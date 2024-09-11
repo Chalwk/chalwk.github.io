@@ -23,7 +23,7 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 // Animated Background Color
-const colors = ['#ff0000', '#00ff00', '#0000ff'];
+const colors = ['#000000']; // black is #000000
 let currentColor = 0;
 
 setInterval(() => {
