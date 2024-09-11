@@ -17,6 +17,11 @@ toggle.addEventListener('click', () => {
   body.classList.toggle('dark-mode');
 });
 
+// Trigger dark mode toggle on page load
+window.addEventListener('DOMContentLoaded', () => {
+  document.querySelector('#darkModeToggle').click();
+});
+
 // Animated Background Color
 const colors = ['#ff0000', '#00ff00', '#0000ff'];
 let currentColor = 0;
