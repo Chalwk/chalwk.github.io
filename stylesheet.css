@@ -1,10 +1,127 @@
+/* General styles */
 body {
-  background-color: #fff;
-  color: #222;
-  transition: background-color 0.3s ease;
+    font-family: Arial, sans-serif;
+    margin: 0; /* Fixed margin */
+    padding: 0;
+    background-color: #f4f4f4; /* Light background */
+    color: #333; /* Dark text */
 }
 
-body.dark-mode {
-  background-color: #222;
-  color: #fff;
+.container {
+    max-width: 800px; /* Container width */
+    margin: 0 auto; /* Centering */
+    padding: 20px; /* Padding */
+}
+
+h1, h2, h3 {
+    margin-top: 40px;
+}
+
+h1 {
+    font-size: 2rem; /* Increased font size */
+    text-align: center; /* Centered header */
+    color: #0e75b6; /* Accent color */
+}
+
+h2 {
+    font-size: 1.5rem;
+}
+
+h3 {
+    font-size: 1.25rem;
+    margin-top: 30px;
+}
+
+p {
+    margin-top: 20px;
+}
+
+/* Navigation bar */
+.header-container {
+    background-color: #333; /* Dark grey */
+    color: #fff; /* White */
+    padding: 10px 20px; /* Padding */
+    display: flex; /* Flexbox */
+    justify-content: space-between; /* Space between items */
+    align-items: center; /* Center vertically */
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav li {
+    margin-left: 20px;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.3s; /* Transition for hover effect */
+}
+
+nav a:hover {
+    color: #0e75b6; /* Change color on hover */
+}
+
+/* Language badges */
+.tool-badges {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
+    gap: 5px; /* Change the gap value to adjust the spacing */
+    margin: 30px 0;
+}
+
+.tool-badges a {
+    display: block;
+}
+
+.tool-badges img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.align-left {
+    float: left;
+    margin: 0 5px 10px 0; /* Updated margin values */
+}
+
+.align-center {
+    display: block;
+    margin: 0 auto;
+}
+
+.align-right {
+    float: right;
+    margin: 0 0 10px 5px; /* Updated margin values */
+}
+
+/* Project list styling */
+.project-list {
+    list-style: none;
+    padding: 0;
+}
+
+.project-list li {
+    background: #fff; /* White background */
+    border: 1px solid #ddd; /* Light border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px; /* Padding */
+    margin: 10px 0; /* Margin between items */
+    transition: box-shadow 0.3s; /* Transition for hover effect */
+}
+
+.project-list li:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect on hover */
+}
+
+/* Footer styling */
+footer {
+    text-align: center; /* Center text */
+    margin: 20px 0; /* Margin for spacing */
 }

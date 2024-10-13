@@ -1,36 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
-    <title>Your Website Title</title>
-    <meta content="The official Little NZ Site." name="description">
-    <meta content="Your Name" name="author">
+    <title>Chalwk - Independent Game Developer</title>
+    <meta content="The official website of Chalwk, an independent game developer and open source enthusiast from New Zealand."
+          name="description">
+    <meta content="Chalwk" name="author">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="stylesheet.css">
-    <link rel="shortcut icon" href="path/to/your/favicon.ico" type="image/x-icon">
+    <link href="favicon.ico" rel="shortcut icon" type="image/x-icon">
 </head>
 
 <body class="dark-mode">
 <header>
-    <nav>
-        <ul>
-            <li><a href="#about">About</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
-    </nav>
+    <div class="header-container">
+        <h1>Chalwk</h1>
+        <nav>
+            <ul>
+                <li><a href="#about">About</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </div>
 </header>
 
-<main>
+<main class="container">
     <section id="about">
         <h2>About Me</h2>
-        <p>TODO: Fill this in.</p>
+        <p>
+            I'm Chalwk, a passionate independent game developer and open source enthusiast from New Zealand.
+            I primarily develop 2D games, but you'll find me doing all sorts of coding projects, from software
+            engineering through research and development to creative coding.
+        </p>
+    </section>
+
+    <section id="profile-badges">
+        <p class="profile-badge">
+            <img alt="chalwk77"
+                 src="https://komarev.com/ghpvc/?username=chalwk77&label=Profile%20views&color=0e75b6&style=flat"/>
+        </p>
+        <p class="profile-badge">
+            <a href="https://github.com/ryo-ma/github-profile-trophy">
+                <img alt="chalwk77" src="https://github-profile-trophy.vercel.app/?username=chalwk77"/>
+            </a>
+        </p>
+        <p class="profile-badge">
+            <a href="https://twitter.com/chalwk77" target="_blank">
+                <img alt="chalwk77"
+                     src="https://img.shields.io/twitter/follow/chalwk77?logo=twitter&style=for-the-badge"/>
+            </a>
+        </p>
+    </section>
+
+    <section id="languages-and-tools">
+        <h3>Languages and Tools:</h3>
+        <p class="tool-badges">
+            <!-- Badges here -->
+            <!-- Same as before -->
+        </p>
+    </section>
+
+    <section>
+        <p><img alt="chalwk77"
+                class="align-left"
+                src="https://github-readme-stats.vercel.app/api/top-langs?username=chalwk77&show_icons=true&locale=en&layout=compact"/></p>
+        <p><img alt="chalwk77"
+                class="align-right"
+                src="https://github-readme-stats.vercel.app/api?username=chalwk77&show_icons=true&locale=en"/></p>
+        <p><img alt="chalwk77" class="align-center"
+                src="https://github-readme-streak-stats.herokuapp.com/?user=chalwk77&"/></p>
     </section>
 
     <section id="projects">
         <h2>My Projects</h2>
-        <ul>
+        <ul class="project-list">
             <li><a href="#">Project 1</a></li>
             <li><a href="#">Project 2</a></li>
             <li><a href="#">Project 3</a></li>
@@ -39,17 +83,15 @@
 
     <section id="contact">
         <h2>Contact Me</h2>
-        <p>Jericho Crosby - jericho.crosby227@gmail.com</p>
+        <p>Email: <a href="mailto:jericho.crosby227@gmail.com">jericho.crosby227@gmail.com</a></p>
     </section>
 </main>
 
-<button id="darkModeToggle">Toggle Dark Mode</button>
-
 <footer>
-    <p>&copy; 2024 Jericho Crosby. All rights reserved.</p>
+    <p>&copy; 2024 Chalwk. All rights reserved.</p>
 </footer>
 
 <script src="main.js"></script>
-</body>
 
+</body>
 </html>
