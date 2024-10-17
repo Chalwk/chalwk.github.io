@@ -245,3 +245,57 @@ footer {
     display: table;
     clear: both;
 }
+
+/* About Section */
+#about {
+    background-color: #f9f9f9;
+    padding: 50px 20px;
+    text-align: center;
+}
+
+.about-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.about-container p {
+    line-height: 1.6; /* Improves readability */
+    margin: 15px 0; /* Adds spacing between paragraphs */
+}
+
+/* Profile Badges Section */
+#profile-badges {
+    background-color: #f9f9f9;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.badges-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px; /* Space between badges */
+}
+
+.badge-item {
+    background-color: #fff; /* White background for badges */
+    border-radius: 10px; /* Rounded corners */
+    padding: 15px; /* Inner padding */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    transition: transform 0.3s, box-shadow 0.3s; /* Transition for hover effect */
+}
+
+.badge-item:hover {
+    transform: translateY(-5px); /* Lift effect on hover */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* Stronger shadow on hover */
+}
+
+.badge-item img {
+    max-width: 100%; /* Ensure images are responsive */
+    height: auto; /* Maintain aspect ratio */
+}
