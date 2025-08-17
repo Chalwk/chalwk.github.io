@@ -4,39 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Useful Lua Tips & Tricks | Chalwk's Blog</title>
+
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Blog CSS -->
     <link rel="stylesheet" href="/styles/blog-post.css">
 
-    <!-- Prism.js CSS for syntax highlighting -->
+    <!-- Prism.js for syntax highlighting -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism-tomorrow.min.css" rel="stylesheet"/>
-    <!-- Prism.js core -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/prism.min.js"></script>
-    <!-- Lua language support -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-lua.min.js"></script>
-    <!-- line numbers -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/plugins/line-numbers/prism-line-numbers.min.css"
-          rel="stylesheet"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+
     <style>
         .sapp-title {
-          font-family: 'Courier New', monospace;
-          color: #ff6600;
-          background-color: #1e1e1e;
-          padding: 6px 12px;
-          border-radius: 4px;
-          display: inline-block;
-          box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            font-family: 'Courier New', monospace;
+            color: #ff6600;
+            background-color: #1e1e1e;
+            padding: 6px 12px;
+            border-radius: 4px;
+            display: inline-block;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
     </style>
 </head>
-
 <body>
 
 <!-- Header -->
 <nav>
     <a href="../index.html" class="logo">
-        <i class="fas fa-code"></i>
-        Chalwk
+        <i class="fas fa-code"></i> Chalwk
     </a>
     <ul class="nav-links">
         <li><a href="../index.html">Home</a></li>
@@ -44,29 +43,21 @@
         <li><a href="../index.html#contact">Contact</a></li>
     </ul>
     <a href="../index.html#blog" class="back-btn">
-        <i class="fas fa-arrow-left"></i>
-        Back to Blog
+        <i class="fas fa-arrow-left"></i> Back to Blog
     </a>
 </nav>
 
 <main>
     <div class="container">
         <div class="blog-container">
+
+            <!-- Blog Header -->
             <div class="blog-header">
                 <h1 class="post-title">Useful Lua Tips & Tricks for Game Scripting</h1>
                 <div class="post-meta">
-                    <div>
-                        <i class="far fa-calendar"></i>
-                        August 17, 2025
-                    </div>
-                    <div>
-                        <i class="far fa-clock"></i>
-                        10 min read
-                    </div>
-                    <div>
-                        <i class="far fa-folder"></i>
-                        Lua, Game Scripting
-                    </div>
+                    <div><i class="far fa-calendar"></i> August 17, 2025</div>
+                    <div><i class="far fa-clock"></i> 2-3 min read</div>
+                    <div><i class="far fa-folder"></i> Lua, Game Scripting</div>
                 </div>
                 <div class="tags">
                     <span class="tag">Lua</span>
@@ -77,15 +68,14 @@
             </div>
 
             <div class="blog-content">
-
                 <h3>FUN FACT</h3>
                 <p>1 world unit = 10 feet, which is 3.048 meters.</p>
 
                 <h3 class="sapp-title">SAPP-Specific Methods</h3>
 
                 <h3>Map Vote / Map Cycle Systems</h3>
-                <p>1) <strong>Do not</strong> use the <code>mapvote_add</code> command in <em>init.txt</em> to add map vote options. Otherwise, SAPP will append duplicate entries to <em>mapvotes.txt</em> on every server boot. Add map vote entries once directly to <em>mapvotes.txt</em>.</p>
-                <p>The map vote format is: <code>map:variant:name:min:max</code></p>
+                <p><strong>Do not</strong> use <code>mapvote_add</code> in <em>init.txt</em>; add entries directly to <em>mapvotes.txt</em>.</p>
+                <p>Format: <code>map:variant:name:min:max</code></p>
                 <table>
                     <thead>
                     <tr>
@@ -94,37 +84,19 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>map</td>
-                        <td>Name of the map</td>
-                    </tr>
-                    <tr>
-                        <td>variant</td>
-                        <td>Name of the custom game mode or game type.<br>Use double quotes if it contains spaces, e.g., <code>"My Custom Mode"</code>.</td>
-                    </tr>
-                    <tr>
-                        <td>name</td>
-                        <td>User-defined message shown next to the map vote option at the end of the game.</td>
-                    </tr>
-                    <tr>
-                        <td>min</td>
-                        <td>Minimum number of players</td>
-                    </tr>
-                    <tr>
-                        <td>max</td>
-                        <td>Maximum number of players</td>
-                    </tr>
+                    <tr><td>map</td><td>Name of the map</td></tr>
+                    <tr><td>variant</td><td>Name of custom game mode. Use quotes for spaces, e.g., <code>"My Custom Mode"</code>.</td></tr>
+                    <tr><td>name</td><td>User-defined message shown next to map vote option.</td></tr>
+                    <tr><td>min</td><td>Minimum players</td></tr>
+                    <tr><td>max</td><td>Maximum players</td></tr>
                     </tbody>
                 </table>
-
-                <p>2) SAPP's map vote system will hang for 60 seconds and then select a random map from <em>mapvotes.txt</em> on server boot. To prevent this delay, add <code>max_idle 1</code> in your <em>init.txt</em>.</p>
-                <p>To force a specific map on startup, add the following to <em>init.txt</em>:</p>
+                <p>Add <code>max_idle 1</code> to <em>init.txt</em> to avoid 60-second hang on server boot.</p>
                 <pre class="line-numbers"><code class="language-lua">map map_name mode
 -- Example: map ratrace MyCustomCTF
 </code></pre>
 
                 <h3>SAPP Built-in rand() Function</h3>
-                <p>The maximum number is exclusive. Increment it by 1 when defining the maximum:</p>
                 <pre class="line-numbers"><code class="language-lua">local t = {'a', 'b', 'c'}
 local i = rand(1, #t + 1)
 print(t[i])
@@ -132,65 +104,73 @@ print(t[i])
 </code></pre>
 
                 <h3>write_vector3d() for Vehicles</h3>
-                <p>Teleporting vehicles may glitch. To reduce this:</p>
                 <ul>
-                    <li>Add a tiny Z velocity (e.g., -0.025).</li>
-                    <li>Unset no-collision & ignore-physics bits:</li>
+                    <li>Add small Z velocity (e.g., -0.025)</li>
+                    <li>Unset no-collision & ignore-physics bits</li>
                 </ul>
                 <pre class="line-numbers"><code class="language-lua">write_bit(object + 0x10, 0, 0)
 write_bit(object + 0x10, 5, 0)
 </code></pre>
 
                 <h3>spawn_object() with Custom Rotation</h3>
-                <p>Rotation values must be in radians, not degrees.</p>
+                <p>Rotation values must be in radians.</p>
 
                 <h3>Custom Spawn Systems</h3>
-                <pre class="line-numbers"><code class="language-lua">-- Update player vector during EVENT_PRESPAWN
-local r = pR      -- rotation in radians
+                <pre class="line-numbers"><code class="language-lua">local r = pR      -- rotation in radians
 local z_off = 0.3 -- prevent falling through the map
 local x, y, z = px, py, pz + z_off
-
 write_vector3d(dyn + 0x5C, x, y, z)
 write_vector3d(dyn + 0x74, math.cos(r), math.sin(r), 0)
 </code></pre>
 
                 <h3>Assigning More Than 2 Weapons</h3>
-                <p>To prevent tertiary/quaternary weapons from dropping, delay assignment by at least 250ms. See <a href="https://github.com/Chalwk/HALO-SCRIPT-PROJECTS/blob/master/Miscellaneous/4-weapons%20(example%20script).lua">this script</a>.</p>
+                <p>Delay assignment by ≥250ms to prevent extra weapons from dropping. See <a href="https://github.com/Chalwk/HALO-SCRIPT-PROJECTS/blob/master/Miscellaneous/4-weapons%20(example%20script).lua">example script</a>.</p>
 
                 <h3>$pn Server Variable</h3>
-                <p>During <code>EVENT_LEAVE</code>, get_var(0, "$pn") does not update immediately. Deduct 1 manually:</p>
                 <pre class="line-numbers"><code class="language-lua">function OnLeave()
     local n = tonumber(get_var(0, "$pn")) - 1
     print('Total Players: ' .. n)
 end
 </code></pre>
 
-                <!-- Existing functions from your original HTML -->
-                <h3>Retrieve Weapon Slot Function</h3>
-                <pre class="line-numbers"><code class="language-lua">--- Retrieves the weapon slot byte from a dynamic player object.
--- @param dyn_player number Dynamic player memory address.
--- @return number Weapon slot (byte).
-local function get_weapon_slot(dyn_player)
+                <h3>Get Player Inventory</h3>
+                <pre class="line-numbers"><code class="language-lua">local function get_inventory(dyn_player)
+    local inventory = {}
+    for i = 0, 3 do
+        local weapon = read_dword(dyn_player + 0x2F8 + i * 4)
+        local object = get_object_memory(weapon)
+        if object ~= 0 then
+            inventory[i + 1] = {
+                id = read_dword(object),
+                ammo = read_word(object + 0x2B6),
+                clip = read_word(object + 0x2B8),
+                ammo2 = read_word(object + 0x2C6),
+                clip2 = read_word(object + 0x2C8),
+                age = read_float(object + 0x240),
+                frags = read_byte(dyn_player + 0x31E),
+                plasmas = read_byte(dyn_player + 0x31F)
+            }
+        end
+    end
+    return inventory
+end
+</code></pre>
+
+                <h3>Retrieve Weapon Slot</h3>
+                <pre class="line-numbers"><code class="language-lua">local function get_weapon_slot(dyn_player)
     return read_byte(dyn_player + 0x2F2)
 end
 </code></pre>
 
                 <h3>Get Tag Reference Address</h3>
-                <pre class="line-numbers"><code class="language-lua">--- Retrieves the memory address of a tag given its class and name.
--- @param class string Tag class identifier (e.g., "weap", "vehi").
--- @param name string Tag name (e.g., "weapons\\pistol\\pistol").
--- @return number|nil Memory address of the tag data or nil if not found.
-local function get_tag(class, name)
+                <pre class="line-numbers"><code class="language-lua">local function get_tag(class, name)
     local tag = lookup_tag(class, name)
     return tag and read_dword(tag + 0xC) or nil
 end
 </code></pre>
 
                 <h3>Get Current Weapon Tag Identifier</h3>
-                <pre class="line-numbers"><code class="language-lua">--- Retrieves the tag identifier of the weapon currently held by the player.
--- @param dyn number Dynamic player memory address.
--- @return number|nil Tag identifier of the current weapon, or nil if none.
-local function get_current_weapon(dyn)
+                <pre class="line-numbers"><code class="language-lua">local function get_current_weapon(dyn)
     local weapon_id = read_dword(dyn + 0x118)
     local weapon_obj = get_object_memory(weapon_id)
     if weapon_obj == nil or weapon_obj == 0 then return nil end
@@ -198,17 +178,95 @@ local function get_current_weapon(dyn)
 end
 </code></pre>
 
-                <!-- … and so on for all your other functions like is_in_vehicle, clear_rcon_console, etc. -->
+                <h3>Check if Player is in Vehicle</h3>
+                <pre class="line-numbers"><code class="language-lua">local function is_in_vehicle(dyn)
+    return read_dword(dyn + 0x11C) ~= 0xFFFFFFFF
+end
+</code></pre>
+
+                <h3>Clear Player's RCON Console</h3>
+                <pre class="line-numbers"><code class="language-lua">local function clear_rcon_console(player_index)
+    for _ = 1, 25 do rprint(player_index, " ") end
+end
+</code></pre>
+
+                <h3>Broadcast Message Excluding One Player</h3>
+                <pre class="line-numbers"><code class="language-lua">local function send_message_exclude(message, exclude_player)
+    for i = 1, 16 do
+        if player_present(i) and i ~= exclude_player then
+            say(i, message)
+        end
+    end
+end
+</code></pre>
+
+                <h3>Check Player Invisibility State</h3>
+                <pre class="line-numbers"><code class="language-lua">local function is_player_invisible(player_index)
+    local dyn = get_dynamic_player(player_index)
+    return dyn ~= 0 and read_float(dyn + 0x37C) == 1
+end
+</code></pre>
+
+                <h3>Get Player World Coordinates</h3>
+                <pre class="line-numbers"><code class="language-lua">local function get_player_position(dyn_player)
+    local crouch = read_float(dyn_player + 0x50C)
+    local vehicle_id = read_dword(dyn_player + 0x11C)
+    local vehicle_obj = get_object_memory(vehicle_id)
+
+    local x, y, z
+    if vehicle_id == 0xFFFFFFFF then
+        x, y, z = read_vector3d(dyn_player + 0x5C)
+    elseif vehicle_obj ~= 0 then
+        x, y, z = read_vector3d(vehicle_obj + 0x5C)
+    end
+
+    local z_offset = (crouch == 0) and 0.65 or 0.35 * crouch
+    return x, y, z + z_offset
+end
+</code></pre>
+
+                <h3>Get Objective (oddball or flag)</h3>
+                <pre class="line-numbers"><code class="language-lua">local function has_objective(dyn_player, objective_type)
+    local base_tag_table = 0x40440000
+    local tag_entry_size = 0x20
+    local tag_data_offset = 0x14
+    local bit_check_offset = 0x308
+    local bit_index = 3
+    objective_type = objective_type or "any"
+
+    local weapon_id = read_dword(dyn_player + 0x118)
+    local weapon_obj = get_object_memory(weapon_id)
+    if weapon_obj == nil or weapon_obj == 0 then return false end
+
+    local tag_address = read_word(weapon_obj)
+    local tag_data_base = read_dword(base_tag_table)
+    local tag_data = read_dword(tag_data_base + tag_address * tag_entry_size + tag_data_offset)
+
+    if read_bit(tag_data + bit_check_offset, bit_index) ~= 1 then return false end
+
+    local obj_byte = read_byte(tag_data + 2)
+    local is_oddball = (obj_byte == 4)
+    local is_flag = (obj_byte == 0)
+
+    if objective_type == "oddball" then return is_oddball
+    elseif objective_type == "flag" then return is_flag
+    else return is_oddball or is_flag end
+end
+</code></pre>
+
+                <h3>Check if Player is In Range</h3>
+                <pre class="line-numbers"><code class="language-lua">local function in_range(x1, y1, z1, x2, y2, z2, radius)
+    local dx = x1 - x2
+    local dy = y1 - y2
+    local dz = z1 - z2
+    return (dx*dx + dy*dy + dz*dz) <= radius*radius
+end
+</code></pre>
 
                 <h3 class="sapp-title">Pure Lua Functions</h3>
 
-                <!-- Example of one pure Lua function -->
                 <h3>String Split</h3>
-                <pre class="line-numbers"><code class="language-lua">--- Splits a string into substrings by a delimiter pattern.
--- @param input string Input string to split.
--- @param delimiter string Lua pattern delimiter.
--- @return table Array of substrings.
-local function string_split(input, delimiter)
+                <pre class="line-numbers"><code class="language-lua">local function string_split(input, delimiter)
     local result = {}
     for substring in input:gmatch("([^" .. delimiter .. "]+)") do
         result[#result + 1] = substring
@@ -217,11 +275,48 @@ local function string_split(input, delimiter)
 end
 </code></pre>
 
+                <h3>Table Length (Key Count)</h3>
+                <pre class="line-numbers"><code class="language-lua">local function table_length(tbl)
+    local count = 0
+    for _ in pairs(tbl) do count = count + 1 end
+    return count
+end
+</code></pre>
+
+                <h3>Shuffle Table Elements (Fisher-Yates)</h3>
+                <pre class="line-numbers"><code class="language-lua">local function shuffle_table(tbl)
+    for i = #tbl, 2, -1 do
+        local j = math.random(i)
+        tbl[i], tbl[j] = tbl[j], tbl[i]
+    end
+end
+</code></pre>
+
+                <h3>Deep Copy Table</h3>
+                <pre class="line-numbers"><code class="language-lua">local function deep_copy(orig)
+    if type(orig) ~= "table" then return orig end
+    local copy = {}
+    for k, v in pairs(orig) do
+        copy[deep_copy(k)] = deep_copy(v)
+    end
+    return setmetatable(copy, deep_copy(getmetatable(orig)))
+end
+</code></pre>
+
+                <h3>Non-blocking Timer Using Coroutines</h3>
+                <pre class="line-numbers"><code class="language-lua">local function timer(delay, func)
+    local co = coroutine.create(function()
+        local start = os.clock()
+        while os.clock() - start < delay do coroutine.yield() end
+        func()
+    end)
+    return co
+end
+</code></pre>
+
                 <!-- Author Card -->
                 <div class="author-card">
-                    <div class="author-avatar">
-                        <i class="fas fa-user"></i>
-                    </div>
+                    <div class="author-avatar"><i class="fas fa-user"></i></div>
                     <div class="author-info">
                         <h4>Chalwk</h4>
                         <p>Independent Game Developer & Open-Source Enthusiast</p>
@@ -237,17 +332,11 @@ end
                 <div class="post-navigation">
                     <a href="post1.html" class="nav-btn prev">
                         <i class="fas fa-arrow-left"></i>
-                        <div>
-                            <span class="label">Previous Post</span>
-                            <div>Exploring the Future of Game Development with AI</div>
-                        </div>
+                        <div><span class="label">Previous Post</span><div>Exploring the Future of Game Development with AI</div></div>
                     </a>
                     <a href="#" class="nav-btn next">
                         <i class="fas fa-arrow-right"></i>
-                        <div>
-                            <span class="label">Next Post</span>
-                            <div>Advanced Lua Techniques</div>
-                        </div>
+                        <div><span class="label">Next Post</span><div>Advanced Lua Techniques</div></div>
                     </a>
                 </div>
 
