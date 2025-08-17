@@ -7,6 +7,14 @@
     "filename": "admin-chat.lua",
     "category": "utility"
   },
+  "afk-system": {
+    "title": "AFK System",
+    "shortDescription": "Advanced AFK system",
+    "description": "Monitors player activity and automatically kicks players who remain AFK (Away From Keyboard) beyond a configurable threshold. Activity includes movement, camera aim, and input. Grace period and warning messages are included before kicking. Supports voluntary AFK status and admin immunity.",
+    "date": "Aug 12, 2025",
+    "filename": "afk-system.lua",
+    "category": "utility"
+  },
   "command-spy": {
     "title": "Command Spy",
     "shortDescription": "Notifies admins when players use commands",
