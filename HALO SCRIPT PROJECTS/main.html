@@ -10,13 +10,28 @@
     <link rel="stylesheet" href="../website/styles/hsp-page-style.css">
     <style>
         .script-category {
-          margin-bottom: 3rem;
+            margin-bottom: 3rem;
         }
         .script-category h2 {
-          font-size: 1.8rem;
-          margin-bottom: 1rem;
-          border-bottom: 2px solid #444;
-          padding-bottom: 0.5rem;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #444;
+            padding-bottom: 0.5rem;
+        }
+        .return-top {
+            display: block;
+            margin: 2rem auto 0;
+            padding: 0.6rem 1.2rem;
+            font-size: 1rem;
+            background-color: #444;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .return-top:hover {
+            background-color: #666;
         }
     </style>
 </head>
@@ -28,11 +43,6 @@
         <i class="fas fa-code"></i>
         Chalwk
     </a>
-
-    <ul class="nav-links">
-        <li><a href="mailto:jericho.crosby227@gmail.com">Contact Me</a></li>
-    </ul>
-
     <a href="../index.html" class="back-btn">
         <i class="fas fa-arrow-left"></i>
         Return to Home page
@@ -48,25 +58,20 @@
 
     <!-- Script Categories -->
     <div class="script-categories">
-
-        <!-- Utility Section -->
         <section class="script-category" id="utility">
             <h2>Utility</h2>
             <div class="script-grid"></div>
         </section>
 
-        <!-- Custom Games Section -->
         <section class="script-category" id="custom-games">
             <h2>Custom Games</h2>
             <div class="script-grid"></div>
         </section>
 
-        <!-- Attractive Section -->
         <section class="script-category" id="attractive">
             <h2>Attractive</h2>
             <div class="script-grid"></div>
         </section>
-
     </div>
 
     <!-- Script Detail View -->
@@ -96,6 +101,11 @@
             </div>
             <pre><code class="language-lua" id="scriptCode"></code></pre>
         </div>
+
+        <!-- Return to Top button -->
+        <button id="returnTopBtn" style="display:none;" class="return-top">
+            <i class="fas fa-arrow-up"></i> Return to Top
+        </button>
     </div>
 </div>
 
@@ -117,181 +127,170 @@
     const scriptCache = {};
     let scriptMetadata = {};
 
-    // Load script metadata on page load
-    fetch('scripts.json')
-      .then(response => response.json())
-      .then(metadata => {
-        scriptMetadata = metadata;
-        renderScripts();
-      })
-      .catch(error => {
-        console.error('Error loading script metadata:', error);
-      });
+    const returnTopBtn = document.getElementById('returnTopBtn');
 
-    // Render scripts into categories
-    function renderScripts() {
-      for (const scriptId in scriptMetadata) {
-        const meta = scriptMetadata[scriptId];
-        const category = meta.category ? meta.category.toLowerCase() : 'utility'; // default to Utility
-        const container = document.querySelector(`#${category} .script-grid`);
-        if (!container) continue;
-
-        const card = document.createElement('div');
-        card.className = 'script-card';
-        card.innerHTML = `
-          <div class="script-header">
-            <h3><i class="fas fa-code"></i> ${meta.title}</h3>
-            <p>${meta.shortDescription}</p>
-            <div class="script-meta">
-              <span><i class="fas fa-user"></i> ${meta.author}</span>
-              <span><i class="fas fa-calendar"></i> ${meta.date}</span>
-            </div>
-          </div>
-          <div class="script-content">
-            <div class="script-description">
-              <p>${meta.shortDescription}</p>
-            </div>
-            <div class="script-actions">
-              <button class="action-btn view-btn" data-script="${scriptId}">
-                <i class="fas fa-eye"></i> View Script
-              </button>
-              <button class="action-btn copy-btn" data-script="${scriptId}">
-                <i class="fas fa-copy"></i> Copy
-              </button>
-              <button class="action-btn download-btn" data-script="${scriptId}">
-                <i class="fas fa-download"></i> Download
-              </button>
-            </div>
-          </div>
-        `;
-        container.appendChild(card);
-      }
-
-      attachEventListeners();
+    function showReturnTop() {
+        returnTopBtn.style.display = 'block';
     }
 
-    // Fetch Lua script content
-    function fetchScript(scriptId) {
-      if (!scriptMetadata[scriptId]) {
-        console.error('Metadata not found for script:', scriptId);
-        return Promise.reject('Metadata missing');
-      }
+    function hideReturnTop() {
+        returnTopBtn.style.display = 'none';
+    }
 
-      const filename = scriptMetadata[scriptId].filename;
-      return fetch(`scripts/${filename}`)
-        .then(response => {
-          if (!response.ok) throw new Error('Network response was not ok');
-          return response.text();
+    returnTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Load script metadata
+    fetch('scripts.json')
+        .then(response => response.json())
+        .then(metadata => {
+            scriptMetadata = metadata;
+            renderScripts();
         })
-        .then(data => {
-          scriptCache[scriptId] = data;
-          return data;
-        });
+        .catch(error => console.error('Error loading script metadata:', error));
+
+    function renderScripts() {
+        for (const scriptId in scriptMetadata) {
+            const meta = scriptMetadata[scriptId];
+            const category = meta.category ? meta.category.toLowerCase() : 'utility';
+            const container = document.querySelector(`#${category} .script-grid`);
+            if (!container) continue;
+
+            const card = document.createElement('div');
+            card.className = 'script-card';
+            card.innerHTML = `
+                <div class="script-header">
+                    <h3><i class="fas fa-code"></i> ${meta.title}</h3>
+                    <p>${meta.shortDescription}</p>
+                    <div class="script-meta">
+                        <span><i class="fas fa-user"></i> ${meta.author}</span>
+                        <span><i class="fas fa-calendar"></i> ${meta.date}</span>
+                    </div>
+                </div>
+                <div class="script-content">
+                    <div class="script-description">
+                        <p>${meta.shortDescription}</p>
+                    </div>
+                    <div class="script-actions">
+                        <button class="action-btn view-btn" data-script="${scriptId}">
+                            <i class="fas fa-eye"></i> View Script
+                        </button>
+                        <button class="action-btn copy-btn" data-script="${scriptId}">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                        <button class="action-btn download-btn" data-script="${scriptId}">
+                            <i class="fas fa-download"></i> Download
+                        </button>
+                    </div>
+                </div>
+            `;
+            container.appendChild(card);
+        }
+
+        attachEventListeners();
+    }
+
+    function fetchScript(scriptId) {
+        if (!scriptMetadata[scriptId]) return Promise.reject('Metadata missing');
+        const filename = scriptMetadata[scriptId].filename;
+        return fetch(`scripts/${filename}`)
+            .then(response => response.ok ? response.text() : Promise.reject('Network error'))
+            .then(data => {
+                scriptCache[scriptId] = data;
+                return data;
+            });
     }
 
     function getScript(scriptId, callback) {
-      if (scriptCache[scriptId]) {
-        callback(scriptCache[scriptId]);
-      } else {
-        fetchScript(scriptId)
-          .then(code => callback(code))
-          .catch(error => console.error('Error loading script:', error));
-      }
+        if (scriptCache[scriptId]) callback(scriptCache[scriptId]);
+        else fetchScript(scriptId).then(code => callback(code)).catch(console.error);
     }
 
-    // Attach event listeners
     function attachEventListeners() {
-      document.querySelectorAll('.view-btn').forEach(button => {
-        button.addEventListener('click', function() {
-          const scriptId = this.getAttribute('data-script');
-          const meta = scriptMetadata[scriptId];
-          if (!meta) return;
+        document.querySelectorAll('.view-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const scriptId = this.getAttribute('data-script');
+                const meta = scriptMetadata[scriptId];
+                if (!meta) return;
 
-          getScript(scriptId, code => {
-            document.getElementById('scriptTitle').textContent = meta.title;
-            document.getElementById('scriptFullDescription').textContent = meta.description;
-            document.getElementById('scriptCode').textContent = code;
-            hljs.highlightElement(document.getElementById('scriptCode'));
-            document.getElementById('downloadCodeBtn').setAttribute('data-script', scriptId);
-            document.getElementById('scriptDetail').style.display = 'block';
-            document.getElementById('scriptDetail').scrollIntoView({ behavior: 'smooth' });
-          });
-        });
-      });
-
-      document.querySelectorAll('.copy-btn').forEach(button => {
-        button.addEventListener('click', function() {
-          const scriptId = this.getAttribute('data-script');
-          getScript(scriptId, code => {
-            navigator.clipboard.writeText(code).then(() => {
-              showToast('Code copied to clipboard!');
+                getScript(scriptId, code => {
+                    document.getElementById('scriptTitle').textContent = meta.title;
+                    document.getElementById('scriptFullDescription').textContent = meta.description;
+                    document.getElementById('scriptCode').textContent = code;
+                    hljs.highlightElement(document.getElementById('scriptCode'));
+                    document.getElementById('downloadCodeBtn').setAttribute('data-script', scriptId);
+                    document.getElementById('scriptDetail').style.display = 'block';
+                    document.getElementById('scriptDetail').scrollIntoView({ behavior: 'smooth' });
+                    showReturnTop();
+                });
             });
-          });
         });
-      });
 
-      document.querySelectorAll('.download-btn').forEach(button => {
-        button.addEventListener('click', function() {
-          const scriptId = this.getAttribute('data-script');
-          const meta = scriptMetadata[scriptId];
-          if (!meta) return;
-
-          getScript(scriptId, code => {
-            const blob = new Blob([code], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = meta.filename;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            showToast('Download started!');
-          });
+        document.querySelectorAll('.copy-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const scriptId = this.getAttribute('data-script');
+                getScript(scriptId, code => {
+                    navigator.clipboard.writeText(code).then(() => showToast('Code copied to clipboard!'));
+                });
+            });
         });
-      });
+
+        document.querySelectorAll('.download-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const scriptId = this.getAttribute('data-script');
+                const meta = scriptMetadata[scriptId];
+                if (!meta) return;
+
+                getScript(scriptId, code => {
+                    const blob = new Blob([code], { type: 'text/plain' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = meta.filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    showToast('Download started!');
+                });
+            });
+        });
     }
 
-    // Close script detail
     document.getElementById('closeDetail').addEventListener('click', function() {
-      document.getElementById('scriptDetail').style.display = 'none';
+        document.getElementById('scriptDetail').style.display = 'none';
+        hideReturnTop();
     });
 
-    // Copy code in detail view
     document.getElementById('copyCodeBtn').addEventListener('click', function() {
-      const code = document.getElementById('scriptCode').textContent;
-      navigator.clipboard.writeText(code).then(() => {
-        showToast('Code copied to clipboard!');
-      });
+        const code = document.getElementById('scriptCode').textContent;
+        navigator.clipboard.writeText(code).then(() => showToast('Code copied to clipboard!'));
     });
 
-    // Download code from detail view
     document.getElementById('downloadCodeBtn').addEventListener('click', function() {
-      const scriptId = this.getAttribute('data-script');
-      const meta = scriptMetadata[scriptId];
-      if (!meta) return;
-
-      const code = scriptCache[scriptId];
-      if (!code) return;
-
-      const blob = new Blob([code], { type: 'text/plain' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = meta.filename;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      showToast('Download started!');
+        const scriptId = this.getAttribute('data-script');
+        const meta = scriptMetadata[scriptId];
+        if (!meta) return;
+        const code = scriptCache[scriptId];
+        if (!code) return;
+        const blob = new Blob([code], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = meta.filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast('Download started!');
     });
 
-    // Toast notification
     function showToast(message) {
-      const toast = document.getElementById('toast');
-      toast.querySelector('span').textContent = message;
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 3000);
+        const toast = document.getElementById('toast');
+        toast.querySelector('span').textContent = message;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 3000);
     }
 </script>
 </body>
