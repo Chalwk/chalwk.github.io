@@ -309,24 +309,40 @@
     }
 
     // Search functionality
-    function setupSearch() {
-        const searchInput = document.getElementById('scriptSearch');
+	function setupSearch() {
+		const searchInput = document.getElementById('scriptSearch');
 
-        searchInput.addEventListener('input', () => {
-            const query = searchInput.value.toLowerCase();
+		searchInput.addEventListener('input', () => {
+			const query = searchInput.value.toLowerCase();
 
-            document.querySelectorAll('.script-card').forEach(card => {
-                const title = card.querySelector('h3').textContent.toLowerCase();
-                const desc = card.querySelector('.script-description p').textContent.toLowerCase();
+			document.querySelectorAll('.script-category').forEach(category => {
+				const cards = category.querySelectorAll('.script-card');
+				let anyVisible = false;
 
-                if (title.includes(query) || desc.includes(query)) {
-                    card.style.display = '';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        });
-    }
+				cards.forEach(card => {
+					const title = card.querySelector('h3').textContent.toLowerCase();
+					const desc = card.querySelector('.script-description p').textContent.toLowerCase();
+
+					if (title.includes(query) || desc.includes(query)) {
+						card.style.display = '';
+						anyVisible = true;
+					} else {
+						card.style.display = 'none';
+					}
+				});
+
+				// Automatically expand/collapse category based on search results
+				const grid = category.querySelector('.script-grid');
+				if (anyVisible) {
+					category.classList.remove('collapsed');
+					grid.style.display = 'grid';
+				} else {
+					category.classList.add('collapsed');
+					grid.style.display = 'none';
+				}
+			});
+		});
+	}
 </script>
 </body>
 </html>
