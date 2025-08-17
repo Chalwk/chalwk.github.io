@@ -19,14 +19,42 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
 
     <style>
+        .blog-intro {
+            font-family: 'Courier New', monospace;
+            background-color: #1e1e1e;
+            color: #f5f5f5;
+            border-left: 4px solid #ff6600;
+            padding: 12px 16px;
+            margin: 16px 0;
+            border-radius: 4px;
+            line-height: 1.5;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+    </style>
+
+    <style>
         .sapp-title {
             font-family: 'Courier New', monospace;
-            color: #ff6600;
-            background-color: #1e1e1e;
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #ff6600, #ffcc00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 5px #ff6600, 0 0 10px #ff6600, 0 0 20px #ffcc00;
             padding: 6px 12px;
-            border-radius: 4px;
+            border-radius: 6px;
             display: inline-block;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            position: relative;
+            animation: glowPulse 2s infinite alternate;
+        }
+
+        @keyframes glowPulse {
+            0% {
+                text-shadow: 0 0 5px #ff6600, 0 0 10px #ff6600, 0 0 20px #ffcc00;
+            }
+            100% {
+                text-shadow: 0 0 10px #ff6600, 0 0 20px #ff6600, 0 0 40px #ffcc00;
+            }
         }
     </style>
 </head>
@@ -67,9 +95,18 @@
                 </div>
             </div>
 
+            <!-- Blog Intro / Summary -->
+            <div class="blog-intro">
+                <p>
+                    This post is a practical guide for game developers and Halo server scripters using Lua.
+                    It covers useful SAPP-specific methods, pure Lua functions, and tips for working with
+                    map votes, player inventory, custom spawn systems, and more.
+                    Whether you're maintaining a server or creating custom game modes, these examples
+                    will help streamline your scripting workflow.
+                </p>
+            </div>
+
             <div class="blog-content">
-                <h3>FUN FACT</h3>
-                <p>1 world unit = 10 feet, which is 3.048 meters.</p>
 
                 <h3 class="sapp-title">SAPP-Specific Methods</h3>
 
