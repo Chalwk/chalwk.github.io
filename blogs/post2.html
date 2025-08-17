@@ -269,6 +269,58 @@ local function has_objective(dyn_player, objective_type)
 end
 </code></pre>
 
+                <h3>Get Flag Object Meta & Tag Name</h3>
+                <pre class="line-numbers"><code class="language-lua">--[[
+    get_flag_data() → flag_meta_id, flag_tag_name
+
+    Retrieves the meta ID and tag name of the flag (objective) in the map.
+
+    Returns:
+        flag_meta_id   (number)  → Memory reference ID of the flag tag.
+        flag_tag_name  (string)  → Name of the flag tag.
+
+    Notes:
+        - Iterates through all tags in the base tag table.
+        - Checks for weapon class ("weap") with the specific bit set for objectives.
+        - Only returns the first tag where the objective type byte equals 0 (flag).
+        - Returns nil, nil if no valid flag is found.
+
+    Example Usage:
+        local meta_id, tag_name = get_flag_data()
+        if meta_id then
+            print("Flag Meta ID:", meta_id)
+            print("Flag Name:", tag_name)
+        else
+            print("No flag found in this map.")
+        end
+]]
+
+local flag_meta_id, flag_tag_name
+local function get_flag_data()
+    local tag_array = read_dword(base_tag_table)
+    local tag_count = read_dword(base_tag_table + 0xC)
+
+    for i = 0, tag_count - 1 do
+        local tag = tag_array + tag_entry_size * i
+        local tag_class = read_dword(tag)
+
+        if tag_class == 0x77656170 then -- "weap"
+            local tag_data = read_dword(tag + tag_data_offset)
+            if read_bit(tag_data + bit_check_offset, bit_index) == 1 then
+                if read_byte(tag_data + 2) == 0 then
+                    flag_meta_id = read_dword(tag + 0xC)
+                    flag_tag_name = read_string(read_dword(tag + 0x10))
+                    return flag_meta_id, flag_tag_name
+                end
+            end
+        end
+    end
+
+    return nil, nil
+end
+
+</code></pre>
+
                 <h3>Check if Player is In Range</h3>
                 <pre class="line-numbers"><code class="language-lua">-- Usage: if in_range(x1, y1, z1, x2, y2, z2, 5) then ...
 local function in_range(x1, y1, z1, x2, y2, z2, radius)
