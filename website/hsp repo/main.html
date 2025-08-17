@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lua Script Directory | Chalwk's Blog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <link rel="stylesheet" href="../styles/hsp-page-style.css">
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+    <a href="#" class="logo">
+        <i class="fas fa-code"></i>
+        Chalwk
+    </a>
+    <a href="../../index.html" class="back-btn">
+        <i class="fas fa-arrow-left"></i>
+        Return to Home page
+    </a>
+</header>
+
+<!-- Main Content -->
+<div class="container">
+    <header class="page-title">
+        <h1>SAPP & Phasor Lua Script Library</h1>
+        <p>
+            Browse and download a personally curated collection of <strong>SAPP</strong> and <strong>Phasor</strong> Lua scripts,
+            created and maintained by me for <strong>Halo: PC (Retail)</strong> and
+            <strong>Halo: Custom Edition (CE)</strong> dedicated servers.
+        </p>
+    </header>
+
+    <!-- Search Bar -->
+    <div class="search-container">
+        <label for="scriptSearch" class="visually-hidden">Search Scripts</label>
+        <input type="text" id="scriptSearch" placeholder="Search scripts..."/>
+    </div>
+
+    <!-- Script Categories -->
+    <div class="script-categories">
+        <section class="script-category" id="utility">
+            <h2>Utility</h2>
+            <div class="script-grid"></div>
+        </section>
+
+        <section class="script-category" id="custom-games">
+            <h2>Custom Games</h2>
+            <div class="script-grid"></div>
+        </section>
+
+        <section class="script-category" id="attractive">
+            <h2>Attractive</h2>
+            <div class="script-grid"></div>
+        </section>
+    </div>
+
+    <!-- Script Detail View -->
+    <div class="script-detail" id="scriptDetail">
+        <div class="script-detail-header">
+            <h2 id="scriptTitle">Script Title</h2>
+            <button class="close-btn" id="closeDetail">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="script-description">
+            <p id="scriptFullDescription"></p>
+        </div>
+
+        <div class="code-container">
+            <div class="code-header">
+                <div>script.lua</div>
+                <div class="code-actions">
+                    <button class="copy-code" id="copyCodeBtn">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
+                    <button class="download-code" id="downloadCodeBtn">
+                        <i class="fas fa-download"></i> Download
+                    </button>
+                </div>
+            </div>
+            <pre><code class="language-lua" id="scriptCode"></code></pre>
+        </div>
+
+        <!-- Return to Top button -->
+        <button id="returnTopBtn" style="display:none;" class="return-top">
+            <i class="fas fa-arrow-up"></i> Return to Top
+        </button>
+    </div>
+</div>
+
+<!-- Toast Notification -->
+<div class="toast" id="toast">
+    <i class="fas fa-check-circle"></i>
+    <span>Code copied to clipboard!</span>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+    <p>&copy; 2025 Chalwk. All rights reserved.</p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+<script src="../scripts/scriptManager.js"></script>
+</body>
+</html>

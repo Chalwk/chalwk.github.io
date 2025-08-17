@@ -512,3 +512,18 @@ code.hljs {
     clip: rect(0 0 0 0);
     border: 0;
 }
+
+/* Search Bar */
+.search-container {
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+#scriptSearch {
+    width: 90%;
+    max-width: 400px;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
