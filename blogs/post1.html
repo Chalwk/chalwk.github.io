@@ -2,32 +2,669 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Post Title 1 | Chalwk's Blog</title>
-    <link href="stylesheet.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0e75b6;
+            --dark: #121212;
+            --darker: #0a0a0a;
+            --light: #f4f4f4;
+            --gray: #2d2d2d;
+            --card-bg: #1e1e1e;
+            --text-gray: #aaa;
+            --transition: all 0.3s ease;
+            --border-radius: 12px;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, var(--darker), var(--dark));
+            color: var(--light);
+            line-height: 1.7;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        a:hover {
+            color: #5bc0eb;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: rgba(30, 30, 30, 0.95);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 1.2rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: var(--shadow);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--light);
+            font-weight: 500;
+            position: relative;
+            padding: 8px 0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .back-btn {
+            background: var(--card-bg);
+            color: var(--light);
+            padding: 10px 20px;
+            border-radius: 30px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+
+        .back-btn:hover {
+            background: var(--primary);
+            transform: translateX(-5px);
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            padding: 3rem 0;
+        }
+
+        .blog-container {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            margin: 2rem auto;
+            max-width: 900px;
+        }
+
+        .blog-header {
+            padding: 3rem 3rem 2rem;
+            position: relative;
+            background: linear-gradient(rgba(14, 117, 182, 0.15), rgba(0, 0, 0, 0.7)),
+                        url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+        }
+
+        .blog-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: var(--primary);
+        }
+
+        .post-title {
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+            font-weight: 800;
+        }
+
+        .post-meta {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            color: var(--text-gray);
+        }
+
+        .post-meta div {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .tag {
+            background: rgba(14, 117, 182, 0.2);
+            color: var(--primary);
+            padding: 5px 15px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .blog-content {
+            padding: 3rem;
+            font-size: 1.1rem;
+        }
+
+        .blog-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .blog-content h3 {
+            font-size: 1.8rem;
+            margin: 2.5rem 0 1.5rem;
+            color: var(--primary);
+            font-weight: 700;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .blog-content h3::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 12px;
+            height: 25px;
+            width: 5px;
+            background: var(--primary);
+            border-radius: 3px;
+        }
+
+        .blog-content blockquote {
+            border-left: 4px solid var(--primary);
+            padding: 1rem 1.5rem;
+            margin: 2rem 0;
+            background: rgba(14, 117, 182, 0.1);
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+            font-style: italic;
+        }
+
+        .code-block {
+            background: #1a1a1a;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .image-container {
+            margin: 2.5rem 0;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        .image-container img {
+            width: 100%;
+            display: block;
+        }
+
+        .image-caption {
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-gray);
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .author-card {
+            display: flex;
+            gap: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin: 3rem 0;
+            align-items: center;
+            border-left: 3px solid var(--primary);
+        }
+
+        .author-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+
+        .author-info h4 {
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+
+        .author-info p {
+            color: var(--text-gray);
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-links a {
+            color: var(--text-gray);
+            font-size: 1.2rem;
+        }
+
+        .social-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 2rem;
+        }
+
+        .nav-btn {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            width: 48%;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            border-color: var(--primary);
+        }
+
+        .nav-btn i {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .nav-btn.prev {
+            text-align: left;
+        }
+
+        .nav-btn.next {
+            text-align: right;
+            flex-direction: row-reverse;
+        }
+
+        .nav-btn .label {
+            font-size: 0.9rem;
+            color: var(--text-gray);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--darker);
+            padding: 3rem 0 2rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .footer-logo {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .footer-links a {
+            color: var(--text-gray);
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .copyright {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            width: 100%;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            .post-title {
+                font-size: 2.3rem;
+            }
+
+            .blog-header,
+            .blog-content {
+                padding: 2rem;
+            }
+
+            .author-card {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .post-title {
+                font-size: 2rem;
+            }
+
+            .post-navigation {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .blog-header {
+                padding: 1.5rem;
+            }
+
+            .post-title {
+                font-size: 1.8rem;
+            }
+
+            .post-meta {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.8rem;
+            }
+
+            .blog-content {
+                padding: 1.5rem;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
+<!-- Header -->
 <header>
-    <nav>
-        <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="blog.html">Blog</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
-    </nav>
+    <div class="container">
+        <nav>
+            <a href="index.html" class="logo">
+                <i class="fas fa-code"></i>
+                Chalwk
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <a href="blog.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                Back to Blog
+            </a>
+        </nav>
+    </div>
 </header>
 
+<!-- Main Content -->
 <main>
-    <section id="blog-post-1">
-        <h2>Post Title 1</h2>
-        <p><strong>Posted on:</strong> October 18, 2024</p>
-        <p>My first blog</p>
-        <p>Todo: Fill this in</p>
-    </section>
+    <div class="container">
+        <div class="blog-container">
+            <div class="blog-header">
+                <h1 class="post-title">Exploring the Future of Game Development with AI</h1>
+                <div class="post-meta">
+                    <div>
+                        <i class="far fa-calendar"></i>
+                        October 18, 2024
+                    </div>
+                    <div>
+                        <i class="far fa-clock"></i>
+                        8 min read
+                    </div>
+                    <div>
+                        <i class="far fa-folder"></i>
+                        Game Development
+                    </div>
+                </div>
+                <div class="tags">
+                    <span class="tag">AI</span>
+                    <span class="tag">Game Design</span>
+                    <span class="tag">Future Tech</span>
+                    <span class="tag">Innovation</span>
+                </div>
+            </div>
+
+            <div class="blog-content">
+                <p>The world of game development is undergoing a transformation unlike anything we've seen before. With the rapid advancement of artificial intelligence, we're entering an era where the boundaries between human creativity and machine intelligence are becoming increasingly blurred.</p>
+
+                <p>As an independent game developer from New Zealand, I've been experimenting with AI tools in my workflow, and the results have been nothing short of revolutionary. From procedural content generation to intelligent NPC behavior, AI is changing how we create games.</p>
+
+                <h3>The Rise of AI-Assisted Development</h3>
+
+                <p>Traditionally, game development required massive teams working for years to create rich, immersive worlds. But with AI, solo developers and small teams can create experiences that rival those of large studios.</p>
+
+                <div class="image-container">
+                    <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="AI Game Development">
+                    <div class="image-caption">AI tools are transforming game development workflows</div>
+                </div>
+
+                <p>In my recent project, I used machine learning algorithms to generate unique environments. What would have taken months of manual work was accomplished in weeks. The AI didn't replace my creativity—it amplified it.</p>
+
+                <h3>Practical Applications in Game Design</h3>
+
+                <p>Here are some ways I've integrated AI into my development process:</p>
+
+                <blockquote>
+                    "AI is not replacing game developers; it's giving us superpowers. The most successful developers will be those who learn to collaborate with AI as a creative partner."
+                </blockquote>
+
+                <p><strong>1. Procedural Content Generation:</strong> Creating vast, diverse game worlds that feel handcrafted.</p>
+                <p><strong>2. Intelligent NPC Behavior:</strong> Characters that learn and adapt to player actions.</p>
+                <p><strong>3. Automated Testing:</strong> AI bots that playtest games 24/7, identifying bugs and balance issues.</p>
+                <p><strong>4. Dynamic Storytelling:</strong> Narrative systems that adapt to player choices in real-time.</p>
+
+                <h3>Implementing AI in Unity</h3>
+
+                <p>For developers using Unity, integrating AI has become surprisingly accessible. Here's a simple example of how I implemented an AI-driven dialogue system:</p>
+
+                <div class="code-block">
+                        <pre><code>using UnityEngine;
+using System.Collections;
+
+public class AIDialogueSystem : MonoBehaviour
+{
+    // Neural network for dialogue processing
+    private NeuralNetwork dialogueNN;
+
+    void Start()
+    {
+        // Initialize the neural network
+        dialogueNN = new NeuralNetwork();
+        dialogueNN.LoadModel("dialogue_model");
+    }
+
+    public string GenerateResponse(string playerInput)
+    {
+        // Process player input through neural network
+        float[] inputVector = ProcessInput(playerInput);
+        float[] outputVector = dialogueNN.Predict(inputVector);
+
+        // Convert output to meaningful response
+        string response = ConvertOutput(outputVector);
+        return response;
+    }
+
+    // Additional processing methods...
+}</code></pre>
+                </div>
+
+                <h3>The Ethical Dimension</h3>
+
+                <p>With great power comes great responsibility. As we integrate AI into game development, we must consider:</p>
+
+                <p>• The impact on employment in the gaming industry</p>
+                <p>• Ensuring AI doesn't perpetuate harmful biases</p>
+                <p>• Maintaining human creativity at the core of game design</p>
+                <p>• Transparency about AI use in game development</p>
+
+                <p>As developers, we have an obligation to use these powerful tools ethically and responsibly.</p>
+
+                <h3>Looking to the Future</h3>
+
+                <p>The next five years will see even more dramatic changes. We're moving toward:</p>
+
+                <p>• AI co-developers that understand design intent</p>
+                <p>• Truly adaptive games that evolve based on player behavior</p>
+                <p>• Photorealistic environments generated in real-time</p>
+                <p>• Emotionally responsive NPCs that form genuine bonds with players</p>
+
+                <p>I'm incredibly excited about these developments and will continue to explore the intersection of AI and game development. The future of gaming has never looked brighter!</p>
+
+                <div class="author-card">
+                    <div class="author-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="author-info">
+                        <h4>Chalwk</h4>
+                        <p>Independent Game Developer & Open-Source Enthusiast</p>
+                        <p>Creating innovative gaming experiences from New Zealand. Passionate about pushing the boundaries of creativity through coding.</p>
+                        <div class="social-links">
+                            <a href="https://github.com/Chalwk"><i class="fab fa-github"></i></a>
+                            <a href="https://x.com/chalwk77"><i class="fab fa-twitter"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="post-navigation">
+                    <a href="#" class="nav-btn prev">
+                        <i class="fas fa-arrow-left"></i>
+                        <div>
+                            <span class="label">Previous Post</span>
+                            <div>Creating Immersive Game Worlds</div>
+                        </div>
+                    </a>
+                    <a href="#" class="nav-btn next">
+                        <i class="fas fa-arrow-right"></i>
+                        <div>
+                            <span class="label">Next Post</span>
+                            <div>Procedural Generation Techniques</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 </main>
 
+<!-- Footer -->
 <footer>
-    <p>&copy; 2024 Chalwk. All rights reserved.</p>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <i class="fas fa-gamepad"></i>
+                Chalwk
+            </div>
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="#about">About</a>
+                <a href="#projects">Projects</a>
+                <a href="blog.html">Blog</a>
+                <a href="#contact">Contact</a>
+            </div>
+            <div class="copyright">
+                &copy; 2025 Chalwk. All rights reserved. | Crafted with passion in New Zealand
+            </div>
+        </div>
+    </div>
 </footer>
 </body>
 </html>
