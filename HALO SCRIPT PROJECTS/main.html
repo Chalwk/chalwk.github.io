@@ -8,6 +8,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
     <link rel="stylesheet" href="../website/styles/hsp-page-style.css">
+    <style>
+        .script-category {
+          margin-bottom: 3rem;
+        }
+        .script-category h2 {
+          font-size: 1.8rem;
+          margin-bottom: 1rem;
+          border-bottom: 2px solid #444;
+          padding-bottom: 0.5rem;
+        }
+    </style>
 </head>
 <body>
 
@@ -37,78 +48,40 @@
         <p>Browse and download Lua scripts for Halo PC/CE SAPP and Phasor servers</p>
     </div>
 
-    <!-- Script Grid -->
-    <div class="script-grid">
-        <!-- Script 1 -->
-        <div class="script-card">
-            <div class="script-header">
-                <h3><i class="fas fa-shield-alt"></i> Admin Chat</h3>
-                <p>Custom chat channel for server admins</p>
-                <div class="script-meta">
-                    <span><i class="fas fa-user"></i> Chalwk</span>
-                    <span><i class="fas fa-calendar"></i> Aug 12, 2025</span>
-                    <span><i class="fas fa-download"></i> 142</span>
-                </div>
-            </div>
-            <div class="script-content">
-                <div class="script-description">
-                    <p>Toggleable admin-only chat system with command aliases, spam protection, and enhanced player management. Messages are only visible to opted-in admins.</p>
-                </div>
-                <div class="script-actions">
-                    <button class="action-btn view-btn" data-script="admin-chat">
-                        <i class="fas fa-eye"></i> View Script
-                    </button>
-                    <button class="action-btn copy-btn" data-clipboard-target="#admin-chat">
-                        <i class="fas fa-copy"></i> Copy
-                    </button>
-                    <button class="action-btn download-btn" data-download="admin-chat.lua">
-                        <i class="fas fa-download"></i> Download
-                    </button>
-                </div>
-            </div>
-        </div>
+    <!-- Script Categories -->
+    <div class="script-categories">
 
-        <!-- Script 2 -->
-        <div class="script-card">
-            <div class="script-header">
-                <h3><i class="fas fa-gamepad"></i> Command Spy</h3>
-                <p>Notifies specified admin levels when a player executes a command...</p>
-                <div class="script-meta">
-                    <span><i class="fas fa-user"></i> Chalwk</span>
-                    <span><i class="fas fa-calendar"></i> Jul 28, 2025</span>
-                    <span><i class="fas fa-download"></i> 217</span>
-                </div>
-            </div>
-            <div class="script-content">
-                <div class="script-description">
-                    <p>Notifies specified admin levels when a player executes a command...</p>
-                </div>
-                <div class="script-actions">
-                    <button class="action-btn view-btn" data-script="command-spy">
-                        <i class="fas fa-eye"></i> View Script
-                    </button>
-                    <button class="action-btn copy-btn" data-clipboard-target="#command-spy">
-                        <i class="fas fa-copy"></i> Copy
-                    </button>
-                    <button class="action-btn download-btn" data-download="command-spy.lua">
-                        <i class="fas fa-download"></i> Download
-                    </button>
-                </div>
-            </div>
-        </div>
+        <!-- Utility Section -->
+        <section class="script-category" id="utility">
+            <h2>Utility</h2>
+            <div class="script-grid"></div>
+        </section>
+
+        <!-- Custom Games Section -->
+        <section class="script-category" id="custom-games">
+            <h2>Custom Games</h2>
+            <div class="script-grid"></div>
+        </section>
+
+        <!-- Attractive Section -->
+        <section class="script-category" id="attractive">
+            <h2>Attractive</h2>
+            <div class="script-grid"></div>
+        </section>
+
     </div>
 
     <!-- Script Detail View -->
     <div class="script-detail" id="scriptDetail">
         <div class="script-detail-header">
-            <h2 id="scriptTitle">Admin Tools</h2>
+            <h2 id="scriptTitle">Script Title</h2>
             <button class="close-btn" id="closeDetail">
                 <i class="fas fa-times"></i>
             </button>
         </div>
 
         <div class="script-description">
-            <p id="scriptFullDescription">A comprehensive suite of admin tools including player management, ban systems, and server monitoring utilities. This script provides essential functionality for maintaining a healthy server environment and managing player behavior effectively.</p>
+            <p id="scriptFullDescription"></p>
         </div>
 
         <div class="code-container">
@@ -147,150 +120,186 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
 <script>
-    // Initialize syntax highlighting
     hljs.highlightAll();
 
-    // Global cache for scripts and metadata
     const scriptCache = {};
     let scriptMetadata = {};
 
     // Load script metadata on page load
     fetch('scripts.json')
-        .then(response => response.json())
-        .then(metadata => {
-            scriptMetadata = metadata;
-        })
-        .catch(error => {
-            console.error('Error loading script metadata:', error);
-        });
+      .then(response => response.json())
+      .then(metadata => {
+        scriptMetadata = metadata;
+        renderScripts();
+      })
+      .catch(error => {
+        console.error('Error loading script metadata:', error);
+      });
+
+    // Render scripts into categories
+    function renderScripts() {
+      for (const scriptId in scriptMetadata) {
+        const meta = scriptMetadata[scriptId];
+        const category = meta.category ? meta.category.toLowerCase() : 'utility'; // default to Utility
+        const container = document.querySelector(`#${category} .script-grid`);
+        if (!container) continue;
+
+        const card = document.createElement('div');
+        card.className = 'script-card';
+        card.innerHTML = `
+          <div class="script-header">
+            <h3><i class="fas fa-code"></i> ${meta.title}</h3>
+            <p>${meta.shortDescription}</p>
+            <div class="script-meta">
+              <span><i class="fas fa-user"></i> ${meta.author}</span>
+              <span><i class="fas fa-calendar"></i> ${meta.date}</span>
+            </div>
+          </div>
+          <div class="script-content">
+            <div class="script-description">
+              <p>${meta.shortDescription}</p>
+            </div>
+            <div class="script-actions">
+              <button class="action-btn view-btn" data-script="${scriptId}">
+                <i class="fas fa-eye"></i> View Script
+              </button>
+              <button class="action-btn copy-btn" data-script="${scriptId}">
+                <i class="fas fa-copy"></i> Copy
+              </button>
+              <button class="action-btn download-btn" data-script="${scriptId}">
+                <i class="fas fa-download"></i> Download
+              </button>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      }
+
+      attachEventListeners();
+    }
 
     // Fetch Lua script content
     function fetchScript(scriptId) {
-        if (!scriptMetadata[scriptId]) {
-            console.error('Metadata not found for script:', scriptId);
-            return Promise.reject('Metadata missing');
-        }
+      if (!scriptMetadata[scriptId]) {
+        console.error('Metadata not found for script:', scriptId);
+        return Promise.reject('Metadata missing');
+      }
 
-        const filename = scriptMetadata[scriptId].filename;
-        return fetch(`scripts/${filename}`)
-            .then(response => {
-                if (!response.ok) throw new Error('Network response was not ok');
-                return response.text();
-            })
-            .then(data => {
-                scriptCache[scriptId] = data;
-                return data;
-            });
-    }
-
-    // Get script content (uses cache if available)
-    function getScript(scriptId, callback) {
-        if (scriptCache[scriptId]) {
-            callback(scriptCache[scriptId]);
-        } else {
-            fetchScript(scriptId)
-                .then(code => callback(code))
-                .catch(error => console.error('Error loading script:', error));
-        }
-    }
-
-    // Show script detail
-    document.querySelectorAll('.view-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            const scriptId = this.getAttribute('data-script');
-            const meta = scriptMetadata[scriptId];
-
-            if (!meta) {
-                console.error('Script metadata not found:', scriptId);
-                return;
-            }
-
-            getScript(scriptId, code => {
-                document.getElementById('scriptTitle').textContent = meta.title;
-                document.getElementById('scriptFullDescription').textContent = meta.description;
-                document.getElementById('scriptCode').textContent = code;
-                hljs.highlightElement(document.getElementById('scriptCode'));
-                document.getElementById('downloadCodeBtn').setAttribute('data-script', scriptId);
-                document.getElementById('scriptDetail').style.display = 'block';
-                document.getElementById('scriptDetail').scrollIntoView({ behavior: 'smooth' });
-            });
+      const filename = scriptMetadata[scriptId].filename;
+      return fetch(`scripts/${filename}`)
+        .then(response => {
+          if (!response.ok) throw new Error('Network response was not ok');
+          return response.text();
+        })
+        .then(data => {
+          scriptCache[scriptId] = data;
+          return data;
         });
-    });
+    }
+
+    function getScript(scriptId, callback) {
+      if (scriptCache[scriptId]) {
+        callback(scriptCache[scriptId]);
+      } else {
+        fetchScript(scriptId)
+          .then(code => callback(code))
+          .catch(error => console.error('Error loading script:', error));
+      }
+    }
+
+    // Attach event listeners
+    function attachEventListeners() {
+      document.querySelectorAll('.view-btn').forEach(button => {
+        button.addEventListener('click', function() {
+          const scriptId = this.getAttribute('data-script');
+          const meta = scriptMetadata[scriptId];
+          if (!meta) return;
+
+          getScript(scriptId, code => {
+            document.getElementById('scriptTitle').textContent = meta.title;
+            document.getElementById('scriptFullDescription').textContent = meta.description;
+            document.getElementById('scriptCode').textContent = code;
+            hljs.highlightElement(document.getElementById('scriptCode'));
+            document.getElementById('downloadCodeBtn').setAttribute('data-script', scriptId);
+            document.getElementById('scriptDetail').style.display = 'block';
+            document.getElementById('scriptDetail').scrollIntoView({ behavior: 'smooth' });
+          });
+        });
+      });
+
+      document.querySelectorAll('.copy-btn').forEach(button => {
+        button.addEventListener('click', function() {
+          const scriptId = this.getAttribute('data-script');
+          getScript(scriptId, code => {
+            navigator.clipboard.writeText(code).then(() => {
+              showToast('Code copied to clipboard!');
+            });
+          });
+        });
+      });
+
+      document.querySelectorAll('.download-btn').forEach(button => {
+        button.addEventListener('click', function() {
+          const scriptId = this.getAttribute('data-script');
+          const meta = scriptMetadata[scriptId];
+          if (!meta) return;
+
+          getScript(scriptId, code => {
+            const blob = new Blob([code], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = meta.filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('Download started!');
+          });
+        });
+      });
+    }
 
     // Close script detail
     document.getElementById('closeDetail').addEventListener('click', function() {
-        document.getElementById('scriptDetail').style.display = 'none';
+      document.getElementById('scriptDetail').style.display = 'none';
     });
 
-    // Copy code to clipboard
+    // Copy code in detail view
     document.getElementById('copyCodeBtn').addEventListener('click', function() {
-        const code = document.getElementById('scriptCode').textContent;
-        navigator.clipboard.writeText(code).then(() => {
-            showToast('Code copied to clipboard!');
-        });
+      const code = document.getElementById('scriptCode').textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        showToast('Code copied to clipboard!');
+      });
     });
 
     // Download code from detail view
     document.getElementById('downloadCodeBtn').addEventListener('click', function() {
-        const scriptId = this.getAttribute('data-script');
-        const meta = scriptMetadata[scriptId];
-        if (!meta) return;
+      const scriptId = this.getAttribute('data-script');
+      const meta = scriptMetadata[scriptId];
+      if (!meta) return;
 
-        const code = scriptCache[scriptId];
-        if (!code) return;
+      const code = scriptCache[scriptId];
+      if (!code) return;
 
-        const blob = new Blob([code], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = meta.filename;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        showToast('Download started!');
+      const blob = new Blob([code], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = meta.filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('Download started!');
     });
 
-    // Copy button on cards
-    document.querySelectorAll('.copy-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            const scriptId = this.getAttribute('data-script');
-            getScript(scriptId, code => {
-                navigator.clipboard.writeText(code).then(() => {
-                    showToast('Code copied to clipboard!');
-                });
-            });
-        });
-    });
-
-    // Download button on cards
-    document.querySelectorAll('.download-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            const scriptId = this.getAttribute('data-script');
-            const meta = scriptMetadata[scriptId];
-            if (!meta) return;
-
-            getScript(scriptId, code => {
-                const blob = new Blob([code], { type: 'text/plain' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = meta.filename;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-                showToast('Download started!');
-            });
-        });
-    });
-
-    // Show toast notification
+    // Toast notification
     function showToast(message) {
-        const toast = document.getElementById('toast');
-        toast.querySelector('span').textContent = message;
-        toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 3000);
+      const toast = document.getElementById('toast');
+      toast.querySelector('span').textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
     }
 </script>
 </body>

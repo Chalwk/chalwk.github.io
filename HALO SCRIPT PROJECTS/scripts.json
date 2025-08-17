@@ -1,12 +1,20 @@
 {
   "admin-chat": {
     "title": "Admin Chat",
-    "description": "Toggleable admin-only chat system with command aliases, spam protection, and enhanced player management. Messages are only visible to opted-in admins.",
-    "filename": "admin-chat.lua"
+    "shortDescription": "Custom chat channel for server admins",
+    "description": "Toggleable admin-only chat system...",
+    "author": "Chalwk",
+    "date": "Aug 12, 2025",
+    "filename": "admin-chat.lua",
+    "category": "utility"
   },
   "command-spy": {
     "title": "Command Spy",
+    "shortDescription": "Notifies admins when players use commands",
     "description": "Notifies specified admin levels when a player executes a command...",
-    "filename": "command-spy.lua"
+    "author": "Chalwk",
+    "date": "Jul 28, 2025",
+    "filename": "command-spy.lua",
+    "category": "utility"
   }
 }
