@@ -3,7 +3,7 @@
     "title": "Admin Chat",
     "shortDescription": "Custom chat channel for server admins",
     "description": "Toggleable admin-only chat system for communication among server administrators.",
-    "date": "Aug 12, 2025",
+    "lastUpdated": "Aug 12, 2025",
     "filename": "Admin Chat.lua",
     "category": "utility"
   },
@@ -11,7 +11,7 @@
     "title": "Admin Messages",
     "shortDescription": "Broadcast messages to admins",
     "description": "Send system-wide messages or notifications directly to server admins.",
-    "date": "Aug 12, 2025",
+    "lastUpdated": "Aug 12, 2025",
     "filename": "Admin Messages.lua",
     "category": "utility"
   },
@@ -19,7 +19,7 @@
     "title": "Admin Add Me",
     "shortDescription": "Quick admin addition utility",
     "description": "Allows authorized users to automatically grant themselves admin privileges.",
-    "date": "Aug 12, 2025",
+    "lastUpdated": "Aug 12, 2025",
     "filename": "Admin-Add-me (Utility).lua",
     "category": "utility"
   },
@@ -27,7 +27,7 @@
     "title": "AFK System",
     "shortDescription": "Advanced AFK system",
     "description": "Monitors player activity and automatically kicks players who remain AFK beyond a configurable threshold.",
-    "date": "Oct 7, 2018",
+    "lastUpdated": "Oct 7, 2018",
     "filename": "AFK System.lua",
     "category": "utility"
   },
@@ -35,7 +35,7 @@
     "title": "Alias System",
     "shortDescription": "Custom player aliases",
     "description": "Assigns alternate names or nicknames to players, supporting both display and command usage.",
-    "date": "Jun 15, 2020",
+    "lastUpdated": "Jun 15, 2020",
     "filename": "Alias System.lua",
     "category": "utility"
   },
@@ -43,7 +43,7 @@
     "title": "Anti Aimbot",
     "shortDescription": "Detect and prevent aimbot usage",
     "description": "Monitors player accuracy and suspicious aiming patterns to identify and mitigate aimbot usage.",
-    "date": "Jan 10, 2021",
+    "lastUpdated": "Jan 10, 2021",
     "filename": "Anti Aimbot.lua",
     "category": "utility"
   },
@@ -51,7 +51,7 @@
     "title": "Anti Impersonator",
     "shortDescription": "Prevent players from impersonating clan/community members",
     "description": "Detects and removes players attempting to impersonate trusted members, supporting kick/ban and logging.",
-    "date": "Sept 15, 2022",
+    "lastUpdated": "Sept 15, 2022",
     "filename": "Anti Impersonator.lua",
     "category": "utility"
   },
@@ -59,7 +59,7 @@
     "title": "Anti-Camp V1",
     "shortDescription": "Basic camping prevention",
     "description": "Detects players camping in restricted areas and applies warnings or penalties.",
-    "date": "Mar 3, 2019",
+    "lastUpdated": "Mar 3, 2019",
     "filename": "Anti-Camp V1.lua",
     "category": "utility"
   },
@@ -67,7 +67,7 @@
     "title": "Anti-Camp V2",
     "shortDescription": "Advanced camping prevention",
     "description": "Enhanced camping detection with configurable zones, timers, and punishments.",
-    "date": "Apr 12, 2020",
+    "lastUpdated": "Apr 12, 2020",
     "filename": "Anti-Camp V2.lua",
     "category": "utility"
   },
@@ -75,7 +75,7 @@
     "title": "Auto Message",
     "shortDescription": "Scheduled message broadcaster",
     "description": "Automatically sends configurable messages to all players at set intervals.",
-    "date": "May 15, 2019",
+    "lastUpdated": "May 15, 2019",
     "filename": "Auto Message.lua",
     "category": "utility"
   },
@@ -83,7 +83,7 @@
     "title": "Auto Team Balance",
     "shortDescription": "Automatically balance teams",
     "description": "Reassigns players to maintain even teams based on player count and skill levels.",
-    "date": "Feb 8, 2020",
+    "lastUpdated": "Feb 8, 2020",
     "filename": "Auto Team Balance.lua",
     "category": "utility"
   },
@@ -91,7 +91,7 @@
     "title": "Auto Lead",
     "shortDescription": "Automatic team leader assignment",
     "description": "Assigns team leaders automatically based on server rules and player activity.",
-    "date": "Jun 2, 2020",
+    "lastUpdated": "Jun 2, 2020",
     "filename": "Auto-Lead.lua",
     "category": "utility"
   },
@@ -99,7 +99,7 @@
     "title": "Ban On Sight",
     "shortDescription": "Instant ban tool",
     "description": "Allows admins to immediately ban players upon detection or suspicion of rule violations.",
-    "date": "Jul 15, 2019",
+    "lastUpdated": "Jul 15, 2019",
     "filename": "Ban On Sight.lua",
     "category": "utility"
   },
@@ -107,7 +107,7 @@
     "title": "Block Duplicate IPs",
     "shortDescription": "Prevent multiple connections from same IP",
     "description": "Blocks new connections if the IP is already connected, useful to prevent multi-clienting or alt accounts.",
-    "date": "Aug 20, 2019",
+    "lastUpdated": "Aug 20, 2019",
     "filename": "Block Duplicate IPs.lua",
     "category": "utility"
   },
@@ -115,7 +115,7 @@
     "title": "Block or Replace Objects",
     "shortDescription": "Server-side object management",
     "description": "Blocks or replaces unwanted in-game objects to maintain map integrity or prevent exploits.",
-    "date": "Sep 10, 2019",
+    "lastUpdated": "Sep 10, 2019",
     "filename": "Block or Replace Objects.lua",
     "category": "utility"
   },
@@ -123,7 +123,7 @@
     "title": "Block Team Damage",
     "shortDescription": "Prevent friendly fire",
     "description": "Prevents players from damaging teammates, configurable per team or globally.",
-    "date": "Oct 1, 2018",
+    "lastUpdated": "Oct 1, 2018",
     "filename": "Block Team Damage.lua",
     "category": "utility"
   },
@@ -131,7 +131,7 @@
     "title": "Chat IDs",
     "shortDescription": "Track chat participants",
     "description": "Displays player IDs alongside messages for easier identification in chat logs.",
-    "date": "Nov 12, 2019",
+    "lastUpdated": "Nov 12, 2019",
     "filename": "Chat IDs.lua",
     "category": "utility"
   },
@@ -139,7 +139,7 @@
     "title": "Clear Chat",
     "shortDescription": "Wipe chat history",
     "description": "Clears the server chat for all players instantly or on a schedule.",
-    "date": "Dec 1, 2019",
+    "lastUpdated": "Dec 1, 2019",
     "filename": "Clear Chat.lua",
     "category": "utility"
   },
@@ -147,7 +147,7 @@
     "title": "Client Crasher",
     "shortDescription": "Test client stability",
     "description": "Sends specific data packets to crash or test the robustness of player clients.",
-    "date": "Jan 5, 2020",
+    "lastUpdated": "Jan 5, 2020",
     "filename": "Client Crasher.lua",
     "category": "utility"
   },
@@ -155,7 +155,7 @@
     "title": "Console Logo",
     "shortDescription": "Display custom console logo",
     "description": "Shows a custom ASCII or image logo in the server console upon startup.",
-    "date": "Feb 15, 2020",
+    "lastUpdated": "Feb 15, 2020",
     "filename": "Console Logo.lua",
     "category": "utility"
   },
@@ -163,7 +163,7 @@
     "title": "Countdown Timer",
     "shortDescription": "Server countdown utility",
     "description": "Displays a configurable countdown timer to players for events or map changes.",
-    "date": "Mar 20, 2020",
+    "lastUpdated": "Mar 20, 2020",
     "filename": "Countdown Timer.lua",
     "category": "utility"
   },
@@ -171,7 +171,7 @@
     "title": "Custom Colors",
     "shortDescription": "Assign custom colors to players or UI elements",
     "description": "Allows modification of in-game colors for players, teams, or HUD elements.",
-    "date": "Apr 10, 2020",
+    "lastUpdated": "Apr 10, 2020",
     "filename": "Custom Colors.lua",
     "category": "utility"
   },
@@ -179,7 +179,7 @@
     "title": "Custom Command Cooldowns",
     "shortDescription": "Set cooldowns for commands",
     "description": "Configurable cooldown periods for commands to prevent spam or abuse.",
-    "date": "May 18, 2020",
+    "lastUpdated": "May 18, 2020",
     "filename": "Custom Command Cooldowns.lua",
     "category": "utility"
   },
@@ -187,7 +187,7 @@
     "title": "Custom Loadouts",
     "shortDescription": "Assign preset equipment to players",
     "description": "Players receive predefined weapon or equipment loadouts upon spawn or command execution.",
-    "date": "Jun 25, 2020",
+    "lastUpdated": "Jun 25, 2020",
     "filename": "Custom Loadouts.lua",
     "category": "utility"
   },
@@ -195,7 +195,7 @@
     "title": "Custom Vehicle Spawner",
     "shortDescription": "Spawn vehicles with settings",
     "description": "Admin utility to spawn vehicles with custom properties such as type, position, and team assignment.",
-    "date": "Jul 15, 2020",
+    "lastUpdated": "Jul 15, 2020",
     "filename": "Custom Vehicle Spawner.lua",
     "category": "utility"
   },
@@ -203,7 +203,7 @@
     "title": "Cyborg Spawner",
     "shortDescription": "Spawn AI enemies",
     "description": "Spawns cyborg AI units with configurable behavior, health, and team assignments.",
-    "date": "Aug 2, 2020",
+    "lastUpdated": "Aug 2, 2020",
     "filename": "Cyborg Spawner.lua",
     "category": "utility"
   },
@@ -211,7 +211,7 @@
     "title": "Damage Multiplier (Changer)",
     "shortDescription": "Adjust player damage output",
     "description": "Admins can modify the damage multiplier for all players or specific teams, useful for balancing gameplay.",
-    "date": "Sep 10, 2020",
+    "lastUpdated": "Sep 10, 2020",
     "filename": "Damage Multiplier (changer).lua",
     "category": "utility"
   },
@@ -219,7 +219,7 @@
     "title": "Delay Skip",
     "shortDescription": "Skip delays automatically",
     "description": "Skips countdowns or delays in game events, like spawn timers or map transitions.",
-    "date": "Oct 5, 2020",
+    "lastUpdated": "Oct 5, 2020",
     "filename": "Delay Skip.lua",
     "category": "utility"
   },
@@ -227,7 +227,7 @@
     "title": "Disable Fall Damage",
     "shortDescription": "Prevent players from taking fall damage",
     "description": "Disables fall damage globally or for specific players, useful for custom game modes.",
-    "date": "Oct 20, 2020",
+    "lastUpdated": "Oct 20, 2020",
     "filename": "Disable Fall Damage.lua",
     "category": "utility"
   },
@@ -235,7 +235,7 @@
     "title": "Dynamic Ping Kicker",
     "shortDescription": "Automatically kick high-ping players",
     "description": "Monitors player ping and kicks players who exceed a configurable threshold, reducing lag for others.",
-    "date": "Nov 2, 2020",
+    "lastUpdated": "Nov 2, 2020",
     "filename": "Dynamic Ping Kicker.lua",
     "category": "utility"
   },
@@ -243,7 +243,7 @@
     "title": "Dynamic Score Limit",
     "shortDescription": "Adjust game score limits",
     "description": "Automatically adjusts the score limit based on player count or other factors.",
-    "date": "Nov 15, 2020",
+    "lastUpdated": "Nov 15, 2020",
     "filename": "Dynamic Score Limit.lua",
     "category": "utility"
   },
@@ -251,7 +251,7 @@
     "title": "Freeze Players",
     "shortDescription": "Temporarily immobilize players",
     "description": "Admins can freeze selected players or entire teams, preventing movement or actions.",
-    "date": "Dec 1, 2020",
+    "lastUpdated": "Dec 1, 2020",
     "filename": "Freeze Players.lua",
     "category": "utility"
   },
@@ -259,7 +259,7 @@
     "title": "Game Countdown",
     "shortDescription": "Countdown to game start",
     "description": "Displays a configurable countdown timer to signal the start of a match or event.",
-    "date": "Dec 12, 2020",
+    "lastUpdated": "Dec 12, 2020",
     "filename": "Game Countdown.lua",
     "category": "utility"
   },
@@ -267,7 +267,7 @@
     "title": "Get Object Identity",
     "shortDescription": "Retrieve object IDs",
     "description": "Displays the internal IDs and properties of objects in the game world for debugging or scripting.",
-    "date": "Jan 5, 2021",
+    "lastUpdated": "Jan 5, 2021",
     "filename": "Get Object Identity.lua",
     "category": "utility"
   },
@@ -275,7 +275,7 @@
     "title": "Get Server Name (Example)",
     "shortDescription": "Fetch current server name",
     "description": "Demonstrates retrieving the server name programmatically for logging or display purposes.",
-    "date": "Jan 10, 2021",
+    "lastUpdated": "Jan 10, 2021",
     "filename": "Get Server Name (example).lua",
     "category": "utility"
   },
@@ -283,7 +283,7 @@
     "title": "Item Sky Spawner",
     "shortDescription": "Spawn items from the sky",
     "description": "Spawns objects or items from above the map at configurable intervals or locations.",
-    "date": "Feb 1, 2021",
+    "lastUpdated": "Feb 1, 2021",
     "filename": "Item Sky Spawner.lua",
     "category": "utility"
   },
@@ -291,7 +291,7 @@
     "title": "Kill Zones",
     "shortDescription": "Define lethal map zones",
     "description": "Creates designated areas where players instantly die or take damage, for map control or game modes.",
-    "date": "Feb 15, 2021",
+    "lastUpdated": "Feb 15, 2021",
     "filename": "Kill Zones.lua",
     "category": "utility"
   },
@@ -299,7 +299,7 @@
     "title": "List Players",
     "shortDescription": "Display all connected players",
     "description": "Shows a list of currently connected players with IDs, teams, and statuses.",
-    "date": "Mar 1, 2021",
+    "lastUpdated": "Mar 1, 2021",
     "filename": "List Players.lua",
     "category": "utility"
   },
@@ -307,7 +307,7 @@
     "title": "Live on 3",
     "shortDescription": "Countdown audio cue",
     "description": "Announces a 'Live on 3' countdown to signal the start of a game or match.",
-    "date": "Mar 10, 2021",
+    "lastUpdated": "Mar 10, 2021",
     "filename": "Live on 3.lua",
     "category": "utility"
   },
@@ -315,7 +315,7 @@
     "title": "Map Vote System",
     "shortDescription": "Allow players to vote for next map",
     "description": "Players vote for the next map using a menu or chat commands, with results applied automatically.",
-    "date": "Apr 5, 2021",
+    "lastUpdated": "Apr 5, 2021",
     "filename": "Map Vote System.lua",
     "category": "utility"
   },
@@ -323,7 +323,7 @@
     "title": "Mapcycle Manager",
     "shortDescription": "Control map rotation",
     "description": "Manages map cycles with automatic transitions and voting overrides.",
-    "date": "Apr 20, 2021",
+    "lastUpdated": "Apr 20, 2021",
     "filename": "Mapcycle Manager.lua",
     "category": "utility"
   },
@@ -331,7 +331,7 @@
     "title": "MultiClient Detector",
     "shortDescription": "Detect players using multiple clients",
     "description": "Identifies players connected from multiple clients to prevent cheating or exploits.",
-    "date": "May 1, 2021",
+    "lastUpdated": "May 1, 2021",
     "filename": "MultiClient Detector.lua",
     "category": "utility"
   },
@@ -339,7 +339,7 @@
     "title": "Mute System",
     "shortDescription": "Restrict player chat",
     "description": "Admins can mute individual players or entire teams, blocking messages from appearing in chat.",
-    "date": "May 15, 2021",
+    "lastUpdated": "May 15, 2021",
     "filename": "Mute System.lua",
     "category": "utility"
   },
@@ -347,7 +347,7 @@
     "title": "Name Ban",
     "shortDescription": "Prevent players from using banned names",
     "description": "Blocks players from using offensive or restricted names, optionally kicking or banning them.",
-    "date": "Jun 1, 2021",
+    "lastUpdated": "Jun 1, 2021",
     "filename": "Name Ban.lua",
     "category": "utility"
   },
@@ -355,7 +355,7 @@
     "title": "Name Replacer",
     "shortDescription": "Automatically replace player names",
     "description": "Renames players in real-time based on configured rules to maintain community standards.",
-    "date": "Jun 10, 2021",
+    "lastUpdated": "Jun 10, 2021",
     "filename": "Name Replacer.lua",
     "category": "utility"
   },
@@ -363,7 +363,7 @@
     "title": "Notify Me",
     "shortDescription": "Custom notifications for admins",
     "description": "Sends notifications to admins for specific events such as player joins, map changes, or rule violations.",
-    "date": "Jul 1, 2021",
+    "lastUpdated": "Jul 1, 2021",
     "filename": "Notify Me.lua",
     "category": "utility"
   },
@@ -371,7 +371,7 @@
     "title": "OnTeleport",
     "shortDescription": "Trigger actions on player teleport",
     "description": "Executes configurable actions when a player teleports, useful for event handling or logging.",
-    "date": "Jul 15, 2021",
+    "lastUpdated": "Jul 15, 2021",
     "filename": "OnTeleport.lua",
     "category": "utility"
   },
@@ -379,7 +379,7 @@
     "title": "Ping Checker",
     "shortDescription": "Monitor player latency",
     "description": "Periodically checks player ping and logs or warns high-latency connections.",
-    "date": "Aug 1, 2021",
+    "lastUpdated": "Aug 1, 2021",
     "filename": "Ping Checker.lua",
     "category": "utility"
   },
@@ -387,7 +387,7 @@
     "title": "Play Time",
     "shortDescription": "Track player session duration",
     "description": "Records and displays how long each player has been active on the server.",
-    "date": "Aug 10, 2021",
+    "lastUpdated": "Aug 10, 2021",
     "filename": "Play Time.lua",
     "category": "utility"
   },
@@ -395,7 +395,7 @@
     "title": "Random Grenades",
     "shortDescription": "Spawn grenades randomly",
     "description": "Randomly spawns grenades on the map to increase chaos or fun in custom game modes.",
-    "date": "Sep 1, 2021",
+    "lastUpdated": "Sep 1, 2021",
     "filename": "Random Grenades.lua",
     "category": "utility"
   },
@@ -403,7 +403,7 @@
     "title": "Remove Grenades (On Spawn)",
     "shortDescription": "Automatically remove grenades",
     "description": "Removes grenades immediately after spawn to prevent map clutter or unbalanced gameplay.",
-    "date": "Sep 5, 2021",
+    "lastUpdated": "Sep 5, 2021",
     "filename": "Remove Grenades (on spawn).lua",
     "category": "utility"
   },
@@ -411,7 +411,7 @@
     "title": "Restart Mapcycle",
     "shortDescription": "Reset the map rotation",
     "description": "Resets the mapcycle to the first map, optionally applying any voting overrides.",
-    "date": "Sep 15, 2021",
+    "lastUpdated": "Sep 15, 2021",
     "filename": "Restart Mapcycle.lua",
     "category": "utility"
   },
@@ -419,7 +419,7 @@
     "title": "Score Handler",
     "shortDescription": "Custom scoring system",
     "description": "Tracks, modifies, and displays player scores with configurable rules and multipliers.",
-    "date": "Oct 1, 2021",
+    "lastUpdated": "Oct 1, 2021",
     "filename": "Score Handler.lua",
     "category": "utility"
   },
@@ -427,7 +427,7 @@
     "title": "Script Manager",
     "shortDescription": "Load/unload scripts dynamically",
     "description": "Admin utility to manage active scripts, reload changes, and debug script issues in real-time.",
-    "date": "Oct 10, 2021",
+    "lastUpdated": "Oct 10, 2021",
     "filename": "Script Manager.lua",
     "category": "utility"
   },
@@ -435,7 +435,7 @@
     "title": "Server Logger",
     "shortDescription": "Log server events",
     "description": "Records server events such as joins, leaves, kills, and commands to files for auditing or analytics.",
-    "date": "Oct 20, 2021",
+    "lastUpdated": "Oct 20, 2021",
     "filename": "Server Logger.lua",
     "category": "utility"
   },
@@ -443,7 +443,7 @@
     "title": "Server Name Changer",
     "shortDescription": "Modify server name dynamically",
     "description": "Allows admins to change the server name on the fly, useful for events or branding.",
-    "date": "Nov 1, 2021",
+    "lastUpdated": "Nov 1, 2021",
     "filename": "Server Name Changer.lua",
     "category": "utility"
   },
@@ -451,7 +451,7 @@
     "title": "Set Respawn Time",
     "shortDescription": "Adjust player respawn delay",
     "description": "Admins can configure respawn timers globally or per team to modify gameplay pacing.",
-    "date": "Nov 10, 2021",
+    "lastUpdated": "Nov 10, 2021",
     "filename": "Set Respawn Time.lua",
     "category": "utility"
   },
@@ -459,7 +459,7 @@
     "title": "Show Admin Names",
     "shortDescription": "Display all admins",
     "description": "Lists currently connected admins in chat or via command for transparency.",
-    "date": "Nov 15, 2021",
+    "lastUpdated": "Nov 15, 2021",
     "filename": "Show Admin Names.lua",
     "category": "utility"
   },
@@ -467,7 +467,7 @@
     "title": "Simple Poll System",
     "shortDescription": "Conduct in-game polls",
     "description": "Allows players to vote on options, with results displayed in chat.",
-    "date": "Dec 1, 2021",
+    "lastUpdated": "Dec 1, 2021",
     "filename": "Simple Poll System.lua",
     "category": "utility"
   },
@@ -475,7 +475,7 @@
     "title": "Spawn Protection V1",
     "shortDescription": "Prevent spawn kills",
     "description": "Grants temporary invincibility to players after spawning to reduce unfair deaths.",
-    "date": "Dec 5, 2021",
+    "lastUpdated": "Dec 5, 2021",
     "filename": "Spawn Protection V1.lua",
     "category": "utility"
   },
@@ -483,7 +483,7 @@
     "title": "Status Timer",
     "shortDescription": "Track timed statuses",
     "description": "Displays or logs timers for statuses such as buffs, debuffs, or cooldowns.",
-    "date": "Dec 10, 2021",
+    "lastUpdated": "Dec 10, 2021",
     "filename": "Status Timer.lua",
     "category": "utility"
   },
@@ -491,7 +491,7 @@
     "title": "Suicide Punisher",
     "shortDescription": "Penalize self-kills",
     "description": "Applies penalties for players who repeatedly kill themselves to prevent exploits or griefing.",
-    "date": "Dec 20, 2021",
+    "lastUpdated": "Dec 20, 2021",
     "filename": "Suicide Punisher.lua",
     "category": "utility"
   },
@@ -499,7 +499,7 @@
     "title": "Suspend Players",
     "shortDescription": "Temporarily suspend players",
     "description": "Allows admins to suspend player actions, including movement, chat, and attacks, for a configurable duration.",
-    "date": "Jan 5, 2022",
+    "lastUpdated": "Jan 5, 2022",
     "filename": "Suspend Players.lua",
     "category": "utility"
   },
@@ -507,7 +507,7 @@
     "title": "Sync Admins (Utility)",
     "shortDescription": "Sync admin lists across servers",
     "description": "Ensures all servers in a network have updated admin lists and permissions.",
-    "date": "Jan 15, 2022",
+    "lastUpdated": "Jan 15, 2022",
     "filename": "Sync Admins (utility).lua",
     "category": "utility"
   },
@@ -515,7 +515,7 @@
     "title": "Sync Your Files",
     "shortDescription": "Synchronize local scripts with server",
     "description": "Uploads or updates scripts on the server to match a local repository or file set.",
-    "date": "Jan 25, 2022",
+    "lastUpdated": "Jan 25, 2022",
     "filename": "Sync Your Files.lua",
     "category": "utility"
   },
@@ -523,7 +523,7 @@
     "title": "T-Slayer Team Spawns",
     "shortDescription": "Configure team spawn points",
     "description": "Sets custom spawn locations for T-Slayer or similar team-based modes.",
-    "date": "Feb 5, 2022",
+    "lastUpdated": "Feb 5, 2022",
     "filename": "T-Slayer Team Spawns.lua",
     "category": "utility"
   },
@@ -531,7 +531,7 @@
     "title": "Team Chat",
     "shortDescription": "Private team messaging",
     "description": "Enables a separate chat channel for teams, invisible to opponents.",
-    "date": "Feb 15, 2022",
+    "lastUpdated": "Feb 15, 2022",
     "filename": "Team Chat.lua",
     "category": "utility"
   },
@@ -539,7 +539,7 @@
     "title": "Team Color Voting",
     "shortDescription": "Players vote on team colors",
     "description": "Allows players to vote for team colors before match start, applied automatically.",
-    "date": "Feb 20, 2022",
+    "lastUpdated": "Feb 20, 2022",
     "filename": "Team Color Voting.lua",
     "category": "utility"
   },
@@ -547,7 +547,7 @@
     "title": "Team Shuffler",
     "shortDescription": "Randomize team assignments",
     "description": "Randomly assigns players to teams to maintain fairness and variety in matches.",
-    "date": "Mar 1, 2022",
+    "lastUpdated": "Mar 1, 2022",
     "filename": "Team Shuffler.lua",
     "category": "utility"
   },
@@ -555,7 +555,7 @@
     "title": "Teleport Manager",
     "shortDescription": "Manage player teleportation",
     "description": "Admins can teleport players individually, in groups, or to preset locations.",
-    "date": "Mar 10, 2022",
+    "lastUpdated": "Mar 10, 2022",
     "filename": "Teleport Manager.lua",
     "category": "utility"
   },
@@ -563,7 +563,7 @@
     "title": "The Punisher (v1.0)",
     "shortDescription": "Admin punishment tool",
     "description": "Implements automatic punishments for players breaking configurable rules, including kicks, bans, and score penalties.",
-    "date": "Mar 20, 2022",
+    "lastUpdated": "Mar 20, 2022",
     "filename": "The Punisher (v 1.0).lua",
     "category": "utility"
   },
@@ -571,7 +571,7 @@
     "title": "Vehicle Block Utility v1",
     "shortDescription": "Restrict certain vehicles",
     "description": "Blocks specific vehicles from spawning or being used, configurable by admin.",
-    "date": "Apr 1, 2022",
+    "lastUpdated": "Apr 1, 2022",
     "filename": "Vehicle Block Utility v1.lua",
     "category": "utility"
   },
@@ -579,7 +579,7 @@
     "title": "Vehicle Block Utility v2",
     "shortDescription": "Advanced vehicle restrictions",
     "description": "Enhanced vehicle blocking with additional options, such as team-specific or temporary blocks.",
-    "date": "Apr 10, 2022",
+    "lastUpdated": "Apr 10, 2022",
     "filename": "Vehicle Block Utility v2.lua",
     "category": "utility"
   },
@@ -587,7 +587,7 @@
     "title": "Vote Kick",
     "shortDescription": "Player-driven kicking system",
     "description": "Allows players to initiate votes to kick disruptive players, with configurable thresholds.",
-    "date": "Apr 20, 2022",
+    "lastUpdated": "Apr 20, 2022",
     "filename": "Vote Kick.lua",
     "category": "utility"
   },
@@ -595,7 +595,7 @@
     "title": "VPN Blocker",
     "shortDescription": "Prevent VPN connections",
     "description": "Blocks or warns players connecting via VPN to prevent evasion of bans or multi-accounting.",
-    "date": "May 1, 2022",
+    "lastUpdated": "May 1, 2022",
     "filename": "VPN Blocker.lua",
     "category": "utility"
   },
@@ -603,7 +603,7 @@
     "title": "Weapon Assigner",
     "shortDescription": "Assign weapons to players",
     "description": "Automatically provides players with specific weapons on spawn or via command.",
-    "date": "May 10, 2022",
+    "lastUpdated": "May 10, 2022",
     "filename": "Weapon Assigner.lua",
     "category": "utility"
   },
@@ -611,7 +611,7 @@
     "title": "Welcome Message [req]",
     "shortDescription": "Custom welcome messages",
     "description": "Sends personalized welcome messages to players when they join the server.",
-    "date": "May 20, 2022",
+    "lastUpdated": "May 20, 2022",
     "filename": "Welcome Message [req].lua",
     "category": "utility"
   },
@@ -619,7 +619,7 @@
     "title": "Word Buster",
     "shortDescription": "Filter or remove words",
     "description": "Detects and removes offensive or banned words in chat messages, optionally replacing them.",
-    "date": "Jun 1, 2022",
+    "lastUpdated": "Jun 1, 2022",
     "filename": "Word Buster.lua",
     "category": "utility"
   }

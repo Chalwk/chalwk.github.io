@@ -127,7 +127,7 @@
     function renderScripts() {
         for (const scriptId in scriptMetadata) {
             const meta = scriptMetadata[scriptId];
-            const category = meta.category ? meta.category.toLowerCase() : 'utility';
+            const category = meta.category ? meta.category.toLowerCase().replace(/\s+/g, '-') : 'utility';
             const container = document.querySelector(`#${category} .script-grid`);
             if (!container) continue;
 
@@ -138,7 +138,7 @@
                     <h3>${meta.title}</h3>
                     <p>${meta.shortDescription}</p>
                     <div class="script-meta">
-                        <span><i class="fas fa-calendar"></i> ${meta.date}</span>
+                        <span>Last Updated: ${meta.lastUpdated}</span>
                     </div>
                 </div>
                 <div class="script-content">
@@ -167,8 +167,10 @@
 
     function fetchScript(scriptId) {
         if (!scriptMetadata[scriptId]) return Promise.reject('Metadata missing');
-        const filename = scriptMetadata[scriptId].filename;
-        return fetch(`scripts/${filename}`)
+        const meta = scriptMetadata[scriptId];
+        const filename = meta.filename;
+        const categoryFolder = meta.category ? meta.category.toLowerCase().replace(/\s+/g, '-') : 'utility';
+        return fetch(`scripts/${categoryFolder}/${filename}`)
             .then(response => response.ok ? response.text() : Promise.reject('Network error'))
             .then(data => {
                 scriptCache[scriptId] = data;
