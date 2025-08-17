@@ -1,0 +1,17 @@
+{
+  "admin-tools": {
+    "title": "Admin Tools",
+    "description": "A comprehensive suite of admin tools...",
+    "filename": "admin-tools.lua"
+  },
+  "gun-game": {
+    "title": "Gun Game",
+    "description": "Implement the popular Gun Game mode...",
+    "filename": "gun-game.lua"
+  },
+  "performance-monitor": {
+    "title": "Performance Monitor",
+    "description": "Monitor server performance metrics...",
+    "filename": "performance-monitor.lua"
+  }
+}

@@ -267,302 +267,70 @@
     // Initialize syntax highlighting
     hljs.highlightAll();
 
-    // Sample Lua scripts
-    const scripts = {
-        'admin-tools': {
-            title: 'Admin Tools',
-            description: 'A comprehensive suite of admin tools including player management, ban systems, and server monitoring utilities. This script provides essential functionality for maintaining a healthy server environment and managing player behavior effectively.',
-            code: `-- Admin Tools Script for Halo PC/CE
--- Version 2.1.0
--- Created by Chalwk
+    // Global cache for scripts and metadata
+    const scriptCache = {};
+    let scriptMetadata = {};
 
-local admin = {}
+    // Load script metadata on page load
+    fetch('scripts.json')
+        .then(response => response.json())
+        .then(metadata => {
+            scriptMetadata = metadata;
+        })
+        .catch(error => {
+            console.error('Error loading script metadata:', error);
+        });
 
-function admin.OnScriptLoad()
--- Register admin commands
-register_callback(cb['EVENT_COMMAND'], "OnCommand")
-register_callback(cb['EVENT_JOIN'], "OnPlayerJoin")
-register_callback(cb['EVENT_LEAVE'], "OnPlayerLeave")
-
--- Initialize admin list
-admin.admins = {
-    "Chalwk",
-    "Admin2",
-    "Admin3"
-}
-
--- Load ban list from file
-admin.LoadBanList()
-
-cprint("Admin Tools v2.1.0 loaded successfully!", 10)
-end
-
-function admin.OnPlayerJoin(player)
-local name = get_var(player, "$name")
-if admin.IsBanned(name) then
-    execute_command("k " .. player .. " Banned from this server")
-end
-end
-
-function admin.LoadBanList()
-admin.banList = {}
-local file = io.open("bans.txt", "r")
-if file then
-    for line in file:lines() do
-        table.insert(admin.banList, line)
-    end
-    file:close()
-end
-end
-
-function admin.IsBanned(name)
-for _, bannedName in ipairs(admin.banList) do
-    if name:lower() == bannedName:lower() then
-        return true
-    end
-end
-return false
-end
-
-function admin.OnCommand(player, command)
-local args = {}
-for word in command:gmatch("%S+") do
-    table.insert(args, word)
-end
-
-if #args == 0 then return end
-
-local cmd = args[1]:lower()
-table.remove(args, 1)
-
--- Kick command
-if cmd == "kick" and #args >= 1 then
-    if admin.IsAdmin(player) then
-        local target = args[1]
-        local reason = "Kicked by admin"
-        if #args > 1 then
-            reason = table.concat(args, " ", 2)
-        end
-        execute_command("k " .. target .. " " .. reason)
-        admin.MessageAdmins(get_var(player, "$name") .. " kicked " .. get_var(target, "$name") .. ": " .. reason)
-    end
--- Ban command
-elseif cmd == "ban" and #args >= 1 then
-    if admin.IsAdmin(player) then
-        local target = args[1]
-        local reason = "Banned by admin"
-        if #args > 1 then
-            reason = table.concat(args, " ", 2)
-        end
-        local name = get_var(target, "$name")
-        admin.BanPlayer(name, reason)
-        execute_command("k " .. target .. " " .. reason)
-        admin.MessageAdmins(get_var(player, "$name") .. " banned " .. name .. ": " .. reason)
-    end
-end
-end
-
-function admin.BanPlayer(name, reason)
-table.insert(admin.banList, name)
-local file = io.open("bans.txt", "a")
-if file then
-    file:write(name .. "\\n")
-    file:close()
-end
-end
-
-function admin.IsAdmin(player)
-local name = get_var(player, "$name"):lower()
-for _, adminName in ipairs(admin.admins) do
-    if adminName:lower() == name then
-        return true
-    end
-end
-return false
-end
-
-function admin.MessageAdmins(message)
-for i = 1, 16 do
-    if player_present(i) then
-        if admin.IsAdmin(i) then
-            rprint(i, "|cADMIN: |c" .. message)
-        end
-    end
-end
-end
-
-return admin`
-        },
-        'gun-game': {
-            title: 'Gun Game',
-            description: 'Implement the popular Gun Game mode where players progress through weapons with each kill. Players start with basic weapons and advance to more powerful ones as they get kills. The first player to get a kill with the final weapon wins the game.',
-            code: `-- Gun Game Script for Halo PC/CE
--- Version 1.5.0
--- Created by Chalwk
-
-local gunGame = {
-weapons = {
-    "assault rifle",
-    "magnum",
-    "plasma pistol",
-    "shotgun",
-    "sniper rifle",
-    "rocket launcher",
-    "energy sword"
-},
-playerLevels = {}
-}
-
-function gunGame.OnScriptLoad()
-register_callback(cb['EVENT_DIE'], "OnPlayerDeath")
-register_callback(cb['EVENT_JOIN'], "OnPlayerJoin")
-register_callback(cb['EVENT_GAME_END'], "OnGameEnd")
-
--- Initialize player levels
-for i = 1, 16 do
-    if player_present(i) then
-        gunGame.playerLevels[i] = 1
-        gunGame.GiveWeapon(i, gunGame.weapons[1])
-    end
-end
-
-cprint("Gun Game v1.5.0 loaded successfully!", 10)
-end
-
-function gunGame.OnPlayerJoin(player)
-gunGame.playerLevels[player] = 1
-gunGame.GiveWeapon(player, gunGame.weapons[1])
-end
-
-function gunGame.OnPlayerDeath(victim, killer)
-if killer == 0 then return end  -- Suicide or environmental death
-
-local currentLevel = gunGame.playerLevels[killer] or 1
-local nextLevel = currentLevel + 1
-
-if nextLevel > #gunGame.weapons then
-    -- Player has won the game
-    execute_command("msg \"Player " .. get_var(killer, "$name") .. " has won the Gun Game!\"")
-    gunGame.playerLevels[killer] = 1
-    gunGame.GiveWeapon(killer, gunGame.weapons[1])
-else
-    -- Advance to next weapon
-    gunGame.playerLevels[killer] = nextLevel
-    gunGame.GiveWeapon(killer, gunGame.weapons[nextLevel])
-    rprint(killer, "|cAdvanced to weapon: " .. gunGame.weapons[nextLevel])
-end
-
--- Reset victim to level 1
-gunGame.playerLevels[victim] = 1
-gunGame.GiveWeapon(victim, gunGame.weapons[1])
-end
-
-function gunGame.GiveWeapon(player, weaponName)
-execute_command("wdel " .. player)
-execute_command("w " .. player .. " " .. weaponName)
-end
-
-function gunGame.OnGameEnd()
--- Reset all players for next game
-for i = 1, 16 do
-    if player_present(i) then
-        gunGame.playerLevels[i] = 1
-    end
-end
-end
-
-return gunGame`
-        },
-        'performance-monitor': {
-            title: 'Performance Monitor',
-            description: 'Monitor server performance metrics including FPS, memory usage, and network statistics in real-time. This script provides valuable insights for server optimization and troubleshooting performance issues.',
-            code: `-- Server Performance Monitor
--- Version 1.2.0
--- Created by Chalwk
-
-local perfMon = {
-interval = 30,  -- Seconds between reports
-lastReport = 0
-}
-
-function perfMon.OnScriptLoad()
-register_callback(cb['EVENT_TICK'], "OnTick")
-register_callback(cb['EVENT_GAME_START'], "OnGameStart")
-
-cprint("Performance Monitor v1.2.0 loaded", 10)
-end
-
-function perfMon.OnGameStart()
-perfMon.lastReport = 0
-end
-
-function perfMon.OnTick()
-local currentTime = get_var(0, "$time")
-if currentTime - perfMon.lastReport > perfMon.interval then
-    perfMon.lastReport = currentTime
-    perfMon.ReportPerformance()
-end
-end
-
-function perfMon.ReportPerformance()
-local fps = get_var(0, "$fps")
-local players = get_var(0, "$players")
-local memory = collectgarbage("count")
-
-local report = string.format(
-    "|cPERF: |cFPS: %.1f | Players: %d | Memory: %.2f MB",
-    fps, players, memory / 1024
-)
-
--- Send to all admins
-for i = 1, 16 do
-    if player_present(i) and perfMon.IsAdmin(i) then
-        rprint(i, report)
-    end
-end
-
--- Log to file
-local logEntry = string.format(
-    "[%s] FPS: %.1f | Players: %d | Memory: %.2f MB",
-    os.date("%Y-%m-%d %H:%M:%S"), fps, players, memory / 1024
-)
-perfMon.LogToFile("performance.log", logEntry)
-end
-
-function perfMon.LogToFile(filename, message)
-local file = io.open(filename, "a")
-if file then
-    file:write(message .. "\\n")
-    file:close()
-end
-end
-
-function perfMon.IsAdmin(player)
--- In a real implementation, you would check if player is admin
-return true
-end
-
-return perfMon`
+    // Fetch Lua script content
+    function fetchScript(scriptId) {
+        if (!scriptMetadata[scriptId]) {
+            console.error('Metadata not found for script:', scriptId);
+            return Promise.reject('Metadata missing');
         }
-    };
+
+        const filename = scriptMetadata[scriptId].filename;
+        return fetch(`scripts/${filename}`)
+            .then(response => {
+                if (!response.ok) throw new Error('Network response was not ok');
+                return response.text();
+            })
+            .then(data => {
+                scriptCache[scriptId] = data;
+                return data;
+            });
+    }
+
+    // Get script content (uses cache if available)
+    function getScript(scriptId, callback) {
+        if (scriptCache[scriptId]) {
+            callback(scriptCache[scriptId]);
+        } else {
+            fetchScript(scriptId)
+                .then(code => callback(code))
+                .catch(error => console.error('Error loading script:', error));
+        }
+    }
 
     // Show script detail
     document.querySelectorAll('.view-btn').forEach(button => {
         button.addEventListener('click', function() {
             const scriptId = this.getAttribute('data-script');
-            const script = scripts[scriptId];
+            const meta = scriptMetadata[scriptId];
 
-            if (script) {
-                document.getElementById('scriptTitle').textContent = script.title;
-                document.getElementById('scriptFullDescription').textContent = script.description;
-                document.getElementById('scriptCode').textContent = script.code;
-                hljs.highlightElement(document.getElementById('scriptCode'));
-
-                document.getElementById('scriptDetail').style.display = 'block';
-
-                // Scroll to the detail view
-                document.getElementById('scriptDetail').scrollIntoView({ behavior: 'smooth' });
+            if (!meta) {
+                console.error('Script metadata not found:', scriptId);
+                return;
             }
+
+            getScript(scriptId, code => {
+                document.getElementById('scriptTitle').textContent = meta.title;
+                document.getElementById('scriptFullDescription').textContent = meta.description;
+                document.getElementById('scriptCode').textContent = code;
+                hljs.highlightElement(document.getElementById('scriptCode'));
+                document.getElementById('downloadCodeBtn').setAttribute('data-script', scriptId);
+                document.getElementById('scriptDetail').style.display = 'block';
+                document.getElementById('scriptDetail').scrollIntoView({ behavior: 'smooth' });
+            });
         });
     });
 
@@ -579,59 +347,58 @@ return perfMon`
         });
     });
 
-    // Download code
+    // Download code from detail view
     document.getElementById('downloadCodeBtn').addEventListener('click', function() {
-        const title = document.getElementById('scriptTitle').textContent.toLowerCase().replace(/\s+/g, '-');
-        const code = document.getElementById('scriptCode').textContent;
+        const scriptId = this.getAttribute('data-script');
+        const meta = scriptMetadata[scriptId];
+        if (!meta) return;
+
+        const code = scriptCache[scriptId];
+        if (!code) return;
+
         const blob = new Blob([code], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
-
         const a = document.createElement('a');
         a.href = url;
-        a.download = `${title}.lua`;
+        a.download = meta.filename;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
-
         showToast('Download started!');
     });
 
     // Copy button on cards
     document.querySelectorAll('.copy-btn').forEach(button => {
         button.addEventListener('click', function() {
-            const scriptId = this.getAttribute('data-clipboard-target').substring(1);
-            const script = scripts[scriptId];
-
-            if (script) {
-                navigator.clipboard.writeText(script.code).then(() => {
+            const scriptId = this.getAttribute('data-script');
+            getScript(scriptId, code => {
+                navigator.clipboard.writeText(code).then(() => {
                     showToast('Code copied to clipboard!');
                 });
-            }
+            });
         });
     });
 
     // Download button on cards
     document.querySelectorAll('.download-btn').forEach(button => {
         button.addEventListener('click', function() {
-            const filename = this.getAttribute('data-download');
-            const scriptId = filename.replace('.lua', '');
-            const script = scripts[scriptId];
+            const scriptId = this.getAttribute('data-script');
+            const meta = scriptMetadata[scriptId];
+            if (!meta) return;
 
-            if (script) {
-                const blob = new Blob([script.code], { type: 'text/plain' });
+            getScript(scriptId, code => {
+                const blob = new Blob([code], { type: 'text/plain' });
                 const url = URL.createObjectURL(blob);
-
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = filename;
+                a.download = meta.filename;
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
                 URL.revokeObjectURL(url);
-
                 showToast('Download started!');
-            }
+            });
         });
     });
 
@@ -640,10 +407,7 @@ return perfMon`
         const toast = document.getElementById('toast');
         toast.querySelector('span').textContent = message;
         toast.classList.add('show');
-
-        setTimeout(() => {
-            toast.classList.remove('show');
-        }, 3000);
+        setTimeout(() => toast.classList.remove('show'), 3000);
     }
 </script>
 </body>
