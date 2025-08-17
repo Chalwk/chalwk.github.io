@@ -255,6 +255,35 @@
             margin-right: 8px;
         }
 
+        .project-highlights {
+            margin: 10px 0;
+            padding-left: 20px;
+            list-style-type: disc;
+            color: #1779ba;
+            font-size: 0.9rem;
+        }
+
+        .project-highlights li {
+            margin-bottom: 5px;
+        }
+
+        .community-favorites {
+          margin-top: 0.5rem;
+          padding-left: 1.5rem;
+          list-style-type: circle;
+        }
+
+        .community-favorites a {
+          color: #3498db;
+          text-decoration: none;
+          transition: color 0.2s;
+        }
+
+        .community-favorites a:hover {
+          color: #1d6fa5;
+          text-decoration: underline;
+        }
+
         /* Blog */
         .blog-grid {
             display: grid;
@@ -506,9 +535,7 @@
             <div class="project-card">
                 <div class="project-content">
                     <h3 class="project-title">GitHub Stats</h3>
-                    <p>Profile Views: <strong id="github-views">0</strong></p>
                     <p>Repositories: <strong id="github-repos">0</strong></p>
-                    <p>Contributions: <strong id="github-contribs">0</strong></p>
                 </div>
             </div>
         </div>
@@ -521,13 +548,27 @@
         <h2 class="section-title">My Projects</h2>
         <div class="projects-grid">
             <div class="project-card">
-                <div class="project-img">Project Image</div>
+                <div class="project-img">
+                    <img src="/images/HSP.png" alt="Halo Script Projects" style="width:100%; height:100%; object-fit:cover;">
+                </div>
                 <div class="project-content">
                     <h3 class="project-title">Halo Script Projects</h3>
-                    <p class="project-description">Lua scripts for SAPP (Sapphire) enhancing gameplay in Halo 1.</p>
+                    <p class="project-description">Lua scripts enhancing gameplay in Halo: PC (Retail) and Halo: Custom Edition (CE).</p>
+                    <ul class="project-highlights">
+                        <li>Scripts for both SAPP and Phasor server extensions</li>
+                        <li>Nearly 3,000 commits and 20+ major releases</li>
+                        <li>Community favorites:
+                            <ul class="community-favorites">
+                                <li><a href="https://github.com/Chalwk/HALO-SCRIPT-PROJECTS/releases/tag/battle_royale">Battle Royale</a></li>
+                                <li><a href="https://github.com/Chalwk/HALO-SCRIPT-PROJECTS/releases/tag/WordBusterV2">Word Buster - Advanced Multilingual Profanity Filter</a></li>
+                                <li><a href="https://github.com/Chalwk/HALO-SCRIPT-PROJECTS/releases/tag/AdminManager">Admin Manager</a></li>
+                            </ul>
+                        </li>
+                    </ul>
                     <a href="https://github.com/chalwk/Halo-Script-Projects" class="btn">View on GitHub</a>
                 </div>
             </div>
+
 
             <div class="project-card">
                 <div class="project-img">Project Image</div>
@@ -686,9 +727,6 @@
             const userResponse = await fetch(`https://api.github.com/users/${username}`);
             const userData = await userResponse.json();
             document.getElementById('github-repos').innerText = userData.public_repos;
-            document.getElementById('github-views').innerText = 'N/A';
-            const contribResponse = await fetch(`https://github.com/users/${username}/contributions`);
-            document.getElementById('github-contribs').innerText = 'N/A';
         } catch (err) {
             console.error('Error fetching GitHub stats:', err);
         }
