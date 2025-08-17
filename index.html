@@ -503,14 +503,12 @@
                     <span class="skill-tag">Linux</span>
                 </div>
             </div>
-            <div class="about-stats">
-                <div class="project-card">
-                    <div class="project-content">
-                        <h3 class="project-title">GitHub Stats</h3>
-                        <p>Profile Views: <strong>12,345</strong></p>
-                        <p>Repositories: <strong>24</strong></p>
-                        <p>Contributions: <strong>1,234</strong></p>
-                    </div>
+            <div class="project-card">
+                <div class="project-content">
+                    <h3 class="project-title">GitHub Stats</h3>
+                    <p>Profile Views: <strong id="github-views">0</strong></p>
+                    <p>Repositories: <strong id="github-repos">0</strong></p>
+                    <p>Contributions: <strong id="github-contribs">0</strong></p>
                 </div>
             </div>
         </div>
@@ -616,9 +614,9 @@
                     </div>
                 </div>
                 <div class="contact-item">
-                    <div class="contact-icon">🐦</div>
+                    <div class="contact-icon">🅧</div>
                     <div>
-                        <h3>Twitter</h3>
+                        <h3>X</h3>
                         <p>@chalwk</p>
                     </div>
                 </div>
@@ -680,6 +678,24 @@
             });
         });
     });
+</script>
+<script>
+    async function fetchGitHubStats() {
+        const username = 'chalwk';
+        try {
+            const userResponse = await fetch(`https://api.github.com/users/${username}`);
+            const userData = await userResponse.json();
+            document.getElementById('github-repos').innerText = userData.public_repos;
+            document.getElementById('github-views').innerText = 'N/A';
+            const contribResponse = await fetch(`https://github.com/users/${username}/contributions`);
+            document.getElementById('github-contribs').innerText = 'N/A';
+        } catch (err) {
+            console.error('Error fetching GitHub stats:', err);
+        }
+    }
+
+    // Load stats on page load
+    fetchGitHubStats();
 </script>
 </body>
 </html>
