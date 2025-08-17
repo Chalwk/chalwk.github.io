@@ -3,7 +3,6 @@
     "title": "Admin Chat",
     "shortDescription": "Custom chat channel for server admins",
     "description": "Toggleable admin-only chat system...",
-    "author": "Chalwk",
     "date": "Aug 12, 2025",
     "filename": "admin-chat.lua",
     "category": "utility"
@@ -12,7 +11,6 @@
     "title": "Command Spy",
     "shortDescription": "Notifies admins when players use commands",
     "description": "Notifies specified admin levels when a player executes a command...",
-    "author": "Chalwk",
     "date": "Jul 28, 2025",
     "filename": "command-spy.lua",
     "category": "utility"
