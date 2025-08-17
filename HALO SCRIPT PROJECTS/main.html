@@ -125,77 +125,86 @@
         .catch(error => console.error('Error loading script metadata:', error));
 
     function renderScripts() {
-        for (const scriptId in scriptMetadata) {
-            const meta = scriptMetadata[scriptId];
-            const category = meta.category ? meta.category.toLowerCase().replace(/\s+/g, '-') : 'utility';
-            const container = document.querySelector(`#${category} .script-grid`);
+        // Loop through the top-level categories
+        for (const categoryName in scriptMetadata) {
+            const categoryScripts = scriptMetadata[categoryName];
+            const categoryId = categoryName.toLowerCase().replace(/\s+/g, '-');
+            const container = document.querySelector(`#${categoryId} .script-grid`);
             if (!container) continue;
 
-            const card = document.createElement('div');
-            card.className = 'script-card';
-            card.innerHTML = `
-                <div class="script-header">
-                    <h3>${meta.title}</h3>
-                    <p>${meta.shortDescription}</p>
-                    <div class="script-meta">
-                        <span>Last Updated: ${meta.lastUpdated}</span>
-                    </div>
-                </div>
-                <div class="script-content">
-                    <div class="script-description">
+            // Loop through scripts in this category
+            for (const scriptId in categoryScripts) {
+                const meta = categoryScripts[scriptId];
+
+                const card = document.createElement('div');
+                card.className = 'script-card';
+                card.innerHTML = `
+                    <div class="script-header">
+                        <h3>${meta.title}</h3>
                         <p>${meta.shortDescription}</p>
+                        <div class="script-meta">
+                            <span>Last Updated: ${meta.lastUpdated}</span>
+                        </div>
                     </div>
-                    <div class="script-actions">
-                        <button class="action-btn view-btn" data-script="${scriptId}">
-                            <i class="fas fa-eye"></i> View Script
-                        </button>
-                        <button class="action-btn copy-btn" data-script="${scriptId}">
-                            <i class="fas fa-copy"></i> Copy
-                        </button>
-                        <button class="action-btn download-btn" data-script="${scriptId}">
-                            <i class="fas fa-download"></i> Download
-                        </button>
+                    <div class="script-content">
+                        <div class="script-description">
+                            <p>${meta.shortDescription}</p>
+                        </div>
+                        <div class="script-actions">
+                            <button class="action-btn view-btn" data-script="${categoryName}/${scriptId}">
+                                <i class="fas fa-eye"></i> View Script
+                            </button>
+                            <button class="action-btn copy-btn" data-script="${categoryName}/${scriptId}">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                            <button class="action-btn download-btn" data-script="${categoryName}/${scriptId}">
+                                <i class="fas fa-download"></i> Download
+                            </button>
+                        </div>
                     </div>
-                </div>
-            `;
-            container.appendChild(card);
+                `;
+                container.appendChild(card);
+            }
         }
 
         attachEventListeners();
         setupCollapsibleCategories();
     }
 
-    function fetchScript(scriptId) {
-        if (!scriptMetadata[scriptId]) return Promise.reject('Metadata missing');
-        const meta = scriptMetadata[scriptId];
+    function fetchScript(scriptPath) {
+        const [category, scriptId] = scriptPath.split('/');
+        const meta = scriptMetadata[category][scriptId];
+        if (!meta) return Promise.reject('Metadata missing');
+
         const filename = meta.filename;
-        const categoryFolder = meta.category ? meta.category.toLowerCase().replace(/\s+/g, '-') : 'utility';
+        const categoryFolder = category.toLowerCase().replace(/\s+/g, '-');
         return fetch(`scripts/${categoryFolder}/${filename}`)
             .then(response => response.ok ? response.text() : Promise.reject('Network error'))
             .then(data => {
-                scriptCache[scriptId] = data;
+                scriptCache[scriptPath] = data;
                 return data;
             });
     }
 
-    function getScript(scriptId, callback) {
-        if (scriptCache[scriptId]) callback(scriptCache[scriptId]);
-        else fetchScript(scriptId).then(code => callback(code)).catch(console.error);
+    function getScript(scriptPath, callback) {
+        if (scriptCache[scriptPath]) callback(scriptCache[scriptPath]);
+        else fetchScript(scriptPath).then(code => callback(code)).catch(console.error);
     }
 
     function attachEventListeners() {
         document.querySelectorAll('.view-btn').forEach(button => {
             button.addEventListener('click', function() {
-                const scriptId = this.getAttribute('data-script');
-                const meta = scriptMetadata[scriptId];
+                const scriptPath = this.getAttribute('data-script');
+                const [category, scriptId] = scriptPath.split('/');
+                const meta = scriptMetadata[category][scriptId];
                 if (!meta) return;
 
-                getScript(scriptId, code => {
+                getScript(scriptPath, code => {
                     document.getElementById('scriptTitle').textContent = meta.title;
                     document.getElementById('scriptFullDescription').textContent = meta.description;
                     document.getElementById('scriptCode').textContent = code;
                     hljs.highlightElement(document.getElementById('scriptCode'));
-                    document.getElementById('downloadCodeBtn').setAttribute('data-script', scriptId);
+                    document.getElementById('downloadCodeBtn').setAttribute('data-script', scriptPath);
                     document.getElementById('scriptDetail').style.display = 'block';
                     document.getElementById('scriptDetail').scrollIntoView({ behavior: 'smooth' });
                     showReturnTop();
@@ -205,8 +214,8 @@
 
         document.querySelectorAll('.copy-btn').forEach(button => {
             button.addEventListener('click', function() {
-                const scriptId = this.getAttribute('data-script');
-                getScript(scriptId, code => {
+                const scriptPath = this.getAttribute('data-script');
+                getScript(scriptPath, code => {
                     navigator.clipboard.writeText(code).then(() => showToast('Code copied to clipboard!'));
                 });
             });
@@ -214,11 +223,12 @@
 
         document.querySelectorAll('.download-btn').forEach(button => {
             button.addEventListener('click', function() {
-                const scriptId = this.getAttribute('data-script');
-                const meta = scriptMetadata[scriptId];
+                const scriptPath = this.getAttribute('data-script');
+                const [category, scriptId] = scriptPath.split('/');
+                const meta = scriptMetadata[category][scriptId];
                 if (!meta) return;
 
-                getScript(scriptId, code => {
+                getScript(scriptPath, code => {
                     const blob = new Blob([code], { type: 'text/plain' });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a');
@@ -245,11 +255,13 @@
     });
 
     document.getElementById('downloadCodeBtn').addEventListener('click', function() {
-        const scriptId = this.getAttribute('data-script');
-        const meta = scriptMetadata[scriptId];
-        if (!meta) return;
-        const code = scriptCache[scriptId];
+        const scriptPath = this.getAttribute('data-script');
+        const code = scriptCache[scriptPath];
         if (!code) return;
+        const [category, scriptId] = scriptPath.split('/');
+        const meta = scriptMetadata[category][scriptId];
+        if (!meta) return;
+
         const blob = new Blob([code], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -269,7 +281,6 @@
         setTimeout(() => toast.classList.remove('show'), 3000);
     }
 
-    // Collapsible categories
     function setupCollapsibleCategories() {
         document.querySelectorAll('.script-category').forEach(category => {
             category.classList.add('collapsed'); // start collapsed
