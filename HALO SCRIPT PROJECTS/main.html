@@ -8,32 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
     <link rel="stylesheet" href="../website/styles/hsp-page-style.css">
-    <style>
-        .script-category {
-            margin-bottom: 3rem;
-        }
-        .script-category h2 {
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-            border-bottom: 2px solid #444;
-            padding-bottom: 0.5rem;
-        }
-        .return-top {
-            display: block;
-            margin: 2rem auto 0;
-            padding: 0.6rem 1.2rem;
-            font-size: 1rem;
-            background-color: #444;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        .return-top:hover {
-            background-color: #666;
-        }
-    </style>
 </head>
 <body>
 
@@ -188,6 +162,7 @@
         }
 
         attachEventListeners();
+        setupCollapsibleCategories();
     }
 
     function fetchScript(scriptId) {
@@ -290,6 +265,20 @@
         toast.querySelector('span').textContent = message;
         toast.classList.add('show');
         setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    // Collapsible categories
+    function setupCollapsibleCategories() {
+        document.querySelectorAll('.script-category').forEach(category => {
+            category.classList.add('collapsed'); // start collapsed
+            const header = category.querySelector('h2');
+            const grid = category.querySelector('.script-grid');
+
+            header.addEventListener('click', () => {
+                const isCollapsed = category.classList.toggle('collapsed');
+                grid.style.display = isCollapsed ? 'none' : 'grid';
+            });
+        });
     }
 </script>
 </body>
