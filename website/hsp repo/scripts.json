@@ -2,8 +2,8 @@
   "attractive": {
     "Air Strike": {
       "title": "Air Strike",
-      "shortDescription": "Call in an airstrike on a target location",
-      "description": "Players can launch an aerial bombardment at enemies or objectives for tactical advantage.",
+      "shortDescription": "Periodic aerial bombardment",
+      "description": "Automated airstrike system. Spawns rockets at randomized intervals, heights, and trajectories over predefined map locations with player warnings.",
       "filename": "Air Strike.lua"
     },
     "Ammo Resupply": {
@@ -15,8 +15,8 @@
     "April Fools - Chat": {
       "title": "April Fools - Chat",
       "shortDescription": "Prank chat messages",
-      "description": "Funny or mischievous chat effects triggered for April Fools.",
-      "filename": "Apri Fools - Chat.lua"
+      "description": "Funny or mischievous chat triggered for April Fools.",
+      "filename": "April Fools - Chat.lua"
     },
     "April Fools - Word Shuffler": {
       "title": "April Fools - Word Shuffler",
@@ -967,7 +967,7 @@
     "word-buster": {
       "title": "Word Buster",
       "shortDescription": "Filter or remove words",
-      "description": "Detects and removes offensive or banned words in chat messages, optionally replacing them.",
+      "description": "Advanced multi-lingual chat filter. Detects and removes offensive or banned words in chat messages, optionally replacing them.",
       "filename": "Word Buster.lua"
     }
   }
