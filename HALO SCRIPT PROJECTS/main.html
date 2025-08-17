@@ -8,6 +8,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
     <link rel="stylesheet" href="../website/styles/hsp-page-style.css">
+    <style>
+        .search-container {
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        #scriptSearch {
+            width: 90%;
+            max-width: 400px;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+    </style>
 </head>
 <body>
 
@@ -26,8 +41,13 @@
 <!-- Main Content -->
 <div class="container">
     <div class="page-title">
-        <h1>Lua Script Directory</h1>
+        <h1>SAPP Lua Script Directory</h1>
         <p>Browse and download Lua scripts for Halo PC/CE SAPP and Phasor servers</p>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-container">
+        <input type="text" id="scriptSearch" placeholder="Search scripts..." />
     </div>
 
     <!-- Script Categories -->
@@ -103,13 +123,8 @@
 
     const returnTopBtn = document.getElementById('returnTopBtn');
 
-    function showReturnTop() {
-        returnTopBtn.style.display = 'block';
-    }
-
-    function hideReturnTop() {
-        returnTopBtn.style.display = 'none';
-    }
+    function showReturnTop() { returnTopBtn.style.display = 'block'; }
+    function hideReturnTop() { returnTopBtn.style.display = 'none'; }
 
     returnTopBtn.addEventListener('click', () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -125,14 +140,12 @@
         .catch(error => console.error('Error loading script metadata:', error));
 
     function renderScripts() {
-        // Loop through the top-level categories
         for (const categoryName in scriptMetadata) {
             const categoryScripts = scriptMetadata[categoryName];
             const categoryId = categoryName.toLowerCase().replace(/\s+/g, '-');
             const container = document.querySelector(`#${categoryId} .script-grid`);
             if (!container) continue;
 
-            // Loop through scripts in this category
             for (const scriptId in categoryScripts) {
                 const meta = categoryScripts[scriptId];
 
@@ -169,6 +182,7 @@
 
         attachEventListeners();
         setupCollapsibleCategories();
+        setupSearch();
     }
 
     function fetchScript(scriptPath) {
@@ -290,6 +304,26 @@
             header.addEventListener('click', () => {
                 const isCollapsed = category.classList.toggle('collapsed');
                 grid.style.display = isCollapsed ? 'none' : 'grid';
+            });
+        });
+    }
+
+    // Search functionality
+    function setupSearch() {
+        const searchInput = document.getElementById('scriptSearch');
+
+        searchInput.addEventListener('input', () => {
+            const query = searchInput.value.toLowerCase();
+
+            document.querySelectorAll('.script-card').forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                const desc = card.querySelector('.script-description p').textContent.toLowerCase();
+
+                if (title.includes(query) || desc.includes(query)) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
             });
         });
     }
