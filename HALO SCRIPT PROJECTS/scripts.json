@@ -946,84 +946,84 @@
       "title": "Restart Mapcycle",
       "shortDescription": "Reset the map rotation",
       "description": "Resets the mapcycle to the first map, optionally applying any voting overrides.",
-      "lastUpdated": "Sep 15, 2021",
+      "lastUpdated": "TBD",
       "filename": "Restart Mapcycle.lua"
     },
     "score-handler": {
       "title": "Score Handler",
       "shortDescription": "Custom scoring system",
       "description": "Tracks, modifies, and displays player scores with configurable rules and multipliers.",
-      "lastUpdated": "Oct 1, 2021",
+      "lastUpdated": "TBD",
       "filename": "Score Handler.lua"
     },
     "script-manager": {
       "title": "Script Manager",
       "shortDescription": "Load/unload scripts dynamically",
       "description": "Admin utility to manage active scripts, reload changes, and debug script issues in real-time.",
-      "lastUpdated": "Oct 10, 2021",
+      "lastUpdated": "TBD",
       "filename": "Script Manager.lua"
     },
     "server-logger": {
       "title": "Server Logger",
       "shortDescription": "Log server events",
       "description": "Records server events such as joins, leaves, kills, and commands to files for auditing or analytics.",
-      "lastUpdated": "Oct 20, 2021",
+      "lastUpdated": "TBD",
       "filename": "Server Logger.lua"
     },
     "server-name-changer": {
       "title": "Server Name Changer",
       "shortDescription": "Modify server name dynamically",
       "description": "Allows admins to change the server name on the fly, useful for events or branding.",
-      "lastUpdated": "Nov 1, 2021",
+      "lastUpdated": "TBD",
       "filename": "Server Name Changer.lua"
     },
     "set-respawn-time": {
       "title": "Set Respawn Time",
       "shortDescription": "Adjust player respawn delay",
       "description": "Admins can configure respawn timers globally or per team to modify gameplay pacing.",
-      "lastUpdated": "Nov 10, 2021",
+      "lastUpdated": "TBD",
       "filename": "Set Respawn Time.lua"
     },
     "show-admin-names": {
       "title": "Show Admin Names",
       "shortDescription": "Display all admins",
       "description": "Lists currently connected admins in chat or via command for transparency.",
-      "lastUpdated": "Nov 15, 2021",
+      "lastUpdated": "TBD",
       "filename": "Show Admin Names.lua"
     },
     "simple-poll-system": {
       "title": "Simple Poll System",
       "shortDescription": "Conduct in-game polls",
       "description": "Allows players to vote on options, with results displayed in chat.",
-      "lastUpdated": "Dec 1, 2021",
+      "lastUpdated": "TBD",
       "filename": "Simple Poll System.lua"
     },
     "spawn-protection-v1": {
       "title": "Spawn Protection V1",
       "shortDescription": "Prevent spawn kills",
       "description": "Grants temporary invincibility to players after spawning to reduce unfair deaths.",
-      "lastUpdated": "Dec 5, 2021",
+      "lastUpdated": "TBD",
       "filename": "Spawn Protection V1.lua"
     },
     "status-timer": {
       "title": "Status Timer",
       "shortDescription": "Track timed statuses",
       "description": "Displays or logs timers for statuses such as buffs, debuffs, or cooldowns.",
-      "lastUpdated": "Dec 10, 2021",
+      "lastUpdated": "TBD",
       "filename": "Status Timer.lua"
     },
     "suicide-punisher": {
       "title": "Suicide Punisher",
       "shortDescription": "Penalize self-kills",
       "description": "Applies penalties for players who repeatedly kill themselves to prevent exploits or griefing.",
-      "lastUpdated": "Dec 20, 2021",
+      "lastUpdated": "TBD",
       "filename": "Suicide Punisher.lua"
     },
     "suspend-players": {
       "title": "Suspend Players",
       "shortDescription": "Temporarily suspend players",
       "description": "Allows admins to suspend player actions, including movement, chat, and attacks, for a configurable duration.",
-      "lastUpdated": "Jan 5, 2022",
+      "lastUpdated": "TBD",
       "filename": "Suspend Players.lua"
     },
     "sync-admins-utility": {
