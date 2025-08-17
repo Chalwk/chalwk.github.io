@@ -1,17 +1,12 @@
 {
-  "admin-tools": {
-    "title": "Admin Tools",
-    "description": "A comprehensive suite of admin tools...",
-    "filename": "admin-tools.lua"
+  "admin-chat": {
+    "title": "Admin Chat",
+    "description": "Toggleable admin-only chat system with command aliases, spam protection, and enhanced player management. Messages are only visible to opted-in admins.",
+    "filename": "admin-chat.lua"
   },
-  "gun-game": {
-    "title": "Gun Game",
-    "description": "Implement the popular Gun Game mode...",
-    "filename": "gun-game.lua"
-  },
-  "performance-monitor": {
-    "title": "Performance Monitor",
-    "description": "Monitor server performance metrics...",
-    "filename": "performance-monitor.lua"
+  "command-spy": {
+    "title": "Command Spy",
+    "description": "Notifies specified admin levels when a player executes a command...",
+    "filename": "command-spy.lua"
   }
 }
