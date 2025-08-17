@@ -9,8 +9,8 @@
   },
   "admin-messages": {
     "title": "Admin Messages",
-    "shortDescription": "Broadcast messages to admins",
-    "description": "Send system-wide messages or notifications directly to server admins.",
+    "shortDescription": "Broadcasts special admin-vip messages",
+    "description": "Announces a special message to all players when a VIP admin joins the server.",
     "lastUpdated": "Aug 12, 2025",
     "filename": "Admin Messages.lua",
     "category": "utility"
@@ -33,8 +33,8 @@
   },
   "alias-system": {
     "title": "Alias System",
-    "shortDescription": "Custom player aliases",
-    "description": "Assigns alternate names or nicknames to players, supporting both display and command usage.",
+    "shortDescription": "Advanced alias look-up system",
+    "description": "Look up aliases based CD Key Hash, IP Address, ID or Name.",
     "lastUpdated": "Jun 15, 2020",
     "filename": "Alias System.lua",
     "category": "utility"
@@ -89,8 +89,8 @@
   },
   "auto-lead": {
     "title": "Auto Lead",
-    "shortDescription": "Automatic team leader assignment",
-    "description": "Assigns team leaders automatically based on server rules and player activity.",
+    "shortDescription": "SAPP Auto Lead System",
+    "description": "Automatically toggles SAPP's lead mode based on specified map and game type configurations",
     "lastUpdated": "Jun 2, 2020",
     "filename": "Auto-Lead.lua",
     "category": "utility"
@@ -129,8 +129,8 @@
   },
   "chat-ids": {
     "title": "Chat IDs",
-    "shortDescription": "Track chat participants",
-    "description": "Displays player IDs alongside messages for easier identification in chat logs.",
+    "shortDescription": "Visible player IDs",
+    "description": "Shows player IDs in the chat for easier identification.",
     "lastUpdated": "Nov 12, 2019",
     "filename": "Chat IDs.lua",
     "category": "utility"
@@ -138,15 +138,15 @@
   "clear-chat": {
     "title": "Clear Chat",
     "shortDescription": "Wipe chat history",
-    "description": "Clears the server chat for all players instantly or on a schedule.",
+    "description": "Clears the server chat for all players instantly.",
     "lastUpdated": "Dec 1, 2019",
     "filename": "Clear Chat.lua",
     "category": "utility"
   },
   "client-crasher": {
     "title": "Client Crasher",
-    "shortDescription": "Test client stability",
-    "description": "Sends specific data packets to crash or test the robustness of player clients.",
+    "shortDescription": "A tool to crash clients",
+    "description": "This tool will crash clients to the desktop",
     "lastUpdated": "Jan 5, 2020",
     "filename": "Client Crasher.lua",
     "category": "utility"
@@ -154,7 +154,7 @@
   "console-logo": {
     "title": "Console Logo",
     "shortDescription": "Display custom console logo",
-    "description": "Shows a custom ASCII or image logo in the server console upon startup.",
+    "description": "Shows a custom ASCII logo in the server console upon startup.",
     "lastUpdated": "Feb 15, 2020",
     "filename": "Console Logo.lua",
     "category": "utility"
@@ -169,8 +169,8 @@
   },
   "custom-colors": {
     "title": "Custom Colors",
-    "shortDescription": "Assign custom colors to players or UI elements",
-    "description": "Allows modification of in-game colors for players, teams, or HUD elements.",
+    "shortDescription": "Assign custom colors to players",
+    "description": "Allows modification of in-game colors for players or teams.",
     "lastUpdated": "Apr 10, 2020",
     "filename": "Custom Colors.lua",
     "category": "utility"
@@ -193,8 +193,8 @@
   },
   "custom-vehicle-spawner": {
     "title": "Custom Vehicle Spawner",
-    "shortDescription": "Spawn vehicles with settings",
-    "description": "Admin utility to spawn vehicles with custom properties such as type, position, and team assignment.",
+    "shortDescription": "Override map vehicle spawns",
+    "description": "Replaces default vehicle spawns with custom locations and configurations.",
     "lastUpdated": "Jul 15, 2020",
     "filename": "Custom Vehicle Spawner.lua",
     "category": "utility"
@@ -202,7 +202,7 @@
   "cyborg-spawner": {
     "title": "Cyborg Spawner",
     "shortDescription": "Spawn AI enemies",
-    "description": "Spawns cyborg AI units with configurable behavior, health, and team assignments.",
+    "description": "Spawns cyborg AI units",
     "lastUpdated": "Aug 2, 2020",
     "filename": "Cyborg Spawner.lua",
     "category": "utility"
@@ -217,8 +217,8 @@
   },
   "delay-skip": {
     "title": "Delay Skip",
-    "shortDescription": "Skip delays automatically",
-    "description": "Skips countdowns or delays in game events, like spawn timers or map transitions.",
+    "shortDescription": "Prevent players from skipping the map too early",
+    "description": "Prevents players from skipping the map too early, useful for custom game modes.",
     "lastUpdated": "Oct 5, 2020",
     "filename": "Delay Skip.lua",
     "category": "utility"
