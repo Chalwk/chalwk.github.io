@@ -3,7 +3,7 @@
 Welcome to my corner of the internet! This is my official GitHub Pages site, where I share my **coding journey, insights, and creations**.
 
 ## [Visit the website](https://chalwk.github.io./)
-## [New HSP Script Repository](./website/hsp-repo/main.html)
+## [New HSP Script Repository](https://chalwk.github.io/website/hsp-repo/main.html)
 
 ---
 
