@@ -77,14 +77,7 @@ function fetchScript(scriptPath) {
     const meta = scriptMetadata[category][scriptId];
     if (!meta) return Promise.reject('Metadata missing');
 
-    const CATEGORY_FOLDER_MAP = {
-        "attractive": "attractive",
-        "custom_games": "custom_games",
-        "utility": "utility"
-    };
-
-    const folder = CATEGORY_FOLDER_MAP[category] || category;
-    const url = `${RAW_REPO_BASE}sapp/${folder}/${meta.filename}`;
+    const url = `${RAW_REPO_BASE}sapp/${category}/${meta.filename}`;
 
     return fetch(url)
         .then(res => res.ok ? res.text() : Promise.reject(`Network error: ${res.status}`))
