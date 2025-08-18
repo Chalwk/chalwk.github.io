@@ -108,6 +108,7 @@ function attachEventListeners() {
                 document.getElementById('scriptFullDescription').textContent = meta.description;
                 document.getElementById('scriptCode').textContent = code;
                 hljs.highlightElement(document.getElementById('scriptCode'));
+                document.querySelector('.code-header div').textContent = meta.filename; // script name
                 document.getElementById('downloadCodeBtn').setAttribute('data-script', scriptPath);
                 document.getElementById('scriptDetail').style.display = 'block';
                 document.getElementById('scriptDetail').scrollIntoView({ behavior: 'smooth' });
