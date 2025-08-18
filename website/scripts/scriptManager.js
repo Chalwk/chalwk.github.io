@@ -12,15 +12,23 @@ returnTopBtn.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
-// Load script metadata
-fetch('scripts.json')
-    .then(response => response.json())
+// ---------------
+// Load metadata from HSP GitHub repo
+// ---------------
+const RAW_METADATA_URL = 'https://raw.githubusercontent.com/Chalwk/HALO-SCRIPT-PROJECTS/master/metadata.json';
+const RAW_REPO_BASE = 'https://raw.githubusercontent.com/Chalwk/HALO-SCRIPT-PROJECTS/master/';
+
+fetch(RAW_METADATA_URL)
+    .then(res => res.json())
     .then(metadata => {
         scriptMetadata = metadata;
         renderScripts();
     })
-    .catch(error => console.error('Error loading script metadata:', error));
+    .catch(err => console.error('Error loading script metadata:', err));
 
+// ---------------
+// Render scripts into categories
+// ---------------
 function renderScripts() {
     for (const categoryName in scriptMetadata) {
         const categoryScripts = scriptMetadata[categoryName];
@@ -61,15 +69,25 @@ function renderScripts() {
     setupSearch();
 }
 
+// ---------------
+// Fetch script from GitHub
+// ---------------
 function fetchScript(scriptPath) {
     const [category, scriptId] = scriptPath.split('/');
     const meta = scriptMetadata[category][scriptId];
     if (!meta) return Promise.reject('Metadata missing');
 
-    const filename = meta.filename;
-    const categoryFolder = category.toLowerCase().replace(/\s+/g, '-');
-    return fetch(`scripts/${categoryFolder}/${filename}`)
-        .then(response => response.ok ? response.text() : Promise.reject('Network error'))
+    const CATEGORY_FOLDER_MAP = {
+        "attractive": "attractive",
+        "custom_games": "custom_games",
+        "utility": "utility"
+    };
+
+    const folder = CATEGORY_FOLDER_MAP[category] || category;
+    const url = `${RAW_REPO_BASE}sapp/${folder}/${meta.filename}`;
+
+    return fetch(url)
+        .then(res => res.ok ? res.text() : Promise.reject(`Network error: ${res.status}`))
         .then(data => {
             scriptCache[scriptPath] = data;
             return data;
@@ -81,6 +99,9 @@ function getScript(scriptPath, callback) {
     else fetchScript(scriptPath).then(code => callback(code)).catch(console.error);
 }
 
+// ---------------
+// Event Listeners
+// ---------------
 function attachEventListeners() {
     document.querySelectorAll('.view-btn').forEach(button => {
         button.addEventListener('click', function() {
@@ -134,12 +155,12 @@ function attachEventListeners() {
     });
 }
 
-document.getElementById('closeDetail').addEventListener('click', function() {
+document.getElementById('closeDetail').addEventListener('click', () => {
     document.getElementById('scriptDetail').style.display = 'none';
     hideReturnTop();
 });
 
-document.getElementById('copyCodeBtn').addEventListener('click', function() {
+document.getElementById('copyCodeBtn').addEventListener('click', () => {
     const code = document.getElementById('scriptCode').textContent;
     navigator.clipboard.writeText(code).then(() => showToast('Code copied to clipboard!'));
 });
@@ -164,6 +185,9 @@ document.getElementById('downloadCodeBtn').addEventListener('click', function() 
     showToast('Download started!');
 });
 
+// ---------------
+// Toast Notification
+// ---------------
 function showToast(message) {
     const toast = document.getElementById('toast');
     toast.querySelector('span').textContent = message;
@@ -171,9 +195,12 @@ function showToast(message) {
     setTimeout(() => toast.classList.remove('show'), 3000);
 }
 
+// ---------------
+// Collapsible categories
+// ---------------
 function setupCollapsibleCategories() {
     document.querySelectorAll('.script-category').forEach(category => {
-        category.classList.add('collapsed'); // start collapsed
+        category.classList.add('collapsed');
         const header = category.querySelector('h2');
         const grid = category.querySelector('.script-grid');
 
@@ -184,7 +211,9 @@ function setupCollapsibleCategories() {
     });
 }
 
+// ---------------
 // Search functionality
+// ---------------
 function setupSearch() {
     const searchInput = document.getElementById('scriptSearch');
 
@@ -197,7 +226,7 @@ function setupSearch() {
 
             cards.forEach(card => {
                 const title = card.querySelector('h3').textContent.toLowerCase();
-                const desc = card.querySelector('.script-description p').textContent.toLowerCase();
+                const desc = card.querySelector('p').textContent.toLowerCase();
 
                 if (title.includes(query) || desc.includes(query)) {
                     card.style.display = '';
@@ -207,7 +236,6 @@ function setupSearch() {
                 }
             });
 
-            // Automatically expand/collapse category based on search results
             const grid = category.querySelector('.script-grid');
             if (anyVisible) {
                 category.classList.remove('collapsed');
