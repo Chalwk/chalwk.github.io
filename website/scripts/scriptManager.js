@@ -17,6 +17,7 @@ returnTopBtn.addEventListener('click', () => {
 // ---------------
 const RAW_METADATA_URL = 'https://raw.githubusercontent.com/Chalwk/HALO-SCRIPT-PROJECTS/master/metadata.json';
 const RAW_REPO_BASE = 'https://raw.githubusercontent.com/Chalwk/HALO-SCRIPT-PROJECTS/master/';
+const RELEASES_API_URL = "https://api.github.com/repos/Chalwk/HALO-SCRIPT-PROJECTS/releases";
 
 fetch(RAW_METADATA_URL)
     .then(res => res.json())
@@ -67,6 +68,43 @@ function renderScripts() {
     attachEventListeners();
     setupCollapsibleCategories();
     setupSearch();
+}
+
+// Render Flagship Releases
+fetch(RELEASES_API_URL)
+    .then(res => res.json())
+    .then(releases => renderReleases(releases))
+    .catch(err => console.error("Error loading releases:", err));
+
+function renderReleases(releases) {
+    const container = document.querySelector("#flagship_releases .script-grid");
+    if (!container) return;
+
+    releases.forEach(release => {
+        // pick the first zip asset (you could loop if multiple)
+        const asset = release.assets.find(a => a.name.endsWith(".zip"));
+        if (!asset) return;
+
+        const card = document.createElement("div");
+        card.className = "script-card";
+        card.innerHTML = `
+            <div class="script-header">
+                <h3>${release.name}</h3>
+                <p>${release.body ? release.body.substring(0,150) + "..." : "No description provided."}</p>
+            </div>
+            <div class="script-content">
+                <div class="script-actions">
+                    <a href="${asset.browser_download_url}" class="action-btn download-btn" target="_blank">
+                        <i class="fas fa-download"></i> Download ZIP
+                    </a>
+                    <a href="${release.html_url}" class="action-btn view-btn" target="_blank">
+                        <i class="fas fa-eye"></i> View Release
+                    </a>
+                </div>
+            </div>
+        `;
+        container.appendChild(card);
+    });
 }
 
 // ---------------
