@@ -9,16 +9,56 @@
     margin-bottom: 20px;
 }
 
-.skills {
-    display: flex;
-    flex-wrap: wrap;
+.about-icons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
     gap: 15px;
     margin-top: 20px;
+    padding: 15px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
 }
 
-.skill-tag {
-    background-color: var(--card-bg);
-    padding: 8px 15px;
-    border-radius: 20px;
-    font-size: 0.9rem;
+.about-highlights {
+    margin-bottom: 20px;
+}
+
+.about-highlights li {
+    margin-bottom: 10px;
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.about-highlights li:before {
+    content: "";
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.tool-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.tool-icon img {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 5px;
+    object-fit: contain;
+}
+
+.tool-icon span {
+    font-size: 0.7rem;
+    color: #aaa;
+}
+
+.connect-list {
+    margin-top: 15px;
+}
+
+.connect-list li {
+    margin-bottom: 8px;
 }
