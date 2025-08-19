@@ -527,3 +527,36 @@ code.hljs {
     border-radius: 8px;
     border: 1px solid #ccc;
 }
+
+/* Releases Section */
+.flagship_releases {
+    margin-top: 4rem;
+    padding: 2rem;
+    background: rgba(26, 36, 53, 0.85);
+    border-radius: 12px;
+    border: 1px solid rgba(157, 109, 226, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.flagship_releases h2 {
+    font-size: 2rem;
+    color: #ffcc66;
+    border-bottom: 2px solid #ffcc66;
+    padding-bottom: 0.6rem;
+}
+
+.flagship_releases .category-description {
+    font-size: 1rem;
+    color: #c5d4eb;
+    margin-top: 0.5rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-style: italic;
+}
+
+.flagship_releases .script-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+}
