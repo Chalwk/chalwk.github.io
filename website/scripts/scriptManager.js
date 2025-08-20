@@ -9,6 +9,16 @@ function showReturnTop() { returnTopBtn.style.display = 'block'; }
 function hideReturnTop() { returnTopBtn.style.display = 'none'; }
 
 returnTopBtn.addEventListener('click', () => {
+    // Hide the script detail panel
+    document.getElementById('scriptDetail').style.display = 'none';
+    hideReturnTop();
+
+    // Remove ?script=... from the URL without reloading
+    const url = new URL(window.location);
+    url.searchParams.delete('script');
+    window.history.replaceState({}, '', url);
+
+    // Scroll back to top
     window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
@@ -18,13 +28,13 @@ returnTopBtn.addEventListener('click', () => {
 const RAW_METADATA_URL = 'https://raw.githubusercontent.com/Chalwk/HALO-SCRIPT-PROJECTS/master/metadata.json';
 const RAW_REPO_BASE = 'https://raw.githubusercontent.com/Chalwk/HALO-SCRIPT-PROJECTS/master/';
 const RELEASES_API_URL = "https://api.github.com/repos/Chalwk/HALO-SCRIPT-PROJECTS/releases";
-//const RELEASES_API_URL = "https://raw.githubusercontent.com/Chalwk/HALO-SCRIPT-PROJECTS/master/flagship_metadata.json";
 
 fetch(RAW_METADATA_URL)
     .then(res => res.json())
     .then(metadata => {
         scriptMetadata = metadata;
         renderScripts();
+        autoOpenFromURL(); // run after scripts are rendered
     })
     .catch(err => console.error('Error loading script metadata:', err));
 
@@ -50,7 +60,11 @@ function renderScripts() {
             card.className = 'script-card';
             card.innerHTML = `
                 <div class="script-header">
-                    <h3>${meta.title}</h3>
+                    <h3>
+                        <a href="?script=${categoryName}/${scriptId}" class="script-link">
+                            ${meta.title}
+                        </a>
+                    </h3>
                     <p>${meta.shortDescription}</p>
                 </div>
                 <div class="script-content">
@@ -84,7 +98,6 @@ function renderReleases(releases) {
     if (!container) return;
 
     releases.forEach(release => {
-
         const asset = release.assets.find(a => a.name.endsWith(".zip"));
         if (!asset) return;
 
@@ -109,33 +122,6 @@ function renderReleases(releases) {
         container.appendChild(card);
     });
 }
-
-//function renderReleases(releases) {
-//    const container = document.querySelector("#flagship_releases .script-grid");
-//    if (!container) return;
-//
-//    releases.forEach(release => {
-//        const asset = release.assets.find(a => a.name.endsWith(".zip"));
-//        if (!asset) return;
-//
-//        const card = document.createElement("div");
-//        card.className = "script-card";
-//        card.innerHTML = `
-//            <div class="script-header">
-//                <h3><a href="${release.html_url}" target="_blank">${release.name || release.tag_name}</a></h3>
-//                <p>${release.body ? release.body.replace(/\r?\n|\r/g, " ").substring(0, 150) + "..." : "No description provided."}</p>
-//            </div>
-//            <div class="script-content">
-//                <div class="script-actions">
-//                    <a href="${asset.download_url}" class="action-btn download-btn" target="_blank">
-//                        <i class="fas fa-download"></i> ${asset.name}
-//                    </a>
-//                </div>
-//            </div>
-//        `;
-//        container.appendChild(card);
-//    });
-//}
 
 // ---------------
 // Fetch script from GitHub
@@ -167,21 +153,7 @@ function attachEventListeners() {
     document.querySelectorAll('.view-btn').forEach(button => {
         button.addEventListener('click', function() {
             const scriptPath = this.getAttribute('data-script');
-            const [category, scriptId] = scriptPath.split('/');
-            const meta = scriptMetadata[category][scriptId];
-            if (!meta) return;
-
-            getScript(scriptPath, code => {
-                document.getElementById('scriptTitle').textContent = meta.title;
-                document.getElementById('scriptFullDescription').textContent = meta.description;
-                document.getElementById('scriptCode').textContent = code;
-                hljs.highlightElement(document.getElementById('scriptCode'));
-                document.querySelector('.code-header div').textContent = meta.filename; // script name
-                document.getElementById('downloadCodeBtn').setAttribute('data-script', scriptPath);
-                document.getElementById('scriptDetail').style.display = 'block';
-                document.getElementById('scriptDetail').scrollIntoView({ behavior: 'smooth' });
-                showReturnTop();
-            });
+            openScriptDetail(scriptPath);
         });
     });
 
@@ -214,6 +186,24 @@ function attachEventListeners() {
                 showToast('Download started!');
             });
         });
+    });
+}
+
+function openScriptDetail(scriptPath) {
+    const [category, scriptId] = scriptPath.split('/');
+    const meta = scriptMetadata[category][scriptId];
+    if (!meta) return;
+
+    getScript(scriptPath, code => {
+        document.getElementById('scriptTitle').textContent = meta.title;
+        document.getElementById('scriptFullDescription').textContent = meta.description;
+        document.getElementById('scriptCode').textContent = code;
+        hljs.highlightElement(document.getElementById('scriptCode'));
+        document.querySelector('.code-header div').textContent = meta.filename;
+        document.getElementById('downloadCodeBtn').setAttribute('data-script', scriptPath);
+        document.getElementById('scriptDetail').style.display = 'block';
+        document.getElementById('scriptDetail').scrollIntoView({ behavior: 'smooth' });
+        showReturnTop();
     });
 }
 
@@ -308,4 +298,15 @@ function setupSearch() {
             }
         });
     });
+}
+
+// ---------------
+// Auto-open script from URL (?script=...)
+// ---------------
+function autoOpenFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    const scriptPath = params.get('script');
+    if (scriptPath) {
+        openScriptDetail(scriptPath);
+    }
 }
