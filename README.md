@@ -1,6 +1,7 @@
 # 🌐 Chalwk's Personal GitHub Website
 
-Welcome to my corner of the internet! This is my official GitHub Pages site, where I share my **coding journey, insights, and creations**.
+Welcome to my corner of the internet! This is my official GitHub Pages site, where I share my **coding journey,
+insights, and creations**.
 
 # [Visit the website](https://chalwk.github.io./)
 

@@ -2,23 +2,23 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Lua Script Directory</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
           rel="stylesheet">
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
-    <link rel="stylesheet" href="../styles/hsp-page-style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css"
+          rel="stylesheet">
+    <link href="../styles/style.css" rel="stylesheet">
 </head>
-<body>
+<body class="hsp-body">
 
 <header class="header">
-    <a href="#" class="logo">
+    <a class="logo" href="#">
         <i class="fas fa-code"></i>
         Chalwk
     </a>
-    <a href="../index.html" class="back-btn">
+    <a class="back-btn" href="../index.html">
         <i class="fas fa-arrow-left"></i>
         Return to Home page
     </a>
@@ -28,15 +28,16 @@
     <header class="page-title">
         <h1>SAPP & Phasor Lua Script Library</h1>
         <p>
-            Browse and download a personally curated collection of <strong>SAPP</strong> and <strong>Phasor</strong> Lua scripts,
+            Browse and download a personally curated collection of <strong>SAPP</strong> and <strong>Phasor</strong> Lua
+            scripts,
             created and maintained by me for <strong>Halo: PC (Retail)</strong> and
             <strong>Halo: Custom Edition (CE)</strong> dedicated servers.
         </p>
     </header>
 
     <div class="search-container">
-        <label for="scriptSearch" class="visually-hidden">Search Scripts</label>
-        <input type="text" id="scriptSearch" placeholder="Search scripts..."/>
+        <label class="visually-hidden" for="scriptSearch">Search Scripts</label>
+        <input id="scriptSearch" placeholder="Search scripts..." type="text"/>
     </div>
 
     <div class="script-categories">
@@ -91,7 +92,7 @@
             <pre><code class="language-lua" id="scriptCode"></code></pre>
         </div>
 
-        <button id="returnTopBtn" style="display:none;" class="return-top">
+        <button class="return-top" id="returnTopBtn" style="display:none;">
             <i class="fas fa-arrow-up"></i> Return to Top
         </button>
     </div>
