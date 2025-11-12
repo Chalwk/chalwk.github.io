@@ -32,6 +32,8 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
+    position: relative;
+    z-index: 1;
 }
 
 .btn {
@@ -136,6 +138,7 @@ nav {
 
 /* HSP Page Specific Header */
 .header {
+    height: 60px;
     background: rgba(13, 22, 33, 0.95);
     backdrop-filter: blur(10px);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
@@ -469,6 +472,8 @@ footer {
     text-align: center;
     margin-bottom: 40px;
     position: relative;
+    margin-top: 0;
+    padding-top: 20px;
 }
 
 .page-title h1 {
