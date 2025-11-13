@@ -1,0 +1,56 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #222;
+    color: #eee;
+}
+
+h1 {
+    margin: 20px 0;
+}
+
+#maze-container {
+    display: inline-block;
+    margin-top: 20px;
+    background-color: #000;
+}
+
+.cell {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+}
+
+.wall {
+    background-color: #555;
+}
+
+.path {
+    background-color: #111;
+}
+
+.player {
+    background-color: #0f0;
+}
+
+.end {
+    background-color: #f00;
+}
+
+#touch-controls {
+    margin-top: 20px;
+}
+
+#touch-controls button {
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+    margin: 5px;
+    background-color: #333;
+    color: #eee;
+    border: none;
+    border-radius: 8px;
+}
+#touch-controls button:active {
+    background-color: #555;
+}

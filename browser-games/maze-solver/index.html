@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Maze Solver</title>
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>Maze Solver</h1>
+        <p>Use WASD or the buttons below to navigate the maze!</p>
+    </header>
+
+    <main>
+        <div id="game-container">
+            <div id="score">Moves: 0</div>
+            <div id="maze-container"></div>
+        </div>
+
+        <div id="controls">
+            <button id="reset-btn">Restart</button>
+            <button id="browser-btn">Return to Game Browser</button>
+        </div>
+
+        <div id="instructions">
+            <p>How to play: Move your green square to the red square using WASD or the arrow buttons below!</p>
+        </div>
+
+        <div id="touch-controls">
+            <button data-dir="up">↑</button>
+            <button data-dir="left">←</button>
+            <button data-dir="down">↓</button>
+            <button data-dir="right">→</button>
+        </div>
+    </main>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
