@@ -67,13 +67,25 @@ h1 {
 }
 
 .back-link {
+    display: inline-block;
     margin-top: 30px;
+    padding: 10px 20px;
+    font-weight: 500;
+    font-size: 1rem;
     color: #007BFF;
+    background-color: #fff;
+    border: 2px solid #007BFF;
+    border-radius: 8px;
     text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 .back-link:hover {
-    text-decoration: underline;
+    color: #fff;
+    background-color: #007BFF;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transform: translateY(-2px);
 }
 
 main {
