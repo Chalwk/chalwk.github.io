@@ -23,6 +23,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
+// Projects Toggle
 document.addEventListener("DOMContentLoaded", () => {
     const toggleBtn = document.getElementById("toggle-projects");
     const projectsWrapper = document.getElementById("projects-wrapper");
@@ -30,7 +31,6 @@ document.addEventListener("DOMContentLoaded", () => {
     toggleBtn.addEventListener("click", () => {
         projectsWrapper.classList.toggle("show");
 
-        // Optional: Change button text dynamically
         if (projectsWrapper.classList.contains("show")) {
             toggleBtn.textContent = "Hide Projects";
         } else {
