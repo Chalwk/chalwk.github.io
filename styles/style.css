@@ -520,6 +520,21 @@ footer {
 }
 
 /* ===== HSP LIBRARY PAGE STYLES ===== */
+
+.no-results-message {
+    text-align: center;
+    padding: 2rem;
+    margin: 2rem 0;
+    background: var(--card-bg);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    display: none;
+}
+
+.no-results-message strong {
+    color: var(--accent-color);
+}
+
 .hsp-body {
     background: linear-gradient(135deg, #0d1621 0%, #1a2435 100%);
     color: #e0e9f4;

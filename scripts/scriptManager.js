@@ -251,7 +251,10 @@ function showToast(message) {
 // Collapsible categories
 // ---------------
 function setupCollapsibleCategories() {
-    document.querySelectorAll('.script-category').forEach(category => {
+    // Include both regular categories and flagship releases
+    const allCategories = document.querySelectorAll('.script-category, #flagship_releases');
+
+    allCategories.forEach(category => {
         category.classList.add('collapsed');
         const header = category.querySelector('h2');
         const grid = category.querySelector('.script-grid');
@@ -268,36 +271,119 @@ function setupCollapsibleCategories() {
 // ---------------
 function setupSearch() {
     const searchInput = document.getElementById('scriptSearch');
+    let searchTimeout;
 
     searchInput.addEventListener('input', () => {
-        const query = searchInput.value.toLowerCase();
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            performSearch(searchInput.value);
+        }, 300); // Delay search by 300ms for better performance
+    });
 
-        document.querySelectorAll('.script-category').forEach(category => {
-            const cards = category.querySelectorAll('.script-card');
-            let anyVisible = false;
+    // Also trigger search on Enter key
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            performSearch(searchInput.value);
+        }
+    });
+}
 
-            cards.forEach(card => {
-                const title = card.querySelector('h3').textContent.toLowerCase();
-                const desc = card.querySelector('p').textContent.toLowerCase();
+function performSearch(query) {
+    const searchTerm = query.toLowerCase().trim();
 
-                if (title.includes(query) || desc.includes(query)) {
+    // If search is empty, show all categories and cards
+    if (!searchTerm) {
+        resetSearch();
+        return;
+    }
+
+    // Include flagship releases in search
+    const allCategories = document.querySelectorAll('.script-category, #flagship_releases');
+    let totalMatches = 0;
+
+    allCategories.forEach(category => {
+        const cards = category.querySelectorAll('.script-card');
+        let categoryMatches = 0;
+
+        cards.forEach(card => {
+            const titleElement = card.querySelector('h3');
+            const descElement = card.querySelector('p');
+
+            if (titleElement && descElement) {
+                const title = titleElement.textContent.toLowerCase();
+                const desc = descElement.textContent.toLowerCase();
+                const matches = title.includes(searchTerm) || desc.includes(searchTerm);
+
+                if (matches) {
                     card.style.display = '';
-                    anyVisible = true;
+                    categoryMatches++;
+                    totalMatches++;
                 } else {
                     card.style.display = 'none';
                 }
-            });
+            }
+        });
 
-            const grid = category.querySelector('.script-grid');
-            if (anyVisible) {
+        const grid = category.querySelector('.script-grid');
+        if (grid) {
+            if (categoryMatches > 0) {
                 category.classList.remove('collapsed');
                 grid.style.display = 'grid';
             } else {
                 category.classList.add('collapsed');
                 grid.style.display = 'none';
             }
-        });
+        }
     });
+
+    // Show message if no results found
+    if (totalMatches === 0) {
+        showNoResultsMessage(searchTerm);
+    } else {
+        hideNoResultsMessage();
+    }
+}
+
+function resetSearch() {
+    const allCategories = document.querySelectorAll('.script-category, #flagship_releases');
+
+    allCategories.forEach(category => {
+        const cards = category.querySelectorAll('.script-card');
+        cards.forEach(card => {
+            card.style.display = '';
+        });
+
+        // Keep categories in their default state (you might want to remember collapsed state)
+        const grid = category.querySelector('.script-grid');
+        if (grid) {
+            if (category.classList.contains('collapsed')) {
+                grid.style.display = 'none';
+            } else {
+                grid.style.display = 'grid';
+            }
+        }
+    });
+
+    hideNoResultsMessage();
+}
+
+function showNoResultsMessage(searchTerm) {
+    let noResultsMsg = document.getElementById('noResultsMessage');
+    if (!noResultsMsg) {
+        noResultsMsg = document.createElement('div');
+        noResultsMsg.id = 'noResultsMessage';
+        noResultsMsg.className = 'no-results-message';
+        document.querySelector('.container').appendChild(noResultsMsg);
+    }
+    noResultsMsg.innerHTML = `No scripts found for "<strong>${searchTerm}</strong>"`;
+    noResultsMsg.style.display = 'block';
+}
+
+function hideNoResultsMessage() {
+    const noResultsMsg = document.getElementById('noResultsMessage');
+    if (noResultsMsg) {
+        noResultsMsg.style.display = 'none';
+    }
 }
 
 // ---------------
