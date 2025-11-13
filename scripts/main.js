@@ -22,3 +22,19 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         });
     });
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+    const toggleBtn = document.getElementById("toggle-projects");
+    const projectsWrapper = document.getElementById("projects-wrapper");
+
+    toggleBtn.addEventListener("click", () => {
+        projectsWrapper.classList.toggle("show");
+
+        // Optional: Change button text dynamically
+        if (projectsWrapper.classList.contains("show")) {
+            toggleBtn.textContent = "Hide Projects";
+        } else {
+            toggleBtn.textContent = "Show Projects";
+        }
+    });
+});

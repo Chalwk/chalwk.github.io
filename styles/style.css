@@ -321,6 +321,19 @@ nav {
 }
 
 /* ===== PROJECTS SECTION ===== */
+#projects-wrapper {
+    transition: max-height 0.5s ease, opacity 0.5s ease;
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+}
+
+#projects-wrapper.show {
+    max-height: 5000px; /* large enough to fit all cards */
+    opacity: 1;
+    display: block;
+}
+
 .projects-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -338,6 +351,23 @@ nav {
 .project-card:hover {
     transform: translateY(-10px);
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+}
+
+.project-icon {
+    text-align: center;
+    margin-bottom: 1rem;
+    color: var(--primary);
+    margin-top: 10px; /* adjust the value as needed */
+}
+
+.project-icon i {
+    display: inline-block;
+    transition: transform 0.3s ease;
+    font-size: 3rem; /* or adjust size */
+}
+
+.project-icon i:hover {
+    transform: scale(1.2);
 }
 
 .project-img {
