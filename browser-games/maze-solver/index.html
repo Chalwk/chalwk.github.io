@@ -1,42 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Maze Solver</title>
-    <link href="style.css" rel="stylesheet">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>Maze Solver — Polished</title>
+    <meta name="theme-color" content="#0f172a">
+    <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-<div class="container">
-    <header>
-        <h1>Maze Solver</h1>
-        <p>Use WASD or the buttons below to navigate the maze!</p>
+<div class="app">
+    <header class="topbar">
+        <div class="brand">
+            <h1>Maze <span>Solver</span></h1>
+            <p class="tag">WASD / Arrows • Touch-friendly • Hint included</p>
+        </div>
+
+        <div class="hud">
+            <div id="score" class="hud-item" aria-live="polite">Moves: 0</div>
+            <div id="timer" class="hud-item">Time: 0s</div>
+            <div id="best" class="hud-item">Best: —</div>
+        </div>
     </header>
 
-    <main>
-        <div id="game-container">
-            <div id="score">Moves: 0</div>
-            <div id="maze-container"></div>
-        </div>
+    <main class="main">
+        <section id="game-area" class="card">
+            <div id="game-controls" class="controls-top">
+                <div class="left-controls">
+                    <button id="reset-btn" class="btn primary">Restart</button>
+                    <button id="hint-btn" class="btn">Show Hint</button>
+                </div>
+                <div class="right-controls">
+                    <label class="size-label">Size
+                        <select id="size-select" aria-label="Maze size">
+                            <option value="11" selected>11 × 11</option>
+                            <option value="15">15 × 15</option>
+                            <option value="21">21 × 21</option>
+                            <option value="31">31 × 31</option>
+                        </select>
+                    </label>
+                    <button id="browser-btn" class="btn subtle">Return</button>
+                </div>
+            </div>
 
-        <div id="controls">
-            <button id="reset-btn">Restart</button>
-            <button id="browser-btn">Return to Game Browser</button>
-        </div>
+            <div id="game-container" class="game-container">
+                <div id="maze-container" aria-hidden="false"></div>
+            </div>
 
-        <div id="instructions">
-            <p>How to play: Move your green square to the red square using WASD or the arrow buttons below!</p>
-        </div>
+            <div class="instructions">
+                <p>Move your <span class="pill green">player</span> to the <span class="pill red">goal</span>. Use WASD
+                    or arrow keys, or the touch D-pad below.</p>
+            </div>
 
-        <div id="touch-controls">
-            <button data-dir="up">↑</button>
-            <button data-dir="left">←</button>
-            <button data-dir="down">↓</button>
-            <button data-dir="right">→</button>
-        </div>
+            <div id="touch-controls" class="dpad" role="group" aria-label="Touch controls">
+                <button data-dir="up" class="dpad-btn">▲</button>
+                <div class="dpad-row">
+                    <button data-dir="left" class="dpad-btn">◀</button>
+                    <button data-dir="down" class="dpad-btn">▼</button>
+                    <button data-dir="right" class="dpad-btn">▶</button>
+                </div>
+            </div>
+        </section>
+
+        <aside class="info card">
+            <h3>Tips</h3>
+            <ul>
+                <li>Try larger mazes for a challenge.</li>
+                <li>Use <strong>Show Hint</strong> if you get stuck (briefly shows shortest path).</li>
+                <li>Best score is saved locally (moves).</li>
+            </ul>
+            <footer class="credit">Made by Jericho Crosby (Chalwk)</footer>
+        </aside>
     </main>
 </div>
 
 <script src="script.js"></script>
+<div id="message-overlay" class="message-overlay" aria-live="polite"></div>
 </body>
 </html>
