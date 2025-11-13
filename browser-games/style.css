@@ -75,3 +75,14 @@ h1 {
 .back-link:hover {
     text-decoration: underline;
 }
+
+main {
+    flex: 1;
+}
+
+footer {
+    text-align: center;
+    padding: 15px 0;
+    font-size: 0.9rem;
+    color: #555;
+}
