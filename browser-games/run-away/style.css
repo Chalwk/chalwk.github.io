@@ -63,7 +63,7 @@ header p {
 
 #player {
     position: absolute;
-    bottom: 60px;
+    bottom: 40px;
     left: 100px;
     width: 30px;
     height: 60px;
@@ -125,13 +125,13 @@ header p {
 }
 
 .left-leg {
-    left: 5px;
+    left: 0;
     transform-origin: right center;
     animation: runLeg 0.5s infinite alternate;
 }
 
 .right-leg {
-    right: 5px;
+    right: 0;
     transform-origin: left center;
     animation: runLeg 0.5s infinite alternate-reverse;
 }
@@ -158,6 +158,7 @@ header p {
     bottom: 60px;
     font-size: 2.5rem;
     z-index: 5;
+    right: -100px;
 }
 
 #ground {
@@ -167,6 +168,7 @@ header p {
     height: 60px;
     background: linear-gradient(to right, #8B4513, #A0522D);
     border-top: 3px solid #654321;
+    z-index: 1;
 }
 
 .jumping {
@@ -174,9 +176,9 @@ header p {
 }
 
 @keyframes jump {
-    0% { bottom: 60px; }
-    50% { bottom: 180px; }
-    100% { bottom: 60px; }
+    0% { bottom: 45px; }
+    50% { bottom: 120px; }
+    100% { bottom: 45px; }
 }
 
 @keyframes runArm {
@@ -185,12 +187,17 @@ header p {
 }
 
 @keyframes runLeg {
-    0% { transform: rotate(-20deg); }
-    100% { transform: rotate(20deg); }
+    0% { transform: rotate(30deg); }
+    50% { transform: rotate(-30deg); }
+    100% { transform: rotate(30deg); }
 }
 
 .obstacle-moving {
     animation: obstacleMove 2s linear infinite;
+}
+
+.obstacle.flying {
+    bottom: 120px;
 }
 
 @keyframes obstacleMove {
@@ -257,4 +264,8 @@ button:active {
 
 .hidden {
     display: none;
+}
+
+#browser-btn {
+    background: linear-gradient(45deg, #4CAF50, #45a049);
 }

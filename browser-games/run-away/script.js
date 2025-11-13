@@ -24,6 +24,11 @@ class RunAwayGame {
         this.startBtn.addEventListener('click', () => this.startGame());
         this.resetBtn.addEventListener('click', () => this.resetGame());
 
+        this.browserBtn = document.getElementById('browser-btn');
+        this.browserBtn.addEventListener('click', () => {
+            window.location.href = '../index.html';
+        });
+
         document.addEventListener('keydown', (e) => {
             if (!this.isPlaying) return;
 
@@ -158,9 +163,11 @@ class RunAwayGame {
         // Random vertical position (some obstacles can be flying)
         const isFlying = Math.random() > 0.7;
         if (isFlying) {
-            obstacle.style.bottom = `${100 + Math.random() * 80}px`;
+            obstacle.classList.add('flying');
+            obstacle.style.bottom = `${120 + Math.random() * 60}px`;
         } else {
-            obstacle.style.bottom = '60px';
+            // Ground obstacles stay on top of the ground
+            obstacle.style.bottom = '56px';
         }
 
         this.gameArea.appendChild(obstacle);
@@ -172,7 +179,7 @@ class RunAwayGame {
                 obstacle.remove();
                 this.obstacles = this.obstacles.filter(obs => obs !== obstacle);
             }
-        }, 3000);
+        }, 5000);
     }
 
     moveObstacles() {
@@ -188,19 +195,19 @@ class RunAwayGame {
         for (let obstacle of this.obstacles) {
             const obstacleRect = obstacle.getBoundingClientRect();
 
-            // More precise collision detection with adjusted hitboxes
+            // Adjust hitboxes based on player state
             const playerHitbox = {
-                left: playerRect.left + 10,
-                right: playerRect.right - 10,
-                top: playerRect.top + 10,
-                bottom: playerRect.bottom - (this.isCrouching ? 20 : 10)
+                left: playerRect.left + 15,
+                right: playerRect.right - 15,
+                top: playerRect.top + (this.isCrouching ? 20 : 10),
+                bottom: playerRect.bottom - (this.isCrouching ? 10 : 5)
             };
 
             const obstacleHitbox = {
-                left: obstacleRect.left + 15,
-                right: obstacleRect.right - 15,
-                top: obstacleRect.top + 15,
-                bottom: obstacleRect.bottom - 15
+                left: obstacleRect.left + 10,
+                right: obstacleRect.right - 10,
+                top: obstacleRect.top + 10,
+                bottom: obstacleRect.bottom - 10
             };
 
             // Check if hitboxes overlap
@@ -208,7 +215,7 @@ class RunAwayGame {
                 playerHitbox.left < obstacleHitbox.right &&
                 playerHitbox.bottom > obstacleHitbox.top &&
                 playerHitbox.top < obstacleHitbox.bottom) {
-                
+
                 this.gameOver();
                 return;
             }
