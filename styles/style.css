@@ -434,6 +434,29 @@ nav {
     margin-bottom: 5px;
 }
 
+/* Style for See More Card */
+.see-more-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: #1e1e1e; /* match other cards */
+    border: 2px dashed var(--primary);
+    color: var(--primary);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.see-more-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px var(--primary);
+}
+
+.see-more-card .project-icon i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
 /* ===== CONTACT SECTION ===== */
 .contact-info {
     display: grid;
