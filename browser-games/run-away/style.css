@@ -65,9 +65,92 @@ header p {
     position: absolute;
     bottom: 60px;
     left: 100px;
-    font-size: 3rem;
+    width: 30px;
+    height: 60px;
     z-index: 10;
-    transition: bottom 0.3s;
+    transition: all 0.2s ease;
+}
+
+.stick-man {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.head {
+    position: absolute;
+    top: 0;
+    left: 10px;
+    width: 10px;
+    height: 10px;
+    background-color: #333;
+    border-radius: 50%;
+}
+
+.body {
+    position: absolute;
+    top: 10px;
+    left: 14px;
+    width: 2px;
+    height: 20px;
+    background-color: #333;
+}
+
+.arm {
+    position: absolute;
+    width: 15px;
+    height: 2px;
+    background-color: #333;
+    top: 15px;
+}
+
+.left-arm {
+    left: 0;
+    transform-origin: right center;
+    animation: runArm 0.5s infinite alternate;
+}
+
+.right-arm {
+    right: 0;
+    transform-origin: left center;
+    animation: runArm 0.5s infinite alternate-reverse;
+}
+
+.leg {
+    position: absolute;
+    width: 15px;
+    height: 2px;
+    background-color: #333;
+    top: 30px;
+}
+
+.left-leg {
+    left: 5px;
+    transform-origin: right center;
+    animation: runLeg 0.5s infinite alternate;
+}
+
+.right-leg {
+    right: 5px;
+    transform-origin: left center;
+    animation: runLeg 0.5s infinite alternate-reverse;
+}
+
+.crouching .body {
+    height: 15px;
+}
+
+.crouching .arm {
+    top: 12px;
+}
+
+.crouching .leg {
+    top: 25px;
+    transform: rotate(-45deg);
+}
+
+.crouching .left-leg {
+    transform: rotate(45deg);
 }
 
 .obstacle {
@@ -94,6 +177,16 @@ header p {
     0% { bottom: 60px; }
     50% { bottom: 180px; }
     100% { bottom: 60px; }
+}
+
+@keyframes runArm {
+    0% { transform: rotate(-20deg); }
+    100% { transform: rotate(20deg); }
+}
+
+@keyframes runLeg {
+    0% { transform: rotate(-20deg); }
+    100% { transform: rotate(20deg); }
 }
 
 .obstacle-moving {
