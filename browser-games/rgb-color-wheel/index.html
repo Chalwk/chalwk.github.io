@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>RGB Color Wheel</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<main class="app">
+    <header class="app-header">
+        <h1>RGB Color Wheel</h1>
+        <p class="subtitle">Color wheel, palette, sliders — RGB, HSL, HSV, CMYK</p>
+    </header>
+
+    <section class="panel layout">
+        <div class="left">
+            <div class="wheel-card card">
+                <div class="wheel-top">
+                    <div class="preview">
+                        <div id="preview-swatch" class="swatch"></div>
+                        <div class="swatch-info">
+                            <div id="hex" class="hex">#ff0000</div>
+                            <div class="small-info" id="rgb">rgb(255, 0, 0)</div>
+                        </div>
+                    </div>
+
+                    <div class="modes">
+                        <label class="mode-btn"><input type="radio" name="mode" value="rgb" checked /> RGB</label>
+                        <label class="mode-btn"><input type="radio" name="mode" value="hsl" /> HSL</label>
+                        <label class="mode-btn"><input type="radio" name="mode" value="hsv" /> HSV</label>
+                        <label class="mode-btn"><input type="radio" name="mode" value="cmyk" /> CMYK</label>
+                    </div>
+                </div>
+
+                <div class="wheel-area">
+                    <div class="canvas-wrap">
+                        <canvas id="colorWheel" width="360" height="360" aria-label="Color wheel"></canvas>
+                        <div id="picker" class="picker" aria-hidden="true"></div>
+                    </div>
+                    <div class="controls">
+                        <div id="sliders"></div>
+                        <div class="inputs">
+                            <label>Hex <input id="hexInput" type="text" maxlength="9" /></label>
+                            <button id="copyHex" class="btn small">Copy</button>
+                        </div>
+                        <div class="values" id="readouts">
+                            <!-- dynamic readouts -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button id="saveSwatch" class="btn">Save to Palette</button>
+                <button id="randomize" class="btn ghost">Randomize</button>
+            </div>
+        </div>
+
+        <aside class="right">
+            <div class="card palette-card">
+                <h2>Palette</h2>
+                <div id="presetSwatches" class="swatch-grid"></div>
+
+                <h3>Your Palette</h3>
+                <div id="userSwatches" class="swatch-grid"></div>
+
+                <div class="palette-actions">
+                    <button id="clearPalette" class="btn ghost">Clear</button>
+                    <button id="exportPalette" class="btn">Export JSON</button>
+                </div>
+            </div>
+
+            <div class="card tips-card">
+                <h3>Quick tips</h3>
+                <ul>
+                    <li>Tap the wheel to pick hue/saturation.</li>
+                    <li>Drag inside the wheel to scrub S/V (or L for HSL).</li>
+                    <li>Switch modes to edit different color models.</li>
+                    <li>Save swatches and export your palette.</li>
+                </ul>
+            </div>
+        </aside>
+    </section>
+
+    <footer class="footer">
+        <small>&copy; 2025 Jericho Crosby (Chalwk). All rights reserved.</small>
+    </footer>
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
