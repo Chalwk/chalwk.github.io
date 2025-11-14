@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Giggle Factory</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="return-btn" href="../index.html" aria-label="Return to main">← Return</a>
+
+<main class="wrap">
+    <header class="hero">
+        <div class="logo">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c2.8 0 5 2.2 5 5v1c0 2.8-2.2 5-5 5s-5-2.2-5-5V7c0-2.8 2.2-5 5-5zM5 19c0-3.3 2.7-6 6-6h2c3.3 0 6 2.7 6 6v1H5v-1z"/></svg>
+        </div>
+        <h1>Giggle Factory</h1>
+        <p class="lead">Fetch fresh jokes from the wild internet. Click the big button. Try not to snort.</p>
+    </header>
+
+    <section class="card" id="jokeCard" aria-live="polite">
+        <div class="joke-meta">
+            <span id="jokeType" class="badge">dad joke</span>
+            <span id="jokeSource" class="muted">icanhazdadjoke</span>
+        </div>
+
+        <p id="jokeText" class="joke">Loading a joke for you...</p>
+
+        <div class="controls">
+            <button id="newJokeBtn" class="btn primary" title="Get a new joke">New joke</button>
+            <button id="copyBtn" class="btn" title="Copy joke">Copy</button>
+            <button id="tweetBtn" class="btn" title="Tweet joke">Tweet</button>
+            <button id="fallbackBtn" class="btn ghost" title="Use a local fallback joke">Local fallback</button>
+        </div>
+
+        <div class="extras">
+            <div class="small">Tip: Press <kbd>J</kbd> for a new joke</div>
+            <div id="status" class="status"></div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <small>&copy; 2025 Jericho Crosby (Chalwk). All rights reserved.</small>
+    </footer>
+</main>
+
+<script src="script.js" defer></script>
+</body>
+</html>
