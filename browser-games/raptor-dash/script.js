@@ -1,4 +1,4 @@
-// CloudRaptor Dash — procedural endless runner
+// Raptor Dash - procedural endless runner
 // Controls: Space / Up Arrow / Click to jump
 
 (() => {

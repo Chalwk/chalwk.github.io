@@ -1,4 +1,4 @@
-// Rope Untangle — script.js
+// Rope Untangle - script.js
 (() => {
     const svg = document.getElementById('svg');
     const resetBtn = document.getElementById('resetBtn');
@@ -324,7 +324,7 @@
 
         // small resize behaviour
         window.addEventListener('resize', ()=>{
-            // nothing complex — viewBox handles scaling
+            // nothing complex - viewBox handles scaling
         });
     }
 

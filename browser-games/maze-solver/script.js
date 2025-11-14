@@ -20,7 +20,7 @@ let started = false;
 function bestKey(size){ return `maze_best_${size}`; }
 function updateBestUI(){
     const b = localStorage.getItem(bestKey(mazeSize));
-    bestElement.textContent = b ? `Best: ${b} moves` : "Best: —";
+    bestElement.textContent = b ? `Best: ${b} moves` : "Best: -";
 }
 
 /* -------------------
