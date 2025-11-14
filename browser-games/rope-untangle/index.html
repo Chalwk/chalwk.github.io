@@ -1,28 +1,61 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rope Untangling Game</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Rope Untangle — PIP</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="container">
-    <header>
-        <h1>Rope Untangling</h1>
-        <a href="../index.html" class="return-button">Return to Main</a>
+<div class="app">
+    <header class="topbar">
+        <div class="brand">Rope Untangle</div>
+        <div class="controls">
+            <a class="btn return" href="../index.html">Return</a>
+            <button id="resetBtn" class="btn">Reset</button>
+            <button id="shuffleBtn" class="btn">Shuffle</button>
+            <button id="nextBtn" class="btn primary">Next Level</button>
+        </div>
     </header>
 
-    <div class="game-area">
-        <canvas id="gameCanvas" width="800" height="600"></canvas>
-        <div class="controls">
-            <button id="resetButton">Reset Level</button>
-            <button id="newLevelButton">New Level</button>
-            <div class="level-info">Level: <span id="levelNumber">1</span></div>
-        </div>
-    </div>
+    <main class="game-area">
+        <aside class="sidebar">
+            <div class="panel">
+                <h3>Level</h3>
+                <div id="levelLabel">1</div>
+            </div>
+            <div class="panel">
+                <h3>Edges</h3>
+                <div id="edgeCount">0</div>
+            </div>
+            <div class="panel">
+                <h3>Crossings</h3>
+                <div id="crossCount">0</div>
+            </div>
+            <div class="panel note">
+                Drag the dots to untangle the ropes. Clear all crossings to win.
+            </div>
+        </aside>
 
-    <div id="message" class="message hidden">Level Complete!</div>
+        <section class="canvas-wrap">
+            <svg id="svg" class="svg-canvas" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet"></svg>
+
+            <div id="winOverlay" class="win-overlay hidden">
+                <div class="win-card">
+                    <h2>Nice! Puzzle solved.</h2>
+                    <p>Ready for the next one?</p>
+                    <div class="win-actions">
+                        <button id="winNext" class="btn primary">Next Level</button>
+                        <button id="winShuffle" class="btn">Shuffle</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="credit">&copy; 2025 Jericho Crosby (Chalwk). All rights reserved.</div>
+    </footer>
 </div>
 
 <script src="script.js"></script>

@@ -1,291 +1,334 @@
-// script.js
-class RopeUntanglingGame {
-    constructor() {
-        this.canvas = document.getElementById('gameCanvas');
-        this.ctx = this.canvas.getContext('2d');
-        this.points = [];
-        this.edges = [];
-        this.draggingPoint = null;
-        this.level = 1;
-        this.isLevelComplete = false;
+// Rope Untangle — script.js
+// PIP's polished implementation: procedural levels, drag, crossing detection, shuffle, reset.
 
-        this.initializeEventListeners();
-        this.generateLevel();
-        this.gameLoop();
-    }
+(() => {
+    const svg = document.getElementById('svg');
+    const resetBtn = document.getElementById('resetBtn');
+    const shuffleBtn = document.getElementById('shuffleBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const winOverlay = document.getElementById('winOverlay');
+    const winNext = document.getElementById('winNext');
+    const winShuffle = document.getElementById('winShuffle');
+    const levelLabel = document.getElementById('levelLabel');
+    const edgeCountEl = document.getElementById('edgeCount');
+    const crossCountEl = document.getElementById('crossCount');
 
-    initializeEventListeners() {
-        this.canvas.addEventListener('mousedown', this.handleMouseDown.bind(this));
-        this.canvas.addEventListener('mousemove', this.handleMouseMove.bind(this));
-        this.canvas.addEventListener('mouseup', this.handleMouseUp.bind(this));
+    let state = {
+        level: 1,
+        nodes: [], // {id, x, y, baseX, baseY, cxEl, labelEl}
+        edges: [], // {a,b,lineEl}
+        w: 1000, h:700
+    };
 
-        // Touch events for mobile devices
-        this.canvas.addEventListener('touchstart', this.handleTouchStart.bind(this));
-        this.canvas.addEventListener('touchmove', this.handleTouchMove.bind(this));
-        this.canvas.addEventListener('touchend', this.handleTouchEnd.bind(this));
+    // Helpers
+    function randRange(min,max){return Math.random()*(max-min)+min}
+    function distance(a,b){return Math.hypot(a.x-b.x,a.y-b.y)}
 
-        document.getElementById('resetButton').addEventListener('click', () => {
-            this.resetLevel();
-        });
+    // Segment intersection excluding shared endpoints
+    function segmentsIntersect(p1,p2,p3,p4){
+        function orient(a,b,c){return (b.x-a.x)*(c.y-a.y) - (b.y-a.y)*(c.x-a.x)}
+        const o1 = orient(p1,p2,p3);
+        const o2 = orient(p1,p2,p4);
+        const o3 = orient(p3,p4,p1);
+        const o4 = orient(p3,p4,p2);
+        if (o1===0 && onSegment(p1,p2,p3)) return true;
+        if (o2===0 && onSegment(p1,p2,p4)) return true;
+        if (o3===0 && onSegment(p3,p4,p1)) return true;
+        if (o4===0 && onSegment(p3,p4,p2)) return true;
+        return (o1*o2<0) && (o3*o4<0);
 
-        document.getElementById('newLevelButton').addEventListener('click', () => {
-            this.level++;
-            document.getElementById('levelNumber').textContent = this.level;
-            this.generateLevel();
-        });
-    }
-
-    generateLevel() {
-        this.points = [];
-        this.edges = [];
-        this.isLevelComplete = false;
-
-        // Number of points increases with level
-        const numPoints = Math.min(6 + Math.floor(this.level / 2), 12);
-
-        // Create points in a circle initially
-        const centerX = this.canvas.width / 2;
-        const centerY = this.canvas.height / 2;
-        const radius = Math.min(this.canvas.width, this.canvas.height) * 0.35;
-
-        for (let i = 0; i < numPoints; i++) {
-            const angle = (i / numPoints) * 2 * Math.PI;
-            const x = centerX + radius * Math.cos(angle);
-            const y = centerY + radius * Math.sin(angle);
-            this.points.push({ x, y });
-        }
-
-        // Create edges - start with a cycle
-        for (let i = 0; i < numPoints; i++) {
-            this.edges.push([i, (i + 1) % numPoints]);
-        }
-
-        // Add some additional edges to make it more complex
-        const extraEdges = Math.min(Math.floor(this.level / 2) + 2, numPoints / 2);
-        for (let i = 0; i < extraEdges; i++) {
-            let a, b;
-            do {
-                a = Math.floor(Math.random() * numPoints);
-                b = Math.floor(Math.random() * numPoints);
-            } while (a === b || this.edgeExists(a, b));
-
-            this.edges.push([a, b]);
-        }
-
-        // Randomly perturb points to create intersections
-        this.perturbPoints();
-
-        // Check if level is already solved (unlikely but possible)
-        if (this.checkLevelComplete()) {
-            this.perturbPoints(); // Perturb again if already solved
+        function onSegment(a,b,c){
+            return Math.min(a.x,b.x)<=c.x+1e-6 && c.x<=Math.max(a.x,b.x)+1e-6 && Math.min(a.y,b.y)<=c.y+1e-6 && c.y<=Math.max(a.y,b.y)+1e-6;
         }
     }
 
-    perturbPoints() {
-        const perturbation = Math.min(this.canvas.width, this.canvas.height) * 0.3;
-
-        this.points.forEach(point => {
-            point.x += (Math.random() - 0.5) * perturbation;
-            point.y += (Math.random() - 0.5) * perturbation;
-
-            // Keep points within canvas bounds
-            point.x = Math.max(20, Math.min(this.canvas.width - 20, point.x));
-            point.y = Math.max(20, Math.min(this.canvas.height - 20, point.y));
-        });
+    // Build SVG elements
+    function makeSvg(tag, attrs){
+        const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+        for(const k in attrs) el.setAttribute(k, attrs[k]);
+        return el;
     }
 
-    edgeExists(a, b) {
-        return this.edges.some(edge =>
-        (edge[0] === a && edge[1] === b) || (edge[0] === b && edge[1] === a)
-        );
-    }
+    function clearSvg(){ while(svg.firstChild) svg.removeChild(svg.firstChild); }
 
-    handleMouseDown(e) {
-        const rect = this.canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+    // Procedural level generator
+    function generateLevel(level){
+        const nodeCount = Math.min(8 + level, 16);
+        const maxEdges = Math.floor(nodeCount * 1.6);
 
-        this.startDrag(x, y);
-    }
-
-    handleMouseMove(e) {
-        if (this.draggingPoint) {
-            const rect = this.canvas.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-
-            this.dragPoint(x, y);
+        // Base positions on a circle (solved configuration)
+        const cx = state.w/2, cy = state.h/2, r = Math.min(state.w,state.h)/2 - 90;
+        const basePositions = [];
+        for(let i=0;i<nodeCount;i++){
+            const a = (i/nodeCount) * Math.PI*2;
+            basePositions.push({x: cx + Math.cos(a)*r, y: cy + Math.sin(a)*r});
         }
-    }
 
-    handleMouseUp() {
-        this.draggingPoint = null;
-    }
-
-    handleTouchStart(e) {
-        e.preventDefault();
-        const rect = this.canvas.getBoundingClientRect();
-        const touch = e.touches[0];
-        const x = touch.clientX - rect.left;
-        const y = touch.clientY - rect.top;
-
-        this.startDrag(x, y);
-    }
-
-    handleTouchMove(e) {
-        e.preventDefault();
-        if (this.draggingPoint) {
-            const rect = this.canvas.getBoundingClientRect();
-            const touch = e.touches[0];
-            const x = touch.clientX - rect.left;
-            const y = touch.clientY - rect.top;
-
-            this.dragPoint(x, y);
+        // Create planar graph by attempting to add random edges that don't cross (on base positions)
+        const edges = [];
+        function crossesExisting(i,j){
+            const p1 = basePositions[i], p2 = basePositions[j];
+            for(const e of edges){
+                const q1 = basePositions[e.a], q2 = basePositions[e.b];
+                // don't consider touching at endpoints
+                if(e.a===i||e.b===i||e.a===j||e.b===j) continue;
+                if(segmentsIntersect(p1,p2,q1,q2)) return true;
+            }
+            return false;
         }
+
+        // Start by connecting nodes to form a cycle for connectivity
+        const tempEdges = [];
+        for(let i=0;i<nodeCount;i++) tempEdges.push({a:i,b:(i+1)%nodeCount});
+
+        // Add random extra edges without crossing
+        for(let attempts=0; attempts<nodeCount*6 && tempEdges.length < maxEdges; attempts++){
+            const a = Math.floor(Math.random()*nodeCount);
+            const b = Math.floor(Math.random()*nodeCount);
+            if(a===b) continue;
+            // avoid duplicate
+            if(tempEdges.some(e=> (e.a===a&&e.b===b)||(e.a===b&&e.b===a))) continue;
+            if(crossesExisting(a,b)) continue;
+            tempEdges.push({a,b});
+        }
+
+        // Now create nodes assigned base positions, but shuffle positions to create messy starting layout
+        const permuted = shuffleArray(basePositions.map((p,i)=>({...p,id:i}))).map((p,idx)=>({x:p.x,y:p.y,id:idx,baseIndex:p.id}));
+
+        // We'll set nodes so that node object references original base coords in basePositions[baseIndex]
+        const nodes = permuted.map((p, i)=>({
+            id:i,
+            x:p.x, y:p.y,
+            baseX: basePositions[p.baseIndex].x,
+            baseY: basePositions[p.baseIndex].y,
+            radius: 12
+        }));
+
+        // Edges referencing node ids
+        const finalEdges = tempEdges.map(e=>({a: e.a, b: e.b}));
+
+        return {nodes, edges: finalEdges};
     }
 
-    handleTouchEnd(e) {
-        e.preventDefault();
-        this.draggingPoint = null;
+    // Utility: Fisher-Yates shuffle
+    function shuffleArray(arr){
+        const a = arr.slice();
+        for(let i=a.length-1;i>0;i--){
+            const j = Math.floor(Math.random()*(i+1));
+            [a[i],a[j]]=[a[j],a[i]];
+        }
+        return a;
     }
 
-    startDrag(x, y) {
-        // Find the closest point to the click
-        let minDist = 30; // Maximum distance to consider a point
-        let closestPoint = null;
+    function buildScene(spec){
+        clearSvg();
+        state.nodes = spec.nodes.map(n=>({...n}));
+        state.edges = spec.edges.map(e=>({a:e.a,b:e.b}));
 
-        for (let i = 0; i < this.points.length; i++) {
-            const point = this.points[i];
-            const dist = Math.sqrt((point.x - x) ** 2 + (point.y - y) ** 2);
+        // Draw edges first
+        for(const e of state.edges){
+            const A = state.nodes[e.a];
+            const B = state.nodes[e.b];
+            const line = makeSvg('line',{x1:A.x,y1:A.y,x2:B.x,y2:B.y,class:'edge'});
+            svg.appendChild(line);
+            e.el = line;
+        }
 
-            if (dist < minDist) {
-                minDist = dist;
-                closestPoint = i;
+        // Draw nodes on top
+        for(const n of state.nodes){
+            const g = makeSvg('g',{class:'node',cursor:'grab'});
+            const circle = makeSvg('circle',{cx:n.x,cy:n.y,r:n.radius,class:'node-circle',fill:'white',opacity:0.95});
+            const inner = makeSvg('circle',{cx:n.x,cy:n.y,r:6,fill:'url(#grad)'});
+            const label = makeSvg('text',{x:n.x,y:n.y+4,'text-anchor':'middle',class:'node-label'});
+            label.textContent = n.id+1;
+
+            g.appendChild(circle);
+            g.appendChild(inner);
+            g.appendChild(label);
+            svg.appendChild(g);
+
+            n.group = g; n.circle = circle; n.labelEl = label;
+            attachPointerHandlers(g,n);
+        }
+
+        // Add defs for gradient
+        addDefs();
+
+        updateCounts();
+        checkCrossings();
+    }
+
+    function addDefs(){
+        // if defs already exists, skip
+        if(svg.querySelector('defs')) return;
+        const defs = makeSvg('defs',{});
+        const grad = makeSvg('radialGradient',{id:'grad'});
+        grad.appendChild(makeSvg('stop',{offset:'0%', 'stop-color':'#ffffff', 'stop-opacity':'1'}));
+        grad.appendChild(makeSvg('stop',{offset:'100%', 'stop-color':'#6ea8fe', 'stop-opacity':'1'}));
+        defs.appendChild(grad);
+        svg.appendChild(defs);
+    }
+
+    // Pointer drag
+    function attachPointerHandlers(el,node){
+        let dragging = false;
+        let offset = {x:0,y:0};
+
+        function pt(e){
+            const p = svg.createSVGPoint();
+            p.x = e.clientX; p.y = e.clientY;
+            const ctm = svg.getScreenCTM().inverse();
+            const loc = p.matrixTransform(ctm);
+            return {x:loc.x, y:loc.y};
+        }
+
+        function onDown(e){
+            e.preventDefault();
+            dragging = true;
+            el.setPointerCapture(e.pointerId);
+            const p = pt(e);
+            offset.x = node.x - p.x; offset.y = node.y - p.y;
+            node.circle.setAttribute('r', node.radius+2);
+        }
+        function onMove(e){
+            if(!dragging) return;
+            const p = pt(e);
+            node.x = Math.max(40, Math.min(state.w-40, p.x + offset.x));
+            node.y = Math.max(40, Math.min(state.h-40, p.y + offset.y));
+            node.group.setAttribute('transform', `translate(${node.x - parseFloat(node.circle.getAttribute('cx'))}, ${node.y - parseFloat(node.circle.getAttribute('cy'))})`);
+            // update visual coords for circle & label
+            node.circle.setAttribute('cx', node.x);
+            node.circle.setAttribute('cy', node.y);
+            node.labelEl.setAttribute('x', node.x);
+            node.labelEl.setAttribute('y', node.y + 4);
+            // update edges attached
+            for(const e of state.edges){
+                if(e.a===node.id || e.b===node.id){
+                    const A = state.nodes[e.a];
+                    const B = state.nodes[e.b];
+                    e.el.setAttribute('x1', A.x); e.el.setAttribute('y1', A.y);
+                    e.el.setAttribute('x2', B.x); e.el.setAttribute('y2', B.y);
+                }
+            }
+            checkCrossings();
+        }
+        function onUp(e){
+            if(!dragging) return;
+            dragging = false;
+            try{ el.releasePointerCapture(e.pointerId); }catch(_){}
+            node.circle.setAttribute('r', node.radius);
+            checkCrossings();
+        }
+
+        el.addEventListener('pointerdown', onDown);
+        window.addEventListener('pointermove', onMove);
+        window.addEventListener('pointerup', onUp);
+    }
+
+    // Compute crossing count and style edges
+    function checkCrossings(){
+        const crossings = new Set();
+        for(let i=0;i<state.edges.length;i++){
+            for(let j=i+1;j<state.edges.length;j++){
+                const e1 = state.edges[i], e2 = state.edges[j];
+                // ignore shared endpoints
+                if(e1.a===e2.a || e1.a===e2.b || e1.b===e2.a || e1.b===e2.b) continue;
+                const p1 = state.nodes[e1.a], p2 = state.nodes[e1.b];
+                const p3 = state.nodes[e2.a], p4 = state.nodes[e2.b];
+                if(segmentsIntersect(p1,p2,p3,p4)){
+                    crossings.add(i); crossings.add(j);
+                }
             }
         }
-
-        this.draggingPoint = closestPoint;
-    }
-
-    dragPoint(x, y) {
-        if (this.draggingPoint !== null) {
-            // Keep point within canvas bounds
-            const point = this.points[this.draggingPoint];
-            point.x = Math.max(20, Math.min(this.canvas.width - 20, x));
-            point.y = Math.max(20, Math.min(this.canvas.height - 20, y));
-        }
-    }
-
-    resetLevel() {
-        this.generateLevel();
-    }
-
-    checkLevelComplete() {
-        // Check if any edges intersect
-        for (let i = 0; i < this.edges.length; i++) {
-            for (let j = i + 1; j < this.edges.length; j++) {
-                const edge1 = this.edges[i];
-                const edge2 = this.edges[j];
-
-                // Skip if edges share a vertex
-                if (edge1[0] === edge2[0] || edge1[0] === edge2[1] ||
-                edge1[1] === edge2[0] || edge1[1] === edge2[1]) {
-                    continue;
-                }
-
-                const p1 = this.points[edge1[0]];
-                const p2 = this.points[edge1[1]];
-                const p3 = this.points[edge2[0]];
-                const p4 = this.points[edge2[1]];
-
-                if (this.linesIntersect(p1, p2, p3, p4)) {
-                    return false;
-                }
+        // style
+        let crossCount = 0;
+        for(let i=0;i<state.edges.length;i++){
+            const e = state.edges[i];
+            if(crossings.has(i)){
+                e.el.classList.add('crossing'); crossCount++;
+            } else {
+                e.el.classList.remove('crossing');
             }
         }
+        crossCountEl.textContent = crossCount;
+        edgeCountEl.textContent = state.edges.length;
 
-        return true;
-    }
-
-    linesIntersect(p1, p2, p3, p4) {
-        // Calculate direction vectors
-        const denominator = ((p4.y - p3.y) * (p2.x - p1.x) - (p4.x - p3.x) * (p2.y - p1.y));
-
-        // Lines are parallel
-        if (denominator === 0) return false;
-
-        const ua = ((p4.x - p3.x) * (p1.y - p3.y) - (p4.y - p3.y) * (p1.x - p3.x)) / denominator;
-        const ub = ((p2.x - p1.x) * (p1.y - p3.y) - (p2.y - p1.y) * (p1.x - p3.x)) / denominator;
-
-        // Check if intersection point is within both line segments
-        return ua >= 0 && ua <= 1 && ub >= 0 && ub <= 1;
-    }
-
-    draw() {
-        // Clear canvas
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-        // Draw edges
-        this.ctx.lineWidth = 3;
-        this.ctx.strokeStyle = '#333';
-
-        this.edges.forEach(edge => {
-            const p1 = this.points[edge[0]];
-            const p2 = this.points[edge[1]];
-
-            this.ctx.beginPath();
-            this.ctx.moveTo(p1.x, p1.y);
-            this.ctx.lineTo(p2.x, p2.y);
-            this.ctx.stroke();
-        });
-
-        // Draw points
-        this.points.forEach(point => {
-            this.ctx.beginPath();
-            this.ctx.arc(point.x, point.y, 10, 0, Math.PI * 2);
-            this.ctx.fillStyle = '#2196F3';
-            this.ctx.fill();
-            this.ctx.strokeStyle = '#0b7dda';
-            this.ctx.lineWidth = 2;
-            this.ctx.stroke();
-        });
-
-        // Draw dragging point with highlight
-        if (this.draggingPoint !== null) {
-            const point = this.points[this.draggingPoint];
-            this.ctx.beginPath();
-            this.ctx.arc(point.x, point.y, 15, 0, Math.PI * 2);
-            this.ctx.fillStyle = 'rgba(33, 150, 243, 0.5)';
-            this.ctx.fill();
+        if(crossCount===0){
+            onWin();
+        } else {
+            hideWin();
         }
     }
 
-    gameLoop() {
-        this.draw();
+    function updateCounts(){
+        levelLabel.textContent = state.level;
+    }
 
-        // Check if level is complete
-        if (!this.isLevelComplete && this.checkLevelComplete()) {
-            this.isLevelComplete = true;
-            this.showLevelComplete();
+    function onWin(){
+        winOverlay.classList.remove('hidden');
+        burstConfetti();
+    }
+
+    function hideWin(){
+        winOverlay.classList.add('hidden');
+    }
+
+    // Simple confetti: create colorful circles that fade
+    function burstConfetti(){
+        const colors = ['#7ee7c7','#6ea8fe','#ffd97a','#ff9aa2','#c1a7ff'];
+        for(let i=0;i<28;i++){
+            const c = document.createElement('div');
+            c.style.position='absolute'; c.style.left=(Math.random()*60+20)+'%';
+            c.style.top=(Math.random()*60+20)+'%'; c.style.width='8px'; c.style.height='8px';
+            c.style.borderRadius='50%'; c.style.pointerEvents='none';
+            c.style.background=colors[Math.floor(Math.random()*colors.length)];
+            c.style.opacity='0.95';
+            c.style.transform='translateY(0) scale(1)';
+            c.style.transition='transform 900ms cubic-bezier(.2,.8,.2,1), opacity 900ms ease';
+            document.body.appendChild(c);
+            requestAnimationFrame(()=>{
+                c.style.transform = `translateY(${Math.random()*220-120}px) translateX(${Math.random()*220-110}px) scale(${Math.random()*1.8+0.2})`;
+                c.style.opacity='0';
+            });
+            setTimeout(()=>c.remove(),1100);
         }
-
-        requestAnimationFrame(this.gameLoop.bind(this));
     }
 
-    showLevelComplete() {
-        const message = document.getElementById('message');
-        message.classList.remove('hidden');
+    // Controls
+    resetBtn.addEventListener('click', ()=>{
+        buildScene(generateLevel(state.level));
+    });
+    shuffleBtn.addEventListener('click', ()=>{
+        // shuffle current positions among nodes
+        const positions = state.nodes.map(n=>({x:n.x,y:n.y}));
+        const shuffled = shuffleArray(positions);
+        state.nodes.forEach((n,i)=>{ n.x=shuffled[i].x; n.y=shuffled[i].y; n.group.setAttribute('transform', `translate(${n.x-parseFloat(n.circle.getAttribute('cx'))}, ${n.y-parseFloat(n.circle.getAttribute('cy'))})`); n.circle.setAttribute('cx', n.x); n.circle.setAttribute('cy', n.y); n.labelEl.setAttribute('x', n.x); n.labelEl.setAttribute('y', n.y+4); });
+        // update edges
+        for(const e of state.edges){ const A=state.nodes[e.a], B=state.nodes[e.b]; e.el.setAttribute('x1',A.x); e.el.setAttribute('y1',A.y); e.el.setAttribute('x2',B.x); e.el.setAttribute('y2',B.y); }
+        checkCrossings();
+    });
 
-        setTimeout(() => {
-            message.classList.add('hidden');
-            this.level++;
-            document.getElementById('levelNumber').textContent = this.level;
-            this.generateLevel();
-        }, 2000);
+    nextBtn.addEventListener('click', ()=>{ state.level++; startLevel(state.level); });
+    winNext.addEventListener('click', ()=>{ state.level++; startLevel(state.level); });
+    winShuffle.addEventListener('click', ()=>{ shuffleBtn.click(); hideWin(); });
+
+    // Start given level
+    function startLevel(level){
+        state.level = level; updateCounts();
+        const spec = generateLevel(level);
+        buildScene(spec);
     }
-}
 
-// Initialize the game when the page loads
-window.addEventListener('load', () => {
-    new RopeUntanglingGame();
-});
+    // initialize
+    function init(){
+        svg.setAttribute('viewBox', `0 0 ${state.w} ${state.h}`);
+        startLevel(state.level);
+
+        // small resize behaviour
+        window.addEventListener('resize', ()=>{
+            // nothing complex — viewBox handles scaling
+        });
+    }
+
+    init();
+})();
