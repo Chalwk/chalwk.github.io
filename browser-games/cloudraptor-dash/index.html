@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>CloudRaptor Dash</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="wrap">
+    <header class="hud">
+        <div class="brand">CloudRaptor Dash</div>
+        <div class="controls">
+            <button id="btn-start" class="btn">Start</button>
+            <button id="btn-pause" class="btn">Pause</button>
+            <a class="btn return" href="../index.html" title="Return">↩ Return</a>
+        </div>
+        <div class="scoreboard">
+            <div id="score">Score: 0</div>
+            <div id="level">Level: 1</div>
+        </div>
+    </header>
+
+    <section class="game-area">
+        <canvas id="game"></canvas>
+        <aside class="overlay">
+            <div class="title">CloudRaptor Dash</div>
+            <p class="subtitle">Jump, dodge, and ride the thermals. Procedurally generated levels - every run is new.</p>
+            <div class="tips">Controls: Space / Up / Click to jump. Hold for longer hops. Double-tap to boost (if available).</div>
+        </aside>
+    </section>
+
+    <footer class="meta">&copy; 2025 Jericho Crosby (Chalwk). All rights reserved.</footer>
+</main>
+
+<script src="script.js" defer></script>
+</body>
+</html>
