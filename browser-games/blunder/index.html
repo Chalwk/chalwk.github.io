@@ -2,15 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta content="width=device-width,initial-scale=1" name="viewport"/>
     <title>Blunder — Wordle-like Game</title>
 
     <!-- Google fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;600&display=swap"
           rel="stylesheet">
 
-    <link rel="stylesheet" href="style.css"/>
-    <meta name="description" content="Blunder — a Wordle-like game"/>
+    <link href="style.css" rel="stylesheet"/>
+    <meta content="Blunder — a Wordle-like game" name="description"/>
 </head>
 <body>
 <main class="app">
@@ -27,9 +27,9 @@
         <p class="sub">Guess the 5-letter word in 6 tries. Hit enter to submit. Click tiles to toggle focus.</p>
     </section>
 
-    <div id="game" class="game">
-        <div id="grid" class="grid" aria-live="polite" aria-atomic="true"></div>
-        <div id="keyboard" class="keyboard" aria-hidden="false"></div>
+    <div class="game" id="game">
+        <div aria-atomic="true" aria-live="polite" class="grid" id="grid"></div>
+        <div aria-hidden="false" class="keyboard" id="keyboard"></div>
     </div>
 
     <footer class="footer">
@@ -38,13 +38,13 @@
 </main>
 
 <!-- Modal containers -->
-<div id="modal" class="modal hidden" role="dialog" aria-modal="true">
+<div aria-modal="true" class="modal hidden" id="modal" role="dialog">
     <div class="modal-card" role="document">
-        <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
-        <div id="modalContent" class="modal-content"></div>
+        <button aria-label="Close" class="modal-close" id="modalClose">✕</button>
+        <div class="modal-content" id="modalContent"></div>
     </div>
 </div>
 
-<script src="script.js" defer></script>
+<script defer src="script.js"></script>
 </body>
 </html>

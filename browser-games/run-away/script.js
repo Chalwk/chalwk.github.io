@@ -5,6 +5,7 @@ class RunAwayGame {
         this.scoreElement = document.getElementById('score');
         this.startBtn = document.getElementById('start-btn');
         this.resetBtn = document.getElementById('reset-btn');
+        this.browserBtn = document.getElementById('browser-btn');
 
         this.gameSpeed = 2;
         this.score = 0;
@@ -15,7 +16,7 @@ class RunAwayGame {
         this.gameLoop = null;
         this.obstacleInterval = null;
 
-        this.obstacleTypes = ['💣', '🌵', '🪨', '🔥', '⚡'];
+        this.obstacleTypes = ['🌵', '🍄', '🌱', '🌳', '🌴', '🌲', '🎋', '🌿', '🌾'];
 
         this.init();
     }
@@ -24,7 +25,6 @@ class RunAwayGame {
         this.startBtn.addEventListener('click', () => this.startGame());
         this.resetBtn.addEventListener('click', () => this.resetGame());
 
-        this.browserBtn = document.getElementById('browser-btn');
         this.browserBtn.addEventListener('click', () => {
             window.location.href = '../index.html';
         });
@@ -69,14 +69,10 @@ class RunAwayGame {
         this.startBtn.disabled = true;
         this.startBtn.textContent = 'Playing...';
 
-        // Clear any existing obstacles
         this.obstacles.forEach(obs => obs.remove());
         this.obstacles = [];
 
-        // Start game loop
         this.gameLoop = requestAnimationFrame(() => this.update());
-
-        // Start generating obstacles
         this.obstacleInterval = setInterval(() => this.createObstacle(), 1500);
     }
 
@@ -90,15 +86,12 @@ class RunAwayGame {
         cancelAnimationFrame(this.gameLoop);
         clearInterval(this.obstacleInterval);
 
-        // Remove all obstacles
         this.obstacles.forEach(obs => obs.remove());
         this.obstacles = [];
 
-        // Reset player position
-        this.player.style.bottom = '60px';
+        this.player.style.bottom = '56px';
         this.player.classList.remove('jumping');
 
-        // Remove game over message if exists
         const gameOverMsg = document.querySelector('.game-over');
         if (gameOverMsg) gameOverMsg.remove();
     }
@@ -110,7 +103,6 @@ class RunAwayGame {
         this.moveObstacles();
         this.checkCollisions();
 
-        // Increase game speed gradually
         if (this.score % 100 === 0 && this.score > 0) {
             this.gameSpeed = 2 + Math.floor(this.score / 100) * 0.5;
         }
@@ -135,7 +127,6 @@ class RunAwayGame {
 
         this.isCrouching = true;
         this.player.classList.add('crouching');
-        this.player.style.height = '40px';
     }
 
     standUp() {
@@ -143,7 +134,6 @@ class RunAwayGame {
 
         this.isCrouching = false;
         this.player.classList.remove('crouching');
-        this.player.style.height = '60px';
     }
 
     createObstacle() {
@@ -152,28 +142,23 @@ class RunAwayGame {
         const obstacle = document.createElement('div');
         obstacle.className = 'obstacle obstacle-moving';
 
-        // Random obstacle type
         const randomType = this.obstacleTypes[Math.floor(Math.random() * this.obstacleTypes.length)];
         obstacle.textContent = randomType;
 
-        // Random size variation
         const size = 2 + Math.random() * 0.5;
         obstacle.style.fontSize = `${size}rem`;
 
-        // Random vertical position (some obstacles can be flying)
         const isFlying = Math.random() > 0.7;
         if (isFlying) {
             obstacle.classList.add('flying');
             obstacle.style.bottom = `${120 + Math.random() * 60}px`;
         } else {
-            // Ground obstacles stay on top of the ground
             obstacle.style.bottom = '56px';
         }
 
         this.gameArea.appendChild(obstacle);
         this.obstacles.push(obstacle);
 
-        // Remove obstacle when it goes off screen
         setTimeout(() => {
             if (obstacle.parentNode) {
                 obstacle.remove();
@@ -195,12 +180,11 @@ class RunAwayGame {
         for (let obstacle of this.obstacles) {
             const obstacleRect = obstacle.getBoundingClientRect();
 
-            // Adjust hitboxes based on player state
             const playerHitbox = {
-                left: playerRect.left + 15,
-                right: playerRect.right - 15,
-                top: playerRect.top + (this.isCrouching ? 20 : 10),
-                bottom: playerRect.bottom - (this.isCrouching ? 10 : 5)
+                left: playerRect.left + 5,
+                right: playerRect.right - 5,
+                top: playerRect.top + (this.isCrouching ? 10 : 0),
+                bottom: playerRect.bottom - (this.isCrouching ? 0 : 5)
             };
 
             const obstacleHitbox = {
@@ -210,7 +194,6 @@ class RunAwayGame {
                 bottom: obstacleRect.bottom - 10
             };
 
-            // Check if hitboxes overlap
             if (playerHitbox.right > obstacleHitbox.left &&
             playerHitbox.left < obstacleHitbox.right &&
             playerHitbox.bottom > obstacleHitbox.top &&
@@ -237,7 +220,6 @@ class RunAwayGame {
         this.startBtn.disabled = false;
         this.startBtn.textContent = 'Start Game';
 
-        // Create game over message
         const gameOverMsg = document.createElement('div');
         gameOverMsg.className = 'game-over';
         gameOverMsg.innerHTML = `
@@ -250,7 +232,6 @@ class RunAwayGame {
     }
 }
 
-// Initialize the game when the page loads
 document.addEventListener('DOMContentLoaded', () => {
     new RunAwayGame();
 });
