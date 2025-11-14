@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rope Untangling Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>Rope Untangling</h1>
+        <a href="../index.html" class="return-button">Return to Main</a>
+    </header>
+
+    <div class="game-area">
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        <div class="controls">
+            <button id="resetButton">Reset Level</button>
+            <button id="newLevelButton">New Level</button>
+            <div class="level-info">Level: <span id="levelNumber">1</span></div>
+        </div>
+    </div>
+
+    <div id="message" class="message hidden">Level Complete!</div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
