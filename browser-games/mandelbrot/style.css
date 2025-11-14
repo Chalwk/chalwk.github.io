@@ -1,34 +1,205 @@
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #111;
-    color: #fff;
+:root{
+    --bg:#0b1020;
+    --panel:#0f1724;
+    --accent:#7dd3fc;
+    --muted:#94a3b8;
+    --glass: rgba(255,255,255,0.04);
 }
 
-h1 {
-    margin: 20px 0;
+* {box-sizing:border-box}
+html,body,#fractal {height:100%}
+body{
+    margin:0;
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+    background:linear-gradient(180deg,var(--bg),#071021 120%);
+    color:#e6eef8;
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    overflow-x: hidden; /* Prevent horizontal scroll on body */
 }
 
-canvas {
-    border: 2px solid #fff;
-    cursor: crosshair;
-    margin-top: 10px;
+header{
+    padding:12px 18px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    border-bottom:1px solid rgba(255,255,255,0.03);
+    flex-wrap: wrap; /* Allow header content to wrap on small screens */
+}
+header h1{
+    margin:0;
+    font-size:18px;
+    letter-spacing:0.4px;
+}
+header p{
+    margin:0;
+    color:var(--muted);
+    font-size:13px;
 }
 
-button#backButton {
-    margin-bottom: 10px;
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #222;
-    color: #fff;
-    border: 1px solid #fff;
-    cursor: pointer;
-    transition: background-color 0.2s;
+main{
+    display:flex;
+    flex:1;
+    gap:12px;
+    padding:12px;
+    align-items:stretch;
+    overflow: hidden; /* Prevent overflow issues */
 }
 
-button#backButton:hover {
-    background-color: #444;
+/* canvas area */
+canvas#fractal{
+    flex:1 1 auto;
+    width:100%;
+    border-radius:12px;
+    background:linear-gradient(180deg,#000428, #00121a 120%);
+    box-shadow: 0 6px 30px rgba(2,6,23,0.7), inset 0 1px 0 rgba(255,255,255,0.02);
+    cursor:grab;
+    display:block;
+    min-height:360px;
+}
+
+/* controls panel */
+aside#controls{
+    width:340px; /* Slightly wider default */
+    max-width:100%; /* Never exceed parent width */
+    background:var(--panel);
+    border-radius:12px;
+    padding:12px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    box-shadow:0 8px 30px rgba(0,0,0,0.6);
+    overflow-y: auto; /* Keep vertical scroll if needed */
+    overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+.group{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    padding:6px;
+    border-radius:8px;
+    background:var(--glass);
+    min-width: 0; /* Allow text truncation if needed */
+}
+
+.group label{
+    font-size:13px;
+    color:#dbeafe;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap: wrap; /* Allow label text to wrap if needed */
+    gap: 8px;
+}
+
+.group label output {
+    min-width: 40px; /* Ensure output values have consistent space */
+    text-align: right;
+}
+
+.group input[type="range"]{
+    width:100%;
+    appearance:none;
+    height:6px;
+    background:linear-gradient(90deg,var(--accent),#7c3aed);
+    border-radius:999px;
+    outline:none;
+}
+
+/* buttons */
+.buttons{
+    display:flex;
+    gap:8px;
+    justify-content:space-between;
+    padding-top:6px;
+    flex-wrap: wrap; /* Allow buttons to wrap on very small screens */
+}
+.buttons button{
+    flex: 1 1 auto; /* Allow buttons to grow and shrink */
+    min-width: 120px; /* Minimum button width */
+    padding:8px 10px;
+    border-radius:10px;
+    border:0;
+    background:linear-gradient(180deg,#13263a,#0b1830);
+    color:var(--accent);
+    cursor:pointer;
+    font-weight:600;
+    transition: transform 0.2s ease; /* Smooth hover effect */
+}
+.buttons button:hover{
+    transform:translateY(-2px);
+}
+
+/* info */
+.info{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    color:var(--muted);
+    font-size:12px;
+    padding-top:6px;
+}
+
+/* footer */
+footer{
+    padding:10px 14px;
+    text-align:center;
+    color:var(--muted);
+    border-top:1px solid rgba(255,255,255,0.02);
+    font-size:13px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1100px) {
+    aside#controls {
+        width: 320px; /* Slightly smaller on medium screens */
+    }
+}
+
+@media (max-width: 900px){
+    main {
+        flex-direction: column;
+        gap: 16px; /* More space between canvas and controls */
+    }
+
+    aside#controls {
+        width: 100%; /* Full width on mobile */
+        max-width: none;
+        position: static; /* Remove sticky positioning */
+        height: auto; /* Let height adjust to content */
+        margin-left: 0;
+    }
+
+    canvas#fractal {
+        min-height: 420px;
+    }
+
+    .buttons button {
+        min-width: 100px; /* Smaller buttons on mobile */
+    }
+}
+
+@media (max-width: 480px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .group label {
+        font-size: 12px; /* Slightly smaller text on very small screens */
+    }
+
+    .buttons {
+        flex-direction: column; /* Stack buttons vertically on very small screens */
+    }
+
+    .buttons button {
+        min-width: 100%; /* Full width buttons */
+    }
 }
