@@ -12,6 +12,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
 }
 
 .container {
@@ -43,6 +44,7 @@ header p {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
+    transform: translateZ(0);
 }
 
 #score {
@@ -59,28 +61,33 @@ header p {
     border-radius: 10px;
     overflow: hidden;
     border: 3px solid rgba(255, 255, 255, 0.3);
+    transform: translateZ(0);
+    will-change: transform;
 }
 
 #player {
     position: absolute;
     bottom: 56px;
     left: 100px;
-    font-size: 3rem; /* Adjust emoji size */
+    font-size: 3rem;
     z-index: 10;
-    transition: all 0.2s ease;
+    transition: transform 0.2s ease;
     display: flex;
     align-items: flex-end;
+    transform: translateZ(0);
+    will-change: transform;
 }
 
 /* Jump animation */
 .jumping {
     animation: jump 0.5s ease-in-out;
+    will-change: transform;
 }
 
 @keyframes jump {
-    0% { bottom: 56px; }
-    50% { bottom: 120px; }
-    100% { bottom: 56px; }
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-100px); }
+    100% { transform: translateY(0); }
 }
 
 /* Crouch effect (shrinks emoji vertically) */
@@ -103,20 +110,13 @@ header p {
     bottom: 60px;
     font-size: 2.5rem;
     z-index: 5;
-    right: -100px;
+    right: -50px;
+    transform: translateZ(0);
+    will-change: right;
 }
 
 .obstacle.flying {
     bottom: 120px;
-}
-
-.obstacle-moving {
-    animation: obstacleMove 2s linear infinite;
-}
-
-@keyframes obstacleMove {
-    from { right: -50px; }
-    to { right: 100%; }
 }
 
 #controls {
@@ -145,6 +145,12 @@ button:active {
     transform: translateY(0);
 }
 
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
 #instructions {
     margin-top: 20px;
     padding: 15px;
@@ -158,17 +164,52 @@ button:active {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.9);
     padding: 30px;
     border-radius: 15px;
     text-align: center;
     z-index: 20;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+}
+
+.game-over button {
+    margin-top: 15px;
 }
 
 footer.meta {
-    margin-top: 230px;
+    margin-top: 20px;
     padding: 10px 0;
     font-size: 0.9rem;
     color: rgba(255, 255, 255, 0.7);
     text-align: center;
+}
+
+/* Media query for mobile devices */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    header h1 {
+        font-size: 2.5rem;
+    }
+
+    #game-area {
+        height: 250px;
+    }
+
+    #player {
+        font-size: 2.5rem;
+        left: 80px;
+    }
+
+    .obstacle {
+        font-size: 2rem;
+    }
+
+    button {
+        padding: 10px 20px;
+        font-size: 1rem;
+        margin: 5px;
+    }
 }

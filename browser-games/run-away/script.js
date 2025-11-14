@@ -7,7 +7,7 @@ class RunAwayGame {
         this.resetBtn = document.getElementById('reset-btn');
         this.browserBtn = document.getElementById('browser-btn');
 
-        this.gameSpeed = 2;
+        this.gameSpeed = 4;
         this.score = 0;
         this.isPlaying = false;
         this.isJumping = false;
@@ -15,6 +15,8 @@ class RunAwayGame {
         this.obstacles = [];
         this.gameLoop = null;
         this.obstacleInterval = null;
+        this.lastFrameTime = 0;
+        this.obstacleSpawnTime = 1500;
 
         this.obstacleTypes = ['🌵', '🍄', '🌱', '🌳', '🌴', '🌲', '🎋', '🌿', '🌾'];
 
@@ -53,7 +55,8 @@ class RunAwayGame {
         });
 
         // Touch support for mobile
-        this.gameArea.addEventListener('touchstart', () => {
+        this.gameArea.addEventListener('touchstart', (e) => {
+            e.preventDefault();
             if (this.isPlaying && !this.isJumping && !this.isCrouching) this.jump();
         });
     }
@@ -63,7 +66,8 @@ class RunAwayGame {
 
         this.isPlaying = true;
         this.score = 0;
-        this.gameSpeed = 2;
+        this.gameSpeed = 4;
+        this.obstacleSpawnTime = 1500;
         this.updateScore();
 
         this.startBtn.disabled = true;
@@ -72,8 +76,9 @@ class RunAwayGame {
         this.obstacles.forEach(obs => obs.remove());
         this.obstacles = [];
 
-        this.gameLoop = requestAnimationFrame(() => this.update());
-        this.obstacleInterval = setInterval(() => this.createObstacle(), 1500);
+        this.lastFrameTime = performance.now();
+        this.gameLoop = requestAnimationFrame((timestamp) => this.update(timestamp));
+        this.obstacleInterval = setInterval(() => this.createObstacle(), this.obstacleSpawnTime);
     }
 
     resetGame() {
@@ -96,18 +101,29 @@ class RunAwayGame {
         if (gameOverMsg) gameOverMsg.remove();
     }
 
-    update() {
+    update(timestamp) {
         if (!this.isPlaying) return;
 
+        // Calculate delta time for consistent movement regardless of frame rate
+        const deltaTime = timestamp - this.lastFrameTime;
+        this.lastFrameTime = timestamp;
+
         this.updateScore();
-        this.moveObstacles();
+        this.moveObstacles(deltaTime);
         this.checkCollisions();
 
+        // Gradually increase difficulty
         if (this.score % 100 === 0 && this.score > 0) {
-            this.gameSpeed = 2 + Math.floor(this.score / 100) * 0.5;
+            this.gameSpeed = 1.5 + Math.floor(this.score / 100) * 0.3;
+            // Increase obstacle spawn rate
+            if (this.obstacleSpawnTime > 800) {
+                this.obstacleSpawnTime -= 50;
+                clearInterval(this.obstacleInterval);
+                this.obstacleInterval = setInterval(() => this.createObstacle(), this.obstacleSpawnTime);
+            }
         }
 
-        this.gameLoop = requestAnimationFrame(() => this.update());
+        this.gameLoop = requestAnimationFrame((ts) => this.update(ts));
     }
 
     jump() {
@@ -156,48 +172,50 @@ class RunAwayGame {
             obstacle.style.bottom = '56px';
         }
 
+        // Set initial position off-screen to the right
+        obstacle.style.right = '-50px';
+
         this.gameArea.appendChild(obstacle);
         this.obstacles.push(obstacle);
 
+        // Clean up obstacles that are off-screen
         setTimeout(() => {
             if (obstacle.parentNode) {
                 obstacle.remove();
                 this.obstacles = this.obstacles.filter(obs => obs !== obstacle);
             }
-        }, 5000);
+        }, 6000);
     }
 
-    moveObstacles() {
-        this.obstacles.forEach(obstacle => {
-            const currentRight = parseInt(obstacle.style.right) || -50;
-            obstacle.style.right = `${currentRight + this.gameSpeed}px`;
-        });
+    moveObstacles(deltaTime) {
+        // Use deltaTime for consistent movement regardless of frame rate
+        const movement = this.gameSpeed * (deltaTime / 16); // Normalize to 60fps
+
+        for (let i = this.obstacles.length - 1; i >= 0; i--) {
+            const obstacle = this.obstacles[i];
+            const currentRight = parseFloat(obstacle.style.right) || -50;
+            obstacle.style.right = `${currentRight + movement}px`;
+
+            // Remove obstacles that are far off-screen
+            if (currentRight > window.innerWidth + 100) {
+                obstacle.remove();
+                this.obstacles.splice(i, 1);
+            }
+        }
     }
 
     checkCollisions() {
         const playerRect = this.player.getBoundingClientRect();
 
-        for (let obstacle of this.obstacles) {
+        for (let i = this.obstacles.length - 1; i >= 0; i--) {
+            const obstacle = this.obstacles[i];
             const obstacleRect = obstacle.getBoundingClientRect();
 
-            const playerHitbox = {
-                left: playerRect.left + 5,
-                right: playerRect.right - 5,
-                top: playerRect.top + (this.isCrouching ? 10 : 0),
-                bottom: playerRect.bottom - (this.isCrouching ? 0 : 5)
-            };
-
-            const obstacleHitbox = {
-                left: obstacleRect.left + 10,
-                right: obstacleRect.right - 10,
-                top: obstacleRect.top + 10,
-                bottom: obstacleRect.bottom - 10
-            };
-
-            if (playerHitbox.right > obstacleHitbox.left &&
-            playerHitbox.left < obstacleHitbox.right &&
-            playerHitbox.bottom > obstacleHitbox.top &&
-            playerHitbox.top < obstacleHitbox.bottom) {
+            // Simple collision detection with adjusted hitboxes
+            if (playerRect.right - 15 > obstacleRect.left + 10 &&
+            playerRect.left + 15 < obstacleRect.right - 10 &&
+            playerRect.bottom - (this.isCrouching ? 20 : 10) > obstacleRect.top + 10 &&
+            playerRect.top + (this.isCrouching ? 20 : 10) < obstacleRect.bottom - 10) {
 
                 this.gameOver();
                 return;
