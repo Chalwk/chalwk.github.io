@@ -7,8 +7,8 @@ const winningLine = document.getElementById('winning-line');
 
 let board = Array(9).fill('');
 let currentPlayer = 'X';
-let gameActive = false;
-let gameMode = ''; // 'pvp' or 'pvai'
+let gameActive = true; // Start active by default
+let gameMode = 'pvai'; // Default to Player vs AI
 
 const winningConditions = [
     [0,1,2],[3,4,5],[6,7,8],   // rows
@@ -32,6 +32,7 @@ function handleCellClick(e) {
 function makeMove(index) {
     board[index] = currentPlayer;
     cells[index].textContent = currentPlayer;
+    cells[index].classList.add('taken', `player-${currentPlayer}`);
 
     checkResult();
     if (gameActive) {
@@ -69,13 +70,20 @@ function checkResult() {
 
     if (roundWon) {
         status.textContent = `Player ${currentPlayer} wins!`;
+        status.className = 'win-message';
         gameActive = false;
         drawWinningLine(winningCombo);
+
+        // Add win animation to winning cells
+        winningCombo.forEach(index => {
+            cells[index].classList.add('winning-cell');
+        });
         return;
     }
 
     if (!board.includes('')) {
         status.textContent = "It's a tie!";
+        status.className = 'tie-message';
         gameActive = false;
         winningLine.style.display = 'none';
     }
@@ -156,21 +164,27 @@ function drawWinningLine(winningCombo) {
 function resetGame() {
     board = Array(9).fill('');
     currentPlayer = 'X';
-    gameActive = gameMode !== '';
-    status.textContent = gameActive ? `Player ${currentPlayer}'s turn` : 'Select a game mode to start';
-    cells.forEach(cell => cell.textContent = '');
+    gameActive = true;
+    status.textContent = `Player ${currentPlayer}'s turn`;
+    status.className = '';
+    cells.forEach(cell => {
+        cell.textContent = '';
+        cell.classList.remove('taken', 'player-X', 'player-O', 'winning-cell');
+    });
     winningLine.style.display = 'none';
 }
 
 function setGameMode(mode) {
     gameMode = mode;
     resetGame();
-    status.textContent = `Player ${currentPlayer}'s turn`;
 
     // Update button styles to show active mode
-    pvpBtn.style.backgroundColor = mode === 'pvp' ? '#0056b3' : '#007BFF';
-    pvaiBtn.style.backgroundColor = mode === 'pvai' ? '#0056b3' : '#007BFF';
+    pvpBtn.classList.toggle('active', mode === 'pvp');
+    pvaiBtn.classList.toggle('active', mode === 'pvai');
 }
+
+// Initialize the game with Player vs AI mode
+setGameMode('pvai');
 
 cells.forEach(cell => cell.addEventListener('click', handleCellClick));
 resetBtn.addEventListener('click', resetGame);
