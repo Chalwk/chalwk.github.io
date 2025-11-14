@@ -8,36 +8,138 @@ const jokeType = document.getElementById('jokeType');
 const jokeSource = document.getElementById('jokeSource');
 
 const FALLBACK_JOKES = [
-    "I told my computer I needed a break, and it said 'No problem - I’ll go to sleep.'",
+    "I told my computer I needed a break, and it said 'No problem - I'll go to sleep.'",
     "Why do programmers prefer dark mode? Because light attracts bugs.",
     "Why did the scarecrow win an award? He was outstanding in his field.",
-    "I had a joke about UDP, but I’m not sure if you got it.",
-    "Parallel lines have so much in common. It’s a shame they’ll never meet."
+    "I had a joke about UDP, but I'm not sure if you got it.",
+    "Parallel lines have so much in common. It's a shame they'll never meet."
 ];
 
 let lastJoke = '';
+let currentApiIndex = 0;
+
+// Available joke APIs
+const JOKE_APIS = [
+    {
+        name: 'Dad Jokes',
+        source: 'icanhazdadjoke',
+        url: 'https://icanhazdadjoke.com/',
+        headers: { Accept: 'application/json' },
+        parser: (data) => data.joke
+    },
+    {
+        name: 'Chuck Norris',
+        source: 'api.chucknorris.io',
+        url: 'https://api.chucknorris.io/jokes/random',
+        headers: { Accept: 'application/json' },
+        parser: (data) => data.value
+    },
+    {
+        name: 'JokeAPI',
+        source: 'jokeapi.dev',
+        url: 'https://v2.jokeapi.dev/joke/Any?type=single',
+        headers: { Accept: 'application/json' },
+        parser: (data) => data.joke || `${data.setup} ${data.delivery}`
+    },
+    {
+        name: 'Programming',
+        source: 'jokeapi.dev',
+        url: 'https://v2.jokeapi.dev/joke/Programming?type=single',
+        headers: { Accept: 'application/json' },
+        parser: (data) => data.joke || `${data.setup} ${data.delivery}`
+    },
+    {
+        name: 'Official Joke API',
+        source: 'official-joke-api.appspot.com',
+        url: 'https://official-joke-api.appspot.com/jokes/random',
+        headers: { Accept: 'application/json' },
+        parser: (data) => `${data.setup} ${data.punchline}`
+    },
+    {
+        name: 'Geek Jokes',
+        source: 'geek-jokes.sameerkumar.website',
+        url: 'https://geek-jokes.sameerkumar.website/api?format=json',
+        headers: { Accept: 'application/json' },
+        parser: (data) => data.joke
+    },
+    {
+        name: 'Random Jokes',
+        source: 'sv443.net/jokeapi',
+        url: 'https://v2.jokeapi.dev/joke/Miscellaneous,Dark,Any?type=single',
+        headers: { Accept: 'application/json' },
+        parser: (data) => data.joke || `${data.setup} ${data.delivery}`
+    }
+];
+
+// Function to cycle through APIs
+function cycleApi() {
+    currentApiIndex = (currentApiIndex + 1) % JOKE_APIS.length;
+    return JOKE_APIS[currentApiIndex];
+}
+
+// Function to get current API
+function getCurrentApi() {
+    return JOKE_APIS[currentApiIndex];
+}
 
 async function fetchJoke() {
-    setStatus('fetching...');
-    jokeType.textContent = 'dad joke';
-    jokeSource.textContent = 'icanhazdadjoke';
+    const api = getCurrentApi();
+    setStatus(`fetching from ${api.source}...`);
+    jokeType.textContent = api.name.toLowerCase();
+    jokeSource.textContent = api.source;
 
     try {
-        const res = await fetch('https://icanhazdadjoke.com/', {
-            headers: { Accept: 'application/json', "User-Agent": 'GiggleFactory/1.0' }
+        const res = await fetch(api.url, {
+            headers: { ...api.headers, "User-Agent": "GiggleFactory/1.0" }
         });
-        if (!res.ok) throw new Error('Bad response');
+
+        if (!res.ok) throw new Error(`API error: ${res.status}`);
+
         const data = await res.json();
-        const text = data && data.joke ? data.joke.trim() : FALLBACK_JOKES[Math.floor(Math.random()*FALLBACK_JOKES.length)];
+        let text = api.parser(data);
+
+        // Handle empty responses
+        if (!text || text.trim() === '') {
+            throw new Error('Empty joke response');
+        }
+
+        text = text.trim();
         showJoke(text);
-        setStatus('fresh from the web');
+        setStatus(`from ${api.source}`);
     } catch (err) {
-        console.warn('Fetch failed', err);
-        setStatus('offline, using local fallback');
-        const local = FALLBACK_JOKES[Math.floor(Math.random()*FALLBACK_JOKES.length)];
-        jokeType.textContent = 'local fallback';
-        jokeSource.textContent = 'local';
-        showJoke(local);
+        console.warn(`Fetch from ${api.source} failed:`, err);
+
+        // Try next API on failure
+        const nextApi = cycleApi();
+        setStatus(`${api.source} failed, trying ${nextApi.source}`);
+
+        try {
+            const res = await fetch(nextApi.url, {
+                headers: { ...nextApi.headers, "User-Agent": "GiggleFactory/1.0" }
+            });
+
+            if (!res.ok) throw new Error(`API error: ${res.status}`);
+
+            const data = await res.json();
+            let text = nextApi.parser(data);
+
+            if (!text || text.trim() === '') {
+                throw new Error('Empty joke response');
+            }
+
+            text = text.trim();
+            showJoke(text);
+            jokeType.textContent = nextApi.name.toLowerCase();
+            jokeSource.textContent = nextApi.source;
+            setStatus(`from ${nextApi.source} (fallback)`);
+        } catch (secondErr) {
+            console.warn(`Fallback API also failed:`, secondErr);
+            setStatus('all APIs failed, using local');
+            const local = FALLBACK_JOKES[Math.floor(Math.random() * FALLBACK_JOKES.length)];
+            jokeType.textContent = 'local fallback';
+            jokeSource.textContent = 'local';
+            showJoke(local);
+        }
     }
 }
 
@@ -46,13 +148,19 @@ function showJoke(text) {
     jokeText.textContent = text;
 }
 
-function setStatus(txt){
+function setStatus(txt) {
     status.textContent = txt;
 }
 
 newJokeBtn.addEventListener('click', fetchJoke);
+
+newJokeBtn.addEventListener('dblclick', () => {
+    cycleApi();
+    fetchJoke();
+});
+
 fallbackBtn.addEventListener('click', () => {
-    const local = FALLBACK_JOKES[Math.floor(Math.random()*FALLBACK_JOKES.length)];
+    const local = FALLBACK_JOKES[Math.floor(Math.random() * FALLBACK_JOKES.length)];
     jokeType.textContent = 'local fallback';
     jokeSource.textContent = 'local';
     showJoke(local);
@@ -74,12 +182,16 @@ tweetBtn.addEventListener('click', () => {
     window.open(url, '_blank');
 });
 
-// keyboard shortcut J for new joke
+// Keyboard shortcuts
 window.addEventListener('keydown', (e) => {
     if (e.key.toLowerCase() === 'j') {
         fetchJoke();
     }
+    if (e.key.toLowerCase() === 'a') {
+        cycleApi();
+        fetchJoke();
+    }
 });
 
-// initial joke
+// Initial joke
 fetchJoke();
