@@ -1,6 +1,3 @@
-// Raptor Dash - procedural endless runner
-// Controls: Space / Up Arrow / Click to jump
-
 (() => {
     const canvas = document.getElementById('game');
     const ctx = canvas.getContext('2d');
@@ -30,21 +27,26 @@
     const btnStart = document.getElementById('btn-start');
     const btnPause = document.getElementById('btn-pause');
 
-    // player
+    // player - dinosaur character
     const player = {
         x: 92, // screen x
         y: 0,
         vy: 0,
-        w: 46,
-        h: 40,
+        w: 46, // width for running pose
+        h: 50, // height for running pose
+        crouchW: 60, // wider when crouching
+        crouchH: 30, // shorter when crouching
         onGround: false,
         jumping: false,
+        crouching: false,
         boostReady: true,
-        color: '#072a14'
+        color: '#072a14',
+        frame: 0, // animation frame
+        frameTimer: 0
     };
 
     // world
-    const groundY = 300; // canvas-local coordinate. We'll scale canvas height to match.
+    const groundY = 300; // canvas-local coordinate
     let obstacles = [];
     let particles = [];
     let clouds = [];
@@ -101,6 +103,9 @@
         player.y = groundY - player.h;
         player.vy = 0;
         player.onGround = true;
+        player.crouching = false;
+        player.frame = 0;
+        player.frameTimer = 0;
         running = true;
         paused = false;
         last = performance.now();
@@ -246,9 +251,11 @@
 
     // input
     let wantJump = false;
+    let wantCrouch = false;
+
     function onJump(){
         if(!running) return;
-        if(player.onGround){
+        if(player.onGround && !player.crouching){
             player.vy = -820;
             player.onGround = false;
             player.jumping = true;
@@ -262,7 +269,41 @@
         }
     }
 
-    document.addEventListener('keydown', e => { if([' ','ArrowUp','w'].includes(e.key)) { e.preventDefault(); onJump(); } });
+    function onCrouchStart() {
+        if(!running || !player.onGround || player.jumping) return;
+        player.crouching = true;
+        player.w = player.crouchW;
+        player.h = player.crouchH;
+        player.y = groundY - player.h; // Adjust Y position when crouching
+    }
+
+    function onCrouchEnd() {
+        if(player.crouching) {
+            player.crouching = false;
+            player.w = 46;
+            player.h = 50;
+            player.y = groundY - player.h; // Adjust Y position when standing
+        }
+    }
+
+    document.addEventListener('keydown', e => {
+        if([' ','ArrowUp','w'].includes(e.key)) {
+            e.preventDefault();
+            onJump();
+        }
+        if(['ArrowDown','s'].includes(e.key)) {
+            e.preventDefault();
+            onCrouchStart();
+        }
+    });
+
+    document.addEventListener('keyup', e => {
+        if(['ArrowDown','s'].includes(e.key)) {
+            e.preventDefault();
+            onCrouchEnd();
+        }
+    });
+
     canvas.addEventListener('pointerdown', e => onJump());
 
     // start / pause buttons
@@ -295,10 +336,10 @@
     // Enhanced collision detection for different obstacle types
     function checkPlayerCollision(player, obstacle) {
         const playerRect = {
-            x: player.x + 4, // Shrink player hitbox slightly for fairness
-            y: player.y + 6,
-            w: player.w - 8,
-            h: player.h - 12
+            x: player.x + (player.crouching ? 8 : 4), // Adjust hitbox for crouching
+            y: player.y + (player.crouching ? 2 : 6),
+            w: player.w - (player.crouching ? 16 : 8),
+            h: player.h - (player.crouching ? 4 : 12)
         };
 
         const obRect = {
@@ -429,6 +470,15 @@
             player.jumping = false;
         }
 
+        // Update animation frames
+        if (player.onGround && !player.crouching) {
+            player.frameTimer += dt;
+            if (player.frameTimer > 0.1) { // Switch frame every 100ms
+                player.frameTimer = 0;
+                player.frame = (player.frame + 1) % 2; // Alternate between 0 and 1
+            }
+        }
+
         // move obstacles left with speed
         for(const o of obstacles){
             o.x -= speed * dt;
@@ -499,6 +549,71 @@
         ctx.fill();
     }
 
+    // Draw dinosaur character
+    function drawDinosaur(ctx, x, y, isCrouching, frame) {
+        ctx.save();
+
+        if (isCrouching) {
+            drawCrouchingDino(ctx, x, y);
+        } else {
+            drawRunningDino(ctx, x, y, frame);
+        }
+
+        ctx.restore();
+    }
+
+    function drawRunningDino(ctx, x, y, frame) {
+        // Body (main rectangle)
+        ctx.fillStyle = '#072a14';
+        ctx.fillRect(x, y, 46, 50);
+
+        // Head
+        ctx.fillRect(x + 30, y - 10, 20, 20);
+
+        // Eye
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(x + 42, y - 5, 4, 4);
+
+        // Legs - alternate based on frame
+        ctx.fillStyle = '#072a14';
+        if (frame === 0) {
+            // Frame 1: left leg forward, right leg back
+            ctx.fillRect(x + 5, y + 50, 12, 8);  // Left leg
+            ctx.fillRect(x + 25, y + 50, 8, 12); // Right leg
+        } else {
+            // Frame 2: right leg forward, left leg back
+            ctx.fillRect(x + 5, y + 50, 8, 12);  // Left leg
+            ctx.fillRect(x + 25, y + 50, 12, 8); // Right leg
+        }
+
+        // Tail
+        ctx.fillRect(x - 8, y + 15, 8, 6);
+
+        // Arm
+        ctx.fillRect(x + 20, y + 15, 6, 12);
+    }
+
+    function drawCrouchingDino(ctx, x, y) {
+        // Lower, wider body for crouching
+        ctx.fillStyle = '#072a14';
+        ctx.fillRect(x, y + 20, 60, 30); // Wider and lower body
+
+        // Head - lower and forward
+        ctx.fillRect(x + 15, y + 10, 25, 15);
+
+        // Eye
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(x + 32, y + 14, 4, 4);
+
+        // Legs tucked under
+        ctx.fillStyle = '#072a14';
+        ctx.fillRect(x + 10, y + 50, 15, 6);  // Left leg
+        ctx.fillRect(x + 35, y + 50, 15, 6);  // Right leg
+
+        // Tail - lower and shorter
+        ctx.fillRect(x - 6, y + 30, 6, 4);
+    }
+
     // render
     function render(){
         const cw = canvas.width / DPR;
@@ -562,22 +677,21 @@
             }
         }
 
-        // player with glow
+        // Draw dinosaur character with glow
         ctx.save();
         ctx.shadowColor = 'rgba(124,231,135,0.26)';
         ctx.shadowBlur = 18;
-        ctx.fillStyle = '#0b5829';
-        drawRoundedRect(ctx, player.x, player.y, player.w, player.h, 8);
+        drawDinosaur(ctx, player.x, player.y, player.crouching, player.frame);
 
         // Debug player hitbox
         if (debugMode) {
             ctx.strokeStyle = 'blue';
             ctx.lineWidth = 2;
             const playerRect = {
-                x: player.x + 4,
-                y: player.y + 6,
-                w: player.w - 8,
-                h: player.h - 12
+                x: player.x + (player.crouching ? 8 : 4),
+                y: player.y + (player.crouching ? 2 : 6),
+                w: player.w - (player.crouching ? 16 : 8),
+                h: player.h - (player.crouching ? 4 : 12)
             };
             ctx.strokeRect(playerRect.x, playerRect.y, playerRect.w, playerRect.h);
         }
