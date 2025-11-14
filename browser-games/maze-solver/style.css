@@ -228,8 +228,28 @@ max-width: calc(var(--cell-size) * 32 + 100px);
     pointer-events: none;
     transition: opacity 300ms ease, transform 300ms ease;
     z-index: 1000;
+    border: 1px solid rgba(255,255,255,0.1);
 }
+
 .message-overlay.show {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1.05);
+    pointer-events: all;
+}
+
+.message-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+
+.message-text {
+    line-height: 1.4;
+}
+
+#restart-message-btn {
+    margin-top: 10px;
+    padding: 12px 24px;
+    font-size: 16px;
 }

@@ -15,6 +15,7 @@ let moves = 0;
 let timer = null;
 let timeSeconds = 0;
 let started = false;
+let gameCompleted = false;
 
 // store best moves keyed by size
 function bestKey(size){ return `maze_best_${size}`; }
@@ -24,7 +25,8 @@ function updateBestUI(){
 }
 
 /* -------------------
-   Maze generation (DFS carve)
+   Enhanced Maze generation (Prim's algorithm)
+   Produces more complex mazes with more branches
    ------------------- */
 
 function shuffle(arr){
@@ -34,27 +36,83 @@ function shuffle(arr){
     }
 }
 
-function carve(grid, x, y, directions){
-    grid[y][x] = 0;
-    const dirs = directions.slice();
-    shuffle(dirs);
-    for(const d of dirs){
-        const nx = x + d.x*2, ny = y + d.y*2;
-        if(nx>=0 && nx<grid.length && ny>=0 && ny<grid.length && grid[ny][nx] === 1){
-            grid[y+d.y][x+d.x] = 0;
-            carve(grid, nx, ny, directions);
+function generateMaze(size){
+    // Initialize with all walls
+    const grid = Array.from({length: size}, () => Array(size).fill(1));
+
+    // Start from a random cell
+    const startX = Math.floor(Math.random() * (size-1)) | 1; // Ensure odd for path
+    const startY = Math.floor(Math.random() * (size-1)) | 1;
+
+    // Mark start as path
+    grid[startY][startX] = 0;
+
+    // Initialize frontier (walls that could become paths)
+    const frontier = [];
+    const directions = [{x:0,y:-2},{x:2,y:0},{x:0,y:2},{x:-2,y:0}];
+
+    // Add initial frontier cells
+    for(const d of directions){
+        const nx = startX + d.x, ny = startY + d.y;
+        if(nx > 0 && nx < size-1 && ny > 0 && ny < size-1){
+            frontier.push({x: nx, y: ny, px: startX + d.x/2, py: startY + d.y/2});
         }
     }
-}
 
-function generateMaze(size){
-    const grid = Array.from({length:size}, () => Array(size).fill(1));
-    const directions = [{x:0,y:-1},{x:1,y:0},{x:0,y:1},{x:-1,y:0}];
+    // Process frontier until empty
+    while(frontier.length > 0){
+        // Pick a random frontier cell
+        const randomIndex = Math.floor(Math.random() * frontier.length);
+        const cell = frontier[randomIndex];
+        frontier.splice(randomIndex, 1);
 
-    carve(grid, 0, 0, directions);
+        const {x, y, px, py} = cell;
 
-    // ensure end reachable
-    grid[size-1][size-1] = 0;
+        // If cell is still a wall, carve path
+        if(grid[y][x] === 1){
+            grid[y][x] = 0; // Carve cell
+            grid[py][px] = 0; // Carve passage between cell and nearest path
+
+            // Add new frontier cells
+            for(const d of directions){
+                const nx = x + d.x, ny = y + d.y;
+                if(nx > 0 && nx < size-1 && ny > 0 && ny < size-1 && grid[ny][nx] === 1){
+                    frontier.push({x: nx, y: ny, px: x + d.x/2, py: y + d.y/2});
+                }
+            }
+        }
+    }
+
+    // Ensure start and end positions are clear and at corners
+    grid[0][1] = 0; // Start entrance
+    grid[1][0] = 0; // Alternative start entrance
+    grid[size-1][size-2] = 0; // End exit
+    grid[size-2][size-1] = 0; // Alternative end exit
+
+    // Add some additional random paths to increase complexity
+    for(let i = 0; i < size * 2; i++){
+        const x = Math.floor(Math.random() * (size-2)) + 1;
+        const y = Math.floor(Math.random() * (size-2)) + 1;
+
+        if(grid[y][x] === 1){
+            // Count path neighbors
+            let pathNeighbors = 0;
+            const neighbors = [{x:0,y:-1},{x:1,y:0},{x:0,y:1},{x:-1,y:0}];
+
+            for(const n of neighbors){
+                const nx = x + n.x, ny = y + n.y;
+                if(nx >= 0 && nx < size && ny >= 0 && ny < size && grid[ny][nx] === 0){
+                    pathNeighbors++;
+                }
+            }
+
+            // Convert to path if it has exactly 2 path neighbors that aren't opposite
+            if(pathNeighbors === 2){
+                grid[y][x] = 0;
+            }
+        }
+    }
+
     return grid;
 }
 
@@ -96,7 +154,10 @@ function drawMaze(){
 /* -------------------
    Movement logic
    -------------------*/
-function movePlayer(dx, dy){
+function movePlayer(dx, dy) {
+    // Prevent movement if game is completed
+    if (gameCompleted) return;
+
     const nx = player.x + dx, ny = player.y + dy;
     if(nx<0||ny<0||nx>=mazeSize||ny>=mazeSize) return;
     if(maze[ny][nx]===1) return; // wall
@@ -105,8 +166,9 @@ function movePlayer(dx, dy){
     if(!started){ startTimer(); started=true; }
     drawMaze();
     if(player.x===end.x && player.y===end.y){
+        gameCompleted = true;
         stopTimer();
-        setTimeout(()=> {
+        setTimeout(() => {
             showMessage(`You finished in ${moves} moves and ${timeSeconds}s!`);
             // update best
             const prev = parseInt(localStorage.getItem(bestKey(mazeSize)) || "0", 10);
@@ -234,12 +296,30 @@ hintBtn.addEventListener("click", () => {
     setTimeout(()=> cells.forEach(c => c.classList.remove("hint")), 2200);
 });
 
-/* End-game message: */
-function showMessage(msg, duration = 2500){
+/* End-game message with restart button */
+function showMessage(msg, duration = 0) {
     const overlay = document.getElementById("message-overlay");
-    overlay.textContent = msg;
+
+    // Create message content with restart button
+    overlay.innerHTML = `
+        <div class="message-content">
+            <div class="message-text">${msg}</div>
+            <button class="btn primary" id="restart-message-btn">Play Again</button>
+        </div>
+    `;
+
     overlay.classList.add("show");
-    setTimeout(()=> overlay.classList.remove("show"), duration);
+
+    // Add event listener to the restart button
+    document.getElementById("restart-message-btn").addEventListener('click', () => {
+        overlay.classList.remove("show");
+        initMaze(mazeSize);
+    });
+
+    // Only auto-hide if duration is specified (for non-end-game messages)
+    if (duration > 0) {
+        setTimeout(() => overlay.classList.remove("show"), duration);
+    }
 }
 
 /* -------------------
@@ -248,9 +328,10 @@ function showMessage(msg, duration = 2500){
 function initMaze(size){
     mazeSize = size;
     maze = generateMaze(mazeSize);
-    player = { x: 0, y: 0 };
-    end = { x: mazeSize - 1, y: mazeSize - 1 };
+    player = { x: 1, y: 0 }; // Start near top-left
+    end = { x: mazeSize - 2, y: mazeSize - 1 }; // End near bottom-right
     moves = 0;
+    gameCompleted = false;
     resetTimer();
     computeCellSize();
     drawMaze();
