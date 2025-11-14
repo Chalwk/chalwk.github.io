@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta charset="utf-8"/>
+    <meta content="width=device-width,initial-scale=1" name="viewport"/>
     <title>RGB Color Wheel</title>
-    <link rel="stylesheet" href="style.css" />
+    <link href="style.css" rel="stylesheet"/>
 </head>
 <body>
 <main class="app">
@@ -18,31 +18,31 @@
             <div class="wheel-card card">
                 <div class="wheel-top">
                     <div class="preview">
-                        <div id="preview-swatch" class="swatch"></div>
+                        <div class="swatch" id="preview-swatch"></div>
                         <div class="swatch-info">
-                            <div id="hex" class="hex">#ff0000</div>
+                            <div class="hex" id="hex">#ff0000</div>
                             <div class="small-info" id="rgb">rgb(255, 0, 0)</div>
                         </div>
                     </div>
 
                     <div class="modes">
-                        <label class="mode-btn"><input type="radio" name="mode" value="rgb" checked /> RGB</label>
-                        <label class="mode-btn"><input type="radio" name="mode" value="hsl" /> HSL</label>
-                        <label class="mode-btn"><input type="radio" name="mode" value="hsv" /> HSV</label>
-                        <label class="mode-btn"><input type="radio" name="mode" value="cmyk" /> CMYK</label>
+                        <label class="mode-btn"><input checked name="mode" type="radio" value="rgb"/> RGB</label>
+                        <label class="mode-btn"><input name="mode" type="radio" value="hsl"/> HSL</label>
+                        <label class="mode-btn"><input name="mode" type="radio" value="hsv"/> HSV</label>
+                        <label class="mode-btn"><input name="mode" type="radio" value="cmyk"/> CMYK</label>
                     </div>
                 </div>
 
                 <div class="wheel-area">
                     <div class="canvas-wrap">
-                        <canvas id="colorWheel" width="360" height="360" aria-label="Color wheel"></canvas>
-                        <div id="picker" class="picker" aria-hidden="true"></div>
+                        <canvas aria-label="Color wheel" height="360" id="colorWheel" width="360"></canvas>
+                        <div aria-hidden="true" class="picker" id="picker"></div>
                     </div>
                     <div class="controls">
                         <div id="sliders"></div>
                         <div class="inputs">
-                            <label>Hex <input id="hexInput" type="text" maxlength="9" /></label>
-                            <button id="copyHex" class="btn small">Copy</button>
+                            <label>Hex <input id="hexInput" maxlength="9" type="text"/></label>
+                            <button class="btn small" id="copyHex">Copy</button>
                         </div>
                         <div class="values" id="readouts">
                             <!-- dynamic readouts -->
@@ -52,22 +52,22 @@
             </div>
 
             <div class="actions">
-                <button id="saveSwatch" class="btn">Save to Palette</button>
-                <button id="randomize" class="btn ghost">Randomize</button>
+                <button class="btn" id="saveSwatch">Save to Palette</button>
+                <button class="btn ghost" id="randomize">Randomize</button>
             </div>
         </div>
 
         <aside class="right">
             <div class="card palette-card">
                 <h2>Palette</h2>
-                <div id="presetSwatches" class="swatch-grid"></div>
+                <div class="swatch-grid" id="presetSwatches"></div>
 
                 <h3>Your Palette</h3>
-                <div id="userSwatches" class="swatch-grid"></div>
+                <div class="swatch-grid" id="userSwatches"></div>
 
                 <div class="palette-actions">
-                    <button id="clearPalette" class="btn ghost">Clear</button>
-                    <button id="exportPalette" class="btn">Export JSON</button>
+                    <button class="btn ghost" id="clearPalette">Clear</button>
+                    <button class="btn" id="exportPalette">Export JSON</button>
                 </div>
             </div>
 

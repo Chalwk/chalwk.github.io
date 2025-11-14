@@ -16,6 +16,81 @@ const winningConditions = [
     [0,4,8],[2,4,6]            // diagonals
 ];
 
+// Sound effects
+const sounds = {
+    move: new Audio(),
+    aiMove: new Audio(),
+    win: new Audio(),
+    tie: new Audio()
+};
+
+// Initialize sounds with basic tones
+function initSounds() {
+    // Player move - short high beep
+    sounds.move.src = generateBeep(800, 0.1);
+
+    // AI move - slightly lower, softer beep
+    sounds.aiMove.src = generateBeep(500, 0.1);
+
+    // Win sound - rising tone
+    sounds.win.src = generateBeep(600, 0.5);
+
+    // Tie sound - low tone
+    sounds.tie.src = generateBeep(300, 0.3);
+}
+
+// Generate simple beep sound
+function generateBeep(frequency, duration) {
+    const sampleRate = 44100;
+    const numSamples = Math.floor(duration * sampleRate);
+    const buffer = new ArrayBuffer(44 + numSamples * 2);
+    const view = new DataView(buffer);
+
+    // WAV header
+    writeString(view, 0, 'RIFF');
+    view.setUint32(4, 36 + numSamples * 2, true);
+    writeString(view, 8, 'WAVE');
+    writeString(view, 12, 'fmt ');
+    view.setUint32(16, 16, true);
+    view.setUint16(20, 1, true);
+    view.setUint16(22, 1, true);
+    view.setUint32(24, sampleRate, true);
+    view.setUint32(28, sampleRate * 2, true);
+    view.setUint16(32, 2, true);
+    view.setUint16(34, 16, true);
+    writeString(view, 36, 'data');
+    view.setUint32(40, numSamples * 2, true);
+
+    // Generate sine wave
+    const amplitude = 0.3;
+    for (let i = 0; i < numSamples; i++) {
+        const t = i / sampleRate;
+        const value = Math.sin(2 * Math.PI * frequency * t) * amplitude;
+        view.setInt16(44 + i * 2, value * 0x7FFF, true);
+    }
+
+    return URL.createObjectURL(new Blob([buffer], { type: 'audio/wav' }));
+}
+
+function writeString(view, offset, string) {
+    for (let i = 0; i < string.length; i++) {
+        view.setUint8(offset + i, string.charCodeAt(i));
+    }
+}
+
+// Play sound with error handling
+function playSound(soundName) {
+    try {
+        const sound = sounds[soundName];
+        if (sound) {
+            sound.currentTime = 0;
+            sound.play().catch(e => console.log('Sound play failed:', e));
+        }
+    } catch (error) {
+        console.log('Sound error:', error);
+    }
+}
+
 function handleCellClick(e) {
     if (!gameActive || currentPlayer === 'O' && gameMode === 'pvai') return;
 
@@ -33,6 +108,9 @@ function makeMove(index) {
     board[index] = currentPlayer;
     cells[index].textContent = currentPlayer;
     cells[index].classList.add('taken', `player-${currentPlayer}`);
+
+    // Play move sound
+    playSound('move');
 
     checkResult();
     if (gameActive) {
@@ -52,6 +130,8 @@ function makeAIMove() {
     if (availableCells.length > 0) {
         const randomIndex = Math.floor(Math.random() * availableCells.length);
         makeMove(availableCells[randomIndex]);
+
+        playSound('aiMove');
     }
 }
 
@@ -74,6 +154,9 @@ function checkResult() {
         gameActive = false;
         drawWinningLine(winningCombo);
 
+        // Play win sound
+        playSound('win');
+
         // Add win animation to winning cells
         winningCombo.forEach(index => {
             cells[index].classList.add('winning-cell');
@@ -86,6 +169,9 @@ function checkResult() {
         status.className = 'tie-message';
         gameActive = false;
         winningLine.style.display = 'none';
+
+        // Play tie sound
+        playSound('tie');
     }
 }
 
@@ -183,7 +269,8 @@ function setGameMode(mode) {
     pvaiBtn.classList.toggle('active', mode === 'pvai');
 }
 
-// Initialize the game with Player vs AI mode
+// Initialize the game with Player vs AI mode and sounds
+initSounds();
 setGameMode('pvai');
 
 cells.forEach(cell => cell.addEventListener('click', handleCellClick));
