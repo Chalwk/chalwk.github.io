@@ -195,53 +195,54 @@
 
     // draw color wheel using conic gradient + radial overlay for saturation/value
     function drawWheel(){
-        // make canvas resolution match display size for crispness
         const dpr = window.devicePixelRatio || 1;
-        const w = canvas.clientWidth | 0;
-        const h = canvas.clientHeight | 0;
+        const w = canvas.clientWidth;
+        const h = canvas.clientHeight;
+
+        // Set canvas dimensions accounting for device pixel ratio
         canvas.width = w * dpr;
         canvas.height = h * dpr;
-        ctx.setTransform(dpr,0,0,dpr,0,0);
+        ctx.scale(dpr, dpr);
 
-        const cx = w/2, cy = h/2, r = Math.min(w,h)/2 - 1;
+        const cx = w/2, cy = h/2, r = Math.min(w,h)/2;
 
-        // conic gradient for hue
-        const hueG = ctx.createConicGradient(0, cx, cy);
-        for (let i=0;i<=360;i++){
-            const stop = i/360;
-            hueG.addColorStop(stop, `hsl(${i} 100% 50%)`);
-        }
+        // Clear and draw hue circle
         ctx.clearRect(0,0,w,h);
+
+        // Draw hue circle (full saturation and value)
+        const hueG = ctx.createConicGradient(0, cx, cy);
+        for (let i=0;i<=360;i+=30){
+            hueG.addColorStop(i/360, `hsl(${i}, 100%, 50%)`);
+        }
+
         ctx.beginPath();
         ctx.arc(cx,cy,r,0,Math.PI*2);
         ctx.closePath();
         ctx.fillStyle = hueG;
         ctx.fill();
 
-        // overlay radial gradient: white -> transparent (towards edge) to vary saturation
-        const satGrad = ctx.createRadialGradient(cx,cy,0, cx,cy, r);
+        // Draw saturation gradient (white to transparent)
+        const satGrad = ctx.createRadialGradient(cx,cy,0, cx,cy,r);
         satGrad.addColorStop(0, 'rgba(255,255,255,1)');
-        satGrad.addColorStop(0.35, 'rgba(255,255,255,0.0)');
-        satGrad.addColorStop(1, 'rgba(0,0,0,0.0)');
+        satGrad.addColorStop(1, 'rgba(255,255,255,0)');
         ctx.fillStyle = satGrad;
         ctx.beginPath();
         ctx.arc(cx,cy,r,0,Math.PI*2);
         ctx.closePath();
         ctx.fill();
 
-        // overlay value (black) gradient for darker center->edge for HSV? We'll later sample and let mode interpret
-        const blackGrad = ctx.createRadialGradient(cx,cy,0, cx,cy,r);
-        blackGrad.addColorStop(0, 'rgba(0,0,0,0)');
-        blackGrad.addColorStop(1, 'rgba(0,0,0,0.0)');
-        // not used heavily; keeping wheel visually clean.
-
-        // cut extra pixels outside circle
-        ctx.globalCompositeOperation = 'destination-in';
+        // Draw value gradient (black overlay)
+        const valGrad = ctx.createRadialGradient(cx,cy,0, cx,cy,r);
+        valGrad.addColorStop(0, 'rgba(0,0,0,0)');
+        valGrad.addColorStop(1, 'rgba(0,0,0,1)');
+        ctx.fillStyle = valGrad;
         ctx.beginPath();
         ctx.arc(cx,cy,r,0,Math.PI*2);
         ctx.closePath();
         ctx.fill();
-        ctx.globalCompositeOperation = 'source-over';
+
+        // Restore transform
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
     }
 
     // sample color from canvas at client coords
@@ -275,27 +276,51 @@
     // update UI readouts & preview
     function updateUI(){
         const { r, g, b, a } = current;
-        preview.style.background = `rgba(${r}, ${g}, ${b}, ${a})`;
+        preview.style.background = `rgb(${r}, ${g}, ${b})`;
         const hex = rgbToHex(r,g,b);
         hexEl.textContent = hex;
         hexInput.value = hex;
         document.getElementById('rgb').textContent = `rgb(${r}, ${g}, ${b})`;
 
-        // readouts block
         const hsv = rgbToHsv(r,g,b);
         const hsl = rgbToHsl(r,g,b);
         const cmyk = rgbToCmyk(r,g,b);
 
         readouts.innerHTML = `
-      <div class="small-info">HEX: <strong>${hex}</strong></div>
-      <div class="small-info">RGB: <strong>${r}, ${g}, ${b}</strong></div>
-      <div class="small-info">HSL: <strong>${hsl.h}°, ${hsl.s}%, ${hsl.l}%</strong></div>
-      <div class="small-info">HSV: <strong>${hsv.h}°, ${hsv.s}%, ${hsv.v}%</strong></div>
-      <div class="small-info">CMYK: <strong>${cmyk.c}%, ${cmyk.m}%, ${cmyk.y}%, ${cmyk.k}%</strong></div>
+        <div class="small-info">HEX: <strong>${hex}</strong></div>
+        <div class="small-info">RGB: <strong>${r}, ${g}, ${b}</strong></div>
+        <div class="small-info">HSL: <strong>${hsl.h}°, ${hsl.s}%, ${hsl.l}%</strong></div>
+        <div class="small-info">HSV: <strong>${hsv.h}°, ${hsv.s}%, ${hsv.v}%</strong></div>
+        <div class="small-info">CMYK: <strong>${cmyk.c}%, ${cmyk.m}%, ${cmyk.y}%, ${cmyk.k}%</strong></div>
     `;
 
-        // update slider values to reflect current mode
-        renderSliders();
+        // Update existing sliders instead of recreating them
+        updateSliderValues();
+    }
+
+    function updateSliderValues() {
+        if (Object.keys(sliderElements).length === 0) return;
+
+        const rgb = { r: current.r, g: current.g, b: current.b };
+        const hsv = rgbToHsv(rgb.r, rgb.g, rgb.b);
+        const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+        const cmyk = rgbToCmyk(rgb.r, rgb.g, rgb.b);
+
+        const valuesMap = {
+            r: rgb.r, g: rgb.g, b: rgb.b,
+            h: mode === 'hsl' ? hsl.h : hsv.h,
+            s: mode === 'hsl' ? hsl.s : hsv.s,
+            v: hsv.v,
+            l: hsl.l,
+            c: cmyk.c, m: cmyk.m, y: cmyk.y, k: cmyk.k
+        };
+
+        Object.keys(sliderElements).forEach(id => {
+            if (valuesMap[id] !== undefined) {
+                sliderElements[id].input.value = valuesMap[id];
+                sliderElements[id].valueDisplay.textContent = Math.round(valuesMap[id]);
+            }
+        });
     }
 
     // setColor central — sets current and updates UI
@@ -334,11 +359,10 @@
     let sliderElements = {};
 
     function renderSliders(){
-        // build controls for current mode
         const defs = sliderDefinitions[mode];
         slidersContainer.innerHTML = '';
         sliderElements = {};
-        // compute current values depending on mode
+
         const rgb = { r: current.r, g: current.g, b: current.b };
         const hsv = rgbToHsv(rgb.r, rgb.g, rgb.b);
         const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
@@ -346,7 +370,7 @@
 
         const valuesMap = {
             r: rgb.r, g: rgb.g, b: rgb.b,
-            h: mode === 'hsl' || mode === 'hsv' ? (mode === 'hsl' ? hsl.h : hsv.h) : hsv.h,
+            h: mode === 'hsl' ? hsl.h : hsv.h,
             s: mode === 'hsl' ? hsl.s : hsv.s,
             v: hsv.v,
             l: hsl.l,
@@ -356,26 +380,42 @@
         defs.forEach(def => {
             const row = document.createElement('div');
             row.className = 'slider-row';
+
             const label = document.createElement('label');
             label.textContent = def.label;
+            label.style.width = '30px';
+
             const rangeWrap = document.createElement('div');
             rangeWrap.className = 'range';
+
             const input = document.createElement('input');
             input.type = 'range';
             input.min = def.min;
             input.max = def.max;
             input.value = valuesMap[def.id] ?? def.min;
             input.dataset.id = def.id;
+
+            // Fix: Use mousedown and touchstart for better dragging
             input.addEventListener('input', onSliderInput);
+            input.addEventListener('mousedown', () => {
+                document.addEventListener('mousemove', onSliderInput);
+                document.addEventListener('mouseup', () => {
+                    document.removeEventListener('mousemove', onSliderInput);
+                }, { once: true });
+            });
+
             rangeWrap.appendChild(input);
+
             const valueDisplay = document.createElement('div');
             valueDisplay.className = 'small-info';
             valueDisplay.style.minWidth = '42px';
             valueDisplay.textContent = input.value;
+
             row.appendChild(label);
             row.appendChild(rangeWrap);
             row.appendChild(valueDisplay);
             slidersContainer.appendChild(row);
+
             sliderElements[def.id] = { input, valueDisplay };
         });
     }
@@ -491,14 +531,32 @@
     });
 
     exportPaletteBtn.addEventListener('click', () => {
-        const data = JSON.stringify(userPalette, null, 2);
-        const blob = new Blob([data], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'palette.json';
-        a.click();
-        URL.revokeObjectURL(url);
+        if (userPalette.length === 0) {
+            alert('Your palette is empty. Save some colors first.');
+            return;
+        }
+
+        try {
+            const data = JSON.stringify(userPalette, null, 2);
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'color-palette.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            // Show success feedback
+            exportPaletteBtn.textContent = 'Exported!';
+            setTimeout(() => {
+                exportPaletteBtn.textContent = 'Export JSON';
+            }, 2000);
+        } catch (error) {
+            console.error('Export failed:', error);
+            alert('Failed to export palette. Please try again.');
+        }
     });
 
     // initial draw + wiring

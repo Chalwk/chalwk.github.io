@@ -127,6 +127,8 @@ body{
     display:flex;
     align-items:center;
     justify-content:center;
+    overflow: hidden;
+    border-radius: 50%;
 }
 canvas{
     width:100%;
@@ -135,6 +137,9 @@ canvas{
     box-shadow: 0 10px 30px rgba(2,8,20,0.6);
     cursor:crosshair;
     display:block;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 /* picker crosshair */
