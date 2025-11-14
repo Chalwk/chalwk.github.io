@@ -1,6 +1,4 @@
 // Rope Untangle — script.js
-// PIP's polished implementation: procedural levels, drag, crossing detection, shuffle, reset.
-
 (() => {
     const svg = document.getElementById('svg');
     const resetBtn = document.getElementById('resetBtn');
