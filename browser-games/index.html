@@ -4,89 +4,179 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Browser Games by Jericho Crosby (Chalwk)</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="style.css" rel="stylesheet">
 </head>
 <body>
+<!-- Animated Background Elements -->
+<div class="bg-animation">
+    <div class="bg-shape shape-1"></div>
+    <div class="bg-shape shape-2"></div>
+    <div class="bg-shape shape-3"></div>
+    <div class="bg-shape shape-4"></div>
+</div>
+
 <header>
-    <h1>Browser Games</h1>
-    <p>Click a game to play directly in your browser.</p>
+    <div class="header-content">
+        <h1><span class="gradient-text">Browser Games</span></h1>
+        <p>Click a game to play directly in your browser</p>
+        <div class="header-decoration">
+            <div class="decoration-dot"></div>
+            <div class="decoration-dot"></div>
+            <div class="decoration-dot"></div>
+        </div>
+    </div>
 </header>
 
 <main>
     <div class="games-grid">
         <!-- Tic-Tac-Toe -->
         <div class="game-card">
+            <div class="game-icon">
+                <i class="fas fa-times"></i>
+            </div>
             <h3>Tic-Tac-Toe</h3>
             <p>Classic 3x3 Tic-Tac-Toe game. Play against a friend, or AI!</p>
-            <a href="tic-tac-toe/index.html">Play Now</a>
+            <a href="tic-tac-toe/index.html" class="play-button">
+                <span>Play Now</span>
+                <i class="fas fa-arrow-right"></i>
+            </a>
         </div>
 
         <!-- Run Away Game -->
         <div class="game-card">
+            <div class="game-icon">
+                <i class="fas fa-running"></i>
+            </div>
             <h3>Run Away</h3>
-            <p>Jump over obstacles to survive as long as possible. Press SPACE or UP ARROW to jump
-                over bombs, cacti, rocks and other hazards. The game speeds up as your score increases!</p>
-            <a href="run-away/index.html">Play Now</a>
+            <p>Jump over obstacles to survive as long as possible. The game speeds up as your score increases!</p>
+            <a href="run-away/index.html" class="play-button">
+                <span>Play Now</span>
+                <i class="fas fa-arrow-right"></i>
+            </a>
         </div>
 
         <!-- Maze Solver -->
         <div class="game-card">
+            <div class="game-icon">
+                <i class="fas fa-puzzle-piece"></i>
+            </div>
             <h3>Maze Solver</h3>
-            <p>Navigate the green square through the maze to reach the red square. Use WASD, arrow keys, or the
-                on-screen buttons to move!</p>
-            <a href="maze-solver/index.html">Play Now</a>
+            <p>Navigate the green square through the maze to reach the red square. Use WASD or arrow keys!</p>
+            <a href="maze-solver/index.html" class="play-button">
+                <span>Play Now</span>
+                <i class="fas fa-arrow-right"></i>
+            </a>
         </div>
 
         <!-- Mandelbrot Explorer -->
         <div class="game-card">
+            <div class="game-icon">
+                <i class="fas fa-infinity"></i>
+            </div>
             <h3>Mandelbrot Explorer</h3>
             <p>Explore the mesmerizing Mandelbrot fractal. Click to zoom in and discover infinite patterns!</p>
-            <a href="mandelbrot/index.html">Play Now</a>
+            <a href="mandelbrot/index.html" class="play-button">
+                <span>Play Now</span>
+                <i class="fas fa-arrow-right"></i>
+            </a>
         </div>
 
         <!-- Asteroids -->
         <div class="game-card">
+            <div class="game-icon">
+                <i class="fas fa-meteor"></i>
+            </div>
             <h3>Asteroids</h3>
-            <p>Classic space shooter! Destroy asteroids and enemy ships. Use arrow keys to move and spacebar to shoot.
-                Avoid collisions to survive!</p>
-            <a href="asteroids/index.html">Play Now</a>
+            <p>Classic space shooter! Destroy asteroids and enemy ships. Avoid collisions to survive!</p>
+            <a href="asteroids/index.html" class="play-button">
+                <span>Play Now</span>
+                <i class="fas fa-arrow-right"></i>
+            </a>
         </div>
 
         <!-- Blunder Koopa -->
         <div class="game-card">
+            <div class="game-icon">
+                <i class="fas fa-dragon"></i>
+            </div>
             <h3>Blunder Koopa</h3>
             <p>A Mario themed word guessing puzzle. Try to solve the 5 letter mystery word in six tries.</p>
-            <a href="blunder-koopa/index.html">Play Now</a>
+            <a href="blunder-koopa/index.html" class="play-button">
+                <span>Play Now</span>
+                <i class="fas fa-arrow-right"></i>
+            </a>
         </div>
 
         <!-- Rope Untangling -->
         <div class="game-card">
+            <div class="game-icon">
+                <i class="fas fa-rope"></i>
+            </div>
             <h3>Rope Untangling</h3>
             <p>Drag the dots to untangle the ropes. Clear all crossings to win.</p>
-            <a href="rope-untangle/index.html">Play Now</a>
+            <a href="rope-untangle/index.html" class="play-button">
+                <span>Play Now</span>
+                <i class="fas fa-arrow-right"></i>
+            </a>
         </div>
 
         <!-- Raptor Dash -->
         <div class="game-card">
+            <div class="game-icon">
+                <i class="fas fa-feather-alt"></i>
+            </div>
             <h3>Raptor Dash</h3>
-            <p>Soar and dash through procedurally generated obstacles in this endless runner. Jump, dodge, and ride the
-                thermals to rack up the highest score. Press SPACE or UP ARROW to jump, click to boost!</p>
-            <a href="raptor-dash/index.html">Play Now</a>
+            <p>Soar and dash through procedurally generated obstacles in this endless runner.</p>
+            <a href="raptor-dash/index.html" class="play-button">
+                <span>Play Now</span>
+                <i class="fas fa-arrow-right"></i>
+            </a>
         </div>
 
         <!-- Giggle Factory -->
         <div class="game-card">
+            <div class="game-icon">
+                <i class="fas fa-laugh-squint"></i>
+            </div>
             <h3>Giggle Factory</h3>
-            <p>Fetch random jokes from the internet. Click for new jokes, copy to clipboard, or tweet your favorites!</p>
-            <a href="giggle-factory/index.html">Play Now</a>
+            <p>Fetch random jokes from the internet. Click for new jokes, copy to clipboard, or tweet favorites!</p>
+            <a href="giggle-factory/index.html" class="play-button">
+                <span>Play Now</span>
+                <i class="fas fa-arrow-right"></i>
+            </a>
         </div>
     </div>
-    <a class="back-link" href="http://chalwk.github.io/">Back to Main Site</a>
+
+    <div class="back-button-container">
+        <a class="back-link" href="http://chalwk.github.io/">
+            <i class="fas fa-arrow-left"></i>
+            Back to Main Site
+        </a>
+    </div>
 </main>
 
 <footer>
-    <p>&copy; 2025 Jericho Crosby (Chalwk). All rights reserved.</p>
+    <div class="footer-content">
+        <p>&copy; 2025 Jericho Crosby (Chalwk). All rights reserved.</p>
+        <div class="social-links">
+            <a href="https://github.com/Chalwk" aria-label="GitHub"><i class="fab fa-github"></i></a>
+            <a href="https://x.com/chalwk77" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.youtube.com/@Chalwk" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+        </div>
+    </div>
 </footer>
+
+<script>
+    // Add subtle animation to cards on load
+    document.addEventListener('DOMContentLoaded', function() {
+        const cards = document.querySelectorAll('.game-card');
+        cards.forEach((card, index) => {
+            card.style.animationDelay = `${index * 0.1}s`;
+            card.classList.add('fade-in');
+        });
+    });
+</script>
 </body>
 </html>
