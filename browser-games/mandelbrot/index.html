@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta charset="utf-8"/>
+    <meta content="width=device-width,initial-scale=1" name="viewport"/>
     <title>Mandelbrot Browser</title>
-    <link rel="stylesheet" href="style.css" />
+    <link href="style.css" rel="stylesheet"/>
 </head>
 <body>
 <header>
@@ -17,33 +17,39 @@
 
     <aside id="controls">
         <section class="group">
-            <label>Max iterations <output id="iterVal">800</output></label>
-            <input id="iterations" type="range" min="50" max="4000" step="1" value="800"/>
+            <label>Max iterations
+                <output id="iterVal">800</output>
+            </label>
         </section>
 
         <section class="group">
-            <label>Exponent (power) <output id="expVal">2.0</output></label>
-            <input id="exponent" type="range" min="2" max="8" step="0.01" value="2"/>
+            <label>Exponent (power)
+                <output id="expVal">2.0</output>
+            </label>
         </section>
 
         <section class="group">
-            <label>Color hue offset <output id="hueVal">200</output></label>
-            <input id="hue" type="range" min="0" max="360" step="1" value="200"/>
+            <label>Color hue offset
+                <output id="hueVal">200</output>
+            </label>
         </section>
 
         <section class="group">
-            <label>Saturation <output id="satVal">80</output>%</label>
-            <input id="saturation" type="range" min="0" max="100" step="1" value="80"/>
+            <label>Saturation
+                <output id="satVal">80</output>
+                %</label>
         </section>
 
         <section class="group">
-            <label>Lightness <output id="lightVal">50</output>%</label>
-            <input id="lightness" type="range" min="0" max="100" step="1" value="50"/>
+            <label>Lightness
+                <output id="lightVal">50</output>
+                %</label>
         </section>
 
         <section class="group">
-            <label>Bailout radius <output id="bailoutVal">16</output></label>
-            <input id="bailout" type="range" min="2" max="1024" step="1" value="16"/>
+            <label>Bailout radius
+                <output id="bailoutVal">16</output>
+            </label>
         </section>
 
         <section class="buttons">
@@ -63,6 +69,6 @@
     <small>&copy; 2025 Jericho Crosby (Chalwk). All rights reserved.</small>
 </footer>
 
-<script src="script.js" defer></script>
+<script defer src="script.js"></script>
 </body>
 </html>
