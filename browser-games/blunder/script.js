@@ -536,7 +536,7 @@ function showHelp(){
     <li><strong>Yellow</strong> means letter is in the word but wrong spot.</li>
     <li><strong>Gray</strong> means letter is not in the word at all.</li>
   </ul>
-  <p>Use your physical keyboard or click the keys. Place a <code>words.txt</code> file with one word per line in the same folder to use your own dictionary.</p>
+  <p>Use your physical keyboard or click the keys.</p>
   `;
     showModal(help);
 }
