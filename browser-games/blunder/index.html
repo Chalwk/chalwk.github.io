@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>Blunder — Wordle-like Game</title>
+
+    <!-- Google fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;600&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css"/>
+    <meta name="description" content="Blunder — a Wordle-like game"/>
+</head>
+<body>
+<main class="app">
+    <header class="title-row">
+        <h1 class="title">Blunder</h1>
+        <div class="controls">
+            <button id="newGameBtn" title="New game">New Game</button>
+            <button id="statsBtn" title="Stats">Stats</button>
+            <button id="helpBtn" title="How to play">?</button>
+        </div>
+    </header>
+
+    <section class="meta">
+        <p class="sub">Guess the 5-letter word in 6 tries. Hit enter to submit. Click tiles to toggle focus.</p>
+    </section>
+
+    <div id="game" class="game">
+        <div id="grid" class="grid" aria-live="polite" aria-atomic="true"></div>
+        <div id="keyboard" class="keyboard" aria-hidden="false"></div>
+    </div>
+
+    <footer class="footer">
+        <small>&copy; 2025 Jericho Crosby (Chalwk). All rights reserved.</small>
+    </footer>
+</main>
+
+<!-- Modal containers -->
+<div id="modal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-card" role="document">
+        <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
+        <div id="modalContent" class="modal-content"></div>
+    </div>
+</div>
+
+<script src="script.js" defer></script>
+</body>
+</html>
