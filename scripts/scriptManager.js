@@ -32,16 +32,16 @@ const RELEASES_API_URL = "https://api.github.com/repos/Chalwk/HALO-SCRIPT-PROJEC
 fetch(RAW_METADATA_URL)
     .then(res => res.json())
     .then(metadata => {
-        scriptMetadata = metadata;
-        renderScripts();
-        autoOpenFromURL(); // run after scripts are rendered
-    })
+    scriptMetadata = metadata;
+    renderScripts();
+    autoOpenFromURL(); // run after scripts are rendered
+})
     .catch(err => console.error('Error loading script metadata:', err));
 
 fetch(RELEASES_API_URL)
-  .then(res => res.json())
-  .then(releases => renderReleases(releases))
-  .catch(err => console.error("Error loading flagship releases:", err));
+    .then(res => res.json())
+    .then(releases => renderReleases(releases))
+    .catch(err => console.error("Error loading flagship releases:", err));
 
 // ---------------
 // Render scripts into categories
@@ -136,9 +136,9 @@ function fetchScript(scriptPath) {
     return fetch(url)
         .then(res => res.ok ? res.text() : Promise.reject(`Network error: ${res.status}`))
         .then(data => {
-            scriptCache[scriptPath] = data;
-            return data;
-        });
+        scriptCache[scriptPath] = data;
+        return data;
+    });
 }
 
 function getScript(scriptPath, callback) {

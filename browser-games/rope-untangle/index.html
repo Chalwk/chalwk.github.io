@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta charset="utf-8"/>
+    <meta content="width=device-width,initial-scale=1" name="viewport"/>
     <title>Rope Untangle — PIP</title>
-    <link rel="stylesheet" href="style.css">
+    <link href="style.css" rel="stylesheet">
 </head>
 <body>
 <div class="app">
@@ -12,9 +12,9 @@
         <div class="brand">Rope Untangle</div>
         <div class="controls">
             <a class="btn return" href="../index.html">Return</a>
-            <button id="resetBtn" class="btn">Reset</button>
-            <button id="shuffleBtn" class="btn">Shuffle</button>
-            <button id="nextBtn" class="btn primary">Next Level</button>
+            <button class="btn" id="resetBtn">Reset</button>
+            <button class="btn" id="shuffleBtn">Shuffle</button>
+            <button class="btn primary" id="nextBtn">Next Level</button>
         </div>
     </header>
 
@@ -38,15 +38,15 @@
         </aside>
 
         <section class="canvas-wrap">
-            <svg id="svg" class="svg-canvas" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet"></svg>
+            <svg class="svg-canvas" id="svg" preserveAspectRatio="xMidYMid meet" viewBox="0 0 1000 700"></svg>
 
-            <div id="winOverlay" class="win-overlay hidden">
+            <div class="win-overlay hidden" id="winOverlay">
                 <div class="win-card">
                     <h2>Nice! Puzzle solved.</h2>
                     <p>Ready for the next one?</p>
                     <div class="win-actions">
-                        <button id="winNext" class="btn primary">Next Level</button>
-                        <button id="winShuffle" class="btn">Shuffle</button>
+                        <button class="btn primary" id="winNext">Next Level</button>
+                        <button class="btn" id="winShuffle">Shuffle</button>
                     </div>
                 </div>
             </div>

@@ -5,7 +5,7 @@ class RunAwayGame {
         this.scoreElement = document.getElementById('score');
         this.startBtn = document.getElementById('start-btn');
         this.resetBtn = document.getElementById('reset-btn');
-        
+
         this.gameSpeed = 2;
         this.score = 0;
         this.isPlaying = false;
@@ -212,31 +212,31 @@ class RunAwayGame {
 
             // Check if hitboxes overlap
             if (playerHitbox.right > obstacleHitbox.left &&
-                playerHitbox.left < obstacleHitbox.right &&
-                playerHitbox.bottom > obstacleHitbox.top &&
-                playerHitbox.top < obstacleHitbox.bottom) {
+            playerHitbox.left < obstacleHitbox.right &&
+            playerHitbox.bottom > obstacleHitbox.top &&
+            playerHitbox.top < obstacleHitbox.bottom) {
 
                 this.gameOver();
                 return;
             }
         }
     }
-    
+
     updateScore() {
         if (this.isPlaying) {
             this.score += 1;
             this.scoreElement.textContent = `Score: ${this.score}`;
         }
     }
-    
+
     gameOver() {
         this.isPlaying = false;
         cancelAnimationFrame(this.gameLoop);
         clearInterval(this.obstacleInterval);
-        
+
         this.startBtn.disabled = false;
         this.startBtn.textContent = 'Start Game';
-        
+
         // Create game over message
         const gameOverMsg = document.createElement('div');
         gameOverMsg.className = 'game-over';
@@ -245,7 +245,7 @@ class RunAwayGame {
             <p>Final Score: ${this.score}</p>
             <button onclick="this.parentElement.remove()">OK</button>
         `;
-        
+
         this.gameArea.appendChild(gameOverMsg);
     }
 }

@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta content="width=device-width,initial-scale=1" name="viewport"/>
     <title>Maze Solver — Polished</title>
-    <meta name="theme-color" content="#0f172a">
-    <link rel="stylesheet" href="style.css"/>
+    <meta content="#0f172a" name="theme-color">
+    <link href="style.css" rel="stylesheet"/>
 </head>
 <body>
 <div class="app">
@@ -16,34 +16,34 @@
         </div>
 
         <div class="hud">
-            <div id="score" class="hud-item" aria-live="polite">Moves: 0</div>
-            <div id="timer" class="hud-item">Time: 0s</div>
-            <div id="best" class="hud-item">Best: —</div>
+            <div aria-live="polite" class="hud-item" id="score">Moves: 0</div>
+            <div class="hud-item" id="timer">Time: 0s</div>
+            <div class="hud-item" id="best">Best: —</div>
         </div>
     </header>
 
     <main class="main">
-        <section id="game-area" class="card">
-            <div id="game-controls" class="controls-top">
+        <section class="card" id="game-area">
+            <div class="controls-top" id="game-controls">
                 <div class="left-controls">
-                    <button id="reset-btn" class="btn primary">Restart</button>
-                    <button id="hint-btn" class="btn">Show Hint</button>
+                    <button class="btn primary" id="reset-btn">Restart</button>
+                    <button class="btn" id="hint-btn">Show Hint</button>
                 </div>
                 <div class="right-controls">
                     <label class="size-label">Size
-                        <select id="size-select" aria-label="Maze size">
-                            <option value="11" selected>11 × 11</option>
+                        <select aria-label="Maze size" id="size-select">
+                            <option selected value="11">11 × 11</option>
                             <option value="15">15 × 15</option>
                             <option value="21">21 × 21</option>
                             <option value="31">31 × 31</option>
                         </select>
                     </label>
-                    <button id="browser-btn" class="btn subtle">Return</button>
+                    <button class="btn subtle" id="browser-btn">Return</button>
                 </div>
             </div>
 
-            <div id="game-container" class="game-container">
-                <div id="maze-container" aria-hidden="false"></div>
+            <div class="game-container" id="game-container">
+                <div aria-hidden="false" id="maze-container"></div>
             </div>
 
             <div class="instructions">
@@ -51,12 +51,12 @@
                     or arrow keys, or the touch D-pad below.</p>
             </div>
 
-            <div id="touch-controls" class="dpad" role="group" aria-label="Touch controls">
-                <button data-dir="up" class="dpad-btn">▲</button>
+            <div aria-label="Touch controls" class="dpad" id="touch-controls" role="group">
+                <button class="dpad-btn" data-dir="up">▲</button>
                 <div class="dpad-row">
-                    <button data-dir="left" class="dpad-btn">◀</button>
-                    <button data-dir="down" class="dpad-btn">▼</button>
-                    <button data-dir="right" class="dpad-btn">▶</button>
+                    <button class="dpad-btn" data-dir="left">◀</button>
+                    <button class="dpad-btn" data-dir="down">▼</button>
+                    <button class="dpad-btn" data-dir="right">▶</button>
                 </div>
             </div>
         </section>
@@ -74,6 +74,6 @@
 </div>
 
 <script src="script.js"></script>
-<div id="message-overlay" class="message-overlay" aria-live="polite"></div>
+<div aria-live="polite" class="message-overlay" id="message-overlay"></div>
 </body>
 </html>
