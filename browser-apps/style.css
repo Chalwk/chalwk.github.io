@@ -1,4 +1,4 @@
-/* stylesheet for browser-games - Enhanced Version */
+/* stylesheet for browser-apps - Enhanced Version */
 :root {
     --primary: #6C63FF;
     --secondary: #4A44C6;
@@ -393,5 +393,99 @@ footer {
 
     .games-grid {
         grid-template-columns: 1fr;
+    }
+}
+
+/* Category Sections */
+.category-section {
+    width: 100%;
+    max-width: 1200px;
+    margin-bottom: 60px;
+    padding: 0 20px;
+}
+
+.category-header {
+    text-align: center;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.category-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--gradient);
+    color: white;
+    font-size: 2rem;
+    box-shadow: 0 10px 25px rgba(108, 99, 255, 0.4);
+    position: relative;
+    z-index: 1;
+}
+
+.category-header h2 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    font-weight: 700;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
+}
+
+.category-header p {
+    font-size: 1.1rem;
+    opacity: 0.8;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.category-section:first-child .category-icon {
+    background: var(--gradient);
+}
+
+.category-section:first-child .category-header h2 {
+    background: var(--gradient);
+}
+
+.category-section:last-child .category-icon {
+    background: var(--gradient-accent);
+}
+
+.category-section:last-child .category-header h2 {
+    background: var(--gradient-accent);
+}
+
+.category-section:last-child .play-button {
+    background: var(--gradient-accent);
+}
+
+.category-section:last-child .play-button::before {
+    background: var(--gradient);
+}
+
+@media (max-width: 768px) {
+    .category-header h2 {
+        font-size: 2rem;
+    }
+
+    .category-icon {
+        width: 70px;
+        height: 70px;
+        font-size: 1.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .category-header h2 {
+        font-size: 1.8rem;
+    }
+
+    .category-header p {
+        font-size: 1rem;
     }
 }
