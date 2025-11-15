@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Random Password Generator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="app" aria-labelledby="app-title">
+    <header class="app-header">
+        <h1 id="app-title">Random Password Generator</h1>
+        <div class="controls-top">
+            <label class="toggle">
+                <input id="darkMode" type="checkbox" aria-label="Toggle dark mode">
+                <span>Dark mode</span>
+            </label>
+        </div>
+    </header>
+
+    <section class="generator" aria-label="Password generator">
+        <div class="left">
+            <div class="panel">
+                <div class="row">
+                    <label for="length">Length: <span id="lengthVal">16</span></label>
+                    <input id="length" type="range" min="4" max="128" value="16" />
+                </div>
+
+                <fieldset class="char-sets" aria-label="Character sets">
+                    <legend>Character sets</legend>
+                    <label><input id="upper" type="checkbox" checked> ABC</label>
+                    <label><input id="lower" type="checkbox" checked> abc</label>
+                    <label><input id="numbers" type="checkbox" checked> 123</label>
+                    <label><input id="symbols" type="checkbox"> #$&</label>
+                    <label class="custom-field">Custom: <input id="custom" placeholder="e.g. ±§♥" maxlength="32"></label>
+                </fieldset>
+
+                <div class="row">
+                    <label><input id="includeSimilar" type="checkbox"> Exclude similar chars (i, l, 1, O, 0)</label>
+                </div>
+
+                <div class="row">
+                    <label><input id="passphraseMode" type="checkbox"> Passphrase mode</label>
+                    <label class="small">Words: <input id="passphraseWords" type="number" min="3" max="10" value="4"></label>
+                </div>
+
+                <div class="row">
+                    <label>Pattern (optional)<span class="tooltip" title="Use: C=upper, c=lower, d=digit, s=symbol, *=any selected, .=literal">?</span></label>
+                    <input id="pattern" placeholder="e.g. Ccc123!Ccc" aria-describedby="patternDesc">
+                </div>
+
+                <div class="actions">
+                    <button id="generate">Generate</button>
+                    <button id="copy" class="secondary" title="Copy password to clipboard">Copy</button>
+                    <div class="export">
+                        <button id="exportTxt" class="secondary">Export .txt</button>
+                        <button id="exportCsv" class="secondary">Export .csv</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel output">
+                <label for="passwordOutput">Generated password</label>
+                <div id="passwordWrap">
+                    <input id="passwordOutput" readonly aria-live="polite">
+                    <button id="fav" title="Favorite this password">☆</button>
+                </div>
+                <div class="strength-row">
+                    <div id="strengthBar" aria-hidden="true"></div>
+                    <div id="strengthLabel"></div>
+                </div>
+
+                <div class="stats">
+                    <dl>
+                        <div><dt>Entropy</dt><dd id="entropy">—</dd></div>
+                        <div><dt>Bits of security</dt><dd id="bits">—</dd></div>
+                        <div><dt>Guesses</dt><dd id="guesses">—</dd></div>
+                        <div><dt>Time to crack</dt><dd id="timeToCrack">—</dd></div>
+                    </dl>
+                </div>
+
+                <div class="warnings" id="warnings" aria-live="assertive"></div>
+            </div>
+        </div>
+
+        <aside class="right">
+            <div class="panel history">
+                <h2>History</h2>
+                <div id="historyList" tabindex="0"></div>
+                <div class="history-actions">
+                    <button id="clearHistory">Clear</button>
+                    <button id="importHistory">Import</button>
+                </div>
+            </div>
+
+            <div class="panel guidance">
+                <h2>Password guidance</h2>
+                <ul>
+                    <li><strong>NIST checks</strong>: avoids re-used passwords, checks length (12+ recommended for memorized secrets), favors long passphrases.</li>
+                    <li>Use 16+ chars with multiple character sets for strong passwords.</li>
+                    <li>Passphrases with 4+ random words give high entropy and memorability.</li>
+                </ul>
+                <p class="small">Hover terms for more info. Tooltips explain entropy, bits, time-to-crack.</p>
+            </div>
+
+        </aside>
+    </section>
+
+    <footer class="app-footer">
+        <small>&copy; 2025 Jericho Crosby (Chalwk). All rights reserved.</small>
+    </footer>
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
