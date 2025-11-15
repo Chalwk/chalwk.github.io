@@ -302,6 +302,31 @@ class Game {
         else if (this.state === 'paused') { this.state = 'playing'; this.lastTick = now(); this.updateUI(); this.sfx.beep(660, 0.05); }
     }
 
+    showPowerupMessage(type) {
+        const messages = {
+            'speed': 'Speed Boost!',
+            'slow': 'Slow Motion!',
+            'shrink': 'Shrunk!',
+            'mult': '2x Multiplier!',
+            'phase': 'Phase Through!',
+            'life': 'Extra Life!',
+            'magnet': 'Food Magnet!'
+        };
+
+        let messageEl = document.getElementById('powerup-message');
+        messageEl.textContent = messages[type] || 'Powerup!';
+        messageEl.classList.add('show');
+
+        // Remove after 2 seconds
+        setTimeout(() => {
+            messageEl.classList.remove('show');
+            messageEl.classList.add('fade-out');
+            setTimeout(() => {
+                messageEl.classList.remove('fade-out');
+            }, 300);
+        }, 2000);
+    }
+
     updateUI(){
         $('overlay').classList.toggle('hidden', this.state !== 'menu');
         $('overlay-gameover').classList.toggle('hidden', this.state !== 'gameover');
@@ -354,6 +379,7 @@ class Game {
 
     applyPowerup(power) {
         const t = power.type;
+        this.showPowerupMessage(t);
         switch(t){
             case 'speed':
                 this.tickRate *= 1.6; this.tickInterval = 1000/this.tickRate; this.sfx.beep(1200,0.08);
@@ -379,7 +405,6 @@ class Game {
                 this.sfx.beep(840,0.06);
                 break;
             case 'magnet':
-                // for a short time, food will be attracted to the head
                 this.setPowerTimer('magnet', 5000, ()=>{/* expire */});
                 this.sfx.beep(550,0.06);
                 break;
