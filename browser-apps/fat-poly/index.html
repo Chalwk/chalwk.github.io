@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width,initial-scale=1" name="viewport"/>
+    <title>FatPoly</title>
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+<header class="topbar">
+    <div aria-hidden="true" class="logo" id="logo">
+        <!-- SVG logo for FatPoly -->
+        <svg class="logo-svg" preserveAspectRatio="xMidYMid meet" viewBox="0 0 600 120">
+            <defs>
+                <linearGradient id="g1" x1="0" x2="1">
+                    <stop offset="0" stop-color="#FFF"/>
+                    <stop offset="1" stop-color="#a9f"/>
+                </linearGradient>
+            </defs>
+            <rect fill="#222" height="108" opacity="0.85" rx="12" width="108" x="6" y="6"/>
+            <g transform="translate(8,8)">
+                <rect fill="#fff" height="96" rx="10" width="96" x="0" y="0"/>
+                <text fill="url(#g1)" font-family="Segoe UI, Roboto, sans-serif" font-size="48" font-weight="700"
+                      text-anchor="middle" x="48" y="58">P
+                </text>
+            </g>
+            <text fill="#fff" font-family="Segoe UI, Roboto, sans-serif" font-size="64"
+                  font-weight="800" opacity="0.95" x="140" y="70">Fat
+            </text>
+            <text fill="#a9f" font-family="Segoe UI, Roboto, sans-serif" font-size="64"
+                  font-weight="800" x="260" y="70">Poly
+            </text>
+        </svg>
+    </div>
+    <div class="info">
+        <div id="score">Score: 0</div>
+        <div id="level">Level: 1</div>
+    </div>
+    <div class="controls">
+        <button class="btn" id="btn-start">Start</button>
+        <button class="btn" id="btn-pause">Pause</button>
+        <button class="btn" id="btn-sound">🔊</button>
+        <button class="btn" id="btn-reset">Restart</button>
+    </div>
+</header>
+
+<main class="game-area">
+    <canvas id="gameCanvas"></canvas>
+
+    <div class="hud">
+        <div class="bar-label">Health</div>
+        <div class="bar" id="healthBar">
+            <div class="bar-fill" id="healthFill"></div>
+        </div>
+        <div class="bar-label">Progress</div>
+        <div class="bar" id="progressBar">
+            <div class="bar-fill" id="progressFill"></div>
+        </div>
+        <div class="stats">
+            <div id="eaten">Eaten: 0</div>
+            <div id="target">Target: 10</div>
+        </div>
+    </div>
+
+    <div class="overlay hidden" id="overlay">
+        <div class="overlay-content" id="overlayContent">
+            <h1 id="overlayTitle">FatPoly</h1>
+            <p id="overlayText">Press Start to play</p>
+            <button class="btn" id="overlayBtn">Play</button>
+        </div>
+    </div>
+</main>
+
+<footer class="footer">
+    <small>© 2025 FatPoly - Jericho Crosby (Chalwk). All rights reserved.</small>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
