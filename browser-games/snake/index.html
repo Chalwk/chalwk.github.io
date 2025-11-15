@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width,initial-scale=1" name="viewport"/>
+    <title>Snake</title>
+    <link href="style.css" rel="stylesheet"/>
+</head>
+<body>
+<div id="app">
+    <header class="topbar">
+        <div class="brand">Snake</div>
+        <div class="info">
+            <div id="score">Score: 0</div>
+            <div id="best">Best: 0</div>
+        </div>
+        <div class="controls">
+            <button class="btn" id="btn-pause">Pause</button>
+            <button class="btn" id="btn-sound">🔊</button>
+        </div>
+    </header>
+
+    <main class="game-area">
+        <canvas id="gameCanvas" tabindex="0"></canvas>
+
+        <!-- HUD overlays -->
+        <div class="overlay menu" id="overlay">
+            <div class="menu-card">
+                <h1>Snake</h1>
+                <p class="tagline">Fast. Fancy. Frenetic.</p>
+
+                <div class="menu-controls">
+                    <label>Mode
+                        <select id="modeSelect">
+                            <option value="classic">Classic</option>
+                            <option value="walls">Walls</option>
+                            <option value="obstacles">Obstacles</option>
+                            <option value="portal">Portals</option>
+                        </select>
+                    </label>
+
+                    <label>Difficulty
+                        <select id="difficultySelect">
+                            <option value="easy">Easy</option>
+                            <option selected value="normal">Normal</option>
+                            <option value="hard">Hard</option>
+                        </select>
+                    </label>
+
+                    <label>Controls
+                        <select id="controlSelect">
+                            <option value="arrows">Arrows</option>
+                            <option value="wasd">WASD</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="menu-buttons">
+                    <button class="btn big" id="btn-start">Start</button>
+                    <button class="btn" id="btn-how">How to play</button>
+                    <button class="btn" id="btn-stats">Stats</button>
+                </div>
+
+                <div class="smallprint">Tip: Golden apples are worth a lot. Powerups are temporary but game changing.
+                </div>
+            </div>
+        </div>
+
+        <div class="overlay info-panel hidden" id="overlay-info">
+            <div class="info-card">
+                <h2>How to play</h2>
+                <ul>
+                    <li>Eat food to grow and score points.</li>
+                    <li>Use powerups for short advantages.</li>
+                    <li>Avoid colliding with yourself and (depending on mode) walls or obstacles.</li>
+                    <li>Pause with Space or the Pause button. Touch controls supported.</li>
+                </ul>
+                <button class="btn" id="btn-back">Back</button>
+            </div>
+        </div>
+
+        <div class="overlay game-over hidden" id="overlay-gameover">
+            <div class="gameover-card">
+                <h2>Game Over</h2>
+                <p id="go-score">Score: 0</p>
+                <p id="go-best">Best: 0</p>
+                <div class="menu-buttons">
+                    <button class="btn big" id="btn-restart">Restart</button>
+                    <button class="btn" id="btn-menu">Main Menu</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- On-screen touch controls (for mobile) -->
+        <div class="touch-controls hidden" id="touch-controls">
+            <div class="dpad">
+                <button class="tc btn-round" data-dir="up">▲</button>
+                <div class="tc-row">
+                    <button class="tc btn-round" data-dir="left">◄</button>
+                    <button class="tc btn-round" data-dir="down">▼</button>
+                    <button class="tc btn-round" data-dir="right">►</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div>&copy; 2025 Jericho Crosby (Chalwk). All rights reserved.</div>
+    </footer>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
