@@ -620,12 +620,9 @@
         // top-right floating stats
         ctx.save();
         ctx.font = '12px sans-serif';
-        ctx.fillStyle = 'rgba(255,255,255,0.06)';
+        ctx.fillStyle = 'rgba(255,255,255,1)';
         ctx.fillText(`Level ${state.level} • Score ${state.score}`, 12, 20);
         ctx.restore();
-
-        // draw health/progress bars as overlay handled by DOM
-        // render specials timers
     }
 
     // animated background orbs
