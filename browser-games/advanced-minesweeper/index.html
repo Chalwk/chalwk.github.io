@@ -1,0 +1,67 @@
+<!-- index.html -->
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width,initial-scale=1" name="viewport"/>
+    <title>Advanced Minesweeper</title>
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+<header class="topbar">
+    <div class="title">Advanced Minesweeper</div>
+    <div class="controls">
+        <button class="btn" id="newBtn">New Game</button>
+
+        <label class="sr-only" for="difficulty">Difficulty</label>
+        <select class="select" id="difficulty">
+            <option value="beginner">Beginner (9×9, 10)</option>
+            <option value="intermediate">Intermediate (16×16, 40)</option>
+            <option value="expert">Expert (16×30, 99)</option>
+            <option value="custom">Custom</option>
+        </select>
+
+        <div class="custom hidden" id="customPanel">
+            <button class="btn small" id="applyCustom">Apply</button>
+        </div>
+
+        <button class="btn" id="flagToggle">Toggle Flagging</button>
+        <button class="btn" id="revealAllBtn">Reveal Solution</button>
+
+        <div class="status">
+            <span id="mineCount">Mines: 0</span>
+            <span id="timer">00:00</span>
+        </div>
+
+    </div>
+</header>
+
+<main>
+    <div id="boardWrap">
+        <div aria-label="Minesweeper board" id="board" tabindex="0"></div>
+    </div>
+
+    <aside class="menu">
+        <h3>Options</h3>
+        <button class="btn" id="hintBtn">Hint (reveals safe cell)</button>
+        <button class="btn" id="bestTimesBtn">Show Best Times</button>
+        <label><input id="themeToggle" type="checkbox"> Dark theme</label>
+        <div class="note">Tip: Right-click to cycle flag/question/clear. Double-click (or double tap) a number to
+            chord.
+        </div>
+    </aside>
+</main>
+
+<footer class="meta">&copy; 2025 Jericho Crosby (Chalwk). All rights reserved.</footer>
+
+<div class="modal hidden" id="bestTimesModal">
+    <div class="modal-inner">
+        <h3>Best Times</h3>
+        <ul id="bestTimesList"></ul>
+        <button class="btn" id="closeBestTimes">Close</button>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
