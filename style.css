@@ -509,6 +509,17 @@ footer {
     gap: 0.5rem;
 }
 
+/* ===== Projects Button ===== */
+/* Projects Toggle Styles */
+#projects-wrapper {
+    display: none;
+}
+
+#projects-wrapper.show {
+    display: block;
+}
+
+
 /* ===== Mobile Responsiveness ===== */
 @media (max-width: 768px) {
 /* Typography */
