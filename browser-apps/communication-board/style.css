@@ -189,3 +189,60 @@ body.dark .symbol { background:#122034; color:#dfefff; }
     border-top: 1px solid #ccc;
     position: relative; /* ensures it flows with page content */
 }
+
+/* PWA-specific styles */
+@media all and (display-mode: standalone) {
+    .app-header {
+        padding-top: env(safe-area-inset-top);
+    }
+
+    /* Adjust for notch devices */
+    body {
+        padding-top: constant(safe-area-inset-top);
+        padding-top: env(safe-area-inset-top);
+    }
+
+    /* Hide browser UI elements in standalone mode */
+    .floating-btn {
+        bottom: calc(28px + env(safe-area-inset-bottom));
+}
+}
+
+/* Ensure good touch targets for mobile */
+@media (max-width: 768px) {
+    .symbol {
+        min-height: 80px;
+        min-width: 80px;
+    }
+
+    .btn-primary, .btn-secondary {
+        min-height: 44px;
+        padding: 12px 16px;
+    }
+
+    /* Larger touch targets for phrase items */
+    .phrase-item {
+        min-height: 44px;
+        padding: 12px 16px;
+    }
+}
+
+/* Prevent pull-to-refresh in standalone mode */
+@media (display-mode: standalone) {
+    body {
+        overscroll-behavior-y: none;
+    }
+}
+
+/* Status bar coloring for iOS */
+meta[name="apple-mobile-web-app-status-bar-style"] {
+    background-color: #4a86e8;
+}
+
+/* Hide browser address bar when installed */
+@media (display-mode: standalone) {
+    .app-container {
+        height: 100vh;
+        height: 100dvh; /* Dynamic viewport height for mobile */
+    }
+}

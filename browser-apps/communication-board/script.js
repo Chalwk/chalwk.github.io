@@ -501,6 +501,46 @@ document.addEventListener('DOMContentLoaded', () => {
         if (ev.key === 'z' && (ev.ctrlKey || ev.metaKey)) undo();
     });
 
+    // PWA Service Worker Registration
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./sw.js')
+                .then(registration => {
+                console.log('SW registered: ', registration);
+                showToast('App ready for offline use');
+            })
+                .catch(registrationError => {
+                console.log('SW registration failed: ', registrationError);
+            });
+        });
+    }
+
+    // Optional: Add install prompt
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+        // Prevent the mini-infobar from appearing on mobile
+        e.preventDefault();
+        // Stash the event so it can be triggered later
+        deferredPrompt = e;
+        // Show install prompt
+        setTimeout(() => {
+            showToast('💡 Tap ••• then "Install app" for better experience');
+        }, 3000);
+    });
+
+    // Install button handler (optional - you can add this later)
+    function showInstallPrompt() {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    showToast('App installed successfully!');
+                }
+                deferredPrompt = null;
+            });
+        }
+    }
+
     // initial load
     function init() {
         loadSettings();
@@ -514,5 +554,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    init();
+    init(); // This stays at the very end
 });
