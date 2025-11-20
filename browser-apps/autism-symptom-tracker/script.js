@@ -1,3 +1,8 @@
+/* script.js
+   Kept intact from original logic — small improvements to focus / touch behavior
+   (All original IDs are preserved so the UI and logic continue to function.)
+*/
+
 (() => {
     // ----- config + data -----
     const STORAGE_KEY = "autism-tracker-history-v3";
@@ -287,7 +292,6 @@
     const symptomChart = el("#symptom-chart");
 
     // ----- state -----
-    // (no emotion state needed anymore)
 
     // settings storage
     function loadSettings() {
@@ -319,6 +323,7 @@
             if (q && !(sym.label.toLowerCase().includes(q) || (sym.tags || []).join(" ").includes(q))) return;
             const wrapper = document.createElement("div");
             wrapper.className = "symptom fade-in";
+            wrapper.setAttribute("role", "listitem");
             wrapper.innerHTML = `
         <div class="symptom-left">
           <input id="sym-${sym.id}" type="checkbox" name="symptom" value="${sym.id}" aria-label="${sym.label}" />
@@ -405,7 +410,7 @@
         </h3>
         <p class="muted">${escapeHtml(entry.info.explanation || "")}</p>
         <ul aria-label="Strategies for ${escapeHtml(entry.info.name)}" class="strategies">
-          ${entry.info.strategies.map(s => `<li class="strategy"><button class="copy btn" data-copy="${escapeHtml(s)}" title="Copy strategy">Copy</button><span style="margin-left:8px">${escapeHtml(s)}</span></li>`).join("")}
+          ${entry.info.strategies.map(s => `<li class="strategy"><button class="copy btn small" data-copy="${escapeHtml(s)}" title="Copy strategy">Copy</button><span style="margin-left:8px">${escapeHtml(s)}</span></li>`).join("")}
         </ul>
         <div class="taglist">
           ${SYMPTOMS.filter(s => s.tags && s.tags.includes(entry.tag))
@@ -645,6 +650,7 @@
         const ctx = tagChart.getContext("2d");
         const history = loadHistory();
         // clear
+        ctx.setTransform(1,0,0,1,0,0);
         ctx.clearRect(0,0,tagChart.width,tagChart.height);
 
         if (!history.length) {
@@ -709,6 +715,7 @@
         const ctx = symptomChart.getContext("2d");
         const history = loadHistory();
         // clear
+        ctx.setTransform(1,0,0,1,0,0);
         ctx.clearRect(0,0,symptomChart.width,symptomChart.height);
 
         if (!history.length) {
@@ -731,7 +738,7 @@
             return {
                 id: k,
                 name: symptom ? symptom.label : k,
-                color: '#4f46e5', // Use a consistent color for symptoms
+                color: '#4f46e5',
                 v: agg[k]
             };
         }).sort((a,b)=>b.v-a.v);
@@ -896,9 +903,13 @@
         closeHelpBtn.addEventListener("click", () => helpDialog.close());
 
         // react to window resize for charts
+        let resizeTimer;
         window.addEventListener("resize", () => {
-            drawTagChart();
-            drawSymptomChart();
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                drawTagChart();
+                drawSymptomChart();
+            }, 120);
         });
     }
 
@@ -909,6 +920,6 @@
         setTimeout(() => {
             drawTagChart();
             drawSymptomChart();
-        }, 100);
+        }, 120);
     });
 })();
