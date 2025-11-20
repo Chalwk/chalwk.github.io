@@ -468,7 +468,7 @@ a:hover {
     display: flex;
     align-items: center;
     background: white;
-    padding: 1.5rem;
+    padding: 0.5rem;
     border-radius: var(--radius);
     box-shadow: var(--shadow);
     transition: var(--transition);
