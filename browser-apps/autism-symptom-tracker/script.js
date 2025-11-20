@@ -1,8 +1,3 @@
-/* script.js
-   Kept intact from original logic — small improvements to focus / touch behavior
-   (All original IDs are preserved so the UI and logic continue to function.)
-*/
-
 (() => {
     // ----- config + data -----
     const STORAGE_KEY = "autism-tracker-history-v3";
