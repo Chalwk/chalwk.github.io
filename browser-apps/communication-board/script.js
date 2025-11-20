@@ -1,264 +1,518 @@
-// script.js
-document.addEventListener('DOMContentLoaded', function() {
-    // DOM Elements
+document.addEventListener('DOMContentLoaded', () => {
+    // DOM
     const communicationBoard = document.getElementById('communicationBoard');
     const phraseDisplay = document.getElementById('phraseDisplay');
     const speakBtn = document.getElementById('speakBtn');
     const clearBtn = document.getElementById('clearBtn');
     const editModeBtn = document.getElementById('editModeBtn');
+    const exitEditBtn = document.getElementById('exitEditBtn');
     const saveBtn = document.getElementById('saveBtn');
     const addSymbolBtn = document.getElementById('addSymbolBtn');
     const editModal = document.getElementById('editModal');
-    const closeModal = document.querySelector('.close');
+    const closeModalBtn = document.getElementById('closeModal');
     const symbolForm = document.getElementById('symbolForm');
     const deleteBtn = document.getElementById('deleteBtn');
+    const cancelEditBtn = document.getElementById('cancelEdit');
+    const symbolImageFile = document.getElementById('symbolImageFile');
+    const symbolImageInput = document.getElementById('symbolImage');
+    const symbolTextInput = document.getElementById('symbolText');
+    const symbolColorInput = document.getElementById('symbolColor');
+    const symbolCategoryInput = document.getElementById('symbolCategory');
+    const categoryPills = document.getElementById('categoryPills');
+    const voiceSelect = document.getElementById('voiceSelect');
+    const undoBtn = document.getElementById('undoBtn');
+    const exportBtn = document.getElementById('exportBtn');
+    const importFile = document.getElementById('importFile');
+    const toast = document.getElementById('toast');
+    const toggleDarkBtn = document.getElementById('toggleDarkBtn');
+    const syncBtn = document.getElementById('syncBtn');
+    const boardWrap = document.getElementById('boardWrap');
+    const editBanner = document.getElementById('editBanner');
 
-    // App State
+    // State
     let symbols = [];
     let currentPhrase = [];
+    let phraseHistory = [];
     let isEditMode = false;
     let currentEditingSymbol = null;
+    let settings = { filterCategory: 'All', darkMode: false, firebaseConfig: null };
 
-    // Initialize the app
-    function init() {
-        loadSymbols();
-        renderBoard();
-        setupEventListeners();
+    // LocalStorage helpers
+    const LS = {
+        symbolsKey: 'cb.symbols',
+        settingsKey: 'cb.settings',
+        voiceKey: 'cb.voice'
+    };
+
+    function saveSymbols() {
+        localStorage.setItem(LS.symbolsKey, JSON.stringify(symbols));
+        showToast('Symbols saved');
     }
-
-    // Load symbols from localStorage or use default set
     function loadSymbols() {
-        const savedSymbols = localStorage.getItem('communicationSymbols');
-        if (savedSymbols) {
-            symbols = JSON.parse(savedSymbols);
+        const raw = localStorage.getItem(LS.symbolsKey);
+        if (raw) {
+            try { symbols = JSON.parse(raw); }
+            catch { symbols = defaultSymbols(); saveSymbols(); }
         } else {
-            // Default symbols if none saved
-            symbols = [
-                { id: 1, text: 'Hello', image: '😊', color: '#4a86e8' },
-                { id: 2, text: 'Thank you', image: '🙏', color: '#34a853' },
-                { id: 3, text: 'Help', image: '🆘', color: '#ea4335' },
-                { id: 4, text: 'Yes', image: '👍', color: '#fbbc04' },
-                { id: 5, text: 'No', image: '👎', color: '#fbbc04' },
-                { id: 6, text: 'Eat', image: '🍽️', color: '#4a86e8' },
-                { id: 7, text: 'Drink', image: '🥤', color: '#4a86e8' },
-                { id: 8, text: 'Bathroom', image: '🚽', color: '#34a853' },
-                { id: 9, text: 'Play', image: '🎮', color: '#fbbc04' },
-                { id: 10, text: 'Home', image: '🏠', color: '#4a86e8' },
-                { id: 11, text: 'School', image: '🏫', color: '#4a86e8' },
-                { id: 12, text: 'I want', image: '👉', color: '#ea4335' }
-            ];
+            symbols = defaultSymbols();
             saveSymbols();
         }
     }
-
-    // Save symbols to localStorage
-    function saveSymbols() {
-        localStorage.setItem('communicationSymbols', JSON.stringify(symbols));
+    function saveSettings() {
+        localStorage.setItem(LS.settingsKey, JSON.stringify(settings));
+    }
+    function loadSettings() {
+        const raw = localStorage.getItem(LS.settingsKey);
+        if (raw) {
+            try { settings = Object.assign(settings, JSON.parse(raw)); }
+            catch {}
+        }
+        // apply dark mode
+        document.body.classList.toggle('dark', !!settings.darkMode);
     }
 
-    // Render the communication board
+    // Default set
+    function defaultSymbols() {
+        return [
+            { id: 1, text: 'Hello', image: '😊', color: '#4a86e8', category: 'Basic' },
+            { id: 2, text: 'Thank you', image: '🙏', color: '#34a853', category: 'Basic' },
+            { id: 3, text: 'Help', image: '🆘', color: '#ea4335', category: 'Needs' },
+            { id: 4, text: 'Yes', image: '👍', color: '#fbbc04', category: 'Basic' },
+            { id: 5, text: 'No', image: '👎', color: '#fbbc04', category: 'Basic' },
+            { id: 6, text: 'Eat', image: '🍽️', color: '#4a86e8', category: 'Actions' },
+            { id: 7, text: 'Drink', image: '🥤', color: '#4a86e8', category: 'Actions' },
+            { id: 8, text: 'Bathroom', image: '🚽', color: '#34a853', category: 'Places' },
+            { id: 9, text: 'Play', image: '🎮', color: '#fbbc04', category: 'Actions' },
+            { id: 10, text: 'Home', image: '🏠', color: '#4a86e8', category: 'Places' },
+            { id: 11, text: 'School', image: '🏫', color: '#4a86e8', category: 'Places' },
+            { id: 12, text: 'I want', image: '👉', color: '#ea4335', category: 'Needs' }
+        ];
+    }
+
+    // Helpers
+    function showToast(msg, timeout = 2200) {
+        toast.textContent = msg;
+        toast.style.opacity = 1;
+        setTimeout(() => { toast.style.opacity = 0; }, timeout);
+    }
+
+    function isUrl(str) {
+        if (!str) return false;
+        if (str.startsWith('data:')) return true;
+        try {
+            const u = new URL(str);
+            return u.protocol === 'http:' || u.protocol === 'https:';
+        } catch {
+            return false;
+        }
+    }
+
+    function isImageSource(str) {
+        if (!str) return false;
+        if (isUrl(str)) return true;
+        if (str.startsWith('data:image/')) return true;
+        // single-character emoji fallback considered non-url but usable
+        return false;
+    }
+
+    // Rendering
     function renderBoard() {
         communicationBoard.innerHTML = '';
+        const filtered = symbols.filter(s => settings.filterCategory === 'All' || s.category === settings.filterCategory);
+        filtered.forEach(symbol => {
+            const node = document.createElement('div');
+            node.className = 'symbol';
+            node.setAttribute('role', 'listitem');
+            node.setAttribute('tabindex', '0');
+            node.style.backgroundColor = symbol.color || '#e8f0fe';
+            if (isEditMode) node.classList.add('editing');
 
-        symbols.forEach(symbol => {
-            const symbolElement = document.createElement('div');
-            symbolElement.className = 'symbol';
-            symbolElement.style.backgroundColor = symbol.color;
-
-            if (isEditMode) {
-                symbolElement.classList.add('editing');
+            // image or emoji
+            if (isImageSource(symbol.image)) {
+                node.innerHTML = `<img src="${symbol.image}" alt="${symbol.text}"><span>${symbol.text}</span>`;
+            } else {
+                node.innerHTML = `<span style="font-size:2rem">${symbol.image}</span><span>${symbol.text}</span>`;
             }
 
-            symbolElement.innerHTML = `
-                ${symbol.image.startsWith('http') ?
-                    `<img src="${symbol.image}" alt="${symbol.text}">` :
-                    `<span style="font-size: 2rem;">${symbol.image}</span>`
-                }
-                <span>${symbol.text}</span>
-            `;
+            // click behavior
+            node.addEventListener('click', () => {
+                if (isEditMode) openEditModal(symbol);
+                else addToPhrase(symbol);
+            });
 
-            symbolElement.addEventListener('click', () => {
-                if (isEditMode) {
-                    openEditModal(symbol);
-                } else {
-                    addToPhrase(symbol);
+            // keyboard support
+            node.addEventListener('keydown', (ev) => {
+                if (ev.key === 'Enter' || ev.key === ' ') {
+                    ev.preventDefault();
+                    if (isEditMode) openEditModal(symbol);
+                    else addToPhrase(symbol);
+                }
+                if (ev.key === 'e') {
+                    // quick edit when in edit mode
+                    if (isEditMode) openEditModal(symbol);
                 }
             });
 
-            communicationBoard.appendChild(symbolElement);
+            communicationBoard.appendChild(node);
+        });
+
+        renderCategoryPills();
+    }
+
+    function renderCategoryPills() {
+        const cats = Array.from(new Set(['All', ...symbols.map(s => s.category || 'Basic')]));
+        categoryPills.innerHTML = '';
+        cats.forEach(cat => {
+            const pill = document.createElement('button');
+            pill.className = 'pill';
+            if (settings.filterCategory === cat) pill.classList.add('active');
+            pill.textContent = cat;
+            pill.addEventListener('click', () => {
+                settings.filterCategory = cat;
+                saveSettings();
+                renderBoard();
+            });
+            categoryPills.appendChild(pill);
         });
     }
 
-    // Add symbol to current phrase
-    function addToPhrase(symbol) {
-        currentPhrase.push(symbol);
-        updatePhraseDisplay();
-    }
-
-    // Update the phrase display area
     function updatePhraseDisplay() {
         phraseDisplay.innerHTML = '';
-
         if (currentPhrase.length === 0) {
-            phraseDisplay.innerHTML = '<span class="empty-message">Select symbols to build your phrase</span>';
+            const el = document.createElement('span');
+            el.className = 'empty-message';
+            el.textContent = 'Select symbols to build your phrase';
+            phraseDisplay.appendChild(el);
             return;
         }
 
         currentPhrase.forEach((symbol, index) => {
-            const phraseItem = document.createElement('div');
-            phraseItem.className = 'phrase-item';
-            phraseItem.style.backgroundColor = symbol.color;
+            const item = document.createElement('div');
+            item.className = 'phrase-item';
+            item.setAttribute('draggable', 'true');
+            item.setAttribute('role', 'listitem');
+            item.dataset.index = index;
+            item.title = 'Click to remove. Drag to reorder.';
 
-            phraseItem.innerHTML = `
-                ${symbol.image.startsWith('http') ?
-                    `<img src="${symbol.image}" alt="${symbol.text}">` :
-                    `<span style="font-size: 1.2rem; margin-right: 5px;">${symbol.image}</span>`
-                }
-                <span>${symbol.text}</span>
-            `;
+            if (isImageSource(symbol.image)) {
+                item.innerHTML = `<img src="${symbol.image}" alt="${symbol.text}"><span>${symbol.text}</span>`;
+            } else {
+                item.innerHTML = `<span style="font-size:1.2rem; margin-right:6px;">${symbol.image}</span><span>${symbol.text}</span>`;
+            }
 
-            // Add click to remove functionality
-            phraseItem.addEventListener('click', () => {
+            // click to remove (backed up for undo)
+            item.addEventListener('click', () => {
+                backupPhrase();
                 currentPhrase.splice(index, 1);
                 updatePhraseDisplay();
             });
 
-            phraseDisplay.appendChild(phraseItem);
+            // drag handlers
+            item.addEventListener('dragstart', (e) => {
+                e.dataTransfer.setData('text/plain', index.toString());
+                e.dataTransfer.effectAllowed = 'move';
+            });
+
+            item.addEventListener('dragover', (e) => {
+                e.preventDefault();
+            });
+
+            item.addEventListener('drop', (e) => {
+                e.preventDefault();
+                const from = parseInt(e.dataTransfer.getData('text/plain'), 10);
+                const to = index;
+                if (!Number.isFinite(from)) return;
+                if (from === to) return;
+                backupPhrase();
+                const [moved] = currentPhrase.splice(from, 1);
+                currentPhrase.splice(to, 0, moved);
+                updatePhraseDisplay();
+            });
+
+            phraseDisplay.appendChild(item);
         });
     }
 
-    // Speak the current phrase
-    function speakPhrase() {
-        if (currentPhrase.length === 0) return;
+    // Phrase operations
+    function backupPhrase() {
+        phraseHistory.push(JSON.stringify(currentPhrase));
+        // limit history
+        if (phraseHistory.length > 30) phraseHistory.shift();
+    }
 
-        const phraseText = currentPhrase.map(symbol => symbol.text).join(' ');
-
-        // Use the Web Speech API if available
-        if ('speechSynthesis' in window) {
-            const utterance = new SpeechSynthesisUtterance(phraseText);
-            utterance.rate = 0.9;
-            utterance.pitch = 1;
-            speechSynthesis.speak(utterance);
-        } else {
-            alert(`Speech: ${phraseText}`);
+    function undo() {
+        if (phraseHistory.length === 0) {
+            showToast('Nothing to undo');
+            return;
+        }
+        const raw = phraseHistory.pop();
+        try {
+            currentPhrase = JSON.parse(raw);
+            updatePhraseDisplay();
+            showToast('Undo');
+        } catch {
+            showToast('Undo failed');
         }
     }
 
-    // Clear the current phrase
+    function addToPhrase(symbol) {
+        if (!symbol) return;
+        backupPhrase();
+        currentPhrase.push(symbol);
+        updatePhraseDisplay();
+    }
+
     function clearPhrase() {
+        if (currentPhrase.length === 0) return;
+        backupPhrase();
         currentPhrase = [];
         updatePhraseDisplay();
     }
 
-    // Toggle edit mode
-    function toggleEditMode() {
-        isEditMode = !isEditMode;
-        editModeBtn.textContent = isEditMode ? 'Exit Edit Mode' : 'Edit Mode';
-        editModeBtn.classList.toggle('btn-danger', isEditMode);
-        renderBoard();
+    // Speech
+    function speakPhrase() {
+        if (currentPhrase.length === 0) return;
+        const phraseText = currentPhrase.map(s => s.text).join(' ');
+        if ('speechSynthesis' in window) {
+            const utter = new SpeechSynthesisUtterance(phraseText);
+            utter.rate = 0.95;
+            // set voice
+            const chosen = localStorage.getItem(LS.voiceKey);
+            if (chosen) {
+                const v = speechSynthesis.getVoices().find(x => x.name === chosen);
+                if (v) utter.voice = v;
+            }
+            speechSynthesis.speak(utter);
+        } else {
+            alert(phraseText);
+        }
     }
 
-    // Open the edit modal for a symbol
-    function openEditModal(symbol) {
-        currentEditingSymbol = symbol;
-        document.getElementById('symbolText').value = symbol.text;
-        document.getElementById('symbolImage').value = symbol.image.startsWith('http') ? symbol.image : '';
-        document.getElementById('symbolColor').value = symbol.color;
-
-        // Show delete button only for existing symbols (not for new ones)
-        deleteBtn.style.display = symbol.id ? 'block' : 'none';
-
-        editModal.style.display = 'flex';
+    // Edit modal
+    function openEditModal(symbol = null) {
+        isEditMode = true;
+        document.body.classList.add('edit-mode');
+        editBanner.hidden = false;
+        if (symbol && symbol.id) {
+            currentEditingSymbol = symbol;
+            symbolTextInput.value = symbol.text || '';
+            symbolImageInput.value = isUrl(symbol.image) ? symbol.image : (symbol.image || '');
+            symbolColorInput.value = symbol.color || '#4a86e8';
+            symbolCategoryInput.value = symbol.category || 'Basic';
+            deleteBtn.style.display = 'inline-block';
+        } else {
+            currentEditingSymbol = null;
+            symbolForm.reset();
+            deleteBtn.style.display = 'none';
+        }
+        editModal.setAttribute('aria-hidden', 'false');
     }
 
-    // Close the edit modal
     function closeEditModal() {
-        editModal.style.display = 'none';
+        editModal.setAttribute('aria-hidden', 'true');
         currentEditingSymbol = null;
         symbolForm.reset();
     }
 
-    // Save symbol changes from the modal
-    function saveSymbolChanges(event) {
-        event.preventDefault();
+    // Save symbol from modal
+    async function saveSymbolChanges(e) {
+        e.preventDefault();
+        const text = symbolTextInput.value.trim();
+        let image = symbolImageInput.value.trim();
+        const color = symbolColorInput.value;
+        const category = symbolCategoryInput.value || 'Basic';
 
-        const text = document.getElementById('symbolText').value.trim();
-        let image = document.getElementById('symbolImage').value.trim();
-        const color = document.getElementById('symbolColor').value;
+        if (!text) { alert('Please enter text'); return; }
 
-        if (!text) {
-            alert('Please enter text for the symbol');
-            return;
+        // if file selected, convert to data URL
+        if (symbolImageFile.files && symbolImageFile.files[0]) {
+            image = await fileToDataURL(symbolImageFile.files[0]);
         }
 
-        // If no image URL provided, use the first character as emoji placeholder
-        if (!image) {
-            image = text.charAt(0);
-        }
+        // fallback: single character if no image
+        if (!image) image = text.charAt(0) || '?';
 
         if (currentEditingSymbol && currentEditingSymbol.id) {
-            // Update existing symbol
-            const index = symbols.findIndex(s => s.id === currentEditingSymbol.id);
-            if (index !== -1) {
-                symbols[index] = {
-                    ...symbols[index],
-                    text,
-                    image,
-                    color
-                };
+            const idx = symbols.findIndex(s => s.id === currentEditingSymbol.id);
+            if (idx !== -1) {
+                symbols[idx] = Object.assign({}, symbols[idx], { text, image, color, category });
             }
         } else {
-            // Add new symbol
             const newId = symbols.length > 0 ? Math.max(...symbols.map(s => s.id)) + 1 : 1;
-            symbols.push({
-                id: newId,
-                text,
-                image,
-                color
-            });
+            symbols.push({ id: newId, text, image, color, category });
         }
-
         saveSymbols();
         renderBoard();
         closeEditModal();
     }
 
-    // Delete the current symbol
     function deleteSymbol() {
         if (!currentEditingSymbol || !currentEditingSymbol.id) return;
-
-        if (confirm('Are you sure you want to delete this symbol?')) {
-            symbols = symbols.filter(s => s.id !== currentEditingSymbol.id);
-            saveSymbols();
-            renderBoard();
-            closeEditModal();
-        }
+        if (!confirm('Delete this symbol?')) return;
+        symbols = symbols.filter(s => s.id !== currentEditingSymbol.id);
+        saveSymbols();
+        renderBoard();
+        closeEditModal();
     }
 
-    // Add a new symbol
     function addNewSymbol() {
-        openEditModal({});
+        openEditModal(null);
     }
 
-    // Set up event listeners
-    function setupEventListeners() {
-        speakBtn.addEventListener('click', speakPhrase);
-        clearBtn.addEventListener('click', clearPhrase);
-        editModeBtn.addEventListener('click', toggleEditMode);
-        saveBtn.addEventListener('click', saveSymbols);
-        addSymbolBtn.addEventListener('click', addNewSymbol);
-        closeModal.addEventListener('click', closeEditModal);
-        symbolForm.addEventListener('submit', saveSymbolChanges);
-        deleteBtn.addEventListener('click', deleteSymbol);
-
-        // Close modal when clicking outside
-        window.addEventListener('click', (event) => {
-            if (event.target === editModal) {
-                closeEditModal();
-            }
+    // File helpers
+    function fileToDataURL(file) {
+        return new Promise((res, rej) => {
+            const r = new FileReader();
+            r.onload = () => res(r.result);
+            r.onerror = () => rej(new Error('File read error'));
+            r.readAsDataURL(file);
         });
     }
 
-    // Initialize the application
+    // Import / Export
+    function exportJSON() {
+        const payload = { symbols, settings };
+        const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'communication-board-export.json';
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    function importJSONFile(evt) {
+        const file = evt.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+            try {
+                const parsed = JSON.parse(reader.result);
+                if (parsed.symbols && Array.isArray(parsed.symbols)) {
+                    // merge with safe id assignment
+                    const existingIds = new Set(symbols.map(s => s.id));
+                    let nextId = symbols.length > 0 ? Math.max(...symbols.map(s => s.id)) + 1 : 1;
+                    parsed.symbols.forEach(s => {
+                        const copy = Object.assign({}, s);
+                        if (!copy.id || existingIds.has(copy.id)) {
+                            copy.id = nextId++;
+                        }
+                        symbols.push(copy);
+                    });
+                    saveSymbols();
+                    renderBoard();
+                    showToast('Imported symbols');
+                }
+                if (parsed.settings) {
+                    settings = Object.assign({}, settings, parsed.settings);
+                    saveSettings();
+                }
+            } catch (err) {
+                alert('Import failed: invalid file');
+            }
+        };
+        reader.readAsText(file);
+        // clear the input so same file can be imported again if needed
+        evt.target.value = '';
+    }
+
+    // Voices
+    function populateVoices() {
+        const voices = speechSynthesis.getVoices();
+        voiceSelect.innerHTML = '';
+        const stored = localStorage.getItem(LS.voiceKey);
+        voices.forEach(v => {
+            const o = document.createElement('option');
+            o.value = v.name;
+            o.textContent = `${v.name} ${v.lang ? '(' + v.lang + ')' : ''}`;
+            if (stored && stored === v.name) o.selected = true;
+            voiceSelect.appendChild(o);
+        });
+    }
+
+    // Undo handler
+    undoBtn.addEventListener('click', undo);
+
+    // Toggle edit mode
+    function toggleEditMode() {
+        isEditMode = !isEditMode;
+        document.body.classList.toggle('edit-mode', isEditMode);
+        editBanner.hidden = !isEditMode;
+        editModeBtn.textContent = isEditMode ? 'Exit Edit Mode' : 'Edit Mode';
+        renderBoard();
+    }
+
+    // Dark mode
+    toggleDarkBtn.addEventListener('click', () => {
+        settings.darkMode = !settings.darkMode;
+        saveSettings();
+        document.body.classList.toggle('dark', !!settings.darkMode);
+    });
+
+    // Sync scaffolding - placeholder for optional cloud sync
+    syncBtn.addEventListener('click', async () => {
+        // For security and flexibility, cloud sync requires user action and credentials.
+        // You can plug in Firebase, GitHub Gists, or your own endpoint here.
+        // Below is a minimal example that asks for a public gist token and will create a gist.
+        const token = prompt('Optional: paste a GitHub personal access token with gist scope to export symbols as a gist. Cancel to skip.');
+        if (!token) return showToast('Sync cancelled');
+        try {
+            const payload = { description: 'Communication board export', public: false, files: { 'cb-export.json': { content: JSON.stringify({ symbols, settings }, null, 2) } } };
+            const res = await fetch('https://api.github.com/gists', {
+                method: 'POST',
+                headers: { Authorization: `token ${token}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            if (!res.ok) throw new Error('Sync failed');
+            const data = await res.json();
+            showToast('Synced to gist: ' + (data.html_url || 'done'));
+        } catch (err) {
+            alert('Sync failed: ' + err.message);
+        }
+    });
+
+    // Event listeners
+    speakBtn.addEventListener('click', speakPhrase);
+    clearBtn.addEventListener('click', clearPhrase);
+    editModeBtn.addEventListener('click', toggleEditMode);
+    exitEditBtn?.addEventListener('click', toggleEditMode);
+    saveBtn.addEventListener('click', saveSymbols);
+    addSymbolBtn.addEventListener('click', addNewSymbol);
+    closeModalBtn.addEventListener('click', closeEditModal);
+    symbolForm.addEventListener('submit', saveSymbolChanges);
+    deleteBtn.addEventListener('click', deleteSymbol);
+    cancelEditBtn.addEventListener('click', closeEditModal);
+    exportBtn.addEventListener('click', exportJSON);
+    importFile.addEventListener('change', importJSONFile);
+
+    // file input preview - clear previously selected
+    symbolImageFile.addEventListener('change', () => {
+        // file will be processed when saving
+    });
+
+    // voice select save
+    voiceSelect.addEventListener('change', () => {
+        localStorage.setItem(LS.voiceKey, voiceSelect.value);
+    });
+
+    // keyboard quick actions
+    boardWrap.addEventListener('keydown', (ev) => {
+        if (ev.key === 'e') toggleEditMode();
+        if (ev.key === 'z' && (ev.ctrlKey || ev.metaKey)) undo();
+    });
+
+    // initial load
+    function init() {
+        loadSettings();
+        loadSymbols();
+        renderBoard();
+        updatePhraseDisplay();
+        // voices may load after first call
+        populateVoices();
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = populateVoices;
+        }
+    }
+
     init();
 });
