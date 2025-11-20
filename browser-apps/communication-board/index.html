@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Communication Board</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app-container">
+    <header class="app-header">
+        <h1>Communication Board</h1>
+        <div class="header-controls">
+            <button id="editModeBtn" class="btn-secondary">Edit Mode</button>
+            <button id="saveBtn" class="btn-primary">Save</button>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <div class="phrase-bar">
+            <div id="phraseDisplay" class="phrase-display">
+                <span class="empty-message">Select symbols to build your phrase</span>
+            </div>
+            <div class="phrase-controls">
+                <button id="speakBtn" class="btn-primary">Speak</button>
+                <button id="clearBtn" class="btn-secondary">Clear</button>
+            </div>
+        </div>
+
+        <div class="board-container">
+            <div id="communicationBoard" class="communication-board">
+                <!-- Symbols will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Symbol</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="symbolForm">
+                    <div class="form-group">
+                        <label for="symbolText">Text:</label>
+                        <input type="text" id="symbolText" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="symbolImage">Image URL:</label>
+                        <input type="text" id="symbolImage" placeholder="Enter image URL">
+                    </div>
+                    <div class="form-group">
+                        <label for="symbolColor">Background Color:</label>
+                        <input type="color" id="symbolColor" value="#4a86e8">
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" id="deleteBtn" class="btn-danger">Delete</button>
+                        <button type="submit" class="btn-primary">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Symbol Button -->
+    <button id="addSymbolBtn" class="floating-btn" title="Add New Symbol">+</button>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
