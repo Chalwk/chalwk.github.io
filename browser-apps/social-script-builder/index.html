@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width,initial-scale=1" name="viewport"/>
+    <title>Social Script Builder</title>
+    <meta content="Create and practice customizable social scripts for various situations." name="description"/>
+    <link href="style.css" rel="stylesheet"/>
+</head>
+<body>
+<a class="skip" href="#app">Skip to main content</a>
+
+<header class="site-header" role="banner">
+    <div class="container header-inner">
+        <div class="brand">
+            <svg aria-hidden="true" class="logo" height="36" viewBox="0 0 24 24" width="36">
+                <circle cx="12" cy="12" fill="#7c3aed" r="10"/>
+                <path d="M8 8h8M8 12h6M8 16h4" stroke="#fff" stroke-linecap="round" stroke-width="1.5"/>
+            </svg>
+            <div class="title-wrap">
+                <h1>Social Script Builder</h1>
+                <p class="tagline">Prepare for social situations with customizable scripts and practice tools.</p>
+            </div>
+        </div>
+
+        <div aria-label="App actions" class="header-actions" role="toolbar">
+            <button aria-label="Help" class="btn ghost" id="help-btn">Help</button>
+            <button class="btn primary" id="practice-btn">Practice Mode</button>
+        </div>
+    </div>
+</header>
+
+<main class="container app-grid" id="app" role="main">
+    <!-- Left: Script Editor -->
+    <section aria-labelledby="editor-heading" class="panel panel-left">
+        <div class="panel-head">
+            <h2 id="editor-heading">Script Editor</h2>
+            <p class="muted small">Build your social script step by step.</p>
+        </div>
+
+        <div class="script-meta">
+            <label class="field">
+                <span>Script Title</span>
+                <input id="script-title" placeholder="e.g., Ordering coffee, Phone call to doctor" type="text"/>
+            </label>
+            <label class="field">
+                <span>Situation Description</span>
+                <textarea id="script-description" placeholder="Describe the social situation this script is for..."
+                          rows="2"></textarea>
+            </label>
+        </div>
+
+        <div class="script-steps">
+            <h3>Script Steps</h3>
+            <div aria-label="Script steps" class="steps-list" id="steps-list" role="list"></div>
+
+            <div class="step-actions">
+                <button class="btn" id="add-step" type="button">+ Add Step</button>
+                <select aria-label="Step type" id="step-type">
+                    <option value="statement">I Say</option>
+                    <option value="question">They Might Say</option>
+                    <option value="action">Action I Take</option>
+                    <option value="reminder">Reminder to Self</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="script-actions">
+            <button class="btn primary" id="save-script">Save Script</button>
+            <button class="btn" id="new-script">New Script</button>
+            <button class="btn" id="export-script">Export</button>
+        </div>
+    </section>
+
+    <!-- Right: Script Library & Practice -->
+    <section aria-labelledby="library-heading" class="panel panel-right">
+        <div class="panel-head">
+            <h2 id="library-heading">Script Library</h2>
+            <p class="muted small">Your saved scripts and practice tools.</p>
+        </div>
+
+        <div class="search-controls">
+            <input aria-label="Search scripts" id="search-scripts" placeholder="Search scripts..." type="text"/>
+        </div>
+
+        <div aria-label="Saved scripts" class="scripts-library" id="scripts-library" role="list">
+            <div class="muted">No scripts saved yet. Create your first script!</div>
+        </div>
+
+        <div class="premade-scripts-section">
+            <h3>Pre-made Script Templates</h3>
+            <p class="muted small">Based on common social situations</p>
+            <div aria-label="Pre-made scripts" class="premade-scripts" id="premade-scripts" role="list">
+                <!-- Pre-made scripts will be populated here -->
+            </div>
+        </div>
+
+        <div class="practice-tools">
+            <h3>Practice Tools</h3>
+            <div class="tool-options">
+                <label class="checkbox">
+                    <input id="show-timer" type="checkbox"/>
+                    <span>Show practice timer</span>
+                </label>
+                <label class="checkbox">
+                    <input id="auto-advance" type="checkbox"/>
+                    <span>Auto-advance steps</span>
+                </label>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- Practice Modal -->
+<dialog aria-labelledby="practice-title" id="practice-modal">
+    <div class="modal-header">
+        <h3 id="practice-title">Practice: <span id="practice-script-name"></span></h3>
+        <button aria-label="Close practice" class="btn ghost" id="close-practice">×</button>
+    </div>
+
+    <div class="practice-content">
+        <div class="practice-step" id="practice-step">
+            <div class="step-content" id="current-step-text"></div>
+            <div class="step-type-badge" id="current-step-type"></div>
+        </div>
+
+        <div class="practice-progress">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            <span id="progress-text">Step 1 of 1</span>
+        </div>
+
+        <div class="practice-controls">
+            <button class="btn" id="prev-step">Previous</button>
+            <button class="btn primary" id="next-step">Next</button>
+            <button class="btn" id="reset-practice">Restart</button>
+        </div>
+
+        <div class="practice-timer" id="practice-timer" style="display: none;">
+            <span>Time: </span>
+            <span id="timer-display">00:00</span>
+        </div>
+    </div>
+</dialog>
+
+<!-- Help Modal -->
+<dialog aria-labelledby="help-title" id="help-modal">
+    <div class="modal-header">
+        <h3 id="help-title">How to Use Social Script Builder</h3>
+        <button aria-label="Close help" class="btn ghost" id="close-help">×</button>
+    </div>
+
+    <div class="help-content">
+        <div class="help-section">
+            <h4>Creating Scripts</h4>
+            <p>Build scripts for social situations that feel challenging. Add different types of steps:</p>
+            <ul>
+                <li><strong>I Say</strong>: Things you will say</li>
+                <li><strong>They Might Say</strong>: Possible responses from others</li>
+                <li><strong>Action I Take</strong>: Physical actions or behaviors</li>
+                <li><strong>Reminder to Self</strong>: Internal thoughts or coping strategies</li>
+            </ul>
+        </div>
+
+        <div class="help-section">
+            <h4>Pre-made Templates</h4>
+            <p>Use our pre-made script templates for common social situations. These are based on proven social scripting techniques and can be customized to fit your needs.</p>
+        </div>
+
+        <div class="help-section">
+            <h4>Practice Mode</h4>
+            <p>Use practice mode to rehearse your scripts. This helps build muscle memory and reduces anxiety in real situations.</p>
+        </div>
+
+        <div class="help-section">
+            <h4>Tips for Success</h4>
+            <ul>
+                <li>Start with simple, frequently encountered situations</li>
+                <li>Practice in a low-stress environment first</li>
+                <li>Modify scripts based on real-world experience</li>
+                <li>Use the reminder steps for anxiety management</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="modal-actions">
+        <button class="btn primary" id="close-help-btn">Got it!</button>
+    </div>
+</dialog>
+
+<input accept=".json" id="import-file" style="display: none;" type="file"/>
+
+<footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+        <small>© 2025 Social Script Builder - Jericho Crosby (Chalwk)</small>
+    </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,38 +1,39 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
     <title>Random Password Generator</title>
-    <link rel="stylesheet" href="style.css">
+    <link href="style.css" rel="stylesheet">
 </head>
 <body>
-<main class="app" aria-labelledby="app-title">
+<main aria-labelledby="app-title" class="app">
     <header class="app-header">
         <h1 id="app-title">Random Password Generator</h1>
         <div class="controls-top">
             <label class="toggle">
-                <input id="darkMode" type="checkbox" aria-label="Toggle dark mode">
+                <input aria-label="Toggle dark mode" id="darkMode" type="checkbox">
                 <span>Dark mode</span>
             </label>
         </div>
     </header>
 
-    <section class="generator" aria-label="Password generator">
+    <section aria-label="Password generator" class="generator">
         <div class="left">
             <div class="panel">
                 <div class="row">
                     <label for="length">Length: <span id="lengthVal">16</span></label>
-                    <input id="length" type="range" min="4" max="128" value="16" />
+                    <input id="length" max="128" min="4" type="range" value="16"/>
                 </div>
 
-                <fieldset class="char-sets" aria-label="Character sets">
+                <fieldset aria-label="Character sets" class="char-sets">
                     <legend>Character sets</legend>
-                    <label><input id="upper" type="checkbox" checked> ABC</label>
-                    <label><input id="lower" type="checkbox" checked> abc</label>
-                    <label><input id="numbers" type="checkbox" checked> 123</label>
+                    <label><input checked id="upper" type="checkbox"> ABC</label>
+                    <label><input checked id="lower" type="checkbox"> abc</label>
+                    <label><input checked id="numbers" type="checkbox"> 123</label>
                     <label><input id="symbols" type="checkbox"> #$&</label>
-                    <label class="custom-field">Custom: <input id="custom" placeholder="e.g. ±§♥" maxlength="32"></label>
+                    <label class="custom-field">Custom: <input id="custom" maxlength="32"
+                                                               placeholder="e.g. ±§♥"></label>
                 </fieldset>
 
                 <div class="row">
@@ -41,20 +42,22 @@
 
                 <div class="row">
                     <label><input id="passphraseMode" type="checkbox"> Passphrase mode</label>
-                    <label class="small">Words: <input id="passphraseWords" type="number" min="3" max="10" value="4"></label>
+                    <label class="small">Words: <input id="passphraseWords" max="10" min="3" type="number"
+                                                       value="4"></label>
                 </div>
 
                 <div class="row">
-                    <label>Pattern (optional)<span class="tooltip" title="Use: C=upper, c=lower, d=digit, s=symbol, *=any selected, .=literal">?</span></label>
-                    <input id="pattern" placeholder="e.g. Ccc123!Ccc" aria-describedby="patternDesc">
+                    <label>Pattern (optional)<span class="tooltip"
+                                                   title="Use: C=upper, c=lower, d=digit, s=symbol, *=any selected, .=literal">?</span></label>
+                    <input aria-describedby="patternDesc" id="pattern" placeholder="e.g. Ccc123!Ccc">
                 </div>
 
                 <div class="actions">
                     <button id="generate">Generate</button>
-                    <button id="copy" class="secondary" title="Copy password to clipboard">Copy</button>
+                    <button class="secondary" id="copy" title="Copy password to clipboard">Copy</button>
                     <div class="export">
-                        <button id="exportTxt" class="secondary">Export .txt</button>
-                        <button id="exportCsv" class="secondary">Export .csv</button>
+                        <button class="secondary" id="exportTxt">Export .txt</button>
+                        <button class="secondary" id="exportCsv">Export .csv</button>
                     </div>
                 </div>
             </div>
@@ -62,24 +65,36 @@
             <div class="panel output">
                 <label for="passwordOutput">Generated password</label>
                 <div id="passwordWrap">
-                    <input id="passwordOutput" readonly aria-live="polite">
+                    <input aria-live="polite" id="passwordOutput" readonly>
                     <button id="fav" title="Favorite this password">☆</button>
                 </div>
                 <div class="strength-row">
-                    <div id="strengthBar" aria-hidden="true"></div>
+                    <div aria-hidden="true" id="strengthBar"></div>
                     <div id="strengthLabel"></div>
                 </div>
 
                 <div class="stats">
                     <dl>
-                        <div><dt>Entropy</dt><dd id="entropy">—</dd></div>
-                        <div><dt>Bits of security</dt><dd id="bits">—</dd></div>
-                        <div><dt>Guesses</dt><dd id="guesses">—</dd></div>
-                        <div><dt>Time to crack</dt><dd id="timeToCrack">—</dd></div>
+                        <div>
+                            <dt>Entropy</dt>
+                            <dd id="entropy">—</dd>
+                        </div>
+                        <div>
+                            <dt>Bits of security</dt>
+                            <dd id="bits">—</dd>
+                        </div>
+                        <div>
+                            <dt>Guesses</dt>
+                            <dd id="guesses">—</dd>
+                        </div>
+                        <div>
+                            <dt>Time to crack</dt>
+                            <dd id="timeToCrack">—</dd>
+                        </div>
                     </dl>
                 </div>
 
-                <div class="warnings" id="warnings" aria-live="assertive"></div>
+                <div aria-live="assertive" class="warnings" id="warnings"></div>
             </div>
         </div>
 
@@ -96,7 +111,9 @@
             <div class="panel guidance">
                 <h2>Password guidance</h2>
                 <ul>
-                    <li><strong>NIST checks</strong>: avoids re-used passwords, checks length (12+ recommended for memorized secrets), favors long passphrases.</li>
+                    <li><strong>NIST checks</strong>: avoids re-used passwords, checks length (12+ recommended for
+                        memorized secrets), favors long passphrases.
+                    </li>
                     <li>Use 16+ chars with multiple character sets for strong passwords.</li>
                     <li>Passphrases with 4+ random words give high entropy and memorability.</li>
                 </ul>
