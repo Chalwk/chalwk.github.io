@@ -187,6 +187,7 @@ a:hover {
     color: var(--dark);
     font-weight: 500;
     position: relative;
+    padding: 0.2rem;
 }
 
 .nav-links a:hover {
