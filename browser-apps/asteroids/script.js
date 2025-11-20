@@ -303,7 +303,7 @@ function draw() {
     for(let i=0;i<lives;i++){
         ctx.save();
         ctx.translate(30 + i*40, 30);
-        ctx.rotate(0); // Fixed angle (no rotation)
+        ctx.rotate(0);
         ctx.strokeStyle = 'white';
         ctx.beginPath();
         ctx.moveTo(10,0);

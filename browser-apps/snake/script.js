@@ -486,7 +486,7 @@ class Game {
             this.nextPowerSpawn = now() + rand(...CONFIG.powerupSpawnIntervalRange);
         }
 
-        // Fixed-step logic: accumulate elapsed time
+        // accumulate elapsed time
         this.accumulator += elapsed;
         while (this.accumulator >= this.tickInterval) {
             // tick logic
