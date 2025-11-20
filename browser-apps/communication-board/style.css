@@ -180,14 +180,39 @@ body.dark .app-header { background:#0b62b3; }
 body.dark .phrase-display { background:#0f1720; }
 body.dark .symbol { background:#122034; color:#dfefff; }
 
+/* Footer Styles */
 .app-footer {
-    background-color: #f1f1f1; /* light gray background */
-    color: #333; /* dark text */
+    background-color: #f1f1f1;
+    color: #333;
     text-align: center;
     padding: 12px 0;
     font-size: 0.9rem;
     border-top: 1px solid #ccc;
-    position: relative; /* ensures it flows with page content */
+    position: relative;
+    margin-top: auto; /* Pushes footer to bottom */
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 16px;
+}
+
+.footer-sub {
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 4px;
+}
+
+/* Dark mode footer */
+body.dark .app-footer {
+    background-color: #1a1a1a;
+    color: #ddd;
+    border-top: 1px solid #333;
+}
+
+body.dark .footer-sub {
+    color: #aaa;
 }
 
 /* PWA-specific styles */
