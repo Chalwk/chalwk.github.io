@@ -2,590 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Autistic Burnout Risk Assessment</title>
-    <style>
-        :root {
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
-            --secondary: #7e22ce;
-            --danger: #dc2626;
-            --warning: #d97706;
-            --success: #059669;
-            --bg-light: #f8fafc;
-            --bg-white: #ffffff;
-            --text: #0f172a;
-            --text-muted: #64748b;
-            --border: #e2e8f0;
-            --radius: 12px;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: var(--font-family);
-            line-height: 1.6;
-            color: var(--text);
-            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding: 20px;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            color: var(--primary);
-        }
-
-        .tagline {
-            font-size: 1.2rem;
-            color: var(--text-muted);
-            max-width: 800px;
-            margin: 0 auto 20px;
-        }
-
-        .app-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
-        }
-
-        @media (min-width: 768px) {
-            .app-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .full-width {
-                grid-column: 1 / -1;
-            }
-        }
-
-        .card {
-            background: var(--bg-white);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            padding: 24px;
-            transition: transform 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-        }
-
-        .card h2 {
-            margin-bottom: 16px;
-            font-size: 1.4rem;
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .card h2 svg {
-            width: 24px;
-            height: 24px;
-        }
-
-        .risk-meter {
-            background: linear-gradient(to right, var(--success), var(--warning), var(--danger));
-            height: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-            position: relative;
-        }
-
-        .risk-indicator {
-            position: absolute;
-            top: -5px;
-            width: 30px;
-            height: 30px;
-            background: white;
-            border: 3px solid var(--primary);
-            border-radius: 50%;
-            transform: translateX(-50%);
-            transition: left 0.5s ease;
-        }
-
-        .risk-labels {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 5px;
-            font-size: 0.9rem;
-            color: var(--text-muted);
-        }
-
-        .risk-score {
-            text-align: center;
-            font-size: 2.5rem;
-            font-weight: bold;
-            margin: 20px 0;
-            color: var(--primary);
-        }
-
-        .risk-level {
-            text-align: center;
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin-bottom: 20px;
-            padding: 10px;
-            border-radius: var(--radius);
-        }
-
-        .low-risk {
-            background-color: #d1fae5;
-            color: var(--success);
-        }
-
-        .medium-risk {
-            background-color: #fef3c7;
-            color: var(--warning);
-        }
-
-        .high-risk {
-            background-color: #fee2e2;
-            color: var(--danger);
-        }
-
-        .critical-risk {
-            background-color: #fecaca;
-            color: var(--danger);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.8; }
-            100% { opacity: 1; }
-        }
-
-        .factor-group {
-            margin-bottom: 20px;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 15px;
-            background: var(--bg-light);
-        }
-
-        .factor-group h3 {
-            font-size: 1.1rem;
-            margin-bottom: 10px;
-            color: var(--secondary);
-            padding-bottom: 5px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .question {
-            margin-bottom: 15px;
-            padding: 15px;
-            background: var(--bg-white);
-            border-radius: var(--radius);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        }
-
-        .question-text {
-            margin-bottom: 10px;
-            font-weight: 500;
-        }
-
-        .question-description {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            margin-bottom: 10px;
-            font-style: italic;
-        }
-
-        .slider-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .slider {
-            flex: 1;
-            -webkit-appearance: none;
-            height: 8px;
-            border-radius: 4px;
-            background: var(--border);
-            outline: none;
-        }
-
-        .slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: var(--primary);
-            cursor: pointer;
-        }
-
-        .slider-value {
-            min-width: 30px;
-            text-align: center;
-            font-weight: bold;
-            color: var(--primary);
-        }
-
-        .btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: var(--radius);
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn:hover {
-            background: var(--primary-dark);
-        }
-
-        .btn-block {
-            display: block;
-            width: 100%;
-            text-align: center;
-        }
-
-        .btn-ghost {
-            background: transparent;
-            color: var(--primary);
-            border: 1px solid var(--primary);
-        }
-
-        .btn-ghost:hover {
-            background: var(--bg-light);
-        }
-
-        .actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .recommendations-list {
-            list-style-type: none;
-        }
-
-        .recommendations-list li {
-            margin-bottom: 12px;
-            padding: 12px;
-            background: var(--bg-light);
-            border-radius: var(--radius);
-            border-left: 4px solid var(--primary);
-        }
-
-        .history-item {
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: var(--radius);
-            background: var(--bg-light);
-            border-left: 4px solid var(--success);
-        }
-
-        .history-item.medium {
-            border-left-color: var(--warning);
-        }
-
-        .history-item.high {
-            border-left-color: var(--danger);
-        }
-
-        .history-item.critical {
-            border-left-color: var(--danger);
-            background: #fef2f2;
-        }
-
-        .history-date {
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .history-score {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
-        }
-
-        .progress-bar {
-            height: 10px;
-            background: var(--border);
-            border-radius: 5px;
-            margin-top: 5px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: var(--primary);
-            border-radius: 5px;
-            transition: width 0.5s ease;
-        }
-
-        .trend-indicator {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            padding: 3px 8px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            margin-left: 10px;
-        }
-
-        .trend-up {
-            background: #fee2e2;
-            color: var(--danger);
-        }
-
-        .trend-down {
-            background: #d1fae5;
-            color: var(--success);
-        }
-
-        .trend-stable {
-            background: #fef3c7;
-            color: var(--warning);
-        }
-
-        .tab-container {
-            margin-top: 20px;
-        }
-
-        .tabs {
-            display: flex;
-            border-bottom: 1px solid var(--border);
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .tab {
-            padding: 10px 20px;
-            cursor: pointer;
-            border-bottom: 3px solid transparent;
-            white-space: nowrap;
-        }
-
-        .tab.active {
-            border-bottom: 3px solid var(--primary);
-            font-weight: bold;
-            color: var(--primary);
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        footer {
-            text-align: center;
-            margin-top: 40px;
-            padding: 20px;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
-        .warning-note {
-            background: #fef3c7;
-            border: 1px solid #f59e0b;
-            border-radius: var(--radius);
-            padding: 15px;
-            margin: 20px 0;
-            color: #92400e;
-        }
-
-        .emergency-contact {
-            background: #fee2e2;
-            border: 1px solid #ef4444;
-            border-radius: var(--radius);
-            padding: 15px;
-            margin: 20px 0;
-            color: #b91c1c;
-        }
-
-        .emergency-contact h3 {
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .factor-breakdown {
-            margin-top: 20px;
-        }
-
-        .factor-breakdown-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .factor-name {
-            font-weight: 500;
-        }
-
-        .factor-score {
-            font-weight: bold;
-            color: var(--primary);
-        }
-
-        .collapse-toggle {
-            background: none;
-            border: none;
-            color: var(--primary);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-weight: 500;
-            margin-bottom: 10px;
-        }
-
-        .collapse-content {
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-
-        .collapse-content.collapsed {
-            max-height: 0;
-        }
-
-        .risk-chart {
-            height: 200px;
-            margin: 20px 0;
-            position: relative;
-        }
-
-        .info-icon {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: var(--text-muted);
-            color: white;
-            font-size: 12px;
-            margin-left: 5px;
-            cursor: help;
-        }
-
-        .tooltip {
-            position: relative;
-            display: inline-block;
-        }
-
-        .tooltip .tooltiptext {
-            visibility: hidden;
-            width: 250px;
-            background-color: var(--text);
-            color: white;
-            text-align: center;
-            border-radius: 6px;
-            padding: 10px;
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            margin-left: -125px;
-            opacity: 0;
-            transition: opacity 0.3s;
-            font-size: 0.8rem;
-            font-weight: normal;
-        }
-
-        .tooltip:hover .tooltiptext {
-            visibility: visible;
-            opacity: 1;
-        }
-
-        .priority-badge {
-            display: inline-block;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 0.7rem;
-            font-weight: bold;
-            margin-left: 8px;
-        }
-
-        .priority-high {
-            background: #fee2e2;
-            color: var(--danger);
-        }
-
-        .priority-medium {
-            background: #fef3c7;
-            color: var(--warning);
-        }
-
-        .priority-low {
-            background: #d1fae5;
-            color: var(--success);
-        }
-
-        .resources-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .resource-card {
-            background: var(--bg-light);
-            border-radius: var(--radius);
-            padding: 15px;
-            border-left: 4px solid var(--primary);
-        }
-
-        .resource-card h4 {
-            margin-bottom: 8px;
-            color: var(--primary);
-        }
-
-        .resource-card p {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            margin-bottom: 10px;
-        }
-
-        .resource-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            color: var(--primary);
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        .resource-link:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <link href="style.css" rel="stylesheet">
 </head>
 <body>
 <div class="container">
@@ -595,11 +14,11 @@
             progress over time</p>
         <div class="emergency-contact">
             <h3>
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                     stroke-width="2" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
                     <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-                    <line x1="12" y1="9" x2="12" y2="13"></line>
-                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    <line x1="12" x2="12" y1="9" y2="13"></line>
+                    <line x1="12" x2="12.01" y1="17" y2="17"></line>
                 </svg>
                 Important: Crisis resources — New Zealand
             </h3>
@@ -638,18 +57,18 @@
         <!-- Assessment Card -->
         <div class="card">
             <h2>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                <svg stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round"
+                          stroke-width="2"/>
                 </svg>
                 Burnout Risk Assessment
             </h2>
 
             <div class="factor-group">
                 <button class="collapse-toggle" data-target="energy-group">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                         class="collapse-icon">
+                    <svg class="collapse-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round"
+                         stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"
+                         xmlns="http://www.w3.org/2000/svg">
                         <polyline points="6 9 12 15 18 9"></polyline>
                     </svg>
                     <h3>Energy & Fatigue</h3>
@@ -664,9 +83,9 @@
                         </div>
                         <div class="question-description">0 = Consistently high energy, 4 = Constantly exhausted</div>
                         <div class="slider-container">
-                            <label for="energy-level"></label><input type="range" min="0" max="4" value="2"
-                                                                     class="slider"
-                                                                     id="energy-level">
+                            <label for="energy-level"></label><input class="slider" id="energy-level" max="4" min="0"
+                                                                     type="range"
+                                                                     value="2">
                             <span class="slider-value" id="energy-value">2</span>
                         </div>
                     </div>
@@ -675,9 +94,9 @@
                         <div class="question-description">0 = Sleeping well, 4 = Severe insomnia or disrupted sleep
                         </div>
                         <div class="slider-container">
-                            <label for="sleep-quality"></label><input type="range" min="0" max="4" value="2"
-                                                                      class="slider"
-                                                                      id="sleep-quality">
+                            <label for="sleep-quality"></label><input class="slider" id="sleep-quality" max="4" min="0"
+                                                                      type="range"
+                                                                      value="2">
                             <span class="slider-value" id="sleep-value">2</span>
                         </div>
                     </div>
@@ -687,9 +106,9 @@
                             routine
                         </div>
                         <div class="slider-container">
-                            <label for="routine-difficulty"></label><input type="range" min="0" max="4" value="2"
-                                                                           class="slider"
-                                                                           id="routine-difficulty">
+                            <label for="routine-difficulty"></label><input class="slider" id="routine-difficulty" max="4" min="0"
+                                                                           type="range"
+                                                                           value="2">
                             <span class="slider-value" id="routine-value">2</span>
                         </div>
                     </div>
@@ -699,9 +118,9 @@
                         </div>
                         <div class="question-description">0 = None, 4 = Heavy reliance just to get through the day</div>
                         <div class="slider-container">
-                            <label for="stimulant-use"></label><input type="range" min="0" max="4" value="2"
-                                                                      class="slider"
-                                                                      id="stimulant-use">
+                            <label for="stimulant-use"></label><input class="slider" id="stimulant-use" max="4" min="0"
+                                                                      type="range"
+                                                                      value="2">
                             <span class="slider-value" id="stimulant-value">2</span>
                         </div>
                     </div>
@@ -710,9 +129,9 @@
 
             <div class="factor-group">
                 <button class="collapse-toggle" data-target="sensory-group">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                         class="collapse-icon">
+                    <svg class="collapse-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round"
+                         stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"
+                         xmlns="http://www.w3.org/2000/svg">
                         <polyline points="6 9 12 15 18 9"></polyline>
                     </svg>
                     <h3>Sensory Sensitivity</h3>
@@ -724,8 +143,8 @@
                             lights, smells, etc.
                         </div>
                         <div class="slider-container">
-                            <label for="sensory-overload"></label><input type="range" min="0" max="4" value="2"
-                                                                         class="slider" id="sensory-overload">
+                            <label for="sensory-overload"></label><input class="slider" id="sensory-overload" max="4" min="0"
+                                                                         type="range" value="2">
                             <span class="slider-value" id="sensory-value">2</span>
                         </div>
                     </div>
@@ -733,8 +152,8 @@
                         <div class="question-text">How much are you avoiding sensory situations?</div>
                         <div class="question-description">0 = No avoidance, 4 = Avoiding most sensory environments</div>
                         <div class="slider-container">
-                            <label for="sensory-avoidance"></label><input type="range" min="0" max="4" value="2"
-                                                                          class="slider" id="sensory-avoidance">
+                            <label for="sensory-avoidance"></label><input class="slider" id="sensory-avoidance" max="4" min="0"
+                                                                          type="range" value="2">
                             <span class="slider-value" id="avoidance-value">2</span>
                         </div>
                     </div>
@@ -743,8 +162,8 @@
                         <div class="question-description">0 = Not sensitive, 4 = Extreme sensitivity causing distress
                         </div>
                         <div class="slider-container">
-                            <label for="tactile-sensitivity"></label><input type="range" min="0" max="4" value="2"
-                                                                            class="slider" id="tactile-sensitivity">
+                            <label for="tactile-sensitivity"></label><input class="slider" id="tactile-sensitivity" max="4" min="0"
+                                                                            type="range" value="2">
                             <span class="slider-value" id="tactile-value">2</span>
                         </div>
                     </div>
@@ -755,8 +174,8 @@
                         <div class="question-description">0 = Rarely need them, 4 = Constantly relying on them to cope
                         </div>
                         <div class="slider-container">
-                            <label for="sensory-tools"></label><input type="range" min="0" max="4" value="2"
-                                                                      class="slider" id="sensory-tools">
+                            <label for="sensory-tools"></label><input class="slider" id="sensory-tools" max="4" min="0"
+                                                                      type="range" value="2">
                             <span class="slider-value" id="tools-value">2</span>
                         </div>
                     </div>
@@ -765,9 +184,9 @@
 
             <div class="factor-group">
                 <button class="collapse-toggle" data-target="executive-group">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                         class="collapse-icon">
+                    <svg class="collapse-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round"
+                         stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"
+                         xmlns="http://www.w3.org/2000/svg">
                         <polyline points="6 9 12 15 18 9"></polyline>
                     </svg>
                     <h3>Executive Function</h3>
@@ -779,8 +198,8 @@
                             initiation/completion
                         </div>
                         <div class="slider-container">
-                            <label for="task-initiation"></label><input type="range" min="0" max="4" value="2"
-                                                                        class="slider" id="task-initiation">
+                            <label for="task-initiation"></label><input class="slider" id="task-initiation" max="4" min="0"
+                                                                        type="range" value="2">
                             <span class="slider-value" id="task-value">2</span>
                         </div>
                     </div>
@@ -790,8 +209,8 @@
                             planning/organization
                         </div>
                         <div class="slider-container">
-                            <label for="planning-difficulty"></label><input type="range" min="0" max="4" value="2"
-                                                                            class="slider" id="planning-difficulty">
+                            <label for="planning-difficulty"></label><input class="slider" id="planning-difficulty" max="4" min="0"
+                                                                            type="range" value="2">
                             <span class="slider-value" id="planning-value">2</span>
                         </div>
                     </div>
@@ -800,8 +219,8 @@
                         <div class="question-description">0 = No issues, 4 = Constant forgetfulness and memory lapses
                         </div>
                         <div class="slider-container">
-                            <label for="memory-issues"></label><input type="range" min="0" max="4" value="2"
-                                                                      class="slider" id="memory-issues">
+                            <label for="memory-issues"></label><input class="slider" id="memory-issues" max="4" min="0"
+                                                                      type="range" value="2">
                             <span class="slider-value" id="memory-value">2</span>
                         </div>
                     </div>
@@ -811,8 +230,8 @@
                             overwhelming
                         </div>
                         <div class="slider-container">
-                            <label for="decision-fatigue"></label><input type="range" min="0" max="4" value="2"
-                                                                         class="slider" id="decision-fatigue">
+                            <label for="decision-fatigue"></label><input class="slider" id="decision-fatigue" max="4" min="0"
+                                                                         type="range" value="2">
                             <span class="slider-value" id="decision-value">2</span>
                         </div>
                     </div>
@@ -821,9 +240,9 @@
 
             <div class="factor-group">
                 <button class="collapse-toggle" data-target="social-group">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                         class="collapse-icon">
+                    <svg class="collapse-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round"
+                         stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"
+                         xmlns="http://www.w3.org/2000/svg">
                         <polyline points="6 9 12 15 18 9"></polyline>
                     </svg>
                     <h3>Social Demands</h3>
@@ -835,9 +254,9 @@
                             interaction
                         </div>
                         <div class="slider-container">
-                            <label for="social-drain"></label><input type="range" min="0" max="4" value="2"
-                                                                     class="slider"
-                                                                     id="social-drain">
+                            <label for="social-drain"></label><input class="slider" id="social-drain" max="4" min="0"
+                                                                     type="range"
+                                                                     value="2">
                             <span class="slider-value" id="social-value">2</span>
                         </div>
                     </div>
@@ -846,9 +265,9 @@
                         <div class="question-description">0 = Rarely mask, 4 = Constantly masking in all situations
                         </div>
                         <div class="slider-container">
-                            <label for="masking-level"></label><input type="range" min="0" max="4" value="2"
-                                                                      class="slider"
-                                                                      id="masking-level">
+                            <label for="masking-level"></label><input class="slider" id="masking-level" max="4" min="0"
+                                                                      type="range"
+                                                                      value="2">
                             <span class="slider-value" id="masking-value">2</span>
                         </div>
                     </div>
@@ -858,9 +277,9 @@
                             selective mutism
                         </div>
                         <div class="slider-container">
-                            <label for="communication-difficulty"></label><input type="range" min="0" max="4" value="2"
-                                                                                 class="slider"
-                                                                                 id="communication-difficulty">
+                            <label for="communication-difficulty"></label><input class="slider" id="communication-difficulty" max="4" min="0"
+                                                                                 type="range"
+                                                                                 value="2">
                             <span class="slider-value" id="communication-value">2</span>
                         </div>
                     </div>
@@ -868,8 +287,8 @@
                         <div class="question-text">How much are you isolating yourself from others?</div>
                         <div class="question-description">0 = Not isolating, 4 = Complete social withdrawal</div>
                         <div class="slider-container">
-                            <label for="social-isolation"></label><input type="range" min="0" max="4" value="2"
-                                                                         class="slider" id="social-isolation">
+                            <label for="social-isolation"></label><input class="slider" id="social-isolation" max="4" min="0"
+                                                                         type="range" value="2">
                             <span class="slider-value" id="isolation-value">2</span>
                         </div>
                     </div>
@@ -878,9 +297,9 @@
 
             <div class="factor-group">
                 <button class="collapse-toggle" data-target="emotional-group">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                         class="collapse-icon">
+                    <svg class="collapse-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round"
+                         stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"
+                         xmlns="http://www.w3.org/2000/svg">
                         <polyline points="6 9 12 15 18 9"></polyline>
                     </svg>
                     <h3>Emotional State</h3>
@@ -892,8 +311,8 @@
                             outbursts
                         </div>
                         <div class="slider-container">
-                            <label for="emotional-reactivity"></label><input type="range" min="0" max="4" value="2"
-                                                                             class="slider" id="emotional-reactivity">
+                            <label for="emotional-reactivity"></label><input class="slider" id="emotional-reactivity" max="4" min="0"
+                                                                             type="range" value="2">
                             <span class="slider-value" id="emotional-value">2</span>
                         </div>
                     </div>
@@ -901,8 +320,8 @@
                         <div class="question-text">How disconnected or numb do you feel?</div>
                         <div class="question-description">0 = Not disconnected, 4 = Complete emotional numbness</div>
                         <div class="slider-container">
-                            <label for="emotional-numbness"></label><input type="range" min="0" max="4" value="2"
-                                                                           class="slider" id="emotional-numbness">
+                            <label for="emotional-numbness"></label><input class="slider" id="emotional-numbness" max="4" min="0"
+                                                                           type="range" value="2">
                             <span class="slider-value" id="numbness-value">2</span>
                         </div>
                     </div>
@@ -910,8 +329,8 @@
                         <div class="question-text">How much are you experiencing meltdowns or shutdowns?</div>
                         <div class="question-description">0 = None, 4 = Frequent meltdowns/shutdowns</div>
                         <div class="slider-container">
-                            <label for="meltdown-frequency"></label><input type="range" min="0" max="4" value="2"
-                                                                           class="slider" id="meltdown-frequency">
+                            <label for="meltdown-frequency"></label><input class="slider" id="meltdown-frequency" max="4" min="0"
+                                                                           type="range" value="2">
                             <span class="slider-value" id="meltdown-value">2</span>
                         </div>
                     </div>
@@ -920,8 +339,8 @@
                         <div class="question-description">0 = Not hopeless, 4 = Overwhelming feelings of hopelessness
                         </div>
                         <div class="slider-container">
-                            <label for="hopelessness"></label><input type="range" min="0" max="4" value="2"
-                                                                     class="slider" id="hopelessness">
+                            <label for="hopelessness"></label><input class="slider" id="hopelessness" max="4" min="0"
+                                                                     type="range" value="2">
                             <span class="slider-value" id="hopelessness-value">2</span>
                         </div>
                     </div>
@@ -930,7 +349,7 @@
 
             <div class="actions">
                 <button class="btn btn-block" id="calculate-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+                    <svg height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
                         <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                         <path d="M5 6.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm1 2a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5z"/>
                     </svg>
@@ -942,9 +361,9 @@
         <!-- Results Card -->
         <div class="card">
             <h2>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                <svg stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-linecap="round" stroke-linejoin="round"
+                          stroke-width="2"/>
                 </svg>
                 Your Burnout Risk
             </h2>
@@ -993,13 +412,13 @@
 
             <div class="actions">
                 <button class="btn btn-ghost" id="save-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+                    <svg height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
                         <path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293l2.646-2.647a.5.5 0 0 1 .708.708l-3.5 3.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1H2z"/>
                     </svg>
                     Save Assessment
                 </button>
                 <button class="btn" id="recommendations-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+                    <svg height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
                         <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 8zM7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5zM4.285 9.567a.5.5 0 0 1 .683.183A3.498 3.498 0 0 0 8 11.5a3.498 3.498 0 0 0 3.032-1.75.5.5 0 1 1 .866.5A4.498 4.498 0 0 1 8 12.5a4.498 4.498 0 0 1-3.898-2.25.5.5 0 0 1 .183-.683zM10 8c-.552 0-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5S10.552 8 10 8z"/>
                     </svg>
                     View Recommendations
@@ -1010,9 +429,9 @@
         <!-- Recommendations Card -->
         <div class="card full-width" id="recommendations-card" style="display: none;">
             <h2>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                <svg stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round"
+                          stroke-width="2"/>
                 </svg>
                 Personalized Recommendations
             </h2>
@@ -1164,14 +583,14 @@
                             <h4>Autistic Self Advocacy Network</h4>
                             <p>Resources by and for autistic people, including policy advocacy and community
                                 support.</p>
-                            <a href="https://autisticadvocacy.org/" class="resource-link" target="_blank">
+                            <a class="resource-link" href="https://autisticadvocacy.org/" target="_blank">
                                 Visit Website
-                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
-                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                     stroke-linejoin="round">
+                                <svg fill="none" height="12" stroke="currentColor" stroke-linecap="round"
+                                     stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="12"
+                                     xmlns="http://www.w3.org/2000/svg">
                                     <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
                                     <polyline points="15 3 21 3 21 9"></polyline>
-                                    <line x1="10" y1="14" x2="21" x2="3"></line>
+                                    <line x1="10" x2="21" x2="3" y1="14"></line>
                                 </svg>
                             </a>
                         </div>
@@ -1179,14 +598,14 @@
                             <h4>NeuroClastic</h4>
                             <p>A community platform with articles and resources about autism from autistic
                                 perspectives.</p>
-                            <a href="https://neuroclastic.com/" class="resource-link" target="_blank">
+                            <a class="resource-link" href="https://neuroclastic.com/" target="_blank">
                                 Visit Website
-                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
-                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                     stroke-linejoin="round">
+                                <svg fill="none" height="12" stroke="currentColor" stroke-linecap="round"
+                                     stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="12"
+                                     xmlns="http://www.w3.org/2000/svg">
                                     <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
                                     <polyline points="15 3 21 3 21 9"></polyline>
-                                    <line x1="10" y1="14" x2="21" x2="3"></line>
+                                    <line x1="10" x2="21" x2="3" y1="14"></line>
                                 </svg>
                             </a>
                         </div>
@@ -1194,28 +613,28 @@
                             <h4>AASPIRE Healthcare Toolkit</h4>
                             <p>Resources to help autistic adults and their providers improve healthcare
                                 interactions.</p>
-                            <a href="https://autismandhealth.org/" class="resource-link" target="_blank">
+                            <a class="resource-link" href="https://autismandhealth.org/" target="_blank">
                                 Visit Website
-                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
-                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                     stroke-linejoin="round">
+                                <svg fill="none" height="12" stroke="currentColor" stroke-linecap="round"
+                                     stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="12"
+                                     xmlns="http://www.w3.org/2000/svg">
                                     <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
                                     <polyline points="15 3 21 3 21 9"></polyline>
-                                    <line x1="10" y1="14" x2="21" x2="3"></line>
+                                    <line x1="10" x2="21" x2="3" y1="14"></line>
                                 </svg>
                             </a>
                         </div>
                         <div class="resource-card">
                             <h4>Thinking Person's Guide to Autism</h4>
                             <p>Collection of essays and resources from autistic people, parents, and professionals.</p>
-                            <a href="http://www.thinkingautismguide.com/" class="resource-link" target="_blank">
+                            <a class="resource-link" href="http://www.thinkingautismguide.com/" target="_blank">
                                 Visit Website
-                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
-                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                     stroke-linejoin="round">
+                                <svg fill="none" height="12" stroke="currentColor" stroke-linecap="round"
+                                     stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="12"
+                                     xmlns="http://www.w3.org/2000/svg">
                                     <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
                                     <polyline points="15 3 21 3 21 9"></polyline>
-                                    <line x1="10" y1="14" x2="21" x2="3"></line>
+                                    <line x1="10" x2="21" x2="3" y1="14"></line>
                                 </svg>
                             </a>
                         </div>
@@ -1227,9 +646,9 @@
         <!-- History Card -->
         <div class="card full-width">
             <h2>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                <svg stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"
+                          stroke-width="2"/>
                 </svg>
                 Assessment History & Trends
             </h2>
@@ -1240,15 +659,15 @@
 
             <div class="actions">
                 <button class="btn btn-ghost" id="clear-history-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+                    <svg height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
                         <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
-                        <path fill-rule="evenodd"
-                              d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                        <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"
+                              fill-rule="evenodd"/>
                     </svg>
                     Clear History
                 </button>
                 <button class="btn" id="export-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+                    <svg height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
                         <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
                         <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
                     </svg>
@@ -1264,364 +683,6 @@
     </footer>
 </div>
 
-<script>
-    // DOM Elements
-    const calculateBtn = document.getElementById('calculate-btn');
-    const saveBtn = document.getElementById('save-btn');
-    const recommendationsBtn = document.getElementById('recommendations-btn');
-    const clearHistoryBtn = document.getElementById('clear-history-btn');
-    const exportBtn = document.getElementById('export-btn');
-    const riskIndicator = document.getElementById('risk-indicator');
-    const riskScore = document.getElementById('risk-score');
-    const riskLevel = document.getElementById('risk-level');
-    const factorBreakdown = document.getElementById('factor-breakdown');
-    const recommendationsCard = document.getElementById('recommendations-card');
-    const historyList = document.getElementById('history-list');
-    const tabs = document.querySelectorAll('.tab');
-    const tabContents = document.querySelectorAll('.tab-content');
-    const collapseToggles = document.querySelectorAll('.collapse-toggle');
-
-    // Slider elements
-    const sliders = document.querySelectorAll('.slider');
-    const sliderValues = document.querySelectorAll('.slider-value');
-
-    // Factor scores
-    const energyScore = document.getElementById('energy-score');
-    const sensoryScore = document.getElementById('sensory-score');
-    const executiveScore = document.getElementById('executive-score');
-    const socialScore = document.getElementById('social-score');
-    const emotionScore = document.getElementById('emotion-score');
-
-    // Storage key
-    const STORAGE_KEY = 'burnout-assessment-history';
-
-    // Initialize sliders
-    sliders.forEach((slider, index) => {
-        slider.addEventListener('input', function() {
-            sliderValues[index].textContent = this.value;
-        });
-    });
-
-    // Tab functionality
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            // Remove active class from all tabs and contents
-            tabs.forEach(t => t.classList.remove('active'));
-            tabContents.forEach(c => c.classList.remove('active'));
-
-            // Add active class to clicked tab and corresponding content
-            tab.classList.add('active');
-            const tabId = `${tab.dataset.tab}-tab`;
-            document.getElementById(tabId).classList.add('active');
-        });
-    });
-
-    // Collapse functionality for factor groups
-    collapseToggles.forEach(toggle => {
-        toggle.addEventListener('click', function() {
-            const targetId = this.getAttribute('data-target');
-            const content = document.getElementById(targetId);
-            const icon = this.querySelector('.collapse-icon');
-
-            if (content.classList.contains('collapsed')) {
-                content.classList.remove('collapsed');
-                content.style.maxHeight = content.scrollHeight + 'px';
-                icon.style.transform = 'rotate(0deg)';
-            } else {
-                content.classList.add('collapsed');
-                content.style.maxHeight = '0';
-                icon.style.transform = 'rotate(-90deg)';
-            }
-        });
-
-        // Initialize collapsed state
-        const targetId = toggle.getAttribute('data-target');
-        const content = document.getElementById(targetId);
-        const icon = toggle.querySelector('.collapse-icon');
-        content.classList.add('collapsed');
-        content.style.maxHeight = '0';
-        icon.style.transform = 'rotate(-90deg)';
-    });
-
-    // Calculate risk
-    calculateBtn.addEventListener('click', calculateRisk);
-
-    function calculateRisk() {
-        // Get values from all sliders
-        const energyLevel = parseInt(document.getElementById('energy-level').value);
-        const sleepQuality = parseInt(document.getElementById('sleep-quality').value);
-        const routineDifficulty = parseInt(document.getElementById('routine-difficulty').value);
-        const stimulantUse = parseInt(document.getElementById('stimulant-use').value);
-
-        const sensoryOverload = parseInt(document.getElementById('sensory-overload').value);
-        const sensoryAvoidance = parseInt(document.getElementById('sensory-avoidance').value);
-        const tactileSensitivity = parseInt(document.getElementById('tactile-sensitivity').value);
-        const sensoryTools = parseInt(document.getElementById('sensory-tools').value);
-
-        const taskInitiation = parseInt(document.getElementById('task-initiation').value);
-        const planningDifficulty = parseInt(document.getElementById('planning-difficulty').value);
-        const memoryIssues = parseInt(document.getElementById('memory-issues').value);
-        const decisionFatigue = parseInt(document.getElementById('decision-fatigue').value);
-
-        const socialDrain = parseInt(document.getElementById('social-drain').value);
-        const maskingLevel = parseInt(document.getElementById('masking-level').value);
-        const communicationDifficulty = parseInt(document.getElementById('communication-difficulty').value);
-        const socialIsolation = parseInt(document.getElementById('social-isolation').value);
-
-        const emotionalReactivity = parseInt(document.getElementById('emotional-reactivity').value);
-        const emotionalNumbness = parseInt(document.getElementById('emotional-numbness').value);
-        const meltdownFrequency = parseInt(document.getElementById('meltdown-frequency').value);
-        const hopelessness = parseInt(document.getElementById('hopelessness').value);
-
-        // Calculate factor scores (each category now has 4 questions, max 16)
-        const energyFactor = energyLevel + sleepQuality + routineDifficulty + stimulantUse;
-        const sensoryFactor = sensoryOverload + sensoryAvoidance + tactileSensitivity + sensoryTools;
-        const executiveFactor = taskInitiation + planningDifficulty + memoryIssues + decisionFatigue;
-        const socialFactor = socialDrain + maskingLevel + communicationDifficulty + socialIsolation;
-        const emotionFactor = emotionalReactivity + emotionalNumbness + meltdownFrequency + hopelessness;
-
-        // Calculate total score (0-80)
-        const totalScore = energyFactor + sensoryFactor + executiveFactor + socialFactor + emotionFactor;
-
-        // Update factor breakdown
-        energyScore.textContent = `${energyFactor}/16`;
-        sensoryScore.textContent = `${sensoryFactor}/16`;
-        executiveScore.textContent = `${executiveFactor}/16`;
-        socialScore.textContent = `${socialFactor}/16`;
-        emotionScore.textContent = `${emotionFactor}/16`;
-
-        // Show factor breakdown
-        factorBreakdown.style.display = 'block';
-
-        // Update risk indicator position
-        const riskPercentage = (totalScore / 80) * 100;
-        riskIndicator.style.left = `${riskPercentage}%`;
-
-        // Update risk score and level
-        riskScore.textContent = totalScore;
-
-        let riskText = '';
-        let riskClass = '';
-
-        if (totalScore <= 20) {
-            riskText = 'Low Risk';
-            riskClass = 'low-risk';
-        } else if (totalScore <= 40) {
-            riskText = 'Medium Risk';
-            riskClass = 'medium-risk';
-        } else if (totalScore <= 60) {
-            riskText = 'High Risk';
-            riskClass = 'high-risk';
-        } else {
-            riskText = 'Critical Risk';
-            riskClass = 'critical-risk';
-        }
-
-        riskLevel.textContent = riskText;
-        riskLevel.className = `risk-level ${riskClass}`;
-
-        // Update recommendations based on highest scoring factors
-        updatePriorityRecommendations(energyFactor, sensoryFactor, executiveFactor, socialFactor, emotionFactor);
-    }
-
-    // Update priority recommendations based on factor scores
-    function updatePriorityRecommendations(energy, sensory, executive, social, emotion) {
-        const factors = [
-            { name: 'energy', score: energy },
-            { name: 'sensory', score: sensory },
-            { name: 'executive', score: executive },
-            { name: 'social', score: social },
-            { name: 'emotion', score: emotion }
-        ];
-
-        // Sort by score (highest first)
-        factors.sort((a, b) => b.score - a.score);
-
-        // Update priority badges based on ranking
-        factors.forEach((factor, index) => {
-            const tab = document.querySelector(`[data-tab="${factor.name}"]`);
-            if (tab) {
-                // Clear existing priority indicators
-                const existingBadges = tab.querySelectorAll('.priority-indicator');
-                existingBadges.forEach(badge => badge.remove());
-
-                // Add new priority indicator
-                let priorityText = '';
-                let priorityClass = '';
-
-                if (index === 0) {
-                    priorityText = 'Highest Priority';
-                    priorityClass = 'priority-high';
-                } else if (index === 1) {
-                    priorityText = 'High Priority';
-                    priorityClass = 'priority-high';
-                } else if (index === 2) {
-                    priorityText = 'Medium Priority';
-                    priorityClass = 'priority-medium';
-                } else {
-                    priorityText = 'Lower Priority';
-                    priorityClass = 'priority-low';
-                }
-
-                const priorityBadge = document.createElement('span');
-                priorityBadge.className = `priority-badge ${priorityClass} priority-indicator`;
-                priorityBadge.textContent = priorityText;
-                tab.appendChild(priorityBadge);
-            }
-        });
-    }
-
-    // Save assessment
-    saveBtn.addEventListener('click', saveAssessment);
-
-    function saveAssessment() {
-        const totalScore = riskScore.textContent;
-        if (totalScore === '--') {
-            alert('Please calculate your risk score before saving.');
-            return;
-        }
-
-        const assessment = {
-            date: new Date().toISOString(),
-            score: parseInt(totalScore),
-            factors: {
-                energy: parseInt(energyScore.textContent.split('/')[0]),
-                sensory: parseInt(sensoryScore.textContent.split('/')[0]),
-                executive: parseInt(executiveScore.textContent.split('/')[0]),
-                social: parseInt(socialScore.textContent.split('/')[0]),
-                emotion: parseInt(emotionScore.textContent.split('/')[0])
-            }
-        };
-
-        // Get existing history or initialize empty array
-        const history = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-
-        // Add new assessment
-        history.push(assessment);
-
-        // Save back to localStorage
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
-
-        // Update history display
-        renderHistory();
-
-        alert('Assessment saved successfully!');
-    }
-
-    // Show recommendations
-    recommendationsBtn.addEventListener('click', () => {
-        recommendationsCard.style.display = 'block';
-        recommendationsCard.scrollIntoView({ behavior: 'smooth' });
-    });
-
-    // Clear history
-    clearHistoryBtn.addEventListener('click', () => {
-        if (confirm('Are you sure you want to clear all assessment history? This cannot be undone.')) {
-            localStorage.removeItem(STORAGE_KEY);
-            renderHistory();
-        }
-    });
-
-    // Export data
-    exportBtn.addEventListener('click', exportData);
-
-    function exportData() {
-        const history = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-
-        if (history.length === 0) {
-            alert('No assessment history to export.');
-            return;
-        }
-
-        // Convert to CSV
-        let csv = 'Date,Total Score,Energy Factor,Sensory Factor,Executive Factor,Social Factor,Emotion Factor\n';
-
-        history.forEach(assessment => {
-            const date = new Date(assessment.date).toLocaleDateString();
-            csv += `${date},${assessment.score},${assessment.factors.energy},${assessment.factors.sensory},${assessment.factors.executive},${assessment.factors.social},${assessment.factors.emotion}\n`;
-        });
-
-        // Create download link
-        const blob = new Blob([csv], { type: 'text/csv' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `burnout-assessment-${new Date().toISOString().split('T')[0]}.csv`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-    }
-
-    // Render history
-    function renderHistory() {
-        const history = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-
-        if (history.length === 0) {
-            historyList.innerHTML = '<p>No assessment history yet. Complete and save an assessment to see your history here.</p>';
-            return;
-        }
-
-        // Sort by date (newest first)
-        history.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-        let html = '';
-
-        history.forEach((assessment, index) => {
-            const date = new Date(assessment.date).toLocaleDateString();
-            const time = new Date(assessment.date).toLocaleTimeString();
-
-            let riskClass = '';
-            if (assessment.score <= 20) {
-                riskClass = '';
-            } else if (assessment.score <= 40) {
-                riskClass = 'medium';
-            } else if (assessment.score <= 60) {
-                riskClass = 'high';
-            } else {
-                riskClass = 'critical';
-            }
-
-            // Calculate trend if there's a previous assessment
-            let trendHtml = '';
-            if (index < history.length - 1) {
-                const prevScore = history[index + 1].score;
-                const trend = assessment.score - prevScore;
-
-                if (trend > 5) {
-                    trendHtml = '<span class="trend-indicator trend-up">↑ Increasing</span>';
-                } else if (trend < -5) {
-                    trendHtml = '<span class="trend-indicator trend-down">↓ Improving</span>';
-                } else {
-                    trendHtml = '<span class="trend-indicator trend-stable">→ Stable</span>';
-                }
-            }
-
-            html += `
-                    <div class="history-item ${riskClass}">
-                        <div class="history-date">${date} at ${time} ${trendHtml}</div>
-                        <div>Total Score: <strong>${assessment.score}/80</strong></div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: ${(assessment.score / 80) * 100}%"></div>
-                        </div>
-                        <div class="history-score">
-                            <span>Energy: ${assessment.factors.energy}/16</span>
-                            <span>Sensory: ${assessment.factors.sensory}/16</span>
-                            <span>Executive: ${assessment.factors.executive}/16</span>
-                            <span>Social: ${assessment.factors.social}/16</span>
-                            <span>Emotion: ${assessment.factors.emotion}/16</span>
-                        </div>
-                    </div>
-                `;
-        });
-
-        historyList.innerHTML = html;
-    }
-
-    // Initialize the app
-    document.addEventListener('DOMContentLoaded', () => {
-        renderHistory();
-    });
-</script>
+<script src="script.js"></script>
 </body>
 </html>
