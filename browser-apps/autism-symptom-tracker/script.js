@@ -3,7 +3,7 @@
     const STORAGE_KEY = "autism-tracker-history-v3";
     const DEFAULT_MAX_HISTORY = 200;
 
-    // Emotions for the emotion wheel
+    // Emotions for the emotion grid
     const EMOTIONS = [
         { id: "happy", label: "Happy", color: "#FFD166", tags: ["positive"] },
         { id: "calm", label: "Calm", color: "#06D6A0", tags: ["positive", "regulated"] },
@@ -255,8 +255,8 @@
     const fmtDate = ts => new Date(ts).toLocaleString();
 
     // ----- DOM refs -----
-    const emotionWheelEl = el("#emotion-wheel");
-    const resetWheelBtn = el("#reset-wheel");
+    const emotionGridEl = el("#emotion-grid");
+    const resetEmotionsBtn = el("#reset-emotions");
     const selectedEmotionsEl = el("#selected-emotions");
     const symptomListEl = el("#symptom-list");
     const analyzeBtn = el("#analyze-btn");
@@ -310,52 +310,22 @@
         localStorage.setItem(`${STORAGE_KEY}-settings`, JSON.stringify(obj));
     }
 
-    // ----- emotion wheel -----
-    function renderEmotionWheel() {
-        emotionWheelEl.innerHTML = "";
-        const segmentAngle = 360 / EMOTIONS.length;
-        const radius = 140;
-        const labelRadius = radius + 30; // Position labels outside the wheel
+    // ----- emotion grid -----
+    function renderEmotionGrid() {
+        emotionGridEl.innerHTML = "";
 
-        EMOTIONS.forEach((emotion, index) => {
-            const segment = document.createElement("div");
-            segment.className = "emotion-segment";
-            segment.dataset.emotionId = emotion.id;
-            segment.style.backgroundColor = emotion.color;
-            segment.style.transform = `rotate(${index * segmentAngle}deg)`;
+        EMOTIONS.forEach((emotion) => {
+            const button = document.createElement("button");
+            button.type = "button";
+            button.className = "emotion-btn";
+            button.textContent = emotion.label;
+            button.style.backgroundColor = emotion.color;
+            button.dataset.emotionId = emotion.id;
 
-            // Create label
-            const label = document.createElement("div");
-            label.className = "emotion-label";
-            label.textContent = emotion.label;
+            button.addEventListener("click", () => toggleEmotion(emotion.id));
 
-            // Calculate position for the label
-            const angle = (index * segmentAngle + segmentAngle/2) * Math.PI / 180;
-            const x = Math.cos(angle) * labelRadius;
-            const y = Math.sin(angle) * labelRadius;
-
-            label.style.position = "absolute";
-            label.style.left = `calc(50% + ${x}px)`;
-            label.style.top = `calc(50% + ${y}px)`;
-            label.style.transform = "translate(-50%, -50%)";
-            label.style.zIndex = "10";
-            label.style.pointerEvents = "none";
-            label.style.fontWeight = "bold";
-            label.style.color = "#333";
-            label.style.textShadow = "1px 1px 2px rgba(255,255,255,0.8)";
-            label.style.fontSize = "0.9rem";
-            label.style.textAlign = "center";
-            label.style.minWidth = "80px";
-
-            emotionWheelEl.appendChild(segment);
-            emotionWheelEl.appendChild(label);
-
-            // Add click event
-            segment.addEventListener("click", () => toggleEmotion(emotion.id));
+            emotionGridEl.appendChild(button);
         });
-
-        // Add pulse animation to the wheel
-        emotionWheelEl.classList.add("pulse");
     }
 
     function toggleEmotion(emotionId) {
@@ -363,22 +333,22 @@
         if (!emotion) return;
 
         const index = selectedEmotions.findIndex(e => e.id === emotionId);
-        const segment = el(`[data-emotion-id="${emotionId}"]`);
+        const button = el(`[data-emotion-id="${emotionId}"]`);
 
         if (index === -1) {
             // Add emotion
             selectedEmotions.push(emotion);
-            segment.classList.add("selected");
+            button.classList.add("selected");
 
             // Add animation
-            segment.style.animation = "pulse 0.5s ease";
+            button.style.animation = "pulse 0.5s ease";
             setTimeout(() => {
-                segment.style.animation = "";
+                button.style.animation = "";
             }, 500);
         } else {
             // Remove emotion
             selectedEmotions.splice(index, 1);
-            segment.classList.remove("selected");
+            button.classList.remove("selected");
         }
 
         updateSelectedEmotionsDisplay();
@@ -417,10 +387,10 @@
         });
     }
 
-    function resetEmotionWheel() {
+    function resetEmotions() {
         selectedEmotions = [];
-        els(".emotion-segment").forEach(segment => {
-            segment.classList.remove("selected");
+        els(".emotion-btn").forEach(button => {
+            button.classList.remove("selected");
         });
         updateSelectedEmotionsDisplay();
     }
@@ -947,7 +917,7 @@ ctx.fillStyle = "#374151";
 
 // ----- event wiring -----
 function wire() {
-renderEmotionWheel();
+renderEmotionGrid();
 renderSymptomList();
 renderHistory();
 
@@ -994,7 +964,7 @@ setTimeout(()=> tag.style.opacity = "1", 400);
 }
 });
 
-resetWheelBtn.addEventListener("click", resetEmotionWheel);
+resetEmotionsBtn.addEventListener("click", resetEmotions);
 
 analyzeBtn.addEventListener("click", () => {
 const sel = getAllSelectedItems();
@@ -1024,7 +994,7 @@ resultSummary.textContent = `Saved entry - ${summaryName || "no pattern detected
 clearBtn.addEventListener("click", () => {
 els("input[name='symptom']", symptomListEl).forEach(i => i.checked = false);
 els(".intensity", symptomListEl).forEach(s => s.disabled = true);
-resetEmotionWheel();
+resetEmotions();
 resultSummary.textContent = "Selections cleared.";
 suggestionsEl.innerHTML = "";
 patternInsightsEl.innerHTML = '<p class="muted">Pattern insights will appear here after multiple entries.</p>';
