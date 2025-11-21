@@ -551,6 +551,7 @@ footer {
 
     .hamburger {
         display: flex;
+        margin-left: 0.5rem;
     }
 
     .hamburger.active span:nth-child(1) {
