@@ -2,16 +2,10 @@
     // ----- config + data -----
     const STORAGE_KEY = "social-script-builder-v1";
     const STEP_TYPES = {
-        statement: { name: "I Say", color: "step-type-statement", description: "Things I will say out loud" },
-        question: { name: "They Might Say", color: "step-type-question", description: "Possible responses from others" },
-        action: { name: "Action I Take", color: "step-type-action", description: "Physical actions or behaviors" },
-        reminder: { name: "Reminder to Self", color: "step-type-reminder", description: "Internal thoughts or coping strategies" },
-        transition: { name: "Transition", color: "step-type-transition", description: "Moving between topics or situations" },
-        observation: { name: "Observation", color: "step-type-observation", description: "Noticing social cues or environment" },
-        validation: { name: "Validation", color: "step-type-validation", description: "Acknowledging others' feelings" },
-        boundary: { name: "Boundary", color: "step-type-boundary", description: "Setting personal limits" },
-        followup: { name: "Follow-up", color: "step-type-followup", description: "Continuing the conversation" },
-        closure: { name: "Closure", color: "step-type-closure", description: "Ending interactions smoothly" }
+        statement: { name: "I Say", color: "step-type-statement" },
+        question: { name: "They Might Say", color: "step-type-question" },
+        action: { name: "Action I Take", color: "step-type-action" },
+        reminder: { name: "Reminder to Self", color: "step-type-reminder" }
     };
 
     // Pre-made scripts based on the Social Scripting Guide
