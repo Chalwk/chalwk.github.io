@@ -5,7 +5,13 @@
         statement: { name: "I Say", color: "step-type-statement" },
         question: { name: "They Might Say", color: "step-type-question" },
         action: { name: "Action I Take", color: "step-type-action" },
-        reminder: { name: "Reminder to Self", color: "step-type-reminder" }
+        reminder: { name: "Reminder to Self", color: "step-type-reminder" },
+        transition: { name: "Transition", color: "step-type-transition" },
+        observation: { name: "Observation", color: "step-type-observation" },
+        validation: { name: "Validation", color: "step-type-validation" },
+        boundary: { name: "Boundary", color: "step-type-boundary" },
+        followup: { name: "Follow-up", color: "step-type-followup" },
+        closure: { name: "Closure", color: "step-type-closure" }
     };
 
     // Pre-made scripts based on the Social Scripting Guide
@@ -110,6 +116,132 @@
                 { id: "n6", type: "statement", text: "Many neurodivergent people need this. Here's a helpful article...", order: 5 },
                 { id: "n7", type: "reminder", text: "Bring printed accommodation suggestions", order: 6 },
                 { id: "n8", type: "reminder", text: "Script key phrases on index card", order: 7 }
+            ]
+        },
+        {
+            id: "interruption-script",
+            title: "Handling Interruptions",
+            description: "When someone interrupts me while speaking",
+            steps: [
+                { id: "int1", type: "statement", text: "I'd like to finish my thought first.", order: 0 },
+                { id: "int2", type: "action", text: "Hold up one finger briefly to signal 'one moment'", order: 1 },
+                { id: "int3", type: "statement", text: "As I was saying...", order: 2 },
+                { id: "int4", type: "question", text: "But this is more important!", order: 3 },
+                { id: "int5", type: "statement", text: "I understand it's important. I'll be done in a moment.", order: 4 },
+                { id: "int6", type: "reminder", text: "It's okay to assert my right to speak", order: 5 },
+                { id: "int7", type: "boundary", text: "I deserve to finish my sentences without interruption", order: 6 }
+            ]
+        },
+        {
+            id: "overwhelm-script",
+            title: "Managing Sensory Overload",
+            description: "When environments become overwhelming",
+            steps: [
+                { id: "ov1", type: "observation", text: "I notice the lights/sounds are becoming overwhelming", order: 0 },
+                { id: "ov2", type: "statement", text: "I need to take a brief break to reset.", order: 1 },
+                { id: "ov3", type: "action", text: "Move to a quieter space or step outside", order: 2 },
+                { id: "ov4", type: "action", text: "Use noise-canceling headphones or sunglasses if available", order: 3 },
+                { id: "ov5", type: "reminder", text: "Focus on breathing slowly for 60 seconds", order: 4 },
+                { id: "ov6", type: "reminder", text: "This feeling will pass - I am safe", order: 5 },
+                { id: "ov7", type: "statement", text: "I'm ready to return now.", order: 6 }
+            ]
+        },
+        {
+            id: "conflict-script",
+            title: "Resolving Disagreements",
+            description: "Navigating differences of opinion calmly",
+            steps: [
+                { id: "c1", type: "validation", text: "I understand we see this differently.", order: 0 },
+                { id: "c2", type: "statement", text: "Can you help me understand your perspective?", order: 1 },
+                { id: "c3", type: "statement", text: "From my point of view...", order: 2 },
+                { id: "c4", type: "question", text: "You're wrong about this.", order: 3 },
+                { id: "c5", type: "statement", text: "I respect that we may not agree on this.", order: 4 },
+                { id: "c6", type: "boundary", text: "Let's focus on the issue, not personal attacks", order: 5 },
+                { id: "c7", type: "closure", text: "I think we've both shared our views. Should we move on?", order: 6 }
+            ]
+        },
+        {
+            id: "group-script",
+            title: "Joining Group Conversations",
+            description: "Entering existing conversations smoothly",
+            steps: [
+                { id: "gr1", type: "observation", text: "Observe the conversation topic before joining", order: 0 },
+                { id: "gr2", type: "action", text: "Make eye contact with one person and smile", order: 1 },
+                { id: "gr3", type: "statement", text: "Mind if I join you?", order: 2 },
+                { id: "gr4", type: "transition", text: "That reminds me of...", order: 3 },
+                { id: "gr5", type: "question", text: "What were you discussing?", order: 4 },
+                { id: "gr6", type: "reminder", text: "It's okay to listen more than speak at first", order: 5 },
+                { id: "gr7", type: "reminder", text: "Groups are loud - it's fine to step back if needed", order: 6 }
+            ]
+        },
+        {
+            id: "feedback-script",
+            title: "Giving and Receiving Feedback",
+            description: "Constructive communication in work/school settings",
+            steps: [
+                { id: "f1", type: "statement", text: "I have some thoughts about the project. Is now a good time?", order: 0 },
+                { id: "f2", type: "statement", text: "I noticed [specific observation].", order: 1 },
+                { id: "f3", type: "statement", text: "One suggestion I have is...", order: 2 },
+                { id: "f4", type: "question", text: "I need feedback on my work.", order: 3 },
+                { id: "f5", type: "action", text: "Take notes during feedback to process later", order: 4 },
+                { id: "f6", type: "reminder", text: "Feedback is about the work, not me as a person", order: 5 },
+                { id: "f7", type: "validation", text: "Thank you for this feedback - it's helpful.", order: 6 }
+            ]
+        },
+        {
+            id: "phone-script",
+            title: "Phone Calls",
+            description: "Structured approach to telephone conversations",
+            steps: [
+                { id: "p1", type: "statement", text: "Hello, this is [Name] speaking.", order: 0 },
+                { id: "p2", type: "statement", text: "I'm calling about [specific reason].", order: 1 },
+                { id: "p3", type: "action", text: "Have pen and paper ready for important information", order: 2 },
+                { id: "p4", type: "question", text: "Could you repeat that please?", order: 3 },
+                { id: "p5", type: "statement", text: "Let me read that back to confirm...", order: 4 },
+                { id: "p6", type: "reminder", text: "It's okay to ask for a moment to process", order: 5 },
+                { id: "p7", type: "closure", text: "Thank you for your help. Goodbye.", order: 6 }
+            ]
+        },
+        {
+            id: "dating-script",
+            title: "Dating Situations",
+            description: "Navigating romantic social interactions",
+            steps: [
+                { id: "d1", type: "statement", text: "I've enjoyed getting to know you.", order: 0 },
+                { id: "d2", type: "question", text: "What are you looking for in a relationship?", order: 1 },
+                { id: "d3", type: "boundary", text: "I prefer to take physical intimacy slowly.", order: 2 },
+                { id: "d4", type: "statement", text: "As an autistic person, I sometimes...", order: 3 },
+                { id: "d5", type: "validation", text: "I appreciate you sharing that with me.", order: 4 },
+                { id: "d6", type: "reminder", text: "My needs and boundaries are valid", order: 5 },
+                { id: "d7", type: "closure", text: "I'd like to see you again if you're interested.", order: 6 }
+            ]
+        },
+        {
+            id: "medical-script",
+            title: "Medical Appointments",
+            description: "Communicating effectively with healthcare providers",
+            steps: [
+                { id: "m1", type: "action", text: "Bring written list of questions and concerns", order: 0 },
+                { id: "m2", type: "statement", text: "I have some specific things I'd like to discuss today.", order: 1 },
+                { id: "m3", type: "statement", text: "As an autistic person, I need...", order: 2 },
+                { id: "m4", type: "question", text: "Could you explain that in simpler terms?", order: 3 },
+                { id: "m5", type: "statement", text: "I'd like to take notes or record this conversation.", order: 4 },
+                { id: "m6", type: "boundary", text: "I need to understand all procedures before consenting", order: 5 },
+                { id: "m7", type: "closure", text: "Thank you for taking the time to explain everything.", order: 6 }
+            ]
+        },
+        {
+            id: "restaurant-script",
+            title: "Restaurant Interactions",
+            description: "Ordering food and managing dining situations",
+            steps: [
+                { id: "r1", type: "observation", text: "Review menu online before arriving", order: 0 },
+                { id: "r2", type: "statement", text: "I need a few more minutes to decide, please.", order: 1 },
+                { id: "r3", type: "statement", text: "I'd like to order the [dish], with modifications...", order: 2 },
+                { id: "r4", type: "question", text: "What ingredients are in this sauce?", order: 3 },
+                { id: "r5", type: "action", text: "Use noise-canceling earbuds if the environment is loud", order: 4 },
+                { id: "r6", type: "reminder", text: "It's okay to send food back if it's wrong", order: 5 },
+                { id: "r7", type: "closure", text: "Check, please. Thank you for the meal.", order: 6 }
             ]
         }
     ];
