@@ -126,15 +126,13 @@ function initializeTemplates() {
     templatesContainer.className = 'card';
     templatesContainer.innerHTML = `
         <h2 class="card-title">Task Templates 🎯</h2>
-        <div class="templates-grid" id="templates-container">
-            ${taskTemplates.map(template => `
-                <div class="template-item" data-template='${JSON.stringify(template).replace(/'/g, "&#39;")}'>
-                    <div class="template-title">${template.title}</div>
-                    <div class="template-steps">${template.steps.length} steps</div>
-                    <button class="btn btn-use-template">Use</button>
-                </div>
+        <select id="template-dropdown" class="template-dropdown">
+            <option value="">Select a template</option>
+            ${taskTemplates.map((template, index) => `
+                <option value='${index}'>${template.title} (${template.steps.length} steps)</option>
             `).join('')}
-        </div>
+        </select>
+        <button id="use-template-btn" class="btn btn-use-template">Use Template</button>
     `;
 
     // Insert templates card after task creation card
@@ -142,15 +140,19 @@ function initializeTemplates() {
     const taskCreationCard = document.querySelector('.left-column .card');
     leftColumn.insertBefore(templatesContainer, taskCreationCard.nextSibling);
 
-    // Add event listeners for template buttons
-    document.getElementById('templates-container').addEventListener('click', function(e) {
-        if (e.target.classList.contains('btn-use-template')) {
-            const templateItem = e.target.closest('.template-item');
-            const templateData = JSON.parse(templateItem.dataset.template.replace(/&#39;/g, "'"));
+    const dropdown = document.getElementById('template-dropdown');
+    const useBtn = document.getElementById('use-template-btn');
+
+    // Load template when button is clicked
+    useBtn.addEventListener('click', () => {
+        const selectedIndex = dropdown.value;
+        if (selectedIndex !== "") {
+            const templateData = taskTemplates[selectedIndex];
             loadTemplate(templateData);
         }
     });
 }
+
 
 // Load template into form
 function loadTemplate(template) {

@@ -42,6 +42,14 @@ header {
     align-items: center;
 }
 
+footer {
+    text-align: center;
+    margin-top: 40px;
+    padding: 20px;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
 h1 {
     font-size: 2.2rem;
 }
@@ -326,6 +334,7 @@ input, textarea, select {
     background-color: var(--accent);
     padding: 5px 10px;
     font-size: 0.9rem;
+    margin-top: 10px;
 }
 
 .btn-use-template:hover {
