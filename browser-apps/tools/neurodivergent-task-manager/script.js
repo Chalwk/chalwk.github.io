@@ -31,6 +31,83 @@ let timerInterval = null;
 let timerSeconds = 25 * 60; // 25 minutes in seconds
 let timerRunning = false;
 let timerPaused = false;
+let timerUses = JSON.parse(localStorage.getItem('timerUses')) || 0;
+
+// Task Templates
+const taskTemplates = [
+    {
+        title: "Morning Routine 🌅",
+        description: "Start your day right",
+        steps: [
+            "Make bed",
+            "Brush teeth",
+            "Drink water",
+            "Eat breakfast"
+        ],
+        priority: "medium",
+        timer: 30
+    },
+    {
+        title: "Work Session 💼",
+        description: "Focused work time",
+        steps: [
+            "Check emails",
+            "Prioritize tasks",
+            "Work on main project",
+            "Take short breaks"
+        ],
+        priority: "high",
+        timer: 45
+    },
+    {
+        title: "Exercise 🏃‍♂️",
+        description: "Get moving and stay healthy",
+        steps: [
+            "Warm up stretches",
+            "Cardio exercise",
+            "Strength training",
+            "Cool down"
+        ],
+        priority: "medium",
+        timer: 60
+    },
+    {
+        title: "Study Session 📚",
+        description: "Learning and knowledge building",
+        steps: [
+            "Review previous notes",
+            "Read new material",
+            "Take notes",
+            "Practice problems"
+        ],
+        priority: "high",
+        timer: 25
+    },
+    {
+        title: "Evening Wind-down 🌙",
+        description: "Prepare for restful sleep",
+        steps: [
+            "Tidy living space",
+            "Prepare for tomorrow",
+            "Relaxation activity",
+            "Digital devices off"
+        ],
+        priority: "low",
+        timer: 20
+    },
+    {
+        title: "Creative Time 🎨",
+        description: "Express yourself creatively",
+        steps: [
+            "Gather materials",
+            "Warm up exercise",
+            "Main creative work",
+            "Clean up"
+        ],
+        priority: "medium",
+        timer: 40
+    }
+];
 
 // Initialize the app
 function init() {
@@ -40,6 +117,61 @@ function init() {
     updateStats();
     updateAchievements();
     updateTimerCircle();
+    initializeTemplates();
+}
+
+// Initialize task templates
+function initializeTemplates() {
+    const templatesContainer = document.createElement('div');
+    templatesContainer.className = 'card';
+    templatesContainer.innerHTML = `
+        <h2 class="card-title">Task Templates 🎯</h2>
+        <div class="templates-grid" id="templates-container">
+            ${taskTemplates.map(template => `
+                <div class="template-item" data-template='${JSON.stringify(template).replace(/'/g, "&#39;")}'>
+                    <div class="template-title">${template.title}</div>
+                    <div class="template-steps">${template.steps.length} steps</div>
+                    <button class="btn btn-use-template">Use</button>
+                </div>
+            `).join('')}
+        </div>
+    `;
+
+    // Insert templates card after task creation card
+    const leftColumn = document.querySelector('.left-column');
+    const taskCreationCard = document.querySelector('.left-column .card');
+    leftColumn.insertBefore(templatesContainer, taskCreationCard.nextSibling);
+
+    // Add event listeners for template buttons
+    document.getElementById('templates-container').addEventListener('click', function(e) {
+        if (e.target.classList.contains('btn-use-template')) {
+            const templateItem = e.target.closest('.template-item');
+            const templateData = JSON.parse(templateItem.dataset.template.replace(/&#39;/g, "'"));
+            loadTemplate(templateData);
+        }
+    });
+}
+
+// Load template into form
+function loadTemplate(template) {
+    document.getElementById('task-title').value = template.title;
+    document.getElementById('task-description').value = template.description;
+    document.getElementById('task-priority').value = template.priority;
+    document.getElementById('task-timer').value = template.timer;
+
+    // Clear existing steps
+    resetSteps();
+
+    // Add template steps
+    template.steps.forEach((step, index) => {
+        if (index > 0) {
+            addStepBtn.click();
+        }
+        const stepInputs = document.querySelectorAll('.step-text');
+        stepInputs[index].value = step;
+    });
+
+    showNotification(`"${template.title}" template loaded!`, 'info');
 }
 
 // Task Form Submission
@@ -155,6 +287,9 @@ function renderCompletedTasks() {
                         <div class="task-priority priority-${task.priority}">${task.priority}</div>
                     </div>
                     <p>Completed on ${new Date(task.completedAt).toLocaleDateString()}</p>
+                    <div class="completed-task-actions">
+                        <button class="btn-delete-completed" data-task-id="${task.id}">Delete</button>
+                    </div>
                 `;
         completedTasks.appendChild(taskElement);
     });
@@ -257,6 +392,23 @@ tasksList.addEventListener('click', function(e) {
     }
 });
 
+// Delete Completed Task
+completedTasks.addEventListener('click', function(e) {
+    if (e.target.classList.contains('btn-delete-completed')) {
+        const taskId = parseInt(e.target.dataset.taskId);
+        deleteCompletedTask(taskId);
+    }
+});
+
+function deleteCompletedTask(taskId) {
+    if (!confirm('Are you sure you want to permanently delete this completed task?')) return;
+
+    completedTasksList = completedTasksList.filter(task => task.id !== taskId);
+    saveData();
+    renderCompletedTasks();
+    showNotification('Completed task deleted', 'info');
+}
+
 // Complete Task
 function completeTask(taskId) {
     const taskIndex = tasks.findIndex(task => task.id === taskId);
@@ -352,6 +504,11 @@ function startTaskTimer(taskId) {
     if (!timerRunning) {
         startTimer();
     }
+
+    // Track timer usage for achievements
+    timerUses++;
+    localStorage.setItem('timerUses', JSON.stringify(timerUses));
+    updateAchievements();
 
     showNotification(`Timer set for "${task.title}"`, 'info');
 }
@@ -489,13 +646,42 @@ function updateAchievements() {
     }
 
     // Timer user achievement (use timer 5 times)
-    // This would need additional tracking in a real app
+    if (timerUses >= 5) {
+        unlockAchievement('achievement-4');
+    }
+
+    // NEW ACHIEVEMENTS
+
+    // Productivity Pro (25 tasks)
+    if (userStats.tasksCompleted >= 25) {
+        unlockAchievement('achievement-5');
+    }
+
+    // Week Warrior (7-day streak)
+    if (userStats.streak >= 7) {
+        unlockAchievement('achievement-6');
+    }
+
+    // Step Master (complete 50 steps)
+    const totalStepsCompleted = completedTasksList.reduce((total, task) => {
+        return total + task.steps.filter(step => step.completed).length;
+    }, 0);
+    if (totalStepsCompleted >= 50) {
+        unlockAchievement('achievement-7');
+    }
+
+    // Priority Finisher (complete 5 high-priority tasks)
+    const highPriorityCompleted = completedTasksList.filter(task => task.priority === 'high').length;
+    if (highPriorityCompleted >= 5) {
+        unlockAchievement('achievement-8');
+    }
 }
 
 function unlockAchievement(achievementId) {
     const achievement = document.getElementById(achievementId);
     if (achievement && !achievement.classList.contains('unlocked')) {
         achievement.classList.add('unlocked');
+        achievement.classList.remove('locked');
         showNotification(`Achievement unlocked: ${achievement.querySelector('.achievement-title').textContent}`, 'success');
     }
 }

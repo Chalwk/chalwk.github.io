@@ -266,12 +266,77 @@ input, textarea, select {
     color: var(--dark);
 }
 
+/* Completed Task Delete Button */
+.completed-task-actions {
+    margin-top: 10px;
+    text-align: right;
+}
+
+#add-step {
+    margin-top: 10px;
+}
+
+.btn-delete-completed {
+    background-color: var(--danger);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+.btn-delete-completed:hover {
+    background-color: #c0392b;
+}
+
+/* Task Templates Styles */
+.templates-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+
+.template-item {
+    background-color: var(--light);
+    padding: 15px;
+    border-radius: var(--border-radius);
+    border-left: 4px solid var(--accent);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.template-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.template-title {
+    font-weight: 600;
+    margin-bottom: 5px;
+    font-size: 1.1rem;
+}
+
+.template-steps {
+    font-size: 0.9rem;
+    color: var(--secondary);
+    margin-bottom: 10px;
+}
+
+.btn-use-template {
+    background-color: var(--accent);
+    padding: 5px 10px;
+    font-size: 0.9rem;
+}
+
+.btn-use-template:hover {
+    background-color: #e68a00;
+}
+
 /* Gamification Styles */
 .achievements {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 10px;
-    margin-top: 15px;
 }
 
 .achievement {
@@ -279,8 +344,7 @@ input, textarea, select {
     padding: 10px;
     border-radius: var(--border-radius);
     text-align: center;
-    flex: 1;
-    min-width: 80px;
+    transition: all 0.3s;
 }
 
 .achievement-icon {
@@ -288,9 +352,19 @@ input, textarea, select {
     margin-bottom: 5px;
 }
 
+.achievement.locked {
+    opacity: 0.6;
+}
+
 .achievement.unlocked {
     background-color: var(--accent);
     color: white;
+    transform: scale(1.05);
+}
+
+.achievement-title {
+    font-size: 0.8rem;
+    font-weight: 600;
 }
 
 /* Responsive Design */
