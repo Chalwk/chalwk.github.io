@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Neurodivergent Task Manager</title>
-    <link rel="stylesheet" href="style.css">
+    <link href="style.css" rel="stylesheet">
 </head>
 <body>
 <div class="container">
@@ -34,12 +34,12 @@
                 <form id="task-form">
                     <div class="form-group">
                         <label for="task-title">Task Title</label>
-                        <input type="text" id="task-title" placeholder="What needs to be done?" required>
+                        <input id="task-title" placeholder="What needs to be done?" required type="text">
                     </div>
                     <div class="form-group">
                         <label for="task-description">Description</label>
-                        <textarea id="task-description" rows="3"
-                                  placeholder="More details about the task..."></textarea>
+                        <textarea id="task-description" placeholder="More details about the task..."
+                                  rows="3"></textarea>
                     </div>
                     <div class="form-group">
                         <label for="task-priority">Priority</label>
@@ -53,22 +53,21 @@
                         <label>Break into Steps (Chunking)</label>
                         <div id="steps-container">
                             <div class="step-input">
-                                <label>
-                                    <input type="text" class="step-text" placeholder="Step 1">
-                                </label>
+                                <input class="step-text" placeholder="Step 1" type="text">
+                                <button class="btn-remove-step" disabled type="button">×</button>
                             </div>
                         </div>
-                        <button type="button" id="add-step" class="btn">+ Add Step</button>
+                        <button class="btn" id="add-step" type="button">+ Add Step</button>
                     </div>
                     <div class="form-group">
                         <label for="task-timer">Timer (minutes)</label>
-                        <input type="number" id="task-timer" min="1" value="25">
+                        <input id="task-timer" min="1" type="number" value="25">
                     </div>
                     <div class="form-group">
                         <label for="task-reminder">Reminder</label>
-                        <input type="datetime-local" id="task-reminder">
+                        <input id="task-reminder" type="datetime-local">
                     </div>
-                    <button type="submit" class="btn btn-success">Create Task</button>
+                    <button class="btn btn-success" type="submit">Create Task</button>
                 </form>
             </div>
         </div>
@@ -144,14 +143,14 @@
                         <div class="timer-text" id="visual-timer">25:00</div>
                     </div>
                     <div class="timer-controls">
-                        <button id="start-timer" class="btn">Start</button>
-                        <button id="pause-timer" class="btn btn-warning">Pause</button>
-                        <button id="reset-timer" class="btn btn-danger">Reset</button>
+                        <button class="btn" id="start-timer">Start</button>
+                        <button class="btn btn-warning" id="pause-timer">Pause</button>
+                        <button class="btn btn-danger" id="reset-timer">Reset</button>
                     </div>
                     <div class="form-group" style="margin-top: 15px;">
                         <label for="custom-timer">Set Custom Timer (minutes)</label>
-                        <input type="number" id="custom-timer" min="1" value="25">
-                        <button id="set-custom-timer" class="btn" style="margin-top: 10px;">Set Timer</button>
+                        <input id="custom-timer" min="1" type="number" value="25">
+                        <button class="btn" id="set-custom-timer" style="margin-top: 10px;">Set Timer</button>
                     </div>
                 </div>
             </div>

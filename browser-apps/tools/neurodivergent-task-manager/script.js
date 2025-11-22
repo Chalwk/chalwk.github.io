@@ -106,6 +106,255 @@ const taskTemplates = [
         ],
         priority: "medium",
         timer: 40
+    },
+    {
+        title: "Morning Routine Plus 🌅",
+        description: "Gentle, structured start for focus and calm",
+        steps: [
+            "Wake up — place feet on floor",
+            "Open curtains or get 2 minutes of sunlight",
+            "Drink a full glass of water",
+            "Use bathroom and basic hygiene",
+            "Choose outfit from 2 options",
+            "Quick sensory check",
+            "3-minute calendar check",
+            "Set one small starter task"
+        ],
+        priority: "medium",
+        timer: 30
+    },
+    {
+        title: "Mini Launch 🚀 (Quick Morning)",
+        description: "Ultra-short routine when you need momentum fast",
+        steps: [
+            "Turn on lights or lamp",
+            "Drink water",
+            "Wash face",
+            "Put on a comfortable top",
+            "Pick one task for 10 minutes"
+        ],
+        priority: "high",
+        timer: 10
+    },
+    {
+        title: "Pomodoro Focus Session ⏲️",
+        description: "25-minute focused work with short break",
+        steps: [
+            "Choose a single measurable goal",
+            "Clear workspace",
+            "Set timer for 25 minutes",
+            "Work without distractions",
+            "Take a 5-minute break"
+        ],
+        priority: "high",
+        timer: 25
+    },
+    {
+        title: "Deep Work Block 🔒",
+        description: "Longer uninterrupted focus for big tasks",
+        steps: [
+            "Define one deliverable",
+            "Turn off notifications",
+            "Prepare water or fidget tool",
+            "Set 50-minute timer",
+            "Record progress then take 10-minute break"
+        ],
+        priority: "high",
+        timer: 50
+    },
+    {
+        title: "Study Session — Chunked 📚",
+        description: "Small chunks for learning and retention",
+        steps: [
+            "Review notes for 5 minutes",
+            "Set specific reading or problem goal",
+            "Use two 20-minute blocks with break",
+            "Summarize key points",
+            "Plan next small goal"
+        ],
+        priority: "high",
+        timer: 45
+    },
+    {
+        title: "Transition Routine ↔️",
+        description: "Shift between activities smoothly",
+        steps: [
+            "Give a 5-minute warning",
+            "Quick physical reset",
+            "Gather items for next task",
+            "One deep breath and begin"
+        ],
+        priority: "medium",
+        timer: 10
+    },
+    {
+        title: "Sensory Reset Break ✨",
+        description: "Short break to regulate sensory load",
+        steps: [
+            "Move to quiet or dim space",
+            "Use calming sound support",
+            "Grounding exercise",
+            "Use sensory tool",
+            "Return when calmer"
+        ],
+        priority: "medium",
+        timer: 10
+    },
+    {
+        title: "Medication & Health Check 💊",
+        description: "Quick health routine",
+        steps: [
+            "Take medication",
+            "Log dosage",
+            "Drink water",
+            "Check for side effects",
+            "Set reminder"
+        ],
+        priority: "high",
+        timer: 5
+    },
+    {
+        title: "Meal Prep — Simple Batch 🍲",
+        description: "Make several easy meals",
+        steps: [
+            "Pick base",
+            "Choose proteins and veggies",
+            "Cook or assemble",
+            "Portion into containers",
+            "Wipe down surfaces"
+        ],
+        priority: "medium",
+        timer: 45
+    },
+    {
+        title: "15-Minute Clean Blitz ⚡",
+        description: "Fast tidy to reset environment",
+        steps: [
+            "Set timer",
+            "Tidy visible surfaces",
+            "Bin trash",
+            "Place loose items in box",
+            "Wipe one surface"
+        ],
+        priority: "low",
+        timer: 15
+    },
+    {
+        title: "Grocery Trip — Prep + Run 🛒",
+        description: "Reduce overwhelm while shopping",
+        steps: [
+            "Check pantry and list essentials",
+            "Choose 1 or 2 meal plans",
+            "Pack sensory supports",
+            "Bring aisle sorted list",
+            "Stick to list and use self-checkout"
+        ],
+        priority: "medium",
+        timer: 90
+    },
+    {
+        title: "Social Interaction Prep 🗣️",
+        description: "Get ready for social events",
+        steps: [
+            "Define a goal",
+            "Prep prompts",
+            "Plan exit strategy",
+            "Bring grounding object",
+            "Do quick calming exercise"
+        ],
+        priority: "medium",
+        timer: 20
+    },
+    {
+        title: "Appointment Prep 📎",
+        description: "Prepare for appointments",
+        steps: [
+            "Confirm details",
+            "Prepare transport and sensory aids",
+            "Write key questions",
+            "Set reminder",
+            "Pack essentials"
+        ],
+        priority: "high",
+        timer: 30
+    },
+    {
+        title: "Evening Wind-down Plus 🌙",
+        description: "Slow the brain and body before sleep",
+        steps: [
+            "Tidy area for 5 minutes",
+            "Prepare outfit or bag",
+            "Dim lights",
+            "Relaxing activity",
+            "Turn off devices 30 minutes before bed"
+        ],
+        priority: "low",
+        timer: 30
+    },
+    {
+        title: "Bedtime Routine 🛏️",
+        description: "Consistent cues for sleep",
+        steps: [
+            "Brush teeth and hygiene",
+            "Change into comfortable clothes",
+            "Do body scan or breathing",
+            "Use sleep aids if needed",
+            "Set alarm and place phone away"
+        ],
+        priority: "low",
+        timer: 20
+    },
+    {
+        title: "Emotional Regulation Toolkit ❤️",
+        description: "Simple plan for emotional spikes",
+        steps: [
+            "Label the feeling",
+            "Take deep breaths",
+            "Grounding technique",
+            "Hydrate or snack",
+            "Contact support if needed"
+        ],
+        priority: "high",
+        timer: 10
+    },
+    {
+        title: "Weekly Review & Plan 📆",
+        description: "Low-stress weekly planning",
+        steps: [
+            "List wins and unfinished tasks",
+            "Pick 3 must-dos",
+            "Plan one self-care or social activity",
+            "Sort laundry and clothes",
+            "Tidy inbox and schedules"
+        ],
+        priority: "medium",
+        timer: 45
+    },
+    {
+        title: "Creative Session 🎨",
+        description: "Playful creative time",
+        steps: [
+            "Set up materials",
+            "Warm-up activity",
+            "Work on main piece freely",
+            "Stretch break",
+            "Tidy and label work"
+        ],
+        priority: "medium",
+        timer: 40
+    },
+    {
+        title: "Burnout De-escalation Plan 🚑",
+        description: "Steps to protect energy",
+        steps: [
+            "Stop task and rest",
+            "Reduce sensory input",
+            "Drink water and eat snack",
+            "Use grounding or weight",
+            "Notify trusted person and postpone demands"
+        ],
+        priority: "high",
+        timer: 15
     }
 ];
 
@@ -232,18 +481,46 @@ addStepBtn.addEventListener('click', function() {
     const stepInput = document.createElement('div');
     stepInput.className = 'step-input';
     stepInput.innerHTML = `
-                <input type="text" class="step-text" placeholder="Step ${stepCount}">
-            `;
+        <input type="text" class="step-text" placeholder="Step ${stepCount}">
+        <button type="button" class="btn-remove-step">×</button>
+    `;
     stepsContainer.appendChild(stepInput);
+
+    // Update remove buttons state
+    updateRemoveButtons();
 });
+
+// Remove step when remove button is clicked
+stepsContainer.addEventListener('click', function(e) {
+    if (e.target.classList.contains('btn-remove-step')) {
+        const stepInput = e.target.closest('.step-input');
+        if (stepInput && document.querySelectorAll('.step-input').length > 1) {
+            stepInput.remove();
+            updateRemoveButtons();
+        }
+    }
+});
+
+// Update remove buttons state (disable if only one step remains)
+function updateRemoveButtons() {
+    const stepInputs = document.querySelectorAll('.step-input');
+    const removeButtons = document.querySelectorAll('.btn-remove-step');
+
+    if (stepInputs.length === 1) {
+        removeButtons[0].disabled = true;
+    } else {
+        removeButtons.forEach(button => button.disabled = false);
+    }
+}
 
 // Reset steps to initial state
 function resetSteps() {
     stepsContainer.innerHTML = `
-                <div class="step-input">
-                    <input type="text" class="step-text" placeholder="Step 1">
-                </div>
-            `;
+        <div class="step-input">
+            <input type="text" class="step-text" placeholder="Step 1">
+            <button type="button" class="btn-remove-step" disabled>×</button>
+        </div>
+    `;
 }
 
 // Render Tasks
@@ -344,22 +621,29 @@ function createTaskElement(task) {
                     <div class="task-title">${task.title}</div>
                     <div class="task-priority priority-${task.priority}">${task.priority}</div>
                 </div>
-                ${task.description ? `<p>${task.description}</p>` : ''}
+                ${task.description ? `<p class="task-description">${task.description}</p>` : ''}
 
                 ${task.steps.length > 0 ? `
                 <div class="task-steps">
+                    <h4 class="steps-title">Steps (${completedSteps}/${totalSteps})</h4>
                     ${task.steps.map(step => `
-                        <div class="step-item">
-                            <input type="checkbox" class="step-checkbox" ${step.completed ? 'checked' : ''} data-task-id="${task.id}" data-step-id="${step.id}">
-                            <span class="step-text ${step.completed ? 'completed' : ''}">${step.text}</span>
+                        <div class="step-item ${step.completed ? 'completed' : ''}">
+                            <label class="step-checkbox-container">
+                                <input type="checkbox" class="step-checkbox" ${step.completed ? 'checked' : ''} data-task-id="${task.id}" data-step-id="${step.id}">
+                                <span class="checkmark"></span>
+                            </label>
+                            <span class="step-text">${step.text}</span>
                         </div>
                     `).join('')}
                 </div>
                 ` : ''}
 
                 ${task.steps.length > 0 ? `
-                <div class="timer-progress">
-                    <div class="timer-progress-bar" style="width: ${completionPercentage}%"></div>
+                <div class="progress-container">
+                    <div class="progress-label">Progress: ${Math.round(completionPercentage)}%</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${completionPercentage}%"></div>
+                    </div>
                 </div>
                 ` : ''}
 
@@ -471,15 +755,18 @@ function toggleStepCompletion(taskId, stepId, completed) {
         const totalSteps = task.steps.length;
         const completionPercentage = totalSteps > 0 ? (completedSteps / totalSteps) * 100 : 0;
 
-        const progressBar = taskElement.querySelector('.timer-progress-bar');
-        if (progressBar) {
-            progressBar.style.width = `${completionPercentage}%`;
+        // Update progress bar
+        const progressFill = taskElement.querySelector('.progress-fill');
+        const progressLabel = taskElement.querySelector('.progress-label');
+        if (progressFill && progressLabel) {
+            progressFill.style.width = `${completionPercentage}%`;
+            progressLabel.textContent = `Progress: ${Math.round(completionPercentage)}%`;
         }
 
-        // Update step text style
-        const stepText = taskElement.querySelector(`.step-checkbox[data-step-id="${stepId}"]`).nextElementSibling;
-        if (stepText) {
-            stepText.classList.toggle('completed', completed);
+        // Update step item style
+        const stepItem = taskElement.querySelector(`.step-checkbox[data-step-id="${stepId}"]`).closest('.step-item');
+        if (stepItem) {
+            stepItem.classList.toggle('completed', completed);
         }
     }
 
