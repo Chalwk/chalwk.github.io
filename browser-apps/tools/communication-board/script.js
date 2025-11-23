@@ -25,6 +25,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const toast = document.getElementById('toast');
     const boardWrap = document.getElementById('boardWrap');
 
+    // Install Button for PWA
+    const installBtn = document.getElementById('installBtn');
+
     // State
     let symbols = [];
     let currentPhrase = [];
@@ -551,6 +554,30 @@ document.addEventListener('DOMContentLoaded', () => {
     boardWrap.addEventListener('keydown', (ev) => {
         if (ev.key === 'e') toggleEditMode();
         if (ev.key === 'z' && (ev.ctrlKey || ev.metaKey)) undo();
+    });
+
+    // PWA install button:
+    if (installBtn) {
+        installBtn.addEventListener('click', installApp);
+    }
+
+    // Update the beforeinstallprompt handler to show install button
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        // Show install button
+        if (installBtn) {
+            installBtn.style.display = 'block';
+        }
+    });
+
+    // Hide install button after successful installation
+    window.addEventListener('appinstalled', () => {
+        deferredPrompt = null;
+        if (installBtn) {
+            installBtn.style.display = 'none';
+        }
+        showToast('App installed successfully!');
     });
 
     // initial load
