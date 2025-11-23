@@ -1,0 +1,29 @@
+{
+  "name": "Social Script Builder",
+  "short_name": "SocialScriptBuilder",
+  "description": "Create and practice customizable social scripts for various situations",
+  "start_url": "/browser-apps/tools/social-script-builder/",
+  "scope": "/browser-apps/tools/social-script-builder/",
+  "display": "standalone",
+  "background_color": "#4a86e8",
+  "theme_color": "#4a86e8",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": [
+    "accessibility"
+  ],
+  "lang": "en"
+}

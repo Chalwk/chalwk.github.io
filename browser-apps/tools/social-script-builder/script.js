@@ -792,6 +792,30 @@
         });
     }
 
+    // Offline detection
+    function updateOnlineStatus() {
+        const offlineIndicator = document.getElementById('offline-indicator');
+        if (!offlineIndicator) return;
+
+        if (navigator.onLine) {
+            offlineIndicator.classList.remove('show');
+        } else {
+            offlineIndicator.classList.add('show');
+        }
+    }
+
+    // Create offline indicator
+    const offlineIndicator = document.createElement('div');
+    offlineIndicator.id = 'offline-indicator';
+    offlineIndicator.className = 'offline-indicator';
+    offlineIndicator.textContent = 'You are currently offline. Some features may be limited.';
+    document.body.prepend(offlineIndicator);
+
+    // Listen for online/offline events
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+    updateOnlineStatus(); // Set initial state
+
     // ----- init -----
     document.addEventListener("DOMContentLoaded", () => {
         // Make functions available globally for onclick handlers

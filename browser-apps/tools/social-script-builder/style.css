@@ -256,6 +256,31 @@ dialog {
 .muted { color:var(--muted); }
 .small { font-size:0.9rem; color:var(--muted); }
 
+/* Add to style.css */
+.install-btn {
+    display: none;
+    margin: 10px auto;
+}
+
+/* Offline indicator */
+.offline-indicator {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: #fbbf24;
+    color: #92400e;
+    text-align: center;
+    padding: 8px;
+    font-size: 0.9rem;
+    z-index: 1000;
+    display: none;
+}
+
+.offline-indicator.show {
+    display: block;
+}
+
 /* Animations */
 @keyframes fadeIn { from { opacity:0; transform: translateY(6px);} to { opacity:1; transform:none; } }
 .fade-in { animation: fadeIn 0.45s ease both; }

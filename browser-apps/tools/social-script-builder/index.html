@@ -5,6 +5,16 @@
     <meta content="width=device-width,initial-scale=1" name="viewport"/>
     <title>Social Script Builder</title>
     <meta content="Create and practice customizable social scripts for various situations." name="description"/>
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#4a86e8"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Social Script Builder">
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+
+    <!-- Manifest -->
+    <link rel="manifest" href="manifest.json">
+
     <link href="style.css" rel="stylesheet"/>
 </head>
 <body>
@@ -204,5 +214,66 @@
 </footer>
 
 <script src="script.js"></script>
+
+<script>
+    // Register service worker for PWA functionality
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+            const scope = '/browser-apps/tools/social-script-builder/';
+            navigator.serviceWorker.register('sw.js', { scope: scope })
+                .then(function(registration) {
+                console.log('SW registered: ', registration);
+            })
+                .catch(function(registrationError) {
+                console.log('SW registration failed: ', registrationError);
+            });
+        });
+    }
+
+    // Handle app installation
+    let deferredPrompt;
+    const installButton = document.createElement('button');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+        // Prevent the mini-infobar from appearing on mobile
+        e.preventDefault();
+        // Stash the event so it can be triggered later
+        deferredPrompt = e;
+
+        // Show install promotion (optional - you can customize this)
+        installButton.style.display = 'block';
+        installButton.textContent = 'Install App';
+        installButton.className = 'btn primary';
+        installButton.style.margin = '10px auto';
+        installButton.style.display = 'block';
+
+        installButton.addEventListener('click', () => {
+            // Hide the install button
+            installButton.style.display = 'none';
+            // Show the install prompt
+            deferredPrompt.prompt();
+            // Wait for the user to respond to the prompt
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('User accepted the install prompt');
+                } else {
+                    console.log('User dismissed the install prompt');
+                }
+                deferredPrompt = null;
+            });
+        });
+
+        // Add install button to footer (optional)
+        document.querySelector('.site-footer').prepend(installButton);
+    });
+
+    window.addEventListener('appinstalled', () => {
+        // Clear the deferredPrompt so it can be garbage collected
+        deferredPrompt = null;
+        // Hide the install button
+        installButton.style.display = 'none';
+        console.log('PWA was installed');
+    });
+</script>
 </body>
 </html>
