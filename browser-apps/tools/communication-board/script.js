@@ -85,7 +85,8 @@ document.addEventListener('DOMContentLoaded', () => {
             { id: 9, text: 'Play', image: '🎮', color: '#fbbc04', category: 'Actions' },
             { id: 10, text: 'Home', image: '🏠', color: '#4a86e8', category: 'Places' },
             { id: 11, text: 'School', image: '🏫', color: '#4a86e8', category: 'Places' },
-            { id: 12, text: 'I want', image: '👉', color: '#ea4335', category: 'Needs' }
+            { id: 12, text: 'I want', image: '👉', color: '#ea4335', category: 'Needs' },
+            { id: 13, text: 'Angry', image: '😡', color: '#e72222', category: 'Basic' }
         ];
     }
 
