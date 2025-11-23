@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const symbolTextInput = document.getElementById('symbolText');
     const symbolColorInput = document.getElementById('symbolColor');
     const symbolCategoryInput = document.getElementById('symbolCategory');
-    const categoryPills = document.getElementById('categoryPills');
+    const categorySelect = document.getElementById('categorySelect');
     const voiceSelect = document.getElementById('voiceSelect');
     const undoBtn = document.getElementById('undoBtn');
     const exportBtn = document.getElementById('exportBtn');
@@ -80,7 +80,9 @@ document.addEventListener('DOMContentLoaded', () => {
             { id: 10, text: 'Home', image: '🏠', color: '#4a86e8', category: 'Places' },
             { id: 11, text: 'School', image: '🏫', color: '#4a86e8', category: 'Places' },
             { id: 12, text: 'I want', image: '👉', color: '#ea4335', category: 'Needs' },
-            { id: 13, text: 'Angry', image: '😡', color: '#e72222', category: 'Basic' }
+            { id: 13, text: 'Angry', image: '😡', color: '#e72222', category: 'Feelings' },
+            { id: 14, text: 'Happy', image: '😄', color: '#fbbc04', category: 'Feelings' },
+            { id: 15, text: 'Sad', image: '😢', color: '#4a86e8', category: 'Feelings' },
         ];
     }
 
@@ -151,23 +153,18 @@ document.addEventListener('DOMContentLoaded', () => {
             communicationBoard.appendChild(node);
         });
 
-        renderCategoryPills();
+        renderCategorySelect();
     }
 
-    function renderCategoryPills() {
+    function renderCategorySelect() {
         const cats = Array.from(new Set(['All', ...symbols.map(s => s.category || 'Basic')]));
-        categoryPills.innerHTML = '';
+        categorySelect.innerHTML = '<option value="All">All Categories</option>';
         cats.forEach(cat => {
-            const pill = document.createElement('button');
-            pill.className = 'pill';
-            if (settings.filterCategory === cat) pill.classList.add('active');
-            pill.textContent = cat;
-            pill.addEventListener('click', () => {
-                settings.filterCategory = cat;
-                saveSettings();
-                renderBoard();
-            });
-            categoryPills.appendChild(pill);
+            const option = document.createElement('option');
+            option.value = cat;
+            option.textContent = cat;
+            if (settings.filterCategory === cat) option.selected = true;
+            categorySelect.appendChild(option);
         });
     }
 
@@ -447,6 +444,13 @@ document.addEventListener('DOMContentLoaded', () => {
     cancelEditBtn.addEventListener('click', closeEditModal);
     exportBtn.addEventListener('click', exportJSON);
     importFile.addEventListener('change', importJSONFile);
+
+    // Category select event listener
+    categorySelect.addEventListener('change', () => {
+        settings.filterCategory = categorySelect.value;
+        saveSettings();
+        renderBoard();
+    });
 
     // file input preview - clear previously selected
     symbolImageFile.addEventListener('change', () => {

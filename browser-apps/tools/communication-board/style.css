@@ -185,6 +185,112 @@ body {
     margin-top: 4px;
 }
 
+/* Add these styles to your existing CSS */
+
+/* Category dropdown styling */
+.header-sub select {
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    background: white;
+    font-size: 0.9rem;
+}
+
+/* Improved mobile responsiveness */
+@media (max-width: 768px) {
+    .app-header {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+        padding: 12px;
+    }
+
+    .header-left {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .header-controls {
+        width: 100%;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .header-controls select,
+    .header-controls button {
+        font-size: 0.85rem;
+        padding: 8px 12px;
+    }
+
+    /* Stack phrase bar vertically on very small screens */
+    @media (max-width: 480px) {
+        .phrase-bar {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 10px;
+        }
+
+        .phrase-controls {
+            justify-content: center;
+        }
+
+        .communication-board {
+            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+            gap: 10px;
+        }
+
+        .symbol {
+            min-height: 100px;
+            padding: 12px 6px;
+        }
+
+        .symbol img {
+            width: 48px;
+            height: 48px;
+        }
+
+        .floating-btn {
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+        }
+    }
+}
+
+.btn-primary,
+.btn-secondary,
+.btn-danger,
+.symbol,
+.phrase-item {
+    min-height: 44px;
+    min-width: 44px;
+}
+
+/* Improve modal for mobile */
+@media (max-width: 480px) {
+    .modal-content {
+        width: 95%;
+        margin: 10px;
+    }
+
+    .modal-body {
+        padding: 12px;
+    }
+
+    .form-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .form-actions > div {
+        width: 100%;
+        justify-content: space-between;
+    }
+}
+
 /* Ensure good touch targets for mobile */
 @media (max-width: 768px) {
     .symbol {
