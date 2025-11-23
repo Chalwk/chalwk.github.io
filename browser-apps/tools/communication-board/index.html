@@ -5,15 +5,6 @@
     <meta content="width=device-width,initial-scale=1" name="viewport">
     <title>Communication Board</title>
     <link href="style.css" rel="stylesheet">
-
-    <!-- PWA Meta Tags -->
-    <meta name="theme-color" content="#4a86e8">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="CommBoard">
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" href="icon-192.png" type="image/png">
-    <link rel="apple-touch-icon" href="icon-192.png">
 </head>
 <body>
 <div class="app-container">
@@ -31,20 +22,10 @@
             <select id="voiceSelect" title="Choose TTS voice"></select>
 
             <button class="btn-secondary" id="undoBtn" title="Undo last phrase edit">Undo</button>
-            <button class="btn-secondary" id="editModeBtn">Edit Mode</button>
+            <button class="btn-primary" id="editModeBtn">Edit Mode</button>
             <button class="btn-primary" id="saveBtn">Save</button>
-
-            <div class="small-controls">
-                <button class="btn-secondary" id="toggleDarkBtn" title="Toggle dark mode">Dark</button>
-                <button class="btn-secondary" id="syncBtn" title="Cloud sync (optional)">Sync</button>
-            </div>
         </div>
     </header>
-
-    <div class="edit-banner" hidden id="editBanner">
-        Edit mode active. Click a tile to edit it.
-        <button class="btn-secondary" id="exitEditBtn">Exit Edit Mode</button>
-    </div>
 
     <div class="main-content">
         <div class="phrase-bar">

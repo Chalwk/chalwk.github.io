@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const speakBtn = document.getElementById('speakBtn');
     const clearBtn = document.getElementById('clearBtn');
     const editModeBtn = document.getElementById('editModeBtn');
-    const exitEditBtn = document.getElementById('exitEditBtn');
     const saveBtn = document.getElementById('saveBtn');
     const addSymbolBtn = document.getElementById('addSymbolBtn');
     const editModal = document.getElementById('editModal');
@@ -24,10 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const exportBtn = document.getElementById('exportBtn');
     const importFile = document.getElementById('importFile');
     const toast = document.getElementById('toast');
-    const toggleDarkBtn = document.getElementById('toggleDarkBtn');
-    const syncBtn = document.getElementById('syncBtn');
     const boardWrap = document.getElementById('boardWrap');
-    const editBanner = document.getElementById('editBanner');
 
     // State
     let symbols = [];
@@ -35,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let phraseHistory = [];
     let isEditMode = false;
     let currentEditingSymbol = null;
-    let settings = { filterCategory: 'All', darkMode: false, firebaseConfig: null };
+    let settings = { filterCategory: 'All' };
 
     // LocalStorage helpers
     const LS = {
@@ -67,8 +63,6 @@ document.addEventListener('DOMContentLoaded', () => {
             try { settings = Object.assign(settings, JSON.parse(raw)); }
             catch {}
         }
-        // apply dark mode
-        document.body.classList.toggle('dark', !!settings.darkMode);
     }
 
     // Default set
@@ -293,7 +287,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function openEditModal(symbol = null) {
         isEditMode = true;
         document.body.classList.add('edit-mode');
-        editBanner.hidden = false;
         if (symbol && symbol.id) {
             currentEditingSymbol = symbol;
             symbolTextInput.value = symbol.text || '';
@@ -438,45 +431,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function toggleEditMode() {
         isEditMode = !isEditMode;
         document.body.classList.toggle('edit-mode', isEditMode);
-        editBanner.hidden = !isEditMode;
         editModeBtn.textContent = isEditMode ? 'Exit Edit Mode' : 'Edit Mode';
         renderBoard();
     }
-
-    // Dark mode
-    toggleDarkBtn.addEventListener('click', () => {
-        settings.darkMode = !settings.darkMode;
-        saveSettings();
-        document.body.classList.toggle('dark', !!settings.darkMode);
-    });
-
-    // Sync scaffolding - placeholder for optional cloud sync
-    syncBtn.addEventListener('click', async () => {
-        // For security and flexibility, cloud sync requires user action and credentials.
-        // You can plug in Firebase, GitHub Gists, or your own endpoint here.
-        // Below is a minimal example that asks for a public gist token and will create a gist.
-        const token = prompt('Optional: paste a GitHub personal access token with gist scope to export symbols as a gist. Cancel to skip.');
-        if (!token) return showToast('Sync cancelled');
-        try {
-            const payload = { description: 'Communication board export', public: false, files: { 'cb-export.json': { content: JSON.stringify({ symbols, settings }, null, 2) } } };
-            const res = await fetch('https://api.github.com/gists', {
-                method: 'POST',
-                headers: { Authorization: `token ${token}`, 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-            if (!res.ok) throw new Error('Sync failed');
-            const data = await res.json();
-            showToast('Synced to gist: ' + (data.html_url || 'done'));
-        } catch (err) {
-            alert('Sync failed: ' + err.message);
-        }
-    });
 
     // Event listeners
     speakBtn.addEventListener('click', speakPhrase);
     clearBtn.addEventListener('click', clearPhrase);
     editModeBtn.addEventListener('click', toggleEditMode);
-    exitEditBtn?.addEventListener('click', toggleEditMode);
     saveBtn.addEventListener('click', saveSymbols);
     addSymbolBtn.addEventListener('click', addNewSymbol);
     closeModalBtn.addEventListener('click', closeEditModal);
@@ -501,46 +463,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (ev.key === 'e') toggleEditMode();
         if (ev.key === 'z' && (ev.ctrlKey || ev.metaKey)) undo();
     });
-
-    // PWA Service Worker Registration
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('./sw.js')
-                .then(registration => {
-                console.log('SW registered: ', registration);
-                showToast('App ready for offline use');
-            })
-                .catch(registrationError => {
-                console.log('SW registration failed: ', registrationError);
-            });
-        });
-    }
-
-    // Optional: Add install prompt
-    let deferredPrompt;
-    window.addEventListener('beforeinstallprompt', (e) => {
-        // Prevent the mini-infobar from appearing on mobile
-        e.preventDefault();
-        // Stash the event so it can be triggered later
-        deferredPrompt = e;
-        // Show install prompt
-        setTimeout(() => {
-            showToast('💡 Tap ••• then "Install app" for better experience');
-        }, 3000);
-    });
-
-    // Install button handler (optional - you can add this later)
-    function showInstallPrompt() {
-        if (deferredPrompt) {
-            deferredPrompt.prompt();
-            deferredPrompt.userChoice.then((choiceResult) => {
-                if (choiceResult.outcome === 'accepted') {
-                    showToast('App installed successfully!');
-                }
-                deferredPrompt = null;
-            });
-        }
-    }
 
     // initial load
     function init() {
