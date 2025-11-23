@@ -178,6 +178,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Helpers
     function showToast(msg, timeout = 2200) {
+        const toast = document.getElementById('toast');
+        if (!toast) return;
+
         toast.textContent = msg;
         toast.style.opacity = 1;
         setTimeout(() => { toast.style.opacity = 0; }, timeout);

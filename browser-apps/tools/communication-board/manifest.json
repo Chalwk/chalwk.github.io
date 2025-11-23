@@ -2,14 +2,12 @@
   "name": "Communication Board",
   "short_name": "CommBoard",
   "description": "An accessible AAC tool for enhanced communication",
-  "start_url": "/",
+  "start_url": "/browser-apps/tools/communication-board/",
+  "scope": "/browser-apps/tools/communication-board/",
   "display": "standalone",
   "background_color": "#4a86e8",
   "theme_color": "#4a86e8",
   "orientation": "any",
-  "scope": "/",
-  "categories": ["education", "health", "accessibility"],
-  "lang": "en",
   "icons": [
     {
       "src": "icons/icon-192x192.png",
@@ -24,12 +22,10 @@
       "purpose": "any maskable"
     }
   ],
-  "screenshots": [
-    {
-      "src": "icons/icon-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "form_factor": "wide"
-    }
-  ]
+  "categories": [
+    "education",
+    "health",
+    "accessibility"
+  ],
+  "lang": "en"
 }

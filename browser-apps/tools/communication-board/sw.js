@@ -1,16 +1,20 @@
-const CACHE_NAME = 'communication-board-v1.3';
+const CACHE_NAME = 'communication-board-v1.4';
+const BASE_PATH = '/browser-apps/tools/communication-board/';
+
+// URLs to cache - using absolute paths from site root
 const urlsToCache = [
-    './',
-    './index.html',
-    './style.css',
-    './script.js',
-    './manifest.json',
-    './icons/icon-192x192.png',
-    './icons/icon-512x512.png'
+    BASE_PATH,
+    BASE_PATH + 'index.html',
+    BASE_PATH + 'style.css',
+    BASE_PATH + 'script.js',
+    BASE_PATH + 'manifest.json',
+    BASE_PATH + 'icons/icon-192x192.png',
+    BASE_PATH + 'icons/icon-512x512.png'
 ];
 
+// Install event - cache essential resources
 self.addEventListener('install', event => {
-    console.log('Service Worker installing');
+    console.log('Service Worker installing for path:', BASE_PATH);
     self.skipWaiting();
 
     event.waitUntil(
@@ -24,6 +28,7 @@ self.addEventListener('install', event => {
     );
 });
 
+// Activate event - clean up old caches
 self.addEventListener('activate', event => {
     console.log('Service Worker activating');
     event.waitUntil(
@@ -41,21 +46,28 @@ self.addEventListener('activate', event => {
     self.clients.claim();
 });
 
+// Fetch event - serve from cache, fallback to network
 self.addEventListener('fetch', event => {
     // Skip non-GET requests
     if (event.request.method !== 'GET') return;
 
-    // Skip cross-origin requests
-    if (!event.request.url.startsWith(self.location.origin)) return;
+    const requestUrl = new URL(event.request.url);
+
+    // Only handle requests from our origin and path
+    if (requestUrl.origin !== location.origin ||
+    !requestUrl.pathname.startsWith(BASE_PATH)) {
+        return;
+    }
 
     event.respondWith(
         caches.match(event.request)
             .then(cachedResponse => {
-            // Return cached version or fetch from network
+            // Return cached version if available
             if (cachedResponse) {
                 return cachedResponse;
             }
 
+            // Otherwise fetch from network
             return fetch(event.request)
                 .then(networkResponse => {
                 // Only cache successful responses
@@ -72,10 +84,11 @@ self.addEventListener('fetch', event => {
 
                 return networkResponse;
             })
-                .catch(() => {
-                // If both cache and network fail, return offline page for HTML
+                .catch(error => {
+                console.log('Fetch failed, serving offline page:', error);
+                // For HTML requests, return the cached index.html
                 if (event.request.headers.get('accept').includes('text/html')) {
-                    return caches.match('./index.html');
+                    return caches.match(BASE_PATH + 'index.html');
                 }
             });
         })

@@ -141,7 +141,10 @@
     // Register service worker for PWA functionality
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
-            navigator.serviceWorker.register('/sw.js')
+            // Use the correct path for your GitHub Pages subdirectory
+            navigator.serviceWorker.register('/browser-apps/tools/communication-board/sw.js', {
+                scope: '/browser-apps/tools/communication-board/'
+            })
                 .then(function(registration) {
                 console.log('ServiceWorker registration successful with scope: ', registration.scope);
             })
@@ -151,14 +154,13 @@
         });
     }
 
+    // Add beforeinstallprompt event handler for install prompt
     let deferredPrompt;
     window.addEventListener('beforeinstallprompt', (e) => {
-        // Prevent the mini-infobar from appearing on mobile
         e.preventDefault();
-        // Stash the event so it can be triggered later
         deferredPrompt = e;
-        // Optionally, show your own install button or notification
         console.log('App can be installed');
+        updateInstallButton();
     });
 
     // Function to manually trigger install prompt
@@ -168,13 +170,45 @@
             deferredPrompt.userChoice.then((choiceResult) => {
                 if (choiceResult.outcome === 'accepted') {
                     console.log('User accepted the install prompt');
+                    showToast('App installed successfully!');
                 } else {
                     console.log('User dismissed the install prompt');
                 }
                 deferredPrompt = null;
+                updateInstallButton();
             });
         }
     }
+
+    // Update install button visibility
+    function updateInstallButton() {
+        const installBtn = document.getElementById('installBtn');
+        if (!installBtn) return;
+
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
+        window.navigator.standalone ||
+        document.referrer.includes('android-app://');
+
+        if (isStandalone) {
+            installBtn.style.display = 'none';
+        } else if (deferredPrompt || isIOS) {
+            installBtn.style.display = 'block';
+        } else {
+            installBtn.style.display = 'none';
+        }
+    }
+
+    // Listen for app installed event
+    window.addEventListener('appinstalled', () => {
+        deferredPrompt = null;
+        updateInstallButton();
+        console.log('App was installed');
+        showToast('App installed successfully!');
+    });
+
+    // Initialize install button on load
+    window.addEventListener('load', updateInstallButton);
 </script>
 </body>
 </html>
