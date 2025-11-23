@@ -24,15 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const importFile = document.getElementById('importFile');
     const toast = document.getElementById('toast');
     const boardWrap = document.getElementById('boardWrap');
-
-    // Install Button for PWA
     const installBtn = document.getElementById('installBtn');
-
-    let deferredPrompt;
-    let isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-    let isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
-    window.navigator.standalone ||
-    document.referrer.includes('android-app://');
 
     // State
     let symbols = [];
@@ -41,6 +33,13 @@ document.addEventListener('DOMContentLoaded', () => {
     let isEditMode = false;
     let currentEditingSymbol = null;
     let settings = { filterCategory: 'All' };
+
+    // PWA State
+    let deferredPrompt;
+    let isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    let isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
+    window.navigator.standalone ||
+    document.referrer.includes('android-app://');
 
     // LocalStorage helpers
     const LS = {
@@ -201,6 +200,42 @@ document.addEventListener('DOMContentLoaded', () => {
         if (str.startsWith('data:image/')) return true;
         // single-character emoji fallback considered non-url but usable
         return false;
+    }
+
+    // PWA Functions
+    function showInstallPrompt() {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('User accepted the install prompt');
+                    showToast('App installed successfully!');
+                } else {
+                    console.log('User dismissed the install prompt');
+                }
+                deferredPrompt = null;
+                updateInstallButton();
+            });
+        } else if (isIOS) {
+            showToast('Tap the share button and "Add to Home Screen" to install');
+        }
+    }
+
+    function updateInstallButton() {
+        if (!installBtn) return;
+
+        // Don't show install button if already in standalone mode
+        if (isStandalone) {
+            installBtn.style.display = 'none';
+            return;
+        }
+
+        // Show install button if we have a deferred prompt or on iOS
+        if (deferredPrompt || isIOS) {
+            installBtn.style.display = 'block';
+        } else {
+            installBtn.style.display = 'none';
+        }
     }
 
     // Rendering
@@ -454,43 +489,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Function to show install prompt
-    function showInstallPrompt() {
-        if (deferredPrompt) {
-            deferredPrompt.prompt();
-            deferredPrompt.userChoice.then((choiceResult) => {
-                if (choiceResult.outcome === 'accepted') {
-                    console.log('User accepted the install prompt');
-                    showToast('App installed successfully!');
-                } else {
-                    console.log('User dismissed the install prompt');
-                }
-                deferredPrompt = null;
-                updateInstallButton();
-            });
-        } else if (isIOS) {
-            showToast('Tap the share button and "Add to Home Screen" to install');
-        }
-    }
-
-    // Function to update install button visibility
-    function updateInstallButton() {
-        if (!installBtn) return;
-
-        // Don't show install button if already in standalone mode
-        if (isStandalone) {
-            installBtn.style.display = 'none';
-            return;
-        }
-
-        // Show install button if we have a deferred prompt or on iOS
-        if (deferredPrompt || isIOS) {
-            installBtn.style.display = 'block';
-        } else {
-            installBtn.style.display = 'none';
-        }
-    }
-
     // Import / Export
     function exportJSON() {
         const payload = { symbols, settings };
@@ -576,6 +574,11 @@ document.addEventListener('DOMContentLoaded', () => {
     exportBtn.addEventListener('click', exportJSON);
     importFile.addEventListener('change', importJSONFile);
 
+    // PWA Event Listeners
+    if (installBtn) {
+        installBtn.addEventListener('click', showInstallPrompt);
+    }
+
     // Category select event listener
     categorySelect.addEventListener('change', () => {
         settings.filterCategory = categorySelect.value;
@@ -599,7 +602,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (ev.key === 'z' && (ev.ctrlKey || ev.metaKey)) undo();
     });
 
-    // Listen for beforeinstallprompt event
+    // PWA Events
     window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         deferredPrompt = e;
@@ -607,26 +610,13 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('Before install prompt event fired');
     });
 
-    // Listen for app installed event
     window.addEventListener('appinstalled', () => {
         deferredPrompt = null;
         isStandalone = true;
         updateInstallButton();
         console.log('App was installed');
+        showToast('App installed successfully!');
     });
-
-    // Check if app is already in standalone mode
-    if (isStandalone) {
-        console.log('App is running in standalone mode');
-        if (installBtn) installBtn.style.display = 'none';
-    }
-
-    // Add install button event listener
-    if (installBtn) {
-        installBtn.addEventListener('click', showInstallPrompt);
-    }
-
-    updateInstallButton();
 
     // initial load
     function init() {
@@ -634,6 +624,14 @@ document.addEventListener('DOMContentLoaded', () => {
         loadSymbols();
         renderBoard();
         updatePhraseDisplay();
+
+        // Check if app is already in standalone mode
+        if (isStandalone) {
+            console.log('App is running in standalone mode');
+        }
+
+        updateInstallButton();
+
         // voices may load after first call
         populateVoices();
         if (speechSynthesis.onvoiceschanged !== undefined) {
