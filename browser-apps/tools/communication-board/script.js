@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
             { id: 33, text: 'Friend', image: '🧑‍🤝‍🧑', color: '#00bcd4', category: 'People & Pronouns' },
             { id: 34, text: 'Family', image: '👨‍👩‍👦', color: '#00bcd4', category: 'People & Pronouns' },
             { id: 35, text: 'Teacher', image: '👩‍🏫', color: '#00bcd4', category: 'People & Pronouns' },
-            { id: 50, text: 'Mom', image: '👩', color: '#00bcd4', category: 'People & Pronouns' },
+            { id: 50, text: 'Mum', image: '👩', color: '#00bcd4', category: 'People & Pronouns' },
             { id: 51, text: 'Dad', image: '👨', color: '#00bcd4', category: 'People & Pronouns' },
             { id: 52, text: 'Doctor', image: '👨‍⚕️', color: '#00bcd4', category: 'People & Pronouns' },
 
