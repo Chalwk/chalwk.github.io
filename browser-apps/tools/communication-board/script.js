@@ -33,6 +33,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let isEditMode = false;
     let currentEditingSymbol = null;
     let settings = { filterCategory: 'All' };
+    let longPressTimer = null;
+    const LONG_PRESS_DURATION = 500; // milliseconds
 
     // PWA State
     let deferredPrompt;
@@ -177,6 +179,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Helpers
+    function handleSymbolLongPress(symbol) {
+        if (!symbol) return;
+
+        // Speak the individual symbol
+        const phraseText = symbol.text;
+        if ('speechSynthesis' in window) {
+            const utter = new SpeechSynthesisUtterance(phraseText);
+            utter.rate = 0.95;
+            // set voice
+            const chosen = localStorage.getItem(LS.voiceKey);
+            if (chosen) {
+                const v = speechSynthesis.getVoices().find(x => x.name === chosen);
+                if (v) utter.voice = v;
+            }
+            speechSynthesis.speak(utter);
+        } else {
+            alert(phraseText);
+        }
+    }
+
     function showToast(msg, timeout = 2200) {
         const toast = document.getElementById('toast');
         if (!toast) return;
@@ -266,7 +288,57 @@ document.addEventListener('DOMContentLoaded', () => {
                 else addToPhrase(symbol);
             });
 
-            // keyboard support
+            // ADD LONG-PRESS SUPPORT HERE
+            // Touch events for mobile
+            node.addEventListener('touchstart', (ev) => {
+                if (isEditMode) return; // Don't long-press in edit mode
+                longPressTimer = setTimeout(() => {
+                    handleSymbolLongPress(symbol);
+                    longPressTimer = null;
+                }, LONG_PRESS_DURATION);
+                ev.preventDefault();
+            });
+
+            node.addEventListener('touchend', (ev) => {
+                if (longPressTimer) {
+                    clearTimeout(longPressTimer);
+                    longPressTimer = null;
+                }
+                ev.preventDefault();
+            });
+
+            node.addEventListener('touchmove', (ev) => {
+                if (longPressTimer) {
+                    clearTimeout(longPressTimer);
+                    longPressTimer = null;
+                }
+                ev.preventDefault();
+            });
+
+            // Mouse events for desktop
+            node.addEventListener('mousedown', (ev) => {
+                if (isEditMode) return; // Don't long-press in edit mode
+                longPressTimer = setTimeout(() => {
+                    handleSymbolLongPress(symbol);
+                    longPressTimer = null;
+                }, LONG_PRESS_DURATION);
+            });
+
+            node.addEventListener('mouseup', (ev) => {
+                if (longPressTimer) {
+                    clearTimeout(longPressTimer);
+                    longPressTimer = null;
+                }
+            });
+
+            node.addEventListener('mouseleave', (ev) => {
+                if (longPressTimer) {
+                    clearTimeout(longPressTimer);
+                    longPressTimer = null;
+                }
+            });
+
+            // keyboard support (existing code)
             node.addEventListener('keydown', (ev) => {
                 if (ev.key === 'Enter' || ev.key === ' ') {
                     ev.preventDefault();
@@ -277,12 +349,78 @@ document.addEventListener('DOMContentLoaded', () => {
                     // quick edit when in edit mode
                     if (isEditMode) openEditModal(symbol);
                 }
+                // ADD: Quick speak with 's' key
+                if (ev.key === 's' && !isEditMode) {
+                    ev.preventDefault();
+                    handleSymbolLongPress(symbol);
+                }
             });
 
             communicationBoard.appendChild(node);
         });
 
         renderCategorySelect();
+    }
+
+    function setupPhraseItemSpeak() {
+        document.querySelectorAll('.phrase-item').forEach(item => {
+            // Remove existing event listeners to avoid duplicates
+            const newItem = item.cloneNode(true);
+            item.parentNode.replaceChild(newItem, item);
+
+            // Add long-press to phrase items as well
+            const symbolIndex = parseInt(newItem.dataset.index);
+            const symbol = currentPhrase[symbolIndex];
+
+            if (!symbol) return;
+
+            // Touch events for phrase items
+            newItem.addEventListener('touchstart', (ev) => {
+                longPressTimer = setTimeout(() => {
+                    handleSymbolLongPress(symbol);
+                    longPressTimer = null;
+                }, LONG_PRESS_DURATION);
+                ev.preventDefault();
+            });
+
+            newItem.addEventListener('touchend', (ev) => {
+                if (longPressTimer) {
+                    clearTimeout(longPressTimer);
+                    longPressTimer = null;
+                }
+                ev.preventDefault();
+            });
+
+            newItem.addEventListener('touchmove', (ev) => {
+                if (longPressTimer) {
+                    clearTimeout(longPressTimer);
+                    longPressTimer = null;
+                }
+                ev.preventDefault();
+            });
+
+            // Mouse events for phrase items
+            newItem.addEventListener('mousedown', (ev) => {
+                longPressTimer = setTimeout(() => {
+                    handleSymbolLongPress(symbol);
+                    longPressTimer = null;
+                }, LONG_PRESS_DURATION);
+            });
+
+            newItem.addEventListener('mouseup', (ev) => {
+                if (longPressTimer) {
+                    clearTimeout(longPressTimer);
+                    longPressTimer = null;
+                }
+            });
+
+            newItem.addEventListener('mouseleave', (ev) => {
+                if (longPressTimer) {
+                    clearTimeout(longPressTimer);
+                    longPressTimer = null;
+                }
+            });
+        });
     }
 
     function renderCategorySelect() {
@@ -316,7 +454,7 @@ document.addEventListener('DOMContentLoaded', () => {
             item.setAttribute('draggable', 'true');
             item.setAttribute('role', 'listitem');
             item.dataset.index = index;
-            item.title = 'Click to remove. Drag to reorder.';
+            item.title = 'Click to remove. Drag to reorder. Press and hold to speak.';
 
             if (isImageSource(symbol.image)) {
                 item.innerHTML = `<img src="${symbol.image}" alt="${symbol.text}"><span>${symbol.text}</span>`;
@@ -355,6 +493,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             phraseDisplay.appendChild(item);
         });
+
+        // Setup long-press for phrase items
+        setupPhraseItemSpeak();
     }
 
     // Phrase operations
