@@ -26,6 +26,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const boardWrap = document.getElementById('boardWrap');
     const installBtn = document.getElementById('installBtn');
 
+    // Settings dropdown elements
+    const settingsToggle = document.getElementById('settingsToggle');
+    const settingsMenu = document.getElementById('settingsMenu');
+
     // State
     let symbols = [];
     let currentPhrase = [];
@@ -204,6 +208,22 @@ document.addEventListener('DOMContentLoaded', () => {
         // single-character emoji fallback considered non-url but usable
         return false;
     }
+
+    // Settings Dropdown Functions
+    function toggleSettingsMenu() {
+        settingsMenu.parentElement.classList.toggle('active');
+    }
+
+    function closeSettingsMenu() {
+        settingsMenu.parentElement.classList.remove('active');
+    }
+
+    // Close settings menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!settingsToggle.contains(e.target) && !settingsMenu.contains(e.target)) {
+            closeSettingsMenu();
+        }
+    });
 
     // PWA Functions
     function showInstallPrompt() {
@@ -502,6 +522,7 @@ document.addEventListener('DOMContentLoaded', () => {
         a.download = 'communication-board-export.json';
         a.click();
         URL.revokeObjectURL(url);
+        closeSettingsMenu();
     }
 
     function importJSONFile(evt) {
@@ -537,6 +558,7 @@ document.addEventListener('DOMContentLoaded', () => {
         reader.readAsText(file);
         // clear the input so same file can be imported again if needed
         evt.target.value = '';
+        closeSettingsMenu();
     }
 
     // Voices
@@ -554,7 +576,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Undo handler
-    undoBtn.addEventListener('click', undo);
+    undoBtn.addEventListener('click', () => {
+        undo();
+        closeSettingsMenu();
+    });
 
     // Toggle edit mode
     function toggleEditMode() {
@@ -562,13 +587,17 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.classList.toggle('edit-mode', isEditMode);
         editModeBtn.textContent = isEditMode ? 'Exit Edit Mode' : 'Edit Mode';
         renderBoard();
+        closeSettingsMenu();
     }
 
     // Event listeners
     speakBtn.addEventListener('click', speakPhrase);
     clearBtn.addEventListener('click', clearPhrase);
     editModeBtn.addEventListener('click', toggleEditMode);
-    saveBtn.addEventListener('click', saveSymbols);
+    saveBtn.addEventListener('click', () => {
+        saveSymbols();
+        closeSettingsMenu();
+    });
     addSymbolBtn.addEventListener('click', addNewSymbol);
     closeModalBtn.addEventListener('click', closeEditModal);
     symbolForm.addEventListener('submit', saveSymbolChanges);
@@ -576,6 +605,9 @@ document.addEventListener('DOMContentLoaded', () => {
     cancelEditBtn.addEventListener('click', closeEditModal);
     exportBtn.addEventListener('click', exportJSON);
     importFile.addEventListener('change', importJSONFile);
+
+    // Settings dropdown event listeners
+    settingsToggle.addEventListener('click', toggleSettingsMenu);
 
     // PWA Event Listeners
     if (installBtn) {
@@ -601,8 +633,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // keyboard quick actions
     boardWrap.addEventListener('keydown', (ev) => {
-        if (ev.key === 'e') toggleEditMode();
-        if (ev.key === 'z' && (ev.ctrlKey || ev.metaKey)) undo();
+        if (ev.key === 'e') {
+            toggleEditMode();
+            closeSettingsMenu();
+        }
+        if (ev.key === 'z' && (ev.ctrlKey || ev.metaKey)) {
+            undo();
+            closeSettingsMenu();
+        }
+        if (ev.key === 'Escape') {
+            closeSettingsMenu();
+        }
     });
 
     // PWA Events

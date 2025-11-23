@@ -7,21 +7,21 @@
     <link href="style.css" rel="stylesheet">
 
     <!-- PWA Meta Tags -->
-    <meta name="theme-color" content="#4a86e8">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="CommBoard">
-    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+    <meta content="#4a86e8" name="theme-color">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="default" name="apple-mobile-web-app-status-bar-style">
+    <meta content="CommBoard" name="apple-mobile-web-app-title">
+    <link href="icons/icon-192x192.png" rel="apple-touch-icon">
 
     <!-- Web App Manifest -->
-    <link rel="manifest" href="manifest.json">
+    <link href="manifest.json" rel="manifest">
 
     <!-- Mobile meta tags for Web App -->
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="CommBoard">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="msapplication-TileColor" content="#4a86e8">
-    <meta name="msapplication-config" content="none">
+    <meta content="yes" name="mobile-web-app-capable">
+    <meta content="CommBoard" name="application-name">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="#4a86e8" name="msapplication-TileColor">
+    <meta content="none" name="msapplication-config">
 </head>
 <body>
 <div class="app-container">
@@ -37,14 +37,29 @@
         </div>
 
         <div class="header-controls">
-            <label class="visually-hidden" for="voiceSelect">Choose voice</label>
-            <select id="voiceSelect" title="Choose TTS voice"></select>
+            <div class="settings-dropdown">
+                <button class="btn-secondary settings-toggle" id="settingsToggle" title="Settings">⚙️</button>
+                <div class="settings-menu" id="settingsMenu">
+                    <div class="settings-group">
+                        <label class="visually-hidden" for="voiceSelect">Choose voice</label>
+                        <select id="voiceSelect" title="Choose TTS voice"></select>
+                    </div>
+                    <div class="settings-group">
+                        <button class="btn-secondary" id="editModeBtn">Edit Mode</button>
+                        <button class="btn-primary" id="saveBtn">Save</button>
+                    </div>
+                    <div class="settings-group">
+                        <button class="btn-secondary" id="exportBtn" title="Export symbols and settings">Export</button>
+                        <label class="btn-secondary" for="importFile" title="Import symbols">
+                            Import
+                            <input accept="application/json" id="importFile" style="display:none" type="file">
+                        </label>
+                    </div>
+                </div>
+            </div>
 
             <button class="btn-secondary" id="installBtn" style="display:none;" title="Install App">Install App</button>
-
             <button class="btn-secondary" id="undoBtn" title="Undo last phrase edit">Undo</button>
-            <button class="btn-primary" id="editModeBtn">Edit Mode</button>
-            <button class="btn-primary" id="saveBtn">Save</button>
         </div>
     </header>
 
@@ -56,11 +71,6 @@
             <div class="phrase-controls">
                 <button class="btn-primary" id="speakBtn">Speak</button>
                 <button class="btn-secondary" id="clearBtn">Clear</button>
-                <button class="btn-secondary" id="exportBtn" title="Export symbols and settings">Export</button>
-                <label class="btn-secondary" for="importFile" title="Import symbols">
-                    Import
-                    <input accept="application/json" id="importFile" style="display:none" type="file">
-                </label>
             </div>
         </div>
 
