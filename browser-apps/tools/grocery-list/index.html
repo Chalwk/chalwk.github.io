@@ -3,8 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta name="theme-color" content="#4a86e8">
+    <meta name="description" content="⚠️ Check an item to indicate that it needs to be purchased.">
     <title>🛒 Grocery List</title>
     <link href="style.css" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="icons/icon-192x192.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Grocery List">
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
 </head>
 <body>
 <header>
@@ -97,5 +105,19 @@
 <input type="file" id="importFile" accept=".json" style="display: none;">
 
 <script src="script.js"></script>
+<script>
+    // Register service worker for PWA functionality
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+            navigator.serviceWorker.register('sw.js')
+                .then(function(registration) {
+                console.log('ServiceWorker registration successful with scope: ', registration.scope);
+            })
+                .catch(function(error) {
+                console.log('ServiceWorker registration failed: ', error);
+            });
+        });
+    }
+</script>
 </body>
 </html>

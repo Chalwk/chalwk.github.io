@@ -1,4 +1,5 @@
 let groceryData = {};
+let isOnline = navigator.onLine;
 
 // Initialize the application
 function initApp() {
@@ -29,6 +30,70 @@ function initApp() {
     renderGroceries();
     setupEventListeners();
     updateStats();
+    setupOnlineOfflineListener();
+}
+
+// Setup online/offline detection
+function setupOnlineOfflineListener() {
+    window.addEventListener('online', function() {
+        isOnline = true;
+        showStatusMessage('Back online', 'success');
+    });
+
+    window.addEventListener('offline', function() {
+        isOnline = false;
+        showStatusMessage('You are currently offline', 'warning');
+    });
+
+    // Show initial status
+    if (!isOnline) {
+        showStatusMessage('You are currently offline', 'warning');
+    }
+}
+
+// Show status message
+function showStatusMessage(message, type) {
+    // Remove existing status message
+    const existingStatus = document.querySelector('.status-message');
+    if (existingStatus) {
+        existingStatus.remove();
+    }
+
+    const statusEl = document.createElement('div');
+    statusEl.className = `status-message status-${type}`;
+    statusEl.textContent = message;
+
+    // Add styles for status message
+    statusEl.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 10px 15px;
+        border-radius: 4px;
+        color: white;
+        font-weight: bold;
+        z-index: 10000;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        transition: opacity 0.3s;
+    `;
+
+    if (type === 'success') {
+        statusEl.style.backgroundColor = '#2ecc71';
+    } else if (type === 'warning') {
+        statusEl.style.backgroundColor = '#f39c12';
+    } else {
+        statusEl.style.backgroundColor = '#e74c3c';
+    }
+
+    document.body.appendChild(statusEl);
+
+    // Auto remove after 3 seconds for success messages
+    if (type === 'success') {
+        setTimeout(() => {
+            statusEl.style.opacity = '0';
+            setTimeout(() => statusEl.remove(), 300);
+        }, 3000);
+    }
 }
 
 // Save data to localStorage

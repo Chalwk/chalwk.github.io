@@ -1,7 +1,7 @@
 {
   "name": "Grocery List",
   "short_name": "GroceryList",
-  "description": "",
+  "description": "⚠️ Check an item to indicate that it needs to be purchased.",
   "start_url": "/browser-apps/tools/grocery-list/",
   "scope": "/browser-apps/tools/grocery-list/",
   "display": "standalone",
