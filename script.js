@@ -59,4 +59,52 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     });
+
+    // Dropdown functionality for mobile
+    document.addEventListener('DOMContentLoaded', function() {
+        const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+        const submenuToggles = document.querySelectorAll('.submenu-toggle');
+
+        // Handle dropdown toggle clicks
+        dropdownToggles.forEach(toggle => {
+            toggle.addEventListener('click', function(e) {
+                if (window.innerWidth <= 768) {
+                    e.preventDefault();
+                    const dropdown = this.closest('.dropdown');
+                    dropdown.classList.toggle('active');
+
+                    // Close other dropdowns
+                    dropdownToggles.forEach(otherToggle => {
+                        if (otherToggle !== this) {
+                            const otherDropdown = otherToggle.closest('.dropdown');
+                            otherDropdown.classList.remove('active');
+                        }
+                    });
+                }
+            });
+        });
+
+        // Handle submenu toggle clicks
+        submenuToggles.forEach(toggle => {
+            toggle.addEventListener('click', function(e) {
+                if (window.innerWidth <= 768) {
+                    e.preventDefault();
+                    const submenu = this.closest('.dropdown-submenu');
+                    submenu.classList.toggle('active');
+                }
+            });
+        });
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(e) {
+            if (window.innerWidth <= 768) {
+                if (!e.target.closest('.dropdown')) {
+                    dropdownToggles.forEach(toggle => {
+                        const dropdown = toggle.closest('.dropdown');
+                        dropdown.classList.remove('active');
+                    });
+                }
+            }
+        });
+    });
 });

@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Understanding Autism - Interactive Guide</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4a6fa5;
+            --secondary: #ff9a3c;
+            --accent: #6b5b95;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --success: #28a745;
+            --info: #17a2b8;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --spectrum-1: #ff595e;
+            --spectrum-2: #ff9a3c;
+            --spectrum-3: #ffca3a;
+            --spectrum-4: #8ac926;
+            --spectrum-5: #1982c4;
+            --spectrum-6: #6a4c93;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 1.5rem;
+        }
+
+        .nav-container {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            padding: 1rem 1.5rem;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--primary);
+            border-bottom: 3px solid var(--secondary);
+            background-color: rgba(74, 111, 165, 0.05);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--secondary);
+            display: inline-block;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-header {
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            font-weight: 600;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .spectrum-visual {
+            display: flex;
+            height: 30px;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 1.5rem 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .spectrum-color {
+            flex: 1;
+        }
+
+        .interactive-element {
+            background-color: var(--light);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--secondary);
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .resources-list {
+            list-style-type: none;
+        }
+
+        .resources-list li {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .resources-list li:before {
+            content: "•";
+            color: var(--secondary);
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        /* Communication tips specific styling */
+        .communication-tips ul {
+            padding-left: 1.5rem;
+        }
+
+        .communication-tips li {
+            margin-bottom: 0.5rem;
+        }
+
+        footer {
+            background: linear-gradient(135deg, var(--dark), #1a1a1a);
+            color: white;
+            padding: 3rem 1rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--secondary);
+            transform: translateY(-3px);
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--primary);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            z-index: 99;
+        }
+
+        .back-to-top:hover {
+            background: var(--accent);
+            transform: translateY(-3px);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            nav {
+                flex-direction: column;
+            }
+
+            nav a {
+                text-align: center;
+                border-bottom: 1px solid #eee;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="header-content">
+        <h1>Understanding Autism</h1>
+        <p class="tagline">An Interactive Guide to Autism Spectrum Disorder</p>
+        <div class="spectrum-visual">
+            <div class="spectrum-color" style="background-color: var(--spectrum-1);"></div>
+            <div class="spectrum-color" style="background-color: var(--spectrum-2);"></div>
+            <div class="spectrum-color" style="background-color: var(--spectrum-3);"></div>
+            <div class="spectrum-color" style="background-color: var(--spectrum-4);"></div>
+            <div class="spectrum-color" style="background-color: var(--spectrum-5);"></div>
+            <div class="spectrum-color" style="background-color: var(--spectrum-6);"></div>
+        </div>
+    </div>
+</header>
+
+<div class="nav-container">
+    <nav>
+        <a href="#" class="active">Home</a>
+        <a href="#what-is-autism">What is Autism?</a>
+        <a href="#characteristics">Characteristics</a>
+        <a href="#myths-facts">Myths vs Facts</a>
+        <a href="#support">Support Strategies</a>
+        <a href="#resources">Resources</a>
+    </nav>
+</div>
+
+<div class="container">
+    <section id="what-is-autism" class="section">
+        <h2>What is Autism?</h2>
+        <p>Autism Spectrum Disorder (ASD) is a complex neurodevelopmental condition that affects communication, social interaction, and behavior. It's called a "spectrum" because autism affects people in different ways and to varying degrees.</p>
+
+        <div class="interactive-element">
+            <h3>Key Facts About Autism</h3>
+            <ul>
+                <li>Autism is not a disease or illness - it's a different way of experiencing the world</li>
+                <li>Approximately 1 in 54 children are diagnosed with autism</li>
+                <li>Autism is lifelong - people are born autistic and remain autistic throughout their lives</li>
+                <li>There is no "cure" for autism, and many autistic people don't want one</li>
+                <li>With appropriate support, autistic people can lead fulfilling lives</li>
+            </ul>
+        </div>
+
+        <div class="card-grid">
+            <div class="card">
+                <div class="card-header">Early Signs</div>
+                <div class="card-body">
+                    <p>Early signs of autism may include:</p>
+                    <ul>
+                        <li>Limited eye contact</li>
+                        <li>Delayed speech development</li>
+                        <li>Repetitive behaviors</li>
+                        <li>Difficulty with social interactions</li>
+                        <li>Intense focus on specific interests</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">Diagnosis</div>
+                <div class="card-body">
+                    <p>Autism is typically diagnosed through:</p>
+                    <ul>
+                        <li>Developmental screening</li>
+                        <li>Comprehensive diagnostic evaluation</li>
+                        <li>Observation of behavior</li>
+                        <li>Parent/caregiver interviews</li>
+                        <li>Assessment by specialists</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">Strengths</div>
+                <div class="card-body">
+                    <p>Many autistic people have remarkable strengths:</p>
+                    <ul>
+                        <li>Attention to detail</li>
+                        <li>Deep focus and concentration</li>
+                        <li>Strong memory</li>
+                        <li>Honesty and loyalty</li>
+                        <li>Unique problem-solving abilities</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="characteristics" class="section">
+        <h2>Characteristics of Autism</h2>
+        <p>Autism manifests differently in each individual, but common characteristics fall into these main categories:</p>
+
+        <div class="card-grid">
+            <div class="card">
+                <div class="card-header" style="background: linear-gradient(135deg, var(--spectrum-1), var(--spectrum-2));">Social Communication</div>
+                <div class="card-body">
+                    <ul>
+                        <li>Difficulty with back-and-forth conversation</li>
+                        <li>Challenges understanding nonverbal cues</li>
+                        <li>Difficulty developing and maintaining relationships</li>
+                        <li>May not initiate social interaction</li>
+                        <li>May interpret language literally</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" style="background: linear-gradient(135deg, var(--spectrum-3), var(--spectrum-4));">Restricted/Repetitive Behaviors</div>
+                <div class="card-body">
+                    <ul>
+                        <li>Repetitive movements or speech</li>
+                        <li>Insistence on sameness and routines</li>
+                        <li>Highly restricted, fixated interests</li>
+                        <li>Unusual responses to sensory input</li>
+                        <li>Preoccupation with parts of objects</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" style="background: linear-gradient(135deg, var(--spectrum-5), var(--spectrum-6));">Sensory Differences</div>
+                <div class="card-body">
+                    <ul>
+                        <li>Over- or under-sensitivity to sounds, lights, textures</li>
+                        <li>Unusual interest in sensory aspects of environment</li>
+                        <li>Adverse response to specific sounds or textures</li>
+                        <li>May seek or avoid certain sensory experiences</li>
+                        <li>Can affect eating, dressing, and daily activities</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="interactive-element">
+            <h3>Sensory Experience Simulator</h3>
+            <p>Click the buttons below to experience how sensory differences might feel for an autistic person:</p>
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem;">
+                <button class="btn" onclick="simulateSensory('overload')">Sensory Overload</button>
+                <button class="btn" onclick="simulateSensory('sight')">Visual Sensitivity</button>
+                <button class="btn" onclick="simulateSensory('sound')">Auditory Sensitivity</button>
+                <button class="btn" onclick="resetSimulation()">Reset</button>
+            </div>
+            <div id="sensory-display" style="margin-top: 1.5rem; padding: 1rem; background: white; border-radius: 5px; min-height: 100px;"></div>
+        </div>
+    </section>
+
+    <section id="myths-facts" class="section">
+        <h2>Myths vs Facts About Autism</h2>
+        <p>There are many misconceptions about autism. Let's separate fact from fiction:</p>
+
+        <div class="card-grid">
+            <div class="card">
+                <div class="card-header" style="background: var(--danger);">Myth</div>
+                <div class="card-body">
+                    <p><strong>Vaccines cause autism.</strong></p>
+                    <p>This myth originated from a fraudulent study that has been thoroughly debunked. Extensive research has shown no link between vaccines and autism.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" style="background: var(--success);">Fact</div>
+                <div class="card-body">
+                    <p><strong>Autism has a strong genetic component.</strong></p>
+                    <p>Research indicates that autism is primarily genetic, though environmental factors may also play a role in some cases.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" style="background: var(--danger);">Myth</div>
+                <div class="card-body">
+                    <p><strong>Autistic people lack empathy.</strong></p>
+                    <p>Many autistic people experience empathy deeply, though they may express it differently than neurotypical people.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" style="background: var(--success);">Fact</div>
+                <div class="card-body">
+                    <p><strong>Autism occurs across all racial, ethnic, and socioeconomic groups.</strong></p>
+                    <p>Autism affects people of all backgrounds, though diagnosis rates may vary due to disparities in access to healthcare and cultural factors.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" style="background: var(--danger);">Myth</div>
+                <div class="card-body">
+                    <p><strong>All autistic people have savant skills.</strong></p>
+                    <p>While some autistic people have exceptional skills in specific areas, this is not true for everyone on the spectrum.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" style="background: var(--success);">Fact</div>
+                <div class="card-body">
+                    <p><strong>Early intervention can improve outcomes.</strong></p>
+                    <p>While there is no cure, early diagnosis and appropriate support can help autistic people develop skills and reach their full potential.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="support" class="section">
+        <h2>Support Strategies</h2>
+        <p>There are many ways to support autistic individuals in various settings:</p>
+
+        <div class="card-grid">
+            <div class="card">
+                <div class="card-header">At Home</div>
+                <div class="card-body">
+                    <ul>
+                        <li>Establish predictable routines</li>
+                        <li>Create a calm, organized environment</li>
+                        <li>Use visual schedules and timers</li>
+                        <li>Provide advance notice of changes</li>
+                        <li>Respect sensory needs and preferences</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">In School</div>
+                <div class="card-body">
+                    <ul>
+                        <li>Implement individualized education plans (IEPs)</li>
+                        <li>Provide clear, concise instructions</li>
+                        <li>Offer breaks and quiet spaces</li>
+                        <li>Use visual supports and social stories</li>
+                        <li>Teach social skills explicitly</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">In the Workplace</div>
+                <div class="card-body">
+                    <ul>
+                        <li>Provide clear job descriptions and expectations</li>
+                        <li>Offer flexible work arrangements</li>
+                        <li>Minimize sensory distractions</li>
+                        <li>Use written communication when possible</li>
+                        <li>Focus on strengths and talents</li>
+                </div>
+            </div>
+        </div>
+
+        <div class="interactive-element communication-tips">
+            <h3>Communication Tips</h3>
+            <p>Try these strategies when communicating with autistic individuals:</p>
+            <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1rem;">
+                <div style="flex: 1; min-width: 200px; background: white; padding: 1rem; border-radius: 5px; border-left: 4px solid var(--success);">
+                    <h4>Do</h4>
+                    <ul>
+                        <li>Be clear and direct</li>
+                        <li>Allow processing time</li>
+                        <li>Use visual supports</li>
+                        <li>Respect personal space</li>
+                    </ul>
+                </div>
+                <div style="flex: 1; min-width: 200px; background: white; padding: 1rem; border-radius: 5px; border-left: 4px solid var(--danger);">
+                    <h4>Don't</h4>
+                    <ul>
+                        <li>Use sarcasm or irony</li>
+                        <li>Force eye contact</li>
+                        <li>Assume understanding</li>
+                        <li>Take behaviors personally</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="resources" class="section">
+        <h2>Resources & Further Information</h2>
+        <p>If you'd like to learn more about autism, here are some valuable resources:</p>
+
+        <div class="card-grid">
+            <div class="card">
+                <div class="card-header">Organizations</div>
+                <div class="card-body">
+                    <ul class="resources-list">
+                        <li>Autism Society of America</li>
+                        <li>Autism Speaks</li>
+                        <li>Organization for Autism Research</li>
+                        <li>Autistic Self Advocacy Network</li>
+                        <li>National Autistic Society (UK)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">Books</div>
+                <div class="card-body">
+                    <ul class="resources-list">
+                        <li>"NeuroTribes" by Steve Silberman</li>
+                        <li>"The Reason I Jump" by Naoki Higashida</li>
+                        <li>"Uniquely Human" by Barry Prizant</li>
+                        <li>"Thinking in Pictures" by Temple Grandin</li>
+                        <li>"The Autistic Brain" by Temple Grandin</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">Online Resources</div>
+                <div class="card-body">
+                    <ul class="resources-list">
+                        <li>Autism Research Institute</li>
+                        <li>Interactive Autism Network</li>
+                        <li>Wrong Planet online community</li>
+                        <li>Autism Women & Nonbinary Network</li>
+                        <li>National Institute of Mental Health - Autism</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<footer>
+    <div class="footer-content">
+        <h3>Understanding Autism</h3>
+        <p>An educational resource to promote awareness and acceptance</p>
+        <p>&copy; 2025 Understanding Autism - Jericho Crosby (Chalwk) All rights reserved.</p>
+    </div>
+</footer>
+
+<div class="back-to-top" id="backToTop">
+    <i class="fas fa-arrow-up"></i>
+</div>
+
+<script>
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('nav a').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const targetId = this.getAttribute('href');
+            if(targetId === '#') return;
+
+            const targetElement = document.querySelector(targetId);
+            if(targetElement) {
+                window.scrollTo({
+                    top: targetElement.offsetTop - 80,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+
+    // Back to top button
+    const backToTopBtn = document.getElementById('backToTop');
+
+    window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 300) {
+            backToTopBtn.style.display = 'flex';
+        } else {
+            backToTopBtn.style.display = 'none';
+        }
+    });
+
+    backToTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+
+    // Sensory simulation
+    function simulateSensory(type) {
+        const display = document.getElementById('sensory-display');
+        display.innerHTML = '';
+
+        switch(type) {
+            case 'overload':
+                display.innerHTML = `
+                        <h4>Sensory Overload Simulation</h4>
+                        <p>Imagine trying to focus while:</p>
+                        <ul>
+                            <li>Fluorescent lights are flickering and buzzing</li>
+                            <li>Multiple conversations are happening around you</li>
+                            <li>Someone is wearing strong perfume</li>
+                            <li>Your clothing tags are itching</li>
+                            <li>A clock is ticking loudly</li>
+                        </ul>
+                        <p>This overwhelming experience can make it difficult to concentrate or function.</p>
+                    `;
+                display.style.backgroundColor = '#ffebee';
+                display.style.borderLeft = '4px solid var(--spectrum-1)';
+                break;
+
+            case 'sight':
+                display.innerHTML = `
+                        <h4>Visual Sensitivity Simulation</h4>
+                        <p>Imagine:</p>
+                        <ul>
+                            <li>Bright lights causing physical discomfort or pain</li>
+                            <li>Patterns that appear to move or vibrate</li>
+                            <li>Difficulty filtering visual information</li>
+                            <li>Being distracted by small visual details others don't notice</li>
+                        </ul>
+                        <p>These visual sensitivities can make environments like shopping malls or classrooms challenging.</p>
+                    `;
+                display.style.backgroundColor = '#e3f2fd';
+                display.style.borderLeft = '4px solid var(--spectrum-5)';
+                break;
+
+            case 'sound':
+                display.innerHTML = `
+                        <h4>Auditory Sensitivity Simulation</h4>
+                        <p>Imagine:</p>
+                        <ul>
+                            <li>Every sound being equally loud and important</li>
+                            <li>Difficulty filtering background noise from conversation</li>
+                            <li>Certain frequencies causing physical pain</li>
+                            <li>Being able to hear electricity humming or clocks ticking</li>
+                        </ul>
+                        <p>This can make noisy environments overwhelming and conversations difficult to follow.</p>
+                    `;
+                display.style.backgroundColor = '#f3e5f5';
+                display.style.borderLeft = '4px solid var(--spectrum-6)';
+                break;
+        }
+    }
+
+    function resetSimulation() {
+        const display = document.getElementById('sensory-display');
+        display.innerHTML = '<p>Select a simulation above to experience different sensory perspectives.</p>';
+        display.style.backgroundColor = 'white';
+        display.style.borderLeft = 'none';
+    }
+
+    // Highlight active nav link on scroll
+    window.addEventListener('scroll', () => {
+        const sections = document.querySelectorAll('.section');
+        const navLinks = document.querySelectorAll('nav a');
+
+        let current = '';
+
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.clientHeight;
+            if (pageYOffset >= sectionTop - 100) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === `#${current}`) {
+                link.classList.add('active');
+            }
+        });
+    });
+</script>
+</body>
+</html>
