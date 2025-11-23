@@ -15,7 +15,7 @@
     <div class="container header-inner">
         <div class="brand">
             <svg aria-hidden="true" class="logo" height="36" viewBox="0 0 24 24" width="36">
-                <circle cx="12" cy="12" fill="#2563eb" r="10"/>
+                <circle cx="12" cy="12" fill="#4f46e5" r="10"/>
                 <path d="M8 12h8M8 16h6" stroke="#fff" stroke-linecap="round" stroke-width="1.5"/>
             </svg>
             <div class="title-wrap">
@@ -48,7 +48,7 @@
                 <input aria-label="Filter symptoms" id="search" placeholder="Filter symptoms or tags"/>
             </label>
             <div class="controls-cta">
-                <button class="btn" id="clear-btn" title="Clear selections">Clear</button>
+                <button class="btn btn-secondary" id="clear-btn" title="Clear selections">Clear</button>
             </div>
         </div>
 
@@ -60,7 +60,9 @@
 
             <div class="actions-row">
                 <button class="btn primary" id="analyze-btn" type="button">Analyze</button>
-                <button class="btn" id="save-btn" title="Save entry to local history" type="button">Save entry</button>
+                <button class="btn btn-secondary" id="save-btn" title="Save entry to local history" type="button">Save
+                    entry
+                </button>
             </div>
         </form>
     </section>
@@ -98,9 +100,9 @@
                 <p class="muted small">Entries are stored locally. Export backups or import JSON to merge history.</p>
             </div>
             <div aria-label="Export and import actions" class="export-actions" role="group">
-                <button class="btn" id="export-csv-btn" title="Export history as CSV">Export CSV</button>
-                <button class="btn" id="export-json-btn" title="Export as JSON">Export JSON</button>
-                <button class="btn" id="import-json-btn" title="Import JSON backup">Import JSON</button>
+                <button class="btn btn-secondary" id="export-csv-btn" title="Export history as CSV">Export CSV</button>
+                <button class="btn btn-secondary" id="export-json-btn" title="Export as JSON">Export JSON</button>
+                <button class="btn btn-secondary" id="import-json-btn" title="Import JSON backup">Import JSON</button>
             </div>
         </div>
 
@@ -159,7 +161,7 @@
 
         <menu class="dialog-actions">
             <button class="btn primary" id="save-settings">Save</button>
-            <button class="btn" id="close-settings">Close</button>
+            <button class="btn btn-secondary" id="close-settings">Close</button>
         </menu>
     </form>
 </dialog>
@@ -170,7 +172,7 @@
         <p class="muted">Select symptoms, set intensity, Analyze to view suggestions, then Save to keep an entry. Export
             regularly to backup.</p>
         <menu class="dialog-actions">
-            <button class="btn" id="close-help">Close</button>
+            <button class="btn btn-secondary" id="close-help">Close</button>
         </menu>
     </form>
 </dialog>

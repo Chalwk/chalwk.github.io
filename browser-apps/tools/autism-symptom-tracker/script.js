@@ -338,6 +338,20 @@
       `;
             symptomListEl.appendChild(wrapper);
         });
+
+        // Add visual feedback for selected symptoms
+        updateSymptomSelectionVisuals();
+    }
+
+    function updateSymptomSelectionVisuals() {
+        els("input[name='symptom']", symptomListEl).forEach(cb => {
+            const symptomEl = cb.closest('.symptom');
+            if (cb.checked) {
+                symptomEl.classList.add('selected');
+            } else {
+                symptomEl.classList.remove('selected');
+            }
+        });
     }
 
     // ----- selection helpers -----
@@ -364,61 +378,68 @@
             return;
         }
 
-        // aggregate tag weights
-        const tagScore = {};
-        selected.forEach((item) => {
-            let tags = [];
-            const s = SYMPTOMS.find(x => x.id === item.id);
-            if (s) tags = s.tags || [];
+        // Show loading state
+        resultSummary.textContent = "Analyzing your selections...";
+        suggestionsEl.innerHTML = '<div class="loading">Loading suggestions...</div>';
 
-            tags.forEach(tag => {
-                tagScore[tag] = (tagScore[tag] || 0) + item.weight;
+        // Simulate processing time for better UX
+        setTimeout(() => {
+            // aggregate tag weights
+            const tagScore = {};
+            selected.forEach((item) => {
+                let tags = [];
+                const s = SYMPTOMS.find(x => x.id === item.id);
+                if (s) tags = s.tags || [];
+
+                tags.forEach(tag => {
+                    tagScore[tag] = (tagScore[tag] || 0) + item.weight;
+                });
             });
-        });
 
-        const totalScore = Object.values(tagScore).reduce((a,b) => a + b, 0);
+            const totalScore = Object.values(tagScore).reduce((a,b) => a + b, 0);
 
-        const entries = Object.keys(tagScore).map(tag => {
-            return {
-                tag,
-                score: tagScore[tag],
-                info: TAGS[tag] || { name: tag, strategies: [], explanation: "" },
-                percent: totalScore ? Math.round((tagScore[tag] / totalScore) * 100) : 0
-            };
-        }).sort((a,b) => b.score - a.score);
+            const entries = Object.keys(tagScore).map(tag => {
+                return {
+                    tag,
+                    score: tagScore[tag],
+                    info: TAGS[tag] || { name: tag, strategies: [], explanation: "" },
+                    percent: totalScore ? Math.round((tagScore[tag] / totalScore) * 100) : 0
+                };
+            }).sort((a,b) => b.score - a.score);
 
-        const symptomCount = selected.length;
+            const symptomCount = selected.length;
 
-        resultSummary.textContent = `Matched ${symptomCount} symptom(s). Top patterns: ${entries.slice(0,3).map(e => e.info.name).join(", ") || "None"}.`;
+            resultSummary.textContent = `Matched ${symptomCount} symptom(s). Top patterns: ${entries.slice(0,3).map(e => e.info.name).join(", ") || "None"}.`;
 
-        // render suggestions
-        suggestionsEl.innerHTML = "";
-        if (entries.length === 0) return;
+            // render suggestions
+            suggestionsEl.innerHTML = "";
+            if (entries.length === 0) return;
 
-        entries.forEach(entry => {
-            const card = document.createElement("article");
-            card.className = "suggestion fade-in";
-            card.innerHTML = `
-        <h3>
-          <span>${escapeHtml(entry.info.name)}</span>
-          <span class="percent-badge" title="Relative confidence">${entry.percent}%</span>
-        </h3>
-        <p class="muted">${escapeHtml(entry.info.explanation || "")}</p>
-        <ul aria-label="Strategies for ${escapeHtml(entry.info.name)}" class="strategies">
-          ${entry.info.strategies.map(s => `<li class="strategy"><button class="copy btn small" data-copy="${escapeHtml(s)}" title="Copy strategy">Copy</button><span style="margin-left:8px">${escapeHtml(s)}</span></li>`).join("")}
-        </ul>
-        <div class="taglist">
-          ${SYMPTOMS.filter(s => s.tags && s.tags.includes(entry.tag))
-            .slice(0,8)
-            .map(s => `<span class="tag" data-sym="${escapeHtml(s.id)}">${escapeHtml(s.label)}</span>`)
-            .join("")}
-        </div>
-      `;
-            suggestionsEl.appendChild(card);
-        });
+            entries.forEach(entry => {
+                const card = document.createElement("article");
+                card.className = "suggestion fade-in";
+                card.innerHTML = `
+          <h3>
+            <span>${escapeHtml(entry.info.name)}</span>
+            <span class="percent-badge" title="Relative confidence">${entry.percent}%</span>
+          </h3>
+          <p class="muted">${escapeHtml(entry.info.explanation || "")}</p>
+          <ul aria-label="Strategies for ${escapeHtml(entry.info.name)}" class="strategies">
+            ${entry.info.strategies.map(s => `<li class="strategy"><button class="copy btn small" data-copy="${escapeHtml(s)}" title="Copy strategy">Copy</button><span style="margin-left:8px">${escapeHtml(s)}</span></li>`).join("")}
+          </ul>
+          <div class="taglist">
+            ${SYMPTOMS.filter(s => s.tags && s.tags.includes(entry.tag))
+              .slice(0,8)
+              .map(s => `<span class="tag" data-sym="${escapeHtml(s.id)}">${escapeHtml(s.label)}</span>`)
+              .join("")}
+          </div>
+        `;
+                suggestionsEl.appendChild(card);
+            });
 
-        // Update pattern insights
-        updatePatternInsights();
+            // Update pattern insights
+            updatePatternInsights();
+        }, 600);
     }
 
     function updatePatternInsights() {
@@ -697,7 +718,7 @@
             ctx.fillRect(barLeft, y, w - barLeft - padding, barHeight);
             // bar fill
             const width = Math.max(6, ((w - barLeft - padding) * (p.v / max)));
-            ctx.fillStyle = "#2563eb";
+            ctx.fillStyle = "#4f46e5";
             ctx.fillRect(barLeft, y, width, barHeight);
             // value
             ctx.fillStyle = "#fff";
@@ -791,6 +812,9 @@
             if (sel) sel.disabled = !ev.target.checked;
             // give brief focus to select if enabled
             if (sel && !sel.disabled) sel.focus();
+
+            // Update visual state
+            updateSymptomSelectionVisuals();
         });
 
         // clicking tag in suggestions copies symptom label
@@ -800,7 +824,11 @@
                 const text = copyBtn.dataset.copy || "";
                 navigator.clipboard?.writeText(text).then(() => {
                     copyBtn.textContent = "Copied";
-                    setTimeout(()=> copyBtn.textContent = "Copy", 800);
+                    copyBtn.classList.add('primary');
+                    setTimeout(()=> {
+                        copyBtn.textContent = "Copy";
+                        copyBtn.classList.remove('primary');
+                    }, 800);
                 }).catch(()=>{});
                 return;
             }
@@ -838,6 +866,14 @@
                 summaryName
             });
             resultSummary.textContent = `Saved entry - ${summaryName || "no pattern detected"}.`;
+
+            // Visual feedback
+            saveBtn.textContent = "Saved!";
+            saveBtn.classList.add('primary');
+            setTimeout(() => {
+                saveBtn.textContent = "Save entry";
+                saveBtn.classList.remove('primary');
+            }, 1500);
         });
 
         clearBtn.addEventListener("click", () => {
