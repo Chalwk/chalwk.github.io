@@ -28,6 +28,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Install Button for PWA
     const installBtn = document.getElementById('installBtn');
 
+    let deferredPrompt;
+    let isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    let isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
+    window.navigator.standalone ||
+    document.referrer.includes('android-app://');
+
     // State
     let symbols = [];
     let currentPhrase = [];
@@ -448,6 +454,43 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Function to show install prompt
+    function showInstallPrompt() {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('User accepted the install prompt');
+                    showToast('App installed successfully!');
+                } else {
+                    console.log('User dismissed the install prompt');
+                }
+                deferredPrompt = null;
+                updateInstallButton();
+            });
+        } else if (isIOS) {
+            showToast('Tap the share button and "Add to Home Screen" to install');
+        }
+    }
+
+    // Function to update install button visibility
+    function updateInstallButton() {
+        if (!installBtn) return;
+
+        // Don't show install button if already in standalone mode
+        if (isStandalone) {
+            installBtn.style.display = 'none';
+            return;
+        }
+
+        // Show install button if we have a deferred prompt or on iOS
+        if (deferredPrompt || isIOS) {
+            installBtn.style.display = 'block';
+        } else {
+            installBtn.style.display = 'none';
+        }
+    }
+
     // Import / Export
     function exportJSON() {
         const payload = { symbols, settings };
@@ -556,29 +599,34 @@ document.addEventListener('DOMContentLoaded', () => {
         if (ev.key === 'z' && (ev.ctrlKey || ev.metaKey)) undo();
     });
 
-    // PWA install button:
-    if (installBtn) {
-        installBtn.addEventListener('click', installApp);
-    }
-
-    // Update the beforeinstallprompt handler to show install button
+    // Listen for beforeinstallprompt event
     window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         deferredPrompt = e;
-        // Show install button
-        if (installBtn) {
-            installBtn.style.display = 'block';
-        }
+        updateInstallButton();
+        console.log('Before install prompt event fired');
     });
 
-    // Hide install button after successful installation
+    // Listen for app installed event
     window.addEventListener('appinstalled', () => {
         deferredPrompt = null;
-        if (installBtn) {
-            installBtn.style.display = 'none';
-        }
-        showToast('App installed successfully!');
+        isStandalone = true;
+        updateInstallButton();
+        console.log('App was installed');
     });
+
+    // Check if app is already in standalone mode
+    if (isStandalone) {
+        console.log('App is running in standalone mode');
+        if (installBtn) installBtn.style.display = 'none';
+    }
+
+    // Add install button event listener
+    if (installBtn) {
+        installBtn.addEventListener('click', showInstallPrompt);
+    }
+
+    updateInstallButton();
 
     // initial load
     function init() {

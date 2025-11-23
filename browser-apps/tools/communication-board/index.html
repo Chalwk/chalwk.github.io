@@ -15,6 +15,13 @@
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="manifest.json">
+
+    <!-- Mobile meta tags for Web App -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="CommBoard">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-TileColor" content="#4a86e8">
+    <meta name="msapplication-config" content="none">
 </head>
 <body>
 <div class="app-container">
@@ -33,10 +40,11 @@
             <label class="visually-hidden" for="voiceSelect">Choose voice</label>
             <select id="voiceSelect" title="Choose TTS voice"></select>
 
+            <button class="btn-secondary" id="installBtn" style="display:none;" title="Install App">Install App</button>
+
             <button class="btn-secondary" id="undoBtn" title="Undo last phrase edit">Undo</button>
             <button class="btn-primary" id="editModeBtn">Edit Mode</button>
             <button class="btn-primary" id="saveBtn">Save</button>
-            <button class="btn-secondary" id="installBtn" style="display:none;">Install App</button>
         </div>
     </header>
 

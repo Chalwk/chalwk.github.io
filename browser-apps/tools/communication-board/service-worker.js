@@ -1,31 +1,29 @@
-const CACHE_NAME = 'communication-board-v1.2';
+const CACHE_NAME = 'communication-board-v1.3';
 const urlsToCache = [
-    '/',
-    '/index.html',
-    '/style.css',
-    '/script.js',
-    '/icons/icon-192x192.png',
-    '/icons/icon-512x512.png',
-    '/manifest.json'
+    './',
+    './index.html',
+    './style.css',
+    './script.js',
+    './manifest.json',
+    './icons/icon-192x192.png',
+    './icons/icon-512x512.png'
 ];
 
-// Install event - cache essential resources
 self.addEventListener('install', event => {
     console.log('Service Worker installing');
+    self.skipWaiting();
+
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then(cache => {
-            console.log('Opened cache');
-            return cache.addAll(urlsToCache);
-        })
-            .catch(error => {
-            console.log('Cache addAll failed:', error);
+            console.log('Caching app resources');
+            return cache.addAll(urlsToCache).catch(error => {
+                console.log('Cache addAll error:', error);
+            });
         })
     );
-    self.skipWaiting();
 });
 
-// Activate event - clean up old caches
 self.addEventListener('activate', event => {
     console.log('Service Worker activating');
     event.waitUntil(
@@ -43,38 +41,41 @@ self.addEventListener('activate', event => {
     self.clients.claim();
 });
 
-// Fetch event - serve from cache, fallback to network
 self.addEventListener('fetch', event => {
-    // Skip non-GET requests and external URLs
-    if (event.request.method !== 'GET' || !event.request.url.startsWith(self.location.origin)) {
-        return;
-    }
+    // Skip non-GET requests
+    if (event.request.method !== 'GET') return;
+
+    // Skip cross-origin requests
+    if (!event.request.url.startsWith(self.location.origin)) return;
 
     event.respondWith(
         caches.match(event.request)
-            .then(response => {
+            .then(cachedResponse => {
             // Return cached version or fetch from network
-            return response || fetch(event.request)
-                .then(fetchResponse => {
-                // Don't cache non-successful responses
-                if (!fetchResponse || fetchResponse.status !== 200 || fetchResponse.type !== 'basic') {
-                    return fetchResponse;
+            if (cachedResponse) {
+                return cachedResponse;
+            }
+
+            return fetch(event.request)
+                .then(networkResponse => {
+                // Only cache successful responses
+                if (!networkResponse || networkResponse.status !== 200) {
+                    return networkResponse;
                 }
 
-                // Clone the response and cache it
-                const responseToCache = fetchResponse.clone();
+                // Clone the response for caching
+                const responseToCache = networkResponse.clone();
                 caches.open(CACHE_NAME)
                     .then(cache => {
                     cache.put(event.request, responseToCache);
                 });
 
-                return fetchResponse;
+                return networkResponse;
             })
-                .catch(error => {
-                console.log('Fetch failed; returning offline page:', error);
-                // For HTML requests, return the cached index.html
+                .catch(() => {
+                // If both cache and network fail, return offline page for HTML
                 if (event.request.headers.get('accept').includes('text/html')) {
-                    return caches.match('/index.html');
+                    return caches.match('./index.html');
                 }
             });
         })
