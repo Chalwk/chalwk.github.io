@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width,initial-scale=1" name="viewport">
-    <title>Communication Board (AAC)</title>
+    <title>Communication Board</title>
     <link href="style.css" rel="stylesheet">
 
     <!-- PWA Meta Tags -->
@@ -27,7 +27,7 @@
 <div class="app-container">
     <header class="app-header">
         <div class="header-left">
-            <h1>Communication Board (AAC)</h1>
+            <h1>Communication Board</h1>
             <div class="header-sub">
                 <label class="visually-hidden" for="categorySelect">Filter symbols by category</label>
                 <select id="categorySelect" title="Filter by category">
@@ -54,6 +54,9 @@
                             Import
                             <input accept="application/json" id="importFile" style="display:none" type="file">
                         </label>
+                    </div>
+                    <div class="settings-group">
+                        <button class="btn-secondary" id="manageCategoriesBtn">Manage Categories</button>
                     </div>
                 </div>
             </div>
@@ -114,12 +117,7 @@
                     <div class="form-group">
                         <label for="symbolCategory">Category</label>
                         <select id="symbolCategory">
-                            <option value="Basic">Basic</option>
-                            <option value="Needs">Needs</option>
-                            <option value="Places">Places</option>
-                            <option value="Actions">Actions</option>
-                            <option value="Feelings">Feelings</option>
-                            <option value="People">People</option>
+                            <!-- Categories will be populated dynamically -->
                         </select>
                     </div>
 
@@ -131,6 +129,31 @@
                         </div>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Categories Management Modal -->
+    <div aria-hidden="true" aria-labelledby="categoriesModalTitle" aria-modal="true" class="modal" id="categoriesModal" role="dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="categoriesModalTitle">Manage Categories</h2>
+                <span aria-label="Close" class="close" id="closeCategoriesModal" role="button">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="newCategoryName">New Category Name</label>
+                    <input id="newCategoryName" type="text" placeholder="Enter category name">
+                    <button class="btn-primary" id="addCategoryBtn">Add Category</button>
+                </div>
+
+                <div class="categories-list" id="categoriesList">
+                    <!-- Categories will be listed here -->
+                </div>
+
+                <div class="form-actions">
+                    <button class="btn-secondary" id="closeCategoriesBtn">Close</button>
+                </div>
             </div>
         </div>
     </div>

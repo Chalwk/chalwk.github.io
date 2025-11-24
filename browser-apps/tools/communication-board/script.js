@@ -26,6 +26,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const boardWrap = document.getElementById('boardWrap');
     const installBtn = document.getElementById('installBtn');
 
+    // Categories Management DOM
+    const manageCategoriesBtn = document.getElementById('manageCategoriesBtn');
+    const categoriesModal = document.getElementById('categoriesModal');
+    const closeCategoriesModal = document.getElementById('closeCategoriesModal');
+    const closeCategoriesBtn = document.getElementById('closeCategoriesBtn');
+    const categoriesList = document.getElementById('categoriesList');
+    const newCategoryName = document.getElementById('newCategoryName');
+    const addCategoryBtn = document.getElementById('addCategoryBtn');
+
     // Settings dropdown elements
     const settingsToggle = document.getElementById('settingsToggle');
     const settingsMenu = document.getElementById('settingsMenu');
@@ -49,13 +58,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const LS = {
         symbolsKey: 'cb.symbols',
         settingsKey: 'cb.settings',
-        voiceKey: 'cb.voice'
+        voiceKey: 'cb.voice',
+        categoriesKey: 'cb.categories'
     };
+
+    // Default categories
+    const defaultCategories = [
+        'Basic Communication',
+        'Needs & Wants',
+        'Feelings & Emotions',
+        'People & Pronouns',
+        'Common Actions',
+        'Places',
+        'Questions',
+        'Time & Schedule',
+        'Food & Drink',
+        'Activities & Play'
+    ];
 
     function saveSymbols() {
         localStorage.setItem(LS.symbolsKey, JSON.stringify(symbols));
         showToast('Symbols saved');
     }
+
     function loadSymbols() {
         const raw = localStorage.getItem(LS.symbolsKey);
         if (raw) {
@@ -66,15 +91,140 @@ document.addEventListener('DOMContentLoaded', () => {
             saveSymbols();
         }
     }
+
     function saveSettings() {
         localStorage.setItem(LS.settingsKey, JSON.stringify(settings));
     }
+
     function loadSettings() {
         const raw = localStorage.getItem(LS.settingsKey);
         if (raw) {
             try { settings = Object.assign(settings, JSON.parse(raw)); }
             catch {}
         }
+    }
+
+    // Categories management
+    function getCategories() {
+        const categoriesRaw = localStorage.getItem(LS.categoriesKey);
+        if (categoriesRaw) {
+            try {
+                return JSON.parse(categoriesRaw);
+            } catch {
+                return [...defaultCategories];
+            }
+        }
+        return [...defaultCategories];
+    }
+
+    function saveCategories(categories) {
+        localStorage.setItem(LS.categoriesKey, JSON.stringify(categories));
+    }
+
+    function addCategory(name) {
+        if (!name || name.trim() === '') {
+            showToast('Please enter a category name');
+            return false;
+        }
+
+        const categories = getCategories();
+        if (categories.includes(name.trim())) {
+            showToast('Category already exists');
+            return false;
+        }
+
+        categories.push(name.trim());
+        saveCategories(categories);
+        updateCategorySelects();
+        showToast(`Category "${name}" added`);
+        return true;
+    }
+
+    function renameCategory(oldName, newName) {
+        if (!newName || newName.trim() === '') {
+            showToast('Please enter a category name');
+            return false;
+        }
+
+        const categories = getCategories();
+        if (categories.includes(newName.trim()) && newName.trim() !== oldName) {
+            showToast('Category already exists');
+            return false;
+        }
+
+        // Update category in categories list
+        const index = categories.indexOf(oldName);
+        if (index !== -1) {
+            categories[index] = newName.trim();
+            saveCategories(categories);
+        }
+
+        // Update category in all symbols
+        symbols.forEach(symbol => {
+            if (symbol.category === oldName) {
+                symbol.category = newName.trim();
+            }
+        });
+        saveSymbols();
+
+        updateCategorySelects();
+        renderBoard();
+        showToast(`Category renamed to "${newName}"`);
+        return true;
+    }
+
+    function deleteCategory(name) {
+        if (!name) return false;
+
+        // Check if category is used by any symbols
+        const symbolsInCategory = symbols.filter(s => s.category === name);
+        if (symbolsInCategory.length > 0) {
+            if (!confirm(`This category contains ${symbolsInCategory.length} symbol(s). Deleting it will move these symbols to "Basic Communication". Continue?`)) {
+                return false;
+            }
+
+            // Move symbols to Basic Communication
+            symbols.forEach(symbol => {
+                if (symbol.category === name) {
+                    symbol.category = 'Basic Communication';
+                }
+            });
+            saveSymbols();
+        }
+
+        const categories = getCategories();
+        const index = categories.indexOf(name);
+        if (index !== -1) {
+            categories.splice(index, 1);
+            saveCategories(categories);
+        }
+
+        // Update filter if it was set to the deleted category
+        if (settings.filterCategory === name) {
+            settings.filterCategory = 'All';
+            saveSettings();
+        }
+
+        updateCategorySelects();
+        renderBoard();
+        showToast(`Category "${name}" deleted`);
+        return true;
+    }
+
+    function updateCategorySelects() {
+        const categories = getCategories();
+
+        // Update symbol category select in edit modal
+        symbolCategoryInput.innerHTML = '';
+        categories.forEach(category => {
+            const option = document.createElement('option');
+            option.value = category;
+            option.textContent = category;
+            symbolCategoryInput.appendChild(option);
+        });
+
+        // Update category filter select
+        renderCategorySelect();
     }
 
     // Default set
@@ -225,6 +375,58 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Categories Management Functions
+    function openCategoriesModal() {
+        categoriesModal.setAttribute('aria-hidden', 'false');
+        renderCategoriesList();
+        closeSettingsMenu();
+    }
+
+    function closeCategoriesModalHandler() { // Renamed this function
+        categoriesModal.setAttribute('aria-hidden', 'true');
+        newCategoryName.value = '';
+    }
+
+    function renderCategoriesList() {
+        const categories = getCategories();
+        categoriesList.innerHTML = '';
+
+        categories.forEach(category => {
+            const categoryItem = document.createElement('div');
+            categoryItem.className = 'category-item';
+            categoryItem.innerHTML = `
+            <input type="text" value="${category}" class="category-name-input">
+            <div class="category-actions">
+                <button class="btn-secondary rename-category-btn" data-category="${category}">Rename</button>
+                <button class="btn-danger delete-category-btn" data-category="${category}">Delete</button>
+            </div>
+        `;
+            categoriesList.appendChild(categoryItem);
+        });
+
+        // Add event listeners for rename and delete buttons
+        document.querySelectorAll('.rename-category-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const oldCategory = e.target.dataset.category;
+                const input = e.target.closest('.category-item').querySelector('.category-name-input');
+                const newCategory = input.value.trim();
+
+                if (renameCategory(oldCategory, newCategory)) {
+                    renderCategoriesList();
+                }
+            });
+        });
+
+        document.querySelectorAll('.delete-category-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const category = e.target.dataset.category;
+                if (deleteCategory(category)) {
+                    renderCategoriesList();
+                }
+            });
+        });
+    }
+
     // PWA Functions
     function showInstallPrompt() {
         if (deferredPrompt) {
@@ -306,7 +508,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderCategorySelect() {
-        const cats = Array.from(new Set(['All', ...symbols.map(s => s.category || 'Basic')]));
+        const categories = getCategories();
+        const cats = Array.from(new Set(['All', ...categories]));
         categorySelect.innerHTML = '<option value="All">All Categories</option>';
         cats.forEach(cat => {
             const option = document.createElement('option');
@@ -441,11 +644,12 @@ document.addEventListener('DOMContentLoaded', () => {
             symbolTextInput.value = symbol.text || '';
             symbolImageInput.value = isUrl(symbol.image) ? symbol.image : (symbol.image || '');
             symbolColorInput.value = symbol.color || '#4a86e8';
-            symbolCategoryInput.value = symbol.category || 'Basic';
+            symbolCategoryInput.value = symbol.category || 'Basic Communication';
             deleteBtn.style.display = 'inline-block';
         } else {
             currentEditingSymbol = null;
             symbolForm.reset();
+            symbolCategoryInput.value = 'Basic Communication';
             deleteBtn.style.display = 'none';
         }
         editModal.setAttribute('aria-hidden', 'false');
@@ -463,7 +667,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const text = symbolTextInput.value.trim();
         let image = symbolImageInput.value.trim();
         const color = symbolColorInput.value;
-        const category = symbolCategoryInput.value || 'Basic';
+        const category = symbolCategoryInput.value || 'Basic Communication';
 
         if (!text) { alert('Please enter text'); return; }
 
@@ -514,7 +718,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Import / Export
     function exportJSON() {
-        const payload = { symbols, settings };
+        const payload = {
+            symbols,
+            settings,
+            categories: getCategories()
+        };
         const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -550,6 +758,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (parsed.settings) {
                     settings = Object.assign({}, settings, parsed.settings);
                     saveSettings();
+                }
+                if (parsed.categories && Array.isArray(parsed.categories)) {
+                    saveCategories(parsed.categories);
+                    updateCategorySelects();
+                    showToast('Imported categories');
                 }
             } catch (err) {
                 alert('Import failed: invalid file');
@@ -605,6 +818,25 @@ document.addEventListener('DOMContentLoaded', () => {
     cancelEditBtn.addEventListener('click', closeEditModal);
     exportBtn.addEventListener('click', exportJSON);
     importFile.addEventListener('change', importJSONFile);
+
+    // Categories Management Event Listeners
+    manageCategoriesBtn.addEventListener('click', openCategoriesModal);
+    closeCategoriesModal.addEventListener('click', closeCategoriesModalHandler);
+    closeCategoriesBtn.addEventListener('click', closeCategoriesModalHandler);
+    addCategoryBtn.addEventListener('click', () => {
+        if (addCategory(newCategoryName.value)) {
+            newCategoryName.value = '';
+            renderCategoriesList();
+        }
+    });
+
+    // Allow Enter key to add category
+    newCategoryName.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            addCategoryBtn.click();
+        }
+    });
 
     // Settings dropdown event listeners
     settingsToggle.addEventListener('click', toggleSettingsMenu);
@@ -666,6 +898,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function init() {
         loadSettings();
         loadSymbols();
+        updateCategorySelects();
         renderBoard();
         updatePhraseDisplay();
 
