@@ -375,6 +375,32 @@ function setupCategoryToggles() {
     });
 }
 
+// Dropdown functionality
+function setupDropdown() {
+    const dropdown = document.querySelector('.dropdown');
+    const dropdownToggle = document.querySelector('.dropdown-toggle');
+
+    dropdownToggle.addEventListener('click', function(e) {
+        e.stopPropagation();
+        dropdown.classList.toggle('active');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!dropdown.contains(e.target)) {
+            dropdown.classList.remove('active');
+        }
+    });
+
+    // Close dropdown when a dropdown item is clicked
+    const dropdownItems = document.querySelectorAll('.dropdown-content .control-btn');
+    dropdownItems.forEach(item => {
+        item.addEventListener('click', function() {
+            dropdown.classList.remove('active');
+        });
+    });
+}
+
 // Update statistics
 function updateStats() {
     const totalItems = Object.values(groceryData).flat().length;
@@ -736,6 +762,7 @@ function setupEventListeners() {
     setupImport();
     setupCategoryManagement();
     setupItemManagement();
+    setupDropdown();
 }
 
 // Initialize the page
