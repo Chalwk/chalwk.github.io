@@ -271,6 +271,33 @@
             transform: translateY(-3px);
         }
 
+        .nz-flag {
+            display: inline-block;
+            width: 20px;
+            height: 15px;
+            background: linear-gradient(to bottom, #00247D 0%, #00247D 50%, #fff 50%, #fff 100%);
+            position: relative;
+            margin-right: 5px;
+        }
+
+        .nz-flag:before, .nz-flag:after {
+            content: "";
+            position: absolute;
+            background: #CC142B;
+        }
+
+        .nz-flag:before {
+            width: 100%;
+            height: 2px;
+            top: 7px;
+        }
+
+        .nz-flag:after {
+            width: 2px;
+            height: 100%;
+            left: 7px;
+        }
+
         @media (max-width: 768px) {
             h1 {
                 font-size: 2.2rem;
@@ -295,7 +322,7 @@
 <header>
     <div class="header-content">
         <h1>Understanding Autism</h1>
-        <p class="tagline">An Interactive Guide to Autism Spectrum Disorder</p>
+        <p class="tagline">A Guide to Autism Spectrum Disorder</p>
         <div class="spectrum-visual">
             <div class="spectrum-color" style="background-color: var(--spectrum-1);"></div>
             <div class="spectrum-color" style="background-color: var(--spectrum-2);"></div>
@@ -313,24 +340,27 @@
         <a href="#what-is-autism">What is Autism?</a>
         <a href="#characteristics">Characteristics</a>
         <a href="#myths-facts">Myths vs Facts</a>
-        <a href="#support">Support Strategies</a>
-        <a href="#resources">Resources</a>
+        <a href="#support">Support in NZ</a>
+        <a href="#resources">NZ Resources</a>
     </nav>
 </div>
 
 <div class="container">
     <section id="what-is-autism" class="section">
         <h2>What is Autism?</h2>
-        <p>Autism Spectrum Disorder (ASD) is a complex neurodevelopmental condition that affects communication, social interaction, and behavior. It's called a "spectrum" because autism affects people in different ways and to varying degrees.</p>
+        <p>Autism Spectrum Disorder (ASD) is a complex neurodevelopmental condition that affects communication, social
+            interaction, and behavior. It's called a "spectrum" because autism affects people in different ways and to
+            varying degrees.</p>
 
         <div class="interactive-element">
             <h3>Key Facts About Autism</h3>
             <ul>
                 <li>Autism is not a disease or illness - it's a different way of experiencing the world</li>
-                <li>Approximately 1 in 54 children are diagnosed with autism</li>
+                <li>Approximately 1 in 66 children in New Zealand are diagnosed with autism</li>
                 <li>Autism is lifelong - people are born autistic and remain autistic throughout their lives</li>
                 <li>There is no "cure" for autism, and many autistic people don't want one</li>
                 <li>With appropriate support, autistic people can lead fulfilling lives</li>
+                <li>In New Zealand, autism affects people of all ethnicities and backgrounds</li>
             </ul>
         </div>
 
@@ -350,15 +380,15 @@
             </div>
 
             <div class="card">
-                <div class="card-header">Diagnosis</div>
+                <div class="card-header">Diagnosis in NZ</div>
                 <div class="card-body">
-                    <p>Autism is typically diagnosed through:</p>
+                    <p>In New Zealand, autism is typically diagnosed through:</p>
                     <ul>
-                        <li>Developmental screening</li>
+                        <li>Assessment by paediatricians or psychologists</li>
                         <li>Comprehensive diagnostic evaluation</li>
                         <li>Observation of behavior</li>
                         <li>Parent/caregiver interviews</li>
-                        <li>Assessment by specialists</li>
+                        <li>Referrals through your GP</li>
                     </ul>
                 </div>
             </div>
@@ -381,11 +411,15 @@
 
     <section id="characteristics" class="section">
         <h2>Characteristics of Autism</h2>
-        <p>Autism manifests differently in each individual, but common characteristics fall into these main categories:</p>
+        <p>Autism manifests differently in each individual, but common characteristics fall into these main
+            categories:</p>
 
         <div class="card-grid">
             <div class="card">
-                <div class="card-header" style="background: linear-gradient(135deg, var(--spectrum-1), var(--spectrum-2));">Social Communication</div>
+                <div class="card-header"
+                     style="background: linear-gradient(135deg, var(--spectrum-1), var(--spectrum-2));">Social
+                    Communication
+                </div>
                 <div class="card-body">
                     <ul>
                         <li>Difficulty with back-and-forth conversation</li>
@@ -398,7 +432,10 @@
             </div>
 
             <div class="card">
-                <div class="card-header" style="background: linear-gradient(135deg, var(--spectrum-3), var(--spectrum-4));">Restricted/Repetitive Behaviors</div>
+                <div class="card-header"
+                     style="background: linear-gradient(135deg, var(--spectrum-3), var(--spectrum-4));">
+                    Restricted/Repetitive Behaviors
+                </div>
                 <div class="card-body">
                     <ul>
                         <li>Repetitive movements or speech</li>
@@ -411,7 +448,10 @@
             </div>
 
             <div class="card">
-                <div class="card-header" style="background: linear-gradient(135deg, var(--spectrum-5), var(--spectrum-6));">Sensory Differences</div>
+                <div class="card-header"
+                     style="background: linear-gradient(135deg, var(--spectrum-5), var(--spectrum-6));">Sensory
+                    Differences
+                </div>
                 <div class="card-body">
                     <ul>
                         <li>Over- or under-sensitivity to sounds, lights, textures</li>
@@ -433,7 +473,8 @@
                 <button class="btn" onclick="simulateSensory('sound')">Auditory Sensitivity</button>
                 <button class="btn" onclick="resetSimulation()">Reset</button>
             </div>
-            <div id="sensory-display" style="margin-top: 1.5rem; padding: 1rem; background: white; border-radius: 5px; min-height: 100px;"></div>
+            <div id="sensory-display"
+                 style="margin-top: 1.5rem; padding: 1rem; background: white; border-radius: 5px; min-height: 100px;"></div>
         </div>
     </section>
 
@@ -446,7 +487,8 @@
                 <div class="card-header" style="background: var(--danger);">Myth</div>
                 <div class="card-body">
                     <p><strong>Vaccines cause autism.</strong></p>
-                    <p>This myth originated from a fraudulent study that has been thoroughly debunked. Extensive research has shown no link between vaccines and autism.</p>
+                    <p>This myth originated from a fraudulent study that has been thoroughly debunked. Extensive
+                        research has shown no link between vaccines and autism.</p>
                 </div>
             </div>
 
@@ -454,7 +496,8 @@
                 <div class="card-header" style="background: var(--success);">Fact</div>
                 <div class="card-body">
                     <p><strong>Autism has a strong genetic component.</strong></p>
-                    <p>Research indicates that autism is primarily genetic, though environmental factors may also play a role in some cases.</p>
+                    <p>Research indicates that autism is primarily genetic, though environmental factors may also play a
+                        role in some cases.</p>
                 </div>
             </div>
 
@@ -462,15 +505,17 @@
                 <div class="card-header" style="background: var(--danger);">Myth</div>
                 <div class="card-body">
                     <p><strong>Autistic people lack empathy.</strong></p>
-                    <p>Many autistic people experience empathy deeply, though they may express it differently than neurotypical people.</p>
+                    <p>Many autistic people experience empathy deeply, though they may express it differently than
+                        neurotypical people.</p>
                 </div>
             </div>
 
             <div class="card">
                 <div class="card-header" style="background: var(--success);">Fact</div>
                 <div class="card-body">
-                    <p><strong>Autism occurs across all racial, ethnic, and socioeconomic groups.</strong></p>
-                    <p>Autism affects people of all backgrounds, though diagnosis rates may vary due to disparities in access to healthcare and cultural factors.</p>
+                    <p><strong>Autism occurs across all racial, ethnic, and socioeconomic groups in NZ.</strong></p>
+                    <p>Autism affects people of all backgrounds in Aotearoa, though diagnosis rates may vary due to
+                        disparities in access to healthcare and cultural factors.</p>
                 </div>
             </div>
 
@@ -478,7 +523,8 @@
                 <div class="card-header" style="background: var(--danger);">Myth</div>
                 <div class="card-body">
                     <p><strong>All autistic people have savant skills.</strong></p>
-                    <p>While some autistic people have exceptional skills in specific areas, this is not true for everyone on the spectrum.</p>
+                    <p>While some autistic people have exceptional skills in specific areas, this is not true for
+                        everyone on the spectrum.</p>
                 </div>
             </div>
 
@@ -486,15 +532,16 @@
                 <div class="card-header" style="background: var(--success);">Fact</div>
                 <div class="card-body">
                     <p><strong>Early intervention can improve outcomes.</strong></p>
-                    <p>While there is no cure, early diagnosis and appropriate support can help autistic people develop skills and reach their full potential.</p>
+                    <p>While there is no cure, early diagnosis and appropriate support can help autistic people develop
+                        skills and reach their full potential.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <section id="support" class="section">
-        <h2>Support Strategies</h2>
-        <p>There are many ways to support autistic individuals in various settings:</p>
+        <h2>Support Strategies in New Zealand</h2>
+        <p>There are many ways to support autistic individuals in various settings in Aotearoa:</p>
 
         <div class="card-grid">
             <div class="card">
@@ -514,11 +561,12 @@
                 <div class="card-header">In School</div>
                 <div class="card-body">
                     <ul>
-                        <li>Implement individualized education plans (IEPs)</li>
+                        <li>Implement individual education plans (IEPs)</li>
                         <li>Provide clear, concise instructions</li>
                         <li>Offer breaks and quiet spaces</li>
                         <li>Use visual supports and social stories</li>
                         <li>Teach social skills explicitly</li>
+                        <li>Access Ministry of Education support services</li>
                     </ul>
                 </div>
             </div>
@@ -532,7 +580,38 @@
                         <li>Minimize sensory distractions</li>
                         <li>Use written communication when possible</li>
                         <li>Focus on strengths and talents</li>
+                        <li>Access Work and Income support services</li>
                     </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="interactive-element">
+            <h3>New Zealand Support Services</h3>
+            <p>In New Zealand, several government and community services support autistic individuals and their
+                families:</p>
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-header">Government Support</div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Ministry of Education - Ongoing Resourcing Scheme (ORS)</li>
+                            <li>Ministry of Health - Disability Support Services</li>
+                            <li>Work and Income - Disability Allowance</li>
+                            <li>Accident Compensation Corporation (ACC)</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">Community Support</div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Autism New Zealand regional services</li>
+                            <li>Altogether Autism</li>
+                            <li>IHC advocacy services</li>
+                            <li>Parent to Parent support networks</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -564,32 +643,45 @@
     </section>
 
     <section id="resources" class="section">
-        <h2>Resources & Further Information</h2>
-        <p>If you'd like to learn more about autism, here are some valuable resources:</p>
+        <h2>New Zealand Resources & Further Information</h2>
+        <p>If you'd like to learn more about autism in New Zealand, here are some valuable resources:</p>
 
         <div class="card-grid">
             <div class="card">
-                <div class="card-header">Organizations</div>
+                <div class="card-header">Organisations</div>
                 <div class="card-body">
                     <ul class="resources-list">
-                        <li>Autism Society of America</li>
-                        <li>Autism Speaks</li>
-                        <li>Organization for Autism Research</li>
-                        <li>Autistic Self Advocacy Network</li>
-                        <li>National Autistic Society (UK)</li>
+                        <li><span class="nz-flag"></span> <a href="https://www.autismnz.org.nz/" target="_blank">Autism
+                            New Zealand</a> - National organisation providing support and resources
+                        </li>
+                        <li><span class="nz-flag"></span> <a href="https://www.altogetherautism.org.nz/"
+                                                             target="_blank">Altogether Autism</a> - Provides
+                            information and resources
+                        </li>
+                        <li><span class="nz-flag"></span> <a href="https://www.ihc.org.nz/" target="_blank">IHC New
+                            Zealand</a> - Advocacy and support services
+                        </li>
+                        <li><span class="nz-flag"></span> <a href="https://www.parent2parent.org.nz/" target="_blank">Parent
+                            to Parent</a> - Support for parents of disabled children
+                        </li>
+                        <li><span class="nz-flag"></span> <a href="https://www.health.govt.nz/" target="_blank">Ministry
+                            of Health</a> - Information on disability support services
+                        </li>
                     </ul>
                 </div>
             </div>
 
             <div class="card">
-                <div class="card-header">Books</div>
+                <div class="card-header">Books by NZ Authors</div>
                 <div class="card-body">
                     <ul class="resources-list">
-                        <li>"NeuroTribes" by Steve Silberman</li>
-                        <li>"The Reason I Jump" by Naoki Higashida</li>
-                        <li>"Uniquely Human" by Barry Prizant</li>
-                        <li>"Thinking in Pictures" by Temple Grandin</li>
-                        <li>"The Autistic Brain" by Temple Grandin</li>
+                        <li>"The Autism Discussion Page" by Bill Nason</li>
+                        <li>"The Awesome Autistic Go-To Guide" by Yenn Purkis and Tanya Masterman</li>
+                        <li>"The Guide to Good Mental Health on the Autism Spectrum" by Jeanette Purkis, Emma Goodall,
+                            and Jane Nugent
+                        </li>
+                        <li>"I Am an Aspie Girl" by Danuta Bulhak-Paterson</li>
+                        <li>"The Disappointment Dragon" by K.I. Al-Ghani</li>
                     </ul>
                 </div>
             </div>
@@ -598,14 +690,39 @@
                 <div class="card-header">Online Resources</div>
                 <div class="card-body">
                     <ul class="resources-list">
-                        <li>Autism Research Institute</li>
-                        <li>Interactive Autism Network</li>
-                        <li>Wrong Planet online community</li>
-                        <li>Autism Women & Nonbinary Network</li>
-                        <li>National Institute of Mental Health - Autism</li>
+                        <li><span class="nz-flag"></span> <a
+                                href="https://www.education.govt.nz/school/student-support/special-education/"
+                                target="_blank">Ministry of Education - Special Education</a></li>
+                        <li><span class="nz-flag"></span> <a
+                                href="https://www.workandincome.govt.nz/products/a-z-benefits/disability-allowance.html"
+                                target="_blank">Work and Income - Disability Allowance</a></li>
+                        <li><span class="nz-flag"></span> <a
+                                href="https://www.healthnavigator.org.nz/health-a-z/a/autism-spectrum-disorder/"
+                                target="_blank">Health Navigator NZ - Autism Information</a></li>
+                        <li><span class="nz-flag"></span> <a
+                                href="https://www.kidshealth.org.nz/autism-spectrum-disorder" target="_blank">KidsHealth
+                            NZ - Autism Information</a></li>
+                        <li><span class="nz-flag"></span> <a href="https://www.tki.org.nz/" target="_blank">Te Kete
+                            Ipurangi (TKI) - Education Resources</a></li>
                     </ul>
                 </div>
             </div>
+        </div>
+
+        <div class="interactive-element">
+            <h3>Getting a Diagnosis in New Zealand</h3>
+            <p>The process for getting an autism diagnosis in New Zealand typically involves:</p>
+            <ol>
+                <li>Discuss your concerns with your GP (family doctor)</li>
+                <li>Your GP may refer you to a paediatrician or psychologist</li>
+                <li>Assessment by a multidisciplinary team may be recommended</li>
+                <li>Diagnosis is based on observation, developmental history, and standardized assessment tools</li>
+                <li>Once diagnosed, you can access support services through the Ministry of Health and Ministry of
+                    Education
+                </li>
+            </ol>
+            <p>Note: Wait times for publicly funded assessments can vary by region. Private assessments are also
+                available.</p>
         </div>
     </section>
 </div>
@@ -613,8 +730,14 @@
 <footer>
     <div class="footer-content">
         <h3>Understanding Autism</h3>
-        <p>An educational resource to promote awareness and acceptance</p>
-        <p>&copy; 2025 Understanding Autism - Jericho Crosby (Chalwk) All rights reserved.</p>
+        <p>An educational resource to promote awareness and acceptance in Aotearoa</p>
+        <div class="social-links">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+        <p>&copy; 2025 Understanding Autism - Jericho Crosby (Chalwk) | All rights reserved.</p>
     </div>
 </footer>
 
