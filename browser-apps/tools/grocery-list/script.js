@@ -42,13 +42,7 @@ function setupOnlineOfflineListener() {
 
     window.addEventListener('offline', function() {
         isOnline = false;
-        showStatusMessage('You are currently offline', 'warning');
     });
-
-    // Show initial status
-    if (!isOnline) {
-        showStatusMessage('You are currently offline', 'warning');
-    }
 }
 
 // Show status message
