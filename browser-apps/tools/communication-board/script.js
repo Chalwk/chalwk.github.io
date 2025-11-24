@@ -64,16 +64,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Default categories
     const defaultCategories = [
+        'Activities & Play',
         'Basic Communication',
-        'Needs & Wants',
-        'Feelings & Emotions',
-        'People & Pronouns',
+        'Body & Health',
         'Common Actions',
+        'Feelings & Emotions',
+        'Food & Drink',
+        'Needs & Wants',
+        'People & Pronouns',
         'Places',
         'Questions',
-        'Time & Schedule',
-        'Food & Drink',
-        'Activities & Play'
+        'Sensory Needs',
+        'Time & Schedule'
     ];
 
     function saveSymbols() {
@@ -240,6 +242,9 @@ document.addEventListener('DOMContentLoaded', () => {
             { id: 7, text: 'Sorry', image: '🙇', color: '#4a86e8', category: 'Basic Communication' },
             { id: 42, text: 'Okay', image: '👌', color: '#4a86e8', category: 'Basic Communication' },
             { id: 43, text: 'Excuse me', image: '🗣️', color: '#4a86e8', category: 'Basic Communication' },
+            { id: 79, text: 'Maybe', image: '💭', color: '#4a86e8', category: 'Basic Communication' },
+            { id: 80, text: 'I understand', image: '💡', color: '#4a86e8', category: 'Basic Communication' },
+            { id: 81, text: "I don't understand", image: '❓', color: '#4a86e8', category: 'Basic Communication' },
 
             /* Needs & Wants */
             { id: 8, text: 'Help', image: '🆘', color: '#ea4335', category: 'Needs & Wants' },
@@ -251,8 +256,13 @@ document.addEventListener('DOMContentLoaded', () => {
             { id: 14, text: 'Pain', image: '🤕', color: '#ea4335', category: 'Needs & Wants' },
             { id: 15, text: 'Tired', image: '😴', color: '#ea4335', category: 'Needs & Wants' },
             { id: 44, text: 'Break', image: '⏸️', color: '#ea4335', category: 'Needs & Wants' },
-            { id: 45, text: 'I don\'t want', image: '🙅', color: '#ea4335', category: 'Needs & Wants' },
-            { id: 46, text: 'I don\'t know', image: '🤷', color: '#ea4335', category: 'Needs & Wants' },
+            { id: 45, text: "I don't want", image: '🙅', color: '#ea4335', category: 'Needs & Wants' },
+            { id: 46, text: "I don't know", image: '🤷', color: '#ea4335', category: 'Needs & Wants' },
+            { id: 82, text: 'Space', image: '🚶', color: '#ea4335', category: 'Needs & Wants' },
+            { id: 83, text: 'Alone', image: '🚪', color: '#ea4335', category: 'Needs & Wants' },
+            { id: 84, text: 'Too much', image: '🔥', color: '#ea4335', category: 'Needs & Wants' },
+            { id: 85, text: 'Too loud', image: '📢', color: '#ea4335', category: 'Needs & Wants' },
+            { id: 86, text: 'Too bright', image: '💡', color: '#ea4335', category: 'Needs & Wants' },
 
             /* Feelings & Emotions */
             { id: 36, text: 'Happy', image: '😄', color: '#fbbc04', category: 'Feelings & Emotions' },
@@ -264,6 +274,22 @@ document.addEventListener('DOMContentLoaded', () => {
             { id: 47, text: 'Sick', image: '🤢', color: '#fbbc04', category: 'Feelings & Emotions' },
             { id: 48, text: 'Surprised', image: '😲', color: '#fbbc04', category: 'Feelings & Emotions' },
             { id: 49, text: 'Lonely', image: '🥺', color: '#fbbc04', category: 'Feelings & Emotions' },
+            { id: 87, text: 'Overwhelmed', image: '🌊', color: '#fbbc04', category: 'Feelings & Emotions' },
+            { id: 88, text: 'Anxious', image: '😰', color: '#fbbc04', category: 'Feelings & Emotions' },
+            { id: 89, text: 'Frustrated', image: '😤', color: '#fbbc04', category: 'Feelings & Emotions' },
+            { id: 90, text: 'Confused', image: '😕', color: '#fbbc04', category: 'Feelings & Emotions' },
+            { id: 91, text: 'Proud', image: '😊', color: '#fbbc04', category: 'Feelings & Emotions' },
+
+            /* Sensory Needs */
+            { id: 92, text: 'Headphones', image: '🎧', color: '#9c27b0', category: 'Sensory Needs' },
+            { id: 93, text: 'Quiet', image: '🔇', color: '#9c27b0', category: 'Sensory Needs' },
+            { id: 94, text: 'Dark', image: '🌙', color: '#9c27b0', category: 'Sensory Needs' },
+            { id: 95, text: 'Weighted blanket', image: '🛏️', color: '#9c27b0', category: 'Sensory Needs' },
+            { id: 96, text: 'Stim', image: '🌀', color: '#9c27b0', category: 'Sensory Needs' },
+            { id: 97, text: 'Fidget', image: '🔄', color: '#9c27b0', category: 'Sensory Needs' },
+            { id: 98, text: 'Hug', image: '🫂', color: '#9c27b0', category: 'Sensory Needs' },
+            { id: 99, text: 'No touch', image: '✋', color: '#9c27b0', category: 'Sensory Needs' },
+            { id: 100, text: 'Different clothes', image: '👕', color: '#9c27b0', category: 'Sensory Needs' },
 
             /* People & Pronouns */
             { id: 31, text: 'Me', image: '🙂', color: '#00bcd4', category: 'People & Pronouns' },
@@ -274,6 +300,8 @@ document.addEventListener('DOMContentLoaded', () => {
             { id: 50, text: 'Mum', image: '👩', color: '#00bcd4', category: 'People & Pronouns' },
             { id: 51, text: 'Dad', image: '👨', color: '#00bcd4', category: 'People & Pronouns' },
             { id: 52, text: 'Doctor', image: '👨‍⚕️', color: '#00bcd4', category: 'People & Pronouns' },
+            { id: 101, text: 'Therapist', image: '🧠', color: '#00bcd4', category: 'People & Pronouns' },
+            { id: 102, text: 'Support worker', image: '👥', color: '#00bcd4', category: 'People & Pronouns' },
 
             /* Common Actions */
             { id: 16, text: 'Eat', image: '🍽️', color: '#9c27b0', category: 'Common Actions' },
@@ -289,6 +317,8 @@ document.addEventListener('DOMContentLoaded', () => {
             { id: 54, text: 'Read', image: '📖', color: '#9c27b0', category: 'Common Actions' },
             { id: 55, text: 'Write', image: '✍️', color: '#9c27b0', category: 'Common Actions' },
             { id: 56, text: 'Watch', image: '📺', color: '#9c27b0', category: 'Common Actions' },
+            { id: 103, text: 'Breathe', image: '🌬️', color: '#9c27b0', category: 'Common Actions' },
+            { id: 104, text: 'Rest', image: '😴', color: '#9c27b0', category: 'Common Actions' },
 
             /* Places */
             { id: 25, text: 'Home', image: '🏠', color: '#34a853', category: 'Places' },
@@ -299,6 +329,8 @@ document.addEventListener('DOMContentLoaded', () => {
             { id: 30, text: 'Car', image: '🚗', color: '#34a853', category: 'Places' },
             { id: 57, text: 'Park', image: '🌲', color: '#34a853', category: 'Places' },
             { id: 58, text: 'Work', image: '💼', color: '#34a853', category: 'Places' },
+            { id: 105, text: 'Quiet room', image: '🚪', color: '#34a853', category: 'Places' },
+            { id: 106, text: 'Bedroom', image: '🛏️', color: '#34a853', category: 'Places' },
 
             /* Questions */
             { id: 59, text: 'What?', image: '❓', color: '#9b59b6', category: 'Questions' },
@@ -307,6 +339,8 @@ document.addEventListener('DOMContentLoaded', () => {
             { id: 62, text: 'Why?', image: '🤔', color: '#9b59b6', category: 'Questions' },
             { id: 63, text: 'How?', image: '🛠️', color: '#9b59b6', category: 'Questions' },
             { id: 64, text: 'Who?', image: '👤', color: '#9b59b6', category: 'Questions' },
+            { id: 107, text: 'How long?', image: '⏱️', color: '#9b59b6', category: 'Questions' },
+            { id: 108, text: 'What next?', image: '➡️', color: '#9b59b6', category: 'Questions' },
 
             /* Time & Schedule */
             { id: 65, text: 'Now', image: '⏰', color: '#ff9800', category: 'Time & Schedule' },
@@ -314,6 +348,9 @@ document.addEventListener('DOMContentLoaded', () => {
             { id: 67, text: 'Today', image: '📅', color: '#ff9800', category: 'Time & Schedule' },
             { id: 68, text: 'Tomorrow', image: '➡️', color: '#ff9800', category: 'Time & Schedule' },
             { id: 69, text: 'Yesterday', image: '⬅️', color: '#ff9800', category: 'Time & Schedule' },
+            { id: 109, text: 'Soon', image: '🔜', color: '#ff9800', category: 'Time & Schedule' },
+            { id: 110, text: 'First/Then', image: '1️⃣/2️⃣', color: '#ff9800', category: 'Time & Schedule' },
+            { id: 111, text: 'Change', image: '🔄', color: '#ff9800', category: 'Time & Schedule' },
 
             /* Food & Drink */
             { id: 70, text: 'Water', image: '💧', color: '#e74c3c', category: 'Food & Drink' },
@@ -321,12 +358,23 @@ document.addEventListener('DOMContentLoaded', () => {
             { id: 72, text: 'Snack', image: '🍎', color: '#e74c3c', category: 'Food & Drink' },
             { id: 73, text: 'Lunch', image: '🥪', color: '#e74c3c', category: 'Food & Drink' },
             { id: 74, text: 'Dinner', image: '🍽️', color: '#e74c3c', category: 'Food & Drink' },
+            { id: 112, text: 'Safe food', image: '⭐', color: '#e74c3c', category: 'Food & Drink' },
+            { id: 113, text: 'Texture', image: '👆', color: '#e74c3c', category: 'Food & Drink' },
 
             /* Activities & Play */
             { id: 75, text: 'Game', image: '🎲', color: '#2ecc71', category: 'Activities & Play' },
             { id: 76, text: 'Music', image: '🎵', color: '#2ecc71', category: 'Activities & Play' },
             { id: 77, text: 'Draw', image: '🎨', color: '#2ecc71', category: 'Activities & Play' },
-            { id: 78, text: 'Walk', image: '🚶', color: '#2ecc71', category: 'Activities & Play' }
+            { id: 78, text: 'Walk', image: '🚶', color: '#2ecc71', category: 'Activities & Play' },
+            { id: 114, text: 'Special interest', image: '❤️', color: '#2ecc71', category: 'Activities & Play' },
+            { id: 115, text: 'Routine', image: '📋', color: '#2ecc71', category: 'Activities & Play' },
+
+            /* Body & Health */
+            { id: 116, text: 'Headache', image: '🤕', color: '#8e44ad', category: 'Body & Health' },
+            { id: 117, text: 'Stomach ache', image: '🤢', color: '#8e44ad', category: 'Body & Health' },
+            { id: 118, text: 'Medicine', image: '💊', color: '#8e44ad', category: 'Body & Health' },
+            { id: 119, text: 'Meltdown', image: '🌪️', color: '#8e44ad', category: 'Body & Health' },
+            { id: 120, text: 'Shutdown', image: '🔄', color: '#8e44ad', category: 'Body & Health' }
         ];
     }
 
