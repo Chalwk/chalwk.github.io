@@ -245,7 +245,7 @@
         ctx.setTransform(1, 0, 0, 1, 0, 0);
     }
 
-    // sample color from canvas at client coords
+    // Color from canvas at client coords
     function getCanvasColor(clientX, clientY){
         const rect = canvas.getBoundingClientRect();
         const x = clientX - rect.left;
@@ -590,7 +590,7 @@
         picker.style.top = y + 'px';
     }
 
-    // sample click from keyboard (accessibility) - optional
+    // Click from keyboard (accessibility) - optional
     canvas.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
             // pick center color
