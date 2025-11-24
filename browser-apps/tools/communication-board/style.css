@@ -249,6 +249,26 @@ body {
     background: white;
 }
 
+/* Fix for Import button on desktop */
+.settings-group label.btn-secondary {
+    display: block;
+    width: 100%;
+    text-align: center;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+/* Ensure consistent padding and height */
+.settings-group .btn-primary,
+.settings-group .btn-secondary,
+.settings-group label.btn-secondary {
+    padding: 8px 12px;
+    min-height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .settings-group .btn-primary,
 .settings-group .btn-secondary {
     width: 100%;
@@ -293,7 +313,8 @@ body {
     }
 
     .settings-group .btn-primary,
-    .settings-group .btn-secondary {
+    .settings-group .btn-secondary,
+    .settings-group label.btn-secondary {
         flex: 1;
         min-width: 80px;
         margin-bottom: 0;
@@ -424,7 +445,8 @@ body {
 
         .settings-group select,
         .settings-group .btn-primary,
-        .settings-group .btn-secondary {
+        .settings-group .btn-secondary,
+        .settings-group label.btn-secondary {
             width: 100%;
             flex: none;
         }
