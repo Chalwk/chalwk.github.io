@@ -121,7 +121,7 @@ h1 {
 }
 
 .dropdown-toggle::after {
-    content: '▾';
+    content: '◌';
     font-size: 0.8rem;
 }
 
