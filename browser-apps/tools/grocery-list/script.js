@@ -42,7 +42,13 @@ function setupOnlineOfflineListener() {
 
     window.addEventListener('offline', function() {
         isOnline = false;
+        showStatusMessage('You are currently offline', 'warning');
     });
+
+    // Show initial status
+    if (!isOnline) {
+        showStatusMessage('You are currently offline', 'warning');
+    }
 }
 
 // Show status message
@@ -82,12 +88,10 @@ function showStatusMessage(message, type) {
     document.body.appendChild(statusEl);
 
     // Auto remove after 3 seconds for success messages
-    if (type === 'success') {
-        setTimeout(() => {
-            statusEl.style.opacity = '0';
-            setTimeout(() => statusEl.remove(), 300);
-        }, 3000);
-    }
+    setTimeout(() => {
+        statusEl.style.opacity = '0';
+        setTimeout(() => statusEl.remove(), 300);
+    }, 3000);
 }
 
 // Save data to localStorage
