@@ -83,17 +83,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function saveSymbols() {
         localStorage.setItem(LS.symbolsKey, JSON.stringify(symbols));
-        showToast('Symbols saved');
+        if (document.getElementById('toast')) {
+            showToast('Symbols saved');
+        }
+    }
+
+    function saveSymbolsSilently() {
+        localStorage.setItem(LS.symbolsKey, JSON.stringify(symbols));
     }
 
     function loadSymbols() {
         const raw = localStorage.getItem(LS.symbolsKey);
         if (raw) {
-            try { symbols = JSON.parse(raw); }
-            catch { symbols = defaultSymbols(); saveSymbols(); }
+            try {
+                symbols = JSON.parse(raw);
+            } catch {
+                symbols = defaultSymbols();
+                saveSymbolsSilently();
+            }
         } else {
             symbols = defaultSymbols();
-            saveSymbols();
+            saveSymbolsSilently();
         }
     }
 
@@ -477,11 +487,18 @@ document.addEventListener('DOMContentLoaded', () => {
     // Helpers
     function showToast(msg, timeout = 2200) {
         const toast = document.getElementById('toast');
-        if (!toast) return;
+        if (!toast || !msg) return;
 
         toast.textContent = msg;
-        toast.style.opacity = 1;
-        setTimeout(() => { toast.style.opacity = 0; }, timeout);
+        toast.style.opacity = '1';
+        toast.style.visibility = 'visible';
+
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            setTimeout(() => {
+                toast.style.visibility = 'hidden';
+            }, 300);
+        }, timeout);
     }
 
     function isUrl(str) {
@@ -611,16 +628,18 @@ document.addEventListener('DOMContentLoaded', () => {
     function previewSpeak(symbol) {
         const text = symbol.text;
         if (!text || !('speechSynthesis' in window)) return;
-
         speechSynthesis.cancel();
         const ut = new SpeechSynthesisUtterance(text);
-
-        // apply chosen voice
         const chosen = localStorage.getItem(LS.voiceKey);
         if (chosen) {
             const voice = speechSynthesis.getVoices().find(v => v.name === chosen);
             if (voice) ut.voice = voice;
         }
+        ut.onerror = (event) => {
+            if (event.error !== 'interrupted') {
+                console.error('Speech synthesis error:', event);
+            }
+        };
 
         speechSynthesis.speak(ut);
     }
@@ -874,7 +893,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const phraseText = currentPhrase.map(s => s.text).join(' ');
 
         if ('speechSynthesis' in window) {
-            // Cancel any ongoing speech
+            // Cancel any ongoing speech first
             speechSynthesis.cancel();
 
             const utter = new SpeechSynthesisUtterance(phraseText);
@@ -882,7 +901,6 @@ document.addEventListener('DOMContentLoaded', () => {
             utter.pitch = 1;
             utter.volume = 1;
 
-            // Set voice with better error handling
             const chosen = localStorage.getItem(LS.voiceKey);
             if (chosen) {
                 const voices = speechSynthesis.getVoices();
@@ -893,6 +911,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             utter.onerror = (event) => {
+                // Ignore 'interrupted' errors
+                if (event.error === 'interrupted') {
+                    return;
+                }
                 console.error('Speech synthesis error:', event);
                 showToast('Speech error, trying without voice selection');
                 // Fallback: try without specific voice
