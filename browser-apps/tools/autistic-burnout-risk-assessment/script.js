@@ -13,6 +13,7 @@ const historyList = document.getElementById('history-list');
 const tabs = document.querySelectorAll('.tab');
 const tabContents = document.querySelectorAll('.tab-content');
 const collapseToggles = document.querySelectorAll('.collapse-toggle');
+const defaultValues = new Set();
 
 // Slider elements
 const sliders = document.querySelectorAll('.slider');
@@ -30,8 +31,17 @@ const STORAGE_KEY = 'burnout-assessment-history';
 
 // Initialize sliders
 sliders.forEach((slider, index) => {
+    // Set all sliders to neutral (3) initially
+    slider.value = 3;
+    sliderValues[index].textContent = '3';
+
+    // Track that this is a default value
+    defaultValues.add(slider.id);
+
     slider.addEventListener('input', function() {
         sliderValues[index].textContent = this.value;
+        // Remove from default values once user changes it
+        defaultValues.delete(this.id);
     });
 });
 
@@ -80,7 +90,13 @@ collapseToggles.forEach(toggle => {
 calculateBtn.addEventListener('click', calculateRisk);
 
 function calculateRisk() {
-    // Get values from all sliders
+    // Check if all values are still at default (neutral)
+    if (defaultValues.size === sliders.length) {
+        alert('Please adjust at least one slider from the neutral position to get an accurate assessment.');
+        return;
+    }
+
+    // Get values from all sliders (now 0-5 scale)
     const energyLevel = parseInt(document.getElementById('energy-level').value);
     const sleepQuality = parseInt(document.getElementById('sleep-quality').value);
     const routineDifficulty = parseInt(document.getElementById('routine-difficulty').value);
@@ -106,28 +122,28 @@ function calculateRisk() {
     const meltdownFrequency = parseInt(document.getElementById('meltdown-frequency').value);
     const hopelessness = parseInt(document.getElementById('hopelessness').value);
 
-    // Calculate factor scores (each category now has 4 questions, max 16)
+    // Calculate factor scores (each category now has 4 questions, max 20)
     const energyFactor = energyLevel + sleepQuality + routineDifficulty + stimulantUse;
     const sensoryFactor = sensoryOverload + sensoryAvoidance + tactileSensitivity + sensoryTools;
     const executiveFactor = taskInitiation + planningDifficulty + memoryIssues + decisionFatigue;
     const socialFactor = socialDrain + maskingLevel + communicationDifficulty + socialIsolation;
     const emotionFactor = emotionalReactivity + emotionalNumbness + meltdownFrequency + hopelessness;
 
-    // Calculate total score (0-80)
+    // Calculate total score (0-100)
     const totalScore = energyFactor + sensoryFactor + executiveFactor + socialFactor + emotionFactor;
 
     // Update factor breakdown
-    energyScore.textContent = `${energyFactor}/16`;
-    sensoryScore.textContent = `${sensoryFactor}/16`;
-    executiveScore.textContent = `${executiveFactor}/16`;
-    socialScore.textContent = `${socialFactor}/16`;
-    emotionScore.textContent = `${emotionFactor}/16`;
+    energyScore.textContent = `${energyFactor}/20`;
+    sensoryScore.textContent = `${sensoryFactor}/20`;
+    executiveScore.textContent = `${executiveFactor}/20`;
+    socialScore.textContent = `${socialFactor}/20`;
+    emotionScore.textContent = `${emotionFactor}/20`;
 
     // Show factor breakdown
     factorBreakdown.style.display = 'block';
 
     // Update risk indicator position
-    const riskPercentage = (totalScore / 80) * 100;
+    const riskPercentage = (totalScore / 100) * 100;
     riskIndicator.style.left = `${riskPercentage}%`;
 
     // Update risk score and level
@@ -136,13 +152,13 @@ function calculateRisk() {
     let riskText = '';
     let riskClass = '';
 
-    if (totalScore <= 20) {
+    if (totalScore <= 25) {
         riskText = 'Low Risk';
         riskClass = 'low-risk';
-    } else if (totalScore <= 40) {
+    } else if (totalScore <= 50) {
         riskText = 'Medium Risk';
         riskClass = 'medium-risk';
-    } else if (totalScore <= 60) {
+    } else if (totalScore <= 75) {
         riskText = 'High Risk';
         riskClass = 'high-risk';
     } else {
@@ -305,11 +321,11 @@ function renderHistory() {
         const time = new Date(assessment.date).toLocaleTimeString();
 
         let riskClass = '';
-        if (assessment.score <= 20) {
+        if (assessment.score <= 25) {
             riskClass = '';
-        } else if (assessment.score <= 40) {
+        } else if (assessment.score <= 50) {
             riskClass = 'medium';
-        } else if (assessment.score <= 60) {
+        } else if (assessment.score <= 75) {
             riskClass = 'high';
         } else {
             riskClass = 'critical';
@@ -333,16 +349,16 @@ function renderHistory() {
         html += `
                 <div class="history-item ${riskClass}">
                     <div class="history-date">${date} at ${time} ${trendHtml}</div>
-                    <div>Total Score: <strong>${assessment.score}/80</strong></div>
+                    <div>Total Score: <strong>${assessment.score}/100</strong></div>
                     <div class="progress-bar">
-                        <div class="progress-fill" style="width: ${(assessment.score / 80) * 100}%"></div>
+                        <div class="progress-fill" style="width: ${(assessment.score / 100) * 100}%"></div>
                     </div>
                     <div class="history-score">
-                        <span>Energy: ${assessment.factors.energy}/16</span>
-                        <span>Sensory: ${assessment.factors.sensory}/16</span>
-                        <span>Executive: ${assessment.factors.executive}/16</span>
-                        <span>Social: ${assessment.factors.social}/16</span>
-                        <span>Emotion: ${assessment.factors.emotion}/16</span>
+                        <span>Energy: ${assessment.factors.energy}/20</span>
+                        <span>Sensory: ${assessment.factors.sensory}/20</span>
+                        <span>Executive: ${assessment.factors.executive}/20</span>
+                        <span>Social: ${assessment.factors.social}/20</span>
+                        <span>Emotion: ${assessment.factors.emotion}/20</span>
                     </div>
                 </div>
             `;
