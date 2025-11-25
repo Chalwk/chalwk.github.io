@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const installBtn = document.getElementById('installBtn');
     const globalSearch = document.getElementById('globalSearch');
     const gridSizeSelect = document.getElementById('gridSizeSelect');
+    const volumeSelect = document.getElementById('volumeSelect');
 
     // Categories Management DOM
     const manageCategoriesBtn = document.getElementById('manageCategoriesBtn');
@@ -47,7 +48,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let phraseHistory = [];
     let isEditMode = false;
     let currentEditingSymbol = null;
-    let settings = { filterCategory: 'All', gridSize: 'auto', theme: 'auto' };
+    let settings = {
+        filterCategory: 'All',
+        gridSize: 'auto',
+        theme: 'auto',
+        volume: 0.6
+    };
 
     // PWA State
     let deferredPrompt;
@@ -62,7 +68,8 @@ document.addEventListener('DOMContentLoaded', () => {
         settingsKey: 'cb.settings',
         voiceKey: 'cb.voice',
         categoriesKey: 'cb.categories',
-        themeKey: 'cb.theme'
+        themeKey: 'cb.theme',
+        volumeKey: 'cb.volume'
     };
 
     // Default categories
@@ -109,14 +116,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function saveSettings() {
         localStorage.setItem(LS.settingsKey, JSON.stringify(settings));
+        saveVolume(settings.volume);
     }
 
     function loadSettings() {
         const raw = localStorage.getItem(LS.settingsKey);
         if (raw) {
-            try { settings = Object.assign(settings, JSON.parse(raw)); }
-            catch {}
+            try {
+                settings = Object.assign(settings, JSON.parse(raw));
+            } catch {}
         }
+        loadVolume();
+    }
+
+    function loadVolume() {
+        const savedVolume = localStorage.getItem(LS.volumeKey);
+        if (savedVolume) {
+            settings.volume = parseFloat(savedVolume);
+        } else {
+            settings.volume = 0.6;
+        }
+    }
+
+    function saveVolume(volume) {
+        settings.volume = volume;
+        localStorage.setItem(LS.volumeKey, volume.toString());
     }
 
     function applyTheme(theme) {
@@ -630,6 +654,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!text || !('speechSynthesis' in window)) return;
         speechSynthesis.cancel();
         const ut = new SpeechSynthesisUtterance(text);
+        ut.volume = settings.volume;
         const chosen = localStorage.getItem(LS.voiceKey);
         if (chosen) {
             const voice = speechSynthesis.getVoices().find(v => v.name === chosen);
@@ -640,10 +665,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('Speech synthesis error:', event);
             }
         };
-
         speechSynthesis.speak(ut);
     }
-
 
     // Rendering
     function renderBoard() {
@@ -893,13 +916,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const phraseText = currentPhrase.map(s => s.text).join(' ');
 
         if ('speechSynthesis' in window) {
-            // Cancel any ongoing speech first
             speechSynthesis.cancel();
 
             const utter = new SpeechSynthesisUtterance(phraseText);
             utter.rate = 0.95;
             utter.pitch = 1;
-            utter.volume = 1;
+            utter.volume = settings.volume;
 
             const chosen = localStorage.getItem(LS.voiceKey);
             if (chosen) {
@@ -911,17 +933,16 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             utter.onerror = (event) => {
-                // Ignore 'interrupted' errors
                 if (event.error === 'interrupted') {
                     return;
                 }
                 console.error('Speech synthesis error:', event);
                 showToast('Speech error, trying without voice selection');
-                // Fallback: try without specific voice
                 if (chosen) {
                     localStorage.removeItem(LS.voiceKey);
                     const fallbackUtter = new SpeechSynthesisUtterance(phraseText);
                     fallbackUtter.rate = 0.95;
+                    fallbackUtter.volume = settings.volume; // Also use volume in fallback
                     speechSynthesis.speak(fallbackUtter);
                 }
             };
@@ -1195,6 +1216,12 @@ document.addEventListener('DOMContentLoaded', () => {
         applyGridSetting();
     });
 
+    volumeSelect.addEventListener('change', () => {
+        settings.volume = parseFloat(volumeSelect.value);
+        saveSettings();
+        showToast(`Volume set to ${Math.round(settings.volume * 100)}%`);
+    });
+
     // Category select event listener
     categorySelect.addEventListener('change', () => {
         settings.filterCategory = categorySelect.value;
@@ -1264,13 +1291,13 @@ document.addEventListener('DOMContentLoaded', () => {
         renderBoard();
         updatePhraseDisplay();
 
-        // Check if app is already in standalone mode
         if (isStandalone) {
             console.log('App is running in standalone mode');
         }
 
         if (gridSizeSelect) gridSizeSelect.value = settings.gridSize;
         if (themeSelect) themeSelect.value = settings.theme;
+        if (volumeSelect) volumeSelect.value = settings.volume.toString();
 
         applyGridSetting();
         updateInstallButton();
