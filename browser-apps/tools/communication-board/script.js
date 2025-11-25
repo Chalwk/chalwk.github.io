@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const boardWrap = document.getElementById('boardWrap');
     const installBtn = document.getElementById('installBtn');
     const globalSearch = document.getElementById('globalSearch');
+    const gridSizeSelect = document.getElementById('gridSizeSelect');
 
     // Categories Management DOM
     const manageCategoriesBtn = document.getElementById('manageCategoriesBtn');
@@ -46,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let phraseHistory = [];
     let isEditMode = false;
     let currentEditingSymbol = null;
-    let settings = { filterCategory: 'All' };
+    let settings = { filterCategory: 'All', gridSize: 'auto' };
 
     // PWA State
     let deferredPrompt;
@@ -608,20 +609,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 else addToPhrase(symbol);
             });
 
-            // LONG PRESS PREVIEW
             let pressTimer = null;
-            node.addEventListener('mousedown', () => {
+
+            function startPressTimer() {
                 if (isEditMode) return;
-                pressTimer = setTimeout(() => previewSpeak(symbol), 600);
-            });
-            node.addEventListener('mouseup', () => clearTimeout(pressTimer));
-            node.addEventListener('mouseleave', () => clearTimeout(pressTimer));
-            node.addEventListener('touchstart', () => {
-                if (isEditMode) return;
-                pressTimer = setTimeout(() => previewSpeak(symbol), 600);
-            });
-            node.addEventListener('touchend', () => clearTimeout(pressTimer));
-            node.addEventListener('touchcancel', () => clearTimeout(pressTimer));
+                pressTimer = setTimeout(() => previewSpeak(symbol), 550);
+            }
+
+            function clearPressTimer() {
+                clearTimeout(pressTimer);
+                pressTimer = null;
+            }
+
+            node.addEventListener('pointerdown', (e) => {
+                // Prevent scrolling from cancelling the long-press
+                e.preventDefault();
+                startPressTimer();
+            }, { passive: false });
+
+            node.addEventListener('pointerup', clearPressTimer);
+            node.addEventListener('pointerleave', clearPressTimer);
+            node.addEventListener('pointercancel', clearPressTimer);
 
             // keyboard support
             node.addEventListener('keydown', (ev) => {
@@ -640,6 +648,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         renderCategorySelect();
+        applyGridSetting();
     }
 
     function renderCategorySelect() {
@@ -932,6 +941,20 @@ document.addEventListener('DOMContentLoaded', () => {
         closeSettingsMenu();
     }
 
+    function applyGridSetting() {
+        const board = document.getElementById('communicationBoard');
+        if (!board) return;
+
+        switch (settings.gridSize) {
+            case '3x4': board.style.gridTemplateColumns = 'repeat(3, 1fr)'; break;
+            case '4x6': board.style.gridTemplateColumns = 'repeat(4, 1fr)'; break;
+            case '6x8': board.style.gridTemplateColumns = 'repeat(6, 1fr)'; break;
+            default:
+                board.style.gridTemplateColumns = 'repeat(auto-fill, minmax(120px, 1fr))';
+        }
+    }
+
+
     // Voices
     function populateVoices() {
         const voices = speechSynthesis.getVoices();
@@ -1027,6 +1050,12 @@ document.addEventListener('DOMContentLoaded', () => {
         globalSearch.addEventListener('input', renderBoard);
     }
 
+    gridSizeSelect.addEventListener('change', () => {
+        settings.gridSize = gridSizeSelect.value;
+        saveSettings();
+        applyGridSetting();
+    });
+
     // Category select event listener
     categorySelect.addEventListener('change', () => {
         settings.filterCategory = categorySelect.value;
@@ -1094,6 +1123,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isStandalone) {
             console.log('App is running in standalone mode');
         }
+
+        if (gridSizeSelect) gridSizeSelect.value = settings.gridSize;
+        applyGridSetting();
 
         updateInstallButton();
 

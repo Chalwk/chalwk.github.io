@@ -498,6 +498,21 @@ body {
     font-size: 1rem;
 }
 
+/* Grid selector styling */
+#gridSizeSelect {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    background: white;
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+
+.settings-group label[for="gridSizeSelect"] {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 6px;
+}
 
 /* Ensure good touch targets for mobile */
 @media (max-width: 768px) {
