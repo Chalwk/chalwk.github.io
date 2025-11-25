@@ -41,6 +41,19 @@
                 <button class="btn-secondary settings-toggle" id="settingsToggle" title="Settings">⚙️</button>
                 <div class="settings-menu" id="settingsMenu">
                     <div class="settings-group">
+                        <button class="btn-secondary" id="editModeBtn">Edit Mode</button>
+                        <button class="btn-primary" id="saveBtn">Save</button>
+                    </div>
+                    <div class="settings-group">
+                        <button class="btn-secondary" id="exportBtn" title="Export symbols and settings">Export</button>
+                        <label class="btn-secondary" for="importFile" title="Import symbols">Import
+                            <input accept="application/json" id="importFile" style="display:none" type="file">
+                        </label>
+                    </div>
+                    <div class="settings-group">
+                        <button class="btn-secondary" id="manageCategoriesBtn">Manage Categories</button>
+                    </div>
+                    <div class="settings-group">
                         <label for="themeSelect">Theme</label>
                         <select id="themeSelect">
                             <option value="auto">Auto (System)</option>
@@ -61,23 +74,6 @@
                         </select>
                     </div>
                     <div class="settings-group">
-                        <label class="visually-hidden" for="voiceSelect">Choose voice</label>
-                        <select id="voiceSelect" title="Choose TTS voice"></select>
-                    </div>
-                    <div class="settings-group">
-                        <button class="btn-secondary" id="editModeBtn">Edit Mode</button>
-                        <button class="btn-primary" id="saveBtn">Save</button>
-                    </div>
-                    <div class="settings-group">
-                        <button class="btn-secondary" id="exportBtn" title="Export symbols and settings">Export</button>
-                        <label class="btn-secondary" for="importFile" title="Import symbols">Import
-                            <input accept="application/json" id="importFile" style="display:none" type="file">
-                        </label>
-                    </div>
-                    <div class="settings-group">
-                        <button class="btn-secondary" id="manageCategoriesBtn">Manage Categories</button>
-                    </div>
-                    <div class="settings-group">
                         <label for="gridSizeSelect">Board Layout</label>
                         <select id="gridSizeSelect">
                             <option value="auto">Auto Responsive</option>
@@ -85,6 +81,10 @@
                             <option value="4x6">4 × 6</option>
                             <option value="6x8">6 × 8</option>
                         </select>
+                    </div>
+                    <div class="settings-group">
+                        <label class="visually-hidden" for="voiceSelect">Choose voice</label>
+                        <select id="voiceSelect" title="Choose TTS voice"></select>
                     </div>
                 </div>
             </div>

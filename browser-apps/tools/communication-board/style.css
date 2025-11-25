@@ -718,6 +718,22 @@ body.theme-high-contrast .symbol {
     margin-bottom: var(--spacing-xs);
 }
 
+/* Volume selector specific styling */
+.settings-group select#volumeSelect {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: var(--spacing-sm);
+    border-radius: var(--border-radius-md);
+    width: 100%;
+}
+
+.settings-group label[for="volumeSelect"] {
+    font-weight: 600;
+    display: block;
+    margin-bottom: var(--spacing-xs);
+}
+
 /* ===== UTILITY COMPONENTS ===== */
 .toast {
     position: fixed;
