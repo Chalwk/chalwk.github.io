@@ -668,15 +668,38 @@ document.addEventListener('DOMContentLoaded', () => {
     function speakPhrase() {
         if (currentPhrase.length === 0) return;
         const phraseText = currentPhrase.map(s => s.text).join(' ');
+
         if ('speechSynthesis' in window) {
+            // Cancel any ongoing speech
+            speechSynthesis.cancel();
+
             const utter = new SpeechSynthesisUtterance(phraseText);
             utter.rate = 0.95;
-            // set voice
+            utter.pitch = 1;
+            utter.volume = 1;
+
+            // Set voice with better error handling
             const chosen = localStorage.getItem(LS.voiceKey);
             if (chosen) {
-                const v = speechSynthesis.getVoices().find(x => x.name === chosen);
-                if (v) utter.voice = v;
+                const voices = speechSynthesis.getVoices();
+                const voice = voices.find(x => x.name === chosen);
+                if (voice) {
+                    utter.voice = voice;
+                }
             }
+
+            utter.onerror = (event) => {
+                console.error('Speech synthesis error:', event);
+                showToast('Speech error, trying without voice selection');
+                // Fallback: try without specific voice
+                if (chosen) {
+                    localStorage.removeItem(LS.voiceKey);
+                    const fallbackUtter = new SpeechSynthesisUtterance(phraseText);
+                    fallbackUtter.rate = 0.95;
+                    speechSynthesis.speak(fallbackUtter);
+                }
+            };
+
             speechSynthesis.speak(utter);
         } else {
             alert(phraseText);
@@ -826,14 +849,33 @@ document.addEventListener('DOMContentLoaded', () => {
     function populateVoices() {
         const voices = speechSynthesis.getVoices();
         voiceSelect.innerHTML = '';
+
+        // Add a default option
+        const defaultOption = document.createElement('option');
+        defaultOption.value = '';
+        defaultOption.textContent = 'Default Voice';
+        defaultOption.selected = !localStorage.getItem(LS.voiceKey);
+        voiceSelect.appendChild(defaultOption);
+
         const stored = localStorage.getItem(LS.voiceKey);
+        let foundStored = false;
+
         voices.forEach(v => {
             const o = document.createElement('option');
             o.value = v.name;
             o.textContent = `${v.name} ${v.lang ? '(' + v.lang + ')' : ''}`;
-            if (stored && stored === v.name) o.selected = true;
+            if (stored && stored === v.name) {
+                o.selected = true;
+                foundStored = true;
+            }
             voiceSelect.appendChild(o);
         });
+
+        // If stored voice not found but we have voices, select first available
+        if (!foundStored && voices.length > 0 && stored) {
+            localStorage.removeItem(LS.voiceKey);
+            showToast('Previous voice not available, using default');
+        }
     }
 
     // Undo handler
@@ -908,7 +950,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // voice select save
     voiceSelect.addEventListener('change', () => {
-        localStorage.setItem(LS.voiceKey, voiceSelect.value);
+        const selectedVoice = voiceSelect.value;
+        if (selectedVoice) {
+            localStorage.setItem(LS.voiceKey, selectedVoice);
+            showToast(`Voice set to: ${selectedVoice}`);
+        } else {
+            localStorage.removeItem(LS.voiceKey);
+            showToast('Using default voice');
+        }
     });
 
     // keyboard quick actions
@@ -957,11 +1006,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
         updateInstallButton();
 
-        // voices may load after first call
-        populateVoices();
-        if (speechSynthesis.onvoiceschanged !== undefined) {
-            speechSynthesis.onvoiceschanged = populateVoices;
+        function loadVoices() {
+            const voices = speechSynthesis.getVoices();
+            if (voices.length > 0) {
+                populateVoices();
+            } else {
+                // Try again after a short delay on mobile
+                setTimeout(() => {
+                    const retryVoices = speechSynthesis.getVoices();
+                    if (retryVoices.length > 0) {
+                        populateVoices();
+                    } else {
+                        console.log('No voices available');
+                        showToast('No TTS voices detected');
+                    }
+                }, 500);
+            }
         }
+
+        // Initial voice load
+        loadVoices();
+
+        // Voice change handler - more aggressive on mobile
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = loadVoices;
+        }
+
+        // Mobile-specific voice check
+        setTimeout(loadVoices, 1000);
     }
 
     init(); // This stays at the very end
