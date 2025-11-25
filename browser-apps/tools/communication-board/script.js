@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let phraseHistory = [];
     let isEditMode = false;
     let currentEditingSymbol = null;
-    let settings = { filterCategory: 'All', gridSize: 'auto' };
+    let settings = { filterCategory: 'All', gridSize: 'auto', theme: 'auto' };
 
     // PWA State
     let deferredPrompt;
@@ -61,7 +61,8 @@ document.addEventListener('DOMContentLoaded', () => {
         symbolsKey: 'cb.symbols',
         settingsKey: 'cb.settings',
         voiceKey: 'cb.voice',
-        categoriesKey: 'cb.categories'
+        categoriesKey: 'cb.categories',
+        themeKey: 'cb.theme'
     };
 
     // Default categories
@@ -106,6 +107,54 @@ document.addEventListener('DOMContentLoaded', () => {
             try { settings = Object.assign(settings, JSON.parse(raw)); }
             catch {}
         }
+    }
+
+    function applyTheme(theme) {
+        // Remove all theme classes
+        document.body.classList.remove('theme-light', 'theme-dark', 'theme-high-contrast');
+
+        if (theme === 'auto') {
+            // Let CSS media queries handle it
+            document.body.classList.add('theme-auto');
+        } else {
+            document.body.classList.add(`theme-${theme}`);
+        }
+
+        // Update theme color meta tag for PWA
+        updateThemeColor(theme);
+    }
+
+    function updateThemeColor(theme) {
+        const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+        if (!themeColorMeta) return;
+
+        const colors = {
+            light: '#4a86e8',
+            dark: '#1a1a1a',
+            'high-contrast': '#000000',
+            auto: '#4a86e8'
+        };
+
+        themeColorMeta.content = colors[theme] || colors.auto;
+    }
+
+    function loadTheme() {
+        const savedTheme = localStorage.getItem(LS.themeKey);
+        if (savedTheme) {
+            settings.theme = savedTheme;
+            applyTheme(savedTheme);
+        } else {
+            // Default to auto
+            settings.theme = 'auto';
+            applyTheme('auto');
+        }
+    }
+
+    function saveTheme(theme) {
+        settings.theme = theme;
+        localStorage.setItem(LS.themeKey, theme);
+        applyTheme(theme);
+        showToast(`Theme set to ${theme}`);
     }
 
     // Categories management
@@ -1136,6 +1185,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // file will be processed when saving
     });
 
+    themeSelect.addEventListener('change', () => {
+        saveTheme(themeSelect.value);
+        closeSettingsMenu();
+    });
+
     // voice select save
     voiceSelect.addEventListener('change', () => {
         const selectedVoice = voiceSelect.value;
@@ -1183,6 +1237,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function init() {
         loadSettings();
         loadSymbols();
+        loadTheme();
         updateCategorySelects();
         renderBoard();
         updatePhraseDisplay();
@@ -1193,8 +1248,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (gridSizeSelect) gridSizeSelect.value = settings.gridSize;
-        applyGridSetting();
+        if (themeSelect) themeSelect.value = settings.theme;
 
+        applyGridSetting();
         updateInstallButton();
 
         function loadVoices() {

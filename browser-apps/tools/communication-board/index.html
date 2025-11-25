@@ -40,6 +40,17 @@
             <div class="settings-dropdown">
                 <button class="btn-secondary settings-toggle" id="settingsToggle" title="Settings">⚙️</button>
                 <div class="settings-menu" id="settingsMenu">
+                    <!-- ADD THEME SETTINGS HERE -->
+                    <div class="settings-group">
+                        <label for="themeSelect">Theme</label>
+                        <select id="themeSelect">
+                            <option value="auto">Auto (System)</option>
+                            <option value="light">Light</option>
+                            <option value="dark">Dark</option>
+                            <option value="high-contrast">High Contrast</option>
+                        </select>
+                    </div>
+
                     <div class="settings-group">
                         <label class="visually-hidden" for="voiceSelect">Choose voice</label>
                         <select id="voiceSelect" title="Choose TTS voice"></select>
@@ -57,13 +68,15 @@
                     <div class="settings-group">
                         <button class="btn-secondary" id="manageCategoriesBtn">Manage Categories</button>
                     </div>
-                    <label for="gridSizeSelect">Board Layout</label>
-                    <select id="gridSizeSelect">
-                        <option value="auto">Auto Responsive</option>
-                        <option value="3x4">3 × 4</option>
-                        <option value="4x6">4 × 6</option>
-                        <option value="6x8">6 × 8</option>
-                    </select>
+                    <div class="settings-group">
+                        <label for="gridSizeSelect">Board Layout</label>
+                        <select id="gridSizeSelect">
+                            <option value="auto">Auto Responsive</option>
+                            <option value="3x4">3 × 4</option>
+                            <option value="4x6">4 × 6</option>
+                            <option value="6x8">6 × 8</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
@@ -84,7 +97,7 @@
         </div>
 
         <div class="board-toolbar">
-            <input aria-label="Search symbols" id="globalSearch" placeholder="Search symbols..." type="text">
+            <input type="text" id="globalSearch" placeholder="Search symbols..." aria-label="Search symbols">
         </div>
 
         <div aria-label="Communication board" class="board-container" id="boardWrap" tabindex="0">
@@ -154,7 +167,7 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label for="newCategoryName">New Category Name</label>
-                    <input id="newCategoryName" placeholder="Enter category name" type="text">
+                    <input id="newCategoryName" type="text" placeholder="Enter category name">
                     <button class="btn-primary" id="addCategoryBtn">Add Category</button>
                 </div>
 
