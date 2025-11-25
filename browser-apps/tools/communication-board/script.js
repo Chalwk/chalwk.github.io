@@ -669,6 +669,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updatePhraseDisplay() {
         phraseDisplay.innerHTML = '';
+
+        // Add drag-active class management
+        phraseDisplay.classList.remove('drag-active');
+
         if (currentPhrase.length === 0) {
             const el = document.createElement('span');
             el.className = 'empty-message';
@@ -691,37 +695,92 @@ document.addEventListener('DOMContentLoaded', () => {
                 item.innerHTML = `<span style="font-size:1.2rem; margin-right:6px;">${symbol.image}</span><span>${symbol.text}</span>`;
             }
 
-            // click to remove (backed up for undo)
+            // Click to remove (backed up for undo)
             item.addEventListener('click', () => {
                 backupPhrase();
                 currentPhrase.splice(index, 1);
                 updatePhraseDisplay();
             });
 
-            // drag handlers
+            // Improved drag handlers
             item.addEventListener('dragstart', (e) => {
                 e.dataTransfer.setData('text/plain', index.toString());
                 e.dataTransfer.effectAllowed = 'move';
+                item.classList.add('dragging');
+                phraseDisplay.classList.add('drag-active');
+
+                // Set drag image to the element itself for better visual feedback
+                setTimeout(() => {
+                    item.style.opacity = '0.4';
+                }, 0);
+            });
+
+            item.addEventListener('dragend', () => {
+                // Remove all drag-related classes
+                document.querySelectorAll('.phrase-item').forEach(el => {
+                    el.classList.remove('dragging', 'drag-over', 'drag-placeholder');
+                    el.style.opacity = '';
+                });
+                phraseDisplay.classList.remove('drag-active');
             });
 
             item.addEventListener('dragover', (e) => {
                 e.preventDefault();
+                e.dataTransfer.dropEffect = 'move';
+
+                // Add visual feedback to potential drop targets
+                document.querySelectorAll('.phrase-item').forEach(el => {
+                    el.classList.remove('drag-over');
+                });
+
+                const afterElement = getDragAfterElement(phraseDisplay, e.clientX);
+                if (afterElement) {
+                    afterElement.classList.add('drag-over');
+                }
+            });
+
+            item.addEventListener('dragenter', (e) => {
+                e.preventDefault();
+            });
+
+            item.addEventListener('dragleave', (e) => {
+                // Only remove class if not dragging over child elements
+                if (!item.contains(e.relatedTarget)) {
+                    item.classList.remove('drag-over');
+                }
             });
 
             item.addEventListener('drop', (e) => {
                 e.preventDefault();
-                const from = parseInt(e.dataTransfer.getData('text/plain'), 10);
-                const to = index;
-                if (!Number.isFinite(from)) return;
-                if (from === to) return;
+                const fromIndex = parseInt(e.dataTransfer.getData('text/plain'), 10);
+                const toIndex = index;
+
+                if (!Number.isFinite(fromIndex)) return;
+                if (fromIndex === toIndex) return;
+
                 backupPhrase();
-                const [moved] = currentPhrase.splice(from, 1);
-                currentPhrase.splice(to, 0, moved);
+                const [moved] = currentPhrase.splice(fromIndex, 1);
+                currentPhrase.splice(toIndex, 0, moved);
                 updatePhraseDisplay();
             });
 
             phraseDisplay.appendChild(item);
         });
+    }
+
+    function getDragAfterElement(container, x) {
+        const draggableElements = [...container.querySelectorAll('.phrase-item:not(.dragging)')];
+
+        return draggableElements.reduce((closest, child) => {
+            const box = child.getBoundingClientRect();
+            const offset = x - box.left - box.width / 2;
+
+            if (offset < 0 && offset > closest.offset) {
+                return { offset: offset, element: child };
+            } else {
+                return closest;
+            }
+        }, { offset: Number.NEGATIVE_INFINITY }).element;
     }
 
     // Phrase operations
@@ -1159,5 +1218,5 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(loadVoices, 1000);
     }
 
-    init(); // This stays at the very end
+    init();
 });

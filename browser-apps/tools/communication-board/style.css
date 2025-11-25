@@ -61,18 +61,59 @@ body {
     box-shadow: 0 1px 3px rgba(0,0,0,0.04);
 }
 .phrase-item {
-    display:flex;
-    align-items:center;
-    gap:8px;
-    padding:8px 12px;
-    border-radius:20px;
-    background:#e8f0fe;
-    font-weight:600;
-    cursor:grab;
-    user-select:none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 20px;
+    background: #e8f0fe;
+    font-weight: 600;
+    cursor: grab;
+    user-select: none;
+    transition: all 0.2s ease;
+    position: relative;
+    border: 2px solid transparent;
 }
 .phrase-item:active { cursor:grabbing; }
 .phrase-item img { width:20px; height:20px; object-fit:contain; }
+
+.phrase-item.dragging {
+    opacity: 0.6;
+    transform: scale(0.95);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Empty state styling */
+.empty-message {
+    color: #666;
+    font-style: italic;
+    padding: 10px;
+}
+
+/* Drag placeholder */
+.phrase-item.drag-placeholder {
+    background: #f0f0f0;
+    border: 2px dashed #ccc;
+    opacity: 0.5;
+}
+
+/* Visual feedback during drag */
+.phrase-display.drag-active {
+    background: #f8f9fa;
+    border: 2px dashed #e6e9ec;
+    min-height: 60px;
+}
+
+.phrase-item.drag-over {
+    border: 2px dashed #4a86e8;
+    background: #f0f5ff;
+}
+
+.phrase-item:hover {
+    background: #dbe8ff;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
 
 /* Controls */
 .phrase-controls { display:flex; gap:8px; align-items:center; }
@@ -526,9 +567,17 @@ body {
         padding: 12px 16px;
     }
 
-    /* Larger touch targets for phrase items */
     .phrase-item {
-        min-height: 44px;
         padding: 12px 16px;
+        min-height: 52px;
+    }
+
+    .phrase-display.drag-active {
+        border-width: 3px;
+    }
+
+    .phrase-item.drag-over {
+        border-width: 3px;
+        transform: scale(1.05);
     }
 }
