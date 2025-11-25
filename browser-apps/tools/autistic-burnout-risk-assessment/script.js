@@ -13,7 +13,6 @@ const historyList = document.getElementById('history-list');
 const tabs = document.querySelectorAll('.tab');
 const tabContents = document.querySelectorAll('.tab-content');
 const collapseToggles = document.querySelectorAll('.collapse-toggle');
-const defaultValues = new Set();
 
 // Slider elements
 const sliders = document.querySelectorAll('.slider');
@@ -29,21 +28,49 @@ const emotionScore = document.getElementById('emotion-score');
 // Storage key
 const STORAGE_KEY = 'burnout-assessment-history';
 
-// Initialize sliders
+// Track answered sliders
+const answeredSliders = new Set();
+
+// Initialize sliders with validation
 sliders.forEach((slider, index) => {
     // Set all sliders to neutral (3) initially
     slider.value = 3;
     sliderValues[index].textContent = '3';
 
-    // Track that this is a default value
-    defaultValues.add(slider.id);
+    // Add validation styling
+    slider.classList.add('unanswered');
 
     slider.addEventListener('input', function() {
         sliderValues[index].textContent = this.value;
-        // Remove from default values once user changes it
-        defaultValues.delete(this.id);
+
+        // Mark as answered
+        answeredSliders.add(this.id);
+        slider.classList.remove('unanswered');
+        slider.classList.add('answered');
+
+        // Update calculate button state
+        updateCalculateButtonState();
     });
 });
+
+// Update calculate button based on completion
+function updateCalculateButtonState() {
+    const allAnswered = answeredSliders.size === sliders.length;
+
+    if (allAnswered) {
+        calculateBtn.disabled = false;
+        calculateBtn.classList.remove('disabled');
+        calculateBtn.title = 'Calculate your burnout risk';
+    } else {
+        calculateBtn.disabled = true;
+        calculateBtn.classList.add('disabled');
+        const remaining = sliders.length - answeredSliders.size;
+        calculateBtn.title = `Please answer ${remaining} more question${remaining !== 1 ? 's' : ''}`;
+    }
+}
+
+// Initialize calculate button state
+updateCalculateButtonState();
 
 // Tab functionality
 tabs.forEach(tab => {
@@ -59,44 +86,58 @@ tabs.forEach(tab => {
     });
 });
 
-// Collapse functionality for factor groups
-collapseToggles.forEach(toggle => {
-    toggle.addEventListener('click', function() {
-        const targetId = this.getAttribute('data-target');
+// Enhanced collapse functionality for factor groups
+function initializeCollapsedState() {
+    collapseToggles.forEach(toggle => {
+        const targetId = toggle.getAttribute('data-target');
         const content = document.getElementById(targetId);
-        const icon = this.querySelector('.collapse-icon');
+        const icon = toggle.querySelector('.collapse-icon');
 
-        if (content.classList.contains('collapsed')) {
-            content.classList.remove('collapsed');
-            content.style.maxHeight = content.scrollHeight + 'px';
-            icon.style.transform = 'rotate(0deg)';
-        } else {
-            content.classList.add('collapsed');
-            content.style.maxHeight = '0';
-            icon.style.transform = 'rotate(-90deg)';
-        }
+        // Ensure all are collapsed by default
+        content.classList.add('collapsed');
+        content.style.maxHeight = '0';
+        icon.style.transform = 'rotate(-90deg)';
+
+        // Add click handler
+        toggle.addEventListener('click', function() {
+            if (content.classList.contains('collapsed')) {
+                content.classList.remove('collapsed');
+                content.style.maxHeight = content.scrollHeight + 'px';
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                content.classList.add('collapsed');
+                content.style.maxHeight = '0';
+                icon.style.transform = 'rotate(-90deg)';
+            }
+        });
     });
+}
 
-    // Initialize collapsed state
-    const targetId = toggle.getAttribute('data-target');
-    const content = document.getElementById(targetId);
-    const icon = toggle.querySelector('.collapse-icon');
-    content.classList.add('collapsed');
-    content.style.maxHeight = '0';
-    icon.style.transform = 'rotate(-90deg)';
-});
+// Initialize collapsed state
+initializeCollapsedState();
 
 // Calculate risk
 calculateBtn.addEventListener('click', calculateRisk);
 
 function calculateRisk() {
-    // Check if all values are still at default (neutral)
-    if (defaultValues.size === sliders.length) {
-        alert('Please adjust at least one slider from the neutral position to get an accurate assessment.');
+    // Check if all sliders have been answered
+    if (answeredSliders.size !== sliders.length) {
+        const unansweredCount = sliders.length - answeredSliders.size;
+        alert(`Please answer all ${unansweredCount} remaining question${unansweredCount !== 1 ? 's' : ''} before calculating your risk.`);
+
+        // Highlight unanswered questions
+        sliders.forEach(slider => {
+            if (!answeredSliders.has(slider.id)) {
+                slider.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                slider.focus();
+                return;
+            }
+        });
+
         return;
     }
 
-    // Get values from all sliders (now 0-5 scale)
+    // Get values from all sliders (0-5 scale)
     const energyLevel = parseInt(document.getElementById('energy-level').value);
     const sleepQuality = parseInt(document.getElementById('sleep-quality').value);
     const routineDifficulty = parseInt(document.getElementById('routine-difficulty').value);
@@ -122,17 +163,67 @@ function calculateRisk() {
     const meltdownFrequency = parseInt(document.getElementById('meltdown-frequency').value);
     const hopelessness = parseInt(document.getElementById('hopelessness').value);
 
-    // Calculate factor scores (each category now has 4 questions, max 20)
-    const energyFactor = energyLevel + sleepQuality + routineDifficulty + stimulantUse;
-    const sensoryFactor = sensoryOverload + sensoryAvoidance + tactileSensitivity + sensoryTools;
-    const executiveFactor = taskInitiation + planningDifficulty + memoryIssues + decisionFatigue;
-    const socialFactor = socialDrain + maskingLevel + communicationDifficulty + socialIsolation;
-    const emotionFactor = emotionalReactivity + emotionalNumbness + meltdownFrequency + hopelessness;
+    // IMPROVED ASSESSMENT LOGIC
 
-    // Calculate total score (0-100)
-    const totalScore = energyFactor + sensoryFactor + executiveFactor + socialFactor + emotionFactor;
+    // Calculate weighted factor scores with different weightings
+    // Higher weight = more impact on overall burnout risk
 
-    // Update factor breakdown
+    // Energy factor (high impact on overall burnout)
+    const energyFactor = Math.round(
+        (energyLevel * 1.2) +
+        (sleepQuality * 1.1) +
+        (routineDifficulty * 1.0) +
+        (stimulantUse * 0.9)
+    );
+
+    // Sensory factor (medium-high impact)
+    const sensoryFactor = Math.round(
+        (sensoryOverload * 1.1) +
+        (sensoryAvoidance * 1.0) +
+        (tactileSensitivity * 0.9) +
+        (sensoryTools * 0.8)
+    );
+
+    // Executive function factor (high impact)
+    const executiveFactor = Math.round(
+        (taskInitiation * 1.2) +
+        (planningDifficulty * 1.1) +
+        (memoryIssues * 1.0) +
+        (decisionFatigue * 1.1)
+    );
+
+    // Social factor (medium impact)
+    const socialFactor = Math.round(
+        (socialDrain * 1.1) +
+        (maskingLevel * 1.2) +  // Masking is particularly draining for neurodivergent individuals
+        (communicationDifficulty * 1.0) +
+        (socialIsolation * 0.9)
+    );
+
+    // Emotional factor (high impact)
+    const emotionFactor = Math.round(
+        (emotionalReactivity * 1.1) +
+        (emotionalNumbness * 1.0) +
+        (meltdownFrequency * 1.3) +  // Meltdowns indicate severe overwhelm
+        (hopelessness * 1.2)  // Hopelessness is a key burnout indicator
+    );
+
+    // Apply non-linear scaling to account for compounding effects
+    // Higher scores in multiple areas compound burnout risk
+    const factorScores = [energyFactor, sensoryFactor, executiveFactor, socialFactor, emotionFactor];
+    const highRiskFactors = factorScores.filter(score => score >= 15).length;
+    const compoundingMultiplier = 1 + (highRiskFactors * 0.1); // 10% increase per high-risk factor
+
+    // Calculate total score with compounding
+    let totalScore = Math.round(
+        (energyFactor + sensoryFactor + executiveFactor + socialFactor + emotionFactor) *
+        compoundingMultiplier
+    );
+
+    // Cap at maximum of 100
+    totalScore = Math.min(totalScore, 100);
+
+    // Update factor breakdown (show weighted scores but display out of 20 for consistency)
     energyScore.textContent = `${energyFactor}/20`;
     sensoryScore.textContent = `${sensoryFactor}/20`;
     executiveScore.textContent = `${executiveFactor}/20`;
@@ -143,68 +234,85 @@ function calculateRisk() {
     factorBreakdown.style.display = 'block';
 
     // Update risk indicator position
-    const riskPercentage = (totalScore / 100) * 100;
+    const riskPercentage = Math.min((totalScore / 100) * 100, 100);
     riskIndicator.style.left = `${riskPercentage}%`;
 
-    // Update risk score and level
+    // Update risk score and level with improved thresholds
     riskScore.textContent = totalScore;
 
     let riskText = '';
     let riskClass = '';
+    let riskDescription = '';
 
-    if (totalScore <= 25) {
+    if (totalScore <= 20) {
         riskText = 'Low Risk';
         riskClass = 'low-risk';
-    } else if (totalScore <= 50) {
-        riskText = 'Medium Risk';
+        riskDescription = 'Minimal signs of burnout. Good self-care practices detected.';
+    } else if (totalScore <= 40) {
+        riskText = 'Moderate Risk';
         riskClass = 'medium-risk';
-    } else if (totalScore <= 75) {
+        riskDescription = 'Early warning signs present. Consider preventative strategies.';
+    } else if (totalScore <= 60) {
         riskText = 'High Risk';
         riskClass = 'high-risk';
+        riskDescription = 'Significant burnout symptoms. Active intervention recommended.';
+    } else if (totalScore <= 80) {
+        riskText = 'Severe Risk';
+        riskClass = 'critical-risk';
+        riskDescription = 'Severe burnout symptoms. Professional support strongly advised.';
     } else {
         riskText = 'Critical Risk';
         riskClass = 'critical-risk';
+        riskDescription = 'Critical level of burnout. Immediate professional support needed.';
     }
 
     riskLevel.textContent = riskText;
     riskLevel.className = `risk-level ${riskClass}`;
 
+    // Add risk description if element exists
+    const riskDescriptionEl = document.getElementById('risk-description');
+    if (riskDescriptionEl) {
+        riskDescriptionEl.textContent = riskDescription;
+    }
+
     // Update recommendations based on highest scoring factors
     updatePriorityRecommendations(energyFactor, sensoryFactor, executiveFactor, socialFactor, emotionFactor);
+
+    // Scroll to results
+    factorBreakdown.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-// Update priority recommendations based on factor scores
+// Enhanced priority recommendations
 function updatePriorityRecommendations(energy, sensory, executive, social, emotion) {
     const factors = [
-        { name: 'energy', score: energy },
-        { name: 'sensory', score: sensory },
-        { name: 'executive', score: executive },
-        { name: 'social', score: social },
-        { name: 'emotion', score: emotion }
+        { name: 'energy', score: energy, label: 'Energy Management' },
+        { name: 'sensory', score: sensory, label: 'Sensory Processing' },
+        { name: 'executive', score: executive, label: 'Executive Function' },
+        { name: 'social', score: social, label: 'Social Interaction' },
+        { name: 'emotion', score: emotion, label: 'Emotional Regulation' }
     ];
 
     // Sort by score (highest first)
     factors.sort((a, b) => b.score - a.score);
 
-    // Update priority badges based on ranking
+    // Clear existing priority indicators
+    document.querySelectorAll('.priority-indicator').forEach(indicator => indicator.remove());
+
+    // Update priority badges based on ranking and score thresholds
     factors.forEach((factor, index) => {
         const tab = document.querySelector(`[data-tab="${factor.name}"]`);
         if (tab) {
-            // Clear existing priority indicators
-            const existingBadges = tab.querySelectorAll('.priority-indicator');
-            existingBadges.forEach(badge => badge.remove());
-
-            // Add new priority indicator
             let priorityText = '';
             let priorityClass = '';
 
-            if (index === 0) {
+            // Determine priority based on combination of rank and absolute score
+            if (factor.score >= 16 || index === 0) {
                 priorityText = 'Highest Priority';
                 priorityClass = 'priority-high';
-            } else if (index === 1) {
+            } else if (factor.score >= 12 || index <= 1) {
                 priorityText = 'High Priority';
                 priorityClass = 'priority-high';
-            } else if (index === 2) {
+            } else if (factor.score >= 8 || index <= 2) {
                 priorityText = 'Medium Priority';
                 priorityClass = 'priority-medium';
             } else {
@@ -215,6 +323,7 @@ function updatePriorityRecommendations(energy, sensory, executive, social, emoti
             const priorityBadge = document.createElement('span');
             priorityBadge.className = `priority-badge ${priorityClass} priority-indicator`;
             priorityBadge.textContent = priorityText;
+            priorityBadge.title = `${factor.label}: ${factor.score}/20`;
             tab.appendChild(priorityBadge);
         }
     });
@@ -225,8 +334,8 @@ saveBtn.addEventListener('click', saveAssessment);
 
 function saveAssessment() {
     const totalScore = riskScore.textContent;
-    if (totalScore === '--') {
-        alert('Please calculate your risk score before saving.');
+    if (totalScore === '--' || answeredSliders.size !== sliders.length) {
+        alert('Please complete and calculate your risk score before saving.');
         return;
     }
 
@@ -239,7 +348,8 @@ function saveAssessment() {
             executive: parseInt(executiveScore.textContent.split('/')[0]),
             social: parseInt(socialScore.textContent.split('/')[0]),
             emotion: parseInt(emotionScore.textContent.split('/')[0])
-        }
+        },
+        answeredQuestions: answeredSliders.size
     };
 
     // Get existing history or initialize empty array
@@ -259,6 +369,11 @@ function saveAssessment() {
 
 // Show recommendations
 recommendationsBtn.addEventListener('click', () => {
+    if (answeredSliders.size !== sliders.length) {
+        alert('Please complete the assessment first to get personalized recommendations.');
+        return;
+    }
+
     recommendationsCard.style.display = 'block';
     recommendationsCard.scrollIntoView({ behavior: 'smooth' });
 });
@@ -283,11 +398,11 @@ function exportData() {
     }
 
     // Convert to CSV
-    let csv = 'Date,Total Score,Energy Factor,Sensory Factor,Executive Factor,Social Factor,Emotion Factor\n';
+    let csv = 'Date,Total Score,Energy Factor,Sensory Factor,Executive Factor,Social Factor,Emotion Factor,Questions Answered\n';
 
     history.forEach(assessment => {
         const date = new Date(assessment.date).toLocaleDateString();
-        csv += `${date},${assessment.score},${assessment.factors.energy},${assessment.factors.sensory},${assessment.factors.executive},${assessment.factors.social},${assessment.factors.emotion}\n`;
+        csv += `${date},${assessment.score},${assessment.factors.energy},${assessment.factors.sensory},${assessment.factors.executive},${assessment.factors.social},${assessment.factors.emotion},${assessment.answeredQuestions || sliders.length}\n`;
     });
 
     // Create download link
@@ -302,12 +417,12 @@ function exportData() {
     URL.revokeObjectURL(url);
 }
 
-// Render history
+// Enhanced history rendering
 function renderHistory() {
     const history = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
 
     if (history.length === 0) {
-        historyList.innerHTML = '<p>No assessment history yet. Complete and save an assessment to see your history here.</p>';
+        historyList.innerHTML = '<div class="history-empty"><p>No assessment history yet.</p><p>Complete and save an assessment to see your history here.</p></div>';
         return;
     }
 
@@ -318,17 +433,26 @@ function renderHistory() {
 
     history.forEach((assessment, index) => {
         const date = new Date(assessment.date).toLocaleDateString();
-        const time = new Date(assessment.date).toLocaleTimeString();
+        const time = new Date(assessment.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
         let riskClass = '';
-        if (assessment.score <= 25) {
-            riskClass = '';
-        } else if (assessment.score <= 50) {
+        let riskLevelText = '';
+
+        if (assessment.score <= 20) {
+            riskClass = 'low';
+            riskLevelText = 'Low Risk';
+        } else if (assessment.score <= 40) {
             riskClass = 'medium';
-        } else if (assessment.score <= 75) {
+            riskLevelText = 'Moderate Risk';
+        } else if (assessment.score <= 60) {
             riskClass = 'high';
+            riskLevelText = 'High Risk';
+        } else if (assessment.score <= 80) {
+            riskClass = 'critical';
+            riskLevelText = 'Severe Risk';
         } else {
             riskClass = 'critical';
+            riskLevelText = 'Critical Risk';
         }
 
         // Calculate trend if there's a previous assessment
@@ -347,21 +471,24 @@ function renderHistory() {
         }
 
         html += `
-                <div class="history-item ${riskClass}">
-                    <div class="history-date">${date} at ${time} ${trendHtml}</div>
-                    <div>Total Score: <strong>${assessment.score}/100</strong></div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: ${(assessment.score / 100) * 100}%"></div>
-                    </div>
-                    <div class="history-score">
-                        <span>Energy: ${assessment.factors.energy}/20</span>
-                        <span>Sensory: ${assessment.factors.sensory}/20</span>
-                        <span>Executive: ${assessment.factors.executive}/20</span>
-                        <span>Social: ${assessment.factors.social}/20</span>
-                        <span>Emotion: ${assessment.factors.emotion}/20</span>
-                    </div>
+            <div class="history-item ${riskClass}">
+                <div class="history-header">
+                    <div class="history-date">${date} at ${time}</div>
+                    <div class="history-risk">${riskLevelText} ${trendHtml}</div>
                 </div>
-            `;
+                <div class="history-score-total">Total Score: <strong>${assessment.score}/100</strong></div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${(assessment.score / 100) * 100}%"></div>
+                </div>
+                <div class="history-scores">
+                    <span class="factor-score">Energy: ${assessment.factors.energy}/20</span>
+                    <span class="factor-score">Sensory: ${assessment.factors.sensory}/20</span>
+                    <span class="factor-score">Executive: ${assessment.factors.executive}/20</span>
+                    <span class="factor-score">Social: ${assessment.factors.social}/20</span>
+                    <span class="factor-score">Emotion: ${assessment.factors.emotion}/20</span>
+                </div>
+            </div>
+        `;
     });
 
     historyList.innerHTML = html;
@@ -370,4 +497,49 @@ function renderHistory() {
 // Initialize the app
 document.addEventListener('DOMContentLoaded', () => {
     renderHistory();
+
+    // Add CSS for validation states
+    const style = document.createElement('style');
+    style.textContent = `
+        .slider.unanswered {
+            border: 2px solid #ff6b6b;
+            border-radius: 4px;
+        }
+        .slider.answered {
+            border: 2px solid #51cf66;
+            border-radius: 4px;
+        }
+        #calculate-btn.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .history-empty {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        .history-risk {
+            font-weight: bold;
+        }
+        .history-score-total {
+            margin-bottom: 0.5rem;
+        }
+        .history-scores {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        .factor-score {
+            font-size: 0.9rem;
+            color: #555;
+        }
+    `;
+    document.head.appendChild(style);
 });
