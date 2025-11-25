@@ -162,6 +162,145 @@ body {
     transition: background-color var(--transition-normal), color var(--transition-normal);
 }
 
+/* ===== IMPROVED CATEGORY SELECTOR ===== */
+.header-sub select,
+#categorySelect,
+#symbolCategory {
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--border-radius-md);
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    min-height: 36px;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'><path fill='%23666' d='M2 0L0 2h4zm0 5L0 3h4z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 12px;
+    padding-right: 36px;
+}
+
+/* Dark theme arrow */
+body.theme-dark .header-sub select,
+body.theme-dark #categorySelect,
+body.theme-dark #symbolCategory {
+    background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'><path fill='%23cccccc' d='M2 0L0 2h4zm0 5L0 3h4z'/></svg>");
+}
+
+/* High contrast theme arrow */
+body.theme-high-contrast .header-sub select,
+body.theme-high-contrast #categorySelect,
+body.theme-high-contrast #symbolCategory {
+    background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'><path fill='%23ffffff' d='M2 0L0 2h4zm0 5L0 3h4z'/></svg>");
+}
+
+.header-sub select:hover,
+#categorySelect:hover,
+#symbolCategory:hover {
+    border-color: var(--primary-color);
+    background-color: var(--bg-tertiary);
+}
+
+.header-sub select:focus,
+#categorySelect:focus,
+#symbolCategory:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(74, 134, 232, 0.2);
+}
+
+/* Header-specific category selector */
+.header-sub select,
+#categorySelect {
+    background-color: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    font-weight: 500;
+}
+
+.header-sub select:hover,
+#categorySelect:hover {
+    background-color: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.header-sub select:focus,
+#categorySelect:focus {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.7);
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+}
+
+/* Dark theme header adjustments */
+body.theme-dark .header-sub select,
+body.theme-dark #categorySelect {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+body.theme-dark .header-sub select:hover,
+body.theme-dark #categorySelect:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* High contrast header adjustments */
+body.theme-high-contrast .header-sub select,
+body.theme-high-contrast #categorySelect {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    color: white;
+    font-weight: bold;
+}
+
+body.theme-high-contrast .header-sub select:hover,
+body.theme-high-contrast #categorySelect:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-color: white;
+}
+
+/* Dropdown options styling */
+.header-sub select option,
+#categorySelect option,
+#symbolCategory option {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    padding: var(--spacing-sm);
+    font-weight: normal;
+}
+
+/* Remove default focus styles for options */
+.header-sub select option:focus,
+#categorySelect option:focus,
+#symbolCategory option:focus {
+    background: var(--primary-color);
+    color: white;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .header-sub select,
+    #categorySelect,
+    #symbolCategory {
+        font-size: 0.85rem;
+        padding: var(--spacing-xs) var(--spacing-sm);
+        padding-right: 32px;
+        min-height: 32px;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-sub select,
+    #categorySelect {
+        width: 100%;
+        margin-top: var(--spacing-xs);
+    }
+}
+
 /* ===== LAYOUT COMPONENTS ===== */
 .app-container {
     display: flex;
