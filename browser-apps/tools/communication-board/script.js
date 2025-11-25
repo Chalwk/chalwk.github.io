@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const toast = document.getElementById('toast');
     const boardWrap = document.getElementById('boardWrap');
     const installBtn = document.getElementById('installBtn');
+    const globalSearch = document.getElementById('globalSearch');
 
     // Categories Management DOM
     const manageCategoriesBtn = document.getElementById('manageCategoriesBtn');
@@ -559,7 +560,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Rendering
     function renderBoard() {
         communicationBoard.innerHTML = '';
-        const filtered = symbols.filter(s => settings.filterCategory === 'All' || s.category === settings.filterCategory);
+        const searchValue = (globalSearch?.value || "").toLowerCase();
+
+        const filtered = symbols.filter(s => {
+            const categoryOk = settings.filterCategory === 'All' || s.category === settings.filterCategory;
+            const searchOk = s.text.toLowerCase().includes(searchValue);
+            return categoryOk && searchOk;
+        });
+
         filtered.forEach(symbol => {
             const node = document.createElement('div');
             node.className = 'symbol';
@@ -979,6 +987,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // PWA Event Listeners
     if (installBtn) {
         installBtn.addEventListener('click', showInstallPrompt);
+    }
+
+    if (globalSearch) {
+        globalSearch.addEventListener('input', renderBoard);
     }
 
     // Category select event listener

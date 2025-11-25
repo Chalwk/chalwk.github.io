@@ -484,6 +484,21 @@ body {
     }
 }
 
+.board-toolbar {
+    padding: 10px 16px;
+    background: #f1f3f4;
+    border-bottom: 1px solid #e6e9ec;
+}
+
+#globalSearch {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+}
+
+
 /* Ensure good touch targets for mobile */
 @media (max-width: 768px) {
     .symbol {

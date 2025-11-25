@@ -76,6 +76,10 @@
             </div>
         </div>
 
+        <div class="board-toolbar">
+            <input type="text" id="globalSearch" placeholder="Search symbols..." aria-label="Search symbols">
+        </div>
+
         <div aria-label="Communication board" class="board-container" id="boardWrap" tabindex="0">
             <div class="communication-board" id="communicationBoard" role="list">
                 <!-- Symbols will be loaded here -->
@@ -133,7 +137,8 @@
     </div>
 
     <!-- Categories Management Modal -->
-    <div aria-hidden="true" aria-labelledby="categoriesModalTitle" aria-modal="true" class="modal" id="categoriesModal" role="dialog">
+    <div aria-hidden="true" aria-labelledby="categoriesModalTitle" aria-modal="true" class="modal" id="categoriesModal"
+         role="dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h2 id="categoriesModalTitle">Manage Categories</h2>
