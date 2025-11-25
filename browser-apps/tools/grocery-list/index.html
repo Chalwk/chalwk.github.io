@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta name="theme-color" content="#4a86e8">
-    <meta name="description" content="⚠️ Check an item to indicate that it needs to be purchased.">
+    <meta content="#4a86e8" name="theme-color">
+    <meta content="⚠️ Check an item to indicate that it needs to be purchased." name="description">
     <title>🛒 Grocery List</title>
     <link href="style.css" rel="stylesheet">
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" type="image/png" href="icons/icon-192x192.png">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Grocery List">
-    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+    <link href="manifest.json" rel="manifest">
+    <link href="icons/icon-192x192.png" rel="icon" type="image/png">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="default" name="apple-mobile-web-app-status-bar-style">
+    <meta content="Grocery List" name="apple-mobile-web-app-title">
+    <link href="icons/icon-192x192.png" rel="apple-touch-icon">
 </head>
 <body>
 <header>
@@ -61,23 +61,23 @@
 </main>
 
 <!-- Modal for adding/editing categories -->
-<div id="categoryModal" class="modal">
+<div class="modal" id="categoryModal">
     <div class="modal-content">
         <span class="close">&times;</span>
         <h2 id="categoryModalTitle">Add Category</h2>
         <form id="categoryForm">
             <label for="categoryName">Category Name:</label>
-            <input type="text" id="categoryName" required>
+            <input id="categoryName" required type="text">
             <div class="modal-buttons">
                 <button type="submit">Save</button>
-                <button type="button" id="cancelCategory">Cancel</button>
+                <button id="cancelCategory" type="button">Cancel</button>
             </div>
         </form>
     </div>
 </div>
 
 <!-- Modal for adding/editing items -->
-<div id="itemModal" class="modal">
+<div class="modal" id="itemModal">
     <div class="modal-content">
         <span class="close">&times;</span>
         <h2 id="itemModalTitle">Add Item</h2>
@@ -88,28 +88,28 @@
             </select>
 
             <label for="itemName">Item Name:</label>
-            <input type="text" id="itemName" required>
+            <input id="itemName" required type="text">
 
             <label for="itemPrice">Price:</label>
-            <input type="text" id="itemPrice" placeholder="$0.00">
+            <input id="itemPrice" placeholder="$0.00" type="text">
 
             <label for="itemLocation">Store/Location:</label>
-            <input type="text" id="itemLocation">
+            <input id="itemLocation" type="text">
 
             <label for="itemDescription">Description:</label>
             <textarea id="itemDescription" rows="3"></textarea>
 
             <div class="modal-buttons">
                 <button type="submit">Save</button>
-                <button type="button" id="cancelItem">Cancel</button>
-                <button type="button" id="deleteItem" style="display: none; background-color: #e74c3c;">Delete</button>
+                <button id="cancelItem" type="button">Cancel</button>
+                <button id="deleteItem" style="display: none; background-color: #e74c3c;" type="button">Delete</button>
             </div>
         </form>
     </div>
 </div>
 
 <!-- Hidden file input for import -->
-<input type="file" id="importFile" accept=".json" style="display: none;">
+<input accept=".json" id="importFile" style="display: none;" type="file">
 
 <script src="script.js"></script>
 <script>

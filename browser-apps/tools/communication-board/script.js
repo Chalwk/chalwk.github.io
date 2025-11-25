@@ -1003,11 +1003,20 @@ document.addEventListener('DOMContentLoaded', () => {
     function applyGridSetting() {
         const board = document.getElementById('communicationBoard');
         if (!board) return;
-
+        board.classList.remove('fixed-grid');
         switch (settings.gridSize) {
-            case '3x4': board.style.gridTemplateColumns = 'repeat(3, 1fr)'; break;
-            case '4x6': board.style.gridTemplateColumns = 'repeat(4, 1fr)'; break;
-            case '6x8': board.style.gridTemplateColumns = 'repeat(6, 1fr)'; break;
+            case '3x4':
+                board.style.gridTemplateColumns = 'repeat(3, 1fr)';
+                board.classList.add('fixed-grid');
+                break;
+            case '4x6':
+                board.style.gridTemplateColumns = 'repeat(4, 1fr)';
+                board.classList.add('fixed-grid');
+                break;
+            case '6x8':
+                board.style.gridTemplateColumns = 'repeat(6, 1fr)';
+                board.classList.add('fixed-grid');
+                break;
             default:
                 board.style.gridTemplateColumns = 'repeat(auto-fill, minmax(120px, 1fr))';
         }
