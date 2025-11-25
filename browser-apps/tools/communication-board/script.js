@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const symbolColorInput = document.getElementById('symbolColor');
     const symbolCategoryInput = document.getElementById('symbolCategory');
     const categorySelect = document.getElementById('categorySelect');
-    const undoBtn = document.getElementById('undoBtn');
     const exportBtn = document.getElementById('exportBtn');
     const importFile = document.getElementById('importFile');
     const toast = document.getElementById('toast');
@@ -1201,12 +1200,6 @@ document.addEventListener('DOMContentLoaded', () => {
             showToast('Previous voice not available, using default');
         }
     }
-
-    // Undo handler
-    undoBtn.addEventListener('click', () => {
-        undo();
-        closeSettingsMenu();
-    });
 
     // Toggle edit mode
     function toggleEditMode() {
