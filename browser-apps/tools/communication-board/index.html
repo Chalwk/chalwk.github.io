@@ -54,37 +54,7 @@
                         <button class="btn-secondary" id="manageCategoriesBtn">Manage Categories</button>
                     </div>
                     <div class="settings-group">
-                        <label for="themeSelect">Theme</label>
-                        <select id="themeSelect">
-                            <option value="auto">Auto (System)</option>
-                            <option value="light">Light</option>
-                            <option value="dark">Dark</option>
-                            <option value="high-contrast">High Contrast</option>
-                        </select>
-                    </div>
-                    <div class="settings-group">
-                        <label for="volumeSelect">Speech Volume</label>
-                        <select id="volumeSelect">
-                            <option value="1.0">100% (Loud)</option>
-                            <option value="0.8">80%</option>
-                            <option value="0.6">60% (Medium)</option>
-                            <option value="0.4">40%</option>
-                            <option value="0.2">20% (Quiet)</option>
-                            <option value="0.1">10% (Very Quiet)</option>
-                        </select>
-                    </div>
-                    <div class="settings-group">
-                        <label for="gridSizeSelect">Board Layout</label>
-                        <select id="gridSizeSelect">
-                            <option value="auto">Auto Responsive</option>
-                            <option value="3x4">3 × 4</option>
-                            <option value="4x6">4 × 6</option>
-                            <option value="6x8">6 × 8</option>
-                        </select>
-                    </div>
-                    <div class="settings-group">
-                        <label class="visually-hidden" for="voiceSelect">Choose voice</label>
-                        <select id="voiceSelect" title="Choose TTS voice"></select>
+                        <button class="btn-secondary" id="openSettingsPanelBtn">Additional Settings</button>
                     </div>
                 </div>
             </div>
@@ -186,6 +156,68 @@
 
                 <div class="form-actions">
                     <button class="btn-secondary" id="closeCategoriesBtn">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Panel Modal -->
+    <div aria-hidden="true" aria-labelledby="settingsModalTitle" aria-modal="true" class="modal" id="settingsModal" role="dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="settingsModalTitle">Settings</h2>
+                <span aria-label="Close" class="close" id="closeSettingsModal" role="button">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="settings-panel">
+                    <div class="settings-section">
+                        <h3>Appearance</h3>
+                        <div class="form-group">
+                            <label for="settingsThemeSelect">Theme</label>
+                            <select id="settingsThemeSelect">
+                                <option value="auto">Auto (System)</option>
+                                <option value="light">Light</option>
+                                <option value="dark">Dark</option>
+                                <option value="high-contrast">High Contrast</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <h3>Speech</h3>
+                        <div class="form-group">
+                            <label for="settingsVolumeSelect">Speech Volume</label>
+                            <select id="settingsVolumeSelect">
+                                <option value="1.0">100% (Loud)</option>
+                                <option value="0.8">80%</option>
+                                <option value="0.6">60% (Medium)</option>
+                                <option value="0.4">40%</option>
+                                <option value="0.2">20% (Quiet)</option>
+                                <option value="0.1">10% (Very Quiet)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="settingsVoiceSelect">Voice</label>
+                            <select id="settingsVoiceSelect"></select>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <h3>Board Layout</h3>
+                        <div class="form-group">
+                            <label for="settingsGridSizeSelect">Grid Size</label>
+                            <select id="settingsGridSizeSelect">
+                                <option value="auto">Auto Responsive</option>
+                                <option value="3x4">3 × 4</option>
+                                <option value="4x6">4 × 6</option>
+                                <option value="6x8">6 × 8</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button class="btn-secondary" id="closeSettingsBtn">Close</button>
                 </div>
             </div>
         </div>

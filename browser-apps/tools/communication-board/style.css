@@ -643,6 +643,13 @@ body.theme-high-contrast .symbol {
     border-bottom: none;
 }
 
+.settings-group label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: var(--spacing-xs);
+    color: var(--text-primary);
+}
+
 .settings-group select {
     width: 100%;
     padding: var(--spacing-sm);
@@ -650,6 +657,7 @@ body.theme-high-contrast .symbol {
     border: 1px solid var(--border-color);
     background: var(--bg-secondary);
     color: var(--text-primary);
+    font-size: 0.9rem;
 }
 
 .settings-group label.btn-secondary {
@@ -681,6 +689,39 @@ body.theme-high-contrast .symbol {
     margin-bottom: 0;
 }
 
+/* ===== SETTINGS PANEL ===== */
+.settings-panel {
+    margin-bottom: var(--spacing-lg);
+}
+
+.settings-section {
+    margin-bottom: var(--spacing-xl);
+    padding: var(--spacing-md);
+    background: var(--bg-tertiary);
+    border-radius: var(--border-radius-lg);
+    border: 1px solid var(--border-light);
+}
+
+.settings-section:last-child {
+    margin-bottom: 0;
+}
+
+.settings-section h3 {
+    margin-bottom: var(--spacing-md);
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: var(--spacing-xs);
+}
+
+.settings-section .form-group {
+    margin-bottom: var(--spacing-md);
+}
+
+.settings-section .form-group:last-child {
+    margin-bottom: 0;
+}
+
 /* ===== BOARD TOOLBAR ===== */
 .board-toolbar {
     padding: var(--spacing-md) var(--spacing-lg);
@@ -700,22 +741,6 @@ body.theme-high-contrast .symbol {
 
 #globalSearch::placeholder {
     color: var(--text-light);
-}
-
-#gridSizeSelect {
-    width: 100%;
-    padding: var(--spacing-sm) var(--spacing-md);
-    border: 1px solid var(--border-color);
-    background: var(--bg-secondary);
-    color: var(--text-primary);
-    border-radius: var(--border-radius-md);
-    font-size: 0.9rem;
-}
-
-.settings-group label[for="gridSizeSelect"] {
-    font-weight: 600;
-    display: block;
-    margin-bottom: var(--spacing-xs);
 }
 
 /* Volume selector specific styling */
@@ -858,6 +883,15 @@ body.theme-high-contrast .symbol {
         height: 50px;
         font-size: 24px;
     }
+
+    /* Settings Panel Mobile Styles */
+    .settings-section {
+        padding: var(--spacing-sm);
+    }
+
+    .settings-section h3 {
+        font-size: 1rem;
+    }
 }
 
 @media (max-width: 480px) {
@@ -929,6 +963,16 @@ body.theme-high-contrast .symbol {
     .phrase-item.drag-over {
         border-width: 3px;
         transform: scale(1.05);
+    }
+
+    /* Settings Panel Small Screen */
+    .settings-panel {
+        margin-bottom: var(--spacing-md);
+    }
+
+    .settings-section {
+        margin-bottom: var(--spacing-lg);
+        padding: var(--spacing-sm);
     }
 }
 

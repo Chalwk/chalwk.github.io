@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const symbolColorInput = document.getElementById('symbolColor');
     const symbolCategoryInput = document.getElementById('symbolCategory');
     const categorySelect = document.getElementById('categorySelect');
-    const voiceSelect = document.getElementById('voiceSelect');
     const undoBtn = document.getElementById('undoBtn');
     const exportBtn = document.getElementById('exportBtn');
     const importFile = document.getElementById('importFile');
@@ -26,7 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const boardWrap = document.getElementById('boardWrap');
     const installBtn = document.getElementById('installBtn');
     const globalSearch = document.getElementById('globalSearch');
-    const gridSizeSelect = document.getElementById('gridSizeSelect');
     const volumeSelect = document.getElementById('volumeSelect');
 
     // Categories Management DOM
@@ -37,6 +35,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const categoriesList = document.getElementById('categoriesList');
     const newCategoryName = document.getElementById('newCategoryName');
     const addCategoryBtn = document.getElementById('addCategoryBtn');
+
+    // Settings Panel DOM
+    const settingsModal = document.getElementById('settingsModal');
+    const closeSettingsModal = document.getElementById('closeSettingsModal');
+    const closeSettingsBtn = document.getElementById('closeSettingsBtn');
+    const openSettingsPanelBtn = document.getElementById('openSettingsPanelBtn');
+    const settingsThemeSelect = document.getElementById('settingsThemeSelect');
+    const settingsVolumeSelect = document.getElementById('settingsVolumeSelect');
+    const settingsVoiceSelect = document.getElementById('settingsVoiceSelect');
+    const settingsGridSizeSelect = document.getElementById('settingsGridSizeSelect');
 
     // Settings dropdown elements
     const settingsToggle = document.getElementById('settingsToggle');
@@ -567,7 +575,7 @@ document.addEventListener('DOMContentLoaded', () => {
         closeSettingsMenu();
     }
 
-    function closeCategoriesModalHandler() { // Renamed this function
+    function closeCategoriesModalHandler() {
         categoriesModal.setAttribute('aria-hidden', 'true');
         newCategoryName.value = '';
     }
@@ -610,6 +618,53 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         });
+    }
+
+    // Settings Panel Functions
+    function openSettingsModal() {
+        settingsModal.setAttribute('aria-hidden', 'false');
+
+        // Sync current settings to the panel
+        settingsThemeSelect.value = settings.theme;
+        settingsVolumeSelect.value = settings.volume.toString();
+        settingsGridSizeSelect.value = settings.gridSize;
+
+        // Populate voices in settings panel
+        populateSettingsVoices();
+        closeSettingsMenu();
+    }
+
+    function closeSettingsModalHandler() {
+        settingsModal.setAttribute('aria-hidden', 'true');
+    }
+
+    function populateSettingsVoices() {
+        const voices = speechSynthesis.getVoices();
+        settingsVoiceSelect.innerHTML = '';
+
+        const defaultOption = document.createElement('option');
+        defaultOption.value = '';
+        defaultOption.textContent = 'Default Voice';
+        defaultOption.selected = !localStorage.getItem(LS.voiceKey);
+        settingsVoiceSelect.appendChild(defaultOption);
+
+        const stored = localStorage.getItem(LS.voiceKey);
+        let foundStored = false;
+
+        voices.forEach(v => {
+            const o = document.createElement('option');
+            o.value = v.name;
+            o.textContent = `${v.name} ${v.lang ? '(' + v.lang + ')' : ''}`;
+            if (stored && stored === v.name) {
+                o.selected = true;
+                foundStored = true;
+            }
+            settingsVoiceSelect.appendChild(o);
+        });
+
+        if (!foundStored && voices.length > 0 && stored) {
+            localStorage.removeItem(LS.voiceKey);
+        }
     }
 
     // PWA Functions
@@ -1114,18 +1169,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-
     // Voices
     function populateVoices() {
         const voices = speechSynthesis.getVoices();
-        voiceSelect.innerHTML = '';
+        settingsVoiceSelect.innerHTML = '';
 
         // Add a default option
         const defaultOption = document.createElement('option');
         defaultOption.value = '';
         defaultOption.textContent = 'Default Voice';
         defaultOption.selected = !localStorage.getItem(LS.voiceKey);
-        voiceSelect.appendChild(defaultOption);
+        settingsVoiceSelect.appendChild(defaultOption);
 
         const stored = localStorage.getItem(LS.voiceKey);
         let foundStored = false;
@@ -1138,7 +1192,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 o.selected = true;
                 foundStored = true;
             }
-            voiceSelect.appendChild(o);
+            settingsVoiceSelect.appendChild(o);
         });
 
         // If stored voice not found but we have voices, select first available
@@ -1198,6 +1252,39 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Settings Panel Event Listeners
+    openSettingsPanelBtn.addEventListener('click', openSettingsModal);
+    closeSettingsModal.addEventListener('click', closeSettingsModalHandler);
+    closeSettingsBtn.addEventListener('click', closeSettingsModalHandler);
+
+    // Settings panel controls
+    settingsThemeSelect.addEventListener('change', () => {
+        saveTheme(settingsThemeSelect.value);
+    });
+
+    settingsVolumeSelect.addEventListener('change', () => {
+        settings.volume = parseFloat(settingsVolumeSelect.value);
+        saveSettings();
+        showToast(`Volume set to ${Math.round(settings.volume * 100)}%`);
+    });
+
+    settingsGridSizeSelect.addEventListener('change', () => {
+        settings.gridSize = settingsGridSizeSelect.value;
+        saveSettings();
+        applyGridSetting();
+    });
+
+    settingsVoiceSelect.addEventListener('change', () => {
+        const selectedVoice = settingsVoiceSelect.value;
+        if (selectedVoice) {
+            localStorage.setItem(LS.voiceKey, selectedVoice);
+            showToast(`Voice set to: ${selectedVoice}`);
+        } else {
+            localStorage.removeItem(LS.voiceKey);
+            showToast('Using default voice');
+        }
+    });
+
     // Settings dropdown event listeners
     settingsToggle.addEventListener('click', toggleSettingsMenu);
 
@@ -1209,18 +1296,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (globalSearch) {
         globalSearch.addEventListener('input', renderBoard);
     }
-
-    gridSizeSelect.addEventListener('change', () => {
-        settings.gridSize = gridSizeSelect.value;
-        saveSettings();
-        applyGridSetting();
-    });
-
-    volumeSelect.addEventListener('change', () => {
-        settings.volume = parseFloat(volumeSelect.value);
-        saveSettings();
-        showToast(`Volume set to ${Math.round(settings.volume * 100)}%`);
-    });
 
     // Category select event listener
     categorySelect.addEventListener('change', () => {
@@ -1234,14 +1309,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // file will be processed when saving
     });
 
-    themeSelect.addEventListener('change', () => {
-        saveTheme(themeSelect.value);
-        closeSettingsMenu();
-    });
-
     // voice select save
-    voiceSelect.addEventListener('change', () => {
-        const selectedVoice = voiceSelect.value;
+    settingsVoiceSelect.addEventListener('change', () => {
+        const selectedVoice = settingsVoiceSelect.value;
         if (selectedVoice) {
             localStorage.setItem(LS.voiceKey, selectedVoice);
             showToast(`Voice set to: ${selectedVoice}`);
@@ -1295,10 +1365,6 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('App is running in standalone mode');
         }
 
-        if (gridSizeSelect) gridSizeSelect.value = settings.gridSize;
-        if (themeSelect) themeSelect.value = settings.theme;
-        if (volumeSelect) volumeSelect.value = settings.volume.toString();
-
         applyGridSetting();
         updateInstallButton();
 
@@ -1306,12 +1372,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const voices = speechSynthesis.getVoices();
             if (voices.length > 0) {
                 populateVoices();
+                populateSettingsVoices(); // Also populate settings panel
             } else {
                 // Try again after a short delay on mobile
                 setTimeout(() => {
                     const retryVoices = speechSynthesis.getVoices();
                     if (retryVoices.length > 0) {
                         populateVoices();
+                        populateSettingsVoices(); // Also populate settings panel
                     } else {
                         console.log('No voices available');
                         showToast('No TTS voices detected');
