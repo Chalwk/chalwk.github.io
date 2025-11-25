@@ -557,6 +557,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // For long-press
+    function previewSpeak(symbol) {
+        const text = symbol.text;
+        if (!text || !('speechSynthesis' in window)) return;
+
+        speechSynthesis.cancel();
+        const ut = new SpeechSynthesisUtterance(text);
+
+        // apply chosen voice
+        const chosen = localStorage.getItem(LS.voiceKey);
+        if (chosen) {
+            const voice = speechSynthesis.getVoices().find(v => v.name === chosen);
+            if (voice) ut.voice = voice;
+        }
+
+        speechSynthesis.speak(ut);
+    }
+
+
     // Rendering
     function renderBoard() {
         communicationBoard.innerHTML = '';
@@ -588,6 +607,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (isEditMode) openEditModal(symbol);
                 else addToPhrase(symbol);
             });
+
+            // LONG PRESS PREVIEW
+            let pressTimer = null;
+            node.addEventListener('mousedown', () => {
+                if (isEditMode) return;
+                pressTimer = setTimeout(() => previewSpeak(symbol), 600);
+            });
+            node.addEventListener('mouseup', () => clearTimeout(pressTimer));
+            node.addEventListener('mouseleave', () => clearTimeout(pressTimer));
+            node.addEventListener('touchstart', () => {
+                if (isEditMode) return;
+                pressTimer = setTimeout(() => previewSpeak(symbol), 600);
+            });
+            node.addEventListener('touchend', () => clearTimeout(pressTimer));
+            node.addEventListener('touchcancel', () => clearTimeout(pressTimer));
 
             // keyboard support
             node.addEventListener('keydown', (ev) => {
