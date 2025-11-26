@@ -33,11 +33,8 @@ const answeredSliders = new Set();
 
 // Initialize sliders with validation
 sliders.forEach((slider, index) => {
-    // Set all sliders to neutral (3) initially
     slider.value = 3;
     sliderValues[index].textContent = '3';
-
-    // Add validation styling
     slider.classList.add('unanswered');
 
     slider.addEventListener('input', function() {
@@ -48,12 +45,10 @@ sliders.forEach((slider, index) => {
         slider.classList.remove('unanswered');
         slider.classList.add('answered');
 
-        // Update calculate button state
         updateCalculateButtonState();
     });
 });
 
-// Update calculate button based on completion
 function updateCalculateButtonState() {
     const allAnswered = answeredSliders.size === sliders.length;
 
@@ -69,7 +64,6 @@ function updateCalculateButtonState() {
     }
 }
 
-// Initialize calculate button state
 updateCalculateButtonState();
 
 // Tab functionality
@@ -86,19 +80,17 @@ tabs.forEach(tab => {
     });
 });
 
-// Enhanced collapse functionality for factor groups
+// Collapse groups
 function initializeCollapsedState() {
     collapseToggles.forEach(toggle => {
         const targetId = toggle.getAttribute('data-target');
         const content = document.getElementById(targetId);
         const icon = toggle.querySelector('.collapse-icon');
 
-        // Ensure all are collapsed by default
         content.classList.add('collapsed');
         content.style.maxHeight = '0';
         icon.style.transform = 'rotate(-90deg)';
 
-        // Add click handler
         toggle.addEventListener('click', function() {
             if (content.classList.contains('collapsed')) {
                 content.classList.remove('collapsed');
@@ -113,10 +105,7 @@ function initializeCollapsedState() {
     });
 }
 
-// Initialize collapsed state
 initializeCollapsedState();
-
-// Calculate risk
 calculateBtn.addEventListener('click', calculateRisk);
 
 function calculateRisk() {
@@ -137,7 +126,6 @@ function calculateRisk() {
         return;
     }
 
-    // Get values from all sliders (0-5 scale)
     const energyLevel = parseInt(document.getElementById('energy-level').value);
     const sleepQuality = parseInt(document.getElementById('sleep-quality').value);
     const routineDifficulty = parseInt(document.getElementById('routine-difficulty').value);
@@ -162,11 +150,6 @@ function calculateRisk() {
     const emotionalNumbness = parseInt(document.getElementById('emotional-numbness').value);
     const meltdownFrequency = parseInt(document.getElementById('meltdown-frequency').value);
     const hopelessness = parseInt(document.getElementById('hopelessness').value);
-
-    // IMPROVED ASSESSMENT LOGIC
-
-    // Calculate weighted factor scores with different weightings
-    // Higher weight = more impact on overall burnout risk
 
     // Energy factor (high impact on overall burnout)
     const energyFactor = Math.round(
@@ -195,7 +178,7 @@ function calculateRisk() {
     // Social factor (medium impact)
     const socialFactor = Math.round(
         (socialDrain * 1.1) +
-        (maskingLevel * 1.2) +  // Masking is particularly draining for neurodivergent individuals
+        (maskingLevel * 1.2) +
         (communicationDifficulty * 1.0) +
         (socialIsolation * 0.9)
     );
@@ -204,12 +187,12 @@ function calculateRisk() {
     const emotionFactor = Math.round(
         (emotionalReactivity * 1.1) +
         (emotionalNumbness * 1.0) +
-        (meltdownFrequency * 1.3) +  // Meltdowns indicate severe overwhelm
-        (hopelessness * 1.2)  // Hopelessness is a key burnout indicator
+        (meltdownFrequency * 1.3) +
+        (hopelessness * 1.2)
     );
 
-    // Apply non-linear scaling to account for compounding effects
-    // Higher scores in multiple areas compound burnout risk
+    // Non-linear scaling to account for compounding effects
+    // Higher scores in multiple areas compound burnout risk!
     const factorScores = [energyFactor, sensoryFactor, executiveFactor, socialFactor, emotionFactor];
     const highRiskFactors = factorScores.filter(score => score >= 15).length;
     const compoundingMultiplier = 1 + (highRiskFactors * 0.1); // 10% increase per high-risk factor
@@ -220,24 +203,20 @@ function calculateRisk() {
         compoundingMultiplier
     );
 
-    // Cap at maximum of 100
+    // Cap at maximum of 100!
     totalScore = Math.min(totalScore, 100);
 
-    // Update factor breakdown (show weighted scores but display out of 20 for consistency)
+    // Sshow weighted scores but display out of 20
     energyScore.textContent = `${energyFactor}/20`;
     sensoryScore.textContent = `${sensoryFactor}/20`;
     executiveScore.textContent = `${executiveFactor}/20`;
     socialScore.textContent = `${socialFactor}/20`;
     emotionScore.textContent = `${emotionFactor}/20`;
 
-    // Show factor breakdown
     factorBreakdown.style.display = 'block';
 
-    // Update risk indicator position
     const riskPercentage = Math.min((totalScore / 100) * 100, 100);
     riskIndicator.style.left = `${riskPercentage}%`;
-
-    // Update risk score and level with improved thresholds
     riskScore.textContent = totalScore;
 
     let riskText = '';
@@ -269,20 +248,16 @@ function calculateRisk() {
     riskLevel.textContent = riskText;
     riskLevel.className = `risk-level ${riskClass}`;
 
-    // Add risk description if element exists
     const riskDescriptionEl = document.getElementById('risk-description');
     if (riskDescriptionEl) {
         riskDescriptionEl.textContent = riskDescription;
     }
-
-    // Update recommendations based on highest scoring factors
     updatePriorityRecommendations(energyFactor, sensoryFactor, executiveFactor, socialFactor, emotionFactor);
 
-    // Scroll to results
     factorBreakdown.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-// Enhanced priority recommendations
+// Priority recommendations
 function updatePriorityRecommendations(energy, sensory, executive, social, emotion) {
     const factors = [
         { name: 'energy', score: energy, label: 'Energy Management' },
@@ -329,7 +304,6 @@ function updatePriorityRecommendations(energy, sensory, executive, social, emoti
     });
 }
 
-// Save assessment
 saveBtn.addEventListener('click', saveAssessment);
 
 function saveAssessment() {
@@ -352,16 +326,9 @@ function saveAssessment() {
         answeredQuestions: answeredSliders.size
     };
 
-    // Get existing history or initialize empty array
     const history = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-
-    // Add new assessment
     history.push(assessment);
-
-    // Save back to localStorage
     localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
-
-    // Update history display
     renderHistory();
 
     alert('Assessment saved successfully!');
@@ -405,7 +372,7 @@ function exportData() {
         csv += `${date},${assessment.score},${assessment.factors.energy},${assessment.factors.sensory},${assessment.factors.executive},${assessment.factors.social},${assessment.factors.emotion},${assessment.answeredQuestions || sliders.length}\n`;
     });
 
-    // Create download link
+    // Download link
     const blob = new Blob([csv], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
