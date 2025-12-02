@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Bills & Invoices Tracker</title>
+    <link href="style.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>Bills & Invoices Tracker</h1>
+        <p class="subtitle">Track your weekly and monthly expenses with automatic calculations</p>
+    </header>
+
+    <div class="dashboard">
+        <div class="card">
+            <h2>Weekly Income <span>After Tax</span></h2>
+            <div class="stat positive" id="weekly-income">Calculating...</div>
+            <p>Total from all income streams</p>
+        </div>
+
+        <div class="card">
+            <h2>Weekly Expenses <span>Total</span></h2>
+            <div class="stat negative" id="weekly-expenses">Calculating...</div>
+            <p>Sum of all weekly payments</p>
+        </div>
+
+        <div class="card">
+            <h2>Remaining Balance <span>Weekly</span></h2>
+            <div class="stat" id="remaining-balance">Calculating...</div>
+            <p>For Kai, treats, activities, birthdays, etc.</p>
+        </div>
+
+        <div class="card">
+            <h2>Monthly Average <span>From Weekly</span></h2>
+            <div class="stat" id="monthly-average">Calculating...</div>
+            <p>Weekly expenses × 4 weeks</p>
+        </div>
+    </div>
+
+    <div class="toolbar" style="margin-bottom: 20px;">
+        <div class="data-management">
+            <button class="btn btn-info" id="import-data">
+                <i class="fas fa-file-import"></i> Import Data
+            </button>
+            <input type="file" id="import-file" accept=".json" style="display: none;">
+            <button class="btn btn-success" id="export-data">
+                <i class="fas fa-file-export"></i> Export Data
+            </button>
+            <button class="btn btn-warning" id="reset-data">
+                <i class="fas fa-trash-restore"></i> Reset to Default
+            </button>
+        </div>
+    </div>
+
+    <div class="tabs">
+        <div class="tab active" data-tab="income">Income Streams</div>
+        <div class="tab" data-tab="weekly">Weekly Bills</div>
+        <div class="tab" data-tab="monthly">Monthly Bills</div>
+        <div class="tab" data-tab="invoices">Invoices</div>
+        <div class="tab" data-tab="affordability">Affordability Analysis</div>
+    </div>
+
+    <div class="tab-content" id="income-tab">
+        <div class="toolbar">
+            <h2>Income Streams</h2>
+            <button class="btn btn-primary" id="add-income">
+                <i class="fas fa-plus"></i> Add Income Stream
+            </button>
+        </div>
+
+        <table id="income-streams-table">
+            <thead>
+            <tr>
+                <th>Source</th>
+                <th>Amount</th>
+                <th>Frequency</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Status</th>
+                <th>Notes</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Income streams will be populated here -->
+            </tbody>
+        </table>
+        <p class="help-text"><i>Tip: Double-click any income stream to edit it</i></p>
+    </div>
+
+    <div class="tab-content" id="weekly-tab">
+        <div class="toolbar">
+            <h2>Recurring Weekly Payments</h2>
+            <button class="btn btn-primary" id="add-weekly-bill">
+                <i class="fas fa-plus"></i> Add Bill
+            </button>
+        </div>
+
+        <table id="weekly-bills-table">
+            <thead>
+            <tr>
+                <th>Bill</th>
+                <th>Amount (Weekly Equivalent)</th>
+                <th>Frequency</th>
+                <th>Payment Day</th>
+                <th>Additional Notes</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Weekly bills will be populated here -->
+            </tbody>
+        </table>
+        <p class="help-text"><i>Tip: Double-click any bill to edit it</i></p>
+    </div>
+
+    <div class="tab-content" id="monthly-tab">
+        <div class="toolbar">
+            <h2>Monthly Bills</h2>
+            <button class="btn btn-primary" id="add-monthly-bill">
+                <i class="fas fa-plus"></i> Add Bill
+            </button>
+        </div>
+
+        <table id="monthly-bills-table">
+            <thead>
+            <tr>
+                <th>Bill</th>
+                <th>Amount</th>
+                <th>Frequency</th>
+                <th>Payment Day</th>
+                <th>Additional Notes</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Monthly bills will be populated here -->
+            </tbody>
+        </table>
+        <p class="help-text"><i>Tip: Double-click any bill to edit it</i></p>
+    </div>
+
+    <div class="tab-content" id="invoices-tab">
+        <div class="toolbar">
+            <h2>Invoices</h2>
+            <div>
+                <button class="btn btn-secondary" id="toggle-paid-invoices">
+                    Hide Paid Invoices
+                </button>
+                <button class="btn btn-primary" id="add-invoice">
+                    <i class="fas fa-plus"></i> Add Invoice
+                </button>
+            </div>
+        </div>
+
+        <div id="invoices-container">
+            <!-- Invoices will be populated here -->
+        </div>
+        <p class="help-text"><i>Tip: Double-click any invoice to edit it</i></p>
+    </div>
+
+    <div class="tab-content" id="affordability-tab">
+        <div class="toolbar">
+            <h2>Affordability Analysis</h2>
+            <button class="btn btn-primary" id="add-affordability-item">
+                <i class="fas fa-plus"></i> Add Item
+            </button>
+        </div>
+
+        <p class="help-text">Add items you're considering purchasing to see if you can afford them based on your
+            remaining weekly balance.</p>
+
+        <table id="affordability-table">
+            <thead>
+            <tr>
+                <th>Item Name</th>
+                <th>Description</th>
+                <th>Total Cost</th>
+                <th>Deposit</th>
+                <th>Weekly Payment</th>
+                <th>Timeframe (weeks)</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Affordability items will be populated here -->
+            </tbody>
+        </table>
+        <p class="help-text"><i>Tip: Double-click any item to edit it</i></p>
+    </div>
+
+    <div class="toolbar">
+        <div></div>
+        <div>
+            <button class="btn btn-success" id="back-button">
+                <i class="fas fa-arrow-left"></i> ← Back to Home Page
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for adding/editing bills -->
+<div class="modal" id="bill-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="modal-title">Add Bill</h2>
+            <button class="btn btn-light" id="close-modal">&times;</button>
+        </div>
+        <form id="bill-form">
+            <input id="bill-id" type="hidden">
+            <input id="bill-type" type="hidden">
+
+            <div class="form-group">
+                <label for="bill-name">Bill Name</label>
+                <input id="bill-name" required type="text">
+            </div>
+
+            <div class="form-group">
+                <label for="bill-amount">Amount ($)</label>
+                <input id="bill-amount" required step="0.01" type="number">
+            </div>
+
+            <div class="form-group">
+                <label for="bill-frequency">Frequency</label>
+                <select id="bill-frequency" required>
+                    <option value="Weekly">Weekly</option>
+                    <option value="Bi-weekly">Bi-weekly</option>
+                    <option value="Monthly">Monthly</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="bill-day">Payment Day</label>
+                <input id="bill-day" required type="text">
+            </div>
+
+            <div class="form-group">
+                <label for="bill-notes">Additional Notes</label>
+                <input id="bill-notes" type="text">
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-light" id="cancel-bill" type="button">Cancel</button>
+                <button class="btn btn-primary" type="submit">Save Bill</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal for adding/editing invoices -->
+<div class="modal" id="invoice-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="invoice-modal-title">Add Invoice</h2>
+            <button class="btn btn-light" id="close-invoice-modal">&times;</button>
+        </div>
+        <form id="invoice-form">
+            <input id="invoice-id" type="hidden">
+
+            <div class="form-group">
+                <label for="invoice-number">Invoice Number</label>
+                <input id="invoice-number" required type="text">
+            </div>
+
+            <div class="form-group">
+                <label for="invoice-total">Total Amount ($)</label>
+                <input id="invoice-total" required step="0.01" type="number">
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-light" id="cancel-invoice" type="button">Cancel</button>
+                <button class="btn btn-primary" type="submit">Save Invoice</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal for adding payments -->
+<div class="modal" id="payment-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Add Payment</h2>
+            <button class="btn btn-light" id="close-payment-modal">&times;</button>
+        </div>
+        <form id="payment-form">
+            <input id="payment-invoice-id" type="hidden">
+
+            <div class="form-group">
+                <label for="payment-date">Payment Date</label>
+                <input id="payment-date" required type="date">
+            </div>
+
+            <div class="form-group">
+                <label for="payment-amount">Amount ($)</label>
+                <input id="payment-amount" required step="0.01" type="number">
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-light" id="cancel-payment" type="button">Cancel</button>
+                <button class="btn btn-primary" type="submit">Add Payment</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal for adding/editing income streams -->
+<div class="modal" id="income-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="income-modal-title">Add Income Stream</h2>
+            <button class="btn btn-light" id="close-income-modal">&times;</button>
+        </div>
+        <form id="income-form">
+            <input id="income-id" type="hidden">
+
+            <div class="form-group">
+                <label for="income-name">Income Source</label>
+                <input id="income-name" required type="text" placeholder="e.g., Part-time Job">
+            </div>
+
+            <div class="form-group">
+                <label for="income-amount">Amount ($)</label>
+                <input id="income-amount" required step="0.01" type="number">
+            </div>
+
+            <div class="form-group">
+                <label for="income-frequency">Frequency</label>
+                <select id="income-frequency" required>
+                    <option value="Weekly">Weekly</option>
+                    <option value="Fortnightly">Fortnightly</option>
+                    <option value="Monthly">Monthly</option>
+                    <option value="Yearly">Yearly</option>
+                    <option value="One-off">One-off</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="income-dates-group">
+                <div class="date-group">
+                    <label for="income-start-date">Start Date</label>
+                    <input id="income-start-date" type="date">
+                </div>
+                <div class="date-group">
+                    <label for="income-end-date">End Date (Optional)</label>
+                    <input id="income-end-date" type="date">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="income-notes">Notes (Optional)</label>
+                <input id="income-notes" type="text">
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-light" id="cancel-income" type="button">Cancel</button>
+                <button class="btn btn-primary" type="submit">Save Income</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal for adding/editing affordability items -->
+<div class="modal" id="affordability-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="affordability-modal-title">Add Affordability Item</h2>
+            <button class="btn btn-light" id="close-affordability-modal">&times;</button>
+        </div>
+        <form id="affordability-form">
+            <input id="affordability-id" type="hidden">
+
+            <div class="form-group">
+                <label for="affordability-name">Item Name</label>
+                <input id="affordability-name" required type="text" placeholder="e.g., Laptop, Gaming Console">
+            </div>
+
+            <div class="form-group">
+                <label for="affordability-description">Description (Optional)</label>
+                <input id="affordability-description" type="text" placeholder="e.g., Birthday Present">
+            </div>
+
+            <div class="form-group">
+                <label for="affordability-total-cost">Total Cost ($)</label>
+                <input id="affordability-total-cost" required step="0.01" type="number">
+            </div>
+
+            <div class="form-group">
+                <label for="affordability-deposit">Deposit ($ - Optional)</label>
+                <input id="affordability-deposit" step="0.01" type="number" value="0">
+            </div>
+
+            <div class="form-group">
+                <label for="affordability-timeframe">Timeframe (weeks)</label>
+                <input id="affordability-timeframe" type="number" min="0" value="52">
+                <small class="help-text">How many weeks do you want to pay this off in?</small>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-light" id="cancel-affordability" type="button">Cancel</button>
+                <button class="btn btn-primary" type="submit">Save Item</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
