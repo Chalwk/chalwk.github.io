@@ -413,7 +413,6 @@ select {
     background-color: var(--warning);
 }
 
-/* New styles for multiple entries */
 .multiple-entry-controls {
     margin-top: 10px;
 }
@@ -467,7 +466,6 @@ select {
     background-color: var(--text);
 }
 
-/* Import/Export modal specific styles */
 #importExportModal .modal-content {
     max-width: 400px;
 }
@@ -481,7 +479,6 @@ select {
     line-height: 1.5;
 }
 
-/* Enhanced prediction styles */
 .prediction-value {
     min-height: 50px;
     display: flex;
@@ -555,7 +552,6 @@ select {
     color: var(--text-light);
 }
 
-/* Analytics button */
 .btn-analytics {
     background-color: var(--secondary);
     color: white;
@@ -571,7 +567,6 @@ select {
     background-color: var(--primary);
 }
 
-/* Modal for detailed analytics */
 .analytics-modal .modal-content {
     max-width: 800px;
     max-height: 80vh;
@@ -652,7 +647,6 @@ select {
     box-shadow: 0 0 0 1px white;
 }
 
-/* Enhanced table view for individual events */
 .event-timestamp {
     font-size: 0.85rem;
     color: var(--text-light);
@@ -664,7 +658,6 @@ select {
     gap: 5px;
 }
 
-/* Statistics enhancements */
 .stats-grid {
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
 }
@@ -681,7 +674,6 @@ select {
     font-size: 0.8rem;
 }
 
-/* Prediction confidence indicator */
 .confidence-indicator {
     display: inline-block;
     width: 10px;
@@ -702,7 +694,6 @@ select {
     background-color: var(--danger);
 }
 
-/* Detailed stats */
 .detailed-stats {
     display: contents;
 }
