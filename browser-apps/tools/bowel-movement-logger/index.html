@@ -18,6 +18,22 @@
 </header>
 
 <main>
+
+    <!-- Sample Data Notification -->
+    <div class="sample-data-notification" id="sampleDataNotification">
+        <div class="notification-content">
+            <span class="notification-icon">ℹ️</span>
+            <div class="notification-text">
+                <strong>Sample Data Loaded</strong>
+                <p>You're currently viewing sample data. Add your own entries or clear this data to start tracking your actual bowel movements.</p>
+            </div>
+            <div class="notification-buttons">
+                <button class="btn btn-warning btn-sm" id="clearSampleDataBtn">Clear Sample Data</button>
+                <button class="btn btn-secondary btn-sm" id="hideSampleNotificationBtn">Hide</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Prediction Section -->
     <section class="prediction-section">
         <h2 class="prediction-title">📊 Predictive Analysis</h2>
@@ -161,6 +177,16 @@
 <!-- Import/Export Modal -->
 <div class="modal" id="importExportModal">
     <div class="modal-content">
+        <div class="form-group" style="border-top: 1px solid var(--border); padding-top: 20px;">
+            <p>Load sample data to see how the app works. This will replace your current data.</p>
+            <button class="btn btn-info" id="loadSampleDataBtn" style="width: 100%; margin-bottom: 10px;">
+                📋 Load Sample Data
+            </button>
+            <small style="color: var(--text-light); display: block; margin-top: 5px;">
+                Note: Loading sample data will replace all current entries with demonstration data.
+            </small>
+        </div>
+
         <div class="modal-header">
             <h3 class="modal-title">Import/Export Data</h3>
             <button class="close-btn" id="closeImportExportBtn">&times;</button>

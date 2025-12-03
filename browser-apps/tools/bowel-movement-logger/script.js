@@ -1,5 +1,109 @@
 let bowelMovementData = [];
 
+// Sample data for demonstration
+const sampleData = [
+    { id: 1, date: "2025-12-15", time: "08:30", type: "3", notes: "Normal movement" },
+    { id: 2, date: "2025-12-16", time: "09:15", type: "4", notes: "Slightly loose" },
+    { id: 3, date: "2025-12-17", time: "10:00", type: "2", notes: "Hard, constipated" },
+    { id: 4, date: "2025-12-18", time: "08:00 / 14:30", type: "3/4", notes: "Two movements, one normal one loose" },
+    { id: 5, date: "2025-12-19", time: "07:45", type: "3", notes: "" },
+    { id: 6, date: "2025-12-20", time: "09:00", type: "5", notes: "Loose" },
+    { id: 7, date: "2025-12-21", time: "08:30", type: "3", notes: "Normal" },
+    { id: 8, date: "2025-12-22", time: "10:15", type: "4", notes: "Soft" },
+    { id: 9, date: "2025-12-23", time: "08:45", type: "3", notes: "Normal" },
+    { id: 10, date: "2025-12-24", time: "09:30", type: "4", notes: "Slightly soft" },
+    { id: 11, date: "2025-12-25", time: "08:00", type: "3", notes: "" },
+    { id: 12, date: "2025-12-26", time: "11:00", type: "2-3", notes: "Between type 2 and 3" },
+    { id: 13, date: "2025-12-27", time: "08:30", type: "3", notes: "Regular" },
+    { id: 14, date: "2025-12-28", time: "09:15", type: "4", notes: "Morning movement" },
+    { id: 15, date: "2025-12-29", time: "08:45 / 16:00", type: "3/5", notes: "Two movements, second one loose" }
+];
+
+// Flag to track if using sample data
+let isUsingSampleData = false;
+
+// Check if data is empty and load sample data
+function checkAndLoadSampleData() {
+    const savedData = localStorage.getItem('bowelMovementData');
+
+    if (!savedData || savedData === '[]') {
+        // No data exists, load sample data
+        loadSampleData();
+        showSampleDataNotification();
+    } else {
+        // Check if it's sample data by looking at content
+        try {
+            const parsed = JSON.parse(savedData);
+            if (parsed.length === 0) {
+                loadSampleData();
+                showSampleDataNotification();
+            } else {
+                // Check if this looks like our sample data
+                const firstEntry = parsed[0];
+                if (firstEntry && firstEntry.id === 1 && firstEntry.date === "2025-12-15") {
+                    isUsingSampleData = true;
+                    showSampleDataNotification();
+                }
+            }
+        } catch (e) {
+            console.error('Error checking data:', e);
+        }
+    }
+}
+
+// Load sample data
+function loadSampleData() {
+    bowelMovementData = [...sampleData];
+    saveData();
+    isUsingSampleData = true;
+
+    // Normalize dates and update display
+    normalizeAllDates();
+    renderLogTable();
+    updatePredictionAndStats();
+    populateMonthFilter();
+
+    return bowelMovementData;
+}
+
+// Clear sample data and start fresh
+function clearSampleData() {
+    if (confirm('This will clear all sample data and allow you to start with your own entries. Continue?')) {
+        bowelMovementData = [];
+        localStorage.removeItem('bowelMovementData');
+        isUsingSampleData = false;
+
+        // Update UI
+        renderLogTable();
+        updatePredictionAndStats();
+        populateMonthFilter();
+
+        // Hide notification
+        hideSampleDataNotification();
+
+        // Show success message
+        alert('Sample data cleared! You can now add your own entries.');
+    }
+}
+
+// Show sample data notification
+function showSampleDataNotification() {
+    const notification = document.getElementById('sampleDataNotification');
+    if (notification) {
+        notification.style.display = 'block';
+    }
+    isUsingSampleData = true;
+}
+
+// Hide sample data notification
+function hideSampleDataNotification() {
+    const notification = document.getElementById('sampleDataNotification');
+    if (notification) {
+        notification.style.display = 'none';
+    }
+    isUsingSampleData = false;
+}
+
 // Date normalization with multiple format support
 function normalizeDateString(s) {
     if (!s) return null;
@@ -948,6 +1052,19 @@ function saveEntry(event) {
 // Save data to localStorage
 function saveData() {
     localStorage.setItem('bowelMovementData', JSON.stringify(bowelMovementData));
+
+    // If user is saving their own data, clear sample data flag
+    if (isUsingSampleData && bowelMovementData.length > 0) {
+        // Check if this is still the sample data
+        const isStillSampleData = bowelMovementData.some(entry =>
+        entry.id <= 15 && entry.date.startsWith('2025-01')
+        );
+
+        if (!isStillSampleData) {
+            isUsingSampleData = false;
+            hideSampleDataNotification();
+        }
+    }
 }
 
 function loadData() {
@@ -1329,8 +1446,14 @@ function updatePredictionAndStats() {
 
 // Initialize the page
 document.addEventListener('DOMContentLoaded', function() {
-    // Load existing data
-    loadData();
+    // Check and load sample data if needed
+    checkAndLoadSampleData();
+
+    // If sample data wasn't loaded, load from localStorage
+    if (!isUsingSampleData) {
+        loadData();
+    }
+
     renderLogTable();
     updatePredictionAndStats();
     populateMonthFilter();
@@ -1363,6 +1486,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const cancelImportExportBtn = document.getElementById('cancelImportExportBtn');
     if (cancelImportExportBtn) cancelImportExportBtn.addEventListener('click', closeImportExportModal);
+
+    // Sample data button
+    const clearSampleDataBtn = document.getElementById('clearSampleDataBtn');
+    if (clearSampleDataBtn) clearSampleDataBtn.addEventListener('click', clearSampleData);
+
+    const loadSampleDataBtn = document.getElementById('loadSampleDataBtn');
+    if (loadSampleDataBtn) loadSampleDataBtn.addEventListener('click', loadSampleData);
+
+    const hideSampleNotificationBtn = document.getElementById('hideSampleNotificationBtn');
+    if (hideSampleNotificationBtn) hideSampleNotificationBtn.addEventListener('click', hideSampleDataNotification);
 
     // Add/remove time-type pairs
     const addPairBtn = document.getElementById('addPairBtn');
