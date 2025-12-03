@@ -785,22 +785,10 @@ function createTimeTypePair(time = '', type = '3') {
 }
 
 function addEntry() {
-    const today = new Date().toISOString().split('T')[0];
-
-    // Check if an entry already exists for today
-    const existingEntryIndex = bowelMovementData.findIndex(item => item.date === today);
-
-    if (existingEntryIndex !== -1) {
-        // Entry exists for today - edit it instead of creating new
-        editEntry(bowelMovementData[existingEntryIndex].id);
-        return; // Exit early, editEntry will handle the rest
-    }
-
-    // No entry exists for today - create new
     document.getElementById('modalTitle').textContent = 'Add New Entry';
     document.getElementById('entryForm').reset();
     document.getElementById('entryId').value = '';
-    document.getElementById('entryDate').value = today;
+    document.getElementById('entryDate').value = new Date().toISOString().split('T')[0];
 
     const pairsContainer = document.getElementById('timeTypePairs');
     pairsContainer.innerHTML = '';
