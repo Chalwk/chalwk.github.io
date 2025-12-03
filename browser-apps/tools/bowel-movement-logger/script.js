@@ -545,7 +545,6 @@ function calculateEnhancedPrediction() {
     };
 }
 
-// Helper function to calculate days since last event
 function calculateDaysSinceLast(events) {
     if (events.length === 0) return 0;
 
@@ -1119,7 +1118,6 @@ function applyFilters() {
     renderLogTable(filteredData);
 }
 
-// Helper function for standard deviation
 function calculateStdDev(arr) {
     if (arr.length === 0) return 0;
     const mean = arr.reduce((a, b) => a + b, 0) / arr.length;
@@ -1304,7 +1302,7 @@ function closeAnalyticsModal() {
     }
 }
 
-// Update prediction and stats with enhanced information
+// Update prediction and stats
 function updatePredictionAndStats() {
     const prediction = calculateEnhancedPrediction();
     const stats = calculateStatistics();
