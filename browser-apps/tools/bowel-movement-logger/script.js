@@ -408,7 +408,6 @@ function calculateDayIntervals(events) {
     return intervals;
 }
 
-// Prediction calculation
 function calculateEnhancedPrediction() {
     normalizeAllDates();
     const events = extractIndividualEvents();
@@ -452,7 +451,7 @@ function calculateEnhancedPrediction() {
     const trimmedMeanInterval = calculateTrimmedMean(intervalsInDays, 0.1);
 
     // Get recency weights based on dates (not individual events)
-    const recencyWeights = getRecencyWeights(events); // This might need adjustment too
+    const recencyWeights = getRecencyWeights(events);
     const weightedMeanInterval = calculateWeightedMean(intervalsInDays, recencyWeights);
 
     // Handle outliers
@@ -466,7 +465,6 @@ function calculateEnhancedPrediction() {
     const lastDate = new Date(uniqueDates[uniqueDates.length - 1]);
     const totalDaysSpan = (lastDate - firstDate) / (1000 * 60 * 60 * 24);
     const totalDaysWithEvents = uniqueDates.length;
-
     //----------------------------------------------------------------------------//
     // EVENT-BASED:
     //const eventsPerDay = totalDaysWithEvents / Math.max(totalDaysSpan, 1);
@@ -528,19 +526,30 @@ function calculateEnhancedPrediction() {
         }
     }
 
+    const patterns = {};
+
+    if (events.length > 0) {
+        patterns.dayOfWeek = analyzeDayOfWeekPattern(events);
+        patterns.timeOfDay = analyzeTimeOfDayPattern(events);
+        patterns.trend = detectTrend(events);
+    }
+
     return {
         nextDate: nextDate,
         avgFrequency: weightedMeanInterval.toFixed(1),
         daysSinceLast: daysSinceLast,
         predictionText: predictionText,
         probabilities: probabilities,
-        patterns: {}, // Simplified for brevity
+        patterns: patterns,
         stats: {
             meanInterval: meanInterval.toFixed(2),
             medianInterval: medianInterval.toFixed(2),
+            weightedMean: weightedMeanInterval.toFixed(2),
+            trimmedMean: trimmedMeanInterval.toFixed(2),
             eventsPerDay: eventsPerDay.toFixed(2),
             totalDaysWithEvents: totalDaysWithEvents,
-            totalDaysSpan: totalDaysSpan.toFixed(1)
+            totalDaysSpan: totalDaysSpan.toFixed(1),
+            outlierCount: outliers.length
         }
     };
 }
@@ -593,16 +602,13 @@ function updateEnhancedPredictionDisplay(prediction) {
     document.getElementById('daysSinceLast').textContent = `${prediction.daysSinceLast} days`;
 }
 
-// Add detailed statistics section
 function updateDetailedStatistics(prediction) {
-    // Update existing stats
     const stats = calculateStatistics();
     document.getElementById('totalEntries').textContent = stats.totalEntries;
     document.getElementById('avgDaysBetween').textContent = stats.avgDaysBetween;
     document.getElementById('mostCommonType').textContent = stats.mostCommonType;
     document.getElementById('currentStreak').textContent = stats.currentStreak;
 
-    // Add additional stats display
     let detailedStatsContainer = document.getElementById('detailedStats');
     if (!detailedStatsContainer && prediction.stats && Object.keys(prediction.stats).length > 0) {
         detailedStatsContainer = document.createElement('div');
@@ -617,6 +623,14 @@ function updateDetailedStatistics(prediction) {
                 <div class="stat-value">${prediction.stats.medianInterval || '0.0'}</div>
                 <div class="stat-label">Median Interval</div>
             </div>
+            <div class="stat-card small">
+                <div class="stat-value">${prediction.stats.weightedMean || '0.0'}</div>
+                <div class="stat-label">Weighted Mean</div>
+            </div>
+            <div class="stat-card small">
+                <div class="stat-value">${prediction.stats.outlierCount || '0'}</div>
+                <div class="stat-label">Outliers</div>
+            </div>
         `;
 
         const statsGrid = document.querySelector('.stats-grid');
@@ -624,10 +638,13 @@ function updateDetailedStatistics(prediction) {
             statsGrid.appendChild(detailedStatsContainer);
         }
     } else if (detailedStatsContainer && prediction.stats) {
+        // Update existing stats cards
         const statCards = detailedStatsContainer.querySelectorAll('.stat-card');
-        if (statCards.length >= 2) {
+        if (statCards.length >= 4) {
             statCards[0].querySelector('.stat-value').textContent = prediction.stats.eventsPerDay || '0.0';
             statCards[1].querySelector('.stat-value').textContent = prediction.stats.medianInterval || '0.0';
+            statCards[2].querySelector('.stat-value').textContent = prediction.stats.weightedMean || '0.0';
+            statCards[3].querySelector('.stat-value').textContent = prediction.stats.outlierCount || '0';
         }
     }
 }
