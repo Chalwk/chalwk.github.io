@@ -465,13 +465,13 @@
         </div>
 
         <div class="interactive-element">
-            <h3>Sensory Experience Simulator</h3>
-            <p>Click the buttons below to experience how sensory differences might feel for an autistic person:</p>
+            <h3>Sensory Experience</h3>
+            <p>Click the buttons below to see how sensory differences might feel for an autistic person:</p>
             <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem;">
-                <button class="btn" onclick="simulateSensory('overload')">Sensory Overload</button>
-                <button class="btn" onclick="simulateSensory('sight')">Visual Sensitivity</button>
-                <button class="btn" onclick="simulateSensory('sound')">Auditory Sensitivity</button>
-                <button class="btn" onclick="resetSimulation()">Reset</button>
+                <button class="btn" onclick="showSensory('overload')">Sensory Overload</button>
+                <button class="btn" onclick="showSensory('sight')">Visual Sensitivity</button>
+                <button class="btn" onclick="showSensory('sound')">Auditory Sensitivity</button>
+                <button class="btn" onclick="reset()">Reset</button>
             </div>
             <div id="sensory-display"
                  style="margin-top: 1.5rem; padding: 1rem; background: white; border-radius: 5px; min-height: 100px;"></div>
@@ -778,14 +778,14 @@
     });
 
     // Sensory simulation
-    function simulateSensory(type) {
+    function showSensory(type) {
         const display = document.getElementById('sensory-display');
         display.innerHTML = '';
 
         switch(type) {
             case 'overload':
                 display.innerHTML = `
-                        <h4>Sensory Overload Simulation</h4>
+                        <h4>Sensory Overload</h4>
                         <p>Imagine trying to focus while:</p>
                         <ul>
                             <li>Fluorescent lights are flickering and buzzing</li>
@@ -802,7 +802,7 @@
 
             case 'sight':
                 display.innerHTML = `
-                        <h4>Visual Sensitivity Simulation</h4>
+                        <h4>Visual Sensitivity</h4>
                         <p>Imagine:</p>
                         <ul>
                             <li>Bright lights causing physical discomfort or pain</li>
@@ -818,7 +818,7 @@
 
             case 'sound':
                 display.innerHTML = `
-                        <h4>Auditory Sensitivity Simulation</h4>
+                        <h4>Auditory Sensitivity</h4>
                         <p>Imagine:</p>
                         <ul>
                             <li>Every sound being equally loud and important</li>
@@ -834,9 +834,9 @@
         }
     }
 
-    function resetSimulation() {
+    function reset() {
         const display = document.getElementById('sensory-display');
-        display.innerHTML = '<p>Select a simulation above to experience different sensory perspectives.</p>';
+        display.innerHTML = '<p>Select a button above to see different sensory perspectives.</p>';
         display.style.backgroundColor = 'white';
         display.style.borderLeft = 'none';
     }
