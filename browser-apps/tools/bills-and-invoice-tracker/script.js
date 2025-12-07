@@ -548,10 +548,9 @@ function renderAffordabilityItems() {
 
     affordabilityItems.forEach(item => {
         const row = document.createElement('tr');
-        const remainingBalance = calculateTotalWeeklyIncome() -
-        weeklyBills.reduce((total, bill) => total + bill.amount, 0) -
-        monthlyBills.filter(b => b.paymentMethod === 'automatic')
-            .reduce((total, bill) => total + (bill.amount / 4), 0);
+
+        const remainingBalanceText = remainingBalanceEl.textContent;
+        const remainingBalance = parseFloat(remainingBalanceText.replace('$', ''));
 
         let weeklyNeeded, displayTimeframe;
 
@@ -636,15 +635,14 @@ function togglePaidInvoices() {
     }
 }
 
-// Analyze affordability item
+// Analyze affordability item - FIXED VERSION
 function analyzeAffordabilityItem(id) {
     const item = affordabilityItems.find(i => i.id === id);
     if (!item) return;
 
-    const remainingBalance = calculateTotalWeeklyIncome() -
-    weeklyBills.reduce((total, bill) => total + bill.amount, 0) -
-    monthlyBills.filter(b => b.paymentMethod === 'automatic')
-        .reduce((total, bill) => total + (bill.amount / 4), 0);
+    // Get the actual remaining balance from the dashboard
+    const remainingBalanceText = remainingBalanceEl.textContent;
+    const remainingBalance = parseFloat(remainingBalanceText.replace('$', ''));
 
     let weeklyNeeded, timeframeMessage;
 
