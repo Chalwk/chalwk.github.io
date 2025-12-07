@@ -455,39 +455,84 @@ a:hover {
 }
 
 /* ===== Contact Section ===== */
-.contact-info {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+.contact-layout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3rem;
+    align-items: flex-start;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.discord-widget-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     gap: 1.5rem;
 }
 
-.contact-item {
-    display: flex;
-    align-items: center;
-    background: white;
-    padding: 0.5rem;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    transition: var(--transition);
-}
-
-.contact-item:hover {
-    transform: translateY(-5px);
+.discord-embed {
+    border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);
-    color: inherit;
+    background: var(--darker);
 }
 
-.contact-icon {
-    background: var(--primary);
-    color: white;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
+/* Small contact icons below widget */
+.contact-icons-small {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.contact-icon-small {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: 1rem;
-    font-size: 1.25rem;
+    width: 50px;
+    height: 50px;
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    transition: var(--transition);
+    box-shadow: var(--shadow);
+}
+
+.contact-icon-small:hover {
+    background: var(--primary-dark);
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+    color: white;
+}
+
+.contact-content {
+    flex: 1;
+    min-width: 300px;
+    max-width: 500px;
+}
+
+.contact-message {
+    background: white;
+    padding: 2rem;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+}
+
+.contact-message h3 {
+    color: var(--primary);
+    margin-bottom: 1rem;
+}
+
+.contact-message p {
+    margin-bottom: 1rem;
+    color: var(--dark);
+}
+
+/* Remove old contact styles */
+.contact-info,
+.contact-item {
+    display: none;
 }
 
 /* ===== Footer ===== */
@@ -704,11 +749,33 @@ footer {
         grid-template-columns: 1fr;
     }
 
+    /* Contact Section */
+    .contact-layout {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .discord-widget-container {
+        width: 100%;
+        max-width: 350px;
+    }
+
+    .contact-content {
+        width: 100%;
+        text-align: center;
+    }
+
+    .discord-embed {
+        width: 100%;
+        height: 400px;
+    }
+
     /* Footer */
     .footer-container {
         flex-direction: column;
         text-align: center;
     }
+
     .dropdown-menu {
         position: static;
         background: transparent;
@@ -786,8 +853,14 @@ footer {
         flex-direction: column;
     }
 
-    .contact-info {
-        grid-template-columns: 1fr;
+    .discord-embed {
+        height: 350px;
+    }
+
+    .contact-icon-small {
+        width: 45px;
+        height: 45px;
+        font-size: 1.25rem;
     }
 }
 
