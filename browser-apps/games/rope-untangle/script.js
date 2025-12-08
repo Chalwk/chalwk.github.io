@@ -167,60 +167,117 @@
         svg.appendChild(defs);
     }
 
-    // Pointer drag
-    function attachPointerHandlers(el,node){
+    function attachPointerHandlers(el, node) {
         let dragging = false;
-        let offset = {x:0,y:0};
+        let offset = { x: 0, y: 0 };
+        let pointerId = null;
 
-        function pt(e){
+        function pt(e) {
             const p = svg.createSVGPoint();
-            p.x = e.clientX; p.y = e.clientY;
+            p.x = e.clientX !== undefined ? e.clientX : e.touches[0].clientX;
+            p.y = e.clientY !== undefined ? e.clientY : e.touches[0].clientY;
             const ctm = svg.getScreenCTM().inverse();
             const loc = p.matrixTransform(ctm);
-            return {x:loc.x, y:loc.y};
+            return { x: loc.x, y: loc.y };
         }
 
-        function onDown(e){
+        function onDown(e) {
+            // Prevent default to stop scrolling on mobile
             e.preventDefault();
             dragging = true;
-            el.setPointerCapture(e.pointerId);
-            const p = pt(e);
-            offset.x = node.x - p.x; offset.y = node.y - p.y;
-            node.circle.setAttribute('r', node.radius+2);
+            pointerId = e.pointerId !== undefined ? e.pointerId : null;
+
+            // For touch events on mobile
+            if (e.type === 'touchstart') {
+                // Convert touch event to pointer-like event
+                const touch = e.touches[0];
+                const fakeEvent = {
+                    clientX: touch.clientX,
+                    clientY: touch.clientY,
+                    pointerId: touch.identifier
+                };
+                const p = pt(fakeEvent);
+                offset.x = node.x - p.x;
+                offset.y = node.y - p.y;
+            } else {
+                // For mouse/pointer events
+                if (pointerId !== null) {
+                    el.setPointerCapture(pointerId);
+                }
+                const p = pt(e);
+                offset.x = node.x - p.x;
+                offset.y = node.y - p.y;
+            }
+
+            node.circle.setAttribute('r', node.radius + 2);
         }
-        function onMove(e){
-            if(!dragging) return;
-            const p = pt(e);
-            node.x = Math.max(40, Math.min(state.w-40, p.x + offset.x));
-            node.y = Math.max(40, Math.min(state.h-40, p.y + offset.y));
+
+        function onMove(e) {
+            if (!dragging) return;
+
+            // Prevent default to stop scrolling
+            e.preventDefault();
+
+            let p;
+            if (e.type === 'touchmove') {
+                // Handle touch move
+                const touch = e.touches[0];
+                const fakeEvent = {
+                    clientX: touch.clientX,
+                    clientY: touch.clientY
+                };
+                p = pt(fakeEvent);
+            } else {
+                p = pt(e);
+            }
+
+            node.x = Math.max(40, Math.min(state.w - 40, p.x + offset.x));
+            node.y = Math.max(40, Math.min(state.h - 40, p.y + offset.y));
+
+            // Update visual elements
             node.group.setAttribute('transform', `translate(${node.x - parseFloat(node.circle.getAttribute('cx'))}, ${node.y - parseFloat(node.circle.getAttribute('cy'))})`);
-            // update visual coords for circle & label
             node.circle.setAttribute('cx', node.x);
             node.circle.setAttribute('cy', node.y);
             node.labelEl.setAttribute('x', node.x);
             node.labelEl.setAttribute('y', node.y + 4);
-            // update edges attached
-            for(const e of state.edges){
-                if(e.a===node.id || e.b===node.id){
+
+            // Update connected edges
+            for (const e of state.edges) {
+                if (e.a === node.id || e.b === node.id) {
                     const A = state.nodes[e.a];
                     const B = state.nodes[e.b];
-                    e.el.setAttribute('x1', A.x); e.el.setAttribute('y1', A.y);
-                    e.el.setAttribute('x2', B.x); e.el.setAttribute('y2', B.y);
+                    e.el.setAttribute('x1', A.x);
+                    e.el.setAttribute('y1', A.y);
+                    e.el.setAttribute('x2', B.x);
+                    e.el.setAttribute('y2', B.y);
                 }
             }
             checkCrossings();
         }
-        function onUp(e){
-            if(!dragging) return;
+
+        function onUp(e) {
+            if (!dragging) return;
             dragging = false;
-            try{ el.releasePointerCapture(e.pointerId); }catch(_){}
+
+            if (pointerId !== null && e.type !== 'touchend') {
+                try {
+                    el.releasePointerCapture(pointerId);
+                } catch (_) {}
+            }
+            pointerId = null;
             node.circle.setAttribute('r', node.radius);
             checkCrossings();
         }
 
         el.addEventListener('pointerdown', onDown);
-        window.addEventListener('pointermove', onMove);
-        window.addEventListener('pointerup', onUp);
+        el.addEventListener('touchstart', onDown, { passive: false });
+
+        document.addEventListener('pointermove', onMove);
+        document.addEventListener('touchmove', onMove, { passive: false });
+
+        document.addEventListener('pointerup', onUp);
+        document.addEventListener('touchend', onUp);
+        document.addEventListener('pointercancel', onUp);
     }
 
     // Compute crossing count and style edges
