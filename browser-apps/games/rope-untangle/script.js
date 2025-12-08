@@ -10,6 +10,8 @@
     const levelLabel = document.getElementById('levelLabel');
     const edgeCountEl = document.getElementById('edgeCount');
     const crossCountEl = document.getElementById('crossCount');
+    const mobileInstructions = document.getElementById('mobileInstructions');
+    const closeInstructions = document.getElementById('closeInstructions');
 
     let state = {
         level: 1,
@@ -99,7 +101,7 @@
             x:p.x, y:p.y,
             baseX: basePositions[p.baseIndex].x,
             baseY: basePositions[p.baseIndex].y,
-            radius: 12
+            radius: window.innerWidth < 768 ? 16 : 12 // Larger nodes on mobile
         }));
 
         // Edges referencing node ids
@@ -127,7 +129,12 @@
         for(const e of state.edges){
             const A = state.nodes[e.a];
             const B = state.nodes[e.b];
-            const line = makeSvg('line',{x1:A.x,y1:A.y,x2:B.x,y2:B.y,class:'edge'});
+            const line = makeSvg('line',{
+                x1:A.x, y1:A.y,
+                x2:B.x, y2:B.y,
+                class:'edge',
+                'stroke-width': window.innerWidth < 768 ? 4 : 3 // Thicker lines on mobile
+            });
             svg.appendChild(line);
             e.el = line;
         }
@@ -135,9 +142,27 @@
         // Draw nodes on top
         for(const n of state.nodes){
             const g = makeSvg('g',{class:'node',cursor:'grab'});
-            const circle = makeSvg('circle',{cx:n.x,cy:n.y,r:n.radius,class:'node-circle',fill:'white',opacity:0.95});
-            const inner = makeSvg('circle',{cx:n.x,cy:n.y,r:6,fill:'url(#grad)'});
-            const label = makeSvg('text',{x:n.x,y:n.y+4,'text-anchor':'middle',class:'node-label'});
+            const circle = makeSvg('circle',{
+                cx:n.x,
+                cy:n.y,
+                r:n.radius,
+                class:'node-circle',
+                fill:'white',
+                opacity:0.95
+            });
+            const inner = makeSvg('circle',{
+                cx:n.x,
+                cy:n.y,
+                r: window.innerWidth < 768 ? 8 : 6, // Larger inner circle on mobile
+                fill:'url(#grad)'
+            });
+            const label = makeSvg('text',{
+                x:n.x,
+                y:n.y+4,
+                'text-anchor':'middle',
+                class:'node-label',
+                'font-size': window.innerWidth < 768 ? '12px' : '10px' // Larger text on mobile
+            });
             label.textContent = n.id+1;
 
             g.appendChild(circle);
@@ -167,60 +192,122 @@
         svg.appendChild(defs);
     }
 
-    // Pointer drag
-    function attachPointerHandlers(el,node){
+    function attachPointerHandlers(el, node) {
         let dragging = false;
-        let offset = {x:0,y:0};
+        let offset = { x: 0, y: 0 };
+        let pointerId = null;
 
-        function pt(e){
+        function pt(e) {
             const p = svg.createSVGPoint();
-            p.x = e.clientX; p.y = e.clientY;
+            p.x = e.clientX !== undefined ? e.clientX : e.touches[0].clientX;
+            p.y = e.clientY !== undefined ? e.clientY : e.touches[0].clientY;
             const ctm = svg.getScreenCTM().inverse();
             const loc = p.matrixTransform(ctm);
-            return {x:loc.x, y:loc.y};
+            return { x: loc.x, y: loc.y };
         }
 
-        function onDown(e){
+        function onDown(e) {
+            // Prevent default to stop scrolling on mobile
             e.preventDefault();
             dragging = true;
-            el.setPointerCapture(e.pointerId);
-            const p = pt(e);
-            offset.x = node.x - p.x; offset.y = node.y - p.y;
-            node.circle.setAttribute('r', node.radius+2);
+            pointerId = e.pointerId !== undefined ? e.pointerId : null;
+
+            // For touch events on mobile
+            if (e.type === 'touchstart') {
+                // Convert touch event to pointer-like event
+                const touch = e.touches[0];
+                const fakeEvent = {
+                    clientX: touch.clientX,
+                    clientY: touch.clientY,
+                    pointerId: touch.identifier
+                };
+                const p = pt(fakeEvent);
+                offset.x = node.x - p.x;
+                offset.y = node.y - p.y;
+            } else {
+                // For mouse/pointer events
+                if (pointerId !== null) {
+                    el.setPointerCapture(pointerId);
+                }
+                const p = pt(e);
+                offset.x = node.x - p.x;
+                offset.y = node.y - p.y;
+            }
+
+            // Visual feedback for touch
+            node.circle.setAttribute('r', node.radius + (window.innerWidth < 768 ? 4 : 2));
+            node.circle.style.fill = '#f0f8ff';
         }
-        function onMove(e){
-            if(!dragging) return;
-            const p = pt(e);
-            node.x = Math.max(40, Math.min(state.w-40, p.x + offset.x));
-            node.y = Math.max(40, Math.min(state.h-40, p.y + offset.y));
+
+        function onMove(e) {
+            if (!dragging) return;
+
+            // Prevent default to stop scrolling
+            e.preventDefault();
+
+            let p;
+            if (e.type === 'touchmove') {
+                // Handle touch move
+                const touch = e.touches[0];
+                const fakeEvent = {
+                    clientX: touch.clientX,
+                    clientY: touch.clientY
+                };
+                p = pt(fakeEvent);
+            } else {
+                p = pt(e);
+            }
+
+            // Add boundary padding for mobile
+            const padding = window.innerWidth < 768 ? 50 : 40;
+            node.x = Math.max(padding, Math.min(state.w - padding, p.x + offset.x));
+            node.y = Math.max(padding, Math.min(state.h - padding, p.y + offset.y));
+
+            // Update visual elements
             node.group.setAttribute('transform', `translate(${node.x - parseFloat(node.circle.getAttribute('cx'))}, ${node.y - parseFloat(node.circle.getAttribute('cy'))})`);
-            // update visual coords for circle & label
             node.circle.setAttribute('cx', node.x);
             node.circle.setAttribute('cy', node.y);
             node.labelEl.setAttribute('x', node.x);
             node.labelEl.setAttribute('y', node.y + 4);
-            // update edges attached
-            for(const e of state.edges){
-                if(e.a===node.id || e.b===node.id){
+
+            // Update connected edges
+            for (const e of state.edges) {
+                if (e.a === node.id || e.b === node.id) {
                     const A = state.nodes[e.a];
                     const B = state.nodes[e.b];
-                    e.el.setAttribute('x1', A.x); e.el.setAttribute('y1', A.y);
-                    e.el.setAttribute('x2', B.x); e.el.setAttribute('y2', B.y);
+                    e.el.setAttribute('x1', A.x);
+                    e.el.setAttribute('y1', A.y);
+                    e.el.setAttribute('x2', B.x);
+                    e.el.setAttribute('y2', B.y);
                 }
             }
             checkCrossings();
         }
-        function onUp(e){
-            if(!dragging) return;
+
+        function onUp(e) {
+            if (!dragging) return;
             dragging = false;
-            try{ el.releasePointerCapture(e.pointerId); }catch(_){}
+
+            if (pointerId !== null && e.type !== 'touchend') {
+                try {
+                    el.releasePointerCapture(pointerId);
+                } catch (_) {}
+            }
+            pointerId = null;
             node.circle.setAttribute('r', node.radius);
+            node.circle.style.fill = 'white';
             checkCrossings();
         }
 
         el.addEventListener('pointerdown', onDown);
-        window.addEventListener('pointermove', onMove);
-        window.addEventListener('pointerup', onUp);
+        el.addEventListener('touchstart', onDown, { passive: false });
+
+        document.addEventListener('pointermove', onMove);
+        document.addEventListener('touchmove', onMove, { passive: false });
+
+        document.addEventListener('pointerup', onUp);
+        document.addEventListener('touchend', onUp);
+        document.addEventListener('pointercancel', onUp);
     }
 
     // Compute crossing count and style edges
@@ -243,9 +330,12 @@
         for(let i=0;i<state.edges.length;i++){
             const e = state.edges[i];
             if(crossings.has(i)){
-                e.el.classList.add('crossing'); crossCount++;
+                e.el.classList.add('crossing');
+                e.el.setAttribute('stroke-width', window.innerWidth < 768 ? 5 : 4);
+                crossCount++;
             } else {
                 e.el.classList.remove('crossing');
+                e.el.setAttribute('stroke-width', window.innerWidth < 768 ? 4 : 3);
             }
         }
         crossCountEl.textContent = crossCount;
@@ -283,12 +373,22 @@
             c.style.opacity='0.95';
             c.style.transform='translateY(0) scale(1)';
             c.style.transition='transform 900ms cubic-bezier(.2,.8,.2,1), opacity 900ms ease';
+            c.style.zIndex='9999';
             document.body.appendChild(c);
             requestAnimationFrame(()=>{
                 c.style.transform = `translateY(${Math.random()*220-120}px) translateX(${Math.random()*220-110}px) scale(${Math.random()*1.8+0.2})`;
                 c.style.opacity='0';
             });
             setTimeout(()=>c.remove(),1100);
+        }
+    }
+
+    // Mobile instructions
+    function showMobileInstructions() {
+        if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent) && !sessionStorage.getItem('ropeUntangleInstructionsSeen')) {
+            setTimeout(() => {
+                mobileInstructions.classList.remove('hidden');
+            }, 500);
         }
     }
 
@@ -300,9 +400,23 @@
         // shuffle current positions among nodes
         const positions = state.nodes.map(n=>({x:n.x,y:n.y}));
         const shuffled = shuffleArray(positions);
-        state.nodes.forEach((n,i)=>{ n.x=shuffled[i].x; n.y=shuffled[i].y; n.group.setAttribute('transform', `translate(${n.x-parseFloat(n.circle.getAttribute('cx'))}, ${n.y-parseFloat(n.circle.getAttribute('cy'))})`); n.circle.setAttribute('cx', n.x); n.circle.setAttribute('cy', n.y); n.labelEl.setAttribute('x', n.x); n.labelEl.setAttribute('y', n.y+4); });
+        state.nodes.forEach((n,i)=>{
+            n.x=shuffled[i].x;
+            n.y=shuffled[i].y;
+            n.group.setAttribute('transform', `translate(${n.x-parseFloat(n.circle.getAttribute('cx'))}, ${n.y-parseFloat(n.circle.getAttribute('cy'))})`);
+            n.circle.setAttribute('cx', n.x);
+            n.circle.setAttribute('cy', n.y);
+            n.labelEl.setAttribute('x', n.x);
+            n.labelEl.setAttribute('y', n.y+4);
+        });
         // update edges
-        for(const e of state.edges){ const A=state.nodes[e.a], B=state.nodes[e.b]; e.el.setAttribute('x1',A.x); e.el.setAttribute('y1',A.y); e.el.setAttribute('x2',B.x); e.el.setAttribute('y2',B.y); }
+        for(const e of state.edges){
+            const A=state.nodes[e.a], B=state.nodes[e.b];
+            e.el.setAttribute('x1',A.x);
+            e.el.setAttribute('y1',A.y);
+            e.el.setAttribute('x2',B.x);
+            e.el.setAttribute('y2',B.y);
+        }
         checkCrossings();
     });
 
@@ -310,21 +424,45 @@
     winNext.addEventListener('click', ()=>{ state.level++; startLevel(state.level); });
     winShuffle.addEventListener('click', ()=>{ shuffleBtn.click(); hideWin(); });
 
+    // Close mobile instructions
+    if (closeInstructions) {
+        closeInstructions.addEventListener('click', () => {
+            mobileInstructions.classList.add('hidden');
+            sessionStorage.setItem('ropeUntangleInstructionsSeen', 'true');
+        });
+    }
+
     // Start given level
     function startLevel(level){
-        state.level = level; updateCounts();
+        state.level = level;
+        updateCounts();
         const spec = generateLevel(level);
         buildScene(spec);
     }
 
+    // Adjust for mobile viewport
+    function adjustForMobile() {
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        if (isMobile) {
+            // Adjust for mobile portrait
+            if (window.innerHeight > window.innerWidth) {
+                state.h = 900;
+                state.w = Math.min(1000, window.innerWidth / window.innerHeight * 900);
+            }
+        }
+    }
+
     // initialize
     function init(){
+        adjustForMobile();
         svg.setAttribute('viewBox', `0 0 ${state.w} ${state.h}`);
         startLevel(state.level);
+        showMobileInstructions();
 
-        // small resize behaviour
-        window.addEventListener('resize', ()=>{
-            // nothing complex - viewBox handles scaling
+        // Handle resize
+        window.addEventListener('resize', () => {
+            adjustForMobile();
+            svg.setAttribute('viewBox', `0 0 ${state.w} ${state.h}`);
         });
     }
 

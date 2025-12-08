@@ -65,8 +65,250 @@ a.btn.return{display:inline-flex;align-items:center;text-decoration:none}
 /* little floating instructions */
 .hint{position:absolute;left:12px;bottom:12px;padding:8px 12px;border-radius:999px;background:rgba(0,0,0,0.28);font-size:13px}
 
-/* responsive tweak */
-@media (max-width:980px){
-    .app{width:100%}
-    .sidebar{display:none}
+/* Mobile Instructions */
+.mobile-instructions {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(15, 23, 36, 0.95);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.mobile-instructions.hidden {
+    display: none;
+}
+
+.instructions-content {
+    background: var(--glass);
+    padding: 24px;
+    border-radius: var(--radius);
+    text-align: center;
+    max-width: 300px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.instructions-content h3 {
+    margin: 0 0 16px 0;
+    background: linear-gradient(90deg,var(--accent1),var(--accent2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-size: 20px;
+}
+
+.instructions-content p {
+    margin: 12px 0;
+    font-size: 16px;
+    color: var(--muted);
+}
+
+.instructions-content .btn {
+    margin-top: 16px;
+    width: 100%;
+}
+
+/* Prevent text selection and improve tap */
+* {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Mobile-specific improvements */
+@media (max-width: 768px) {
+    body {
+        padding: 12px 8px;
+        min-height: 100vh;
+        display: block;
+        align-items: flex-start;
+        justify-content: flex-start;
+        overflow-x: hidden;
+    }
+
+    .app {
+        width: 100%;
+        max-width: 100%;
+        padding: 8px;
+        border-radius: 16px;
+        min-height: 95vh;
+        max-height: 95vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .topbar {
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 10px 12px;
+    }
+
+    .brand {
+        font-size: 18px;
+        width: 100%;
+        text-align: center;
+        margin-bottom: 4px;
+    }
+
+    .controls {
+        width: 100%;
+        justify-content: space-between;
+        gap: 8px;
+    }
+
+    .btn {
+        padding: 10px 16px;
+        font-size: 14px;
+        flex: 1;
+        min-height: 44px;
+    }
+
+    .game-area {
+        flex: 1;
+        min-height: 0;
+        padding: 4px;
+        gap: 8px;
+    }
+
+    .sidebar {
+        display: none;
+    }
+
+    .canvas-wrap {
+        min-height: 400px;
+        padding: 6px;
+        flex: 1;
+    }
+
+    /* Make nodes larger for touch */
+    .node-circle {
+        filter: drop-shadow(0 4px 12px rgba(110,168,254,0.15));
+    }
+
+    .node-label {
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    /* Adjust edge thickness */
+    .edge {
+        stroke-width: 4;
+    }
+
+    .edge.crossing {
+        stroke-width: 5;
+    }
+
+    /* Win overlay adjustments */
+    .win-card {
+        padding: 24px 16px;
+        margin: 0 12px;
+        width: 90%;
+        max-width: 320px;
+    }
+
+    .win-actions {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .win-actions .btn {
+        width: 100%;
+    }
+
+    /* Footer adjustments */
+    .footer {
+        padding: 8px;
+        font-size: 11px;
+    }
+
+    /* Hide hint on very small screens */
+    .hint {
+        display: none;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 480px) {
+    .btn {
+        padding: 12px 8px;
+        font-size: 13px;
+        min-height: 48px;
+    }
+
+    .controls {
+        flex-wrap: wrap;
+    }
+
+    .btn.primary {
+        order: -1;
+        width: 100%;
+    }
+
+    .canvas-wrap {
+        border-radius: 10px;
+    }
+
+    /* Adjust node hit area */
+    .node {
+        cursor: pointer;
+    }
+
+    .node-circle {
+        r: 16;
+    }
+}
+
+/* Tablet adjustments */
+@media (min-width: 769px) and (max-width: 980px) {
+    .app {
+        width: 95%;
+        padding: 16px;
+    }
+
+    .btn {
+        padding: 10px 18px;
+        min-height: 44px;
+    }
+
+    .game-area {
+        gap: 20px;
+    }
+
+    .sidebar {
+        display: none;
+    }
+}
+
+/* Landscape orientation on mobile */
+@media (max-height: 600px) and (orientation: landscape) {
+    body {
+        padding: 4px;
+    }
+
+    .app {
+        min-height: 96vh;
+        max-height: 96vh;
+    }
+
+    .topbar {
+        padding: 6px 10px;
+    }
+
+    .game-area {
+        flex-direction: row;
+    }
+
+    .canvas-wrap {
+        height: 85vh;
+    }
 }

@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
-    <meta content="width=device-width,initial-scale=1" name="viewport"/>
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport"/>
+    <meta content="yes" name="apple-mobile-web-app-capable">
     <title>Rope Untangle</title>
     <link href="style.css" rel="stylesheet">
 </head>
@@ -56,6 +57,17 @@
     <footer class="footer">
         <div class="credit">&copy; 2025 Jericho Crosby (Chalwk). All rights reserved.</div>
     </footer>
+</div>
+
+<!-- Mobile Instructions -->
+<div class="mobile-instructions hidden" id="mobileInstructions">
+    <div class="instructions-content">
+        <h3>How to Play</h3>
+        <p>👆 Drag the colored dots</p>
+        <p>🎯 Clear all red crossings</p>
+        <p>✨ Solve the puzzle to win!</p>
+        <button class="btn primary" id="closeInstructions">Got it!</button>
+    </div>
 </div>
 
 <script src="script.js"></script>
