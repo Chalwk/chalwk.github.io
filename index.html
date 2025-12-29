@@ -1,3 +1,5 @@
+<!-- Copyright (c) 2025. Jericho Crosby (Chalwk) -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,12 +11,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
           rel="stylesheet">
 
-    <!-- Prism.js for syntax highlighting -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
 </head>
 <body class="hsp-body">
 
-<!-- Header -->
 <header class="header">
     <a class="logo" href="#">
         <i class="fas fa-code"></i>
@@ -23,7 +23,7 @@
     <nav>
         <ul class="nav-links">
             <li><a href="#about">About</a></li>
-            <li><a href="hsp-repo/index.html">HSP Repo</a></li>
+            <li><a href="https://chalwk.github.io/CPAS/">CPAS</a></li>
             <li><a href="browser-apps/index.html">Browser Apps</a></li>
             <li class="dropdown">
                 <a class="dropdown-toggle" href="#">More <i class="fas fa-chevron-down"></i></a>
@@ -45,7 +45,6 @@
     </nav>
 </header>
 
-<!-- Hero Section -->
 <section class="hero">
     <div class="container">
         <div class="hero-content">
@@ -55,14 +54,12 @@
                 <div class="hero-buttons">
                     <a class="btn" href="#about">About me</a>
                     <a class="btn" href="#projects">Project Highlights</a>
-                    <a class="btn" href="#contact">Get In Touch</a>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- About Section -->
 <section class="section" id="about">
     <div class="container">
         <h2 class="section-title">About Me</h2>
@@ -70,20 +67,19 @@
         <div class="intro">
             <p>Hey! I'm Jericho, an <strong>independent developer</strong>. I build tools, mods, bots, and utilities.
                 Sometimes I live-code projects from scratch on <a href="https://www.twitch.tv/chalwk" target="_blank">Twitch</a>
-                - Break things, fix things, document it. I love
-                tackling weird programming shenanigans, and occasionally game (MSFS, Halo, Minecraft, Survival-Horror games, etc.).
+                - break things, fix things, document it. I love tackling weird programming shenanigans, and I'm also a
+                gamer, spending most of my time in <strong>Microsoft Flight Simulator</strong>, with the occasional
+                detour into Halo, Minecraft, and survival-horror games.
             </p>
 
             <p>My goal is simple: create fun, useful, or just plain interesting stuff for people to enjoy or learn
-                from.
-            </p>
+                from.</p>
 
             <p><em>"There's nothing quite like being able to say at the end of the day, I made this. This is my world."
-                - <a href="https://www.twitch.tv/chalwk" target="_blank">me</a></em></p>
+                – <a href="https://www.twitch.tv/chalwk" target="_blank">me</a></em></p>
         </div>
 
         <div class="about-card">
-
             <div class="section-divider">
                 <span>What I'm up to</span>
             </div>
@@ -119,12 +115,24 @@
                         - the largest collection of Lua scripts for Halo: PC/CE
                     </div>
                 </div>
+
+                <div class="focus-item">
+                    <i class="fas fa-helicopter"></i>
+                    <div>
+                        <strong>Running <a href="https://chalwk.github.io/CPAS/" target="_blank">Coastal Peaks Air
+                            Service (CPAS)</a></strong> - a Virtual Charter (VC) and specialty flight operator for
+                        Microsoft Flight Simulator. We operate general aviation aircraft and helicopters for tours,
+                        charters, and HEMS missions, flying realistic routes across New Zealand's South Island. Our
+                        flights cover Canterbury, Christchurch, Banks Peninsula, and the dramatic landscapes of the West
+                        Coast and Southern Alps, offering an experience distinct from traditional virtual airlines.
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
 </section>
 
-<!-- Projects Section -->
 <section class="section" id="projects">
     <div class="container">
         <h2 class="section-title">Project Highlights</h2>
@@ -133,7 +141,41 @@
         </div>
         <div id="projects-wrapper">
             <div class="projects-grid">
-                <!-- HALO SCRIPT PROJECTS -->
+
+                <div class="project-card featured-project">
+                    <div class="project-icon">
+                        <i class="fas fa-helicopter"></i>
+                    </div>
+                    <div class="project-content">
+                        <div class="project-tags">
+                            <span class="project-tag">MSFS</span>
+                            <span class="project-tag">Aviation</span>
+                            <span class="project-tag">Virtual Charter</span>
+                            <span class="project-tag">New Zealand</span>
+                        </div>
+
+                        <h3 class="project-title">Coastal Peaks Air Service (CPAS)</h3>
+
+                        <p class="project-description">
+                            A realism-focused <strong>Virtual Charter and specialty flight operator</strong> for
+                            <strong>Microsoft Flight Simulator</strong>, flying immersive GA and helicopter missions
+                            across New Zealand's South Island.
+                        </p>
+
+                        <ul class="project-highlights">
+                            <li>Charter, scenic, and HEMS-style missions</li>
+                            <li>Real-world routes across Canterbury, the West Coast, and the Southern Alps</li>
+                            <li>Custom tooling, documentation, and operational structure</li>
+                        </ul>
+
+                        <div class="project-actions">
+                            <a class="btn btn-primary" href="https://chalwk.github.io/CPAS/" target="_blank">
+                                Visit CPAS Website
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="project-card">
                     <div class="project-icon">
                         <i class="fas fa-server"></i>
@@ -154,14 +196,14 @@
                             <li>Active community contributions</li>
                         </ul>
                         <div class="project-actions">
-                            <a class="btn btn-primary" href="hsp-repo/index.html">View Library</a>
+                            <a class="btn btn-primary" href="https://chalwk.github.io/HALO-SCRIPT-PROJECTS/">View
+                                Library</a>
                             <a class="btn btn-secondary" href="https://github.com/Chalwk/HALO-SCRIPT-PROJECTS"
                                target="_blank">GitHub</a>
                         </div>
                     </div>
                 </div>
 
-                <!-- SAPPDiscordBot (Java Discord Bot for Halo Servers) -->
                 <div class="project-card">
                     <div class="project-icon">
                         <i class="fab fa-discord"></i>
@@ -187,8 +229,6 @@
                     </div>
                 </div>
 
-
-                <!-- Big Brother (Paper/Spigot Java Plugin)-->
                 <div class="project-card">
                     <div class="project-icon">
                         <i class="fas fa-cogs"></i>
@@ -214,7 +254,6 @@
                     </div>
                 </div>
 
-                <!-- Nebular-Frontier (Love2D) -->
                 <div class="project-card">
                     <div class="project-icon">
                         <i class="fas fa-rocket"></i>
@@ -240,7 +279,6 @@
                     </div>
                 </div>
 
-                <!-- PathFinder (Love2D) -->
                 <div class="project-card">
                     <div class="project-icon">
                         <i class="fas fa-route"></i>
@@ -266,7 +304,6 @@
                     </div>
                 </div>
 
-                <!-- Hangman (Love2D) -->
                 <div class="project-card">
                     <div class="project-icon">
                         <i class="fas fa-spell-check"></i>
@@ -293,7 +330,6 @@
                     </div>
                 </div>
 
-                <!-- Infinite Runner (Love2D) -->
                 <div class="project-card">
                     <div class="project-icon">
                         <i class="fas fa-running"></i>
@@ -320,7 +356,6 @@
                     </div>
                 </div>
 
-                <!-- Memory (Love2D) -->
                 <div class="project-card">
                     <div class="project-icon">
                         <i class="fas fa-brain"></i>
@@ -347,7 +382,6 @@
                     </div>
                 </div>
 
-                <!-- Tic-Tac-Toe (Love2D) -->
                 <div class="project-card">
                     <div class="project-icon">
                         <i class="fas fa-chess-board"></i>
@@ -375,7 +409,6 @@
                     </div>
                 </div>
 
-                <!-- WordSearch (Love2D) -->
                 <div class="project-card">
                     <div class="project-icon">
                         <i class="fas fa-font"></i>
@@ -403,7 +436,6 @@
                     </div>
                 </div>
 
-                <!-- Minesweeper (Love2D) -->
                 <div class="project-card">
                     <div class="project-icon">
                         <i class="fas fa-bomb"></i>
@@ -431,7 +463,6 @@
                     </div>
                 </div>
 
-                <!-- DotsAndBoxes (Love2D) -->
                 <div class="project-card">
                     <div class="project-icon">
                         <i class="fas fa-th-large"></i>
@@ -457,7 +488,6 @@
                     </div>
                 </div>
 
-                <!-- NeonSnake (Love2D) -->
                 <div class="project-card">
                     <div class="project-icon">
                         <i class="fas fa-dragon"></i>
@@ -495,42 +525,17 @@
     </div>
 </section>
 
-<!-- Contact Section -->
-<section class="section" id="contact">
-    <div class="container">
-        <h2 class="section-title">Get In Touch</h2>
-
-        <div class="contact-layout">
-            <!-- Left side: Discord Widget -->
-            <div class="discord-widget-container">
-                <iframe
-                        src="https://discord.com/widget?id=1409714415816675404&theme=dark"
-                        width="350"
-                        height="500"
-                        allowtransparency="true"
-                        sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
-                        class="discord-embed">
-                </iframe>
-            </div>
-
-            <!-- Right side -->
-            <div class="contact-content">
-                <div class="contact-message">
-                    <h3>Connect With Me</h3>
-                    <p>Feel free to reach out through Discord or GitHub. I'm always open to discussing new projects,
-                        collaborations, or just chatting about game development!</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Footer -->
 <footer>
     <div class="footer-container">
-        <div class="footer-content">
-            <p class="copyright">&copy; 2025 Jericho Crosby (Chalwk). All rights reserved.</p>
+        <div class="social-icons">
+            <a href="https://discord.com/channels/@me/707058110396760094" target="_blank" aria-label="Discord">
+                <i class="fab fa-discord"></i>
+            </a>
+            <a href="https://github.com/Chalwk" target="_blank" aria-label="GitHub">
+                <i class="fab fa-github"></i>
+            </a>
         </div>
+        <p class="copyright">&copy; 2025. Jericho Crosby (Chalwk)</p>
     </div>
 </footer>
 

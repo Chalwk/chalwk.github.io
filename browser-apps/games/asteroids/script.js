@@ -1,3 +1,5 @@
+// Copyright (c) 2025. Jericho Crosby (Chalwk)
+
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
@@ -34,7 +36,6 @@ for(let i=0; i<150; i++){
     stars.push(new Star(Math.random()*canvas.width, Math.random()*canvas.height, Math.random()*2+1, Math.random()*1+0.2));
 }
 
-// ---------- Player ----------
 const player = {
     x: canvas.width/2,
     y: canvas.height/2,

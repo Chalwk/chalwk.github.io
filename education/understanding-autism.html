@@ -1,3 +1,5 @@
+<!-- Copyright (c) 2025. Jericho Crosby (Chalwk) -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -741,7 +743,6 @@
 </div>
 
 <script>
-    // Smooth scrolling for navigation links
     document.querySelectorAll('nav a').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             e.preventDefault();
@@ -759,7 +760,6 @@
         });
     });
 
-    // Back to top button
     const backToTopBtn = document.getElementById('backToTop');
 
     window.addEventListener('scroll', () => {
@@ -777,7 +777,6 @@
         });
     });
 
-    // Sensory simulation
     function showSensory(type) {
         const display = document.getElementById('sensory-display');
         display.innerHTML = '';
@@ -841,7 +840,6 @@
         display.style.borderLeft = 'none';
     }
 
-    // Highlight active nav link on scroll
     window.addEventListener('scroll', () => {
         const sections = document.querySelectorAll('.section');
         const navLinks = document.querySelectorAll('nav a');

@@ -1,5 +1,6 @@
+// Copyright (c) 2025. Jericho Crosby (Chalwk)
+
 (() => {
-    // DOM
     const boardEl = document.getElementById('board');
     const mineCountEl = document.getElementById('mineCount');
     const timerEl = document.getElementById('timer');
@@ -19,30 +20,26 @@
     const bestTimesList = document.getElementById('bestTimesList');
     const closeBestTimes = document.getElementById('closeBestTimes');
 
-    // State
     let rows = 9, cols = 9, mines = 10;
-    let board = []; // 2D array of cells
+    let board = [];
     let started = false;
     let ended = false;
-    let flagsMode = true; // whether right-click places flags
+    let flagsMode = true;
     let mineCounter = 0;
     let timer = null;
     let seconds = 0;
     let firstClick = true;
     let revealedCount = 0;
 
-    // Difficulty presets
     const presets = {
         beginner: {rows:9, cols:9, mines:10},
         intermediate: {rows:16, cols:16, mines:40},
         expert: {rows:16, cols:30, mines:99}
     };
 
-    // Utilities
     function clamp(v, a, b){return Math.max(a, Math.min(b, v));}
     function randInt(max){return Math.floor(Math.random()*max);}
 
-    // Board generation
     function resetState(r,c,m){
         rows = r; cols = c; mines = m;
         board = Array.from({length:rows}, ()=> Array.from({length:cols}, ()=> ({
@@ -69,7 +66,6 @@
     }
 
     function placeMines(firstR, firstC){
-        // ensure first click and its neighbors are safe
         const forbidden = new Set();
         for(let dr=-1;dr<=1;dr++)for(let dc=-1;dc<=1;dc++){
             const rr = firstR+dr, cc = firstC+dc;
@@ -84,7 +80,6 @@
             if(board[r][c].isMine) continue;
             board[r][c].isMine = true; placed++;
         }
-        // compute adjacency
         for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){
             let adj = 0;
             for(let dr=-1;dr<=1;dr++)for(let dc=-1;dc<=1;dc++){
@@ -96,7 +91,6 @@
         }
     }
 
-    // Reveal logic
     function revealCell(r,c){
         if(ended) return;
         const cellObj = board[r][c];
@@ -107,14 +101,12 @@
 
         if(cellObj.isMine){
             el.classList.add('mine'); el.textContent = '💣';
-            // game over - reveal all
             endGame(false);
             return;
         }
 
         if(cellObj.adjacent > 0){ el.textContent = cellObj.adjacent; el.style.color = colorForNumber(cellObj.adjacent); }
         else {
-            // flood reveal neighbors
             for(let dr=-1;dr<=1;dr++)for(let dc=-1;dc<=1;dc++){
                 if(dr===0 && dc===0) continue;
                 const rr=r+dr, cc=c+dc;
@@ -122,7 +114,6 @@
             }
         }
 
-        // check win
         checkWin();
     }
 
@@ -134,7 +125,6 @@
 
     function endGame(win){
         ended = true; clearInterval(timer); timer=null;
-        // reveal all mines if lost
         if(!win){
             for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){
                 const obj = board[r][c];
@@ -142,13 +132,11 @@
                 if(obj.isMine && !obj.revealed){ el.classList.add('revealed','mine'); el.textContent = '💣'; }
             }
         } else {
-            // celebrate
             saveBestTime(rows,cols,mines,seconds);
             setTimeout(()=>alert('You win! Time: '+formatTime(seconds)), 100);
         }
     }
 
-    // Helpers
     function getCellEl(r,c){ return boardEl.querySelector(`.cell[data-r='${r}'][data-c='${c}']`); }
     function colorForNumber(n){
         const map = {1:'#0b61f7',2:'#0b8f1a',3:'#f22f2f',4:'#1b2f6b',5:'#7b1f1f',6:'#096',7:'#333',8:'#666'}; return map[n]||'#000';
@@ -172,7 +160,6 @@
         const el = e.currentTarget; const r = Number(el.dataset.r); const c = Number(el.dataset.c);
         const obj = board[r][c];
         if(obj.revealed) return;
-        // cycle flagged -> question -> none
         if(!obj.flagged && !obj.question){ obj.flagged=true; el.classList.add('flag'); el.textContent = '🚩'; mineCounter--; }
         else if(obj.flagged){ obj.flagged=false; obj.question=true; el.classList.remove('flag'); el.classList.add('question'); el.textContent = '?'; mineCounter++; }
         else { obj.question=false; el.classList.remove('question'); el.textContent = ''; }
@@ -184,14 +171,12 @@
         const el = e.currentTarget; const r = Number(el.dataset.r); const c = Number(el.dataset.c);
         const obj = board[r][c];
         if(!obj.revealed || obj.adjacent === 0) return;
-        // count adjacent flags
         let flags = 0;
         for(let dr=-1;dr<=1;dr++)for(let dc=-1;dc<=1;dc++){
             const rr = r+dr, cc = c+dc;
             if(rr>=0 && rr<rows && cc>=0 && cc<cols && board[rr][cc].flagged) flags++;
         }
         if(flags === obj.adjacent){
-            // reveal neighbors
             for(let dr=-1;dr<=1;dr++)for(let dc=-1;dc<=1;dc++){
                 const rr = r+dr, cc = c+dc;
                 if(rr>=0 && rr<rows && cc>=0 && cc<cols && !board[rr][cc].flagged) revealCell(rr,cc);
@@ -208,7 +193,6 @@
 
     function formatTime(s){ const mm = String(Math.floor(s/60)).padStart(2,'0'); const ss = String(s%60).padStart(2,'0'); return `${mm}:${ss}`; }
 
-    // Menu actions
     newBtn.addEventListener('click', ()=> startNewGame());
     difficultySelect.addEventListener('change', ()=>{
         const val = difficultySelect.value;
@@ -234,17 +218,13 @@
 
     hintBtn.addEventListener('click', ()=>{
         if(ended) return;
-        // reveal a random safe unrevealed cell
         for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){
             if(!board[r][c].isMine && !board[r][c].revealed){ revealCell(r,c); return; }
         }
     });
 
     flagToggle.addEventListener('click', ()=>{ flagsMode = !flagsMode; flagToggle.textContent = flagsMode ? 'Toggle Flagging' : 'Flagging Off'; });
-
     themeToggle.addEventListener('change', ()=>{ document.body.classList.toggle('dark', themeToggle.checked); });
-
-    // Best times
     bestTimesBtn.addEventListener('click', ()=>{
         showBestTimes();
     });
@@ -265,7 +245,6 @@
         bestTimesModal.classList.remove('hidden');
     }
 
-    // initialize
     function startNewGame(){
         const val = difficultySelect.value;
         if(presets[val]){ const p = presets[val]; rows=p.rows; cols=p.cols; mines=p.mines; }
@@ -273,7 +252,6 @@
         resetState(rows,cols,mines);
     }
 
-    // quick helpers
     startNewGame();
 
 })();

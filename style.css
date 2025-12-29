@@ -1,3 +1,5 @@
+/* Copyright (c) 2025. Jericho Crosby (Chalwk) */
+
 :root {
     --primary: #2563eb;
     --primary-dark: #1d4ed8;
@@ -27,6 +29,7 @@
     --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 
     --transition: all 0.3s ease;
+    --social-icon-size: 40px;
 }
 
 * {
@@ -46,12 +49,6 @@ body {
     color: var(--dark);
     background-color: var(--light);
     overflow-x: hidden;
-}
-
-.hsp-body {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -395,55 +392,10 @@ a:hover {
     justify-content: center;
 }
 
-.contact-layout {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 3rem;
-    align-items: flex-start;
-    justify-content: center;
-    margin-top: 2rem;
-}
-
-.discord-widget-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.5rem;
-}
-
-.discord-embed {
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
-    background: var(--darker);
-}
-
-.contact-content {
-    flex: 1;
-    min-width: 300px;
-    max-width: 500px;
-}
-
-.contact-message {
-    background: white;
-    padding: 2rem;
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow);
-}
-
-.contact-message h3 {
-    color: var(--primary);
-    margin-bottom: 1rem;
-}
-
-.contact-message p {
-    margin-bottom: 1rem;
-    color: var(--dark);
-}
-
 footer {
     background: var(--darker);
     color: white;
-    padding: 2rem 0;
+    padding: 3rem 0 2rem;
     margin-top: auto;
 }
 
@@ -452,7 +404,39 @@ footer {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 0.5rem;
+    gap: 1.5rem;
+}
+
+.social-icons {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.social-icons a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--social-icon-size);
+    height: var(--social-icon-size);
+    background-color: var(--primary);
+    color: white;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    transition: var(--transition);
+}
+
+.social-icons a:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.copyright {
+    text-align: center;
+    color: var(--gray-light);
+    font-size: 0.9rem;
+    margin: 0;
 }
 
 #projects-wrapper {
@@ -645,29 +629,18 @@ footer {
         grid-template-columns: 1fr;
     }
 
-    .contact-layout {
-        flex-direction: column;
-        align-items: center;
+    .social-icons {
+        gap: 1rem;
     }
 
-    .discord-widget-container {
-        width: 100%;
-        max-width: 350px;
+    .social-icons a {
+        width: 45px;
+        height: 45px;
+        font-size: 1.1rem;
     }
 
-    .contact-content {
-        width: 100%;
-        text-align: center;
-    }
-
-    .discord-embed {
-        width: 100%;
-        height: 400px;
-    }
-
-    .footer-container {
-        flex-direction: column;
-        text-align: center;
+    footer {
+        padding: 2rem 0 1.5rem;
     }
 
     .dropdown-menu {
@@ -747,8 +720,15 @@ footer {
         flex-direction: column;
     }
 
-    .discord-embed {
-        height: 350px;
+    .social-icons a {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+
+    .copyright {
+        font-size: 0.8rem;
+        padding: 0 1rem;
     }
 }
 

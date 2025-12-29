@@ -1,6 +1,5 @@
-/* -----------------------
-   CONFIG
-   ----------------------- */
+// Copyright (c) 2025. Jericho Crosby (Chalwk)
+
 const MAX_GUESSES = 6;
 const WORD_LENGTH = 5; // default: 5-letter words
 
@@ -148,13 +147,11 @@ async function init(){
    ----------------------- */
 function newGame(){
     secret = pickRandom(wordlist);
-    // reset state
     board = Array.from({length: MAX_GUESSES}, () => Array.from({length: WORD_LENGTH}, () => ''));
     row = 0; col = 0; finished = false; keyboardState = {};
     renderGrid();
     renderKeyboard();
     announce("New game. Start guessing.");
-    // store today's secret in session so refresh keeps same game in this run - optional
 }
 
 /* -----------------------
@@ -400,8 +397,6 @@ modalClose.addEventListener('click', ()=> modal.classList.add('hidden'));
 modal.addEventListener('click', (e)=> { if(e.target === modal) modal.classList.add('hidden') });
 
 function announce(text){
-    // simple notification in modal for now (keeps accessibility)
-    // small ephemeral messages should not be annoying: use ARIA live
     const live = document.createElement('div');
     live.style.position='absolute';
     live.style.left='-9999px';
@@ -520,8 +515,6 @@ function bindUI(){
     newGameBtn.addEventListener('click', () => { newGame(); });
     statsBtn.addEventListener('click', () => showStats());
     helpBtn.addEventListener('click', showHelp);
-
-    // modal close already wired
 }
 
 /* -----------------------

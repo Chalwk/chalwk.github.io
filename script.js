@@ -1,4 +1,5 @@
-// Mobile Navigation
+// Copyright (c) 2025. Jericho Crosby (Chalwk)
+
 const hamburger = document.querySelector('.hamburger');
 const navLinks = document.querySelector('.nav-links');
 
@@ -6,14 +7,12 @@ hamburger.addEventListener('click', () => {
     navLinks.classList.toggle('active');
 });
 
-// Close mobile menu when clicking a link
 document.querySelectorAll('.nav-links a').forEach(link => {
     link.addEventListener('click', () => {
         navLinks.classList.remove('active');
     });
 });
 
-// Projects Toggle
 document.addEventListener("DOMContentLoaded", () => {
     const toggleBtn = document.getElementById("toggle-projects");
     const projectsWrapper = document.getElementById("projects-wrapper");
@@ -29,7 +28,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-// Mobile dropdown functionality
 document.addEventListener('DOMContentLoaded', function() {
     const dropdowns = document.querySelectorAll('.dropdown');
 
@@ -41,7 +39,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 e.preventDefault();
                 dropdown.classList.toggle('active');
 
-                // Close other dropdowns
                 dropdowns.forEach(otherDropdown => {
                     if (otherDropdown !== dropdown) {
                         otherDropdown.classList.remove('active');
@@ -51,7 +48,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Close dropdowns when clicking outside
     document.addEventListener('click', function(e) {
         if (!e.target.closest('.dropdown')) {
             dropdowns.forEach(dropdown => {
@@ -60,12 +56,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Dropdown functionality for mobile
     document.addEventListener('DOMContentLoaded', function() {
         const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
         const submenuToggles = document.querySelectorAll('.submenu-toggle');
 
-        // Handle dropdown toggle clicks
         dropdownToggles.forEach(toggle => {
             toggle.addEventListener('click', function(e) {
                 if (window.innerWidth <= 768) {
@@ -73,7 +67,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     const dropdown = this.closest('.dropdown');
                     dropdown.classList.toggle('active');
 
-                    // Close other dropdowns
                     dropdownToggles.forEach(otherToggle => {
                         if (otherToggle !== this) {
                             const otherDropdown = otherToggle.closest('.dropdown');
@@ -84,7 +77,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
 
-        // Handle submenu toggle clicks
         submenuToggles.forEach(toggle => {
             toggle.addEventListener('click', function(e) {
                 if (window.innerWidth <= 768) {
@@ -95,7 +87,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
 
-        // Close dropdowns when clicking outside
         document.addEventListener('click', function(e) {
             if (window.innerWidth <= 768) {
                 if (!e.target.closest('.dropdown')) {
