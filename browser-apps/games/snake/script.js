@@ -1,7 +1,8 @@
-// --------- Config ----------
+// Copyright (c) 2025. Jericho Crosby (Chalwk)
+
 const CONFIG = {
-    baseTick: 10, // logical ticks per second (will be scaled by difficulty)
-    cellSize: 18, // base cell px size for internal grid (canvas will scale)
+    baseTick: 10,
+    cellSize: 18,
     colors: {
         bg: '#071017',
         snake: '#7ef9ff',
@@ -13,11 +14,10 @@ const CONFIG = {
     },
     storageKey: 'snake-v1',
     audioEnabled: true,
-    powerupSpawnIntervalRange: [7000, 16000], // ms
+    powerupSpawnIntervalRange: [7000, 16000],
     foodSpawnIntervalRange: [1000, 2500],
 };
 
-// --------- Helpers ----------
 const $ = id => document.getElementById(id);
 const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -75,17 +75,13 @@ class Grid {
         window.addEventListener('resize', () => this.resize());
     }
     resize(){
-        // Make canvas resolution such that integer number of cells fits
         const rect = this.canvas.getBoundingClientRect();
         const availableW = Math.max(300, rect.width);
         const availableH = Math.max(300, rect.height);
-        // compute scale to keep crisp cells
         this.cols = Math.floor(availableW / this.cellSize);
         this.rows = Math.floor(availableH / this.cellSize);
-        // pixel size
         this.canvas.width = this.cols * this.cellSize;
         this.canvas.height = this.rows * this.cellSize;
-        // style dimensions remain flexible in CSS
     }
     clear(){
         const c = this.ctx;
@@ -192,7 +188,6 @@ class Game {
         const startX = Math.floor(this.grid.cols/2);
         const startY = Math.floor(this.grid.rows/2);
         this.snake = new Snake(startX, startY);
-        // give a short starter length
         this.snake.grow(3);
         this.entities.clear();
         this.score = 0;
@@ -206,9 +201,8 @@ class Game {
         this.tickRate = CONFIG.baseTick * (this.difficulty === 'easy' ? 0.85 : this.difficulty === 'hard' ? 1.4 : 1);
         this.tickInterval = 1000 / this.tickRate;
         this.nextPowerSpawn = now() + rand(...CONFIG.powerupSpawnIntervalRange);
-        this.nextFoodSpawn = now() + 200; // spawn quickly initially
+        this.nextFoodSpawn = now() + 200;
         this.obstacleCount = this.activeMode === 'obstacles' ? Math.floor(this.grid.cols * this.grid.rows * 0.02) : 0;
-        // create obstacles for obstacles mode
         if (this.obstacleCount > 0) {
             for (let i=0;i<this.obstacleCount;i++) {
                 const p = this.randomEmptyCell();
@@ -234,7 +228,6 @@ class Game {
         };
         window.addEventListener('keydown', (e) => {
             if (this.state !== 'playing' && e.key === ' ') {
-                // start game from menu
                 e.preventDefault();
                 $('btn-start').click();
                 return;
@@ -754,7 +747,6 @@ window.addEventListener('load', () => {
     const stats = loadStats();
     $('best').textContent = `Best: ${stats.best}`;
 
-    // simple UI bindings for menu selects to show immediate effect
     ['modeSelect','difficultySelect','controlSelect'].forEach(id => {
         const el = $(id);
         if (!el) return;

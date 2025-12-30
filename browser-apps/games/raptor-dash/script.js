@@ -1,3 +1,5 @@
+// Copyright (c) 2025. Jericho Crosby (Chalwk)
+
 (() => {
     const canvas = document.getElementById('game');
     const ctx = canvas.getContext('2d');

@@ -1,3 +1,5 @@
+// Copyright (c) 2025. Jericho Crosby (Chalwk)
+
 const mazeContainer = document.getElementById("maze-container");
 const scoreElement = document.getElementById("score");
 const timerElement = document.getElementById("timer");

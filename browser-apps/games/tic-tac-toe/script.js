@@ -1,3 +1,5 @@
+// Copyright (c) 2025. Jericho Crosby (Chalwk)
+
 const cells = document.querySelectorAll('.cell');
 const status = document.getElementById('status');
 const resetBtn = document.getElementById('reset');
@@ -7,16 +9,15 @@ const winningLine = document.getElementById('winning-line');
 
 let board = Array(9).fill('');
 let currentPlayer = 'X';
-let gameActive = true; // Start active by default
-let gameMode = 'pvai'; // Default to Player vs AI
+let gameActive = true;
+let gameMode = 'pvai';
 
 const winningConditions = [
-    [0,1,2],[3,4,5],[6,7,8],   // rows
-    [0,3,6],[1,4,7],[2,5,8],   // columns
-    [0,4,8],[2,4,6]            // diagonals
+    [0,1,2],[3,4,5],[6,7,8],
+    [0,3,6],[1,4,7],[2,5,8],
+    [0,4,8],[2,4,6]
 ];
 
-// Sound effects
 const sounds = {
     move: new Audio(),
     aiMove: new Audio(),
@@ -24,29 +25,19 @@ const sounds = {
     tie: new Audio()
 };
 
-// Initialize sounds with basic tones
 function initSounds() {
-    // Player move - short high beep
     sounds.move.src = generateBeep(800, 0.1);
-
-    // AI move - slightly lower, softer beep
     sounds.aiMove.src = generateBeep(500, 0.1);
-
-    // Win sound - rising tone
     sounds.win.src = generateBeep(600, 0.5);
-
-    // Tie sound - low tone
     sounds.tie.src = generateBeep(300, 0.3);
 }
 
-// Generate simple beep sound
 function generateBeep(frequency, duration) {
     const sampleRate = 44100;
     const numSamples = Math.floor(duration * sampleRate);
     const buffer = new ArrayBuffer(44 + numSamples * 2);
     const view = new DataView(buffer);
 
-    // WAV header
     writeString(view, 0, 'RIFF');
     view.setUint32(4, 36 + numSamples * 2, true);
     writeString(view, 8, 'WAVE');
@@ -61,7 +52,6 @@ function generateBeep(frequency, duration) {
     writeString(view, 36, 'data');
     view.setUint32(40, numSamples * 2, true);
 
-    // Generate sine wave
     const amplitude = 0.3;
     for (let i = 0; i < numSamples; i++) {
         const t = i / sampleRate;
@@ -78,7 +68,6 @@ function writeString(view, offset, string) {
     }
 }
 
-// Play sound with error handling
 function playSound(soundName) {
     try {
         const sound = sounds[soundName];
@@ -108,10 +97,7 @@ function makeMove(index) {
     board[index] = currentPlayer;
     cells[index].textContent = currentPlayer;
     cells[index].classList.add('taken', `player-${currentPlayer}`);
-
-    // Play move sound
     playSound('move');
-
     checkResult();
     if (gameActive) {
         currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
@@ -153,11 +139,7 @@ function checkResult() {
         status.className = 'win-message';
         gameActive = false;
         drawWinningLine(winningCombo);
-
-        // Play win sound
         playSound('win');
-
-        // Add win animation to winning cells
         winningCombo.forEach(index => {
             cells[index].classList.add('winning-cell');
         });
@@ -169,8 +151,6 @@ function checkResult() {
         status.className = 'tie-message';
         gameActive = false;
         winningLine.style.display = 'none';
-
-        // Play tie sound
         playSound('tie');
     }
 }
@@ -180,12 +160,10 @@ function drawWinningLine(winningCombo) {
     const cellSize = 100;
     const gap = 5;
 
-    // Get positions of the winning cells
     const cell1 = cells[a].getBoundingClientRect();
     const cell2 = cells[c].getBoundingClientRect();
     const container = document.getElementById('game-container').getBoundingClientRect();
 
-    // Calculate line properties based on winning combination
     let startX, startY, endX, endY, length, angle;
 
     // Horizontal lines (rows)
@@ -235,11 +213,9 @@ function drawWinningLine(winningCombo) {
         endY = cell2.top - container.top + cellSize - 10;
     }
 
-    // Calculate line length and angle
     length = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
     angle = Math.atan2(endY - startY, endX - startX) * (180 / Math.PI);
 
-    // Apply styles to the winning line
     winningLine.style.width = length + 'px';
     winningLine.style.left = startX + 'px';
     winningLine.style.top = startY + 'px';
@@ -264,12 +240,10 @@ function setGameMode(mode) {
     gameMode = mode;
     resetGame();
 
-    // Update button styles to show active mode
     pvpBtn.classList.toggle('active', mode === 'pvp');
     pvaiBtn.classList.toggle('active', mode === 'pvai');
 }
 
-// Initialize the game with Player vs AI mode and sounds
 initSounds();
 setGameMode('pvai');
 

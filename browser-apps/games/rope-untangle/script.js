@@ -1,3 +1,5 @@
+// Copyright (c) 2025. Jericho Crosby (Chalwk)
+
 // Rope Untangle - script.js
 (() => {
     const svg = document.getElementById('svg');

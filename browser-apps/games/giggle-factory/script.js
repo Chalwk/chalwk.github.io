@@ -1,3 +1,5 @@
+// Copyright (c) 2025. Jericho Crosby (Chalwk)
+
 const jokeText = document.getElementById('jokeText');
 const newJokeBtn = document.getElementById('newJokeBtn');
 const copyBtn = document.getElementById('copyBtn');

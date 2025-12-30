@@ -1,3 +1,5 @@
+// Copyright (c) 2025. Jericho Crosby (Chalwk)
+
 class RunAwayGame {
     constructor() {
         this.gameArea = document.getElementById('game-area');
