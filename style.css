@@ -133,11 +133,6 @@ a:hover {
     transition: var(--transition);
 }
 
-.header.scrolled {
-    padding: 0.75rem 0;
-    box-shadow: var(--shadow);
-}
-
 .header .container {
     display: flex;
     justify-content: space-between;
