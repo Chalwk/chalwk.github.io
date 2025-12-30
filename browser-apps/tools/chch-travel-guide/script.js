@@ -127,7 +127,7 @@ const categories = [
             },
             {
                 name: 'Hagley Park',
-                description: 'North & South – gardens, golf course, sports fields in the heart of the city.',
+                description: 'North & South - gardens, golf course, sports fields in the heart of the city.',
                 link: 'https://www.ccc.govt.nz/parks-and-gardens/christchurch-parks/hagley-park',
                 image: 'hagley-park.jpg'
             },
