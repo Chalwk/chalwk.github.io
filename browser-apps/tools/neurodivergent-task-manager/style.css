@@ -1,3 +1,5 @@
+/* Copyright (c) 2025. Jericho Crosby (Chalwk) */
+
 :root {
     --primary: #4a6fa5;
     --secondary: #6b8cbc;
@@ -93,7 +95,6 @@ h1 {
     padding-bottom: 10px;
 }
 
-/* Task Creation Styles */
 .form-group {
     margin-bottom: 15px;
 }
@@ -139,7 +140,6 @@ input, textarea, select {
     background-color: var(--danger);
 }
 
-/* Step Input Styles */
 .step-input {
     display: flex;
     gap: 10px;
@@ -175,7 +175,6 @@ input, textarea, select {
     background-color: #c0392b;
 }
 
-/* Task List Styles */
 .task-item {
     background-color: white;
     border-left: 5px solid var(--primary);
@@ -230,7 +229,6 @@ input, textarea, select {
     color: white;
 }
 
-/* Task Steps Styles */
 .task-steps {
     margin: 15px 0;
     background-color: var(--light);
@@ -306,7 +304,6 @@ input, textarea, select {
     color: #888;
 }
 
-/* Progress Bar Styles */
 .progress-container {
     margin: 15px 0;
 }
@@ -358,7 +355,6 @@ input, textarea, select {
     margin-top: 10px;
 }
 
-/* Visual Timer Styles */
 .timer-container {
     text-align: center;
     padding: 20px;
@@ -383,7 +379,6 @@ input, textarea, select {
     color: var(--dark);
 }
 
-/* Completed Task Delete Button */
 .completed-task-actions {
     margin-top: 10px;
     text-align: right;
@@ -407,7 +402,6 @@ input, textarea, select {
     background-color: #c0392b;
 }
 
-/* Task Templates Styles */
 .templates-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -450,7 +444,6 @@ input, textarea, select {
     background-color: #e68a00;
 }
 
-/* Gamification Styles */
 .achievements {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -485,7 +478,6 @@ input, textarea, select {
     font-weight: 600;
 }
 
-/* Responsive Design */
 @media (max-width: 900px) {
     .main-content {
         grid-template-columns: 1fr;

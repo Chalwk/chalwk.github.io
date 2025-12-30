@@ -1,3 +1,5 @@
+// Copyright (c) 2025. Jericho Crosby (Chalwk)
+
 // DOM Elements
 const taskForm = document.getElementById('task-form');
 const tasksList = document.getElementById('tasks-list');

@@ -1,5 +1,6 @@
+// Copyright (c) 2025. Jericho Crosby (Chalwk)
+
 (() => {
-    // ----- config + data -----
     const STORAGE_KEY = "social-script-builder-v1";
     const STEP_TYPES = {
         statement: { name: "I Say", color: "step-type-statement" },
@@ -14,7 +15,6 @@
         closure: { name: "Closure", color: "step-type-closure" }
     };
 
-    // Pre-made scripts based on the Social Scripting Guide
     const PREMADE_SCRIPTS = [
         {
             id: "greeting-script",
@@ -520,7 +520,6 @@
         document.body.appendChild(previewModal);
         previewModal.showModal();
 
-        // Add event listeners
         const closeButtons = previewModal.querySelectorAll(".close-preview");
         closeButtons.forEach(btn => {
             btn.addEventListener("click", () => {
@@ -556,7 +555,6 @@
         const filtered = scripts.filter(s => s.id !== scriptId);
         saveScripts(filtered);
 
-        // If we're editing the deleted script, clear the editor
         if (currentScript.id === scriptId) {
             newScript();
         }
@@ -818,7 +816,6 @@
 
     // ----- init -----
     document.addEventListener("DOMContentLoaded", () => {
-        // Make functions available globally for onclick handlers
         window.moveStep = moveStep;
         window.removeStep = removeStep;
         window.loadScriptForEdit = loadScriptForEdit;

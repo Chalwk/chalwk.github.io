@@ -1,3 +1,5 @@
+// Copyright (c) 2025. Jericho Crosby (Chalwk)
+
 const CACHE_NAME = 'communication-board-v1.4';
 const BASE_PATH = '/browser-apps/tools/communication-board/';
 

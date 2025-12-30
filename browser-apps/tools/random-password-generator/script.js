@@ -1,18 +1,25 @@
+// Copyright (c) 2025. Jericho Crosby (Chalwk)
+
 // --- Configuration & helpers ---
 const CONFIG = {
     similarChars: /[il1Lo0O]/g,
     symbols: `!@#$%^&*()-_=+[]{};:,<.>/?~`,
     maxHistory: 200,
     attackSpeeds: {
-        singleGpu: 1e9,      // guesses/s
+        singleGpu: 1e9,
         gpuFarm: 1e12,
         nationState: 1e14,
-        quantumOps: 1e10     // very rough operational rate for Grover-style effective ops
+        quantumOps: 1e10
     }
 };
 
 // Word list for passphrases
-const WORDS = [`apple`,`river`,`stone`,`ocean`,`sun`,`moon`,`forest`,`shadow`,`ember`,`silver`,`iron`,`sage`,`crane`,`wolf`,`breeze`,`ember`,`cinder`,`harbor`,`crest`,`lumen`];
+const WORDS = [
+    `apple`,`river`,`stone`,`ocean`,`sun`,
+    `moon`,`forest`,`shadow`,`ember`,`silver`,
+    `iron`,`sage`,`crane`,`wolf`,`breeze`,
+    `ember`,`cinder`,`harbor`,`crest`,`lumen`
+];
 
 // DOM shortcuts
 const $ = id => document.getElementById(id);

@@ -1,4 +1,5 @@
-/* ===== CSS RESET & BASE STYLES ===== */
+/* Copyright (c) 2025. Jericho Crosby (Chalwk) */
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -14,8 +15,6 @@
     white-space: nowrap;
 }
 
-/* ===== THEME SYSTEM ===== */
-/* Default (Light) theme variables */
 :root {
     --primary-color: #4a86e8;
     --secondary-color: #f1f3f4;
@@ -53,7 +52,6 @@
     --transition-normal: 0.2s ease;
 }
 
-/* Dark theme */
 body.theme-dark {
     --primary-color: #5e97ff;
     --secondary-color: #2d2d2d;
@@ -77,7 +75,6 @@ body.theme-dark {
     --shadow-heavy: 0 8px 24px rgba(0,0,0,0.5);
 }
 
-/* High contrast theme */
 body.theme-high-contrast {
     --primary-color: #ffff00;
     --secondary-color: #000000;
@@ -101,7 +98,6 @@ body.theme-high-contrast {
     --shadow-heavy: 0 8px 24px rgba(255,255,255,0.5);
 }
 
-/* System preference detection (fallback for auto theme) */
 @media (prefers-color-scheme: dark) {
     body.theme-auto {
         --primary-color: #5e97ff;
@@ -152,7 +148,6 @@ body.theme-high-contrast {
     }
 }
 
-/* ===== BASE STYLES ===== */
 body {
     font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
     background-color: var(--bg-primary);
@@ -162,7 +157,6 @@ body {
     transition: background-color var(--transition-normal), color var(--transition-normal);
 }
 
-/* ===== IMPROVED CATEGORY SELECTOR ===== */
 .header-sub select,
 #categorySelect,
 #symbolCategory {
@@ -184,14 +178,12 @@ body {
     padding-right: 36px;
 }
 
-/* Dark theme arrow */
 body.theme-dark .header-sub select,
 body.theme-dark #categorySelect,
 body.theme-dark #symbolCategory {
     background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'><path fill='%23cccccc' d='M2 0L0 2h4zm0 5L0 3h4z'/></svg>");
 }
 
-/* High contrast theme arrow */
 body.theme-high-contrast .header-sub select,
 body.theme-high-contrast #categorySelect,
 body.theme-high-contrast #symbolCategory {
@@ -213,7 +205,6 @@ body.theme-high-contrast #symbolCategory {
     box-shadow: 0 0 0 2px rgba(74, 134, 232, 0.2);
 }
 
-/* Header-specific category selector */
 .header-sub select,
 #categorySelect {
     background-color: rgba(255, 255, 255, 0.15);
@@ -235,7 +226,6 @@ body.theme-high-contrast #symbolCategory {
     box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
 }
 
-/* Dark theme header adjustments */
 body.theme-dark .header-sub select,
 body.theme-dark #categorySelect {
     background-color: rgba(255, 255, 255, 0.1);
@@ -248,7 +238,6 @@ body.theme-dark #categorySelect:hover {
     border-color: rgba(255, 255, 255, 0.3);
 }
 
-/* High contrast header adjustments */
 body.theme-high-contrast .header-sub select,
 body.theme-high-contrast #categorySelect {
     background-color: rgba(255, 255, 255, 0.1);
@@ -263,7 +252,6 @@ body.theme-high-contrast #categorySelect:hover {
     border-color: white;
 }
 
-/* Dropdown options styling */
 .header-sub select option,
 #categorySelect option,
 #symbolCategory option {
@@ -273,7 +261,6 @@ body.theme-high-contrast #categorySelect:hover {
     font-weight: normal;
 }
 
-/* Remove default focus styles for options */
 .header-sub select option:focus,
 #categorySelect option:focus,
 #symbolCategory option:focus {
@@ -281,7 +268,6 @@ body.theme-high-contrast #categorySelect:hover {
     color: white;
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
     .header-sub select,
     #categorySelect,
@@ -301,7 +287,6 @@ body.theme-high-contrast #categorySelect:hover {
     }
 }
 
-/* ===== LAYOUT COMPONENTS ===== */
 .app-container {
     display: flex;
     flex-direction: column;
@@ -347,7 +332,6 @@ body.theme-high-contrast #categorySelect:hover {
     overflow: hidden;
 }
 
-/* ===== PHRASE BAR COMPONENT ===== */
 .phrase-bar {
     display: flex;
     gap: var(--spacing-md);
@@ -427,7 +411,6 @@ body.theme-high-contrast #categorySelect:hover {
     align-items: center;
 }
 
-/* ===== BUTTON COMPONENTS ===== */
 .btn-primary,
 .btn-secondary,
 .btn-danger {
@@ -474,7 +457,6 @@ body.theme-high-contrast #categorySelect:hover {
     transform: translateY(-1px);
 }
 
-/* High contrast button enhancements */
 body.theme-high-contrast .btn-primary,
 body.theme-high-contrast .btn-secondary,
 body.theme-high-contrast .btn-danger {
@@ -482,7 +464,6 @@ body.theme-high-contrast .btn-danger {
     font-weight: bold;
 }
 
-/* ===== COMMUNICATION BOARD ===== */
 .board-container {
     flex: 1;
     padding: var(--spacing-md);
@@ -495,7 +476,6 @@ body.theme-high-contrast .btn-danger {
     gap: var(--spacing-md);
 }
 
-/* Fixed grid layouts with compact spacing */
 .communication-board.fixed-grid {
     gap: var(--spacing-sm);
     padding: var(--spacing-sm);
@@ -523,7 +503,6 @@ body.theme-high-contrast .btn-danger {
     margin-top: 2px;
 }
 
-/* Symbol base styles */
 .symbol {
     display: flex;
     flex-direction: column;
@@ -566,12 +545,10 @@ body.theme-high-contrast .btn-danger {
     font-size: 0.95rem;
 }
 
-/* High contrast symbol enhancements */
 body.theme-high-contrast .symbol {
     border: 3px solid currentColor;
 }
 
-/* Edit mode styles */
 .symbol.editing::after {
     content: "✏️";
     position: absolute;
@@ -584,7 +561,6 @@ body.theme-high-contrast .symbol {
     filter: brightness(0.92) saturate(0.98);
 }
 
-/* ===== FLOATING ACTION BUTTON ===== */
 .floating-btn {
     position: fixed;
     bottom: var(--spacing-xl);
@@ -607,7 +583,6 @@ body.theme-high-contrast .symbol {
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
 }
 
-/* ===== MODAL COMPONENTS ===== */
 .modal {
     display: none;
     position: fixed;
@@ -655,7 +630,6 @@ body.theme-high-contrast .symbol {
     color: var(--text-primary);
 }
 
-/* ===== FORM COMPONENTS ===== */
 .form-group {
     margin-bottom: var(--spacing-md);
     display: flex;
@@ -689,7 +663,6 @@ body.theme-high-contrast .symbol {
     margin-top: var(--spacing-md);
 }
 
-/* ===== CATEGORIES MANAGEMENT ===== */
 .categories-list {
     margin: var(--spacing-lg) 0;
     max-height: 300px;
@@ -735,7 +708,6 @@ body.theme-high-contrast .symbol {
     white-space: nowrap;
 }
 
-/* ===== SETTINGS DROPDOWN ===== */
 .settings-dropdown {
     position: relative;
     display: inline-block;
@@ -828,7 +800,6 @@ body.theme-high-contrast .symbol {
     margin-bottom: 0;
 }
 
-/* ===== SETTINGS PANEL ===== */
 .settings-panel {
     margin-bottom: var(--spacing-lg);
 }
@@ -861,7 +832,6 @@ body.theme-high-contrast .symbol {
     margin-bottom: 0;
 }
 
-/* ===== BOARD TOOLBAR ===== */
 .board-toolbar {
     padding: var(--spacing-md) var(--spacing-lg);
     background: var(--secondary-color);
@@ -882,7 +852,6 @@ body.theme-high-contrast .symbol {
     color: var(--text-light);
 }
 
-/* Volume selector specific styling */
 .settings-group select#volumeSelect {
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
@@ -898,7 +867,6 @@ body.theme-high-contrast .symbol {
     margin-bottom: var(--spacing-xs);
 }
 
-/* ===== UTILITY COMPONENTS ===== */
 .toast {
     position: fixed;
     right: 18px;
@@ -944,7 +912,6 @@ body.theme-high-contrast .symbol {
     margin-top: var(--spacing-xs);
 }
 
-/* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 768px) {
     .app-header {
         flex-direction: column;
@@ -1023,7 +990,6 @@ body.theme-high-contrast .symbol {
         font-size: 24px;
     }
 
-    /* Settings Panel Mobile Styles */
     .settings-section {
         padding: var(--spacing-sm);
     }
@@ -1089,7 +1055,6 @@ body.theme-high-contrast .symbol {
         flex: none;
     }
 
-    /* Mobile drag improvements */
     .phrase-item {
         padding: var(--spacing-md) var(--spacing-lg);
         min-height: 52px;
@@ -1115,7 +1080,6 @@ body.theme-high-contrast .symbol {
     }
 }
 
-/* ===== ACCESSIBILITY ENHANCEMENTS ===== */
 @media (prefers-reduced-motion: reduce) {
     * {
         animation-duration: 0.01ms !important;
@@ -1124,7 +1088,6 @@ body.theme-high-contrast .symbol {
     }
 }
 
-/* Focus indicators for better accessibility */
 .btn-primary:focus,
 .btn-secondary:focus,
 .btn-danger:focus,
@@ -1134,7 +1097,6 @@ body.theme-high-contrast .symbol {
     outline-offset: 2px;
 }
 
-/* Print styles */
 @media print {
     .app-header,
     .phrase-bar,

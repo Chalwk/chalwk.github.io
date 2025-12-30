@@ -1,3 +1,5 @@
+/* Copyright (c) 2025. Jericho Crosby (Chalwk) */
+
 :root{
     --bg:#0f1724;
     --card: rgba(255,255,255,0.04);
@@ -109,11 +111,12 @@ body{
 .mode-btn input{ display:none; }
 .mode-btn input:checked + * {}
 
-.mode-btn input:checked + * { }
+.mode-btn.active {
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    background: rgba(126, 227, 180, 0.1);
+}
 
-.mode-btn input:checked ~ & {}
-
-/* wheel area */
 .wheel-area{
     display:flex;
     gap:16px;
@@ -142,7 +145,6 @@ canvas{
     left: 0;
 }
 
-/* picker crosshair */
 .picker{
     position:absolute;
     width:18px;
@@ -155,7 +157,6 @@ canvas{
     background:rgba(255,255,255,0.05);
 }
 
-/* controls */
 .controls{
     flex:1;
     display:flex;
@@ -199,7 +200,6 @@ canvas{
     border:1px dashed rgba(255,255,255,0.04);
 }
 
-/* right col - palette */
 .palette-card h2{ margin-top:0; margin-bottom:10px; }
 .swatch-grid{ display:grid; grid-template-columns: repeat(6, 1fr); gap:8px; margin-bottom:12px; }
 .swatch-grid .sw{
@@ -220,14 +220,11 @@ canvas{
     box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
 }
 
-/* tips card */
 .tips-card ul{ margin:0; padding-left:18px; color:var(--muted); }
 .tips-card li{ margin-bottom:6px; font-size:14px; }
 
-/* footer */
 .footer{ margin-top:20px; text-align:center; color:var(--muted); font-size:12px; }
 
-/* responsive */
 @media (max-width:980px){
     .layout{ grid-template-columns: 1fr; }
     .canvas-wrap{ width:300px; height:300px; flex:0 0 300px; }

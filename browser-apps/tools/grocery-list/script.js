@@ -1,3 +1,5 @@
+// Copyright (c) 2025. Jericho Crosby (Chalwk)
+
 let groceryData = {};
 let isOnline = navigator.onLine;
 

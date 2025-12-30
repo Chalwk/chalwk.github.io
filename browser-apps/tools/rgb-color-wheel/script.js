@@ -1,3 +1,5 @@
+// Copyright (c) 2025. Jericho Crosby (Chalwk)
+
 (() => {
     // --- helpers: conversions between color spaces ---
     function clamp(v, a = 0, b = 1) { return Math.min(b, Math.max(a, v)); }
@@ -454,12 +456,23 @@
         }
     }
 
-    // handle mode switcher
     const modeRadios = document.querySelectorAll('input[name="mode"]');
-    modeRadios.forEach(r => r.addEventListener('change', (e) => {
-        mode = e.target.value;
-        renderSliders();
-    }));
+    modeRadios.forEach(r => {
+        r.addEventListener('change', (e) => {
+            mode = e.target.value;
+            renderSliders();
+
+            document.querySelectorAll('.mode-btn').forEach(label => {
+                label.classList.remove('active');
+            });
+
+            e.target.closest('.mode-btn').classList.add('active');
+        });
+
+        if (r.checked) {
+            r.closest('.mode-btn').classList.add('active');
+        }
+    });
 
     // wheel input handling
     let isPointerDown = false;

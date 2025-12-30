@@ -1,3 +1,5 @@
+// Copyright (c) 2025. Jericho Crosby (Chalwk)
+
 (() => {
     // ----- config + data -----
     const STORAGE_KEY = "autism-tracker-history-v3";

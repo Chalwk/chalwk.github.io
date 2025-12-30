@@ -1,3 +1,5 @@
+// Copyright (c) 2025. Jericho Crosby (Chalwk)
+
 document.addEventListener('DOMContentLoaded', () => {
     // DOM
     const communicationBoard = document.getElementById('communicationBoard');
@@ -1250,7 +1252,6 @@ document.addEventListener('DOMContentLoaded', () => {
     closeSettingsModal.addEventListener('click', closeSettingsModalHandler);
     closeSettingsBtn.addEventListener('click', closeSettingsModalHandler);
 
-    // Settings panel controls
     settingsThemeSelect.addEventListener('change', () => {
         saveTheme(settingsThemeSelect.value);
     });
@@ -1278,10 +1279,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Settings dropdown event listeners
     settingsToggle.addEventListener('click', toggleSettingsMenu);
 
-    // PWA Event Listeners
     if (installBtn) {
         installBtn.addEventListener('click', showInstallPrompt);
     }
@@ -1290,19 +1289,14 @@ document.addEventListener('DOMContentLoaded', () => {
         globalSearch.addEventListener('input', renderBoard);
     }
 
-    // Category select event listener
     categorySelect.addEventListener('change', () => {
         settings.filterCategory = categorySelect.value;
         saveSettings();
         renderBoard();
     });
 
-    // file input preview - clear previously selected
-    symbolImageFile.addEventListener('change', () => {
-        // file will be processed when saving
-    });
+    symbolImageFile.addEventListener('change', () => {});
 
-    // voice select save
     settingsVoiceSelect.addEventListener('change', () => {
         const selectedVoice = settingsVoiceSelect.value;
         if (selectedVoice) {
@@ -1314,7 +1308,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // keyboard quick actions
     boardWrap.addEventListener('keydown', (ev) => {
         if (ev.key === 'e') {
             toggleEditMode();
@@ -1345,7 +1338,6 @@ document.addEventListener('DOMContentLoaded', () => {
         showToast('App installed successfully!');
     });
 
-    // initial load
     function init() {
         loadSettings();
         loadSymbols();
@@ -1365,14 +1357,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const voices = speechSynthesis.getVoices();
             if (voices.length > 0) {
                 populateVoices();
-                populateSettingsVoices(); // Also populate settings panel
+                populateSettingsVoices();
             } else {
-                // Try again after a short delay on mobile
                 setTimeout(() => {
                     const retryVoices = speechSynthesis.getVoices();
                     if (retryVoices.length > 0) {
                         populateVoices();
-                        populateSettingsVoices(); // Also populate settings panel
+                        populateSettingsVoices();
                     } else {
                         console.log('No voices available');
                         showToast('No TTS voices detected');
@@ -1381,15 +1372,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Initial voice load
         loadVoices();
 
-        // Voice change handler - more aggressive on mobile
         if (speechSynthesis.onvoiceschanged !== undefined) {
             speechSynthesis.onvoiceschanged = loadVoices;
         }
 
-        // Mobile-specific voice check
         setTimeout(loadVoices, 1000);
     }
 

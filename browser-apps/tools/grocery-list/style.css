@@ -1,3 +1,5 @@
+/* Copyright (c) 2025. Jericho Crosby (Chalwk) */
+
 :root {
     --primary: #4a6fa5;
     --secondary: #6b8cbc;
@@ -22,7 +24,6 @@ body {
     margin: 0 auto;
 }
 
-/*Reset*/
 * {
     margin: 0;
     padding: 0;
@@ -108,7 +109,6 @@ h1 {
     border-color: var(--primary);
 }
 
-/* Dropdown Styles */
 .dropdown {
     position: relative;
     display: inline-block;
@@ -159,7 +159,6 @@ h1 {
     background-color: var(--light);
 }
 
-/* Show dropdown when active */
 .dropdown.active .dropdown-content {
     display: flex;
 }
@@ -349,7 +348,6 @@ h1 {
     color: var(--text-light);
 }
 
-/* Modal Styles */
 .modal {
     display: none;
     position: fixed;

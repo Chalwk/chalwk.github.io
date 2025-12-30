@@ -1,4 +1,5 @@
-// DOM Elements
+// Copyright (c) 2025. Jericho Crosby (Chalwk)
+
 const calculateBtn = document.getElementById('calculate-btn');
 const saveBtn = document.getElementById('save-btn');
 const recommendationsBtn = document.getElementById('recommendations-btn');
