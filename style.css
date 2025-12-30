@@ -238,13 +238,6 @@ a:hover {
     color: var(--gray-light);
 }
 
-.hero-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-
 .btn {
     display: inline-flex;
     align-items: center;
@@ -560,16 +553,6 @@ a:hover {
 
     .hero h1 {
         font-size: 2.5rem;
-    }
-
-    .hero-buttons {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .hero-buttons .btn {
-        width: 100%;
-        max-width: 250px;
     }
 
     .projects-grid {
