@@ -493,6 +493,54 @@ footer p {
     margin-bottom: 10px;
 }
 
+/* Add to core.css - Better mobile navigation */
+@media (max-width: 768px) {
+    .nav-links {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease, transform 0.3s ease;
+    }
+
+    .nav-links.active {
+        max-height: 500px;
+        overflow-y: auto;
+    }
+
+    .dropdown-menu {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+    }
+
+    .dropdown.active > .dropdown-menu {
+        max-height: 300px;
+    }
+
+    .submenu {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+    }
+
+    .dropdown-submenu.active > .submenu {
+        max-height: 200px;
+    }
+
+    /* Ensure dropdown arrows are visible */
+    .dropdown-toggle .fa-chevron-down,
+    .submenu-toggle .fa-chevron-right {
+        transition: transform 0.3s ease;
+    }
+
+    .dropdown.active .dropdown-toggle .fa-chevron-down {
+        transform: rotate(180deg);
+    }
+
+    .dropdown-submenu.active .submenu-toggle .fa-chevron-right {
+        transform: rotate(90deg);
+    }
+}
+
 @media (max-width: 768px) {
     h1 {
         font-size: 2.5rem;
