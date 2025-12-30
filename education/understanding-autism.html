@@ -353,7 +353,7 @@
 
         <div class="interactive-element">
             <h3>Key Facts About Autism</h3>
-            <ul>
+            <ul style="padding-left: 1.5rem;">
                 <li>Autism is not a disease or illness - it's a different way of experiencing the world</li>
                 <li>Approximately 1 in 66 children in New Zealand are diagnosed with autism</li>
                 <li>Autism is lifelong - people are born autistic and remain autistic throughout their lives</li>
@@ -368,7 +368,7 @@
                 <div class="card-header">Early Signs</div>
                 <div class="card-body">
                     <p>Early signs of autism may include:</p>
-                    <ul>
+                    <ul style="padding-left: 1.5rem;">
                         <li>Limited eye contact</li>
                         <li>Delayed speech development</li>
                         <li>Repetitive behaviors</li>
@@ -382,7 +382,7 @@
                 <div class="card-header">Diagnosis in NZ</div>
                 <div class="card-body">
                     <p>In New Zealand, autism is typically diagnosed through:</p>
-                    <ul>
+                    <ul style="padding-left: 1.5rem;">
                         <li>Assessment by paediatricians or psychologists</li>
                         <li>Comprehensive diagnostic evaluation</li>
                         <li>Observation of behavior</li>
@@ -396,7 +396,7 @@
                 <div class="card-header">Strengths</div>
                 <div class="card-body">
                     <p>Many autistic people have remarkable strengths:</p>
-                    <ul>
+                    <ul style="padding-left: 1.5rem;">
                         <li>Attention to detail</li>
                         <li>Deep focus and concentration</li>
                         <li>Strong memory</li>
@@ -420,7 +420,7 @@
                     Communication
                 </div>
                 <div class="card-body">
-                    <ul>
+                    <ul style="padding-left: 1.5rem;">
                         <li>Difficulty with back-and-forth conversation</li>
                         <li>Challenges understanding nonverbal cues</li>
                         <li>Difficulty developing and maintaining relationships</li>
@@ -436,7 +436,7 @@
                     Restricted/Repetitive Behaviors
                 </div>
                 <div class="card-body">
-                    <ul>
+                    <ul style="padding-left: 1.5rem;">
                         <li>Repetitive movements or speech</li>
                         <li>Insistence on sameness and routines</li>
                         <li>Highly restricted, fixated interests</li>
@@ -452,7 +452,7 @@
                     Differences
                 </div>
                 <div class="card-body">
-                    <ul>
+                    <ul style="padding-left: 1.5rem;">
                         <li>Over- or under-sensitivity to sounds, lights, textures</li>
                         <li>Unusual interest in sensory aspects of environment</li>
                         <li>Adverse response to specific sounds or textures</li>
@@ -465,15 +465,62 @@
 
         <div class="interactive-element">
             <h3>Sensory Experience</h3>
-            <p>Click the buttons below to see how sensory differences might feel for an autistic person:</p>
-            <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem;">
-                <button class="btn" onclick="showSensory('overload')">Sensory Overload</button>
-                <button class="btn" onclick="showSensory('sight')">Visual Sensitivity</button>
-                <button class="btn" onclick="showSensory('sound')">Auditory Sensitivity</button>
-                <button class="btn" onclick="reset()">Reset</button>
+            <p>Here are some examples of how sensory differences might feel for an autistic person:</p>
+
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-header"
+                         style="background: linear-gradient(135deg, var(--spectrum-1), var(--spectrum-2));">
+                        Sensory Overload
+                    </div>
+                    <div class="card-body">
+                        <p>Imagine trying to focus while:</p>
+                        <ul style="padding-left: 1.5rem;">
+                            <li>Fluorescent lights are flickering and buzzing</li>
+                            <li>Multiple conversations are happening around you</li>
+                            <li>Someone is wearing strong perfume</li>
+                            <li>Your clothing tags are itching</li>
+                            <li>A clock is ticking loudly</li>
+                        </ul>
+                        <p>This overwhelming experience can make it difficult to concentrate or function.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header"
+                         style="background: linear-gradient(135deg, var(--spectrum-3), var(--spectrum-4));">
+                        Visual Sensitivity
+                    </div>
+                    <div class="card-body">
+                        <p>Imagine:</p>
+                        <ul style="padding-left: 1.5rem;">
+                            <li>Bright lights causing physical discomfort or pain</li>
+                            <li>Patterns that appear to move or vibrate</li>
+                            <li>Difficulty filtering visual information</li>
+                            <li>Being distracted by small visual details others don't notice</li>
+                        </ul>
+                        <p>These visual sensitivities can make environments like shopping malls or classrooms
+                            challenging.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header"
+                         style="background: linear-gradient(135deg, var(--spectrum-5), var(--spectrum-6));">
+                        Auditory Sensitivity
+                    </div>
+                    <div class="card-body">
+                        <p>Imagine:</p>
+                        <ul style="padding-left: 1.5rem;">
+                            <li>Every sound being equally loud and important</li>
+                            <li>Difficulty filtering background noise from conversation</li>
+                            <li>Certain frequencies causing physical pain</li>
+                            <li>Being able to hear electricity humming or clocks ticking</li>
+                        </ul>
+                        <p>This can make noisy environments overwhelming and conversations difficult to follow.</p>
+                    </div>
+                </div>
             </div>
-            <div id="sensory-display"
-                 style="margin-top: 1.5rem; padding: 1rem; background: white; border-radius: 5px; min-height: 100px;"></div>
         </div>
     </section>
 
@@ -546,7 +593,7 @@
             <div class="card">
                 <div class="card-header">At Home</div>
                 <div class="card-body">
-                    <ul>
+                    <ul style="padding-left: 1.5rem;">
                         <li>Establish predictable routines</li>
                         <li>Create a calm, organized environment</li>
                         <li>Use visual schedules and timers</li>
@@ -559,7 +606,7 @@
             <div class="card">
                 <div class="card-header">In School</div>
                 <div class="card-body">
-                    <ul>
+                    <ul style="padding-left: 1.5rem;">
                         <li>Implement individual education plans (IEPs)</li>
                         <li>Provide clear, concise instructions</li>
                         <li>Offer breaks and quiet spaces</li>
@@ -573,7 +620,7 @@
             <div class="card">
                 <div class="card-header">In the Workplace</div>
                 <div class="card-body">
-                    <ul>
+                    <ul style="padding-left: 1.5rem;">
                         <li>Provide clear job descriptions and expectations</li>
                         <li>Offer flexible work arrangements</li>
                         <li>Minimize sensory distractions</li>
@@ -593,7 +640,7 @@
                 <div class="card">
                     <div class="card-header">Government Support</div>
                     <div class="card-body">
-                        <ul>
+                        <ul style="padding-left: 1.5rem;">
                             <li>Ministry of Education - Ongoing Resourcing Scheme (ORS)</li>
                             <li>Ministry of Health - Disability Support Services</li>
                             <li>Work and Income - Disability Allowance</li>
@@ -604,7 +651,7 @@
                 <div class="card">
                     <div class="card-header">Community Support</div>
                     <div class="card-body">
-                        <ul>
+                        <ul style="padding-left: 1.5rem;">
                             <li>Autism New Zealand regional services</li>
                             <li>Altogether Autism</li>
                             <li>IHC advocacy services</li>
@@ -621,7 +668,7 @@
             <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1rem;">
                 <div style="flex: 1; min-width: 200px; background: white; padding: 1rem; border-radius: 5px; border-left: 4px solid var(--success);">
                     <h4>Do</h4>
-                    <ul>
+                    <ul style="padding-left: 1.5rem;">
                         <li>Be clear and direct</li>
                         <li>Allow processing time</li>
                         <li>Use visual supports</li>
@@ -630,7 +677,7 @@
                 </div>
                 <div style="flex: 1; min-width: 200px; background: white; padding: 1rem; border-radius: 5px; border-left: 4px solid var(--danger);">
                     <h4>Don't</h4>
-                    <ul>
+                    <ul style="padding-left: 1.5rem;">
                         <li>Use sarcasm or irony</li>
                         <li>Force eye contact</li>
                         <li>Assume understanding</li>
@@ -712,7 +759,7 @@
         <div class="interactive-element">
             <h3>Getting a Diagnosis in New Zealand</h3>
             <p>The process for getting an autism diagnosis in New Zealand typically involves:</p>
-            <ol>
+            <ol style="padding-left: 1.5rem;">
                 <li>Discuss your concerns with your GP (family doctor)</li>
                 <li>Your GP may refer you to a paediatrician or psychologist</li>
                 <li>Assessment by a multidisciplinary team may be recommended</li>
@@ -778,69 +825,6 @@
             behavior: 'smooth'
         });
     });
-
-    function showSensory(type) {
-        const display = document.getElementById('sensory-display');
-        display.innerHTML = '';
-
-        switch(type) {
-            case 'overload':
-                display.innerHTML = `
-                    <h4>Sensory Overload</h4>
-                    <p>Imagine trying to focus while:</p>
-                    <ul>
-                        <li>Fluorescent lights are flickering and buzzing</li>
-                        <li>Multiple conversations are happening around you</li>
-                        <li>Someone is wearing strong perfume</li>
-                        <li>Your clothing tags are itching</li>
-                        <li>A clock is ticking loudly</li>
-                    </ul>
-                    <p>This overwhelming experience can make it difficult to concentrate or function.</p>
-                `;
-                display.style.backgroundColor = '#ffebee';
-                display.style.borderLeft = '4px solid var(--spectrum-1)';
-                break;
-
-            case 'sight':
-                display.innerHTML = `
-                    <h4>Visual Sensitivity</h4>
-                    <p>Imagine:</p>
-                    <ul>
-                        <li>Bright lights causing physical discomfort or pain</li>
-                        <li>Patterns that appear to move or vibrate</li>
-                        <li>Difficulty filtering visual information</li>
-                        <li>Being distracted by small visual details others don't notice</li>
-                    </ul>
-                    <p>These visual sensitivities can make environments like shopping malls or classrooms challenging.</p>
-                `;
-                display.style.backgroundColor = '#e3f2fd';
-                display.style.borderLeft = '4px solid var(--spectrum-5)';
-                break;
-
-            case 'sound':
-                display.innerHTML = `
-                    <h4>Auditory Sensitivity</h4>
-                    <p>Imagine:</p>
-                    <ul>
-                        <li>Every sound being equally loud and important</li>
-                        <li>Difficulty filtering background noise from conversation</li>
-                        <li>Certain frequencies causing physical pain</li>
-                        <li>Being able to hear electricity humming or clocks ticking</li>
-                    </ul>
-                    <p>This can make noisy environments overwhelming and conversations difficult to follow.</p>
-                `;
-                display.style.backgroundColor = '#f3e5f5';
-                display.style.borderLeft = '4px solid var(--spectrum-6)';
-                break;
-        }
-    }
-
-    function reset() {
-        const display = document.getElementById('sensory-display');
-        display.innerHTML = '<p>Select a button above to see different sensory perspectives.</p>';
-        display.style.backgroundColor = 'white';
-        display.style.borderLeft = 'none';
-    }
 
     window.addEventListener('scroll', () => {
         const sections = document.querySelectorAll('.section');
