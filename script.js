@@ -1,6 +1,5 @@
 // Copyright (c) 2025. Jericho Crosby (Chalwk)
 
-
 document.addEventListener("DOMContentLoaded", () => {
     const toggleBtn = document.getElementById("toggle-projects");
     const projectsWrapper = document.getElementById("projects-wrapper");
