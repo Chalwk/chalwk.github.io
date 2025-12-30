@@ -6,7 +6,10 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Understanding Autism</title>
+    <link href="../core.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
+          rel="stylesheet">
     <style>
         :root {
             --primary: #4a6fa5;
@@ -37,17 +40,19 @@
             background-color: #f5f7fa;
             color: #333;
             line-height: 1.6;
+            padding-top: 70px;
         }
 
-        header {
+        .hero-banner {
             background: linear-gradient(135deg, var(--primary), var(--accent));
             color: white;
-            padding: 2rem 1rem;
+            padding: 4rem 1rem;
             text-align: center;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
         }
 
-        .header-content {
+        .hero-content {
             max-width: 1200px;
             margin: 0 auto;
         }
@@ -62,37 +67,6 @@
             font-size: 1.2rem;
             opacity: 0.9;
             margin-bottom: 1.5rem;
-        }
-
-        .nav-container {
-            background-color: white;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        nav {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        nav a {
-            padding: 1rem 1.5rem;
-            text-decoration: none;
-            color: var(--dark);
-            font-weight: 600;
-            transition: all 0.3s ease;
-            border-bottom: 3px solid transparent;
-        }
-
-        nav a:hover, nav a.active {
-            color: var(--primary);
-            border-bottom: 3px solid var(--secondary);
-            background-color: rgba(74, 111, 165, 0.05);
         }
 
         .container {
@@ -211,25 +185,12 @@
             left: 0;
         }
 
-        /* Communication tips specific styling */
         .communication-tips ul {
             padding-left: 1.5rem;
         }
 
         .communication-tips li {
             margin-bottom: 0.5rem;
-        }
-
-        footer {
-            background: linear-gradient(135deg, var(--dark), #1a1a1a);
-            color: white;
-            padding: 3rem 1rem;
-            text-align: center;
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
         }
 
         .social-links {
@@ -301,17 +262,12 @@
         }
 
         @media (max-width: 768px) {
+            body {
+                padding-top: 60px;
+            }
+
             h1 {
                 font-size: 2.2rem;
-            }
-
-            nav {
-                flex-direction: column;
-            }
-
-            nav a {
-                text-align: center;
-                border-bottom: 1px solid #eee;
             }
 
             .card-grid {
@@ -321,8 +277,39 @@
     </style>
 </head>
 <body>
-<header>
-    <div class="header-content">
+
+<header class="header">
+    <a class="logo" href="../index.html">
+        <i class="fas fa-code"></i>
+        Jericho
+    </a>
+    <nav>
+        <ul class="nav-links">
+            <li><a href="../index.html#about">About</a></li>
+            <li><a href="../browser-apps/apps_and_tools.html">Apps & Tools</a></li>
+            <li class="dropdown">
+                <a class="dropdown-toggle" href="#">Other Stuff <i class="fas fa-chevron-down"></i></a>
+                <ul class="dropdown-menu">
+                    <li><a href="https://chalwk.github.io/CPAS/">CPAS</a></li>
+                    <li class="dropdown-submenu">
+                        <a class="submenu-toggle" href="#">Education <i class="fas fa-chevron-right"></i></a>
+                        <ul class="submenu">
+                            <li><a href="understanding-autism.html">Understanding Autism</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+</header>
+
+<div class="hero-banner">
+    <div class="hero-content">
         <h1>Understanding Autism</h1>
         <p class="tagline">A Guide to Autism Spectrum Disorder</p>
         <div class="spectrum-visual">
@@ -334,17 +321,27 @@
             <div class="spectrum-color" style="background-color: var(--spectrum-6);"></div>
         </div>
     </div>
-</header>
+</div>
 
-<div class="nav-container">
-    <nav>
-        <a class="active" href="#">Home</a>
-        <a href="#what-is-autism">What is Autism?</a>
-        <a href="#characteristics">Characteristics</a>
-        <a href="#myths-facts">Myths vs Facts</a>
-        <a href="#support">Support in NZ</a>
-        <a href="#resources">NZ Resources</a>
-    </nav>
+<div class="container">
+    <div style="background: white; border-radius: 10px; padding: 1rem; margin-bottom: 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center;">
+            <a href="#what-is-autism"
+               style="padding: 0.5rem 1rem; background: var(--light); border-radius: 5px; text-decoration: none; color: var(--dark); font-weight: 500; transition: all 0.3s ease;">What
+                is Autism?</a>
+            <a href="#characteristics"
+               style="padding: 0.5rem 1rem; background: var(--light); border-radius: 5px; text-decoration: none; color: var(--dark); font-weight: 500; transition: all 0.3s ease;">Characteristics</a>
+            <a href="#myths-facts"
+               style="padding: 0.5rem 1rem; background: var(--light); border-radius: 5px; text-decoration: none; color: var(--dark); font-weight: 500; transition: all 0.3s ease;">Myths
+                vs Facts</a>
+            <a href="#support"
+               style="padding: 0.5rem 1rem; background: var(--light); border-radius: 5px; text-decoration: none; color: var(--dark); font-weight: 500; transition: all 0.3s ease;">Support
+                in NZ</a>
+            <a href="#resources"
+               style="padding: 0.5rem 1rem; background: var(--light); border-radius: 5px; text-decoration: none; color: var(--dark); font-weight: 500; transition: all 0.3s ease;">NZ
+                Resources</a>
+        </div>
+    </div>
 </div>
 
 <div class="container">
@@ -731,10 +728,14 @@
 </div>
 
 <footer>
-    <div class="footer-content">
-        <h3>Understanding Autism</h3>
-        <p>An educational resource to promote awareness and acceptance in Aotearoa</p>
-        <p>&copy; 2025 Understanding Autism - Jericho Crosby (Chalwk) | All rights reserved.</p>
+    <div class="footer-container">
+        <div class="social-icons">
+            <a href="https://discord.com/channels/@me/707058110396760094"
+               target="_blank" aria-label="Discord"> <i class="fab fa-discord"></i>
+            </a>
+            <a href="https://github.com/Chalwk" target="_blank" aria-label="GitHub"> <i class="fab fa-github"></i></a>
+        </div>
+        <p class="footer-copyright"></p>
     </div>
 </footer>
 
@@ -742,8 +743,9 @@
     <i class="fas fa-arrow-up"></i>
 </div>
 
+<script src="../nav.js"></script>
 <script>
-    document.querySelectorAll('nav a').forEach(anchor => {
+    document.querySelectorAll('.container a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             e.preventDefault();
 
@@ -753,7 +755,7 @@
             const targetElement = document.querySelector(targetId);
             if(targetElement) {
                 window.scrollTo({
-                    top: targetElement.offsetTop - 80,
+                    top: targetElement.offsetTop - 100,
                     behavior: 'smooth'
                 });
             }
@@ -784,49 +786,49 @@
         switch(type) {
             case 'overload':
                 display.innerHTML = `
-                        <h4>Sensory Overload</h4>
-                        <p>Imagine trying to focus while:</p>
-                        <ul>
-                            <li>Fluorescent lights are flickering and buzzing</li>
-                            <li>Multiple conversations are happening around you</li>
-                            <li>Someone is wearing strong perfume</li>
-                            <li>Your clothing tags are itching</li>
-                            <li>A clock is ticking loudly</li>
-                        </ul>
-                        <p>This overwhelming experience can make it difficult to concentrate or function.</p>
-                    `;
+                    <h4>Sensory Overload</h4>
+                    <p>Imagine trying to focus while:</p>
+                    <ul>
+                        <li>Fluorescent lights are flickering and buzzing</li>
+                        <li>Multiple conversations are happening around you</li>
+                        <li>Someone is wearing strong perfume</li>
+                        <li>Your clothing tags are itching</li>
+                        <li>A clock is ticking loudly</li>
+                    </ul>
+                    <p>This overwhelming experience can make it difficult to concentrate or function.</p>
+                `;
                 display.style.backgroundColor = '#ffebee';
                 display.style.borderLeft = '4px solid var(--spectrum-1)';
                 break;
 
             case 'sight':
                 display.innerHTML = `
-                        <h4>Visual Sensitivity</h4>
-                        <p>Imagine:</p>
-                        <ul>
-                            <li>Bright lights causing physical discomfort or pain</li>
-                            <li>Patterns that appear to move or vibrate</li>
-                            <li>Difficulty filtering visual information</li>
-                            <li>Being distracted by small visual details others don't notice</li>
-                        </ul>
-                        <p>These visual sensitivities can make environments like shopping malls or classrooms challenging.</p>
-                    `;
+                    <h4>Visual Sensitivity</h4>
+                    <p>Imagine:</p>
+                    <ul>
+                        <li>Bright lights causing physical discomfort or pain</li>
+                        <li>Patterns that appear to move or vibrate</li>
+                        <li>Difficulty filtering visual information</li>
+                        <li>Being distracted by small visual details others don't notice</li>
+                    </ul>
+                    <p>These visual sensitivities can make environments like shopping malls or classrooms challenging.</p>
+                `;
                 display.style.backgroundColor = '#e3f2fd';
                 display.style.borderLeft = '4px solid var(--spectrum-5)';
                 break;
 
             case 'sound':
                 display.innerHTML = `
-                        <h4>Auditory Sensitivity</h4>
-                        <p>Imagine:</p>
-                        <ul>
-                            <li>Every sound being equally loud and important</li>
-                            <li>Difficulty filtering background noise from conversation</li>
-                            <li>Certain frequencies causing physical pain</li>
-                            <li>Being able to hear electricity humming or clocks ticking</li>
-                        </ul>
-                        <p>This can make noisy environments overwhelming and conversations difficult to follow.</p>
-                    `;
+                    <h4>Auditory Sensitivity</h4>
+                    <p>Imagine:</p>
+                    <ul>
+                        <li>Every sound being equally loud and important</li>
+                        <li>Difficulty filtering background noise from conversation</li>
+                        <li>Certain frequencies causing physical pain</li>
+                        <li>Being able to hear electricity humming or clocks ticking</li>
+                    </ul>
+                    <p>This can make noisy environments overwhelming and conversations difficult to follow.</p>
+                `;
                 display.style.backgroundColor = '#f3e5f5';
                 display.style.borderLeft = '4px solid var(--spectrum-6)';
                 break;
@@ -842,22 +844,24 @@
 
     window.addEventListener('scroll', () => {
         const sections = document.querySelectorAll('.section');
-        const navLinks = document.querySelectorAll('nav a');
+        const navLinks = document.querySelectorAll('.container a[href^="#"]');
 
         let current = '';
 
         sections.forEach(section => {
             const sectionTop = section.offsetTop;
             const sectionHeight = section.clientHeight;
-            if (pageYOffset >= sectionTop - 100) {
+            if (pageYOffset >= sectionTop - 150) {
                 current = section.getAttribute('id');
             }
         });
 
         navLinks.forEach(link => {
-            link.classList.remove('active');
+            link.style.background = 'var(--light)';
+            link.style.color = 'var(--dark)';
             if (link.getAttribute('href') === `#${current}`) {
-                link.classList.add('active');
+                link.style.background = 'var(--primary)';
+                link.style.color = 'white';
             }
         });
     });
