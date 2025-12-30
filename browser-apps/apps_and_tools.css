@@ -67,7 +67,7 @@ body.apps-tools-page {
 .category-section {
     width: 100%;
     max-width: var(--container-max);
-    margin-bottom: 60px;
+    margin: 0 auto 60px;
     padding: 0 20px;
 }
 
