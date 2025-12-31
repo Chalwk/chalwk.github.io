@@ -2,25 +2,39 @@
 
 class NavigationManager {
     constructor() {
-        this.hamburger = document.querySelector('.hamburger');
-        this.navMobile = document.querySelector('.nav-mobile');
-        this.header = document.querySelector('.header');
-        this.dropdownToggles = document.querySelectorAll('.dropdown-toggle');
-        this.submenuToggles = document.querySelectorAll('.submenu-toggle');
+        this.hamburger = null;
+        this.navMobile = null;
+        this.header = null;
+        this.dropdownToggles = null;
+        this.submenuToggles = null;
 
         this.init();
     }
 
     init() {
-        this.setupHamburger();
-        this.setupMobileDropdowns();
-        this.setupDesktopDropdowns();
-        this.setupCloseMenuOnLinkClick();
-        this.setupCloseOnOutsideClick();
+        setTimeout(() => {
+            this.setupElements();
+            this.setupHamburger();
+            this.setupMobileDropdowns();
+            this.setupDesktopDropdowns();
+            this.setupCloseMenuOnLinkClick();
+            this.setupCloseOnOutsideClick();
+        }, 100);
+    }
+
+    setupElements() {
+        this.hamburger = document.querySelector('.hamburger');
+        this.navMobile = document.querySelector('.nav-mobile');
+        this.header = document.querySelector('.header');
+        this.dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+        this.submenuToggles = document.querySelectorAll('.submenu-toggle');
     }
 
     setupHamburger() {
-        if (!this.hamburger || !this.navMobile) return;
+        if (!this.hamburger || !this.navMobile) {
+            console.error('Navigation elements not found');
+            return;
+        }
 
         this.hamburger.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -32,8 +46,6 @@ class NavigationManager {
         this.hamburger.classList.toggle('active');
         this.navMobile.classList.toggle('active');
         this.header.classList.toggle('active');
-
-        // Close all dropdowns when opening/closing menu
         if (!this.navMobile.classList.contains('active')) {
             this.closeAllDropdowns();
         }
@@ -141,10 +153,10 @@ class NavigationManager {
     setupCloseOnOutsideClick() {
         document.addEventListener('click', (e) => {
             if (window.innerWidth <= 768) {
-                const isClickInsideMenu = this.navMobile.contains(e.target);
-                const isClickOnHamburger = this.hamburger.contains(e.target);
+                const isClickInsideMenu = this.navMobile && this.navMobile.contains(e.target);
+                const isClickOnHamburger = this.hamburger && this.hamburger.contains(e.target);
 
-                if (!isClickInsideMenu && !isClickOnHamburger && this.navMobile.classList.contains('active')) {
+                if (!isClickInsideMenu && !isClickOnHamburger && this.navMobile && this.navMobile.classList.contains('active')) {
                     this.closeMobileMenu();
                 }
             }
@@ -173,15 +185,23 @@ class NavigationManager {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    new NavigationManager();
+    const navigationManager = new NavigationManager();
 
+    let resizeTimeout;
     window.addEventListener('resize', () => {
-        const navManager = new NavigationManager();
-        if (window.innerWidth > 768) {
-            document.querySelector('.hamburger').classList.remove('active');
-            document.querySelector('.nav-mobile').classList.remove('active');
-            document.querySelector('.header').classList.remove('active');
-            navManager.closeAllDropdowns();
-        }
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            if (window.innerWidth > 768) {
+                const hamburger = document.querySelector('.hamburger');
+                const navMobile = document.querySelector('.nav-mobile');
+                const header = document.querySelector('.header');
+
+                if (hamburger) hamburger.classList.remove('active');
+                if (navMobile) navMobile.classList.remove('active');
+                if (header) header.classList.remove('active');
+
+                navigationManager.closeAllDropdowns();
+            }
+        }, 250);
     });
 });
