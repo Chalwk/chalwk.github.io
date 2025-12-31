@@ -184,6 +184,12 @@ a:hover {
     list-style: none;
     gap: 1rem;
     margin-right: 0.5rem;
+    align-items: center;
+}
+
+.nav-links > li {
+    display: flex;
+    align-items: center;
 }
 
 .nav-links a {
@@ -191,6 +197,8 @@ a:hover {
     font-weight: 500;
     position: relative;
     padding: 0.2rem;
+    display: flex;
+    align-items: center;
 }
 
 .nav-links a:hover {
