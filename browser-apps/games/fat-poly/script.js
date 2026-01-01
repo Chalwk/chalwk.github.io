@@ -7,7 +7,6 @@
     let audioEnabled = true;
     let running = false;
 
-    // UI elements
     const healthFill = document.getElementById('healthFill');
     const progressFill = document.getElementById('progressFill');
     const scoreEl = document.getElementById('score');
@@ -22,19 +21,28 @@
     const btnSound = document.getElementById('btn-sound');
     const btnReset = document.getElementById('btn-reset');
 
-    // Game constants
     const MAX_LEVEL = 10;
     const BASE_TARGET = 8;
     const BASE_PARTICLES = 18;
     const SHAPE_TYPES = [
-        'circle','triangle','square','rectangle','oval','pentagon','hexagon','heptagon','star','diamond','isosceles','kite','trapezoid','parallelogram','arrow','crescent','gear','spiral','cube','cylinder','cone','torus','octagon','nonagon','decagon'
+        'circle','triangle','square','rectangle','oval',
+        'pentagon','hexagon','heptagon','star','diamond',
+        'isosceles','kite','trapezoid','parallelogram',
+        'arrow','crescent','gear','spiral','cube','cylinder',
+        'cone','torus','octagon','nonagon','decagon'
     ];
 
-    // Healthy shapes (green) vs unhealthy shapes (red). We'll select types from list:
-    const healthySet = new Set(['circle','triangle','pentagon','hexagon','star','spiral','cylinder','cone','torus','cube','octagon','decagon']);
-    const unhealthySet = new Set(['square','rectangle','oval','diamond','trapezoid','parallelogram','arrow','crescent','gear','nonagon','heptagon','isosceles','kite']);
+    const healthySet = new Set([
+        'circle','triangle','pentagon','hexagon','star',
+        'spiral','cylinder','cone','torus','cube',
+        'octagon','decagon'
+    ]);
+    const unhealthySet = new Set([
+        'square','rectangle','oval','diamond','trapezoid',
+        'parallelogram','arrow','crescent','gear','nonagon',
+        'heptagon','isosceles','kite'
+    ]);
 
-    // Game state
     const state = {
         player: null,
         particles: [],
@@ -51,7 +59,6 @@
         effects: {},
     };
 
-    // Resize canvas
     function resize() {
         const rect = canvas.getBoundingClientRect();
         W = Math.max(300, Math.floor(rect.width));
@@ -65,13 +72,11 @@
     window.addEventListener('resize', resize);
     resize();
 
-    // Utility
     function rand(min, max) { return Math.random() * (max - min) + min; }
     function irand(min, max) { return Math.floor(rand(min, max + 1)); }
     function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
     function dist(ax,ay,bx,by){return Math.hypot(ax-bx,ay-by)}
 
-    // Player
     class Player {
         constructor() {
             this.size = 28;
@@ -85,7 +90,7 @@
             this.moveKeys = { up:false,down:false,left:false,right:false };
         }
         update(dt){
-            // keyboard movement
+
             let mx=0,my=0;
             if(this.moveKeys.up) my-=1;
             if(this.moveKeys.down) my+=1;
@@ -98,7 +103,7 @@
                 this.target.x = this.x + this.vx * 0.12;
                 this.target.y = this.y + this.vy * 0.12;
             } else {
-                // smooth move toward mouse target
+
                 const dx = this.target.x - this.x;
                 const dy = this.target.y - this.y;
                 this.vx = dx * 6;
@@ -115,7 +120,7 @@
             ctx.shadowColor = 'rgba(0,0,0,0.6)';
             ctx.shadowBlur = 16;
             ctx.fillStyle = this.color;
-            // subtle rounded square
+
             const s = this.size;
             const r = Math.min(8, s*0.12);
             roundRect(ctx, -s/2, -s/2, s, s, r);
@@ -124,7 +129,6 @@
         }
     }
 
-    // Particle (food)
     class Particle {
         constructor(kind, x, y, radius, angle, speed) {
             this.kind = kind; // shape type string
@@ -135,11 +139,11 @@
             this.rotation = Math.random()*Math.PI*2;
             this.spin = rand(-1.2,1.2);
             this.hue = kindHue(kind);
-            // decide healthy vs unhealthy based on sets and randomness
+
             this.isHealthy = healthySet.has(kind) || (!unhealthySet.has(kind) && Math.random() < 0.55);
-            // make color
+
             this.color = this.isHealthy ? '#39b54a' : '#e94b3c';
-            // special flag for purple special or effect-changed reversed
+
             this.reversed = false;
             this.birth = performance.now();
         }
@@ -147,7 +151,7 @@
             this.x += Math.cos(this.angle) * this.speed * dt * speedMultiplier();
             this.y += Math.sin(this.angle) * this.speed * dt * speedMultiplier();
             this.rotation += this.spin * dt;
-            // wrap
+
             if(this.x < -40) this.x = W + 40;
             if(this.x > W + 40) this.x = -40;
             if(this.y < -40) this.y = H + 40;
@@ -157,17 +161,16 @@
             ctx.save();
             ctx.translate(this.x, this.y);
             ctx.rotate(this.rotation);
-            // outline
+
             ctx.lineWidth = 1.5;
             ctx.strokeStyle = 'rgba(0,0,0,0.25)';
-            // fill based on effect reversal
+
             const fill = (this.reversed ? (this.isHealthy ? '#e94b3c' : '#39b54a') : this.color);
             drawShape(ctx, this.kind, this.r, fill, '#00000030');
             ctx.restore();
         }
     }
 
-    // Specials - purple circles that trigger effects
     class Special {
         constructor(x,y,dur, effect){
             this.x=x; this.y=y; this.r=18; this.timer = dur || 8;
@@ -190,7 +193,6 @@
             ctx.stroke();
             ctx.restore();
 
-            // label small text
             ctx.save();
             ctx.fillStyle = 'rgba(255,255,255,0.9)';
             ctx.font = '11px sans-serif';
@@ -205,7 +207,6 @@
         return list[irand(0,list.length-1)];
     }
 
-    // helper draw functions
     function roundRect(ctx,x,y,w,h,r){
         ctx.beginPath();
         ctx.moveTo(x+r,y);
@@ -262,7 +263,7 @@
             case 'torus':
                 torus(ctx,size); break;
             default:
-                // fallback circle
+
                 ctx.beginPath(); ctx.arc(0,0,size,0,Math.PI*2); ctx.fill(); ctx.stroke();
         }
     }
@@ -340,7 +341,6 @@
         return m;
     }
 
-    // spawn particles
     function spawnMany(count){
         for(let i=0;i<count;i++) spawnParticle();
     }
@@ -360,14 +360,12 @@
         return p;
     }
 
-    // spawn special
     function spawnSpecial(){
         const x = rand(80,W-80), y = rand(80,H-80);
         const sp = new Special(x,y, 8, chooseSpecial());
         state.specials.push(sp);
     }
 
-    // collision detection
     function checkCollisions(){
         const pl = state.player;
         const pr = pl.size * 0.5;
@@ -375,14 +373,14 @@
             const p = state.particles[i];
             const d = dist(pl.x,pl.y,p.x,p.y);
             if(d < pr + p.r*0.9){
-                // collision!
+
                 eatParticle(p);
                 state.particles.splice(i,1);
                 screenShake(6);
                 spawnParticlesEffect(p.x,p.y, p.color, 8);
             }
         }
-        // specials pickup
+
         for(let i=state.specials.length-1;i>=0;i--){
             const s = state.specials[i];
             const d = dist(pl.x,pl.y,s.x,s.y);
@@ -395,33 +393,33 @@
     }
 
     function eatParticle(p){
-        // reverse effects if global reversed
+
         let healthy = p.isHealthy ^ !!state.effects.REVERSE;
         if(p.reversed) healthy = !healthy;
         if(healthy){
-            // grow
+
             const gain = 4 + Math.round(p.r*0.08);
             state.player.size += gain;
             state.score += 10 + Math.round(p.r);
             state.particlesEaten++;
             audioBeep(880, 0.06);
         } else {
-            // damage
+
             const dmg = 6 + Math.round(p.r*0.06) + (state.level-1);
             state.health = clamp(state.health - dmg, 0, 100);
             state.score -= Math.max(0, 6 - state.level);
             audioBeep(220, 0.08);
-            // small hurt effect
+
         }
         updateUI();
-        // check level up
+
         if(state.particlesEaten >= state.targetToAdvance){
             levelUp();
         }
     }
 
     function applySpecial(effect){
-        // map effect names to behavior
+
         switch(effect){
             case 'RUSH': state.effects.RUSH = 12; break;
             case 'JAM': state.effects.JAM = 12; break;
@@ -432,12 +430,12 @@
             case 'WEIGHT-':
                 state.player.size = Math.max(12, state.player.size - 8); audioBeep(580,0.12); break;
         }
-        // visual flash and sound
+
     }
 
     function reverseAllParticles(flag){
         for(const p of state.particles) p.reversed = !flag ? false : p.reversed;
-        // if flag true, flip colors of all particles so they become maybe dangerous/healthy swapped:
+
         if(flag){
             for(const p of state.particles) p.reversed = !p.reversed;
         }
@@ -448,11 +446,11 @@
         state.level++;
         state.particlesEaten = 0;
         state.targetToAdvance = BASE_TARGET + Math.floor(state.level * 1.9);
-        // size slightly decreases
+
         state.player.size = Math.max(14, state.player.size - Math.floor(state.level*1.1));
-        // spawn more particles and increase speed
+
         spawnMany(BASE_PARTICLES + Math.floor(state.level*3));
-        // remove temporary effects
+
         state.effects = {};
         audioBeep(1200, 0.16);
         shakeScreen(14);
@@ -477,7 +475,6 @@
         overlayBtn.innerText = 'Restart';
     }
 
-    // UI updates
     function updateUI(){
         healthFill.style.width = Math.max(0, state.health) + '%';
         progressFill.style.width = Math.min(100, state.particlesEaten / state.targetToAdvance * 100) + '%';
@@ -487,7 +484,6 @@
         targetEl.innerText = 'Target: ' + state.targetToAdvance;
     }
 
-    // spawn initial
     function resetGame(){
         state.player = new Player();
         state.particles = [];
@@ -504,7 +500,6 @@
         overlay.classList.add('hidden');
     }
 
-    // particle effects on eat
     const effectsBuffer = [];
     function spawnParticlesEffect(x,y,color,count){
         for(let i=0;i<count;i++){
@@ -524,7 +519,6 @@
         }
     }
 
-    // screen shake
     function screenShake(amount){
         state.shake = Math.max(state.shake, amount);
     }
@@ -532,7 +526,6 @@
         screenShake(amount);
     }
 
-    // game loop
     let last = performance.now();
     function loop(now){
         const dt = clamp((now - last)/1000, 0, 0.05);
@@ -546,38 +539,37 @@
 
     function step(dt){
         state.time += dt;
-        // update effects durations
+
         for(const k of Object.keys(state.effects)){
             if(state.effects[k] !== false){
                 state.effects[k] -= dt;
                 if(state.effects[k] <= 0) delete state.effects[k];
             }
         }
-        // occasionally spawn specials
+
         if(state.time - state.lastSpecial > Math.max(6, 18 - state.level*1.2)){
             state.lastSpecial = state.time;
             spawnSpecial();
         }
-        // spawn periodic particles to increase density with level
+
         if(state.time - state.lastSpawn > Math.max(0.4, 1.6 - state.level*0.12)){
             state.lastSpawn = state.time;
             spawnParticle();
         }
-        // update player & particles
+
         state.player.update(dt);
         for(const p of state.particles) p.update(dt, state.time);
         for(const s of state.specials) s.update(dt);
-        // update particle effect particles
+
         updateEffects(dt);
-        // collisions
+
         checkCollisions();
-        // check health lose condition
+
         if(state.health <= 0) lose();
     }
 
-    // render
     function render(now){
-        // background animated gradient
+
         ctx.save();
         const g = ctx.createLinearGradient(0,0,0,H);
         g.addColorStop(0, '#071026');
@@ -585,10 +577,8 @@
         ctx.fillStyle = g;
         ctx.fillRect(0,0,W,H);
 
-        // moving orbs background
         drawBackgroundOrbs(now);
 
-        // screen shake offset
         let ox = 0, oy = 0;
         if(state.shake > 0){
             ox = rand(-state.shake, state.shake);
@@ -597,16 +587,12 @@
         }
         ctx.translate(ox, oy);
 
-        // draw specials below particles
         for(const s of state.specials) s.draw(ctx);
 
-        // draw particles
         for(const p of state.particles) p.draw(ctx);
 
-        // draw player
         state.player.draw(ctx);
 
-        // draw particle effects (sparks)
         for(const e of effectsBuffer){
             ctx.beginPath();
             ctx.globalAlpha = Math.max(0, e.life);
@@ -616,10 +602,8 @@
             ctx.globalAlpha = 1.0;
         }
 
-        // HUD drawing on canvas - small vignette
         ctx.restore();
 
-        // top-right floating stats
         ctx.save();
         ctx.font = '12px sans-serif';
         ctx.fillStyle = 'rgba(255,255,255,1)';
@@ -627,7 +611,6 @@
         ctx.restore();
     }
 
-    // animated background orbs
     const orbs = [];
     for(let i=0;i<12;i++) orbs.push({x:rand(0,1),y:rand(0,1),s:rand(40,160),v:rand(0.02,0.08)});
     function drawBackgroundOrbs(now){
@@ -647,7 +630,6 @@
         }
     }
 
-    // input handling
     canvas.addEventListener('pointerdown', (e)=>{
         const rect = canvas.getBoundingClientRect();
         const x = (e.clientX - rect.left);
@@ -655,7 +637,7 @@
         state.player.target.x = clamp(x, state.player.size/2, W - state.player.size/2);
         state.player.target.y = clamp(y, state.player.size/2, H - state.player.size/2);
     });
-    // allow dragging
+
     let dragging = false;
     canvas.addEventListener('pointermove', (e)=>{
         if(e.buttons === 1){
@@ -681,7 +663,6 @@
         if(e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') state.player.moveKeys.right = false;
     });
 
-    // control buttons
     btnStart.addEventListener('click', ()=>{ startGame(); });
     overlayBtn.addEventListener('click', ()=>{ startGame(); });
     btnPause.addEventListener('click', ()=>{ toggleRunning(); });
@@ -695,7 +676,6 @@
     }
     function toggleRunning(){ running = !running; overlay.classList.toggle('hidden', running); }
 
-    // audio simple using WebAudio
     const Audio = (()=>{
         const ctx = new (window.AudioContext || window.webkitAudioContext)();
         return {
@@ -714,30 +694,26 @@
                 }catch(e){}
             },
             musicLoop:()=>{
-                // simple background sequence using oscillators when running
+
             }
         };
     })();
 
     function audioBeep(freq, time){ Audio.beep(freq, time); }
 
-    // small helper to compress damage to UI
     function updateCanvasSize(){
         resize();
-        // adjust any positions if needed
+
     }
 
-    // animation kick-off
     window.addEventListener('load', ()=>{
         resize();
         last = performance.now();
         requestAnimationFrame(loop);
     });
 
-    // initialize
     resetGame();
 
-    // expose some debugging on window (optional)
     window.fatpoly = { state };
 
 })();

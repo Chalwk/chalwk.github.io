@@ -1,11 +1,8 @@
 // Copyright (c) 2025. Jericho Crosby (Chalwk)
 
 const MAX_GUESSES = 6;
-const WORD_LENGTH = 5; // default: 5-letter words
+const WORD_LENGTH = 5;
 
-/* -----------------------
-   DOM
-   ----------------------- */
 const gridEl = document.getElementById('grid');
 const keyboardEl = document.getElementById('keyboard');
 const newGameBtn = document.getElementById('newGameBtn');
@@ -15,9 +12,6 @@ const modalClose = document.getElementById('modalClose');
 const statsBtn = document.getElementById('statsBtn');
 const helpBtn = document.getElementById('helpBtn');
 
-/* -----------------------
-   INTERNAL STATE
-   ----------------------- */
 let wordlist = [];
 let allowedSet = new Set();
 let secret = '';
@@ -25,11 +19,8 @@ let board = Array.from({length: MAX_GUESSES}, () => Array.from({length: WORD_LEN
 let row = 0;
 let col = 0;
 let finished = false;
-let keyboardState = {}; // letter -> status
+let keyboardState = {};
 
-/* -----------------------
-   SOUNDS
-   ----------------------- */
 const sounds = {
     move: new Audio(),
     submit: new Audio(),
@@ -38,16 +29,14 @@ const sounds = {
     invalid: new Audio()
 };
 
-// Initialize sounds with simple beeps
 function initSounds() {
-    sounds.move.src = generateBeep(800, 0.1);     // letter typed
-    sounds.submit.src = generateBeep(600, 0.15);  // Enter
-    sounds.win.src = generateBeep(1000, 0.5);     // correct word
-    sounds.loss.src = generateBeep(300, 0.5);     // out of tries
-    sounds.invalid.src = generateBeep(400, 0.2);  // invalid word
+    sounds.move.src = generateBeep(800, 0.1);
+    sounds.submit.src = generateBeep(600, 0.15);
+    sounds.win.src = generateBeep(1000, 0.5);
+    sounds.loss.src = generateBeep(300, 0.5);
+    sounds.invalid.src = generateBeep(400, 0.2);
 }
 
-// Generate simple WAV beep URL
 function generateBeep(frequency, duration) {
     const sampleRate = 44100;
     const numSamples = Math.floor(duration * sampleRate);
@@ -89,18 +78,12 @@ function playSound(name){
     }catch(e){console.log('Sound error:',e);}
 }
 
-/* -----------------------
-   FALLBACK WORDS (used if words.txt not found)
-   ----------------------- */
 const FALLBACK = [
     "apple","brave","crane","dodge","eagle","flame","glory","hound","infer","jolly",
     "knack","lemon","mango","noble","ocean","party","quake","river","scent","tango",
     "union","vivid","woven","xenon","young","zesty"
 ];
 
-/* -----------------------
-   UTILS
-   ----------------------- */
 function el(tag, cls, text){
     const e = document.createElement(tag);
     if(cls) e.className = cls;
@@ -109,9 +92,6 @@ function el(tag, cls, text){
 }
 function uid(){ return Math.random().toString(36).slice(2,9) }
 
-/* -----------------------
-   LOAD WORDS
-   ----------------------- */
 async function loadWords() {
     try{
         const resp = await fetch('words.txt');
@@ -119,7 +99,6 @@ async function loadWords() {
         const txt = await resp.text();
         const raw = txt.split(/\r?\n/).map(s => s.trim().toLowerCase()).filter(Boolean);
         wordlist = raw.filter(w => /^[a-z]+$/.test(w) && w.length === WORD_LENGTH);
-        // also create allowed set (for guess validity)
         allowedSet = new Set(raw.filter(w => /^[a-z]+$/.test(w) && w.length === WORD_LENGTH));
     }catch(e){
         console.warn('Failed to load words.txt, using fallback words. Put a words.txt file (one word per line) in the same folder.', e);
@@ -127,24 +106,17 @@ async function loadWords() {
         allowedSet = new Set(FALLBACK);
     }
     if(wordlist.length === 0){
-        // still empty? fall back
         wordlist = FALLBACK.slice();
         allowedSet = new Set(FALLBACK);
     }
 }
 
-/* -----------------------
-   INIT
-   ----------------------- */
 async function init(){
     await loadWords();
     bindUI();
     newGame();
 }
 
-/* -----------------------
-   NEW GAME
-   ----------------------- */
 function newGame(){
     secret = pickRandom(wordlist);
     board = Array.from({length: MAX_GUESSES}, () => Array.from({length: WORD_LENGTH}, () => ''));
@@ -154,16 +126,10 @@ function newGame(){
     announce("New game. Start guessing.");
 }
 
-/* -----------------------
-   PICK RANDOM
-   ----------------------- */
 function pickRandom(list){
     return list[Math.floor(Math.random()*list.length)];
 }
 
-/* -----------------------
-   RENDER GRID
-   ----------------------- */
 function renderGrid(){
     gridEl.innerHTML = '';
     for(let r=0;r<MAX_GUESSES;r++){
@@ -180,9 +146,6 @@ function renderGrid(){
     }
 }
 
-/* -----------------------
-   RENDER KEYBOARD
-   ----------------------- */
 const KEY_LAYOUT = [['q','w','e','r','t','y','u','i','o','p'],
     ['a','s','d','f','g','h','j','k','l'],
     ['Enter','z','x','c','v','b','n','m','Backspace']];
@@ -204,9 +167,6 @@ function renderKeyboard(){
     }
 }
 
-/* -----------------------
-   KEY HANDLING
-   ----------------------- */
 function handleKey(key){
     if(finished) return;
 
@@ -237,9 +197,6 @@ function handleKey(key){
     }
 }
 
-/* -----------------------
-   UPDATE TILE DOM
-   ----------------------- */
 function updateTile(r, c){
     const rowEl = gridEl.querySelector(`.row[data-row="${r}"]`);
     if(!rowEl) return;
@@ -247,9 +204,6 @@ function updateTile(r, c){
     if(tile) tile.textContent = board[r][c] ? board[r][c].toUpperCase() : '';
 }
 
-/* -----------------------
-   SUBMIT GUESS
-   ----------------------- */
 function submitGuess(){
     if(col !== WORD_LENGTH){
         pulseRow(row);
@@ -290,29 +244,23 @@ function submitGuess(){
     }
 }
 
-/* -----------------------
-   EVALUATION ALGO (handles duplicates correctly)
-   Returns array of statuses for each letter
-   ----------------------- */
 function evaluateGuess(guess, secretWord){
     const status = Array(WORD_LENGTH).fill('absent');
     const secretArr = secretWord.split('');
     const guessArr = guess.split('');
-    // first pass for corrects
     for(let i=0;i<WORD_LENGTH;i++){
         if(guessArr[i] === secretArr[i]){
             status[i] = 'correct';
-            secretArr[i] = null; // consume
+            secretArr[i] = null;
             guessArr[i] = null;
         }
     }
-    // second pass for presents
     for(let i=0;i<WORD_LENGTH;i++){
         if(guessArr[i] === null) continue;
         const idx = secretArr.indexOf(guessArr[i]);
         if(idx !== -1){
             status[i] = 'present';
-            secretArr[idx] = null; // consume
+            secretArr[idx] = null;
             guessArr[i] = null;
         } else {
             status[i] = 'absent';
@@ -321,18 +269,13 @@ function evaluateGuess(guess, secretWord){
     return status;
 }
 
-/* -----------------------
-   UI HELPERS (animations, classes)
-   ----------------------- */
 function applyResultToRow(r, result){
     const rowEl = gridEl.querySelector(`.row[data-row="${r}"]`);
     if(!rowEl) return;
     const tiles = Array.from(rowEl.querySelectorAll('.tile'));
     tiles.forEach((t,i) => {
-        // flip timing stagger
         setTimeout(() => {
             t.classList.add('flip');
-            // set status after a small delay to match flip
             setTimeout(()=> {
                 t.classList.remove('flip');
                 t.classList.remove('absent','present','correct');
@@ -358,10 +301,6 @@ function shakeRow(r){
     });
 }
 
-/* -----------------------
-   KEYBOARD STATE UPGRADE RULE
-   correct > present > absent
-   ----------------------- */
 function upgradeKeyState(letter, status){
     const prev = keyboardState[letter] || null;
     const ranking = { 'correct':3, 'present':2, 'absent':1, null:0 };
@@ -370,9 +309,6 @@ function upgradeKeyState(letter, status){
     }
 }
 
-/* -----------------------
-   PHYSICAL KEYBOARD SUPPORT
-   ----------------------- */
 window.addEventListener('keydown', (e) => {
     if(finished) return;
     if(e.key === 'Backspace' || e.key === 'Enter'){
@@ -384,9 +320,6 @@ window.addEventListener('keydown', (e) => {
     if(/^[a-z]$/.test(k)) handleKey(k);
 });
 
-/* -----------------------
-   MODALS / MESSAGES
-   ----------------------- */
 function showModal(html){
     modalContent.innerHTML = '';
     if(typeof html === 'string') modalContent.innerHTML = html;
@@ -406,9 +339,6 @@ function announce(text){
     setTimeout(()=> live.remove(), 900);
 }
 
-/* -----------------------
-   END-GAME UI
-   ----------------------- */
 function showWin(){
     const wrapper = document.createElement('div');
     const lines = el('div','', `<strong>Nice! You guessed it.</strong><br><small>The word was <code>${secret.toUpperCase()}</code></small>`);
@@ -430,11 +360,7 @@ function showLoss(){
     });
 }
 
-/* -----------------------
-   SHARE / RESULTS (emoji grid)
-   ----------------------- */
 function shareResult(){
-    // copy to clipboard representation
     const lines = [];
     for(let r=0;r<=row && r<MAX_GUESSES;r++){
         const rowEl = gridEl.querySelector(`.row[data-row="${r}"]`);
@@ -454,9 +380,6 @@ function shareResult(){
     });
 }
 
-/* -----------------------
-   STATS STORAGE
-   ----------------------- */
 const STATS_KEY = 'blunder_stats_v1';
 function getStats(){
     try{
@@ -487,7 +410,6 @@ function showStats(){
   `;
     container.appendChild(grid);
 
-    // distribution
     const distDiv = document.createElement('div');
     distDiv.style.marginTop = '12px';
     distDiv.innerHTML = `<strong>Guesses distribution</strong>`;
@@ -508,18 +430,12 @@ function showStats(){
     showModal(container);
 }
 
-/* -----------------------
-   BIND EVENTS
-   ----------------------- */
 function bindUI(){
     newGameBtn.addEventListener('click', () => { newGame(); });
     statsBtn.addEventListener('click', () => showStats());
     helpBtn.addEventListener('click', showHelp);
 }
 
-/* -----------------------
-   HELP
-   ----------------------- */
 function showHelp(){
     const help = `
   <h3>How to play</h3>
@@ -534,8 +450,5 @@ function showHelp(){
     showModal(help);
 }
 
-/* -----------------------
-   START
-   ----------------------- */
 init();
 initSounds();

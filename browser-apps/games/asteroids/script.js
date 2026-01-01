@@ -13,7 +13,6 @@ let score = 0;
 let lives = 3;
 let gameOver = false;
 
-// ---------- Starfield ----------
 class Star {
     constructor(x, y, size, speed) {
         this.x = x;
@@ -61,7 +60,6 @@ function drawPlayer(x, y, size = 1) {
     ctx.restore();
 }
 
-// ---------- Asteroids ----------
 class Asteroid {
     constructor(x, y, radius, velocity) {
         this.x = x;
@@ -110,7 +108,6 @@ function spawnAsteroids(num=6){
 }
 spawnAsteroids();
 
-// ---------- Bullets ----------
 function shootBullet() {
     player.bullets.push({
         x: player.x + Math.cos(player.angle)*20,
@@ -120,7 +117,6 @@ function shootBullet() {
     });
 }
 
-// ---------- Enemy ----------
 class Enemy {
     constructor() {
         this.x = Math.random()*canvas.width;
@@ -163,11 +159,9 @@ class Enemy {
     }
 }
 
-// Enemy spawn system
 let enemy = null;
 let enemySpawnTimer = Math.floor(Math.random() * 500) + 500; // ~8-16s
 
-// ---------- Helper ----------
 function wrap(obj){
     if(obj.x < 0) obj.x = canvas.width;
     if(obj.x > canvas.width) obj.x = 0;
@@ -175,11 +169,9 @@ function wrap(obj){
     if(obj.y > canvas.height) obj.y = 0;
 }
 
-// ---------- Game Loop ----------
 function update() {
     if(gameOver) return;
 
-    // Player controls
     if(keys['ArrowLeft']) player.angle -= 0.05;
     if(keys['ArrowRight']) player.angle += 0.05;
     if(keys['ArrowUp']){
@@ -190,7 +182,6 @@ function update() {
 
     wrap(player);
 
-    // Shooting
     if(keys['Space']){
         if(player.canShoot){
             shootBullet();
@@ -199,7 +190,6 @@ function update() {
         }
     }
 
-    // Update bullets
     player.bullets.forEach((b,i)=>{
         b.x += Math.cos(b.angle)*b.speed;
         b.y += Math.sin(b.angle)*b.speed;
@@ -210,7 +200,6 @@ function update() {
 
     asteroids.forEach(a=>a.update());
 
-    // Random enemy spawn
     if(!enemy){
         enemySpawnTimer--;
         if(enemySpawnTimer <= 0){
@@ -219,11 +208,9 @@ function update() {
         }
     }
 
-    // Enemy update
     if(enemy){
         enemy.update();
 
-        // Enemy bullet-player collisions
         enemy.bullets.forEach((b, i)=>{
             const dx = b.x - player.x;
             const dy = b.y - player.y;
@@ -237,13 +224,11 @@ function update() {
             }
         });
 
-        // Remove enemy if offscreen
         if(enemy.y > canvas.height + 50){
             enemy = null;
         }
     }
 
-    // Bullet-asteroid collisions
     player.bullets.forEach((b,i)=>{
         asteroids.forEach((a,j)=>{
             const dx = b.x - a.x;
@@ -266,12 +251,10 @@ function update() {
         const dy = a.y - player.y;
         const dist = Math.sqrt(dx*dx + dy*dy);
         if(dist < a.radius + player.radius){
-            // Collision detected
             lives--;
             if(lives <= 0){
                 gameOver = true;
             }
-            // Remove the asteroid and break it into smaller ones
             asteroids.splice(i, 1);
             score += 10;
             if(a.radius > 15){
@@ -300,7 +283,6 @@ function draw() {
 
     if(enemy) enemy.draw();
 
-    // ---------- HUD ----------
     for(let i=0;i<lives;i++){
         ctx.save();
         ctx.translate(30 + i*40, 30);
@@ -320,7 +302,6 @@ function draw() {
     ctx.textAlign = 'left';
     ctx.fillText(`Score: ${score}`, canvas.width - 120, 30);
 
-    // ---------- Game Over ----------
     if(gameOver){
         ctx.fillStyle = 'rgba(0,0,0,0.7)';
         ctx.fillRect(0,0,canvas.width,canvas.height);
