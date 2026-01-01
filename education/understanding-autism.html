@@ -29,20 +29,7 @@
             --spectrum-6: #6a4c93;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: #f5f7fa;
-            color: #333;
-            line-height: 1.6;
-            padding-top: 70px;
-        }
-
+        /* Specific styles for autism page only */
         .hero-banner {
             background: linear-gradient(135deg, var(--primary), var(--accent));
             color: white;
@@ -57,7 +44,7 @@
             margin: 0 auto;
         }
 
-        h1 {
+        .page-title {
             font-size: 2.8rem;
             margin-bottom: 0.5rem;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
@@ -69,10 +56,10 @@
             margin-bottom: 1.5rem;
         }
 
-        .container {
+        .page-container {
             max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 1rem;
+            margin: 0 auto;
+            padding: 0 1.5rem;
         }
 
         .section {
@@ -88,7 +75,7 @@
             transform: translateY(-5px);
         }
 
-        h2 {
+        .page-section h2 {
             color: var(--primary);
             margin-bottom: 1.5rem;
             padding-bottom: 0.5rem;
@@ -148,7 +135,7 @@
             border-left: 4px solid var(--secondary);
         }
 
-        .btn {
+        .page-btn {
             display: inline-block;
             background: var(--primary);
             color: white;
@@ -161,7 +148,7 @@
             text-decoration: none;
         }
 
-        .btn:hover {
+        .page-btn:hover {
             background: var(--accent);
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -261,17 +248,49 @@
             left: 7px;
         }
 
-        @media (max-width: 768px) {
-            body {
-                padding-top: 60px;
-            }
+        .page-nav {
+            background: white;
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 2rem auto;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            max-width: 1200px;
+        }
 
-            h1 {
+        .page-nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        .page-nav-link {
+            padding: 0.5rem 1rem;
+            background: var(--light);
+            border-radius: 5px;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .page-nav-link:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .page-title {
                 font-size: 2.2rem;
             }
 
             .card-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .page-nav-links {
+                flex-direction: column;
+                align-items: center;
             }
         }
     </style>
@@ -334,485 +353,476 @@
     </div>
 </header>
 
-<div class="hero-banner">
-    <div class="hero-content">
-        <h1>Understanding Autism</h1>
-        <p class="tagline">A Guide to Autism Spectrum Disorder</p>
-        <div class="spectrum-visual">
-            <div class="spectrum-color" style="background-color: var(--spectrum-1);"></div>
-            <div class="spectrum-color" style="background-color: var(--spectrum-2);"></div>
-            <div class="spectrum-color" style="background-color: var(--spectrum-3);"></div>
-            <div class="spectrum-color" style="background-color: var(--spectrum-4);"></div>
-            <div class="spectrum-color" style="background-color: var(--spectrum-5);"></div>
-            <div class="spectrum-color" style="background-color: var(--spectrum-6);"></div>
+<main>
+    <div class="hero-banner">
+        <div class="hero-content">
+            <h1 class="page-title">Understanding Autism</h1>
+            <p class="tagline">A Guide to Autism Spectrum Disorder</p>
+            <div class="spectrum-visual">
+                <div class="spectrum-color" style="background-color: var(--spectrum-1);"></div>
+                <div class="spectrum-color" style="background-color: var(--spectrum-2);"></div>
+                <div class="spectrum-color" style="background-color: var(--spectrum-3);"></div>
+                <div class="spectrum-color" style="background-color: var(--spectrum-4);"></div>
+                <div class="spectrum-color" style="background-color: var(--spectrum-5);"></div>
+                <div class="spectrum-color" style="background-color: var(--spectrum-6);"></div>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="container">
-    <div style="background: white; border-radius: 10px; padding: 1rem; margin-bottom: 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
-        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center;">
-            <a href="#what-is-autism"
-               style="padding: 0.5rem 1rem; background: var(--light); border-radius: 5px; text-decoration: none; color: var(--dark); font-weight: 500; transition: all 0.3s ease;">What
-                is Autism?</a>
-            <a href="#characteristics"
-               style="padding: 0.5rem 1rem; background: var(--light); border-radius: 5px; text-decoration: none; color: var(--dark); font-weight: 500; transition: all 0.3s ease;">Characteristics</a>
-            <a href="#myths-facts"
-               style="padding: 0.5rem 1rem; background: var(--light); border-radius: 5px; text-decoration: none; color: var(--dark); font-weight: 500; transition: all 0.3s ease;">Myths
-                vs Facts</a>
-            <a href="#support"
-               style="padding: 0.5rem 1rem; background: var(--light); border-radius: 5px; text-decoration: none; color: var(--dark); font-weight: 500; transition: all 0.3s ease;">Support
-                in NZ</a>
-            <a href="#resources"
-               style="padding: 0.5rem 1rem; background: var(--light); border-radius: 5px; text-decoration: none; color: var(--dark); font-weight: 500; transition: all 0.3s ease;">NZ
-                Resources</a>
+    <div class="page-nav">
+        <div class="page-nav-links">
+            <a href="#what-is-autism" class="page-nav-link">What is Autism?</a>
+            <a href="#characteristics" class="page-nav-link">Characteristics</a>
+            <a href="#myths-facts" class="page-nav-link">Myths vs Facts</a>
+            <a href="#support" class="page-nav-link">Support in NZ</a>
+            <a href="#resources" class="page-nav-link">NZ Resources</a>
         </div>
     </div>
-</div>
 
-<div class="container">
-    <section class="section" id="what-is-autism">
-        <h2>What is Autism?</h2>
-        <p>Autism Spectrum Disorder (ASD) is a complex neurodevelopmental condition that affects communication, social
-            interaction, and behavior. It's called a "spectrum" because autism affects people in different ways and to
-            varying degrees.</p>
+    <div class="page-container">
+        <section class="section page-section" id="what-is-autism">
+            <h2>What is Autism?</h2>
+            <p>Autism Spectrum Disorder (ASD) is a complex neurodevelopmental condition that affects communication,
+                social interaction, and behavior. It's called a "spectrum" because autism affects people in different
+                ways and to varying degrees.</p>
 
-        <div class="interactive-element">
-            <h3>Key Facts About Autism</h3>
-            <ul style="padding-left: 1.5rem;">
-                <li>Autism is not a disease or illness - it's a different way of experiencing the world</li>
-                <li>Approximately 1 in 66 children in New Zealand are diagnosed with autism</li>
-                <li>Autism is lifelong - people are born autistic and remain autistic throughout their lives</li>
-                <li>There is no "cure" for autism, and many autistic people don't want one</li>
-                <li>With appropriate support, autistic people can lead fulfilling lives</li>
-                <li>In New Zealand, autism affects people of all ethnicities and backgrounds</li>
-            </ul>
-        </div>
-
-        <div class="card-grid">
-            <div class="card">
-                <div class="card-header">Early Signs</div>
-                <div class="card-body">
-                    <p>Early signs of autism may include:</p>
-                    <ul style="padding-left: 1.5rem;">
-                        <li>Limited eye contact</li>
-                        <li>Delayed speech development</li>
-                        <li>Repetitive behaviors</li>
-                        <li>Difficulty with social interactions</li>
-                        <li>Intense focus on specific interests</li>
-                    </ul>
-                </div>
+            <div class="interactive-element">
+                <h3>Key Facts About Autism</h3>
+                <ul style="padding-left: 1.5rem;">
+                    <li>Autism is not a disease or illness - it's a different way of experiencing the world</li>
+                    <li>Approximately 1 in 66 children in New Zealand are diagnosed with autism</li>
+                    <li>Autism is lifelong - people are born autistic and remain autistic throughout their lives</li>
+                    <li>There is no "cure" for autism, and many autistic people don't want one</li>
+                    <li>With appropriate support, autistic people can lead fulfilling lives</li>
+                    <li>In New Zealand, autism affects people of all ethnicities and backgrounds</li>
+                </ul>
             </div>
 
-            <div class="card">
-                <div class="card-header">Diagnosis in NZ</div>
-                <div class="card-body">
-                    <p>In New Zealand, autism is typically diagnosed through:</p>
-                    <ul style="padding-left: 1.5rem;">
-                        <li>Assessment by paediatricians or psychologists</li>
-                        <li>Comprehensive diagnostic evaluation</li>
-                        <li>Observation of behavior</li>
-                        <li>Parent/caregiver interviews</li>
-                        <li>Referrals through your GP</li>
-                    </ul>
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-header">Early Signs</div>
+                    <div class="card-body">
+                        <p>Early signs of autism may include:</p>
+                        <ul style="padding-left: 1.5rem;">
+                            <li>Limited eye contact</li>
+                            <li>Delayed speech development</li>
+                            <li>Repetitive behaviors</li>
+                            <li>Difficulty with social interactions</li>
+                            <li>Intense focus on specific interests</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">Diagnosis in NZ</div>
+                    <div class="card-body">
+                        <p>In New Zealand, autism is typically diagnosed through:</p>
+                        <ul style="padding-left: 1.5rem;">
+                            <li>Assessment by paediatricians or psychologists</li>
+                            <li>Comprehensive diagnostic evaluation</li>
+                            <li>Observation of behavior</li>
+                            <li>Parent/caregiver interviews</li>
+                            <li>Referrals through your GP</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">Strengths</div>
+                    <div class="card-body">
+                        <p>Many autistic people have remarkable strengths:</p>
+                        <ul style="padding-left: 1.5rem;">
+                            <li>Attention to detail</li>
+                            <li>Deep focus and concentration</li>
+                            <li>Strong memory</li>
+                            <li>Honesty and loyalty</li>
+                            <li>Unique problem-solving abilities</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
+        </section>
 
-            <div class="card">
-                <div class="card-header">Strengths</div>
-                <div class="card-body">
-                    <p>Many autistic people have remarkable strengths:</p>
-                    <ul style="padding-left: 1.5rem;">
-                        <li>Attention to detail</li>
-                        <li>Deep focus and concentration</li>
-                        <li>Strong memory</li>
-                        <li>Honesty and loyalty</li>
-                        <li>Unique problem-solving abilities</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="section" id="characteristics">
-        <h2>Characteristics of Autism</h2>
-        <p>Autism manifests differently in each individual, but common characteristics fall into these main
-            categories:</p>
-
-        <div class="card-grid">
-            <div class="card">
-                <div class="card-header"
-                     style="background: linear-gradient(135deg, var(--spectrum-1), var(--spectrum-2));">Social
-                    Communication
-                </div>
-                <div class="card-body">
-                    <ul style="padding-left: 1.5rem;">
-                        <li>Difficulty with back-and-forth conversation</li>
-                        <li>Challenges understanding nonverbal cues</li>
-                        <li>Difficulty developing and maintaining relationships</li>
-                        <li>May not initiate social interaction</li>
-                        <li>May interpret language literally</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header"
-                     style="background: linear-gradient(135deg, var(--spectrum-3), var(--spectrum-4));">
-                    Restricted/Repetitive Behaviors
-                </div>
-                <div class="card-body">
-                    <ul style="padding-left: 1.5rem;">
-                        <li>Repetitive movements or speech</li>
-                        <li>Insistence on sameness and routines</li>
-                        <li>Highly restricted, fixated interests</li>
-                        <li>Unusual responses to sensory input</li>
-                        <li>Preoccupation with parts of objects</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header"
-                     style="background: linear-gradient(135deg, var(--spectrum-5), var(--spectrum-6));">Sensory
-                    Differences
-                </div>
-                <div class="card-body">
-                    <ul style="padding-left: 1.5rem;">
-                        <li>Over- or under-sensitivity to sounds, lights, textures</li>
-                        <li>Unusual interest in sensory aspects of environment</li>
-                        <li>Adverse response to specific sounds or textures</li>
-                        <li>May seek or avoid certain sensory experiences</li>
-                        <li>Can affect eating, dressing, and daily activities</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div class="interactive-element">
-            <h3>Sensory Experience</h3>
-            <p>Here are some examples of how sensory differences might feel for an autistic person:</p>
+        <section class="section page-section" id="characteristics">
+            <h2>Characteristics of Autism</h2>
+            <p>Autism manifests differently in each individual, but common characteristics fall into these main
+                categories:</p>
 
             <div class="card-grid">
                 <div class="card">
                     <div class="card-header"
-                         style="background: linear-gradient(135deg, var(--spectrum-1), var(--spectrum-2));">
-                        Sensory Overload
+                         style="background: linear-gradient(135deg, var(--spectrum-1), var(--spectrum-2));">Social
+                        Communication
                     </div>
                     <div class="card-body">
-                        <p>Imagine trying to focus while:</p>
                         <ul style="padding-left: 1.5rem;">
-                            <li>Fluorescent lights are flickering and buzzing</li>
-                            <li>Multiple conversations are happening around you</li>
-                            <li>Someone is wearing strong perfume</li>
-                            <li>Your clothing tags are itching</li>
-                            <li>A clock is ticking loudly</li>
+                            <li>Difficulty with back-and-forth conversation</li>
+                            <li>Challenges understanding nonverbal cues</li>
+                            <li>Difficulty developing and maintaining relationships</li>
+                            <li>May not initiate social interaction</li>
+                            <li>May interpret language literally</li>
                         </ul>
-                        <p></p>
-                        <p>This overwhelming experience can make it difficult to concentrate or function.</p>
                     </div>
                 </div>
 
                 <div class="card">
                     <div class="card-header"
                          style="background: linear-gradient(135deg, var(--spectrum-3), var(--spectrum-4));">
-                        Visual Sensitivity
+                        Restricted/Repetitive Behaviors
                     </div>
                     <div class="card-body">
-                        <p>Imagine:</p>
                         <ul style="padding-left: 1.5rem;">
-                            <li>Bright lights causing physical discomfort or pain</li>
-                            <li>Patterns that appear to move or vibrate</li>
-                            <li>Difficulty filtering visual information</li>
-                            <li>Being distracted by small visual details others don't notice</li>
+                            <li>Repetitive movements or speech</li>
+                            <li>Insistence on sameness and routines</li>
+                            <li>Highly restricted, fixated interests</li>
+                            <li>Unusual responses to sensory input</li>
+                            <li>Preoccupation with parts of objects</li>
                         </ul>
-                        <p></p>
-                        <p>These visual sensitivities can make environments like shopping malls or classrooms
-                            challenging.</p>
                     </div>
                 </div>
 
                 <div class="card">
                     <div class="card-header"
-                         style="background: linear-gradient(135deg, var(--spectrum-5), var(--spectrum-6));">
-                        Auditory Sensitivity
+                         style="background: linear-gradient(135deg, var(--spectrum-5), var(--spectrum-6));">Sensory
+                        Differences
                     </div>
                     <div class="card-body">
-                        <p>Imagine:</p>
                         <ul style="padding-left: 1.5rem;">
-                            <li>Every sound being equally loud and important</li>
-                            <li>Difficulty filtering background noise from conversation</li>
-                            <li>Certain frequencies causing physical pain</li>
-                            <li>Being able to hear electricity humming or clocks ticking</li>
+                            <li>Over- or under-sensitivity to sounds, lights, textures</li>
+                            <li>Unusual interest in sensory aspects of environment</li>
+                            <li>Adverse response to specific sounds or textures</li>
+                            <li>May seek or avoid certain sensory experiences</li>
+                            <li>Can affect eating, dressing, and daily activities</li>
                         </ul>
-                        <p></p>
-                        <p>This can make noisy environments overwhelming and conversations difficult to follow.</p>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <section class="section" id="myths-facts">
-        <h2>Myths vs Facts About Autism</h2>
-        <p>There are many misconceptions about autism. Let's separate fact from fiction:</p>
+            <div class="interactive-element">
+                <h3>Sensory Experience</h3>
+                <p>Here are some examples of how sensory differences might feel for an autistic person:</p>
 
-        <div class="card-grid">
-            <div class="card">
-                <div class="card-header" style="background: var(--danger);">Myth</div>
-                <div class="card-body">
-                    <p><strong>Vaccines cause autism.</strong></p>
-                    <p>This myth originated from a fraudulent study that has been thoroughly debunked. Extensive
-                        research has shown no link between vaccines and autism.</p>
+                <div class="card-grid">
+                    <div class="card">
+                        <div class="card-header"
+                             style="background: linear-gradient(135deg, var(--spectrum-1), var(--spectrum-2));">Sensory
+                            Overload
+                        </div>
+                        <div class="card-body">
+                            <p>Imagine trying to focus while:</p>
+                            <ul style="padding-left: 1.5rem;">
+                                <li>Fluorescent lights are flickering and buzzing</li>
+                                <li>Multiple conversations are happening around you</li>
+                                <li>Someone is wearing strong perfume</li>
+                                <li>Your clothing tags are itching</li>
+                                <li>A clock is ticking loudly</li>
+                            </ul>
+                            <p></p>
+                            <p>This overwhelming experience can make it difficult to concentrate or function.</p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header"
+                             style="background: linear-gradient(135deg, var(--spectrum-3), var(--spectrum-4));">Visual
+                            Sensitivity
+                        </div>
+                        <div class="card-body">
+                            <p>Imagine:</p>
+                            <ul style="padding-left: 1.5rem;">
+                                <li>Bright lights causing physical discomfort or pain</li>
+                                <li>Patterns that appear to move or vibrate</li>
+                                <li>Difficulty filtering visual information</li>
+                                <li>Being distracted by small visual details others don't notice</li>
+                            </ul>
+                            <p></p>
+                            <p>These visual sensitivities can make environments like shopping malls or classrooms
+                                challenging.</p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header"
+                             style="background: linear-gradient(135deg, var(--spectrum-5), var(--spectrum-6));">Auditory
+                            Sensitivity
+                        </div>
+                        <div class="card-body">
+                            <p>Imagine:</p>
+                            <ul style="padding-left: 1.5rem;">
+                                <li>Every sound being equally loud and important</li>
+                                <li>Difficulty filtering background noise from conversation</li>
+                                <li>Certain frequencies causing physical pain</li>
+                                <li>Being able to hear electricity humming or clocks ticking</li>
+                            </ul>
+                            <p></p>
+                            <p>This can make noisy environments overwhelming and conversations difficult to follow.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </section>
 
-            <div class="card">
-                <div class="card-header" style="background: var(--success);">Fact</div>
-                <div class="card-body">
-                    <p><strong>Autism has a strong genetic component.</strong></p>
-                    <p>Research indicates that autism is primarily genetic, though environmental factors may also play a
-                        role in some cases.</p>
-                </div>
-            </div>
+        <section class="section page-section" id="myths-facts">
+            <h2>Myths vs Facts About Autism</h2>
+            <p>There are many misconceptions about autism. Let's separate fact from fiction:</p>
 
-            <div class="card">
-                <div class="card-header" style="background: var(--danger);">Myth</div>
-                <div class="card-body">
-                    <p><strong>Autistic people lack empathy.</strong></p>
-                    <p>Many autistic people experience empathy deeply, though they may express it differently than
-                        neurotypical people.</p>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header" style="background: var(--success);">Fact</div>
-                <div class="card-body">
-                    <p><strong>Autism occurs across all racial, ethnic, and socioeconomic groups in NZ.</strong></p>
-                    <p>Autism affects people of all backgrounds in Aotearoa, though diagnosis rates may vary due to
-                        disparities in access to healthcare and cultural factors.</p>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header" style="background: var(--danger);">Myth</div>
-                <div class="card-body">
-                    <p><strong>All autistic people have savant skills.</strong></p>
-                    <p>While some autistic people have exceptional skills in specific areas, this is not true for
-                        everyone on the spectrum.</p>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header" style="background: var(--success);">Fact</div>
-                <div class="card-body">
-                    <p><strong>Early intervention can improve outcomes.</strong></p>
-                    <p>While there is no cure, early diagnosis and appropriate support can help autistic people develop
-                        skills and reach their full potential.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="section" id="support">
-        <h2>Support Strategies in New Zealand</h2>
-        <p>There are many ways to support autistic individuals in various settings in Aotearoa:</p>
-
-        <div class="card-grid">
-            <div class="card">
-                <div class="card-header">At Home</div>
-                <div class="card-body">
-                    <ul style="padding-left: 1.5rem;">
-                        <li>Establish predictable routines</li>
-                        <li>Create a calm, organized environment</li>
-                        <li>Use visual schedules and timers</li>
-                        <li>Provide advance notice of changes</li>
-                        <li>Respect sensory needs and preferences</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">In School</div>
-                <div class="card-body">
-                    <ul style="padding-left: 1.5rem;">
-                        <li>Implement individual education plans (IEPs)</li>
-                        <li>Provide clear, concise instructions</li>
-                        <li>Offer breaks and quiet spaces</li>
-                        <li>Use visual supports and social stories</li>
-                        <li>Teach social skills explicitly</li>
-                        <li>Access Ministry of Education support services</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">In the Workplace</div>
-                <div class="card-body">
-                    <ul style="padding-left: 1.5rem;">
-                        <li>Provide clear job descriptions and expectations</li>
-                        <li>Offer flexible work arrangements</li>
-                        <li>Minimize sensory distractions</li>
-                        <li>Use written communication when possible</li>
-                        <li>Focus on strengths and talents</li>
-                        <li>Access Work and Income support services</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div class="interactive-element">
-            <h3>New Zealand Support Services</h3>
-            <p>In New Zealand, several government and community services support autistic individuals and their
-                families:</p>
             <div class="card-grid">
                 <div class="card">
-                    <div class="card-header">Government Support</div>
+                    <div class="card-header" style="background: var(--danger);">Myth</div>
                     <div class="card-body">
-                        <ul style="padding-left: 1.5rem;">
-                            <li>Ministry of Education - Ongoing Resourcing Scheme (ORS)</li>
-                            <li>Ministry of Health - Disability Support Services</li>
-                            <li>Work and Income - Disability Allowance</li>
-                            <li>Accident Compensation Corporation (ACC)</li>
-                        </ul>
+                        <p><strong>Vaccines cause autism.</strong></p>
+                        <p>This myth originated from a fraudulent study that has been thoroughly debunked. Extensive
+                            research has shown no link between vaccines and autism.</p>
                     </div>
                 </div>
+
                 <div class="card">
-                    <div class="card-header">Community Support</div>
+                    <div class="card-header" style="background: var(--success);">Fact</div>
+                    <div class="card-body">
+                        <p><strong>Autism has a strong genetic component.</strong></p>
+                        <p>Research indicates that autism is primarily genetic, though environmental factors may also
+                            play a role in some cases.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header" style="background: var(--danger);">Myth</div>
+                    <div class="card-body">
+                        <p><strong>Autistic people lack empathy.</strong></p>
+                        <p>Many autistic people experience empathy deeply, though they may express it differently than
+                            neurotypical people.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header" style="background: var(--success);">Fact</div>
+                    <div class="card-body">
+                        <p><strong>Autism occurs across all racial, ethnic, and socioeconomic groups in NZ.</strong></p>
+                        <p>Autism affects people of all backgrounds in Aotearoa, though diagnosis rates may vary due to
+                            disparities in access to healthcare and cultural factors.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header" style="background: var(--danger);">Myth</div>
+                    <div class="card-body">
+                        <p><strong>All autistic people have savant skills.</strong></p>
+                        <p>While some autistic people have exceptional skills in specific areas, this is not true for
+                            everyone on the spectrum.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header" style="background: var(--success);">Fact</div>
+                    <div class="card-body">
+                        <p><strong>Early intervention can improve outcomes.</strong></p>
+                        <p>While there is no cure, early diagnosis and appropriate support can help autistic people
+                            develop skills and reach their full potential.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section page-section" id="support">
+            <h2>Support Strategies in New Zealand</h2>
+            <p>There are many ways to support autistic individuals in various settings in Aotearoa:</p>
+
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-header">At Home</div>
                     <div class="card-body">
                         <ul style="padding-left: 1.5rem;">
-                            <li>Autism New Zealand regional services</li>
-                            <li>Altogether Autism</li>
-                            <li>IHC advocacy services</li>
-                            <li>Parent to Parent support networks</li>
+                            <li>Establish predictable routines</li>
+                            <li>Create a calm, organized environment</li>
+                            <li>Use visual schedules and timers</li>
+                            <li>Provide advance notice of changes</li>
+                            <li>Respect sensory needs and preferences</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">In School</div>
+                    <div class="card-body">
+                        <ul style="padding-left: 1.5rem;">
+                            <li>Implement individual education plans (IEPs)</li>
+                            <li>Provide clear, concise instructions</li>
+                            <li>Offer breaks and quiet spaces</li>
+                            <li>Use visual supports and social stories</li>
+                            <li>Teach social skills explicitly</li>
+                            <li>Access Ministry of Education support services</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">In the Workplace</div>
+                    <div class="card-body">
+                        <ul style="padding-left: 1.5rem;">
+                            <li>Provide clear job descriptions and expectations</li>
+                            <li>Offer flexible work arrangements</li>
+                            <li>Minimize sensory distractions</li>
+                            <li>Use written communication when possible</li>
+                            <li>Focus on strengths and talents</li>
+                            <li>Access Work and Income support services</li>
                         </ul>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="interactive-element communication-tips">
-            <h3>Communication Tips</h3>
-            <p>Try these strategies when communicating with autistic individuals:</p>
-            <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1rem;">
-                <div style="flex: 1; min-width: 200px; background: white; padding: 1rem; border-radius: 5px; border-left: 4px solid var(--success);">
-                    <h4>Do</h4>
-                    <ul style="padding-left: 1.5rem;">
-                        <li>Be clear and direct</li>
-                        <li>Allow processing time</li>
-                        <li>Use visual supports</li>
-                        <li>Respect personal space</li>
-                    </ul>
-                </div>
-                <div style="flex: 1; min-width: 200px; background: white; padding: 1rem; border-radius: 5px; border-left: 4px solid var(--danger);">
-                    <h4>Don't</h4>
-                    <ul style="padding-left: 1.5rem;">
-                        <li>Use sarcasm or irony</li>
-                        <li>Force eye contact</li>
-                        <li>Assume understanding</li>
-                        <li>Take behaviors personally</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="section" id="resources">
-        <h2>New Zealand Resources & Further Information</h2>
-        <p>If you'd like to learn more about autism in New Zealand, here are some valuable resources:</p>
-
-        <div class="card-grid">
-            <div class="card">
-                <div class="card-header">Organisations</div>
-                <div class="card-body">
-                    <ul class="resources-list">
-                        <li><span class="nz-flag"></span> <a href="https://www.autismnz.org.nz/" target="_blank">Autism
-                            New Zealand</a> - National organisation providing support and resources
-                        </li>
-                        <li><span class="nz-flag"></span> <a href="https://www.altogetherautism.org.nz/"
-                                                             target="_blank">Altogether Autism</a> - Provides
-                            information and resources
-                        </li>
-                        <li><span class="nz-flag"></span> <a href="https://www.ihc.org.nz/" target="_blank">IHC New
-                            Zealand</a> - Advocacy and support services
-                        </li>
-                        <li><span class="nz-flag"></span> <a href="https://www.parent2parent.org.nz/" target="_blank">Parent
-                            to Parent</a> - Support for parents of disabled children
-                        </li>
-                        <li><span class="nz-flag"></span> <a href="https://www.health.govt.nz/" target="_blank">Ministry
-                            of Health</a> - Information on disability support services
-                        </li>
-                        <li><span class="nz-flag"></span> <a href="https://www.livedexperienceeducator.com/resources"
-                                                             target="_blank">Neurodivergent
-                            Friendly Workbook of DBT Skills - by Sonny Jane Wise</a> - Lived Experience Educator
-                        </li>
-                    </ul>
+            <div class="interactive-element">
+                <h3>New Zealand Support Services</h3>
+                <p>In New Zealand, several government and community services support autistic individuals and their
+                    families:</p>
+                <div class="card-grid">
+                    <div class="card">
+                        <div class="card-header">Government Support</div>
+                        <div class="card-body">
+                            <ul style="padding-left: 1.5rem;">
+                                <li>Ministry of Education - Ongoing Resourcing Scheme (ORS)</li>
+                                <li>Ministry of Health - Disability Support Services</li>
+                                <li>Work and Income - Disability Allowance</li>
+                                <li>Accident Compensation Corporation (ACC)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">Community Support</div>
+                        <div class="card-body">
+                            <ul style="padding-left: 1.5rem;">
+                                <li>Autism New Zealand regional services</li>
+                                <li>Altogether Autism</li>
+                                <li>IHC advocacy services</li>
+                                <li>Parent to Parent support networks</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="card">
-                <div class="card-header">Books by NZ Authors</div>
-                <div class="card-body">
-                    <ul class="resources-list">
-                        <li>"The Autism Discussion Page" by Bill Nason</li>
-                        <li>"The Awesome Autistic Go-To Guide" by Yenn Purkis and Tanya Masterman</li>
-                        <li>"The Guide to Good Mental Health on the Autism Spectrum" by Jeanette Purkis, Emma Goodall,
-                            and Jane Nugent
-                        </li>
-                        <li>"I Am an Aspie Girl" by Danuta Bulhak-Paterson</li>
-                        <li>"The Disappointment Dragon" by K.I. Al-Ghani</li>
-                        <li>"I am Autistic: An interactive and informative guide to autism" by Chanelle Moriah</li>
-                    </ul>
+            <div class="interactive-element communication-tips">
+                <h3>Communication Tips</h3>
+                <p>Try these strategies when communicating with autistic individuals:</p>
+                <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1rem;">
+                    <div style="flex: 1; min-width: 200px; background: white; padding: 1rem; border-radius: 5px; border-left: 4px solid var(--success);">
+                        <h4>Do</h4>
+                        <ul style="padding-left: 1.5rem;">
+                            <li>Be clear and direct</li>
+                            <li>Allow processing time</li>
+                            <li>Use visual supports</li>
+                            <li>Respect personal space</li>
+                        </ul>
+                    </div>
+                    <div style="flex: 1; min-width: 200px; background: white; padding: 1rem; border-radius: 5px; border-left: 4px solid var(--danger);">
+                        <h4>Don't</h4>
+                        <ul style="padding-left: 1.5rem;">
+                            <li>Use sarcasm or irony</li>
+                            <li>Force eye contact</li>
+                            <li>Assume understanding</li>
+                            <li>Take behaviors personally</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section page-section" id="resources">
+            <h2>New Zealand Resources & Further Information</h2>
+            <p>If you'd like to learn more about autism in New Zealand, here are some valuable resources:</p>
+
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-header">Organisations</div>
+                    <div class="card-body">
+                        <ul class="resources-list">
+                            <li><span class="nz-flag"></span> <a href="https://www.autismnz.org.nz/" target="_blank">Autism
+                                New Zealand</a> - National organisation providing support and resources
+                            </li>
+                            <li><span class="nz-flag"></span> <a href="https://www.altogetherautism.org.nz/"
+                                                                 target="_blank">Altogether Autism</a> - Provides
+                                information and resources
+                            </li>
+                            <li><span class="nz-flag"></span> <a href="https://www.ihc.org.nz/" target="_blank">IHC New
+                                Zealand</a> - Advocacy and support services
+                            </li>
+                            <li><span class="nz-flag"></span> <a href="https://www.parent2parent.org.nz/"
+                                                                 target="_blank">Parent to Parent</a> - Support for
+                                parents of disabled children
+                            </li>
+                            <li><span class="nz-flag"></span> <a href="https://www.health.govt.nz/" target="_blank">Ministry
+                                of Health</a> - Information on disability support services
+                            </li>
+                            <li><span class="nz-flag"></span> <a
+                                    href="https://www.livedexperienceeducator.com/resources" target="_blank">Neurodivergent
+                                Friendly Workbook of DBT Skills - by Sonny Jane Wise</a> - Lived Experience Educator
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">Books by NZ Authors</div>
+                    <div class="card-body">
+                        <ul class="resources-list">
+                            <li>"The Autism Discussion Page" by Bill Nason</li>
+                            <li>"The Awesome Autistic Go-To Guide" by Yenn Purkis and Tanya Masterman</li>
+                            <li>"The Guide to Good Mental Health on the Autism Spectrum" by Jeanette Purkis, Emma
+                                Goodall, and Jane Nugent
+                            </li>
+                            <li>"I Am an Aspie Girl" by Danuta Bulhak-Paterson</li>
+                            <li>"The Disappointment Dragon" by K.I. Al-Ghani</li>
+                            <li>"I am Autistic: An interactive and informative guide to autism" by Chanelle Moriah</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">Online Resources</div>
+                    <div class="card-body">
+                        <ul class="resources-list">
+                            <li><span class="nz-flag"></span> <a
+                                    href="https://www.education.govt.nz/school/student-support/special-education/"
+                                    target="_blank">Ministry of Education - Special Education</a></li>
+                            <li><span class="nz-flag"></span> <a
+                                    href="https://www.workandincome.govt.nz/products/a-z-benefits/disability-allowance.html"
+                                    target="_blank">Work and Income - Disability Allowance</a></li>
+                            <li><span class="nz-flag"></span> <a
+                                    href="https://www.healthnavigator.org.nz/health-a-z/a/autism-spectrum-disorder/"
+                                    target="_blank">Health Navigator NZ - Autism Information</a></li>
+                            <li><span class="nz-flag"></span> <a
+                                    href="https://www.kidshealth.org.nz/autism-spectrum-disorder" target="_blank">KidsHealth
+                                NZ - Autism Information</a></li>
+                            <li><span class="nz-flag"></span> <a href="https://www.tki.org.nz/" target="_blank">Te Kete
+                                Ipurangi (TKI) - Education Resources</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
 
-            <div class="card">
-                <div class="card-header">Online Resources</div>
-                <div class="card-body">
-                    <ul class="resources-list">
-                        <li><span class="nz-flag"></span> <a
-                                href="https://www.education.govt.nz/school/student-support/special-education/"
-                                target="_blank">Ministry of Education - Special Education</a></li>
-                        <li><span class="nz-flag"></span> <a
-                                href="https://www.workandincome.govt.nz/products/a-z-benefits/disability-allowance.html"
-                                target="_blank">Work and Income - Disability Allowance</a></li>
-                        <li><span class="nz-flag"></span> <a
-                                href="https://www.healthnavigator.org.nz/health-a-z/a/autism-spectrum-disorder/"
-                                target="_blank">Health Navigator NZ - Autism Information</a></li>
-                        <li><span class="nz-flag"></span> <a
-                                href="https://www.kidshealth.org.nz/autism-spectrum-disorder" target="_blank">KidsHealth
-                            NZ - Autism Information</a></li>
-                        <li><span class="nz-flag"></span> <a href="https://www.tki.org.nz/" target="_blank">Te Kete
-                            Ipurangi (TKI) - Education Resources</a></li>
-                    </ul>
-                </div>
+            <div class="interactive-element">
+                <h3>Getting a Diagnosis in New Zealand</h3>
+                <p>The process for getting an autism diagnosis in New Zealand typically involves:</p>
+                <ol style="padding-left: 1.5rem;">
+                    <li>Discuss your concerns with your GP (family doctor)</li>
+                    <li>Your GP may refer you to a paediatrician or psychologist</li>
+                    <li>Assessment by a multidisciplinary team may be recommended</li>
+                    <li>Diagnosis is based on observation, developmental history, and standardized assessment tools</li>
+                    <li>Once diagnosed, you can access support services through the Ministry of Health and Ministry of
+                        Education
+                    </li>
+                </ol>
+                <p>Note: Wait times for publicly funded assessments can vary by region. Private assessments are also
+                    available.</p>
             </div>
-        </div>
-
-        <div class="interactive-element">
-            <h3>Getting a Diagnosis in New Zealand</h3>
-            <p>The process for getting an autism diagnosis in New Zealand typically involves:</p>
-            <ol style="padding-left: 1.5rem;">
-                <li>Discuss your concerns with your GP (family doctor)</li>
-                <li>Your GP may refer you to a paediatrician or psychologist</li>
-                <li>Assessment by a multidisciplinary team may be recommended</li>
-                <li>Diagnosis is based on observation, developmental history, and standardized assessment tools</li>
-                <li>Once diagnosed, you can access support services through the Ministry of Health and Ministry of
-                    Education
-                </li>
-            </ol>
-            <p>Note: Wait times for publicly funded assessments can vary by region. Private assessments are also
-                available.</p>
-        </div>
-    </section>
-</div>
+        </section>
+    </div>
+</main>
 
 <footer>
     <div class="footer-container">
         <div class="social-icons">
-            <a href="https://discord.com/channels/@me/707058110396760094"
-               target="_blank" aria-label="Discord"> <i class="fab fa-discord"></i>
-            </a>
+            <a href="https://discord.com/channels/@me/707058110396760094" target="_blank" aria-label="Discord"> <i
+                    class="fab fa-discord"></i></a>
             <a href="https://github.com/Chalwk" target="_blank" aria-label="GitHub"> <i class="fab fa-github"></i></a>
         </div>
         <p class="footer-copyright"></p>
@@ -825,7 +835,7 @@
 
 <script src="../nav.js"></script>
 <script>
-    document.querySelectorAll('.container a[href^="#"]').forEach(anchor => {
+    document.querySelectorAll('.page-nav-link').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             e.preventDefault();
 
@@ -860,8 +870,8 @@
     });
 
     window.addEventListener('scroll', () => {
-        const sections = document.querySelectorAll('.section');
-        const navLinks = document.querySelectorAll('.container a[href^="#"]');
+        const sections = document.querySelectorAll('.page-section');
+        const navLinks = document.querySelectorAll('.page-nav-link');
 
         let current = '';
 
