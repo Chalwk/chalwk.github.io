@@ -10,7 +10,7 @@ body.apps-tools-page {
 
 .apps-header {
     text-align: center;
-    margin: 60px 0 50px;
+    margin: 100px 0 50px;
     padding: 0 20px;
     width: 100%;
     max-width: var(--container-max);
@@ -67,7 +67,7 @@ body.apps-tools-page {
 .category-section {
     width: 100%;
     max-width: var(--container-max);
-    margin: 0 auto 60px;
+    margin: 40px auto 60px;
     padding: 0 20px;
 }
 
@@ -236,6 +236,10 @@ body.apps-tools-page {
 }
 
 @media (max-width: 768px) {
+    .apps-header {
+        margin: 90px 0 40px;
+    }
+
     .apps-header h1 {
         font-size: 2.5rem;
     }
@@ -258,9 +262,17 @@ body.apps-tools-page {
         height: 70px;
         font-size: 1.8rem;
     }
+
+    .category-section {
+        margin: 30px auto 50px;
+    }
 }
 
 @media (max-width: 480px) {
+    .apps-header {
+        margin: 80px 0 30px;
+    }
+
     .apps-header h1 {
         font-size: 2rem;
     }

@@ -482,6 +482,10 @@ a:hover {
     }
 }
 
+main {
+    margin-top: 80px;
+}
+
 footer {
     background-color: transparent;
     padding: 2rem 0;
@@ -560,6 +564,10 @@ footer p {
 
     .social-icons a {
         font-size: 1.2rem;
+    }
+
+    main {
+        margin-top: 70px;
     }
 }
 
