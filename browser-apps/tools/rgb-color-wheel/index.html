@@ -146,42 +146,29 @@ RGB Color Wheel
                         <i class="fas fa-random"></i> Randomize
                     </button>
                 </div>
-            </section>
+                <p></p>
+                <section class="panel"
+                         style="background: var(--light); border: 1px solid var(--gray-light); border-radius: var(--radius-lg); padding: 1.5rem;">
+                    <div class="panel-head">
+                        <h2 style="color: var(--primary); margin-bottom: 1rem;">Palette</h2>
+                        <p class="muted small">Your saved colors and preset swatches.</p>
+                    </div>
 
-            <section class="panel"
-                     style="background: var(--light); border: 1px solid var(--gray-light); border-radius: var(--radius-lg); padding: 1.5rem;">
-                <div class="panel-head">
-                    <h2 style="color: var(--primary); margin-bottom: 1rem;">Palette</h2>
-                    <p class="muted small">Your saved colors and preset swatches.</p>
-                </div>
+                    <div class="swatch-grid" id="presetSwatches" style="margin-bottom: 2rem;"></div>
 
-                <div class="swatch-grid" id="presetSwatches" style="margin-bottom: 2rem;"></div>
+                    <h3 style="color: var(--dark); margin-bottom: 1rem; border-bottom: 1px solid var(--gray-light); padding-bottom: 0.5rem;">
+                        Your Palette</h3>
+                    <div class="swatch-grid" id="userSwatches" style="margin-bottom: 2rem;"></div>
 
-                <h3 style="color: var(--dark); margin-bottom: 1rem; border-bottom: 1px solid var(--gray-light); padding-bottom: 0.5rem;">
-                    Your Palette</h3>
-                <div class="swatch-grid" id="userSwatches" style="margin-bottom: 2rem;"></div>
-
-                <div class="palette-actions" style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                    <button class="btn btn-secondary" id="clearPalette">
-                        <i class="fas fa-trash"></i> Clear
-                    </button>
-                    <button class="btn btn-primary" id="exportPalette">
-                        <i class="fas fa-download"></i> Export JSON
-                    </button>
-                </div>
-            </section>
-
-            <section class="panel"
-                     style="background: var(--light); border: 1px solid var(--gray-light); border-radius: var(--radius-lg); padding: 1.5rem;">
-                <div class="panel-head">
-                    <h2 style="color: var(--primary); margin-bottom: 0.5rem;">Quick Tips</h2>
-                </div>
-                <ul style="padding-left: 1.5rem; color: var(--dark);">
-                    <li style="margin-bottom: 0.5rem;">Tap the wheel to pick hue/saturation.</li>
-                    <li style="margin-bottom: 0.5rem;">Drag inside the wheel to scrub S/V (or L for HSL).</li>
-                    <li style="margin-bottom: 0.5rem;">Switch modes to edit different color models.</li>
-                    <li style="margin-bottom: 0.5rem;">Save swatches and export your palette.</li>
-                </ul>
+                    <div class="palette-actions" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <button class="btn btn-secondary" id="clearPalette">
+                            <i class="fas fa-trash"></i> Clear
+                        </button>
+                        <button class="btn btn-primary" id="exportPalette">
+                            <i class="fas fa-download"></i> Export JSON
+                        </button>
+                    </div>
+                </section>
             </section>
         </div>
     </div>
