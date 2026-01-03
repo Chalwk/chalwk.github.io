@@ -18,25 +18,16 @@ const historyList = document.getElementById('history-list');
 const tabs = document.querySelectorAll('.tab');
 const tabContents = document.querySelectorAll('.tab-content');
 const collapseToggles = document.querySelectorAll('.collapse-toggle');
-
-// Slider elements
 const sliders = document.querySelectorAll('.slider');
 const sliderValues = document.querySelectorAll('.slider-value');
-
-// Factor scores
 const energyScore = document.getElementById('energy-score');
 const sensoryScore = document.getElementById('sensory-score');
 const executiveScore = document.getElementById('executive-score');
 const socialScore = document.getElementById('social-score');
 const emotionScore = document.getElementById('emotion-score');
-
-// Storage key
 const STORAGE_KEY = 'burnout-assessment-history';
-
-// Track answered sliders
 const answeredSliders = new Set();
 
-// Initialize sliders with validation
 sliders.forEach((slider, index) => {
     slider.value = 3;
     sliderValues[index].textContent = '3';
@@ -45,7 +36,6 @@ sliders.forEach((slider, index) => {
     slider.addEventListener('input', function() {
         sliderValues[index].textContent = this.value;
 
-        // Mark as answered
         answeredSliders.add(this.id);
         slider.classList.remove('unanswered');
         slider.classList.add('answered');
@@ -71,21 +61,17 @@ function updateCalculateButtonState() {
 
 updateCalculateButtonState();
 
-// Tab functionality
 tabs.forEach(tab => {
     tab.addEventListener('click', () => {
-        // Remove active class from all tabs and contents
         tabs.forEach(t => t.classList.remove('active'));
         tabContents.forEach(c => c.classList.remove('active'));
 
-        // Add active class to clicked tab and corresponding content
         tab.classList.add('active');
         const tabId = `${tab.dataset.tab}-tab`;
         document.getElementById(tabId).classList.add('active');
     });
 });
 
-// Collapse groups
 function initializeCollapsedState() {
     collapseToggles.forEach(toggle => {
         const targetId = toggle.getAttribute('data-target');
@@ -114,12 +100,10 @@ initializeCollapsedState();
 calculateBtn.addEventListener('click', calculateRisk);
 
 function calculateRisk() {
-    // Check if all sliders have been answered
     if (answeredSliders.size !== sliders.length) {
         const unansweredCount = sliders.length - answeredSliders.size;
         alert(`Please answer all ${unansweredCount} remaining question${unansweredCount !== 1 ? 's' : ''} before calculating your risk.`);
 
-        // Highlight unanswered questions
         sliders.forEach(slider => {
             if (!answeredSliders.has(slider.id)) {
                 slider.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -156,7 +140,6 @@ function calculateRisk() {
     const meltdownFrequency = parseInt(document.getElementById('meltdown-frequency').value);
     const hopelessness = parseInt(document.getElementById('hopelessness').value);
 
-    // Energy factor (high impact on overall burnout)
     const energyFactor = Math.round(
         (energyLevel * 1.2) +
         (sleepQuality * 1.1) +
@@ -164,7 +147,6 @@ function calculateRisk() {
         (stimulantUse * 0.9)
     );
 
-    // Sensory factor (medium-high impact)
     const sensoryFactor = Math.round(
         (sensoryOverload * 1.1) +
         (sensoryAvoidance * 1.0) +
@@ -172,7 +154,6 @@ function calculateRisk() {
         (sensoryTools * 0.8)
     );
 
-    // Executive function factor (high impact)
     const executiveFactor = Math.round(
         (taskInitiation * 1.2) +
         (planningDifficulty * 1.1) +
@@ -180,7 +161,6 @@ function calculateRisk() {
         (decisionFatigue * 1.1)
     );
 
-    // Social factor (medium impact)
     const socialFactor = Math.round(
         (socialDrain * 1.1) +
         (maskingLevel * 1.2) +
@@ -188,7 +168,6 @@ function calculateRisk() {
         (socialIsolation * 0.9)
     );
 
-    // Emotional factor (high impact)
     const emotionFactor = Math.round(
         (emotionalReactivity * 1.1) +
         (emotionalNumbness * 1.0) +
@@ -196,22 +175,17 @@ function calculateRisk() {
         (hopelessness * 1.2)
     );
 
-    // Non-linear scaling to account for compounding effects
-    // Higher scores in multiple areas compound burnout risk!
     const factorScores = [energyFactor, sensoryFactor, executiveFactor, socialFactor, emotionFactor];
     const highRiskFactors = factorScores.filter(score => score >= 15).length;
-    const compoundingMultiplier = 1 + (highRiskFactors * 0.1); // 10% increase per high-risk factor
+    const compoundingMultiplier = 1 + (highRiskFactors * 0.1);
 
-    // Calculate total score with compounding
     let totalScore = Math.round(
         (energyFactor + sensoryFactor + executiveFactor + socialFactor + emotionFactor) *
         compoundingMultiplier
     );
 
-    // Cap at maximum of 100!
     totalScore = Math.min(totalScore, 100);
 
-    // Show weighted scores but display out of 20
     energyScore.textContent = `${energyFactor}/20`;
     sensoryScore.textContent = `${sensoryFactor}/20`;
     executiveScore.textContent = `${executiveFactor}/20`;
@@ -262,7 +236,6 @@ function calculateRisk() {
     factorBreakdown.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-// Priority recommendations
 function updatePriorityRecommendations(energy, sensory, executive, social, emotion) {
     const factors = [
         { name: 'energy', score: energy, label: 'Energy Management' },
@@ -272,13 +245,10 @@ function updatePriorityRecommendations(energy, sensory, executive, social, emoti
         { name: 'emotion', score: emotion, label: 'Emotional Regulation' }
     ];
 
-    // Sort by score (highest first)
     factors.sort((a, b) => b.score - a.score);
 
-    // Clear existing priority indicators
     document.querySelectorAll('.priority-indicator').forEach(indicator => indicator.remove());
 
-    // Update priority badges based on ranking and score thresholds
     factors.forEach((factor, index) => {
         const tab = document.querySelector(`[data-tab="${factor.name}"]`);
         if (tab) {
@@ -350,7 +320,6 @@ recommendationsBtn.addEventListener('click', () => {
     recommendationsCard.scrollIntoView({ behavior: 'smooth' });
 });
 
-// Clear history
 clearHistoryBtn.addEventListener('click', () => {
     if (confirm('Are you sure you want to clear all assessment history? This cannot be undone.')) {
         localStorage.removeItem(STORAGE_KEY);
@@ -358,7 +327,6 @@ clearHistoryBtn.addEventListener('click', () => {
     }
 });
 
-// Export data
 exportBtn.addEventListener('click', exportData);
 
 function exportData() {
@@ -369,7 +337,6 @@ function exportData() {
         return;
     }
 
-    // Convert to CSV
     let csv = 'Date,Total Score,Energy Factor,Sensory Factor,Executive Factor,Social Factor,Emotion Factor,Questions Answered\n';
 
     history.forEach(assessment => {
@@ -377,7 +344,6 @@ function exportData() {
         csv += `${date},${assessment.score},${assessment.factors.energy},${assessment.factors.sensory},${assessment.factors.executive},${assessment.factors.social},${assessment.factors.emotion},${assessment.answeredQuestions || sliders.length}\n`;
     });
 
-    // Download link
     const blob = new Blob([csv], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -389,7 +355,6 @@ function exportData() {
     URL.revokeObjectURL(url);
 }
 
-// Enhanced history rendering
 function renderHistory() {
     const history = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
 
@@ -398,7 +363,6 @@ function renderHistory() {
         return;
     }
 
-    // Sort by date (newest first)
     history.sort((a, b) => new Date(b.date) - new Date(a.date));
 
     let html = '';
@@ -427,7 +391,6 @@ function renderHistory() {
             riskLevelText = 'Critical Risk';
         }
 
-        // Calculate trend if there's a previous assessment
         let trendHtml = '';
         if (index < history.length - 1) {
             const prevScore = history[index + 1].score;
@@ -466,52 +429,6 @@ function renderHistory() {
     historyList.innerHTML = html;
 }
 
-// Initialize the app
 document.addEventListener('DOMContentLoaded', () => {
     renderHistory();
-
-    // Add CSS for validation states
-    const style = document.createElement('style');
-    style.textContent = `
-        .slider.unanswered {
-            border: 2px solid #ff6b6b;
-            border-radius: 4px;
-        }
-        .slider.answered {
-            border: 2px solid #51cf66;
-            border-radius: 4px;
-        }
-        #calculate-btn.disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-        .history-empty {
-            text-align: center;
-            padding: 2rem;
-            color: #666;
-        }
-        .history-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.5rem;
-        }
-        .history-risk {
-            font-weight: bold;
-        }
-        .history-score-total {
-            margin-bottom: 0.5rem;
-        }
-        .history-scores {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 0.5rem;
-            margin-top: 0.5rem;
-        }
-        .factor-score {
-            font-size: 0.9rem;
-            color: #555;
-        }
-    `;
-    document.head.appendChild(style);
 });
