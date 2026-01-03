@@ -1,4 +1,8 @@
-<!-- Copyright (c) 2025-2026. Jericho Crosby (Chalwk) -->
+<!--
+Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
+
+Social Script Builder
+-->
 
 <!doctype html>
 <html lang="en">
@@ -7,14 +11,12 @@
     <meta content="width=device-width,initial-scale=1" name="viewport"/>
     <title>Social Script Builder</title>
     <meta content="Create and practice customizable social scripts for various situations." name="description"/>
-    <!-- PWA Meta Tags -->
     <meta content="#4a86e8" name="theme-color"/>
     <meta content="yes" name="apple-mobile-web-app-capable">
     <meta content="default" name="apple-mobile-web-app-status-bar-style">
     <meta content="Social Script Builder" name="apple-mobile-web-app-title">
     <link href="icons/icon-192x192.png" rel="apple-touch-icon">
 
-    <!-- Manifest -->
     <link href="manifest.json" rel="manifest">
 
     <link href="style.css" rel="stylesheet"/>
@@ -43,7 +45,6 @@
 </header>
 
 <main class="container app-grid" id="app" role="main">
-    <!-- Left: Script Editor -->
     <section aria-labelledby="editor-heading" class="panel panel-left">
         <div class="panel-head">
             <h2 id="editor-heading">Script Editor</h2>
@@ -90,7 +91,6 @@
         </div>
     </section>
 
-    <!-- Right: Script Library & Practice -->
     <section aria-labelledby="library-heading" class="panel panel-right">
         <div class="panel-head">
             <h2 id="library-heading">Script Library</h2>
@@ -109,7 +109,6 @@
             <h3>Pre-made Script Templates</h3>
             <p class="muted small">Based on common social situations</p>
             <div aria-label="Pre-made scripts" class="premade-scripts" id="premade-scripts" role="list">
-                <!-- Pre-made scripts will be populated here -->
             </div>
         </div>
 
@@ -129,7 +128,6 @@
     </section>
 </main>
 
-<!-- Practice Modal -->
 <dialog aria-labelledby="practice-title" id="practice-modal">
     <div class="modal-header">
         <h3 id="practice-title">Practice: <span id="practice-script-name"></span></h3>
@@ -162,7 +160,6 @@
     </div>
 </dialog>
 
-<!-- Help Modal -->
 <dialog aria-labelledby="help-title" id="help-modal">
     <div class="modal-header">
         <h3 id="help-title">How to Use Social Script Builder</h3>
@@ -220,7 +217,6 @@
 <script src="script.js"></script>
 
 <script>
-    // Register service worker for PWA functionality
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
             const scope = '/browser-apps/tools/social-script-builder/';
@@ -234,17 +230,13 @@
         });
     }
 
-    // Handle app installation
     let deferredPrompt;
     const installButton = document.createElement('button');
 
     window.addEventListener('beforeinstallprompt', (e) => {
-        // Prevent the mini-infobar from appearing on mobile
         e.preventDefault();
-        // Stash the event so it can be triggered later
         deferredPrompt = e;
 
-        // Show install promotion (optional - you can customize this)
         installButton.style.display = 'block';
         installButton.textContent = 'Install App';
         installButton.className = 'btn primary';
@@ -252,11 +244,8 @@
         installButton.style.display = 'block';
 
         installButton.addEventListener('click', () => {
-            // Hide the install button
             installButton.style.display = 'none';
-            // Show the install prompt
             deferredPrompt.prompt();
-            // Wait for the user to respond to the prompt
             deferredPrompt.userChoice.then((choiceResult) => {
                 if (choiceResult.outcome === 'accepted') {
                     console.log('User accepted the install prompt');
@@ -267,14 +256,11 @@
             });
         });
 
-        // Add install button to footer (optional)
         document.querySelector('.site-footer').prepend(installButton);
     });
 
     window.addEventListener('appinstalled', () => {
-        // Clear the deferredPrompt so it can be garbage collected
         deferredPrompt = null;
-        // Hide the install button
         installButton.style.display = 'none';
         console.log('PWA was installed');
     });

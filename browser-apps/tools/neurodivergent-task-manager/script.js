@@ -1,6 +1,9 @@
-// Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
+/*
+	Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
 
-// DOM Elements
+    Neurodivergent Task Manager JavaScript
+*/
+
 const taskForm = document.getElementById('task-form');
 const tasksList = document.getElementById('tasks-list');
 const completedTasks = document.getElementById('completed-tasks');
@@ -14,12 +17,10 @@ const resetTimerBtn = document.getElementById('reset-timer');
 const customTimerInput = document.getElementById('custom-timer');
 const setCustomTimerBtn = document.getElementById('set-custom-timer');
 
-// User stats elements
 const pointsElement = document.getElementById('points');
 const streakElement = document.getElementById('streak');
 const tasksCompletedElement = document.getElementById('tasks-completed');
 
-// State
 let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
 let completedTasksList = JSON.parse(localStorage.getItem('completedTasks')) || [];
 let reminders = JSON.parse(localStorage.getItem('reminders')) || [];
@@ -30,12 +31,11 @@ let userStats = JSON.parse(localStorage.getItem('userStats')) || {
     achievements: []
 };
 let timerInterval = null;
-let timerSeconds = 25 * 60; // 25 minutes in seconds
+let timerSeconds = 25 * 60;
 let timerRunning = false;
 let timerPaused = false;
 let timerUses = JSON.parse(localStorage.getItem('timerUses')) || 0;
 
-// Task Templates
 const taskTemplates = [
     {
         title: "Morning Routine 🌅",
@@ -371,7 +371,6 @@ function init() {
     initializeTemplates();
 }
 
-// Initialize task templates
 function initializeTemplates() {
     const templatesContainer = document.createElement('div');
     templatesContainer.className = 'card';
@@ -386,7 +385,6 @@ function initializeTemplates() {
         <button id="use-template-btn" class="btn btn-use-template">Use Template</button>
     `;
 
-    // Insert templates card after task creation card
     const leftColumn = document.querySelector('.left-column');
     const taskCreationCard = document.querySelector('.left-column .card');
     leftColumn.insertBefore(templatesContainer, taskCreationCard.nextSibling);
@@ -394,7 +392,6 @@ function initializeTemplates() {
     const dropdown = document.getElementById('template-dropdown');
     const useBtn = document.getElementById('use-template-btn');
 
-    // Load template when button is clicked
     useBtn.addEventListener('click', () => {
         const selectedIndex = dropdown.value;
         if (selectedIndex !== "") {
@@ -405,17 +402,13 @@ function initializeTemplates() {
 }
 
 
-// Load template into form
 function loadTemplate(template) {
     document.getElementById('task-title').value = template.title;
     document.getElementById('task-description').value = template.description;
     document.getElementById('task-priority').value = template.priority;
     document.getElementById('task-timer').value = template.timer;
 
-    // Clear existing steps
     resetSteps();
-
-    // Add template steps
     template.steps.forEach((step, index) => {
         if (index > 0) {
             addStepBtn.click();
@@ -427,7 +420,6 @@ function loadTemplate(template) {
     showNotification(`"${template.title}" template loaded!`, 'info');
 }
 
-// Task Form Submission
 taskForm.addEventListener('submit', function(e) {
     e.preventDefault();
 
@@ -437,13 +429,11 @@ taskForm.addEventListener('submit', function(e) {
     const timerMinutes = parseInt(document.getElementById('task-timer').value);
     const reminder = document.getElementById('task-reminder').value;
 
-    // Get steps
     const stepInputs = document.querySelectorAll('.step-text');
     const steps = Array.from(stepInputs)
         .map(input => input.value.trim())
         .filter(value => value !== '');
 
-    // Create task object
     const task = {
         id: Date.now(),
         title,
@@ -460,24 +450,17 @@ taskForm.addEventListener('submit', function(e) {
         completed: false
     };
 
-    // Add to tasks array
     tasks.push(task);
 
-    // Save to localStorage
     saveData();
-
-    // Render tasks
     renderTasks();
 
-    // Reset form
     taskForm.reset();
     resetSteps();
 
-    // Show confirmation
     showNotification('Task created successfully!', 'success');
 });
 
-// Add Step Button
 addStepBtn.addEventListener('click', function() {
     const stepCount = document.querySelectorAll('.step-input').length + 1;
     const stepInput = document.createElement('div');
@@ -488,11 +471,9 @@ addStepBtn.addEventListener('click', function() {
     `;
     stepsContainer.appendChild(stepInput);
 
-    // Update remove buttons state
     updateRemoveButtons();
 });
 
-// Remove step when remove button is clicked
 stepsContainer.addEventListener('click', function(e) {
     if (e.target.classList.contains('btn-remove-step')) {
         const stepInput = e.target.closest('.step-input');
@@ -503,7 +484,6 @@ stepsContainer.addEventListener('click', function(e) {
     }
 });
 
-// Update remove buttons state (disable if only one step remains)
 function updateRemoveButtons() {
     const stepInputs = document.querySelectorAll('.step-input');
     const removeButtons = document.querySelectorAll('.btn-remove-step');
@@ -515,7 +495,6 @@ function updateRemoveButtons() {
     }
 }
 
-// Reset steps to initial state
 function resetSteps() {
     stepsContainer.innerHTML = `
         <div class="step-input">
@@ -525,7 +504,6 @@ function resetSteps() {
     `;
 }
 
-// Render Tasks
 function renderTasks() {
     tasksList.innerHTML = '';
 
@@ -547,7 +525,6 @@ function renderTasks() {
     });
 }
 
-// Render Completed Tasks
 function renderCompletedTasks() {
     completedTasks.innerHTML = '';
 
@@ -556,7 +533,6 @@ function renderCompletedTasks() {
         return;
     }
 
-    // Show only the 5 most recent completed tasks
     const recentCompleted = completedTasksList.slice(-5).reverse();
 
     recentCompleted.forEach(task => {
@@ -576,7 +552,6 @@ function renderCompletedTasks() {
     });
 }
 
-// Render Reminders
 function renderReminders() {
     remindersList.innerHTML = '';
 
@@ -607,13 +582,11 @@ function renderReminders() {
     });
 }
 
-// Create Task Element
 function createTaskElement(task) {
     const taskElement = document.createElement('div');
     taskElement.className = 'task-item';
     taskElement.dataset.id = task.id;
 
-    // Calculate completion percentage for progress bar
     const completedSteps = task.steps.filter(step => step.completed).length;
     const totalSteps = task.steps.length;
     const completionPercentage = totalSteps > 0 ? (completedSteps / totalSteps) * 100 : 0;
@@ -665,7 +638,6 @@ function createTaskElement(task) {
     return taskElement;
 }
 
-// Event Delegation for Task Actions
 tasksList.addEventListener('click', function(e) {
     const taskId = parseInt(e.target.dataset.taskId);
 
@@ -680,7 +652,6 @@ tasksList.addEventListener('click', function(e) {
     }
 });
 
-// Delete Completed Task
 completedTasks.addEventListener('click', function(e) {
     if (e.target.classList.contains('btn-delete-completed')) {
         const taskId = parseInt(e.target.dataset.taskId);
@@ -697,7 +668,6 @@ function deleteCompletedTask(taskId) {
     showNotification('Completed task deleted', 'info');
 }
 
-// Complete Task
 function completeTask(taskId) {
     const taskIndex = tasks.findIndex(task => task.id === taskId);
     if (taskIndex === -1) return;
@@ -706,29 +676,23 @@ function completeTask(taskId) {
     task.completed = true;
     task.completedAt = new Date().toISOString();
 
-    // Move to completed tasks
     completedTasksList.push(task);
     tasks.splice(taskIndex, 1);
 
-    // Update stats
     userStats.tasksCompleted += 1;
     userStats.points += calculatePoints(task);
 
-    // Check for streak
     updateStreak();
 
-    // Save and render
     saveData();
     renderTasks();
     renderCompletedTasks();
     updateStats();
     updateAchievements();
 
-    // Show celebration
     showNotification('Task completed! Great job!', 'success');
 }
 
-// Delete Task
 function deleteTask(taskId) {
     if (!confirm('Are you sure you want to delete this task?')) return;
 
@@ -740,7 +704,6 @@ function deleteTask(taskId) {
     showNotification('Task deleted', 'info');
 }
 
-// Toggle Step Completion
 function toggleStepCompletion(taskId, stepId, completed) {
     const task = tasks.find(task => task.id === taskId);
     if (!task) return;
@@ -750,14 +713,12 @@ function toggleStepCompletion(taskId, stepId, completed) {
 
     step.completed = completed;
 
-    // Update progress bar
     const taskElement = document.querySelector(`.task-item[data-id="${taskId}"]`);
     if (taskElement) {
         const completedSteps = task.steps.filter(step => step.completed).length;
         const totalSteps = task.steps.length;
         const completionPercentage = totalSteps > 0 ? (completedSteps / totalSteps) * 100 : 0;
 
-        // Update progress bar
         const progressFill = taskElement.querySelector('.progress-fill');
         const progressLabel = taskElement.querySelector('.progress-label');
         if (progressFill && progressLabel) {
@@ -765,14 +726,12 @@ function toggleStepCompletion(taskId, stepId, completed) {
             progressLabel.textContent = `Progress: ${Math.round(completionPercentage)}%`;
         }
 
-        // Update step item style
         const stepItem = taskElement.querySelector(`.step-checkbox[data-step-id="${stepId}"]`).closest('.step-item');
         if (stepItem) {
             stepItem.classList.toggle('completed', completed);
         }
     }
 
-    // Award points for step completion
     if (completed) {
         userStats.points += 5;
         updateStats();
@@ -781,22 +740,18 @@ function toggleStepCompletion(taskId, stepId, completed) {
     saveData();
 }
 
-// Start Task Timer
 function startTaskTimer(taskId) {
     const task = tasks.find(task => task.id === taskId);
     if (!task) return;
 
-    // Set the timer to the task's specified time
     timerSeconds = task.timer * 60;
     updateTimerDisplay();
     updateTimerCircle();
 
-    // Start the timer if not already running
     if (!timerRunning) {
         startTimer();
     }
 
-    // Track timer usage for achievements
     timerUses++;
     localStorage.setItem('timerUses', JSON.stringify(timerUses));
     updateAchievements();
@@ -804,7 +759,6 @@ function startTaskTimer(taskId) {
     showNotification(`Timer set for "${task.title}"`, 'info');
 }
 
-// Timer Functions
 startTimerBtn.addEventListener('click', startTimer);
 pauseTimerBtn.addEventListener('click', pauseTimer);
 resetTimerBtn.addEventListener('click', resetTimer);
@@ -825,7 +779,6 @@ function startTimer() {
             clearInterval(timerInterval);
             timerRunning = false;
             showNotification('Timer finished!', 'success');
-            // Play a sound if needed
         }
     }, 1000);
 }
@@ -873,27 +826,22 @@ function formatTime(seconds) {
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
 }
 
-// Calculate points for task completion
 function calculatePoints(task) {
-    let points = 10; // Base points
+    let points = 10;
 
-    // Bonus points based on priority
     if (task.priority === 'high') points += 10;
     else if (task.priority === 'medium') points += 5;
 
-    // Bonus points for steps
     if (task.steps.length > 0) points += task.steps.length * 2;
 
     return points;
 }
 
-// Update streak
 function updateStreak() {
     const today = new Date().toDateString();
     const lastCompletion = userStats.lastCompletion ? new Date(userStats.lastCompletion).toDateString() : null;
 
     if (lastCompletion === today) {
-        // Already completed a task today, no change
         return;
     }
 
@@ -902,58 +850,45 @@ function updateStreak() {
     const yesterdayString = yesterday.toDateString();
 
     if (lastCompletion === yesterdayString) {
-        // Continued streak
         userStats.streak += 1;
     } else {
-        // New streak or broken streak
         userStats.streak = 1;
     }
 
     userStats.lastCompletion = new Date().toISOString();
 }
 
-// Update stats display
 function updateStats() {
     pointsElement.textContent = userStats.points;
     streakElement.textContent = userStats.streak;
     tasksCompletedElement.textContent = userStats.tasksCompleted;
 }
 
-// Update achievements
 function updateAchievements() {
-    // First task achievement
     if (userStats.tasksCompleted >= 1) {
         unlockAchievement('achievement-1');
     }
 
-    // 3-day streak achievement
     if (userStats.streak >= 3) {
         unlockAchievement('achievement-2');
     }
 
-    // Task master achievement (10 tasks)
     if (userStats.tasksCompleted >= 10) {
         unlockAchievement('achievement-3');
     }
 
-    // Timer user achievement (use timer 5 times)
     if (timerUses >= 5) {
         unlockAchievement('achievement-4');
     }
 
-    // NEW ACHIEVEMENTS
-
-    // Productivity Pro (25 tasks)
     if (userStats.tasksCompleted >= 25) {
         unlockAchievement('achievement-5');
     }
 
-    // Week Warrior (7-day streak)
     if (userStats.streak >= 7) {
         unlockAchievement('achievement-6');
     }
 
-    // Step Master (complete 50 steps)
     const totalStepsCompleted = completedTasksList.reduce((total, task) => {
         return total + task.steps.filter(step => step.completed).length;
     }, 0);
@@ -961,7 +896,6 @@ function updateAchievements() {
         unlockAchievement('achievement-7');
     }
 
-    // Priority Finisher (complete 5 high-priority tasks)
     const highPriorityCompleted = completedTasksList.filter(task => task.priority === 'high').length;
     if (highPriorityCompleted >= 5) {
         unlockAchievement('achievement-8');
@@ -977,14 +911,11 @@ function unlockAchievement(achievementId) {
     }
 }
 
-// Show notification
 function showNotification(message, type) {
-    // Create notification element
     const notification = document.createElement('div');
     notification.className = `notification notification-${type}`;
     notification.textContent = message;
 
-    // Style the notification
     notification.style.position = 'fixed';
     notification.style.top = '20px';
     notification.style.right = '20px';
@@ -1002,10 +933,8 @@ function showNotification(message, type) {
         notification.style.backgroundColor = 'var(--dark)';
     }
 
-    // Add to page
     document.body.appendChild(notification);
 
-    // Remove after 3 seconds
     setTimeout(() => {
         notification.style.opacity = '0';
         notification.style.transition = 'opacity 0.5s';
@@ -1015,7 +944,6 @@ function showNotification(message, type) {
     }, 3000);
 }
 
-// Save data to localStorage
 function saveData() {
     localStorage.setItem('tasks', JSON.stringify(tasks));
     localStorage.setItem('completedTasks', JSON.stringify(completedTasksList));
@@ -1023,5 +951,4 @@ function saveData() {
     localStorage.setItem('userStats', JSON.stringify(userStats));
 }
 
-// Initialize the app
 init();

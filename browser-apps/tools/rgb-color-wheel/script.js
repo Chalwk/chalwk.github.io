@@ -1,4 +1,8 @@
-// Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
+/*
+	Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
+
+    RGB Color Wheel JavaScript
+*/
 
 (() => {
     // --- helpers: conversions between color spaces ---

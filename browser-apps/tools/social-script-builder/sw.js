@@ -1,6 +1,9 @@
-// Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
+/*
+	Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
 
-// sw.js
+    Social Script Builder JavaScript
+*/
+
 const CACHE_NAME = 'social-script-builder-v1.2';
 const urlsToCache = [
     '/browser-apps/tools/social-script-builder/',
@@ -11,7 +14,6 @@ const urlsToCache = [
     '/browser-apps/tools/social-script-builder/icons/icon-512x512.png'
 ];
 
-// Install event - cache essential files
 self.addEventListener('install', event => {
     console.log('Service Worker installing.');
     event.waitUntil(
@@ -24,7 +26,6 @@ self.addEventListener('install', event => {
     );
 });
 
-// Activate event - clean up old caches
 self.addEventListener('activate', event => {
     console.log('Service Worker activating.');
     event.waitUntil(
@@ -41,9 +42,7 @@ self.addEventListener('activate', event => {
     );
 });
 
-// Fetch event - serve from cache, fallback to network
 self.addEventListener('fetch', event => {
-    // Skip cross-origin requests
     if (!event.request.url.startsWith(self.location.origin)) {
         return;
     }
@@ -51,11 +50,9 @@ self.addEventListener('fetch', event => {
     event.respondWith(
         caches.match(event.request)
             .then(response => {
-            // Return cached version or fetch from network
             return response || fetch(event.request);
         })
             .catch(() => {
-            // If both cache and network fail, show offline page
             if (event.request.destination === 'document') {
                 return caches.match('/browser-apps/tools/social-script-builder/index.html');
             }

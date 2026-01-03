@@ -1,4 +1,8 @@
-// Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
+/*
+	Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
+
+    Social Script Builder JavaScript
+*/
 
 (() => {
     const STORAGE_KEY = "social-script-builder-v1";
@@ -284,7 +288,6 @@
     const autoAdvance = el("#auto-advance");
     const importFile = el("#import-file");
 
-    // ----- state -----
     let currentScript = {
         id: null,
         title: "",
@@ -300,7 +303,6 @@
         elapsed: 0
     };
 
-    // ----- script management -----
     function loadScripts() {
         try {
             const raw = localStorage.getItem(STORAGE_KEY);
@@ -320,7 +322,6 @@
         return Date.now().toString(36) + Math.random().toString(36).substr(2);
     }
 
-    // ----- step management -----
     function addStep(type = "statement") {
         const stepId = generateId();
         const step = {
@@ -333,7 +334,6 @@
         currentScript.steps.push(step);
         renderSteps();
 
-        // Focus the new textarea
         setTimeout(() => {
             const textarea = el(`#step-${stepId}-text`);
             if (textarea) textarea.focus();
@@ -353,7 +353,6 @@
         const newIndex = direction === 'up' ? index - 1 : index + 1;
         if (newIndex < 0 || newIndex >= currentScript.steps.length) return;
 
-        // Swap steps
         [currentScript.steps[index], currentScript.steps[newIndex]] =
         [currentScript.steps[newIndex], currentScript.steps[index]];
 
@@ -394,7 +393,6 @@
             `;
             stepsList.appendChild(stepEl);
 
-            // Add event listeners
             const textarea = el(`#step-${step.id}-text`);
             const typeSelect = el(`#step-${step.id}-type`);
 
@@ -408,7 +406,6 @@
         });
     }
 
-    // ----- script library -----
     function renderScriptLibrary(filter = "") {
         const scripts = loadScripts();
         const q = filter.trim().toLowerCase();
@@ -445,7 +442,6 @@
         });
     }
 
-    // ----- pre-made scripts -----
     function renderPremadeScripts() {
         premadeScripts.innerHTML = "";
 
@@ -471,9 +467,8 @@
 
         const script = PREMADE_SCRIPTS.find(s => s.id === scriptId);
         if (script) {
-            // Deep clone the script
             currentScript = JSON.parse(JSON.stringify(script));
-            currentScript.id = generateId(); // Give it a new ID since this will be a copy
+            currentScript.id = generateId();
             scriptTitle.value = currentScript.title;
             scriptDescription.value = currentScript.description;
             renderSteps();
@@ -500,7 +495,6 @@
 
         previewContent += `</div>`;
 
-        // Create a modal for preview
         const previewModal = document.createElement("dialog");
         previewModal.className = "preview-modal";
         previewModal.innerHTML = `
@@ -541,7 +535,7 @@
         const script = scripts.find(s => s.id === scriptId);
 
         if (script) {
-            currentScript = JSON.parse(JSON.stringify(script)); // Deep clone
+            currentScript = JSON.parse(JSON.stringify(script));
             scriptTitle.value = currentScript.title;
             scriptDescription.value = currentScript.description;
             renderSteps();
@@ -566,11 +560,9 @@
             return;
         }
 
-        // Update current script from form
         currentScript.title = scriptTitle.value.trim();
         currentScript.description = scriptDescription.value.trim();
 
-        // Ensure we have an ID
         if (!currentScript.id) {
             currentScript.id = generateId();
             currentScript.created = Date.now();
@@ -578,7 +570,6 @@
 
         currentScript.updated = Date.now();
 
-        // Save to library
         const scripts = loadScripts();
         const existingIndex = scripts.findIndex(s => s.id === currentScript.id);
 
@@ -628,7 +619,6 @@
         URL.revokeObjectURL(url);
     }
 
-    // ----- practice mode -----
     function startPractice(scriptId) {
         const scripts = loadScripts();
         const script = scripts.find(s => s.id === scriptId);
@@ -650,7 +640,6 @@
         updatePracticeStep();
         practiceModal.showModal();
 
-        // Start timer if enabled
         if (showTimer.checked) {
             startTimer();
             practiceTimer.style.display = "block";
@@ -668,16 +657,13 @@
         currentStepText.textContent = step.text || "(No content)";
         currentStepType.textContent = STEP_TYPES[step.type].name;
 
-        // Update step type styling
         currentStepType.className = "step-type-badge";
         currentStepType.classList.add(STEP_TYPES[step.type].color);
 
-        // Update progress
         const progress = ((practiceState.currentStep + 1) / practiceState.script.steps.length) * 100;
         progressFill.style.width = `${progress}%`;
         progressText.textContent = `Step ${practiceState.currentStep + 1} of ${practiceState.script.steps.length}`;
 
-        // Update button states
         prevStepBtn.disabled = practiceState.currentStep === 0;
         nextStepBtn.disabled = practiceState.currentStep === practiceState.script.steps.length - 1;
     }
@@ -723,30 +709,25 @@
         clearInterval(practiceState.timer);
     }
 
-    // ----- event wiring -----
     function wire() {
         renderSteps();
         renderScriptLibrary();
         renderPremadeScripts();
 
-        // Step management
         addStepBtn.addEventListener("click", () => {
             addStep(stepTypeSelect.value);
         });
 
-        // Script management
         saveScriptBtn.addEventListener("click", saveCurrentScript);
         newScriptBtn.addEventListener("click", newScript);
         exportScriptBtn.addEventListener("click", exportScript);
 
-        // Practice mode
         practiceBtn.addEventListener("click", () => {
             if (currentScript.steps.length === 0) {
                 alert("Create a script with at least one step to practice.");
                 return;
             }
 
-            // Save current script if it has changes
             if (currentScript.title || currentScript.steps.length > 0) {
                 saveCurrentScript();
             }
@@ -758,7 +739,6 @@
         nextStepBtn.addEventListener("click", nextPracticeStep);
         resetPracticeBtn.addEventListener("click", resetPractice);
 
-        // Modal controls
         closePractice.addEventListener("click", () => {
             practiceModal.close();
             stopTimer();
@@ -776,21 +756,17 @@
             helpModal.close();
         });
 
-        // Search
         searchScripts.addEventListener("input", (e) => {
             renderScriptLibrary(e.target.value);
         });
 
-        // Auto-advance
         autoAdvance.addEventListener("change", () => {
             if (autoAdvance.checked && practiceState.script) {
-                // In a real implementation, you might add auto-advance with timing
                 console.log("Auto-advance enabled");
             }
         });
     }
 
-    // Offline detection
     function updateOnlineStatus() {
         const offlineIndicator = document.getElementById('offline-indicator');
         if (!offlineIndicator) return;
@@ -802,19 +778,16 @@
         }
     }
 
-    // Create offline indicator
     const offlineIndicator = document.createElement('div');
     offlineIndicator.id = 'offline-indicator';
     offlineIndicator.className = 'offline-indicator';
     offlineIndicator.textContent = 'You are currently offline. Some features may be limited.';
     document.body.prepend(offlineIndicator);
 
-    // Listen for online/offline events
     window.addEventListener('online', updateOnlineStatus);
     window.addEventListener('offline', updateOnlineStatus);
-    updateOnlineStatus(); // Set initial state
+    updateOnlineStatus();
 
-    // ----- init -----
     document.addEventListener("DOMContentLoaded", () => {
         window.moveStep = moveStep;
         window.removeStep = removeStep;

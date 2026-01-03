@@ -1,4 +1,8 @@
-// Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
+/*
+	Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
+
+    Grocery List JavaScript
+*/
 
 let groceryData = {};
 let isOnline = navigator.onLine;

@@ -1,4 +1,8 @@
-/* Copyright (c) 2025-2026. Jericho Crosby (Chalwk) */
+/*
+	Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
+
+    Random Password Generator Stylesheet
+*/
 
 :root{
     --bg:#f5f7fb; --card:#ffffff; --muted:#6b7280; --accent1:#6c5ce7; --accent2:#00b894; --danger:#ff6b6b; --glass: rgba(255,255,255,0.6);
