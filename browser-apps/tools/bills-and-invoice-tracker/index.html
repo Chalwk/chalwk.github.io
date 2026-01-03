@@ -1,215 +1,280 @@
 <!--
-Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
+    Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
 
-Bills & Invoices Tracker
+    Bills & Invoices Tracker
 -->
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Bills & Invoices Tracker</title>
+    <meta content="Track your weekly and monthly expenses with automatic calculations" name="description">
+    <link href="../../../core.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
+          rel="stylesheet">
 </head>
+
 <body>
-<div class="container">
-    <header>
-        <h1>Bills & Invoices Tracker</h1>
-        <p class="subtitle">Track your weekly and monthly expenses with automatic calculations</p>
-    </header>
+<header class="header">
+    <div class="container">
+        <a class="logo" href="../../../index.html"> <i class="fas fa-code"></i> Jericho </a>
 
-    <div class="dashboard">
-        <div class="card">
-            <h2>Weekly Income <span>After Tax</span></h2>
-            <div class="stat positive" id="weekly-income">Calculating...</div>
-            <p>Total from all income streams</p>
+        <nav class="nav-desktop">
+            <ul class="nav-links">
+                <li><a href="../../../index.html#about">About</a></li>
+                <li><a href="../../../browser-apps/apps_and_tools.html">Apps & Tools</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" href="#">Other Stuff <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://chalwk.github.io/CPAS/">CPAS</a></li>
+                        <li class="dropdown-submenu">
+                            <a class="submenu-toggle" href="#">Education <i class="fas fa-chevron-right"></i></a>
+                            <ul class="submenu">
+                                <li><a href="../../../education/understanding-autism.html">Understanding Autism</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Bills Tracker</a></li>
+            </ul>
+        </nav>
+
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
         </div>
 
-        <div class="card">
-            <h2>Weekly Expenses <span>Total</span></h2>
-            <div class="stat negative" id="weekly-expenses">Calculating...</div>
-            <p>Sum of all weekly payments</p>
-        </div>
-
-        <div class="card">
-            <h2>Remaining Balance <span>Weekly</span></h2>
-            <div class="stat" id="remaining-balance">Calculating...</div>
-            <p>Treats, activities, birthdays, etc.</p>
-        </div>
-
-        <div class="card">
-            <h2>Monthly Average <span>From Weekly</span></h2>
-            <div class="stat" id="monthly-average">Calculating...</div>
-            <p>Weekly expenses × 4 weeks</p>
-        </div>
+        <nav class="nav-mobile">
+            <ul class="nav-mobile-links">
+                <li><a href="../../../index.html#about">About</a></li>
+                <li><a href="../../../browser-apps/apps_and_tools.html">Apps & Tools</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" href="#">Other Stuff <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://chalwk.github.io/CPAS/">CPAS</a></li>
+                        <li class="dropdown-submenu">
+                            <a class="submenu-toggle" href="#">Education <i class="fas fa-chevron-right"></i></a>
+                            <ul class="submenu">
+                                <li><a href="../../../education/understanding-autism.html">Understanding Autism</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Bills Tracker</a></li>
+            </ul>
+        </nav>
     </div>
+</header>
 
-    <div class="toolbar" style="margin-bottom: 20px;">
-        <div class="data-management">
-            <button class="btn btn-info" id="import-data">
-                <i class="fas fa-file-import"></i> Import Data
-            </button>
-            <input type="file" id="import-file" accept=".json" style="display: none;">
-            <button class="btn btn-success" id="export-data">
-                <i class="fas fa-file-export"></i> Export Data
-            </button>
-            <button class="btn btn-warning" id="reset-data">
-                <i class="fas fa-trash-restore"></i> Reset to Default
-            </button>
-        </div>
-    </div>
-
-    <div class="tabs">
-        <div class="tab active" data-tab="income">Income Streams</div>
-        <div class="tab" data-tab="weekly">Weekly Bills</div>
-        <div class="tab" data-tab="monthly">Monthly Bills</div>
-        <div class="tab" data-tab="invoices">Invoices</div>
-        <div class="tab" data-tab="affordability">Affordability Analysis</div>
-    </div>
-
-    <div class="tab-content" id="income-tab">
-        <div class="toolbar">
-            <h2>Income Streams</h2>
-            <button class="btn btn-primary" id="add-income">
-                <i class="fas fa-plus"></i> Add Income Stream
-            </button>
+<main>
+    <div class="container">
+        <div class="hero-banner"
+             style="background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 3rem 1rem; text-align: center; margin-top: 20px; border-radius: var(--radius);">
+            <div class="hero-content">
+                <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem; color: white;">Bills & Invoices Tracker</h1>
+                <p style="font-size: 1.2rem; opacity: 0.9; margin-bottom: 1.5rem; color: white;">Track your weekly and
+                    monthly expenses with automatic calculations</p>
+            </div>
         </div>
 
-        <table id="income-streams-table">
-            <thead>
-            <tr>
-                <th>Source</th>
-                <th>Amount</th>
-                <th>Frequency</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Status</th>
-                <th>Notes</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            <!-- Income streams will be populated here -->
-            </tbody>
-        </table>
-        <p class="help-text"><i>Tip: Double-click any income stream to edit it</i></p>
-    </div>
+        <div aria-labelledby="dashboard-title" class="dashboard" id="dashboard" role="main" style="margin-top: 2rem;">
+            <h2 class="sr-only" id="dashboard-title">Financial Dashboard</h2>
 
-    <div class="tab-content" id="weekly-tab">
-        <div class="toolbar">
-            <h2>Recurring Weekly Payments</h2>
-            <button class="btn btn-primary" id="add-weekly-bill">
-                <i class="fas fa-plus"></i> Add Bill
-            </button>
+            <div class="card">
+                <h2>Weekly Income <span>After Tax</span></h2>
+                <div class="stat positive" id="weekly-income">Calculating...</div>
+                <p>Total from all income streams</p>
+            </div>
+
+            <div class="card">
+                <h2>Weekly Expenses <span>Total</span></h2>
+                <div class="stat negative" id="weekly-expenses">Calculating...</div>
+                <p>Sum of all weekly payments</p>
+            </div>
+
+            <div class="card">
+                <h2>Remaining Balance <span>Weekly</span></h2>
+                <div class="stat" id="remaining-balance">Calculating...</div>
+                <p>Treats, activities, birthdays, etc.</p>
+            </div>
+
+            <div class="card">
+                <h2>Monthly Average <span>From Weekly</span></h2>
+                <div class="stat" id="monthly-average">Calculating...</div>
+                <p>Weekly expenses × 4 weeks</p>
+            </div>
         </div>
 
-        <table id="weekly-bills-table">
-            <thead>
-            <tr>
-                <th>Bill</th>
-                <th>Amount (Weekly Equivalent)</th>
-                <th>Frequency</th>
-                <th>Payment Day</th>
-                <th>Additional Notes</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            <!-- Weekly bills will be populated here -->
-            </tbody>
-        </table>
-        <p class="help-text"><i>Tip: Double-click any bill to edit it</i></p>
-    </div>
-
-    <div class="tab-content" id="monthly-tab">
-        <div class="toolbar">
-            <h2>Monthly Bills</h2>
-            <button class="btn btn-primary" id="add-monthly-bill">
-                <i class="fas fa-plus"></i> Add Bill
-            </button>
-        </div>
-
-        <table id="monthly-bills-table">
-            <thead>
-            <tr>
-                <th>Bill</th>
-                <th>Amount</th>
-                <th>Frequency</th>
-                <th>Payment Day</th>
-                <th>Additional Notes</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            <!-- Monthly bills will be populated here -->
-            </tbody>
-        </table>
-        <p class="help-text"><i>Tip: Double-click any bill to edit it</i></p>
-    </div>
-
-    <div class="tab-content" id="invoices-tab">
-        <div class="toolbar">
-            <h2>Invoices</h2>
-            <div>
-                <button class="btn btn-secondary" id="toggle-paid-invoices">
-                    Hide Paid Invoices
+        <div class="toolbar" style="margin-bottom: 20px;">
+            <div class="data-management">
+                <button class="btn btn-info" id="import-data">
+                    <i class="fas fa-file-import"></i> Import Data
                 </button>
-                <button class="btn btn-primary" id="add-invoice">
-                    <i class="fas fa-plus"></i> Add Invoice
+                <input type="file" id="import-file" accept=".json" style="display: none;">
+                <button class="btn btn-success" id="export-data">
+                    <i class="fas fa-file-export"></i> Export Data
+                </button>
+                <button class="btn btn-warning" id="reset-data">
+                    <i class="fas fa-trash-restore"></i> Reset to Default
                 </button>
             </div>
         </div>
 
-        <div id="invoices-container">
-            <!-- Invoices will be populated here -->
+        <div class="tabs">
+            <div class="tab active" data-tab="income">Income Streams</div>
+            <div class="tab" data-tab="weekly">Weekly Bills</div>
+            <div class="tab" data-tab="monthly">Monthly Bills</div>
+            <div class="tab" data-tab="invoices">Invoices</div>
+            <div class="tab" data-tab="affordability">Affordability Analysis</div>
         </div>
-        <p class="help-text"><i>Tip: Double-click any invoice to edit it</i></p>
-    </div>
 
-    <div class="tab-content" id="affordability-tab">
+        <div class="tab-content" id="income-tab">
+            <div class="toolbar">
+                <h2>Income Streams</h2>
+                <button class="btn btn-primary" id="add-income">
+                    <i class="fas fa-plus"></i> Add Income Stream
+                </button>
+            </div>
+
+            <table id="income-streams-table">
+                <thead>
+                <tr>
+                    <th>Source</th>
+                    <th>Amount</th>
+                    <th>Frequency</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Status</th>
+                    <th>Notes</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <p class="help-text"><i>Tip: Double-click any income stream to edit it</i></p>
+        </div>
+
+        <div class="tab-content" id="weekly-tab">
+            <div class="toolbar">
+                <h2>Recurring Weekly Payments</h2>
+                <button class="btn btn-primary" id="add-weekly-bill">
+                    <i class="fas fa-plus"></i> Add Bill
+                </button>
+            </div>
+
+            <table id="weekly-bills-table">
+                <thead>
+                <tr>
+                    <th>Bill</th>
+                    <th>Amount (Weekly Equivalent)</th>
+                    <th>Frequency</th>
+                    <th>Payment Day</th>
+                    <th>Additional Notes</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <p class="help-text"><i>Tip: Double-click any bill to edit it</i></p>
+        </div>
+
+        <div class="tab-content" id="monthly-tab">
+            <div class="toolbar">
+                <h2>Monthly Bills</h2>
+                <button class="btn btn-primary" id="add-monthly-bill">
+                    <i class="fas fa-plus"></i> Add Bill
+                </button>
+            </div>
+
+            <table id="monthly-bills-table">
+                <thead>
+                <tr>
+                    <th>Bill</th>
+                    <th>Amount</th>
+                    <th>Frequency</th>
+                    <th>Payment Day</th>
+                    <th>Additional Notes</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <p class="help-text"><i>Tip: Double-click any bill to edit it</i></p>
+        </div>
+
+        <div class="tab-content" id="invoices-tab">
+            <div class="toolbar">
+                <h2>Invoices</h2>
+                <div>
+                    <button class="btn btn-secondary" id="toggle-paid-invoices">
+                        Hide Paid Invoices
+                    </button>
+                    <button class="btn btn-primary" id="add-invoice">
+                        <i class="fas fa-plus"></i> Add Invoice
+                    </button>
+                </div>
+            </div>
+
+            <div id="invoices-container"></div>
+            <p class="help-text"><i>Tip: Double-click any invoice to edit it</i></p>
+        </div>
+
+        <div class="tab-content" id="affordability-tab">
+            <div class="toolbar">
+                <h2>Affordability Analysis</h2>
+                <button class="btn btn-primary" id="add-affordability-item">
+                    <i class="fas fa-plus"></i> Add Item
+                </button>
+            </div>
+
+            <p class="help-text">Add items you're considering purchasing to see if you can afford them based on your
+                remaining weekly balance.</p>
+
+            <table id="affordability-table">
+                <thead>
+                <tr>
+                    <th>Item Name</th>
+                    <th>Description</th>
+                    <th>Total Cost</th>
+                    <th>Deposit</th>
+                    <th>Weekly Payment</th>
+                    <th>Timeframe (weeks)</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <p class="help-text"><i>Tip: Double-click any item to edit it</i></p>
+        </div>
+
         <div class="toolbar">
-            <h2>Affordability Analysis</h2>
-            <button class="btn btn-primary" id="add-affordability-item">
-                <i class="fas fa-plus"></i> Add Item
-            </button>
-        </div>
-
-        <p class="help-text">Add items you're considering purchasing to see if you can afford them based on your
-            remaining weekly balance.</p>
-
-        <table id="affordability-table">
-            <thead>
-            <tr>
-                <th>Item Name</th>
-                <th>Description</th>
-                <th>Total Cost</th>
-                <th>Deposit</th>
-                <th>Weekly Payment</th>
-                <th>Timeframe (weeks)</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            <!-- Affordability items will be populated here -->
-            </tbody>
-        </table>
-        <p class="help-text"><i>Tip: Double-click any item to edit it</i></p>
-    </div>
-
-    <div class="toolbar">
-        <div></div>
-        <div>
-            <button class="btn btn-success" id="back-button">
-                <i class="fas fa-arrow-left"></i> ← Back to Home Page
-            </button>
+            <div></div>
+            <div>
+                <button class="btn btn-success" id="back-button">
+                    <i class="fas fa-arrow-left"></i> ← Back to Home Page
+                </button>
+            </div>
         </div>
     </div>
-</div>
+</main>
 
-<!-- Modal for adding/editing bills -->
+<footer>
+    <div class="footer-container">
+        <div class="social-icons">
+            <a href="https://discord.com/channels/@me/707058110396760094" target="_blank" aria-label="Discord"> <i
+                    class="fab fa-discord"></i></a>
+            <a href="https://github.com/Chalwk" target="_blank" aria-label="GitHub"> <i class="fab fa-github"></i></a>
+        </div>
+        <p class="footer-copyright"></p>
+    </div>
+</footer>
+
 <div class="modal" id="bill-modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -257,7 +322,6 @@ Bills & Invoices Tracker
     </div>
 </div>
 
-<!-- Modal for adding/editing invoices -->
 <div class="modal" id="invoice-modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -285,7 +349,6 @@ Bills & Invoices Tracker
     </div>
 </div>
 
-<!-- Modal for adding payments -->
 <div class="modal" id="payment-modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -313,7 +376,6 @@ Bills & Invoices Tracker
     </div>
 </div>
 
-<!-- Modal for adding/editing income streams -->
 <div class="modal" id="income-modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -368,7 +430,6 @@ Bills & Invoices Tracker
     </div>
 </div>
 
-<!-- Modal for adding/editing affordability items -->
 <div class="modal" id="affordability-modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -412,6 +473,7 @@ Bills & Invoices Tracker
     </div>
 </div>
 
-<script src="script.js"></script>
+<script defer src="../../../nav.js"></script>
+<script defer src="script.js"></script>
 </body>
 </html>

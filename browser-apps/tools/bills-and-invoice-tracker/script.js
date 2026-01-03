@@ -13,7 +13,6 @@ const defaultData = {
     affordabilityItems: []
 };
 
-// Load data from localStorage
 function loadData() {
     const savedData = localStorage.getItem('billsTrackerData');
     if (savedData) {
@@ -30,7 +29,6 @@ function loadData() {
     return { ...defaultData };
 }
 
-// Save data to localStorage
 function saveData() {
     const dataToSave = {
         incomeStreams,
@@ -39,15 +37,14 @@ function saveData() {
         monthlyBills,
         invoices,
         affordabilityItems,
-        lastSaved: new Date().toISOString()
+        lastSaved: new Date().toISOString(),
+        version: '1.0'
     };
     localStorage.setItem('billsTrackerData', JSON.stringify(dataToSave));
 }
 
-// Initialize data from localStorage
 let { incomeStreams, weeklyBills, biWeeklyBills, monthlyBills, invoices, affordabilityItems } = loadData();
 
-// DOM Elements
 const weeklyIncomeEl = document.getElementById('weekly-income');
 const weeklyExpensesEl = document.getElementById('weekly-expenses');
 const remainingBalanceEl = document.getElementById('remaining-balance');
@@ -78,13 +75,11 @@ const togglePaidInvoicesBtn = document.getElementById('toggle-paid-invoices');
 const importFileInput = document.getElementById('import-file');
 let showPaidInvoices = false;
 
-// Calculate invoice balance
 function calculateInvoiceBalance(invoice) {
     const totalPaid = invoice.payments.reduce((sum, payment) => sum + payment.amount, 0);
     return invoice.total - totalPaid;
 }
 
-// Calculate total weekly income
 function calculateTotalWeeklyIncome() {
     const now = new Date();
     let total = 0;
@@ -138,7 +133,6 @@ function attachIncomeEventListeners() {
     });
 }
 
-// Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
     updateCalculations();
     renderWeeklyBills();
@@ -151,9 +145,7 @@ document.addEventListener('DOMContentLoaded', function() {
     switchTab('income');
 });
 
-// Set up event listeners
 function setupEventListeners() {
-    // Tab switching
     tabs.forEach(tab => {
         tab.addEventListener('click', () => {
             const tabId = tab.getAttribute('data-tab');
@@ -161,21 +153,18 @@ function setupEventListeners() {
         });
     });
 
-    // Add buttons
     document.getElementById('add-weekly-bill').addEventListener('click', () => openBillModal('weekly'));
     document.getElementById('add-monthly-bill').addEventListener('click', () => openBillModal('monthly'));
     document.getElementById('add-invoice').addEventListener('click', () => openInvoiceModal());
     document.getElementById('add-income').addEventListener('click', () => openIncomeModal());
     document.getElementById('add-affordability-item').addEventListener('click', () => openAffordabilityModal());
 
-    // Data management buttons
     document.getElementById('export-data').addEventListener('click', exportData);
     document.getElementById('import-data').addEventListener('click', () => importFileInput.click());
     document.getElementById('reset-data').addEventListener('click', resetToDefault);
 
     importFileInput.addEventListener('change', importData);
 
-    // Modal close buttons
     document.getElementById('close-modal').addEventListener('click', closeBillModal);
     document.getElementById('close-invoice-modal').addEventListener('click', closeInvoiceModal);
     document.getElementById('close-payment-modal').addEventListener('click', closePaymentModal);
@@ -188,14 +177,12 @@ function setupEventListeners() {
     document.getElementById('cancel-income').addEventListener('click', closeIncomeModal);
     document.getElementById('cancel-affordability').addEventListener('click', closeAffordabilityModal);
 
-    // Form submissions
     billForm.addEventListener('submit', saveBill);
     invoiceForm.addEventListener('submit', saveInvoice);
     paymentForm.addEventListener('submit', savePayment);
     incomeForm.addEventListener('submit', saveIncome);
     affordabilityForm.addEventListener('submit', saveAffordabilityItem);
 
-    // Toggle paid invoices
     if (togglePaidInvoicesBtn) {
         togglePaidInvoicesBtn.addEventListener('click', togglePaidInvoices);
     }
@@ -205,7 +192,6 @@ function setupEventListeners() {
     });
 }
 
-// Switch between tabs
 function switchTab(tabId) {
     tabs.forEach(tab => {
         if (tab.getAttribute('data-tab') === tabId) {
@@ -224,22 +210,18 @@ function switchTab(tabId) {
     });
 }
 
-// Calculate total weekly expenses
 function updateCalculations() {
     const incomeData = calculateTotalWeeklyIncome();
     const totalWeeklyIncome = incomeData.recurring;
 
-    // Weekly bills (including weekly payments toward monthly bills)
     const weeklyExpensesFromWeeklyBills = weeklyBills.reduce((total, bill) => {
         return total + (bill.frequency === "Weekly" ? bill.amount : 0);
     }, 0);
 
-    // Bi-weekly bills converted to weekly
     const weeklyExpensesFromBiWeeklyBills = weeklyBills.reduce((total, bill) => {
         return total + (bill.frequency === "Bi-weekly" ? bill.amount / 2 : 0);
     }, 0);
 
-    // Monthly automatic bills that are NOT covered by weekly payments
     const weeklyExpensesFromMonthlyBills = monthlyBills.reduce((total, bill) => {
         if (bill.paymentMethod === 'automatic' && !bill.weeklyCovered) {
             return total + (bill.amount / 4.33);
@@ -263,7 +245,6 @@ function updateCalculations() {
         remainingBalanceEl.className = 'stat negative';
     }
 
-    // Update monthly average (sum of all expenses including those covered weekly)
     const totalMonthlyExpenses = (weeklyExpensesFromWeeklyBills +
     weeklyExpensesFromBiWeeklyBills +
     weeklyExpensesFromMonthlyBills) * 4.33;
@@ -273,7 +254,6 @@ function updateCalculations() {
     saveData();
 }
 
-// Render weekly bills table with double-click functionality
 function renderWeeklyBills() {
     weeklyBillsTable.innerHTML = '';
 
@@ -316,7 +296,6 @@ function renderWeeklyBills() {
     saveData();
 }
 
-// Render monthly bills table with double-click functionality
 function renderMonthlyBills() {
     monthlyBillsTable.innerHTML = '';
 
@@ -345,18 +324,15 @@ function renderMonthlyBills() {
             </td>
         `;
 
-        // Add double-click event listener
         row.addEventListener('dblclick', () => editBill(bill.id, 'monthly'));
 
         monthlyBillsTable.appendChild(row);
     });
 
-    // Add event listeners to edit and delete buttons
     attachBillEventListeners();
     saveData();
 }
 
-// Attach event listeners to bill buttons
 function attachBillEventListeners() {
     document.querySelectorAll('.edit-bill').forEach(button => {
         button.addEventListener('click', (e) => {
@@ -375,7 +351,6 @@ function attachBillEventListeners() {
     });
 }
 
-// Render invoices with collapse functionality for paid ones
 function renderInvoices() {
     invoicesContainer.innerHTML = '';
 
@@ -435,7 +410,6 @@ function renderInvoices() {
     saveData();
 }
 
-// Attach event listeners to invoice buttons
 function attachInvoiceEventListeners() {
     document.querySelectorAll('.edit-invoice').forEach(button => {
         button.addEventListener('click', (e) => {
@@ -483,7 +457,6 @@ function spendOneOffIncome(id) {
     saveData();
 }
 
-// Render income streams
 function renderIncomeStreams() {
     incomeStreamsTable.innerHTML = '';
 
@@ -537,7 +510,6 @@ function renderIncomeStreams() {
     saveData();
 }
 
-// Render affordability items
 function renderAffordabilityItems() {
     affordabilityTable.innerHTML = '';
 
@@ -621,13 +593,11 @@ function renderAffordabilityItems() {
     saveData();
 }
 
-// Format date for display
 function formatDate(dateString) {
     const options = { day: 'numeric', month: 'short', year: 'numeric' };
     return new Date(dateString).toLocaleDateString('en-US', options);
 }
 
-// Toggle paid invoices visibility
 function togglePaidInvoices() {
     showPaidInvoices = !showPaidInvoices;
     const paidInvoices = document.querySelectorAll('.invoice-card.paid');
@@ -641,12 +611,10 @@ function togglePaidInvoices() {
     }
 }
 
-// Analyze affordability item - FIXED VERSION
 function analyzeAffordabilityItem(id) {
     const item = affordabilityItems.find(i => i.id === id);
     if (!item) return;
 
-    // Get the actual remaining balance from the dashboard
     const remainingBalanceText = remainingBalanceEl.textContent;
     const remainingBalance = parseFloat(remainingBalanceText.replace('$', ''));
 
@@ -693,7 +661,6 @@ function analyzeAffordabilityItem(id) {
     saveData();
 }
 
-// Bill modal functions
 function openBillModal(type, id = null) {
     document.getElementById('modal-title').textContent = id ? 'Edit Bill' : 'Add Bill';
     document.getElementById('bill-type').value = type;
@@ -741,7 +708,6 @@ function saveBill(e) {
     };
 
     if (id) {
-        // Update existing bill
         if (type === 'weekly') {
             if (frequency === "Bi-weekly") {
                 const index = biWeeklyBills.findIndex(b => b.id === parseInt(id));
@@ -823,7 +789,6 @@ function deleteBill(id, type) {
     }
 }
 
-// Income modal functions
 function openIncomeModal(id = null) {
     document.getElementById('income-modal-title').textContent = id ? 'Edit Income Stream' : 'Add Income Stream';
     document.getElementById('income-id').value = id || '';
@@ -937,7 +902,6 @@ function deleteIncome(id) {
     }
 }
 
-// Affordability modal functions
 function openAffordabilityModal(id = null) {
     document.getElementById('affordability-modal-title').textContent =
     id ? 'Edit Affordability Item' : 'Add Affordability Item';
@@ -1017,7 +981,6 @@ function deleteAffordabilityItem(id) {
     }
 }
 
-// Invoice modal functions
 function openInvoiceModal(id = null) {
     document.getElementById('invoice-modal-title').textContent = id ? 'Edit Invoice' : 'Add Invoice';
     document.getElementById('invoice-id').value = id || '';
@@ -1045,14 +1008,12 @@ function saveInvoice(e) {
     const total = parseFloat(document.getElementById('invoice-total').value);
 
     if (id) {
-        // Update existing invoice
         const index = invoices.findIndex(i => i.id === parseInt(id));
         if (index !== -1) {
             invoices[index].number = number;
             invoices[index].total = total;
         }
     } else {
-        // Add new invoice
         const newId = Math.max(...invoices.map(i => i.id), 0) + 1;
         invoices.push({
             id: newId,
@@ -1079,7 +1040,6 @@ function deleteInvoice(id) {
     }
 }
 
-// Payment modal functions
 function openPaymentModal(invoiceId) {
     document.getElementById('payment-invoice-id').value = invoiceId;
     document.getElementById('payment-form').reset();
@@ -1111,7 +1071,6 @@ function savePayment(e) {
     saveData();
 }
 
-// Export data function
 function exportData() {
     const data = {
         incomeStreams,
@@ -1133,7 +1092,6 @@ function exportData() {
     link.click();
 }
 
-// Import data function
 function importData(event) {
     const file = event.target.files[0];
     if (!file) return;
@@ -1143,13 +1101,11 @@ function importData(event) {
         try {
             const importedData = JSON.parse(e.target.result);
 
-            // Validate the imported data structure
             if (!importedData.incomeStreams || !importedData.weeklyBills || !importedData.monthlyBills) {
                 throw new Error('Invalid data format');
             }
 
             if (confirm('Importing data will replace your current data. Continue?')) {
-                // Update all data arrays
                 incomeStreams = importedData.incomeStreams || defaultData.incomeStreams;
                 weeklyBills = importedData.weeklyBills || defaultData.weeklyBills;
                 biWeeklyBills = importedData.biWeeklyBills || defaultData.biWeeklyBills;
@@ -1157,10 +1113,8 @@ function importData(event) {
                 invoices = importedData.invoices || defaultData.invoices;
                 affordabilityItems = importedData.affordabilityItems || defaultData.affordabilityItems;
 
-                // Save to localStorage
                 saveData();
 
-                // Refresh the UI
                 updateCalculations();
                 renderWeeklyBills();
                 renderMonthlyBills();
@@ -1174,14 +1128,12 @@ function importData(event) {
             alert('Error importing data: ' + error.message);
         }
 
-        // Reset the file input
         event.target.value = '';
     };
 
     reader.readAsText(file);
 }
 
-// Reset to default data
 function resetToDefault() {
     if (confirm('This will reset ALL data to default values. This cannot be undone. Continue?')) {
         incomeStreams = [...defaultData.incomeStreams];
@@ -1191,10 +1143,8 @@ function resetToDefault() {
         invoices = [...defaultData.invoices];
         affordabilityItems = [...defaultData.affordabilityItems];
 
-        // Save to localStorage
         saveData();
 
-        // Refresh the UI
         updateCalculations();
         renderWeeklyBills();
         renderMonthlyBills();
