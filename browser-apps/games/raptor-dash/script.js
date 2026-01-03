@@ -1,4 +1,8 @@
-// Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
+/*
+	Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
+
+	Rapter Dash JavaScript
+*/
 
 (() => {
     const canvas = document.getElementById('game');

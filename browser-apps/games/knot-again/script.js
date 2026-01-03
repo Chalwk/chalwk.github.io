@@ -1,6 +1,9 @@
-// Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
+/*
+	Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
 
-// Rope Untangle - script.js
+	Knot Again JavaScript
+*/
+
 (() => {
     const svg = document.getElementById('svg');
     const resetBtn = document.getElementById('resetBtn');

@@ -1,4 +1,8 @@
-// Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
+/*
+	Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
+
+	Asteroids JavaScript
+*/
 
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');

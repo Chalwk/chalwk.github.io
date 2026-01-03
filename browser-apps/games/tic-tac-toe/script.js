@@ -1,4 +1,8 @@
-// Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
+/*
+	Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
+
+	Tic-Tac-Toe JavaScript
+*/
 
 const cells = document.querySelectorAll('.cell');
 const status = document.getElementById('status');

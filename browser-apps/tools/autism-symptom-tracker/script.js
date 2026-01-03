@@ -111,9 +111,9 @@
         "executive-function": {
             name: "Executive difficulty (planning, focus)",
             strategies: [
-                "Do a 5-minute timer task — short bursts help.",
+                "Do a 5-minute timer task - short bursts help.",
                 "Write a tiny next-step checklist.",
-                "Remove distractions — phone away or on focus mode.",
+                "Remove distractions - phone away or on focus mode.",
                 "Use visual timers or alarms.",
                 "Break tasks into smaller, manageable steps.",
                 "Use body doubling if available.",

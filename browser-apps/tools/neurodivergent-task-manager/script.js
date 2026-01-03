@@ -113,7 +113,7 @@ const taskTemplates = [
         title: "Morning Routine Plus 🌅",
         description: "Gentle, structured start for focus and calm",
         steps: [
-            "Wake up — place feet on floor",
+            "Wake up - place feet on floor",
             "Open curtains or get 2 minutes of sunlight",
             "Drink a full glass of water",
             "Use bathroom and basic hygiene",
@@ -165,7 +165,7 @@ const taskTemplates = [
         timer: 50
     },
     {
-        title: "Study Session — Chunked 📚",
+        title: "Study Session - Chunked 📚",
         description: "Small chunks for learning and retention",
         steps: [
             "Review notes for 5 minutes",
@@ -216,7 +216,7 @@ const taskTemplates = [
         timer: 5
     },
     {
-        title: "Meal Prep — Simple Batch 🍲",
+        title: "Meal Prep - Simple Batch 🍲",
         description: "Make several easy meals",
         steps: [
             "Pick base",
@@ -242,7 +242,7 @@ const taskTemplates = [
         timer: 15
     },
     {
-        title: "Grocery Trip — Prep + Run 🛒",
+        title: "Grocery Trip - Prep + Run 🛒",
         description: "Reduce overwhelm while shopping",
         steps: [
             "Check pantry and list essentials",

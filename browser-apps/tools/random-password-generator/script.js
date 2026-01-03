@@ -306,7 +306,7 @@ function renderHistory(){
     container.innerHTML='';
     list.forEach((item,idx)=>{
         const wrap = document.createElement('div'); wrap.className='history-item';
-        const left = document.createElement('div'); left.textContent = `${new Date(item.date).toLocaleString()} — ${truncate(item.pw,30)}`;
+        const left = document.createElement('div'); left.textContent = `${new Date(item.date).toLocaleString()} - ${truncate(item.pw,30)}`;
         const right = document.createElement('div');
 
         const btnCopy = document.createElement('button'); btnCopy.textContent='Copy'; btnCopy.addEventListener('click',()=>{navigator.clipboard.writeText(item.pw); flashMessage('Copied history password');});

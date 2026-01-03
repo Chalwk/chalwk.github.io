@@ -1,4 +1,8 @@
-// Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
+/*
+	Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
+
+	Blunder JavaScript
+*/
 
 const MAX_GUESSES = 6;
 const WORD_LENGTH = 5;

@@ -329,7 +329,7 @@
         });
     }
 
-    // setColor central — sets current and updates UI
+    // setColor central - sets current and updates UI
     function setColor(r,g,b){
         current.r = clamp(Math.round(r),0,255);
         current.g = clamp(Math.round(g),0,255);

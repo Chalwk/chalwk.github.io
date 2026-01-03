@@ -1,7 +1,7 @@
 /*
 	Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
 
-	file_name stylesheet
+	Tic-Tac-Toe stylesheet
 */
 
 * {
@@ -207,7 +207,6 @@ header p {
     border-bottom: 1px solid white;
 }
 
-/* Responsive design */
 @media (max-width: 480px) {
     #game-board {
         grid-template-columns: repeat(3, 80px);
