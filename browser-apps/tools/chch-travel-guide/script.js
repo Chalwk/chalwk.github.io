@@ -87,7 +87,6 @@ const categories = [
                 link: 'https://www.christchurchnz.com/experience/bridge-of-remembrance/',
                 image: 'bridge-remembrance.jpg'
             },
-            // Expanded entries
             {
                 name: 'Christchurch Art Gallery',
                 description: 'Contemporary art gallery with impressive collections and architecture.',
@@ -178,7 +177,6 @@ const categories = [
                 link: 'https://www.willowbank.co.nz/',
                 image: 'willowbank.jpg'
             },
-            // Expanded entries
             {
                 name: 'Mona Vale',
                 description: 'Historic homestead with beautiful gardens, perfect for a peaceful stroll.',
@@ -287,7 +285,6 @@ const categories = [
                 link: '#',
                 image: 'escape-rooms.jpg'
             },
-            // Expanded entries
             {
                 name: 'International Antarctic Centre',
                 description: 'Experience Antarctic storms, meet penguins, and learn about polar research.',
@@ -348,7 +345,6 @@ const categories = [
                 link: 'https://www.ccc.govt.nz/parks-and-gardens/christchurch-parks/corsair-bay',
                 image: 'corsair-bay.jpg'
             },
-            // Expanded entries
             {
                 name: 'Godley Head',
                 description: 'Coastal walks with historic WWII gun emplacements and panoramic views.',
@@ -391,7 +387,6 @@ const categories = [
                 link: '#',
                 image: 'trampoline-parks.jpg'
             },
-            // Expanded entries
             {
                 name: 'Science Alive!',
                 description: 'Interactive science museum with hands-on exhibits for all ages.',
@@ -452,7 +447,6 @@ const categories = [
                 link: '#',
                 image: 'op-shops.jpg'
             },
-            // Expanded entries
             {
                 name: 'Ballantynes',
                 description: 'Historic department store with luxury brands and excellent service.',
@@ -489,7 +483,6 @@ const categories = [
                 link: 'https://www.hanmersprings.co.nz/',
                 image: 'hanmer-springs.jpg'
             },
-            // Expanded entries
             {
                 name: 'Kaikoura',
                 description: 'Whale watching, dolphin encounters, and coastal scenery.',
@@ -538,7 +531,6 @@ const categories = [
                 link: '#',
                 image: 'local-cafes.jpg'
             },
-            // Expanded entries
             {
                 name: 'The Curator\'s House',
                 description: 'Spanish-inspired cuisine in a historic building in the Botanic Gardens.',
@@ -575,7 +567,6 @@ const categories = [
                 link: '#',
                 image: 'car-hire.jpg'
             },
-            // Expanded entries
             {
                 name: 'Cycling',
                 description: 'Christchurch is a flat city with many cycle ways, perfect for exploring on two wheels.',
@@ -592,11 +583,9 @@ const categories = [
     }
 ];
 
-// Function to generate category buttons
 function generateCategoryButtons() {
     const filterContainer = document.getElementById('category-filter');
 
-    // Add "All" button
     const allButton = document.createElement('button');
     allButton.className = 'category-btn active';
     allButton.textContent = 'All';
@@ -604,7 +593,6 @@ function generateCategoryButtons() {
     allButton.addEventListener('click', filterPlaces);
     filterContainer.appendChild(allButton);
 
-    // Add category buttons
     categories.forEach(category => {
         const button = document.createElement('button');
         button.className = 'category-btn';
@@ -615,7 +603,6 @@ function generateCategoryButtons() {
     });
 }
 
-// Function to generate place cards
 function generatePlaceCards() {
     const container = document.getElementById('places-container');
 
@@ -639,7 +626,6 @@ function generatePlaceCards() {
             card.className = 'place-card';
             card.setAttribute('data-category', category.id);
 
-            // Use placeholder images - in a real app these would be actual image URLs
             const imageUrl = `https://source.unsplash.com/random/400x300/?${encodeURIComponent(place.name + ' christchurch')}`;
 
             card.innerHTML = `
@@ -658,24 +644,20 @@ function generatePlaceCards() {
         section.appendChild(content);
         container.appendChild(section);
 
-        // Add click event to toggle section
         header.addEventListener('click', () => {
             section.classList.toggle('collapsed');
         });
     });
 }
 
-// Function to filter places by category
 function filterPlaces() {
     const category = this.getAttribute('data-category');
 
-    // Update active button
     document.querySelectorAll('.category-btn').forEach(btn => {
         btn.classList.remove('active');
     });
     this.classList.add('active');
 
-    // Show/hide sections
     document.querySelectorAll('.category-section').forEach(section => {
         if (category === 'all' || section.id === category) {
             section.style.display = 'block';
@@ -685,7 +667,6 @@ function filterPlaces() {
     });
 }
 
-// Function to search places
 function setupSearch() {
     const searchInput = document.getElementById('search-input');
 
@@ -703,7 +684,6 @@ function setupSearch() {
             }
         });
 
-        // Show/hide empty sections
         document.querySelectorAll('.category-section').forEach(section => {
             const visibleCards = section.querySelectorAll('.place-card[style="display: block"]');
             const categoryContent = section.querySelector('.category-content');
@@ -717,7 +697,6 @@ function setupSearch() {
     });
 }
 
-// Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
     generateCategoryButtons();
     generatePlaceCards();

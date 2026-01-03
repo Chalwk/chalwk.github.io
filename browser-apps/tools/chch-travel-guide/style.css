@@ -11,46 +11,8 @@ Christchurch Travel Guide stylesheet
     --light: #ecf0f1;
     --dark: #2c3e50;
     --success: #2ecc71;
-    --warning: #f39c12;
+    --warning: #f59e0b;
     --info: #17a2b8;
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-body {
-    background-color: #f8f9fa;
-    color: #333;
-    line-height: 1.6;
-}
-
-header {
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    color: white;
-    padding: 2rem 1rem;
-    text-align: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-header h1 {
-    font-size: 2.5rem;
-    margin-bottom: 0.5rem;
-}
-
-header p {
-    font-size: 1.2rem;
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 1rem;
 }
 
 .controls {
@@ -186,14 +148,6 @@ header p {
     background: var(--primary);
 }
 
-footer {
-    background: var(--dark);
-    color: white;
-    text-align: center;
-    padding: 2rem 1rem;
-    margin-top: 3rem;
-}
-
 @media (max-width: 768px) {
     .category-content {
         grid-template-columns: 1fr;
@@ -206,10 +160,6 @@ footer {
     .category-filter {
         justify-content: center;
     }
-}
-
-.hidden {
-    display: none;
 }
 
 .collapsed .category-content {
