@@ -1,7 +1,7 @@
 /*
-	Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
+Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
 
-	Run Away JavaScript
+Run Away JavaScript
 */
 
 class RunAwayGame {

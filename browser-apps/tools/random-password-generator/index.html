@@ -1,139 +1,290 @@
 <!--
-Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
+    Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
 
-Random Password Generator
+    Random Password Generator
 -->
 
 <!doctype html>
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <meta content="width=device-width,initial-scale=1" name="viewport"/>
     <title>Random Password Generator</title>
-    <link href="style.css" rel="stylesheet">
+    <meta content="Generate secure random passwords with entropy calculation, strength testing, and history tracking."
+          name="description"/>
+    <link href="../../../core.css" rel="stylesheet"/>
+    <link href="style.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
+          rel="stylesheet">
 </head>
+
 <body>
-<main aria-labelledby="app-title" class="app">
-    <header class="app-header">
-        <h1 id="app-title">Random Password Generator</h1>
-        <div class="controls-top">
-            <label class="toggle">
-                <input aria-label="Toggle dark mode" id="darkMode" type="checkbox">
-                <span>Dark mode</span>
-            </label>
+<header class="header">
+    <div class="container">
+        <a class="logo" href="../../../index.html"> <i class="fas fa-code"></i> Jericho </a>
+
+        <nav class="nav-desktop">
+            <ul class="nav-links">
+                <li><a href="../../../index.html#about">About</a></li>
+                <li><a href="../../../browser-apps/apps_and_tools.html">Apps & Tools</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" href="#">Other Stuff <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://chalwk.github.io/CPAS/">CPAS</a></li>
+                        <li class="dropdown-submenu">
+                            <a class="submenu-toggle" href="#">Education <i class="fas fa-chevron-right"></i></a>
+                            <ul class="submenu">
+                                <li><a href="../../../education/understanding-autism.html">Understanding Autism</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Password Generator</a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
         </div>
-    </header>
 
-    <section aria-label="Password generator" class="generator">
-        <div class="left">
-            <div class="panel">
-                <div class="row">
-                    <label for="length">Length: <span id="lengthVal">16</span></label>
-                    <input id="length" max="128" min="4" type="range" value="16"/>
+        <nav class="nav-mobile">
+            <ul class="nav-mobile-links">
+                <li><a href="../../../index.html#about">About</a></li>
+                <li><a href="../../../browser-apps/apps_and_tools.html">Apps & Tools</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" href="#">Other Stuff <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://chalwk.github.io/CPAS/">CPAS</a></li>
+                        <li class="dropdown-submenu">
+                            <a class="submenu-toggle" href="#">Education <i class="fas fa-chevron-right"></i></a>
+                            <ul class="submenu">
+                                <li><a href="../../../education/understanding-autism.html">Understanding Autism</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Password Generator</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <a class="skip" href="#app">Skip to main content</a>
+
+    <div class="container">
+        <div class="hero-banner"
+             style="background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 3rem 1rem; text-align: center; margin-top: 20px; border-radius: var(--radius);">
+            <div class="hero-content">
+                <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem; color: white;">Random Password Generator</h1>
+                <p style="font-size: 1.2rem; opacity: 0.9; margin-bottom: 1.5rem; color: white;">Generate secure
+                    passwords with entropy calculation, strength testing, and history tracking.</p>
+            </div>
+        </div>
+
+        <div aria-labelledby="app-title" class="app-grid" id="app" role="main" style="margin-top: 2rem;">
+            <h2 class="sr-only" id="app-title">Password Generator</h2>
+
+            <section aria-labelledby="generator-heading" class="panel panel-left" id="generator-panel">
+                <div class="panel-head">
+                    <h2 id="generator-heading" style="color: var(--primary);">Password Settings</h2>
+                    <p class="muted small">Configure your password criteria and generate secure passwords.</p>
                 </div>
 
-                <fieldset aria-label="Character sets" class="char-sets">
-                    <legend>Character sets</legend>
-                    <label><input checked id="upper" type="checkbox"> ABC</label>
-                    <label><input checked id="lower" type="checkbox"> abc</label>
-                    <label><input checked id="numbers" type="checkbox"> 123</label>
-                    <label><input id="symbols" type="checkbox"> #$&</label>
-                    <label class="custom-field">Custom: <input id="custom" maxlength="32"
-                                                               placeholder="e.g. ±§♥"></label>
-                </fieldset>
+                <div class="generator-form">
+                    <div class="form-row">
+                        <label for="length">
+                            Length: <span class="highlight" id="lengthVal">16</span>
+                        </label>
+                        <input id="length" max="128" min="4" type="range" value="16" class="range-input"/>
+                    </div>
 
-                <div class="row">
-                    <label><input id="includeSimilar" type="checkbox"> Exclude similar chars (i, l, 1, O, 0)</label>
-                </div>
+                    <fieldset aria-label="Character sets" class="char-sets">
+                        <legend>Character Sets</legend>
+                        <div class="checkbox-grid">
+                            <label class="checkbox">
+                                <input checked id="upper" type="checkbox">
+                                <span>Uppercase (ABC)</span>
+                            </label>
+                            <label class="checkbox">
+                                <input checked id="lower" type="checkbox">
+                                <span>Lowercase (abc)</span>
+                            </label>
+                            <label class="checkbox">
+                                <input checked id="numbers" type="checkbox">
+                                <span>Numbers (123)</span>
+                            </label>
+                            <label class="checkbox">
+                                <input id="symbols" type="checkbox">
+                                <span>Symbols (#$&)</span>
+                            </label>
+                        </div>
+                        <label class="field" style="margin-top: 1rem;">
+                            <span>Custom characters (optional)</span>
+                            <input id="custom" maxlength="32" placeholder="e.g. ±§♥" type="text"/>
+                        </label>
+                    </fieldset>
 
-                <div class="row">
-                    <label><input id="passphraseMode" type="checkbox"> Passphrase mode</label>
-                    <label class="small">Words: <input id="passphraseWords" max="10" min="3" type="number"
-                                                       value="4"></label>
-                </div>
+                    <div class="form-row">
+                        <label class="checkbox">
+                            <input id="includeSimilar" type="checkbox">
+                            <span>Exclude similar characters (i, l, 1, O, 0)</span>
+                        </label>
+                    </div>
 
-                <div class="row">
-                    <label>Pattern (optional)<span class="tooltip"
-                                                   title="Use: C=upper, c=lower, d=digit, s=symbol, *=any selected, .=literal">?</span></label>
-                    <input aria-describedby="patternDesc" id="pattern" placeholder="e.g. Ccc123!Ccc">
-                </div>
+                    <div class="form-row" style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+                        <label class="checkbox">
+                            <input id="passphraseMode" type="checkbox">
+                            <span>Passphrase mode</span>
+                        </label>
+                        <label class="field" style="min-width: 120px;">
+                            <span>Words:</span>
+                            <input id="passphraseWords" max="10" min="3" type="number" value="4" disabled/>
+                        </label>
+                    </div>
 
-                <div class="actions">
-                    <button id="generate">Generate</button>
-                    <button class="secondary" id="copy" title="Copy password to clipboard">Copy</button>
-                    <div class="export">
-                        <button class="secondary" id="exportTxt">Export .txt</button>
-                        <button class="secondary" id="exportCsv">Export .csv</button>
+                    <div class="form-row">
+                        <label for="pattern">
+                            Pattern (optional)
+                            <span class="tooltip"
+                                  title="Use: C=uppercase, c=lowercase, d=digit, s=symbol, *=any selected, .=literal character">?</span>
+                        </label>
+                        <input aria-describedby="patternDesc" id="pattern" placeholder="e.g. Ccc123!Ccc" type="text"/>
+                    </div>
+
+                    <div class="actions-row" style="margin-top: 2rem;">
+                        <button class="btn btn-primary" id="generate">
+                            <i class="fas fa-key"></i> Generate Password
+                        </button>
+                        <button class="btn btn-secondary" id="copy" title="Copy password to clipboard">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                        <button class="btn btn-secondary" id="fav" title="Favorite this password">
+                            <i class="far fa-star"></i>
+                        </button>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="panel output">
-                <label for="passwordOutput">Generated password</label>
-                <div id="passwordWrap">
-                    <input aria-live="polite" id="passwordOutput" readonly>
-                    <button id="fav" title="Favorite this password">☆</button>
-                </div>
-                <div class="strength-row">
-                    <div aria-hidden="true" id="strengthBar"></div>
-                    <div id="strengthLabel"></div>
+            <section aria-labelledby="output-heading" class="panel panel-right" id="output-panel">
+                <div class="panel-head">
+                    <h2 id="output-heading" style="color: var(--primary);">Generated Password</h2>
+                    <p class="muted small">Your secure password with strength analysis.</p>
                 </div>
 
-                <div class="stats">
-                    <dl>
-                        <div>
-                            <dt>Entropy</dt>
-                            <dd id="entropy">-</dd>
+                <div class="password-output">
+                    <div class="password-display">
+                        <input aria-label="Generated password" id="passwordOutput" readonly type="text"/>
+                    </div>
+
+                    <div class="strength-display">
+                        <div class="strength-header">
+                            <span>Password Strength</span>
+                            <span id="strengthLabel" class="strength-label">-</span>
                         </div>
-                        <div>
-                            <dt>Bits of security</dt>
-                            <dd id="bits">-</dd>
+                        <div aria-hidden="true" class="strength-bar">
+                            <div id="strengthBar" class="strength-bar-fill"></div>
                         </div>
-                        <div>
-                            <dt>Guesses</dt>
-                            <dd id="guesses">-</dd>
+                    </div>
+
+                    <div class="security-stats">
+                        <h3>Security Analysis</h3>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <span class="stat-label">Entropy</span>
+                                <span class="stat-value" id="entropy">-</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Bits of Security</span>
+                                <span class="stat-value" id="bits">-</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Possible Guesses</span>
+                                <span class="stat-value" id="guesses">-</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Time to Crack</span>
+                                <span class="stat-value" id="timeToCrack">-</span>
+                            </div>
                         </div>
-                        <div>
-                            <dt>Time to crack</dt>
-                            <dd id="timeToCrack">-</dd>
-                        </div>
-                    </dl>
+                    </div>
+
+                    <div aria-live="polite" class="warnings" id="warnings"></div>
+                </div>
+            </section>
+
+            <section aria-labelledby="history-heading" class="panel panel-bottom" id="history-panel">
+                <div class="panel-head row-between">
+                    <div>
+                        <h2 id="history-heading" style="color: var(--primary);">Password History</h2>
+                        <p class="muted small">Previously generated passwords are stored locally in your browser.</p>
+                    </div>
+                    <div aria-label="Export and import actions" class="export-actions" role="group">
+                        <button class="btn btn-secondary" id="exportTxt" title="Export history as text">
+                            <i class="fas fa-download"></i> Export TXT
+                        </button>
+                        <button class="btn btn-secondary" id="exportCsv" title="Export history as CSV">
+                            <i class="fas fa-file-csv"></i> Export CSV
+                        </button>
+                        <button class="btn btn-secondary" id="clearHistory" title="Clear all history">
+                            <i class="fas fa-trash"></i> Clear
+                        </button>
+                    </div>
                 </div>
 
-                <div aria-live="assertive" class="warnings" id="warnings"></div>
-            </div>
+                <div aria-live="polite" class="history-list" id="historyList"></div>
+
+                <details aria-label="Password guidance" class="guidance">
+                    <summary>Password Guidance</summary>
+                    <div class="guidance-content">
+                        <ul>
+                            <li><strong>NIST recommendations</strong>: Use passwords with 12+ characters, avoid reused
+                                passwords, and prefer long passphrases for memorability.
+                            </li>
+                            <li>Use 16+ characters with multiple character sets for maximum security.</li>
+                            <li>Passphrases with 4+ random words provide high entropy and are easier to remember.</li>
+                            <li>Regularly update important passwords and use a password manager for better security.
+                            </li>
+                        </ul>
+                    </div>
+                </details>
+            </section>
         </div>
-
-        <aside class="right">
-            <div class="panel history">
-                <h2>History</h2>
-                <div id="historyList" tabindex="0"></div>
-                <div class="history-actions">
-                    <button id="clearHistory">Clear</button>
-                    <button id="importHistory">Import</button>
-                </div>
-            </div>
-
-            <div class="panel guidance">
-                <h2>Password guidance</h2>
-                <ul>
-                    <li><strong>NIST checks</strong>: avoids re-used passwords, checks length (12+ recommended for
-                        memorized secrets), favors long passphrases.
-                    </li>
-                    <li>Use 16+ chars with multiple character sets for strong passwords.</li>
-                    <li>Passphrases with 4+ random words give high entropy and memorability.</li>
-                </ul>
-                <p class="small">Hover terms for more info. Tooltips explain entropy, bits, time-to-crack.</p>
-            </div>
-
-        </aside>
-    </section>
-
-    <footer class="app-footer">
-        <small>&copy; 2025. Jericho Crosby (Chalwk)</small>
-    </footer>
+    </div>
 </main>
 
-<script src="script.js"></script>
+<footer>
+    <div class="footer-container">
+        <div class="social-icons">
+            <a href="https://discord.com/channels/@me/707058110396760094" target="_blank" aria-label="Discord"> <i
+                    class="fab fa-discord"></i></a>
+            <a href="https://github.com/Chalwk" target="_blank" aria-label="GitHub"> <i class="fab fa-github"></i></a>
+        </div>
+        <p class="footer-copyright"></p>
+    </div>
+</footer>
+
+<dialog aria-labelledby="settings-title" id="settings-dialog">
+    <form class="dialog-form" method="dialog">
+        <h3 id="settings-title">Settings</h3>
+        <label class="checkbox">
+            <input id="darkMode" type="checkbox"/>
+            <span>Dark mode</span>
+        </label>
+        <div class="muted small">Toggle dark mode for this page only.</div>
+        <menu class="dialog-actions">
+            <button class="btn btn-primary">Save</button>
+            <button class="btn btn-secondary" onclick="this.closest('dialog').close()">Close</button>
+        </menu>
+    </form>
+</dialog>
+
+<script defer src="../../../nav.js"></script>
+<script defer src="script.js"></script>
 </body>
 </html>

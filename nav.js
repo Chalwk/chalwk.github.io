@@ -1,7 +1,6 @@
-/*
-	Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
+/*Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
 
-	nav.js (script shared between pages)
+nav.js (script shared between pages)
 */
 
 class NavigationManager {
@@ -11,7 +10,6 @@ class NavigationManager {
         this.header = null;
         this.dropdownToggles = null;
         this.submenuToggles = null;
-
         this.init();
     }
 

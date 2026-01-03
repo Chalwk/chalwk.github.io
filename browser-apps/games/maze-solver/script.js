@@ -1,7 +1,7 @@
 /*
-	Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
+Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
 
-	Maze Solver JavaScript
+Maze Solver JavaScript
 */
 
 const mazeContainer = document.getElementById("maze-container");
