@@ -8,118 +8,263 @@ Grocery List
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="#4a86e8" name="theme-color">
-    <meta content="⚠️ Check an item to indicate that it needs to be purchased." name="description">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#4a86e8">
+    <meta name="description" content="⚠️ Check an item to indicate that it needs to be purchased.">
     <title>Grocery List</title>
-    <link href="style.css" rel="stylesheet">
-    <link href="manifest.json" rel="manifest">
-    <link href="icons/icon-192x192.png" rel="icon" type="image/png">
-    <meta content="yes" name="apple-mobile-web-app-capable">
-    <meta content="default" name="apple-mobile-web-app-status-bar-style">
-    <meta content="Grocery List" name="apple-mobile-web-app-title">
-    <link href="icons/icon-192x192.png" rel="apple-touch-icon">
+
+    <link rel="stylesheet" href="../../../core.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap">
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="icons/icon-192x192.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Grocery List">
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
 </head>
+
 <body>
-<header>
-    <h1>🛒 Grocery List</h1>
-    <p class="subtitle">⚠️ Check an item to indicate that it needs to be purchased.</p>
+<header class="header">
+    <div class="container">
+        <a class="logo" href="../../../index.html">
+            <i class="fas fa-code"></i> Jericho
+        </a>
 
-    <div class="search-container">
-        <label for="searchInput"></label><input id="searchInput" placeholder="Search groceries..." type="text">
-    </div>
+        <nav class="nav-desktop">
+            <ul class="nav-links">
+                <li><a href="../../../index.html#about">About</a></li>
+                <li><a href="../../../browser-apps/apps_and_tools.html">Apps & Tools</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" href="#">
+                        Other Stuff <i class="fas fa-chevron-down"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://chalwk.github.io/CPAS/">CPAS</a></li>
+                        <li class="dropdown-submenu">
+                            <a class="submenu-toggle" href="#">
+                                Education <i class="fas fa-chevron-right"></i>
+                            </a>
+                            <ul class="submenu">
+                                <li><a href="../../../education/understanding-autism.html">Understanding Autism</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Grocery List</a></li>
+            </ul>
+        </nav>
 
-    <div class="controls">
-        <button class="control-btn active" data-filter="all">All Items</button>
-        <button class="control-btn" data-filter="needed">Items Needed</button>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
 
-        <!-- Dropdown Menu -->
-        <div class="dropdown">
-            <button class="control-btn dropdown-toggle">More Actions</button>
-            <div class="dropdown-content">
-                <button class="control-btn" id="clearAll">Clear All</button>
-                <button class="control-btn" id="exportBtn">Export List</button>
-                <button class="control-btn" id="importBtn">Import List</button>
-                <button class="control-btn" id="addCategoryBtn">Add Category</button>
-                <button class="control-btn" id="addItemBtn">Add Item</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="stats">
-        <div class="stat-item">
-            <div class="stat-value" id="totalItems">0</div>
-            <div class="stat-label">Total Items</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-value" id="neededItems">0</div>
-            <div class="stat-label">Items Needed</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-value" id="totalPrice">$0.00</div>
-            <div class="stat-label">Total Price</div>
-        </div>
+        <nav class="nav-mobile">
+            <ul class="nav-mobile-links">
+                <li><a href="../../../index.html#about">About</a></li>
+                <li><a href="../../../browser-apps/apps_and_tools.html">Apps & Tools</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" href="#">
+                        Other Stuff <i class="fas fa-chevron-down"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://chalwk.github.io/CPAS/">CPAS</a></li>
+                        <li class="dropdown-submenu">
+                            <a class="submenu-toggle" href="#">
+                                Education <i class="fas fa-chevron-right"></i>
+                            </a>
+                            <ul class="submenu">
+                                <li><a href="../../../education/understanding-autism.html">Understanding Autism</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Grocery List</a></li>
+            </ul>
+        </nav>
     </div>
 </header>
 
-<main>
-    <!-- Grocery categories will be generated by JavaScript -->
+<main class="section" style="padding-top: 2rem;">
+    <div class="container">
+        <section class="panel" style="margin-bottom: 2rem;">
+            <div class="panel-head" style="text-align: center;">
+                <h1 style="color: var(--primary); margin-bottom: 0.5rem;">
+                    <i class="fas fa-shopping-cart"></i> Grocery List
+                </h1>
+                <p class="muted" style="color: var(--gray); margin-bottom: 1rem;">
+                    ⚠️ Check an item to indicate that it needs to be purchased.
+                </p>
+            </div>
+
+            <div class="search-container" style="margin-bottom: 1.5rem;">
+                <div style="max-width: 500px; margin: 0 auto;">
+                    <label for="searchInput"></label><input id="searchInput" type="text"
+                                                            placeholder="Search groceries..."
+                                                            style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--gray-light);
+                                  border-radius: var(--radius); font-size: 1rem;">
+                </div>
+            </div>
+
+            <div class="controls"
+                 style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; margin-bottom: 1.5rem;">
+                <button class="btn btn-primary active" data-filter="all">All Items</button>
+                <button class="btn btn-secondary" data-filter="needed">Items Needed</button>
+
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle">
+                        More Actions <i class="fas fa-chevron-down" style="font-size: 0.8rem;"></i>
+                    </button>
+                    <div class="dropdown-menu" style="top: 100%; left: 0; margin-top: 0.5rem;">
+                        <button class="btn btn-secondary" id="clearAll"
+                                style="justify-content: flex-start; width: 100%; border: none; border-radius: 0;">Clear
+                            All
+                        </button>
+                        <button class="btn btn-secondary" id="exportBtn"
+                                style="justify-content: flex-start; width: 100%; border: none; border-radius: 0;">Export
+                            List
+                        </button>
+                        <button class="btn btn-secondary" id="importBtn"
+                                style="justify-content: flex-start; width: 100%; border: none; border-radius: 0;">Import
+                            List
+                        </button>
+                        <button class="btn btn-secondary" id="addCategoryBtn"
+                                style="justify-content: flex-start; width: 100%; border: none; border-radius: 0;">Add
+                            Category
+                        </button>
+                        <button class="btn btn-secondary" id="addItemBtn"
+                                style="justify-content: flex-start; width: 100%; border: none; border-radius: 0;">Add
+                            Item
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                    gap: 1rem; background: var(--light); padding: 1rem; border-radius: var(--radius);
+                    margin-bottom: 2rem; border: 1px solid var(--gray-light);">
+                <div class="stat-item" style="text-align: center;">
+                    <div class="stat-value" id="totalItems"
+                         style="font-size: 1.75rem; font-weight: 700; color: var(--primary);">0
+                    </div>
+                    <div class="stat-label" style="font-size: 0.9rem; color: var(--gray);">Total Items</div>
+                </div>
+                <div class="stat-item" style="text-align: center;">
+                    <div class="stat-value" id="neededItems"
+                         style="font-size: 1.75rem; font-weight: 700; color: var(--primary);">0
+                    </div>
+                    <div class="stat-label" style="font-size: 0.9rem; color: var(--gray);">Items Needed</div>
+                </div>
+                <div class="stat-item" style="text-align: center;">
+                    <div class="stat-value" id="totalPrice"
+                         style="font-size: 1.75rem; font-weight: 700; color: var(--primary);">$0.00
+                    </div>
+                    <div class="stat-label" style="font-size: 0.9rem; color: var(--gray);">Total Price</div>
+                </div>
+            </div>
+
+            <div class="grocery-content"></div>
+        </section>
+    </div>
 </main>
 
-<!-- Modal for adding/editing categories -->
 <div class="modal" id="categoryModal">
-    <div class="modal-content">
+    <div class="modal-content" style="max-width: 400px;">
         <span class="close">&times;</span>
-        <h2 id="categoryModalTitle">Add Category</h2>
+        <h3 id="categoryModalTitle" style="color: var(--primary); margin-bottom: 1rem;">Add Category</h3>
         <form id="categoryForm">
-            <label for="categoryName">Category Name:</label>
-            <input id="categoryName" required type="text">
-            <div class="modal-buttons">
-                <button type="submit">Save</button>
-                <button id="cancelCategory" type="button">Cancel</button>
+            <label for="categoryName"
+                   style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--dark);">Category
+                Name:</label>
+            <input id="categoryName" type="text" required style="width: 100%; padding: 0.75rem; margin-bottom: 1.5rem;
+                   border: 1px solid var(--gray-light); border-radius: var(--radius);">
+            <div class="modal-buttons" style="display: flex; gap: 0.5rem; justify-content: flex-end;">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <button id="cancelCategory" type="button" class="btn btn-secondary">Cancel</button>
             </div>
         </form>
     </div>
 </div>
 
-<!-- Modal for adding/editing items -->
 <div class="modal" id="itemModal">
-    <div class="modal-content">
+    <div class="modal-content" style="max-width: 500px;">
         <span class="close">&times;</span>
-        <h2 id="itemModalTitle">Add Item</h2>
+        <h3 id="itemModalTitle" style="color: var(--primary); margin-bottom: 1rem;">Add Item</h3>
         <form id="itemForm">
-            <label for="itemCategory">Category:</label>
-            <select id="itemCategory" required>
-                <!-- Categories will be populated by JavaScript -->
-            </select>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <div>
+                    <label for="itemCategory"
+                           style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--dark);">Category:</label>
+                    <select id="itemCategory" required
+                            style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius);">
+                    </select>
+                </div>
 
-            <label for="itemName">Item Name:</label>
-            <input id="itemName" required type="text">
+                <div>
+                    <label for="itemName"
+                           style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--dark);">Item
+                        Name:</label>
+                    <input id="itemName" type="text" required
+                           style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius);">
+                </div>
 
-            <label for="itemPrice">Price:</label>
-            <input id="itemPrice" placeholder="$0.00" type="text">
+                <div>
+                    <label for="itemPrice"
+                           style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--dark);">Price:</label>
+                    <input id="itemPrice" type="text" placeholder="$0.00"
+                           style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius);">
+                </div>
 
-            <label for="itemLocation">Store/Location:</label>
-            <input id="itemLocation" type="text">
+                <div>
+                    <label for="itemLocation"
+                           style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--dark);">Store/Location:</label>
+                    <input id="itemLocation" type="text"
+                           style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius);">
+                </div>
 
-            <label for="itemDescription">Description:</label>
-            <textarea id="itemDescription" rows="3"></textarea>
+                <div>
+                    <label for="itemDescription"
+                           style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--dark);">Description:</label>
+                    <textarea id="itemDescription" rows="3"
+                              style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius); resize: vertical;"></textarea>
+                </div>
 
-            <div class="modal-buttons">
-                <button type="submit">Save</button>
-                <button id="cancelItem" type="button">Cancel</button>
-                <button id="deleteItem" style="display: none; background-color: #e74c3c;" type="button">Delete</button>
+                <div class="modal-buttons" style="display: flex; gap: 0.5rem; justify-content: flex-end;">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button id="cancelItem" type="button" class="btn btn-secondary">Cancel</button>
+                    <button id="deleteItem" type="button" class="btn"
+                            style="background-color: var(--error); color: white; display: none;">Delete
+                    </button>
+                </div>
             </div>
         </form>
     </div>
 </div>
 
-<!-- Hidden file input for import -->
-<input accept=".json" id="importFile" style="display: none;" type="file">
+<input type="file" id="importFile" accept=".json" style="display: none;">
 
+<footer>
+    <div class="footer-container">
+        <div class="social-icons">
+            <a href="https://discord.com/channels/@me/707058110396760094" target="_blank" aria-label="Discord">
+                <i class="fab fa-discord"></i>
+            </a>
+            <a href="https://github.com/Chalwk" target="_blank" aria-label="GitHub">
+                <i class="fab fa-github"></i>
+            </a>
+        </div>
+        <p class="footer-copyright"></p>
+    </div>
+</footer>
+
+<script src="../../../nav.js"></script>
 <script src="script.js"></script>
 <script>
-    // Register service worker for PWA functionality
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
             navigator.serviceWorker.register('sw.js')

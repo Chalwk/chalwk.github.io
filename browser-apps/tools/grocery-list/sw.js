@@ -15,7 +15,6 @@ const urlsToCache = [
     '/browser-apps/tools/grocery-list/icons/icon-512x512.png'
 ];
 
-// Install event - cache essential files
 self.addEventListener('install', function(event) {
     console.log('Service Worker installing.');
     event.waitUntil(
@@ -27,7 +26,6 @@ self.addEventListener('install', function(event) {
     );
 });
 
-// Activate event - clean up old caches
 self.addEventListener('activate', function(event) {
     console.log('Service Worker activating.');
     event.waitUntil(
@@ -44,27 +42,22 @@ self.addEventListener('activate', function(event) {
     );
 });
 
-// Fetch event - serve from cache or network
 self.addEventListener('fetch', function(event) {
     event.respondWith(
         caches.match(event.request)
             .then(function(response) {
-            // Cache hit - return response
             if (response) {
                 return response;
             }
 
-            // Clone the request because it's a one-time use stream
             const fetchRequest = event.request.clone();
 
             return fetch(fetchRequest).then(
                 function(response) {
-                    // Check if we received a valid response
                     if (!response || response.status !== 200 || response.type !== 'basic') {
                         return response;
                     }
 
-                    // Clone the response because it's a one-time use stream
                     const responseToCache = response.clone();
 
                     caches.open(CACHE_NAME)
@@ -75,8 +68,6 @@ self.addEventListener('fetch', function(event) {
                     return response;
                 }
             ).catch(function() {
-                // If both cache and network fail, show a custom offline page
-                // For this app, we'll just let it fail gracefully since it works offline with localStorage
                 console.log('Fetch failed; returning offline page.');
             });
         })
