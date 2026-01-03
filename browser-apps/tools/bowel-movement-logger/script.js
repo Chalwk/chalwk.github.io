@@ -6,7 +6,6 @@ Bowel Movement Logger JavaScript
 
 let bowelMovementData = [];
 
-// Sample data for demonstration
 const sampleData = [
     { id: 1, date: "2025-10-05", time: "08:30", type: "3", notes: "Normal movement" },
     { id: 2, date: "2025-10-07", time: "09:15", type: "4", notes: "Slightly loose" },
@@ -25,26 +24,21 @@ const sampleData = [
     { id: 15, date: "2025-11-03", time: "08:45 / 16:00", type: "3/5", notes: "Two movements, second one loose" }
 ];
 
-// Flag to track if using sample data
 let isUsingSampleData = false;
 
-// Check if data is empty and load sample data
 function checkAndLoadSampleData() {
     const savedData = localStorage.getItem('bowelMovementData');
 
     if (!savedData || savedData === '[]') {
-        // No data exists, load sample data
         loadSampleData();
         showSampleDataNotification();
     } else {
-        // Check if it's sample data by looking at content
         try {
             const parsed = JSON.parse(savedData);
             if (parsed.length === 0) {
                 loadSampleData();
                 showSampleDataNotification();
             } else {
-                // Check if this looks like our sample data
                 const firstEntry = parsed[0];
                 if (firstEntry && firstEntry.id === 1 && firstEntry.date === "2025-12-15") {
                     isUsingSampleData = true;
@@ -57,13 +51,11 @@ function checkAndLoadSampleData() {
     }
 }
 
-// Load sample data
 function loadSampleData() {
     bowelMovementData = [...sampleData];
     saveData();
     isUsingSampleData = true;
 
-    // Normalize dates and update display
     normalizeAllDates();
     renderLogTable();
     updatePredictionAndStats();
@@ -72,27 +64,20 @@ function loadSampleData() {
     return bowelMovementData;
 }
 
-// Clear sample data and start fresh
 function clearSampleData() {
     if (confirm('This will clear all sample data and allow you to start with your own entries. Continue?')) {
         bowelMovementData = [];
         localStorage.removeItem('bowelMovementData');
         isUsingSampleData = false;
 
-        // Update UI
         renderLogTable();
         updatePredictionAndStats();
         populateMonthFilter();
-
-        // Hide notification
         hideSampleDataNotification();
-
-        // Show success message
         alert('Sample data cleared! You can now add your own entries.');
     }
 }
 
-// Show sample data notification
 function showSampleDataNotification() {
     const notification = document.getElementById('sampleDataNotification');
     if (notification) {
@@ -101,7 +86,6 @@ function showSampleDataNotification() {
     isUsingSampleData = true;
 }
 
-// Hide sample data notification
 function hideSampleDataNotification() {
     const notification = document.getElementById('sampleDataNotification');
     if (notification) {
@@ -110,16 +94,11 @@ function hideSampleDataNotification() {
     isUsingSampleData = false;
 }
 
-// Date normalization with multiple format support
 function normalizeDateString(s) {
     if (!s) return null;
 
-    // If already ISO yyyy-mm-dd
     if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
 
-    // Try multiple date formats in order of likelihood
-
-    // Format 1: DD-MM-YYYY (from JSON import)
     const dd_mm_yyyy_match = s.match(/^(\d{1,2})-(\d{1,2})-(\d{4})$/);
     if (dd_mm_yyyy_match) {
         const day = dd_mm_yyyy_match[1].padStart(2, '0');
@@ -128,7 +107,6 @@ function normalizeDateString(s) {
         return `${year}-${month}-${day}`;
     }
 
-    // Format 2: D-MM-YYYY (single digit day)
     const d_mm_yyyy_match = s.match(/^(\d{1})-(\d{1,2})-(\d{4})$/);
     if (d_mm_yyyy_match) {
         const day = d_mm_yyyy_match[1].padStart(2, '0');
@@ -137,13 +115,11 @@ function normalizeDateString(s) {
         return `${year}-${month}-${day}`;
     }
 
-    // Format 3: Month name format with implied year (assume current or previous year)
     const monthMap = {
         'jan': 0, 'feb': 1, 'mar': 2, 'apr': 3, 'may': 4, 'jun': 5,
         'jul': 6, 'aug': 7, 'sep': 8, 'oct': 9, 'nov': 10, 'dec': 11
     };
 
-    // Match patterns like "Sun, Dec 7", "Mon, Jan 15", etc.
     const monthNameMatch = s.toLowerCase().match(/(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\s+(\d{1,2})/);
     if (monthNameMatch) {
         const monthName = monthNameMatch[1];
@@ -151,14 +127,12 @@ function normalizeDateString(s) {
         const month = monthMap[monthName];
 
         if (month !== undefined && !isNaN(day)) {
-            // Determine year: if month is in future (relative to today's month), use previous year
             const today = new Date();
             const currentMonth = today.getMonth();
             const currentYear = today.getFullYear();
 
             let year = currentYear;
             if (month > currentMonth) {
-                // If the month in the date is after current month, it's likely from last year
                 year = currentYear - 1;
             }
 
@@ -167,10 +141,8 @@ function normalizeDateString(s) {
         }
     }
 
-    // Format 4: Try parsing as-is (fallback)
     let d = new Date(s);
     if (isNaN(d)) {
-        // Try with current year appended
         d = new Date(s + ' ' + new Date().getFullYear());
     }
 
@@ -185,7 +157,6 @@ function normalizeDateString(s) {
     return null;
 }
 
-// Function to normalize all dates in the dataset
 function normalizeAllDates() {
     let normalizedCount = 0;
     let errorCount = 0;
@@ -206,7 +177,6 @@ function normalizeAllDates() {
         }
     });
 
-    // Sort by normalized date
     bowelMovementData.sort((a, b) => {
         const dateA = new Date(a.date);
         const dateB = new Date(b.date);
@@ -217,7 +187,6 @@ function normalizeAllDates() {
     return bowelMovementData;
 }
 
-// Format date for display
 function formatDateForDisplay(dateString) {
     const date = new Date(dateString);
     if (isNaN(date)) return dateString;
@@ -225,7 +194,6 @@ function formatDateForDisplay(dateString) {
     return date.toLocaleDateString('en-US', options);
 }
 
-// Get type class based on Bristol Stool Type
 function getTypeClass(type) {
     if (type.includes('1') || type.includes('2')) return 'type-1';
     if (type.includes('3')) return 'type-3';
@@ -233,35 +201,28 @@ function getTypeClass(type) {
     return '';
 }
 
-// Extract Individual Events
 function extractIndividualEvents() {
     const events = [];
     let errorCount = 0;
 
     bowelMovementData.forEach(entry => {
         try {
-            // Split times and types
             const times = entry.time.split(' / ');
             const types = entry.type.split('/');
             const notes = entry.notes;
 
-            // Create an event for each movement
             for (let i = 0; i < Math.max(times.length, types.length); i++) {
                 const time = times[i] ? times[i].trim() : '';
                 const type = types[i] ? types[i].trim() : '3';
 
                 if (time) {
-                    // Parse time (handle approximate times with ~)
                     const cleanTime = time.replace('~', '');
 
-                    // Combine date and time for full timestamp
                     let dateTime;
 
                     try {
-                        // Try parsing as ISO string first
                         dateTime = new Date(`${entry.date}T${cleanTime}:00`);
 
-                        // If that fails, try alternative parsing
                         if (isNaN(dateTime)) {
                             const [hours, minutes] = cleanTime.split(':').map(Number);
                             const date = new Date(entry.date);
@@ -270,7 +231,6 @@ function extractIndividualEvents() {
                         }
                     } catch (timeError) {
                         console.warn(`Error parsing time "${time}" for entry ${entry.id}:`, timeError);
-                        // Fallback to date without time
                         dateTime = new Date(entry.date);
                     }
 
@@ -290,7 +250,6 @@ function extractIndividualEvents() {
                         console.warn(`Invalid datetime for entry ${entry.id}, time: ${time}`);
                     }
                 } else {
-                    // If no time, use just the date
                     const dateTime = new Date(entry.date);
                     if (!isNaN(dateTime.getTime())) {
                         events.push({
@@ -312,7 +271,6 @@ function extractIndividualEvents() {
         }
     });
 
-    // Sort by timestamp
     const sortedEvents = events.sort((a, b) => a.timestamp - b.timestamp);
 
     if (errorCount > 0) {
@@ -322,7 +280,6 @@ function extractIndividualEvents() {
     return sortedEvents;
 }
 
-// Calculate intervals between events (in hours)
 function calculateEventIntervals(events) {
     if (events.length < 2) return [];
 
@@ -367,7 +324,7 @@ function getRecencyWeights(events, decayFactor = 0.95) {
     const now = Date.now();
 
     for (let i = 0; i < events.length - 1; i++) {
-        const age = (now - events[i].timestamp) / (1000 * 60 * 60 * 24); // Age in days
+        const age = (now - events[i].timestamp) / (1000 * 60 * 60 * 24);
         const weight = Math.pow(decayFactor, age);
         weights.push(weight);
     }
@@ -375,25 +332,21 @@ function getRecencyWeights(events, decayFactor = 0.95) {
     return weights;
 }
 
-// Poisson probability model for predicting events
 function calculatePoissonProbabilities(avgEventsPerDay) {
     if (avgEventsPerDay <= 0) return { p24: 0, p48: 0, p72: 0 };
 
-    // Poisson formula: P(k > 0) = 1 - e^(-λt)
-    const lambda = avgEventsPerDay; // Rate parameter
-
-    const p24 = 1 - Math.exp(-lambda * 1); // Next 24 hours
-    const p48 = 1 - Math.exp(-lambda * 2); // Next 48 hours
-    const p72 = 1 - Math.exp(-lambda * 3); // Next 72 hours
+    const lambda = avgEventsPerDay;
+    const p24 = 1 - Math.exp(-lambda * 1);
+    const p48 = 1 - Math.exp(-lambda * 2);
+    const p72 = 1 - Math.exp(-lambda * 3);
 
     return {
-        p24: Math.min(p24, 0.99), // Cap at 99%
+        p24: Math.min(p24, 0.99),
         p48: Math.min(p48, 0.99),
         p72: Math.min(p72, 0.99)
     };
 }
 
-// Day-of-week analysis
 function analyzeDayOfWeekPattern(events) {
     const dayCounts = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
 
@@ -402,7 +355,6 @@ function analyzeDayOfWeekPattern(events) {
         dayCounts[day] = (dayCounts[day] || 0) + 1;
     });
 
-    // Find most active day
     let maxDay = 0;
     let maxCount = 0;
     for (let day in dayCounts) {
@@ -417,11 +369,10 @@ function analyzeDayOfWeekPattern(events) {
     return {
         counts: dayCounts,
         mostActiveDay: dayNames[maxDay],
-        dayFactor: maxCount / (events.length / 7) // Ratio to average
+        dayFactor: maxCount / (events.length / 7)
     };
 }
 
-// Time-of-day analysis
 function analyzeTimeOfDayPattern(events) {
     const hourCounts = Array(24).fill(0);
 
@@ -430,7 +381,6 @@ function analyzeTimeOfDayPattern(events) {
         hourCounts[hour] = (hourCounts[hour] || 0) + 1;
     });
 
-    // Find peak hours
     const peakHour = hourCounts.indexOf(Math.max(...hourCounts));
 
     return {
@@ -442,11 +392,9 @@ function analyzeTimeOfDayPattern(events) {
     };
 }
 
-// Outlier detection
 function detectOutliers(intervals) {
     if (intervals.length < 3) return { outliers: [], cleanedIntervals: intervals };
 
-    // Calculate quartiles
     const sorted = [...intervals].sort((a, b) => a - b);
     const q1 = sorted[Math.floor(sorted.length * 0.25)];
     const q3 = sorted[Math.floor(sorted.length * 0.75)];
@@ -461,11 +409,9 @@ function detectOutliers(intervals) {
     return { outliers, cleanedIntervals };
 }
 
-// Trend detection
 function detectTrend(events) {
     if (events.length < 4) return { trend: 'insufficient data', slope: 0 };
 
-    // Simple linear regression for frequency trend
     const timestamps = events.map((e, i) => i);
     const intervals = calculateEventIntervals(events);
 
@@ -499,11 +445,9 @@ function groupEventsByDate(events) {
     return grouped;
 }
 
-// Calculate intervals between days, not individual events
 function calculateDayIntervals(events) {
     if (events.length < 2) return [];
 
-    // Group events by date and get unique dates
     const grouped = groupEventsByDate(events);
     const uniqueDates = Object.keys(grouped).sort();
 
@@ -534,15 +478,11 @@ function calculateEnhancedPrediction() {
         };
     }
 
-    // Group events by date
     const grouped = groupEventsByDate(events);
     const uniqueDates = Object.keys(grouped).sort();
-
-    // Calculate intervals between days
     const dayIntervals = calculateDayIntervals(events);
 
     if (dayIntervals.length === 0) {
-        // Only one day with data
         return {
             nextDate: null,
             avgFrequency: 0,
@@ -554,66 +494,46 @@ function calculateEnhancedPrediction() {
         };
     }
 
-    // Calculate statistics based on DAY intervals
     const intervalsInDays = dayIntervals;
     const meanInterval = intervalsInDays.reduce((a, b) => a + b, 0) / intervalsInDays.length;
     const medianInterval = intervalsInDays.sort((a, b) => a - b)[Math.floor(intervalsInDays.length / 2)];
     const trimmedMeanInterval = calculateTrimmedMean(intervalsInDays, 0.1);
 
-    // Get recency weights based on dates (not individual events)
     const recencyWeights = getRecencyWeights(events);
     const weightedMeanInterval = calculateWeightedMean(intervalsInDays, recencyWeights);
 
-    // Handle outliers
     const { outliers, cleanedIntervals } = detectOutliers(intervalsInDays);
     const outlierAdjustedMean = cleanedIntervals.length > 0 ?
     cleanedIntervals.reduce((a, b) => a + b, 0) / cleanedIntervals.length :
     weightedMeanInterval;
 
-    // Calculate events per day rate (Poisson parameter)
     const firstDate = new Date(uniqueDates[0]);
     const lastDate = new Date(uniqueDates[uniqueDates.length - 1]);
     const totalDaysSpan = (lastDate - firstDate) / (1000 * 60 * 60 * 24);
     const totalDaysWithEvents = uniqueDates.length;
-    //----------------------------------------------------------------------------//
-    // EVENT-BASED:
-    //const eventsPerDay = totalDaysWithEvents / Math.max(totalDaysSpan, 1);
-
-    // FREQUENCY-BASED:
     const eventsPerDay = events.length / Math.max(totalDaysSpan, 1);
-    //----------------------------------------------------------------------------//
-
-    // Calculate probabilities using Poisson model
     const probabilities = calculatePoissonProbabilities(eventsPerDay);
-
-    // Get last event date (not last individual event)
     const lastEventDate = new Date(uniqueDates[uniqueDates.length - 1]);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    // Check if we already had events today
     const todayStr = today.toISOString().split('T')[0];
     const hasEventsToday = grouped[todayStr] !== undefined;
 
     const daysSinceLast = hasEventsToday ? 0 : Math.floor((today - lastEventDate) / (1000 * 60 * 60 * 24));
 
-    // Predict next event
     let nextDate;
     if (hasEventsToday) {
-        // If we already had events today, predict for tomorrow based on average interval
         nextDate = new Date(today);
         nextDate.setDate(nextDate.getDate() + (outlierAdjustedMean || weightedMeanInterval));
     } else {
-        // If no events today, predict from last event date
         nextDate = new Date(lastEventDate);
         nextDate.setDate(nextDate.getDate() + (outlierAdjustedMean || weightedMeanInterval));
     }
 
-    // Generate prediction text
     let predictionText;
 
     if (hasEventsToday) {
-        // Already had events today
         if (probabilities.p24 > 0.3) {
             predictionText = 'Possibly tomorrow';
         } else {
@@ -622,7 +542,6 @@ function calculateEnhancedPrediction() {
             predictionText = formatDateForDisplay(tomorrow.toISOString().split('T')[0]);
         }
     } else {
-        // No events today
         if (probabilities.p24 > 0.7) {
             predictionText = 'Very likely today';
         } else if (probabilities.p24 > 0.4) {
@@ -675,7 +594,6 @@ function calculateDaysSinceLast(events) {
     return Math.floor((today - lastDate) / (1000 * 60 * 60 * 24));
 }
 
-// Update prediction display with enhanced information
 function updateEnhancedPredictionDisplay(prediction) {
     const nextPredictionElement = document.getElementById('nextPrediction');
     if (!nextPredictionElement) return;
@@ -748,7 +666,6 @@ function updateDetailedStatistics(prediction) {
             statsGrid.appendChild(detailedStatsContainer);
         }
     } else if (detailedStatsContainer && prediction.stats) {
-        // Update existing stats cards
         const statCards = detailedStatsContainer.querySelectorAll('.stat-card');
         if (statCards.length >= 4) {
             statCards[0].querySelector('.stat-value').textContent = prediction.stats.eventsPerDay || '0.0';
@@ -759,7 +676,6 @@ function updateDetailedStatistics(prediction) {
     }
 }
 
-// Calculate statistics
 function calculateStatistics() {
     const events = extractIndividualEvents();
     const totalEntries = events.length;
@@ -784,7 +700,6 @@ function calculateStatistics() {
 
     let currentStreak = 0;
     if (events.length > 0) {
-        // Group events by date
         const eventsByDate = {};
         events.forEach(event => {
             const date = event.date;
@@ -818,7 +733,6 @@ function calculateStatistics() {
     };
 }
 
-// Render the log table
 function renderLogTable(data = bowelMovementData) {
     const tableBody = document.getElementById('logTableBody');
     if (!tableBody) return;
@@ -867,7 +781,6 @@ function renderLogTable(data = bowelMovementData) {
     });
 }
 
-// Create a time/type pair element
 function createTimeTypePair(time = '', type = '3') {
     const pairDiv = document.createElement('div');
     pairDiv.className = 'time-type-pair';
@@ -913,7 +826,6 @@ function addEntry() {
     document.getElementById('entryModal').style.display = 'flex';
 }
 
-// Edit an entry
 function editEntry(id) {
     const entry = bowelMovementData.find(item => item.id === id);
     if (!entry) return;
@@ -938,7 +850,6 @@ function editEntry(id) {
     document.getElementById('entryModal').style.display = 'flex';
 }
 
-// Delete an entry
 function deleteEntry(id) {
     if (confirm('Are you sure you want to delete this entry?')) {
         bowelMovementData = bowelMovementData.filter(item => item.id !== id);
@@ -949,7 +860,6 @@ function deleteEntry(id) {
     }
 }
 
-// Save the form data
 function saveEntry(event) {
     event.preventDefault();
 
@@ -966,41 +876,33 @@ function saveEntry(event) {
     const timeString = times.join(' / ');
     const typeString = types.join('/');
 
-    // Check if we're trying to save an entry with a date that already exists (for a different entry)
     const existingEntryIndex = bowelMovementData.findIndex(item =>
     item.date === date && item.id !== parseInt(id)
     );
 
     if (existingEntryIndex !== -1) {
-        // Date already exists for a different entry
         if (confirm(`An entry already exists for ${date}. Would you like to merge this with the existing entry instead?`)) {
-            // Merge with existing entry
             const existingEntry = bowelMovementData[existingEntryIndex];
 
-            // Combine times (avoiding duplicates)
             const existingTimes = existingEntry.time.split(' / ').filter(t => t);
             const existingTypes = existingEntry.type.split('/').filter(t => t);
 
             const allTimes = [...existingTimes, ...times];
             const allTypes = [...existingTypes, ...types];
 
-            // Update existing entry
             existingEntry.time = allTimes.join(' / ');
             existingEntry.type = allTypes.join('/');
 
-            // Combine notes if needed
             if (notes && !existingEntry.notes) {
                 existingEntry.notes = notes;
             } else if (notes && existingEntry.notes && notes !== existingEntry.notes) {
                 existingEntry.notes = `${existingEntry.notes}; ${notes}`;
             }
 
-            // If we were editing another entry, remove it since we merged
             if (id) {
                 bowelMovementData = bowelMovementData.filter(item => item.id !== parseInt(id));
             }
         } else {
-            // User wants to keep as separate entry (maybe they want to track multiple distinct events)
             if (id) {
                 const index = bowelMovementData.findIndex(item => item.id === parseInt(id));
                 if (index !== -1) {
@@ -1024,7 +926,6 @@ function saveEntry(event) {
             }
         }
     } else {
-        // Normal save logic (no date conflict)
         if (id) {
             const index = bowelMovementData.findIndex(item => item.id === parseInt(id));
             if (index !== -1) {
@@ -1055,13 +956,10 @@ function saveEntry(event) {
     closeModal();
 }
 
-// Save data to localStorage
 function saveData() {
     localStorage.setItem('bowelMovementData', JSON.stringify(bowelMovementData));
 
-    // If user is saving their own data, clear sample data flag
     if (isUsingSampleData && bowelMovementData.length > 0) {
-        // Check if this is still the sample data
         const isStillSampleData = bowelMovementData.some(entry =>
         entry.id <= 15 && entry.date.startsWith('2025-01')
         );
@@ -1082,14 +980,13 @@ function loadData() {
             if (Array.isArray(parsed)) {
                 bowelMovementData = parsed;
 
-                // Check if we have imported JSON data (might have mixed date formats)
                 if (bowelMovementData.length > 0 && bowelMovementData[0].date &&
                 (bowelMovementData[0].date.includes('-') ||
                 bowelMovementData[0].date.includes(','))) {
 
                     console.log('Detected imported data, normalizing dates...');
                     normalizeAllDates();
-                    saveData(); // Save normalized data
+                    saveData();
                 }
             }
         } catch (e) {
@@ -1099,7 +996,6 @@ function loadData() {
     }
 }
 
-// Export data as JSON file
 function exportData() {
     const dataStr = JSON.stringify(bowelMovementData, null, 2);
     const dataBlob = new Blob([dataStr], { type: 'application/json' });
@@ -1130,12 +1026,10 @@ function importData() {
             try {
                 const importedData = JSON.parse(e.target.result);
 
-                // Basic validation
                 if (!Array.isArray(importedData)) {
                     throw new Error('Invalid data format: Expected array');
                 }
 
-                // Validate each entry has required fields
                 const isValid = importedData.every(entry =>
                 entry.id !== undefined &&
                 entry.date &&
@@ -1150,7 +1044,6 @@ function importData() {
                 if (confirm(`Import ${importedData.length} entries? This will replace your current data.`)) {
                     bowelMovementData = importedData;
 
-                    // Normalize dates immediately after import
                     normalizeAllDates();
 
                     saveData();
@@ -1171,7 +1064,6 @@ function importData() {
     input.click();
 }
 
-// Show import/export modal
 function showImportExportModal() {
     const modal = document.getElementById('importExportModal');
     if (modal) {
@@ -1179,7 +1071,6 @@ function showImportExportModal() {
     }
 }
 
-// Close import/export modal
 function closeImportExportModal() {
     const modal = document.getElementById('importExportModal');
     if (modal) {
@@ -1187,12 +1078,10 @@ function closeImportExportModal() {
     }
 }
 
-// Close the modal
 function closeModal() {
     document.getElementById('entryModal').style.display = 'none';
 }
 
-// Populate month filter
 function populateMonthFilter() {
     const monthFilter = document.getElementById('monthFilter');
     if (!monthFilter) return;
@@ -1213,7 +1102,6 @@ function populateMonthFilter() {
     });
 }
 
-// Apply filters
 function applyFilters() {
     const typeFilter = document.getElementById('typeFilter').value;
     const monthFilter = document.getElementById('monthFilter').value;
@@ -1253,12 +1141,10 @@ function calculateStdDev(arr) {
     return Math.sqrt(variance);
 }
 
-// Analytics functions
 function renderAnalytics() {
     const prediction = calculateEnhancedPrediction();
     const events = extractIndividualEvents();
 
-    // Update model details
     const modelDetailsElement = document.getElementById('modelDetails');
     if (modelDetailsElement) {
         if (prediction.stats && Object.keys(prediction.stats).length > 0) {
@@ -1276,7 +1162,6 @@ function renderAnalytics() {
         }
     }
 
-    // Render day of week chart
     const dayChart = document.getElementById('dayPatternChart');
     if (dayChart) {
         dayChart.innerHTML = '';
@@ -1307,7 +1192,6 @@ function renderAnalytics() {
         }
     }
 
-    // Render time of day chart
     const timeChart = document.getElementById('timePatternChart');
     if (timeChart) {
         timeChart.innerHTML = '';
@@ -1325,7 +1209,6 @@ function renderAnalytics() {
                 cell.title = `${hour}:00 - ${count} events`;
                 cell.style.opacity = isActive ? Math.min(count / 3, 1) : 0.3;
 
-                // Add hour label for key hours
                 if ([0, 6, 12, 18].includes(hour)) {
                     const label = document.createElement('div');
                     label.style.position = 'absolute';
@@ -1346,7 +1229,6 @@ function renderAnalytics() {
         }
     }
 
-    // Update trend analysis
     const trendAnalysisElement = document.getElementById('trendAnalysis');
     if (trendAnalysisElement) {
         if (prediction.patterns.trend && prediction.patterns.trend.trend !== 'insufficient data') {
@@ -1367,7 +1249,6 @@ function renderAnalytics() {
         }
     }
 
-    // Update statistical summary
     const statisticalSummaryElement = document.getElementById('statisticalSummary');
     if (statisticalSummaryElement) {
         const intervals = calculateEventIntervals(events);
@@ -1390,7 +1271,6 @@ function renderAnalytics() {
         }
     }
 
-    // Update outlier info
     const outlierInfoElement = document.getElementById('outlierInfo');
     if (outlierInfoElement) {
         const intervals = calculateEventIntervals(events);
@@ -1414,7 +1294,6 @@ function renderAnalytics() {
     }
 }
 
-// Show/hide analytics modal
 function showAnalyticsModal() {
     const modal = document.getElementById('analyticsModal');
     if (modal) {
@@ -1430,7 +1309,6 @@ function closeAnalyticsModal() {
     }
 }
 
-// Update prediction and stats
 function updatePredictionAndStats() {
     const prediction = calculateEnhancedPrediction();
     const stats = calculateStatistics();
@@ -1450,12 +1328,9 @@ function updatePredictionAndStats() {
     updateDetailedStatistics(prediction);
 }
 
-// Initialize the page
 document.addEventListener('DOMContentLoaded', function() {
-    // Check and load sample data if needed
     checkAndLoadSampleData();
 
-    // If sample data wasn't loaded, load from localStorage
     if (!isUsingSampleData) {
         loadData();
     }
@@ -1464,7 +1339,6 @@ document.addEventListener('DOMContentLoaded', function() {
     updatePredictionAndStats();
     populateMonthFilter();
 
-    // Set up event listeners
     const addEntryBtn = document.getElementById('addEntryBtn');
     if (addEntryBtn) addEntryBtn.addEventListener('click', addEntry);
 
@@ -1477,7 +1351,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const cancelBtn = document.getElementById('cancelBtn');
     if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
 
-    // Import/Export buttons
     const exportBtn = document.getElementById('exportBtn');
     if (exportBtn) exportBtn.addEventListener('click', exportData);
 
@@ -1493,7 +1366,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const cancelImportExportBtn = document.getElementById('cancelImportExportBtn');
     if (cancelImportExportBtn) cancelImportExportBtn.addEventListener('click', closeImportExportModal);
 
-    // Sample data button
     const clearSampleDataBtn = document.getElementById('clearSampleDataBtn');
     if (clearSampleDataBtn) clearSampleDataBtn.addEventListener('click', clearSampleData);
 
@@ -1503,7 +1375,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const hideSampleNotificationBtn = document.getElementById('hideSampleNotificationBtn');
     if (hideSampleNotificationBtn) hideSampleNotificationBtn.addEventListener('click', hideSampleDataNotification);
 
-    // Add/remove time-type pairs
     const addPairBtn = document.getElementById('addPairBtn');
     if (addPairBtn) {
         addPairBtn.addEventListener('click', function() {
@@ -1528,7 +1399,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Filter events
     const typeFilter = document.getElementById('typeFilter');
     if (typeFilter) typeFilter.addEventListener('change', applyFilters);
 
@@ -1538,7 +1408,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('searchInput');
     if (searchInput) searchInput.addEventListener('input', applyFilters);
 
-    // Modal close events
     const entryModal = document.getElementById('entryModal');
     if (entryModal) {
         entryModal.addEventListener('click', function(event) {
@@ -1557,7 +1426,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Analytics button listener
     const showAnalyticsBtn = document.getElementById('showAnalyticsBtn');
     if (showAnalyticsBtn) showAnalyticsBtn.addEventListener('click', showAnalyticsModal);
 

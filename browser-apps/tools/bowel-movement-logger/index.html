@@ -10,142 +10,209 @@ Bowel Movement Logger
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Bowel Movement Log</title>
+    <link href="../../../core.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
+          rel="stylesheet">
 </head>
 <body>
-<header>
-    <h1>💩Bowel Movement Logger💩</h1>
-    <p class="subtitle">Tracking your bowel health and patterns</p>
+<header class="header">
+    <div class="container">
+        <a class="logo" href="../../../index.html"> <i class="fas fa-code"></i> Jericho </a>
 
-    <div class="search-container">
-        <label for="searchInput"></label><input id="searchInput" placeholder="Search entries..." type="text">
+        <nav class="nav-desktop">
+            <ul class="nav-links">
+                <li><a href="../../../index.html#about">About</a></li>
+                <li><a href="../../../browser-apps/apps_and_tools.html">Apps & Tools</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" href="#">Other Stuff <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://chalwk.github.io/CPAS/">CPAS</a></li>
+                        <li class="dropdown-submenu">
+                            <a class="submenu-toggle" href="#">Education <i class="fas fa-chevron-right"></i></a>
+                            <ul class="submenu">
+                                <li><a href="../../../education/understanding-autism.html">Understanding Autism</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Bowel Log</a></li>
+            </ul>
+        </nav>
+
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <nav class="nav-mobile">
+            <ul class="nav-mobile-links">
+                <li><a href="../../../index.html#about">About</a></li>
+                <li><a href="../../../browser-apps/apps_and_tools.html">Apps & Tools</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" href="#">Other Stuff <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://chalwk.github.io/CPAS/">CPAS</a></li>
+                        <li class="dropdown-submenu">
+                            <a class="submenu-toggle" href="#">Education <i class="fas fa-chevron-right"></i></a>
+                            <ul class="submenu">
+                                <li><a href="../../../education/understanding-autism.html">Understanding Autism</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Bowel Log</a></li>
+            </ul>
+        </nav>
     </div>
 </header>
 
 <main>
+    <div class="container">
+        <div class="section">
+            <h1><i class="fas fa-chart-line highlight"></i> Bowel Movement Logger</h1>
+            <p class="muted">Tracking your bowel health and patterns</p>
 
-    <!-- Sample Data Notification -->
-    <div class="sample-data-notification" id="sampleDataNotification">
-        <div class="notification-content">
-            <span class="notification-icon">ℹ️</span>
-            <div class="notification-text">
-                <strong>Sample Data Loaded</strong>
-                <p>You're currently viewing sample data. Add your own entries or clear this data to start tracking your actual bowel movements.</p>
+            <div class="sample-data-notification" id="sampleDataNotification">
+                <div class="notification-content">
+                    <span class="notification-icon">ℹ️</span>
+                    <div class="notification-text">
+                        <strong>Sample Data Loaded</strong>
+                        <p>You're currently viewing sample data. Add your own entries or clear this data to start
+                            tracking your actual bowel movements.</p>
+                    </div>
+                    <div class="notification-buttons">
+                        <button class="btn btn-warning btn-sm" id="clearSampleDataBtn">Clear Sample Data</button>
+                        <button class="btn btn-secondary btn-sm" id="hideSampleNotificationBtn">Hide</button>
+                    </div>
+                </div>
             </div>
-            <div class="notification-buttons">
-                <button class="btn btn-warning btn-sm" id="clearSampleDataBtn">Clear Sample Data</button>
-                <button class="btn btn-secondary btn-sm" id="hideSampleNotificationBtn">Hide</button>
+
+            <div class="search-container" style="margin: 2rem 0;">
+                <label for="searchInput"></label><input id="searchInput" placeholder="Search entries..." type="text"
+                                                        class="form-control">
             </div>
+
+            <section class="panel" style="margin-bottom: 2rem;">
+                <div class="panel-head">
+                    <h2><i class="fas fa-chart-bar highlight"></i> Predictive Analysis</h2>
+                </div>
+                <div class="prediction-content">
+                    <div class="prediction-card prediction-highlight">
+                        <div class="prediction-label">Next Likely Movement</div>
+                        <div class="prediction-value" id="nextPrediction">Calculating...</div>
+                    </div>
+                    <div class="prediction-card">
+                        <div class="prediction-label">Average Frequency</div>
+                        <div class="prediction-value" id="avgFrequency">Calculating...</div>
+                    </div>
+                    <div class="prediction-card">
+                        <div class="prediction-label">Days Since Last</div>
+                        <div class="prediction-value" id="daysSinceLast">Calculating...</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="panel" style="margin-bottom: 2rem;">
+                <div class="panel-head">
+                    <h2><i class="fas fa-chart-pie highlight"></i> Statistics</h2>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalEntries">0</div>
+                        <div class="stat-label">Total Events</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="avgDaysBetween">0</div>
+                        <div class="stat-label">Avg Days Between</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="mostCommonType">-</div>
+                        <div class="stat-label">Most Common Type</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="currentStreak">0</div>
+                        <div class="stat-label">Current Streak</div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="controls" style="margin-bottom: 2rem;">
+                <div class="filter-controls">
+                    <label for="typeFilter"></label><select id="typeFilter" class="form-control">
+                    <option value="all">All Types</option>
+                    <option value="1">Type 1</option>
+                    <option value="2">Type 2</option>
+                    <option value="3">Type 3</option>
+                    <option value="4">Type 4</option>
+                    <option value="5">Type 5</option>
+                    <option value="6">Type 6</option>
+                </select>
+                    <label for="monthFilter"></label><select id="monthFilter" class="form-control">
+                    <option value="all">All Months</option>
+                </select>
+                </div>
+                <div class="action-controls">
+                    <button class="btn btn-primary" id="addEntryBtn">
+                        <i class="fas fa-plus"></i> Add Entry
+                    </button>
+                    <button class="btn btn-secondary" id="showImportExportBtn">
+                        <i class="fas fa-file-import"></i> Import/Export
+                    </button>
+                    <button class="btn btn-analytics" id="showAnalyticsBtn">
+                        <i class="fas fa-chart-line"></i> Analytics
+                    </button>
+                    <a class="btn btn-secondary" href="../../../index.html">
+                        <i class="fas fa-home"></i> Home
+                    </a>
+                </div>
+            </div>
+
+            <section class="panel" style="margin-bottom: 2rem;">
+                <div class="panel-head">
+                    <h2><i class="fas fa-info-circle highlight"></i> Bristol Stool Chart</h2>
+                </div>
+                <div class="legend-grid">
+                    <div class="legend-item">
+                        <span class="legend-colour danger"></span>
+                        <p>Types 1-2: Hard, dry, constipated</p>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-colour success"></span>
+                        <p>Type 3: Ideal, healthy</p>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-colour warning"></span>
+                        <p>Types 4-6: Soft, mushy, loose</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="panel">
+                <div class="panel-head">
+                    <h2><i class="fas fa-history highlight"></i> Bowel Movement History</h2>
+                </div>
+                <div class="table-container">
+                    <table class="log-table" id="logTable">
+                        <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Type</th>
+                            <th>Notes</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody id="logTableBody"></tbody>
+                    </table>
+                </div>
+            </section>
         </div>
     </div>
-
-    <!-- Prediction Section -->
-    <section class="prediction-section">
-        <h2 class="prediction-title">📊 Predictive Analysis</h2>
-        <div class="prediction-content">
-            <div class="prediction-card prediction-highlight">
-                <div class="prediction-label">Next Likely Movement</div>
-                <div class="prediction-value" id="nextPrediction">Calculating...</div>
-            </div>
-            <div class="prediction-card">
-                <div class="prediction-label">Average Frequency</div>
-                <div class="prediction-value" id="avgFrequency">Calculating...</div>
-            </div>
-            <div class="prediction-card">
-                <div class="prediction-label">Days Since Last</div>
-                <div class="prediction-value" id="daysSinceLast">Calculating...</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Stats Section -->
-    <section class="stats-section">
-        <h2 class="log-title">📈 Statistics</h2>
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-value" id="totalEntries">0</div>
-                <div class="stat-label">Total Events</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value" id="avgDaysBetween">0</div>
-                <div class="stat-label">Avg Days Between</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value" id="mostCommonType">-</div>
-                <div class="stat-label">Most Common Type</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value" id="currentStreak">0</div>
-                <div class="stat-label">Current Streak</div>
-            </div>
-            <!-- Additional stats will be added by JavaScript -->
-        </div>
-    </section>
-
-    <div class="controls">
-        <div class="filter-controls">
-            <label for="typeFilter"></label><select id="typeFilter">
-            <option value="all">All Types</option>
-            <option value="1">Type 1</option>
-            <option value="2">Type 2</option>
-            <option value="3">Type 3</option>
-            <option value="4">Type 4</option>
-            <option value="5">Type 5</option>
-            <option value="6">Type 6</option>
-        </select>
-            <label for="monthFilter"></label><select id="monthFilter">
-            <option value="all">All Months</option>
-            <!-- Months will be populated by JavaScript -->
-        </select>
-        </div>
-        <div class="action-controls">
-            <button class="btn btn-primary" id="addEntryBtn">Add New Entry</button>
-            <button class="btn btn-secondary" id="showImportExportBtn">Import/Export</button>
-            <button class="btn btn-analytics" id="showAnalyticsBtn">Advanced Analytics</button>
-            <a class="btn btn-warning" href="../../index.html">Home</a>
-        </div>
-    </div>
-
-    <section class="log-section">
-        <h2 class="log-title">Bowel Movement History</h2>
-        <section class="legend-section">
-            <h2 class="log-title">Legend (Bristol Stool Chart)</h2>
-            <div class="legend-grid">
-                <div class="legend-item">
-                    <span class="legend-colour danger"></span>
-                    <p>Types 1 to 2: Hard, dry, constipated</p>
-                </div>
-                <div class="legend-item">
-                    <span class="legend-colour success"></span>
-                    <p>Type 3: Ideal, healthy</p>
-                </div>
-                <div class="legend-item">
-                    <span class="legend-colour warning"></span>
-                    <p>Types 4 to 6: Soft, mushy, loose</p>
-                </div>
-            </div>
-        </section>
-
-        <div class="table-container">
-            <table class="log-table" id="logTable">
-                <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Time</th>
-                    <th>Type</th>
-                    <th>Notes</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody id="logTableBody">
-                <!-- Log entries will be generated by JavaScript -->
-                </tbody>
-            </table>
-        </div>
-    </section>
 </main>
 
-<!-- Add/Edit Entry Modal -->
 <div class="modal" id="entryModal">
     <div class="modal-content">
         <div class="modal-header">
@@ -161,10 +228,10 @@ Bowel Movement Logger
 
             <div class="form-group">
                 <label>Movements</label>
-                <div id="timeTypePairs">
-                    <!-- Time/Type pairs will be added here -->
-                </div>
-                <button class="add-pair-btn" id="addPairBtn" type="button">Add Another Movement</button>
+                <div id="timeTypePairs"></div>
+                <button class="btn btn-secondary" id="addPairBtn" type="button">
+                    <i class="fas fa-plus"></i> Add Another Movement
+                </button>
             </div>
 
             <div class="form-group">
@@ -172,54 +239,57 @@ Bowel Movement Logger
                 <textarea class="form-control" id="entryNotes" rows="3"></textarea>
             </div>
             <div class="form-group" style="display: flex; gap: 10px;">
-                <button class="btn btn-success" type="submit">Save</button>
-                <button class="btn btn-warning" id="cancelBtn" type="button">Cancel</button>
+                <button class="btn btn-primary" type="submit">
+                    <i class="fas fa-save"></i> Save
+                </button>
+                <button class="btn btn-secondary" id="cancelBtn" type="button">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
             </div>
         </form>
     </div>
 </div>
 
-<!-- Import/Export Modal -->
 <div class="modal" id="importExportModal">
     <div class="modal-content">
-        <div class="form-group" style="border-top: 1px solid var(--border); padding-top: 20px;">
-            <p>Load sample data to see how the app works. This will replace your current data.</p>
-            <button class="btn btn-info" id="loadSampleDataBtn" style="width: 100%; margin-bottom: 10px;">
-                📋 Load Sample Data
-            </button>
-            <small style="color: var(--text-light); display: block; margin-top: 5px;">
-                Note: Loading sample data will replace all current entries with demonstration data.
-            </small>
-        </div>
-
         <div class="modal-header">
             <h3 class="modal-title">Import/Export Data</h3>
             <button class="close-btn" id="closeImportExportBtn">&times;</button>
         </div>
         <div class="form-group">
             <p>Export your data as a JSON file for backup or transfer.</p>
-            <button class="btn btn-success" id="exportBtn" style="width: 100%; margin-bottom: 10px;">
-                📥 Export Data as JSON
+            <button class="btn btn-primary" id="exportBtn" style="width: 100%; margin-bottom: 10px;">
+                <i class="fas fa-download"></i> Export Data as JSON
             </button>
         </div>
         <div class="form-group">
             <p>Import previously exported data (will replace current data).</p>
-            <button class="btn btn-warning" id="importBtn" style="width: 100%; margin-bottom: 10px;">
-                📤 Import JSON File
+            <button class="btn btn-secondary" id="importBtn" style="width: 100%; margin-bottom: 10px;">
+                <i class="fas fa-upload"></i> Import JSON File
             </button>
-            <small style="color: var(--text-light); display: block; margin-top: 5px;">
+            <small style="color: var(--gray); display: block; margin-top: 5px;">
                 Note: Importing will replace all current entries.
             </small>
         </div>
+        <div class="form-group" style="border-top: 1px solid var(--gray-light); padding-top: 20px;">
+            <p>Load sample data to see how the app works. This will replace your current data.</p>
+            <button class="btn btn-secondary" id="loadSampleDataBtn" style="width: 100%; margin-bottom: 10px;">
+                <i class="fas fa-clipboard"></i> Load Sample Data
+            </button>
+            <small style="color: var(--gray); display: block; margin-top: 5px;">
+                Note: Loading sample data will replace all current entries with demonstration data.
+            </small>
+        </div>
         <div class="form-group" style="display: flex; gap: 10px; margin-top: 20px;">
-            <button class="btn btn-secondary" id="cancelImportExportBtn" style="flex: 1;">Close</button>
+            <button class="btn btn-secondary" id="cancelImportExportBtn" style="flex: 1;">
+                <i class="fas fa-times"></i> Close
+            </button>
         </div>
     </div>
 </div>
 
-<!-- Advanced Analytics Modal -->
-<div class="modal analytics-modal" id="analyticsModal">
-    <div class="modal-content">
+<div class="modal" id="analyticsModal">
+    <div class="modal-content" style="max-width: 800px; max-height: 80vh; overflow-y: auto;">
         <div class="modal-header">
             <h3 class="modal-title">Advanced Analytics & Patterns</h3>
             <button class="close-btn" id="closeAnalyticsBtn">&times;</button>
@@ -227,42 +297,38 @@ Bowel Movement Logger
         <div id="analyticsContent">
             <div class="analytics-grid">
                 <div class="analytics-card">
-                    <h4>📊 Prediction Model Details</h4>
+                    <h4><i class="fas fa-chart-line"></i> Prediction Model Details</h4>
                     <div id="modelDetails">
                         Loading model details...
                     </div>
                 </div>
 
                 <div class="analytics-card">
-                    <h4>📅 Day of Week Pattern</h4>
-                    <div class="day-of-week-chart" id="dayPatternChart">
-                        <!-- Will be populated by JavaScript -->
-                    </div>
+                    <h4><i class="fas fa-calendar"></i> Day of Week Pattern</h4>
+                    <div class="day-of-week-chart" id="dayPatternChart"></div>
                 </div>
 
                 <div class="analytics-card">
-                    <h4>🕒 Time of Day Pattern</h4>
-                    <div class="time-of-day-chart" id="timePatternChart">
-                        <!-- Will be populated by JavaScript -->
-                    </div>
+                    <h4><i class="fas fa-clock"></i> Time of Day Pattern</h4>
+                    <div class="time-of-day-chart" id="timePatternChart"></div>
                 </div>
 
                 <div class="analytics-card">
-                    <h4>📈 Trend Analysis</h4>
+                    <h4><i class="fas fa-trend-up"></i> Trend Analysis</h4>
                     <div id="trendAnalysis">
                         Loading trend analysis...
                     </div>
                 </div>
 
                 <div class="analytics-card">
-                    <h4>📊 Statistical Summary</h4>
+                    <h4><i class="fas fa-calculator"></i> Statistical Summary</h4>
                     <div id="statisticalSummary">
                         Loading statistics...
                     </div>
                 </div>
 
                 <div class="analytics-card">
-                    <h4>⚠️ Outlier Detection</h4>
+                    <h4><i class="fas fa-exclamation-triangle"></i> Outlier Detection</h4>
                     <div id="outlierInfo">
                         Loading outlier information...
                     </div>
@@ -270,12 +336,26 @@ Bowel Movement Logger
             </div>
 
             <div class="form-group" style="margin-top: 20px; text-align: center;">
-                <button class="btn btn-secondary" id="closeAnalyticsModalBtn">Close Analytics</button>
+                <button class="btn btn-secondary" id="closeAnalyticsModalBtn">
+                    <i class="fas fa-times"></i> Close Analytics
+                </button>
             </div>
         </div>
     </div>
 </div>
 
+<footer>
+    <div class="footer-container">
+        <div class="social-icons">
+            <a href="https://discord.com/channels/@me/707058110396760094" target="_blank" aria-label="Discord"> <i
+                    class="fab fa-discord"></i></a>
+            <a href="https://github.com/Chalwk" target="_blank" aria-label="GitHub"> <i class="fab fa-github"></i></a>
+        </div>
+        <p class="footer-copyright"></p>
+    </div>
+</footer>
+
+<script defer src="../../../nav.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
