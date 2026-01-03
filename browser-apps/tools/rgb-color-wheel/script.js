@@ -5,10 +5,8 @@ RGB Color Wheel JavaScript
 */
 
 (() => {
-    // --- helpers: conversions between color spaces ---
     function clamp(v, a = 0, b = 1) { return Math.min(b, Math.max(a, v)); }
 
-    // RGB <-> HSV
     function rgbToHsv(r, g, b) {
         r /= 255; g /= 255; b /= 255;
         const max = Math.max(r, g, b), min = Math.min(r, g, b);
@@ -44,7 +42,6 @@ RGB Color Wheel JavaScript
         };
     }
 
-    // RGB <-> HSL
     function rgbToHsl(r,g,b) {
         r/=255; g/=255; b/=255;
         const max = Math.max(r,g,b), min = Math.min(r,g,b);
@@ -77,7 +74,6 @@ RGB Color Wheel JavaScript
         return { r: Math.round((r1+m)*255), g: Math.round((g1+m)*255), b: Math.round((b1+m)*255) };
     }
 
-    // RGB <-> CMYK (0..100)
     function rgbToCmyk(r,g,b) {
         if (r === 0 && g === 0 && b === 0) return { c:0, m:0, y:0, k:100 };
         const rd = r/255, gd = g/255, bd = b/255;
@@ -116,7 +112,6 @@ RGB Color Wheel JavaScript
         };
     }
 
-    // --- UI wiring and wheel drawing ---
     const canvas = document.getElementById('colorWheel');
     const ctx = canvas.getContext('2d', { alpha: false });
     const picker = document.getElementById('picker');
@@ -137,7 +132,6 @@ RGB Color Wheel JavaScript
     let current = { r:255, g:0, b:0, a:1 };
     let userPalette = [];
 
-    // preset swatches
     const presets = [
         '#ff3b30','#ff9500','#ffcc00','#34c759','#5ac8fa','#007aff',
         '#5856d6','#ff2d55','#8e8e93','#1c1c1e','#ffffff','#000000',
@@ -199,23 +193,19 @@ RGB Color Wheel JavaScript
     loadUserPalette();
     makeSwatches(userSwatches, userPalette, true);
 
-    // draw color wheel using conic gradient + radial overlay for saturation/value
     function drawWheel(){
         const dpr = window.devicePixelRatio || 1;
         const w = canvas.clientWidth;
         const h = canvas.clientHeight;
 
-        // Set canvas dimensions accounting for device pixel ratio
         canvas.width = w * dpr;
         canvas.height = h * dpr;
         ctx.scale(dpr, dpr);
 
         const cx = w/2, cy = h/2, r = Math.min(w,h)/2;
 
-        // Clear and draw hue circle
         ctx.clearRect(0,0,w,h);
 
-        // Draw hue circle (full saturation and value)
         const hueG = ctx.createConicGradient(0, cx, cy);
         for (let i=0;i<=360;i+=30){
             hueG.addColorStop(i/360, `hsl(${i}, 100%, 50%)`);
@@ -227,7 +217,6 @@ RGB Color Wheel JavaScript
         ctx.fillStyle = hueG;
         ctx.fill();
 
-        // Draw saturation gradient (white to transparent)
         const satGrad = ctx.createRadialGradient(cx,cy,0, cx,cy,r);
         satGrad.addColorStop(0, 'rgba(255,255,255,1)');
         satGrad.addColorStop(1, 'rgba(255,255,255,0)');
@@ -237,7 +226,6 @@ RGB Color Wheel JavaScript
         ctx.closePath();
         ctx.fill();
 
-        // Draw value gradient (black overlay)
         const valGrad = ctx.createRadialGradient(cx,cy,0, cx,cy,r);
         valGrad.addColorStop(0, 'rgba(0,0,0,0)');
         valGrad.addColorStop(1, 'rgba(0,0,0,1)');
@@ -247,11 +235,9 @@ RGB Color Wheel JavaScript
         ctx.closePath();
         ctx.fill();
 
-        // Restore transform
         ctx.setTransform(1, 0, 0, 1, 0, 0);
     }
 
-    // Color from canvas at client coords
     function getCanvasColor(clientX, clientY){
         const rect = canvas.getBoundingClientRect();
         const x = clientX - rect.left;
@@ -260,9 +246,8 @@ RGB Color Wheel JavaScript
         const dx = x - cx, dy = y - cy;
         const d = Math.sqrt(dx*dx + dy*dy);
         const r = Math.min(cx, cy);
-        if (d > r) return null; // outside wheel
+        if (d > r) return null;
 
-        // read pixel
         const dpr = window.devicePixelRatio || 1;
         try {
             const px = Math.floor(x * dpr);
@@ -270,16 +255,13 @@ RGB Color Wheel JavaScript
             const data = ctx.getImageData(px, py, 1, 1).data;
             return { r: data[0], g: data[1], b: data[2], a: data[3]/255 };
         } catch(e) {
-            // fallback: approximate by geometry (use HSV mapping)
             const angle = (Math.atan2(dy, dx) * 180 / Math.PI + 360) % 360;
             const sat = clamp(d / r, 0, 1);
-            // interpret wheel as hue & saturation, value fixed at 1 (bright)
             const rgb = hsvToRgb(angle, sat*100, 100);
             return { r: rgb.r, g: rgb.g, b: rgb.b, a:1 };
         }
     }
 
-    // update UI readouts & preview
     function updateUI(){
         const { r, g, b, a } = current;
         preview.style.background = `rgb(${r}, ${g}, ${b})`;
@@ -293,14 +275,13 @@ RGB Color Wheel JavaScript
         const cmyk = rgbToCmyk(r,g,b);
 
         readouts.innerHTML = `
-        <div class="small-info">HEX: <strong>${hex}</strong></div>
-        <div class="small-info">RGB: <strong>${r}, ${g}, ${b}</strong></div>
-        <div class="small-info">HSL: <strong>${hsl.h}°, ${hsl.s}%, ${hsl.l}%</strong></div>
-        <div class="small-info">HSV: <strong>${hsv.h}°, ${hsv.s}%, ${hsv.v}%</strong></div>
-        <div class="small-info">CMYK: <strong>${cmyk.c}%, ${cmyk.m}%, ${cmyk.y}%, ${cmyk.k}%</strong></div>
+        <div style="margin-bottom: 0.5rem;"><strong>HEX:</strong> ${hex}</div>
+        <div style="margin-bottom: 0.5rem;"><strong>RGB:</strong> ${r}, ${g}, ${b}</div>
+        <div style="margin-bottom: 0.5rem;"><strong>HSL:</strong> ${hsl.h}°, ${hsl.s}%, ${hsl.l}%</div>
+        <div style="margin-bottom: 0.5rem;"><strong>HSV:</strong> ${hsv.h}°, ${hsv.s}%, ${hsv.v}%</div>
+        <div><strong>CMYK:</strong> ${cmyk.c}%, ${cmyk.m}%, ${cmyk.y}%, ${cmyk.k}%</div>
     `;
 
-        // Update existing sliders instead of recreating them
         updateSliderValues();
     }
 
@@ -329,7 +310,6 @@ RGB Color Wheel JavaScript
         });
     }
 
-    // setColor central - sets current and updates UI
     function setColor(r,g,b){
         current.r = clamp(Math.round(r),0,255);
         current.g = clamp(Math.round(g),0,255);
@@ -337,7 +317,6 @@ RGB Color Wheel JavaScript
         updateUI();
     }
 
-    // slider UI generation
     const sliderDefinitions = {
         rgb: [
             { id:'r', label:'R', min:0, max:255 },
@@ -401,7 +380,6 @@ RGB Color Wheel JavaScript
             input.value = valuesMap[def.id] ?? def.min;
             input.dataset.id = def.id;
 
-            // Fix: Use mousedown and touchstart for better dragging
             input.addEventListener('input', onSliderInput);
             input.addEventListener('mousedown', () => {
                 document.addEventListener('mousemove', onSliderInput);
@@ -415,6 +393,7 @@ RGB Color Wheel JavaScript
             const valueDisplay = document.createElement('div');
             valueDisplay.className = 'small-info';
             valueDisplay.style.minWidth = '42px';
+            valueDisplay.style.fontFamily = 'var(--font-mono)';
             valueDisplay.textContent = input.value;
 
             row.appendChild(label);
@@ -429,10 +408,8 @@ RGB Color Wheel JavaScript
     function onSliderInput(e){
         const id = e.target.dataset.id;
         const val = Number(e.target.value);
-        // update display
         sliderElements[id].valueDisplay.textContent = val;
 
-        // compute new current color depending on mode
         if (mode === 'rgb') {
             const r = Number(sliderElements.r.input.value);
             const g = Number(sliderElements.g.input.value);
@@ -478,7 +455,6 @@ RGB Color Wheel JavaScript
         }
     });
 
-    // wheel input handling
     let isPointerDown = false;
     function onPointerDown(e){
         isPointerDown = true;
@@ -509,22 +485,24 @@ RGB Color Wheel JavaScript
         picker.style.display = 'block';
     }
 
-    // hex input handling
     hexInput.addEventListener('change', () => {
         const rgb = hexToRgb(hexInput.value);
         if (rgb) setColor(rgb.r, rgb.g, rgb.b);
         else hexInput.classList.add('invalid');
         setTimeout(()=>hexInput.classList.remove('invalid'), 800);
     });
+
     copyHex.addEventListener('click', async () => {
         try {
             await navigator.clipboard.writeText(hexInput.value);
             copyHex.textContent = 'Copied!';
             setTimeout(()=> copyHex.textContent = 'Copy', 900);
-        } catch(e){ copyHex.textContent = 'Failed'; setTimeout(()=> copyHex.textContent = 'Copy', 900); }
+        } catch(e){
+            copyHex.textContent = 'Failed';
+            setTimeout(()=> copyHex.textContent = 'Copy', 900);
+        }
     });
 
-    // save palette
     saveSwatchBtn.addEventListener('click', () => {
         const hex = rgbToHex(current.r, current.g, current.b);
         userPalette.unshift(hex);
@@ -565,7 +543,6 @@ RGB Color Wheel JavaScript
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
 
-            // Show success feedback
             exportPaletteBtn.textContent = 'Exported!';
             setTimeout(() => {
                 exportPaletteBtn.textContent = 'Export JSON';
@@ -576,24 +553,20 @@ RGB Color Wheel JavaScript
         }
     });
 
-    // initial draw + wiring
     function init(){
         drawWheel();
         renderSliders();
         updateUI();
-        // pointer events
+
         canvas.addEventListener('pointerdown', onPointerDown);
         window.addEventListener('resize', () => {
             drawWheel();
             updateUI();
         });
 
-        // set initial crosshair position to red (0deg)
-        // compute position on canvas corresponding to current color
         placePickerForRgb(current.r, current.g, current.b);
     }
 
-    // place picker by converting rgb -> angle + radius
     function placePickerForRgb(r,g,b){
         const rect = canvas.getBoundingClientRect();
         const cx = rect.width/2, cy = rect.height/2;
@@ -605,12 +578,11 @@ RGB Color Wheel JavaScript
         const y = cy + Math.sin(angle) * rdist;
         picker.style.left = x + 'px';
         picker.style.top = y + 'px';
+        picker.style.display = 'block';
     }
 
-    // Click from keyboard (accessibility) - optional
     canvas.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
-            // pick center color
             const rect = canvas.getBoundingClientRect();
             const centerX = rect.left + rect.width/2;
             const centerY = rect.top + rect.height/2;
@@ -619,7 +591,6 @@ RGB Color Wheel JavaScript
         }
     });
 
-    // initialize on DOM ready
     document.addEventListener('DOMContentLoaded', init);
 
 })();
