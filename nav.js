@@ -1,7 +1,7 @@
 /*
 	Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
 
-	script.js (script shared between pages)
+	nav.js (script shared between pages)
 */
 
 class NavigationManager {
