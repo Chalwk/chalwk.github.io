@@ -207,7 +207,7 @@ function calculateRisk() {
     // Cap at maximum of 100!
     totalScore = Math.min(totalScore, 100);
 
-    // Sshow weighted scores but display out of 20
+    // Show weighted scores but display out of 20
     energyScore.textContent = `${energyFactor}/20`;
     sensoryScore.textContent = `${sensoryFactor}/20`;
     executiveScore.textContent = `${executiveFactor}/20`;
