@@ -1,4 +1,4 @@
-// Copyright (c) 2025. Jericho Crosby (Chalwk)
+// Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
 
 const CACHE_NAME = 'grocery-list-v1.0.0';
 const urlsToCache = [

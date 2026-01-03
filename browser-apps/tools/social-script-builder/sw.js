@@ -1,4 +1,4 @@
-// Copyright (c) 2025. Jericho Crosby (Chalwk)
+// Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
 
 // sw.js
 const CACHE_NAME = 'social-script-builder-v1.2';
