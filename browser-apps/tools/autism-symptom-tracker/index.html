@@ -8,135 +8,203 @@
     <title>Autism Symptom & Emotion Tracker</title>
     <meta content="Comprehensive autism symptom and emotion tracker with coping strategies, pattern recognition, and data visualization."
           name="description"/>
+    <link href="../../../core.css" rel="stylesheet"/>
     <link href="style.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
+          rel="stylesheet">
 </head>
+
 <body>
-<a class="skip" href="#app">Skip to main content</a>
+<header class="header">
+    <div class="container">
+        <a class="logo" href="../../../index.html"> <i class="fas fa-code"></i> Jericho </a>
 
-<header class="site-header" role="banner">
-    <div class="container header-inner">
-        <div class="brand">
-            <svg aria-hidden="true" class="logo" height="36" viewBox="0 0 24 24" width="36">
-                <circle cx="12" cy="12" fill="#4f46e5" r="10"/>
-                <path d="M8 12h8M8 16h6" stroke="#fff" stroke-linecap="round" stroke-width="1.5"/>
-            </svg>
-            <div class="title-wrap">
-                <h1>Autism Symptom &amp; Emotion Tracker</h1>
-                <p class="tagline">Track feelings, surface patterns, and get practical coping strategies.</p>
-            </div>
+        <nav class="nav-desktop">
+            <ul class="nav-links">
+                <li><a href="../../../index.html#about">About</a></li>
+                <li><a href="../../../browser-apps/apps_and_tools.html">Apps & Tools</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" href="#">Other Stuff <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://chalwk.github.io/CPAS/">CPAS</a></li>
+                        <li class="dropdown-submenu">
+                            <a class="submenu-toggle" href="#">Education <i class="fas fa-chevron-right"></i></a>
+                            <ul class="submenu">
+                                <li><a href="../../../education/understanding-autism.html">Understanding Autism</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Symptom Tracker</a></li>
+            </ul>
+        </nav>
+
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
         </div>
 
-        <div aria-label="App actions" class="header-actions" role="toolbar">
-            <button aria-label="Help" class="btn ghost" id="help-btn">Help</button>
-            <button aria-controls="settings-dialog" aria-haspopup="dialog" class="btn ghost" id="open-settings">
-                Settings
-            </button>
-        </div>
+        <nav class="nav-mobile">
+            <ul class="nav-mobile-links">
+                <li><a href="../../../index.html#about">About</a></li>
+                <li><a href="../../../browser-apps/apps_and_tools.html">Apps & Tools</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" href="#">Other Stuff <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://chalwk.github.io/CPAS/">CPAS</a></li>
+                        <li class="dropdown-submenu">
+                            <a class="submenu-toggle" href="#">Education <i class="fas fa-chevron-right"></i></a>
+                            <ul class="submenu">
+                                <li><a href="../../../education/understanding-autism.html">Understanding Autism</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Symptom Tracker</a></li>
+            </ul>
+        </nav>
     </div>
 </header>
 
-<main aria-labelledby="app-title" class="container app-grid" id="app" role="main">
-    <h2 class="sr-only" id="app-title">Tracker app</h2>
+<main>
+    <a class="skip" href="#app">Skip to main content</a>
 
-    <!-- Left column: Symptom selection -->
-    <section aria-labelledby="symptom-heading" class="panel panel-left" id="symptom-panel">
-        <div class="panel-head">
-            <h2 id="symptom-heading">Symptoms &amp; States</h2>
-            <p class="muted small">Select items that match how you feel. Adjust intensity when relevant.</p>
-        </div>
-
-        <div class="controls-row">
-            <label class="search-wrap" for="search">
-                <input aria-label="Filter symptoms" id="search" placeholder="Filter symptoms or tags"/>
-            </label>
-            <div class="controls-cta">
-                <button class="btn btn-secondary" id="clear-btn" title="Clear selections">Clear</button>
-            </div>
-        </div>
-
-        <form aria-describedby="symptom-help" id="symptom-form">
-            <p class="muted" id="symptom-help">Tap to select; choose intensity if needed. Use Analyze for
-                suggestions.</p>
-
-            <div aria-live="polite" class="symptom-list" id="symptom-list" role="list"></div>
-
-            <div class="actions-row">
-                <button class="btn primary" id="analyze-btn" type="button">Analyze</button>
-                <button class="btn btn-secondary" id="save-btn" title="Save entry to local history" type="button">Save
-                    entry
-                </button>
-            </div>
-        </form>
-    </section>
-
-    <!-- Right column top: Suggestions + pattern insights -->
-    <section aria-labelledby="results-heading" class="panel panel-right" id="result-panel">
-        <div class="panel-head">
-            <h2 id="results-heading">Suggestions &amp; Insights</h2>
-            <p class="muted small">Get prioritized strategies and pattern recognition from your entries.</p>
-        </div>
-
-        <div class="result-summary muted" id="result-summary">No analysis yet. Pick symptoms and press Analyze.</div>
-
-        <div aria-live="polite" class="suggestions" id="suggestions"></div>
-
-        <div aria-live="polite" class="pattern-insights" id="pattern-insights-wrap">
-            <h3>Pattern Recognition</h3>
-            <div class="pattern-insights-content" id="pattern-insights">
-                <p class="muted">Pattern insights will appear here after multiple entries.</p>
-            </div>
-        </div>
-
-        <details aria-label="How this works" class="notes" id="explain-details">
-            <summary>How this works</summary>
-            <p>This tool uses weighted tag scoring to suggest strategies. It is not medical advice. If in crisis,
-                contact local emergency services or a professional.</p>
-        </details>
-    </section>
-
-    <!-- Full width: History and charts -->
-    <section aria-labelledby="history-heading" class="panel panel-bottom" id="history-panel">
-        <div class="panel-head row-between">
-            <div>
-                <h2 id="history-heading">History &amp; Patterns</h2>
-                <p class="muted small">Entries are stored locally. Export backups or import JSON to merge history.</p>
-            </div>
-            <div aria-label="Export and import actions" class="export-actions" role="group">
-                <button class="btn btn-secondary" id="export-csv-btn" title="Export history as CSV">Export CSV</button>
-                <button class="btn btn-secondary" id="export-json-btn" title="Export as JSON">Export JSON</button>
-                <button class="btn btn-secondary" id="import-json-btn" title="Import JSON backup">Import JSON</button>
-            </div>
-        </div>
-
-        <div aria-live="polite" class="history-list" id="history-list"></div>
-
-        <div class="history-footer">
-            <div class="history-actions">
-                <button class="btn ghost" id="clear-history" title="Remove all saved entries">Clear All</button>
-            </div>
-
-            <div class="charts">
-                <div class="chart-wrap">
-                    <h3 class="chart-title">Tag frequency (history)</h3>
-                    <canvas aria-label="Tag frequency chart" height="160" id="tag-chart" width="400"></canvas>
-                </div>
-
-                <div class="chart-wrap">
-                    <h3 class="chart-title">Symptom patterns</h3>
-                    <canvas aria-label="Symptom frequency chart" height="160" id="symptom-chart" width="400"></canvas>
+    <div class="container">
+        <div class="hero-banner"
+             style="background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; padding: 3rem 1rem; text-align: center; margin-top: 20px; border-radius: var(--radius);">
+            <div class="hero-content">
+                <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem; color: white;">Autism Symptom &amp; Emotion
+                    Tracker</h1>
+                <p style="font-size: 1.2rem; opacity: 0.9; margin-bottom: 1.5rem; color: white;">Track feelings, surface
+                    patterns, and get practical coping strategies.</p>
+                <div style="display: flex; justify-content: center; gap: 1rem; margin-top: 1.5rem;">
+                    <button class="btn btn-primary"
+                            onclick="document.getElementById('symptom-panel').scrollIntoView({behavior: 'smooth'})">
+                        <i class="fas fa-play"></i> Start Tracking
+                    </button>
+                    <button class="btn btn-secondary" onclick="document.getElementById('help-dialog').showModal()">
+                        <i class="fas fa-question-circle"></i> Quick Guide
+                    </button>
                 </div>
             </div>
         </div>
-    </section>
+
+        <div aria-labelledby="app-title" class="app-grid" id="app" role="main" style="margin-top: 2rem;">
+            <h2 class="sr-only" id="app-title">Tracker app</h2>
+
+            <section aria-labelledby="symptom-heading" class="panel panel-left" id="symptom-panel">
+                <div class="panel-head">
+                    <h2 id="symptom-heading" style="color: var(--primary);">Symptoms &amp; States</h2>
+                    <p class="muted small">Select items that match how you feel. Adjust intensity when relevant.</p>
+                </div>
+
+                <div class="controls-row">
+                    <label class="search-wrap" for="search">
+                        <input aria-label="Filter symptoms" id="search" placeholder="Filter symptoms or tags"/>
+                    </label>
+                    <div class="controls-cta">
+                        <button class="btn btn-secondary" id="clear-btn" title="Clear selections">Clear</button>
+                    </div>
+                </div>
+
+                <form aria-describedby="symptom-help" id="symptom-form">
+                    <p class="muted" id="symptom-help">Tap to select; choose intensity if needed. Use Analyze for
+                        suggestions.</p>
+
+                    <div aria-live="polite" class="symptom-list" id="symptom-list" role="list"></div>
+
+                    <div class="actions-row">
+                        <button class="btn primary" id="analyze-btn" type="button">Analyze</button>
+                        <button class="btn btn-secondary" id="save-btn" title="Save entry to local history"
+                                type="button">Save
+                            entry
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <section aria-labelledby="results-heading" class="panel panel-right" id="result-panel">
+                <div class="panel-head">
+                    <h2 id="results-heading" style="color: var(--primary);">Suggestions &amp; Insights</h2>
+                    <p class="muted small">Get prioritized strategies and pattern recognition from your entries.</p>
+                </div>
+
+                <div class="result-summary muted" id="result-summary">No analysis yet. Pick symptoms and press
+                    Analyze.
+                </div>
+
+                <div aria-live="polite" class="suggestions" id="suggestions"></div>
+
+                <div aria-live="polite" class="pattern-insights" id="pattern-insights-wrap">
+                    <h3>Pattern Recognition</h3>
+                    <div class="pattern-insights-content" id="pattern-insights">
+                        <p class="muted">Pattern insights will appear here after multiple entries.</p>
+                    </div>
+                </div>
+
+                <details aria-label="How this works" class="notes" id="explain-details">
+                    <summary>How this works</summary>
+                    <p>This tool uses weighted tag scoring to suggest strategies. It is not medical advice. If in
+                        crisis,
+                        contact local emergency services or a professional.</p>
+                </details>
+            </section>
+
+            <section aria-labelledby="history-heading" class="panel panel-bottom" id="history-panel">
+                <div class="panel-head row-between">
+                    <div>
+                        <h2 id="history-heading" style="color: var(--primary);">History &amp; Patterns</h2>
+                        <p class="muted small">Entries are stored locally. Export backups or import JSON to merge
+                            history.</p>
+                    </div>
+                    <div aria-label="Export and import actions" class="export-actions" role="group">
+                        <button class="btn btn-secondary" id="export-csv-btn" title="Export history as CSV">Export CSV
+                        </button>
+                        <button class="btn btn-secondary" id="export-json-btn" title="Export as JSON">Export JSON
+                        </button>
+                        <button class="btn btn-secondary" id="import-json-btn" title="Import JSON backup">Import JSON
+                        </button>
+                    </div>
+                </div>
+
+                <div aria-live="polite" class="history-list" id="history-list"></div>
+
+                <div class="history-footer">
+                    <div class="history-actions">
+                        <button class="btn ghost" id="clear-history" title="Remove all saved entries">Clear All</button>
+                    </div>
+
+                    <div class="charts">
+                        <div class="chart-wrap">
+                            <h3 class="chart-title">Tag frequency (history)</h3>
+                            <canvas aria-label="Tag frequency chart" height="160" id="tag-chart" width="400"></canvas>
+                        </div>
+
+                        <div class="chart-wrap">
+                            <h3 class="chart-title">Symptom patterns</h3>
+                            <canvas aria-label="Symptom frequency chart" height="160" id="symptom-chart"
+                                    width="400"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
 </main>
 
-<footer class="site-footer" role="contentinfo">
-    <div class="container footer-inner">
-        <small>© 2025 Autism Symptom Tracker - Jericho Crosby (Chalwk)</small>
+<footer>
+    <div class="footer-container">
+        <div class="social-icons">
+            <a href="https://discord.com/channels/@me/707058110396760094" target="_blank" aria-label="Discord"> <i
+                    class="fab fa-discord"></i></a>
+            <a href="https://github.com/Chalwk" target="_blank" aria-label="GitHub"> <i class="fab fa-github"></i></a>
+        </div>
+        <p class="footer-copyright"></p>
     </div>
 </footer>
 
-<!-- Dialogs -->
 <dialog aria-labelledby="settings-title" id="settings-dialog">
     <form class="dialog-form" method="dialog">
         <h3 id="settings-title">Settings</h3>
@@ -178,6 +246,7 @@
 
 <input accept="application/json" id="file-input" style="display:none" type="file"/>
 
+<script defer src="../../../nav.js"></script>
 <script defer src="script.js"></script>
 </body>
 </html>
