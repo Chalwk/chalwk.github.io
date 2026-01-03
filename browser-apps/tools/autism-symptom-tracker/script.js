@@ -5,11 +5,9 @@ Autism Symptom Tracker JavaScript
 */
 
 (() => {
-    // ----- config + data -----
     const STORAGE_KEY = "autism-tracker-history-v3";
     const DEFAULT_MAX_HISTORY = 200;
 
-    // symptoms: id, label, tags, optional help
     const SYMPTOMS = [
         { id: "tired", label: "Tired / sleepy", tags: ["fatigue"] },
         { id: "poor-sleep", label: "Poor sleep last night", tags: ["fatigue"] },
@@ -259,12 +257,10 @@ Autism Symptom Tracker JavaScript
         }
     };
 
-    // ----- helpers -----
     const el = (sel, root = document) => root.querySelector(sel);
     const els = (sel, root = document) => Array.from(root.querySelectorAll(sel));
     const fmtDate = ts => new Date(ts).toLocaleString();
 
-    // ----- DOM refs -----
     const symptomListEl = el("#symptom-list");
     const analyzeBtn = el("#analyze-btn");
     const saveBtn = el("#save-btn");
@@ -292,9 +288,7 @@ Autism Symptom Tracker JavaScript
     const tagChart = el("#tag-chart");
     const symptomChart = el("#symptom-chart");
 
-    // ----- state -----
 
-    // settings storage
     function loadSettings() {
         try {
             const raw = localStorage.getItem(`${STORAGE_KEY}-settings`);
@@ -316,7 +310,6 @@ Autism Symptom Tracker JavaScript
         localStorage.setItem(`${STORAGE_KEY}-settings`, JSON.stringify(obj));
     }
 
-    // ----- render symptom list (with intensity control) -----
     function renderSymptomList(filter = "") {
         symptomListEl.innerHTML = "";
         const q = filter.trim().toLowerCase();
@@ -345,7 +338,6 @@ Autism Symptom Tracker JavaScript
             symptomListEl.appendChild(wrapper);
         });
 
-        // Add visual feedback for selected symptoms
         updateSymptomSelectionVisuals();
     }
 
@@ -360,7 +352,6 @@ Autism Symptom Tracker JavaScript
         });
     }
 
-    // ----- selection helpers -----
     function getSelectedSymptomsWithWeights() {
         return els("input[name='symptom']:checked", symptomListEl).map(cb => {
             const id = cb.value;
@@ -375,7 +366,6 @@ Autism Symptom Tracker JavaScript
         return [...symptoms];
     }
 
-    // ----- analysis logic (weighted) -----
     function analyze(selected) {
         if (!selected || selected.length === 0) {
             resultSummary.textContent = "No symptoms selected. Choose items and press Analyze.";
@@ -384,13 +374,10 @@ Autism Symptom Tracker JavaScript
             return;
         }
 
-        // Show loading state
         resultSummary.textContent = "Analyzing your selections...";
         suggestionsEl.innerHTML = '<div class="loading">Loading suggestions...</div>';
 
-        // Simulate processing time for better UX
         setTimeout(() => {
-            // aggregate tag weights
             const tagScore = {};
             selected.forEach((item) => {
                 let tags = [];
@@ -417,7 +404,6 @@ Autism Symptom Tracker JavaScript
 
             resultSummary.textContent = `Matched ${symptomCount} symptom(s). Top patterns: ${entries.slice(0,3).map(e => e.info.name).join(", ") || "None"}.`;
 
-            // render suggestions
             suggestionsEl.innerHTML = "";
             if (entries.length === 0) return;
 
@@ -443,7 +429,6 @@ Autism Symptom Tracker JavaScript
                 suggestionsEl.appendChild(card);
             });
 
-            // Update pattern insights
             updatePatternInsights();
         }, 600);
     }
@@ -455,14 +440,12 @@ Autism Symptom Tracker JavaScript
             return;
         }
 
-        // Simple pattern detection - look for frequently co-occurring tags
         const tagCooccurrence = {};
         const symptomFrequency = {};
 
         history.forEach(entry => {
             const tags = new Set();
 
-            // Get all tags from symptoms in this entry
             entry.symptoms.forEach(s => {
                 const symptom = SYMPTOMS.find(x => x.id === s.id);
                 if (symptom) {
@@ -471,7 +454,6 @@ Autism Symptom Tracker JavaScript
                 }
             });
 
-            // Update co-occurrence counts
             const tagArray = Array.from(tags);
             for (let i = 0; i < tagArray.length; i++) {
                 for (let j = i + 1; j < tagArray.length; j++) {
@@ -481,9 +463,8 @@ Autism Symptom Tracker JavaScript
             }
         });
 
-        // Find the most common co-occurrences
         const commonPatterns = Object.entries(tagCooccurrence)
-            .filter(([_, count]) => count > history.length * 0.3) // At least 30% of entries
+            .filter(([_, count]) => count > history.length * 0.3)
             .sort((a, b) => b[1] - a[1])
             .slice(0, 3);
 
@@ -511,7 +492,6 @@ Autism Symptom Tracker JavaScript
         });
     }
 
-    // ----- history management -----
     function loadHistory() {
         try {
             const raw = localStorage.getItem(STORAGE_KEY);
@@ -529,7 +509,6 @@ Autism Symptom Tracker JavaScript
         const settings = loadSettings();
         const arr = loadHistory();
         arr.unshift(entry);
-        // enforce max history
         if (arr.length > (settings.maxHistory || DEFAULT_MAX_HISTORY)) {
             arr.splice((settings.maxHistory || DEFAULT_MAX_HISTORY));
         }
@@ -568,7 +547,6 @@ Autism Symptom Tracker JavaScript
             historyList.appendChild(item);
         });
 
-        // attach delete handlers via delegation
         els(".delete-entry", historyList).forEach(btn => {
             btn.addEventListener("click", ev => {
                 const idx = Number(btn.dataset.idx);
@@ -583,7 +561,6 @@ Autism Symptom Tracker JavaScript
         drawSymptomChart();
     }
 
-    // ----- export CSV & JSON -----
     function exportCSV() {
         const arr = loadHistory();
         if (!arr.length) { alert("No history to export."); return; }
@@ -621,7 +598,6 @@ Autism Symptom Tracker JavaScript
         URL.revokeObjectURL(url);
     }
 
-    // import JSON (merge)
     function importJSONFile(file) {
         const reader = new FileReader();
         reader.onload = ev => {
@@ -629,7 +605,6 @@ Autism Symptom Tracker JavaScript
                 const parsed = JSON.parse(ev.target.result);
                 if (!Array.isArray(parsed)) throw new Error("Invalid JSON format: expected an array");
                 const existing = loadHistory();
-                // merge but avoid duplicates by timestamp
                 const map = new Map(existing.map(e => [e.ts, e]));
                 parsed.forEach(p => {
                     if (!map.has(p.ts)) map.set(p.ts, p);
@@ -645,7 +620,6 @@ Autism Symptom Tracker JavaScript
         reader.readAsText(file);
     }
 
-    // ----- utility functions -----
     function deriveSummaryTagsWeighted(selected) {
         const tagScore = {};
         selected.forEach((item) => {
@@ -662,16 +636,12 @@ Autism Symptom Tracker JavaScript
     function escapeCsv(s){ return String(s).replace(/"/g,'""'); }
 
     function playSound(type) {
-        // In a real app, you would play actual sound files
-        // This is a placeholder for sound functionality
         console.log(`Playing ${type} sound`);
     }
 
-    // ----- chart drawing -----
     function drawTagChart() {
         const ctx = tagChart.getContext("2d");
         const history = loadHistory();
-        // clear
         ctx.setTransform(1,0,0,1,0,0);
         ctx.clearRect(0,0,tagChart.width,tagChart.height);
 
@@ -682,7 +652,6 @@ Autism Symptom Tracker JavaScript
             return;
         }
 
-        // aggregate tag counts across history (sum of weights)
         const agg = {};
         history.forEach(entry => {
             entry.symptoms.forEach(s => {
@@ -696,7 +665,6 @@ Autism Symptom Tracker JavaScript
         const top = pairs.slice(0,6);
         const max = top[0]?.v || 1;
 
-        // drawing
         const padding = 12;
         const w = tagChart.clientWidth;
         const h = Math.max(120, tagChart.clientHeight);
@@ -704,7 +672,6 @@ Autism Symptom Tracker JavaScript
         tagChart.height = Math.floor(h * devicePixelRatio);
         ctx.scale(devicePixelRatio, devicePixelRatio);
 
-        // background
         ctx.fillStyle = "#fff";
         ctx.fillRect(0,0,w,h);
 
@@ -716,17 +683,13 @@ Autism Symptom Tracker JavaScript
 
         top.forEach((p, i) => {
             const y = padding + i * (barHeight + gap);
-            // label
             ctx.fillStyle = "#374151";
             ctx.fillText(p.name, 12, y + barHeight - 6);
-            // bar bg
             ctx.fillStyle = "#eef2ff";
             ctx.fillRect(barLeft, y, w - barLeft - padding, barHeight);
-            // bar fill
             const width = Math.max(6, ((w - barLeft - padding) * (p.v / max)));
             ctx.fillStyle = "#4f46e5";
             ctx.fillRect(barLeft, y, width, barHeight);
-            // value
             ctx.fillStyle = "#fff";
             ctx.fillText(String(p.v), barLeft + width - 28, y + barHeight - 6);
             ctx.fillStyle = "#374151";
@@ -736,7 +699,6 @@ Autism Symptom Tracker JavaScript
     function drawSymptomChart() {
         const ctx = symptomChart.getContext("2d");
         const history = loadHistory();
-        // clear
         ctx.setTransform(1,0,0,1,0,0);
         ctx.clearRect(0,0,symptomChart.width,symptomChart.height);
 
@@ -747,7 +709,6 @@ Autism Symptom Tracker JavaScript
             return;
         }
 
-        // aggregate symptom counts across history
         const agg = {};
         history.forEach(entry => {
             entry.symptoms.forEach(s => {
@@ -768,7 +729,6 @@ Autism Symptom Tracker JavaScript
         const top = pairs.slice(0,8);
         const max = top[0]?.v || 1;
 
-        // drawing
         const padding = 12;
         const w = symptomChart.clientWidth;
         const h = Math.max(120, symptomChart.clientHeight);
@@ -776,7 +736,6 @@ Autism Symptom Tracker JavaScript
         symptomChart.height = Math.floor(h * devicePixelRatio);
         ctx.scale(devicePixelRatio, devicePixelRatio);
 
-        // background
         ctx.fillStyle = "#fff";
         ctx.fillRect(0,0,w,h);
 
@@ -788,42 +747,33 @@ Autism Symptom Tracker JavaScript
 
         top.forEach((p, i) => {
             const y = padding + i * (barHeight + gap);
-            // label
             ctx.fillStyle = "#374151";
             ctx.fillText(p.name, 12, y + barHeight - 5);
-            // bar bg
             ctx.fillStyle = "#f3f4f6";
             ctx.fillRect(barLeft, y, w - barLeft - padding, barHeight);
-            // bar fill
             const width = Math.max(4, ((w - barLeft - padding) * (p.v / max)));
             ctx.fillStyle = p.color;
             ctx.fillRect(barLeft, y, width, barHeight);
-            // value
             ctx.fillStyle = "#fff";
             ctx.fillText(String(p.v), barLeft + width - 20, y + barHeight - 5);
             ctx.fillStyle = "#374151";
         });
     }
 
-    // ----- event wiring -----
     function wire() {
         renderSymptomList();
         renderHistory();
 
-        // toggle intensity select when checkbox toggled
         symptomListEl.addEventListener("change", ev => {
             if (!ev.target || ev.target.name !== "symptom") return;
             const id = ev.target.value;
             const sel = el(`#intensity-${id}`, symptomListEl);
             if (sel) sel.disabled = !ev.target.checked;
-            // give brief focus to select if enabled
             if (sel && !sel.disabled) sel.focus();
 
-            // Update visual state
             updateSymptomSelectionVisuals();
         });
 
-        // clicking tag in suggestions copies symptom label
         suggestionsEl.addEventListener("click", ev => {
             const copyBtn = ev.target.closest("button.copy");
             if (copyBtn) {
@@ -873,7 +823,6 @@ Autism Symptom Tracker JavaScript
             });
             resultSummary.textContent = `Saved entry - ${summaryName || "no pattern detected"}.`;
 
-            // Visual feedback
             saveBtn.textContent = "Saved!";
             saveBtn.classList.add('primary');
             setTimeout(() => {
@@ -915,7 +864,6 @@ Autism Symptom Tracker JavaScript
             importJSONFile(f);
         });
 
-        // settings dialog
         openSettingsBtn.addEventListener("click", () => {
             const s = loadSettings();
             maxHistoryInput.value = s.maxHistory || DEFAULT_MAX_HISTORY;
@@ -935,11 +883,9 @@ Autism Symptom Tracker JavaScript
             renderHistory();
         });
 
-        // help dialog
         helpBtn.addEventListener("click", () => helpDialog.showModal());
         closeHelpBtn.addEventListener("click", () => helpDialog.close());
 
-        // react to window resize for charts
         let resizeTimer;
         window.addEventListener("resize", () => {
             clearTimeout(resizeTimer);
@@ -950,10 +896,8 @@ Autism Symptom Tracker JavaScript
         });
     }
 
-    // ----- init -----
     document.addEventListener("DOMContentLoaded", () => {
         wire();
-        // Initial chart render after a brief delay to ensure proper sizing
         setTimeout(() => {
             drawTagChart();
             drawSymptomChart();

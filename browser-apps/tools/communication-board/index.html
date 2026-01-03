@@ -1,252 +1,331 @@
 <!--
 Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
 
-Communication Board
+SpeakForMe
 -->
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta content="width=device-width,initial-scale=1" name="viewport">
+    <meta charset="utf-8"/>
+    <meta content="width=device-width,initial-scale=1" name="viewport"/>
     <title>Communication Board</title>
-    <link href="style.css" rel="stylesheet">
+    <meta content="Communication board for AAC (Augmentative and Alternative Communication)" name="description"/>
+    <link href="../../../core.css" rel="stylesheet"/>
+    <link href="style.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
+          rel="stylesheet">
 
-    <!-- PWA Meta Tags -->
     <meta content="#4a86e8" name="theme-color">
     <meta content="yes" name="apple-mobile-web-app-capable">
     <meta content="default" name="apple-mobile-web-app-status-bar-style">
     <meta content="CommBoard" name="apple-mobile-web-app-title">
-    <link href="icons/icon-192x192.png" rel="apple-touch-icon">
 
-    <!-- Web App Manifest -->
-    <link href="manifest.json" rel="manifest">
-
-    <!-- Mobile meta tags for Web App -->
     <meta content="yes" name="mobile-web-app-capable">
     <meta content="CommBoard" name="application-name">
     <meta content="telephone=no" name="format-detection">
-    <meta content="#4a86e8" name="msapplication-TileColor">
-    <meta content="none" name="msapplication-config">
 </head>
+
 <body>
-<div class="app-container">
-    <header class="app-header">
-        <div class="header-left">
-            <h1>Communication Board</h1>
-            <div class="header-sub">
-                <label class="visually-hidden" for="categorySelect">Filter symbols by category</label>
-                <select id="categorySelect" title="Filter by category">
-                    <option value="All">All Categories</option>
-                </select>
-            </div>
+<header class="header">
+    <div class="container">
+        <a class="logo" href="../../../index.html"> <i class="fas fa-code"></i> Jericho </a>
+
+        <nav class="nav-desktop">
+            <ul class="nav-links">
+                <li><a href="../../../index.html#about">About</a></li>
+                <li><a href="../../../browser-apps/apps_and_tools.html">Apps & Tools</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" href="#">Other Stuff <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://chalwk.github.io/CPAS/">CPAS</a></li>
+                        <li class="dropdown-submenu">
+                            <a class="submenu-toggle" href="#">Education <i class="fas fa-chevron-right"></i></a>
+                            <ul class="submenu">
+                                <li><a href="../../../education/understanding-autism.html">Understanding Autism</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Communication Board</a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
         </div>
 
-        <div class="header-controls">
-            <div class="settings-dropdown">
-                <button class="btn-secondary settings-toggle" id="settingsToggle" title="Settings">⚙️</button>
-                <div class="settings-menu" id="settingsMenu">
-                    <div class="settings-group">
-                        <button class="btn-secondary" id="editModeBtn">Edit Mode</button>
-                        <button class="btn-primary" id="saveBtn">Save</button>
-                    </div>
-                    <div class="settings-group">
-                        <button class="btn-secondary" id="exportBtn" title="Export symbols and settings">Export</button>
-                        <label class="btn-secondary" for="importFile" title="Import symbols">Import
-                            <input accept="application/json" id="importFile" style="display:none" type="file">
-                        </label>
-                    </div>
-                    <div class="settings-group">
-                        <button class="btn-secondary" id="manageCategoriesBtn">Manage Categories</button>
-                    </div>
-                    <div class="settings-group">
-                        <button class="btn-secondary" id="openSettingsPanelBtn">Additional Settings</button>
-                    </div>
-                </div>
-            </div>
-
-            <button class="btn-secondary" id="installBtn" style="display:none;" title="Install App">Install App</button>
-        </div>
-    </header>
-
-    <div class="main-content">
-        <div class="phrase-bar">
-            <div aria-live="polite" class="phrase-display" id="phraseDisplay" role="list">
-                <span class="empty-message">Select symbols to build your phrase</span>
-            </div>
-            <div class="phrase-controls">
-                <button class="btn-primary" id="speakBtn">Speak</button>
-                <button class="btn-secondary" id="clearBtn">Clear</button>
-            </div>
-        </div>
-
-        <div class="board-toolbar">
-            <input aria-label="Search symbols" id="globalSearch" placeholder="Search symbols..." type="text">
-        </div>
-
-        <div aria-label="Communication board" class="board-container" id="boardWrap" tabindex="0">
-            <div class="communication-board" id="communicationBoard" role="list">
-                <!-- Symbols will be loaded here -->
-            </div>
-        </div>
+        <nav class="nav-mobile">
+            <ul class="nav-mobile-links">
+                <li><a href="../../../index.html#about">About</a></li>
+                <li><a href="../../../browser-apps/apps_and_tools.html">Apps & Tools</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" href="#">Other Stuff <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://chalwk.github.io/CPAS/">CPAS</a></li>
+                        <li class="dropdown-submenu">
+                            <a class="submenu-toggle" href="#">Education <i class="fas fa-chevron-right"></i></a>
+                            <ul class="submenu">
+                                <li><a href="../../../education/understanding-autism.html">Understanding Autism</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Communication Board</a>
+                </li>
+            </ul>
+        </nav>
     </div>
+</header>
 
-    <!-- Footer Section -->
-    <footer class="app-footer">
-        <div class="footer-content">
-            <p>&copy; 2025 Communication Board - Jericho Crosby (Chalwk). All rights reserved.</p>
-        </div>
-    </footer>
-
-    <!-- Edit Modal -->
-    <div aria-hidden="true" aria-labelledby="modalTitle" aria-modal="true" class="modal" id="editModal" role="dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="modalTitle">Edit Symbol</h2>
-                <span aria-label="Close" class="close" id="closeModal" role="button">&times;</span>
-            </div>
-            <div class="modal-body">
-                <form id="symbolForm">
-                    <div class="form-group">
-                        <label for="symbolText">Text</label>
-                        <input id="symbolText" required type="text">
-                    </div>
-                    <div class="form-group">
-                        <label for="symbolImage">Image URL or emoji</label>
-                        <input id="symbolImage" placeholder="https:// or data:, or emoji" type="text">
-                        <small>Or upload an image file</small>
-                        <input accept="image/*" id="symbolImageFile" type="file">
-                    </div>
-                    <div class="form-group">
-                        <label for="symbolColor">Background color</label>
-                        <input id="symbolColor" type="color" value="#4a86e8">
-                    </div>
-                    <div class="form-group">
-                        <label for="symbolCategory">Category</label>
-                        <select id="symbolCategory">
-                            <!-- Categories will be populated dynamically -->
+<main>
+    <div class="container">
+        <div class="app-container" style="margin-top: 2rem;">
+            <div class="app-header">
+                <div class="header-left">
+                    <h2 style="color: white; font-size: 1.2rem; margin: 0;">Communication Board</h2>
+                    <div class="header-sub">
+                        <label class="visually-hidden" for="categorySelect">Filter symbols by category</label>
+                        <select id="categorySelect" title="Filter by category">
+                            <option value="All">All Categories</option>
                         </select>
                     </div>
+                </div>
 
-                    <div class="form-actions">
-                        <button class="btn-danger" id="deleteBtn" type="button">Delete</button>
-                        <div style="display:flex; gap:8px">
-                            <button class="btn-secondary" id="cancelEdit" type="button">Cancel</button>
-                            <button class="btn-primary" type="submit">Save Changes</button>
+                <div class="header-controls">
+                    <div class="settings-dropdown">
+                        <button class="settings-toggle" id="settingsToggle" title="Settings" aria-label="Settings">
+                            <i class="fas fa-cog"></i>
+                        </button>
+                        <div class="settings-menu" id="settingsMenu">
+                            <div class="settings-group">
+                                <button class="btn btn-secondary" id="editModeBtn">
+                                    <i class="fas fa-edit"></i> Edit Mode
+                                </button>
+                                <button class="btn btn-primary" id="saveBtn">
+                                    <i class="fas fa-save"></i> Save
+                                </button>
+                            </div>
+                            <div class="settings-group">
+                                <button class="btn btn-secondary" id="exportBtn" title="Export symbols and settings">
+                                    <i class="fas fa-download"></i> Export
+                                </button>
+                                <label class="btn btn-secondary" for="importFile" title="Import symbols"
+                                       style="cursor: pointer;">
+                                    <i class="fas fa-upload"></i> Import
+                                    <input accept="application/json" id="importFile" style="display:none" type="file">
+                                </label>
+                            </div>
+                            <div class="settings-group">
+                                <button class="btn btn-secondary" id="manageCategoriesBtn">
+                                    <i class="fas fa-tags"></i> Manage Categories
+                                </button>
+                            </div>
+                            <div class="settings-group">
+                                <button class="btn btn-secondary" id="openSettingsPanelBtn">
+                                    <i class="fas fa-sliders-h"></i> Additional Settings
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </form>
+
+                    <button class="btn btn-secondary" id="installBtn" style="display:none;" title="Install App">
+                        <i class="fas fa-download"></i> Install
+                    </button>
+                </div>
             </div>
+
+            <div class="main-content">
+                <div class="phrase-bar">
+                    <div aria-live="polite" class="phrase-display" id="phraseDisplay" role="list">
+                        <span class="empty-message">Select symbols to build your phrase</span>
+                    </div>
+                    <div class="phrase-controls">
+                        <button class="btn btn-primary" id="speakBtn">
+                            <i class="fas fa-volume-up"></i> Speak
+                        </button>
+                        <button class="btn btn-secondary" id="clearBtn">
+                            <i class="fas fa-trash"></i> Clear
+                        </button>
+                    </div>
+                </div>
+
+                <div class="board-toolbar">
+                    <input aria-label="Search symbols" id="globalSearch" placeholder="Search symbols..." type="text">
+                </div>
+
+                <div aria-label="Communication board" class="board-container" id="boardWrap" tabindex="0">
+                    <div class="communication-board" id="communicationBoard" role="list"></div>
+                </div>
+            </div>
+
+            <button aria-label="Add new symbol" class="floating-btn" id="addSymbolBtn" title="Add New Symbol">
+                <i class="fas fa-plus"></i>
+            </button>
         </div>
     </div>
+</main>
 
-    <!-- Categories Management Modal -->
-    <div aria-hidden="true" aria-labelledby="categoriesModalTitle" aria-modal="true" class="modal" id="categoriesModal"
-         role="dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="categoriesModalTitle">Manage Categories</h2>
-                <span aria-label="Close" class="close" id="closeCategoriesModal" role="button">&times;</span>
-            </div>
-            <div class="modal-body">
+<footer>
+    <div class="footer-container">
+        <div class="social-icons">
+            <a href="https://discord.com/channels/@me/707058110396760094" target="_blank" aria-label="Discord"> <i
+                    class="fab fa-discord"></i></a>
+            <a href="https://github.com/Chalwk" target="_blank" aria-label="GitHub"> <i class="fab fa-github"></i></a>
+        </div>
+        <p class="footer-copyright"></p>
+    </div>
+</footer>
+
+<div aria-hidden="true" aria-labelledby="modalTitle" aria-modal="true" class="modal" id="editModal" role="dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="modalTitle">Edit Symbol</h2>
+            <span aria-label="Close" class="close" id="closeModal" role="button">&times;</span>
+        </div>
+        <div class="modal-body">
+            <form id="symbolForm">
                 <div class="form-group">
-                    <label for="newCategoryName">New Category Name</label>
-                    <input id="newCategoryName" placeholder="Enter category name" type="text">
-                    <button class="btn-primary" id="addCategoryBtn">Add Category</button>
+                    <label for="symbolText">Text</label>
+                    <input id="symbolText" required type="text">
                 </div>
-
-                <div class="categories-list" id="categoriesList">
-                    <!-- Categories will be listed here -->
+                <div class="form-group">
+                    <label for="symbolImage">Image URL or emoji</label>
+                    <input id="symbolImage" placeholder="https:// or data:, or emoji" type="text">
+                    <small>Or upload an image file</small>
+                    <input accept="image/*" id="symbolImageFile" type="file">
                 </div>
-
-                <div class="form-actions">
-                    <button class="btn-secondary" id="closeCategoriesBtn">Close</button>
+                <div class="form-group">
+                    <label for="symbolColor">Background color</label>
+                    <input id="symbolColor" type="color" value="#4a86e8">
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Settings Panel Modal -->
-    <div aria-hidden="true" aria-labelledby="settingsModalTitle" aria-modal="true" class="modal" id="settingsModal"
-         role="dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="settingsModalTitle">Settings</h2>
-                <span aria-label="Close" class="close" id="closeSettingsModal" role="button">&times;</span>
-            </div>
-            <div class="modal-body">
-                <div class="settings-panel">
-                    <div class="settings-section">
-                        <h3>Appearance</h3>
-                        <div class="form-group">
-                            <label for="settingsThemeSelect">Theme</label>
-                            <select id="settingsThemeSelect">
-                                <option value="auto">Auto (System)</option>
-                                <option value="light">Light</option>
-                                <option value="dark">Dark</option>
-                                <option value="high-contrast">High Contrast</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="settings-section">
-                        <h3>Speech</h3>
-                        <div class="form-group">
-                            <label for="settingsVolumeSelect">Speech Volume</label>
-                            <select id="settingsVolumeSelect">
-                                <option value="1.0">100% (Loud)</option>
-                                <option value="0.8">80%</option>
-                                <option value="0.6">60% (Medium)</option>
-                                <option value="0.4">40%</option>
-                                <option value="0.2">20% (Quiet)</option>
-                                <option value="0.1">10% (Very Quiet)</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="settingsVoiceSelect">Voice</label>
-                            <select id="settingsVoiceSelect"></select>
-                        </div>
-                    </div>
-
-                    <div class="settings-section">
-                        <h3>Board Layout</h3>
-                        <div class="form-group">
-                            <label for="settingsGridSizeSelect">Grid Size</label>
-                            <select id="settingsGridSizeSelect">
-                                <option value="auto">Auto Responsive</option>
-                                <option value="3x4">3 × 4</option>
-                                <option value="4x6">4 × 6</option>
-                                <option value="6x8">6 × 8</option>
-                            </select>
-                        </div>
-                    </div>
+                <div class="form-group">
+                    <label for="symbolCategory">Category</label>
+                    <select id="symbolCategory"></select>
                 </div>
 
                 <div class="form-actions">
-                    <button class="btn-secondary" id="closeSettingsBtn">Close</button>
+                    <button class="btn btn-danger" id="deleteBtn" type="button">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                    <div style="display:flex; gap:8px">
+                        <button class="btn btn-secondary" id="cancelEdit" type="button">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fas fa-save"></i> Save Changes
+                        </button>
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
-
-    <!-- Add Symbol Button -->
-    <button aria-label="Add new symbol" class="floating-btn" id="addSymbolBtn" title="Add New Symbol">+</button>
 </div>
 
-<!-- Toast area -->
+<div aria-hidden="true" aria-labelledby="categoriesModalTitle" aria-modal="true" class="modal" id="categoriesModal"
+     role="dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="categoriesModalTitle">Manage Categories</h2>
+            <span aria-label="Close" class="close" id="closeCategoriesModal" role="button">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="newCategoryName">New Category Name</label>
+                <input id="newCategoryName" placeholder="Enter category name" type="text">
+                <button class="btn btn-primary" id="addCategoryBtn">
+                    <i class="fas fa-plus"></i> Add Category
+                </button>
+            </div>
+
+            <div class="categories-list" id="categoriesList"></div>
+
+            <div class="form-actions">
+                <button class="btn btn-secondary" id="closeCategoriesBtn">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div aria-hidden="true" aria-labelledby="settingsModalTitle" aria-modal="true" class="modal" id="settingsModal"
+     role="dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="settingsModalTitle">Settings</h2>
+            <span aria-label="Close" class="close" id="closeSettingsModal" role="button">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div class="settings-panel">
+                <div class="settings-section">
+                    <h3>Appearance</h3>
+                    <div class="form-group">
+                        <label for="settingsThemeSelect">Theme</label>
+                        <select id="settingsThemeSelect">
+                            <option value="auto">Auto (System)</option>
+                            <option value="light">Light</option>
+                            <option value="dark">Dark</option>
+                            <option value="high-contrast">High Contrast</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Speech</h3>
+                    <div class="form-group">
+                        <label for="settingsVolumeSelect">Speech Volume</label>
+                        <select id="settingsVolumeSelect">
+                            <option value="1.0">100% (Loud)</option>
+                            <option value="0.8">80%</option>
+                            <option value="0.6">60% (Medium)</option>
+                            <option value="0.4">40%</option>
+                            <option value="0.2">20% (Quiet)</option>
+                            <option value="0.1">10% (Very Quiet)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="settingsVoiceSelect">Voice</label>
+                        <select id="settingsVoiceSelect"></select>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Board Layout</h3>
+                    <div class="form-group">
+                        <label for="settingsGridSizeSelect">Grid Size</label>
+                        <select id="settingsGridSizeSelect">
+                            <option value="auto">Auto Responsive</option>
+                            <option value="3x4">3 × 4</option>
+                            <option value="4x6">4 × 6</option>
+                            <option value="6x8">6 × 8</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button class="btn btn-secondary" id="closeSettingsBtn">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div aria-atomic="true" aria-live="assertive" class="toast" id="toast"></div>
 
-<script defer src="script.js"></script>
+<script defer src="../../../nav.js"></script>
+<script src="script.js"></script>
 
-<!-- Service Worker Registration -->
 <script>
-    // Register service worker for PWA functionality
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
-            // Use the correct path for your GitHub Pages subdirectory
-            navigator.serviceWorker.register('/browser-apps/tools/communication-board/sw.js', {
-                scope: '/browser-apps/tools/communication-board/'
-            })
+            navigator.serviceWorker.register('sw.js')
                 .then(function(registration) {
                 console.log('ServiceWorker registration successful with scope: ', registration.scope);
             })
@@ -256,7 +335,6 @@ Communication Board
         });
     }
 
-    // Add beforeinstallprompt event handler for install prompt
     let deferredPrompt;
     window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
@@ -265,7 +343,6 @@ Communication Board
         updateInstallButton();
     });
 
-    // Function to manually trigger install prompt
     function installApp() {
         if (deferredPrompt) {
             deferredPrompt.prompt();
@@ -282,7 +359,6 @@ Communication Board
         }
     }
 
-    // Update install button visibility
     function updateInstallButton() {
         const installBtn = document.getElementById('installBtn');
         if (!installBtn) return;
@@ -295,13 +371,14 @@ Communication Board
         if (isStandalone) {
             installBtn.style.display = 'none';
         } else if (deferredPrompt || isIOS) {
-            installBtn.style.display = 'block';
+            installBtn.style.display = 'flex';
+            installBtn.style.alignItems = 'center';
+            installBtn.style.gap = '0.5rem';
         } else {
             installBtn.style.display = 'none';
         }
     }
 
-    // Listen for app installed event
     window.addEventListener('appinstalled', () => {
         deferredPrompt = null;
         updateInstallButton();
@@ -309,8 +386,23 @@ Communication Board
         showToast('App installed successfully!');
     });
 
-    // Initialize install button on load
     window.addEventListener('load', updateInstallButton);
+
+    function showToast(msg, timeout = 2200) {
+        const toast = document.getElementById('toast');
+        if (!toast || !msg) return;
+
+        toast.textContent = msg;
+        toast.style.opacity = '1';
+        toast.style.visibility = 'visible';
+
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            setTimeout(() => {
+                toast.style.visibility = 'hidden';
+            }, 300);
+        }, timeout);
+    }
 </script>
 </body>
 </html>

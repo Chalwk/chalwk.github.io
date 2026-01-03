@@ -4,8 +4,7 @@ Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
 Communication Board JavaScript
 */
 
-document.addEventListener('DOMContentLoaded', () => {
-    // DOM
+(() => {
     const communicationBoard = document.getElementById('communicationBoard');
     const phraseDisplay = document.getElementById('phraseDisplay');
     const speakBtn = document.getElementById('speakBtn');
@@ -30,9 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const boardWrap = document.getElementById('boardWrap');
     const installBtn = document.getElementById('installBtn');
     const globalSearch = document.getElementById('globalSearch');
-    const volumeSelect = document.getElementById('volumeSelect');
 
-    // Categories Management DOM
     const manageCategoriesBtn = document.getElementById('manageCategoriesBtn');
     const categoriesModal = document.getElementById('categoriesModal');
     const closeCategoriesModal = document.getElementById('closeCategoriesModal');
@@ -41,7 +38,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const newCategoryName = document.getElementById('newCategoryName');
     const addCategoryBtn = document.getElementById('addCategoryBtn');
 
-    // Settings Panel DOM
     const settingsModal = document.getElementById('settingsModal');
     const closeSettingsModal = document.getElementById('closeSettingsModal');
     const closeSettingsBtn = document.getElementById('closeSettingsBtn');
@@ -51,11 +47,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const settingsVoiceSelect = document.getElementById('settingsVoiceSelect');
     const settingsGridSizeSelect = document.getElementById('settingsGridSizeSelect');
 
-    // Settings dropdown elements
     const settingsToggle = document.getElementById('settingsToggle');
     const settingsMenu = document.getElementById('settingsMenu');
 
-    // State
     let symbols = [];
     let currentPhrase = [];
     let phraseHistory = [];
@@ -68,14 +62,12 @@ document.addEventListener('DOMContentLoaded', () => {
         volume: 0.6
     };
 
-    // PWA State
     let deferredPrompt;
     let isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
     let isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
     window.navigator.standalone ||
     document.referrer.includes('android-app://');
 
-    // LocalStorage helpers
     const LS = {
         symbolsKey: 'cb.symbols',
         settingsKey: 'cb.settings',
@@ -85,7 +77,6 @@ document.addEventListener('DOMContentLoaded', () => {
         volumeKey: 'cb.volume'
     };
 
-    // Default categories
     const defaultCategories = [
         'Activities & Play',
         'Basic Communication',
@@ -103,9 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function saveSymbols() {
         localStorage.setItem(LS.symbolsKey, JSON.stringify(symbols));
-        if (document.getElementById('toast')) {
-            showToast('Symbols saved');
-        }
+        showToast('Symbols saved');
     }
 
     function saveSymbolsSilently() {
@@ -137,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (raw) {
             try {
                 settings = Object.assign(settings, JSON.parse(raw));
-            } catch {}
+            } catch { }
         }
         loadVolume();
     }
@@ -157,17 +146,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function applyTheme(theme) {
-        // Remove all theme classes
         document.body.classList.remove('theme-light', 'theme-dark', 'theme-high-contrast');
 
         if (theme === 'auto') {
-            // Let CSS media queries handle it
             document.body.classList.add('theme-auto');
         } else {
             document.body.classList.add(`theme-${theme}`);
         }
 
-        // Update theme color meta tag for PWA
         updateThemeColor(theme);
     }
 
@@ -191,7 +177,6 @@ document.addEventListener('DOMContentLoaded', () => {
             settings.theme = savedTheme;
             applyTheme(savedTheme);
         } else {
-            // Default to auto
             settings.theme = 'auto';
             applyTheme('auto');
         }
@@ -204,7 +189,6 @@ document.addEventListener('DOMContentLoaded', () => {
         showToast(`Theme set to ${theme}`);
     }
 
-    // Categories management
     function getCategories() {
         const categoriesRaw = localStorage.getItem(LS.categoriesKey);
         if (categoriesRaw) {
@@ -252,14 +236,12 @@ document.addEventListener('DOMContentLoaded', () => {
             return false;
         }
 
-        // Update category in categories list
         const index = categories.indexOf(oldName);
         if (index !== -1) {
             categories[index] = newName.trim();
             saveCategories(categories);
         }
 
-        // Update category in all symbols
         symbols.forEach(symbol => {
             if (symbol.category === oldName) {
                 symbol.category = newName.trim();
@@ -276,14 +258,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function deleteCategory(name) {
         if (!name) return false;
 
-        // Check if category is used by any symbols
         const symbolsInCategory = symbols.filter(s => s.category === name);
         if (symbolsInCategory.length > 0) {
             if (!confirm(`This category contains ${symbolsInCategory.length} symbol(s). Deleting it will move these symbols to "Basic Communication". Continue?`)) {
                 return false;
             }
 
-            // Move symbols to Basic Communication
             symbols.forEach(symbol => {
                 if (symbol.category === name) {
                     symbol.category = 'Basic Communication';
@@ -299,7 +279,6 @@ document.addEventListener('DOMContentLoaded', () => {
             saveCategories(categories);
         }
 
-        // Update filter if it was set to the deleted category
         if (settings.filterCategory === name) {
             settings.filterCategory = 'All';
             saveSettings();
@@ -314,7 +293,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateCategorySelects() {
         const categories = getCategories();
 
-        // Update symbol category select in edit modal
         symbolCategoryInput.innerHTML = '';
         categories.forEach(category => {
             const option = document.createElement('option');
@@ -323,14 +301,11 @@ document.addEventListener('DOMContentLoaded', () => {
             symbolCategoryInput.appendChild(option);
         });
 
-        // Update category filter select
         renderCategorySelect();
     }
 
-    // Default set
     function defaultSymbols() {
         const list = [
-            /* Basic Communication */
             { text: 'Hello', image: '😊', color: '#4a86e8', category: 'Basic Communication' },
             { text: 'Goodbye', image: '👋', color: '#4a86e8', category: 'Basic Communication' },
             { text: 'Yes', image: '👍', color: '#4a86e8', category: 'Basic Communication' },
@@ -348,7 +323,6 @@ document.addEventListener('DOMContentLoaded', () => {
             { text: 'Good night', image: '🌙', color: '#4a86e8', category: 'Basic Communication' },
             { text: 'Welcome', image: '👐', color: '#4a86e8', category: 'Basic Communication' },
 
-            /* Needs & Wants */
             { text: 'Help', image: '🆘', color: '#ea4335', category: 'Needs & Wants' },
             { text: 'I want', image: '👉', color: '#ea4335', category: 'Needs & Wants' },
             { text: 'I need', image: '👐', color: '#ea4335', category: 'Needs & Wants' },
@@ -370,7 +344,6 @@ document.addEventListener('DOMContentLoaded', () => {
             { text: 'Cold', image: '🥶', color: '#ea4335', category: 'Needs & Wants' },
             { text: 'Hot', image: '🥵', color: '#ea4335', category: 'Needs & Wants' },
 
-            /* Feelings & Emotions */
             { text: 'Happy', image: '😄', color: '#fbbc04', category: 'Feelings & Emotions' },
             { text: 'Sad', image: '😢', color: '#fbbc04', category: 'Feelings & Emotions' },
             { text: 'Angry', image: '😡', color: '#fbbc04', category: 'Feelings & Emotions' },
@@ -390,7 +363,6 @@ document.addEventListener('DOMContentLoaded', () => {
             { text: 'Bored', image: '🥱', color: '#fbbc04', category: 'Feelings & Emotions' },
             { text: 'Curious', image: '🤔', color: '#fbbc04', category: 'Feelings & Emotions' },
 
-            /* Sensory Needs */
             { text: 'Headphones', image: '🎧', color: '#9c27b0', category: 'Sensory Needs' },
             { text: 'Quiet', image: '🔇', color: '#9c27b0', category: 'Sensory Needs' },
             { text: 'Dark', image: '🌙', color: '#9c27b0', category: 'Sensory Needs' },
@@ -405,7 +377,6 @@ document.addEventListener('DOMContentLoaded', () => {
             { text: 'Bright', image: '💡', color: '#9c27b0', category: 'Sensory Needs' },
             { text: 'Pressure', image: '⏬', color: '#9c27b0', category: 'Sensory Needs' },
 
-            /* People & Pronouns */
             { text: 'Me', image: '🙂', color: '#00bcd4', category: 'People & Pronouns' },
             { text: 'You', image: '🫵', color: '#00bcd4', category: 'People & Pronouns' },
             { text: 'Friend', image: '🧑‍🤝‍🧑', color: '#00bcd4', category: 'People & Pronouns' },
@@ -421,7 +392,6 @@ document.addEventListener('DOMContentLoaded', () => {
             { text: 'She', image: '👩', color: '#00bcd4', category: 'People & Pronouns' },
             { text: 'We', image: '👥', color: '#00bcd4', category: 'People & Pronouns' },
 
-            /* Common Actions */
             { text: 'Eat', image: '🍽️', color: '#9c27b0', category: 'Common Actions' },
             { text: 'Drink', image: '🥤', color: '#9c27b0', category: 'Common Actions' },
             { text: 'Play', image: '🎮', color: '#9c27b0', category: 'Common Actions' },
@@ -442,7 +412,6 @@ document.addEventListener('DOMContentLoaded', () => {
             { text: 'Sit', image: '🪑', color: '#9c27b0', category: 'Common Actions' },
             { text: 'Stand', image: '🧍', color: '#9c27b0', category: 'Common Actions' },
 
-            /* Places */
             { text: 'Home', image: '🏠', color: '#34a853', category: 'Places' },
             { text: 'School', image: '🏫', color: '#34a853', category: 'Places' },
             { text: 'Bathroom', image: '🚽', color: '#34a853', category: 'Places' },
@@ -456,7 +425,6 @@ document.addEventListener('DOMContentLoaded', () => {
             { text: 'Hospital', image: '🏥', color: '#34a853', category: 'Places' },
             { text: 'Restaurant', image: '🍽️', color: '#34a853', category: 'Places' },
 
-            /* Questions */
             { text: 'What?', image: '❓', color: '#9b59b6', category: 'Questions' },
             { text: 'Where?', image: '🗺️', color: '#9b59b6', category: 'Questions' },
             { text: 'When?', image: '🕒', color: '#9b59b6', category: 'Questions' },
@@ -468,7 +436,6 @@ document.addEventListener('DOMContentLoaded', () => {
             { text: 'How are you?', image: '🙂', color: '#9b59b6', category: 'Questions' },
             { text: 'What is that?', image: '❓', color: '#9b59b6', category: 'Questions' },
 
-            /* Time & Schedule */
             { text: 'Now', image: '⏰', color: '#ff9800', category: 'Time & Schedule' },
             { text: 'Later', image: '⏲️', color: '#ff9800', category: 'Time & Schedule' },
             { text: 'Today', image: '📅', color: '#ff9800', category: 'Time & Schedule' },
@@ -482,7 +449,6 @@ document.addEventListener('DOMContentLoaded', () => {
             { text: 'Evening', image: '🌆', color: '#ff9800', category: 'Time & Schedule' },
             { text: 'Night', image: '🌙', color: '#ff9800', category: 'Time & Schedule' },
 
-            /* Food & Drink */
             { text: 'Water', image: '💧', color: '#e74c3c', category: 'Food & Drink' },
             { text: 'Juice', image: '🧃', color: '#e74c3c', category: 'Food & Drink' },
             { text: 'Snack', image: '🍎', color: '#e74c3c', category: 'Food & Drink' },
@@ -494,7 +460,6 @@ document.addEventListener('DOMContentLoaded', () => {
             { text: 'Fruit', image: '🍎', color: '#e74c3c', category: 'Food & Drink' },
             { text: 'Vegetable', image: '🥦', color: '#e74c3c', category: 'Food & Drink' },
 
-            /* Activities & Play */
             { text: 'Game', image: '🎲', color: '#2ecc71', category: 'Activities & Play' },
             { text: 'Music', image: '🎵', color: '#2ecc71', category: 'Activities & Play' },
             { text: 'Draw', image: '🎨', color: '#2ecc71', category: 'Activities & Play' },
@@ -505,7 +470,6 @@ document.addEventListener('DOMContentLoaded', () => {
             { text: 'Dance', image: '💃', color: '#2ecc71', category: 'Activities & Play' },
             { text: 'Sing', image: '🎤', color: '#2ecc71', category: 'Activities & Play' },
 
-            /* Body & Health */
             { text: 'Headache', image: '🤕', color: '#8e44ad', category: 'Body & Health' },
             { text: 'Stomach ache', image: '🤢', color: '#8e44ad', category: 'Body & Health' },
             { text: 'Medicine', image: '💊', color: '#8e44ad', category: 'Body & Health' },
@@ -521,9 +485,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }));
     }
 
-    // Helpers
     function showToast(msg, timeout = 2200) {
-        const toast = document.getElementById('toast');
         if (!toast || !msg) return;
 
         toast.textContent = msg;
@@ -553,11 +515,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!str) return false;
         if (isUrl(str)) return true;
         if (str.startsWith('data:image/')) return true;
-        // single-character emoji fallback considered non-url but usable
         return false;
     }
 
-    // Settings Dropdown Functions
     function toggleSettingsMenu() {
         settingsMenu.parentElement.classList.toggle('active');
     }
@@ -566,14 +526,12 @@ document.addEventListener('DOMContentLoaded', () => {
         settingsMenu.parentElement.classList.remove('active');
     }
 
-    // Close settings menu when clicking outside
     document.addEventListener('click', (e) => {
         if (!settingsToggle.contains(e.target) && !settingsMenu.contains(e.target)) {
             closeSettingsMenu();
         }
     });
 
-    // Categories Management Functions
     function openCategoriesModal() {
         categoriesModal.setAttribute('aria-hidden', 'false');
         renderCategoriesList();
@@ -593,16 +551,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const categoryItem = document.createElement('div');
             categoryItem.className = 'category-item';
             categoryItem.innerHTML = `
-            <input type="text" value="${category}" class="category-name-input">
-            <div class="category-actions">
-                <button class="btn-secondary rename-category-btn" data-category="${category}">Rename</button>
-                <button class="btn-danger delete-category-btn" data-category="${category}">Delete</button>
-            </div>
-        `;
+                <input type="text" value="${category}" class="category-name-input">
+                <div class="category-actions">
+                    <button class="btn btn-secondary rename-category-btn" data-category="${category}">Rename</button>
+                    <button class="btn btn-danger delete-category-btn" data-category="${category}">Delete</button>
+                </div>
+            `;
             categoriesList.appendChild(categoryItem);
         });
 
-        // Add event listeners for rename and delete buttons
         document.querySelectorAll('.rename-category-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const oldCategory = e.target.dataset.category;
@@ -625,16 +582,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Settings Panel Functions
     function openSettingsModal() {
         settingsModal.setAttribute('aria-hidden', 'false');
 
-        // Sync current settings to the panel
         settingsThemeSelect.value = settings.theme;
         settingsVolumeSelect.value = settings.volume.toString();
         settingsGridSizeSelect.value = settings.gridSize;
 
-        // Populate voices in settings panel
         populateSettingsVoices();
         closeSettingsMenu();
     }
@@ -672,7 +626,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // PWA Functions
     function showInstallPrompt() {
         if (deferredPrompt) {
             deferredPrompt.prompt();
@@ -694,21 +647,20 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateInstallButton() {
         if (!installBtn) return;
 
-        // Don't show install button if already in standalone mode
         if (isStandalone) {
             installBtn.style.display = 'none';
             return;
         }
 
-        // Show install button if we have a deferred prompt or on iOS
         if (deferredPrompt || isIOS) {
-            installBtn.style.display = 'block';
+            installBtn.style.display = 'flex';
+            installBtn.style.alignItems = 'center';
+            installBtn.style.gap = '0.5rem';
         } else {
             installBtn.style.display = 'none';
         }
     }
 
-    // For long-press
     function previewSpeak(symbol) {
         const text = symbol.text;
         if (!text || !('speechSynthesis' in window)) return;
@@ -728,7 +680,6 @@ document.addEventListener('DOMContentLoaded', () => {
         speechSynthesis.speak(ut);
     }
 
-    // Rendering
     function renderBoard() {
         communicationBoard.innerHTML = '';
         const searchValue = (globalSearch?.value || "").toLowerCase();
@@ -747,14 +698,12 @@ document.addEventListener('DOMContentLoaded', () => {
             node.style.backgroundColor = symbol.color || '#e8f0fe';
             if (isEditMode) node.classList.add('editing');
 
-            // image or emoji
             if (isImageSource(symbol.image)) {
                 node.innerHTML = `<img src="${symbol.image}" alt="${symbol.text}"><span>${symbol.text}</span>`;
             } else {
                 node.innerHTML = `<span style="font-size:2rem">${symbol.image}</span><span>${symbol.text}</span>`;
             }
 
-            // click behavior
             node.addEventListener('click', () => {
                 if (isEditMode) openEditModal(symbol);
                 else addToPhrase(symbol);
@@ -773,7 +722,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             node.addEventListener('pointerdown', (e) => {
-                // Prevent scrolling from cancelling the long-press
                 e.preventDefault();
                 startPressTimer();
             }, { passive: false });
@@ -782,7 +730,6 @@ document.addEventListener('DOMContentLoaded', () => {
             node.addEventListener('pointerleave', clearPressTimer);
             node.addEventListener('pointercancel', clearPressTimer);
 
-            // keyboard support
             node.addEventListener('keydown', (ev) => {
                 if (ev.key === 'Enter' || ev.key === ' ') {
                     ev.preventDefault();
@@ -790,7 +737,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     else addToPhrase(symbol);
                 }
                 if (ev.key === 'e') {
-                    // quick edit when in edit mode
                     if (isEditMode) openEditModal(symbol);
                 }
             });
@@ -821,7 +767,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function updatePhraseDisplay() {
         phraseDisplay.innerHTML = '';
 
-        // Add drag-active class management
         phraseDisplay.classList.remove('drag-active');
 
         if (currentPhrase.length === 0) {
@@ -846,28 +791,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 item.innerHTML = `<span style="font-size:1.2rem; margin-right:6px;">${symbol.image}</span><span>${symbol.text}</span>`;
             }
 
-            // Click to remove (backed up for undo)
             item.addEventListener('click', () => {
                 backupPhrase();
                 currentPhrase.splice(index, 1);
                 updatePhraseDisplay();
             });
 
-            // Improved drag handlers
             item.addEventListener('dragstart', (e) => {
                 e.dataTransfer.setData('text/plain', index.toString());
                 e.dataTransfer.effectAllowed = 'move';
                 item.classList.add('dragging');
                 phraseDisplay.classList.add('drag-active');
 
-                // Set drag image to the element itself for better visual feedback
                 setTimeout(() => {
                     item.style.opacity = '0.4';
                 }, 0);
             });
 
             item.addEventListener('dragend', () => {
-                // Remove all drag-related classes
                 document.querySelectorAll('.phrase-item').forEach(el => {
                     el.classList.remove('dragging', 'drag-over', 'drag-placeholder');
                     el.style.opacity = '';
@@ -879,7 +820,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 e.preventDefault();
                 e.dataTransfer.dropEffect = 'move';
 
-                // Add visual feedback to potential drop targets
                 document.querySelectorAll('.phrase-item').forEach(el => {
                     el.classList.remove('drag-over');
                 });
@@ -895,7 +835,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             item.addEventListener('dragleave', (e) => {
-                // Only remove class if not dragging over child elements
                 if (!item.contains(e.relatedTarget)) {
                     item.classList.remove('drag-over');
                 }
@@ -934,10 +873,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }, { offset: Number.NEGATIVE_INFINITY }).element;
     }
 
-    // Phrase operations
     function backupPhrase() {
         phraseHistory.push(JSON.stringify(currentPhrase));
-        // limit history
         if (phraseHistory.length > 30) phraseHistory.shift();
     }
 
@@ -970,7 +907,6 @@ document.addEventListener('DOMContentLoaded', () => {
         updatePhraseDisplay();
     }
 
-    // Speech
     function speakPhrase() {
         if (currentPhrase.length === 0) return;
         const phraseText = currentPhrase.map(s => s.text).join(' ');
@@ -1013,7 +949,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Edit modal
     function openEditModal(symbol = null) {
         isEditMode = true;
         document.body.classList.add('edit-mode');
@@ -1039,7 +974,6 @@ document.addEventListener('DOMContentLoaded', () => {
         symbolForm.reset();
     }
 
-    // Save symbol from modal
     async function saveSymbolChanges(e) {
         e.preventDefault();
         const text = symbolTextInput.value.trim();
@@ -1049,12 +983,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!text) { alert('Please enter text'); return; }
 
-        // if file selected, convert to data URL
         if (symbolImageFile.files && symbolImageFile.files[0]) {
             image = await fileToDataURL(symbolImageFile.files[0]);
         }
 
-        // fallback: single character if no image
         if (!image) image = text.charAt(0) || '?';
 
         if (currentEditingSymbol && currentEditingSymbol.id) {
@@ -1084,7 +1016,6 @@ document.addEventListener('DOMContentLoaded', () => {
         openEditModal(null);
     }
 
-    // File helpers
     function fileToDataURL(file) {
         return new Promise((res, rej) => {
             const r = new FileReader();
@@ -1094,7 +1025,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Import / Export
     function exportJSON() {
         const payload = {
             symbols,
@@ -1119,7 +1049,6 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const parsed = JSON.parse(reader.result);
                 if (parsed.symbols && Array.isArray(parsed.symbols)) {
-                    // merge with safe id assignment
                     const existingIds = new Set(symbols.map(s => s.id));
                     let nextId = symbols.length > 0 ? Math.max(...symbols.map(s => s.id)) + 1 : 1;
                     parsed.symbols.forEach(s => {
@@ -1147,7 +1076,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
         reader.readAsText(file);
-        // clear the input so same file can be imported again if needed
         evt.target.value = '';
         closeSettingsMenu();
     }
@@ -1174,12 +1102,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Voices
     function populateVoices() {
         const voices = speechSynthesis.getVoices();
         settingsVoiceSelect.innerHTML = '';
 
-        // Add a default option
         const defaultOption = document.createElement('option');
         defaultOption.value = '';
         defaultOption.textContent = 'Default Voice';
@@ -1200,14 +1126,12 @@ document.addEventListener('DOMContentLoaded', () => {
             settingsVoiceSelect.appendChild(o);
         });
 
-        // If stored voice not found but we have voices, select first available
         if (!foundStored && voices.length > 0 && stored) {
             localStorage.removeItem(LS.voiceKey);
             showToast('Previous voice not available, using default');
         }
     }
 
-    // Toggle edit mode
     function toggleEditMode() {
         isEditMode = !isEditMode;
         document.body.classList.toggle('edit-mode', isEditMode);
@@ -1216,7 +1140,6 @@ document.addEventListener('DOMContentLoaded', () => {
         closeSettingsMenu();
     }
 
-    // Event listeners
     speakBtn.addEventListener('click', speakPhrase);
     clearBtn.addEventListener('click', clearPhrase);
     editModeBtn.addEventListener('click', toggleEditMode);
@@ -1232,7 +1155,6 @@ document.addEventListener('DOMContentLoaded', () => {
     exportBtn.addEventListener('click', exportJSON);
     importFile.addEventListener('change', importJSONFile);
 
-    // Categories Management Event Listeners
     manageCategoriesBtn.addEventListener('click', openCategoriesModal);
     closeCategoriesModal.addEventListener('click', closeCategoriesModalHandler);
     closeCategoriesBtn.addEventListener('click', closeCategoriesModalHandler);
@@ -1243,7 +1165,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Allow Enter key to add category
     newCategoryName.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
             e.preventDefault();
@@ -1251,7 +1172,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Settings Panel Event Listeners
     openSettingsPanelBtn.addEventListener('click', openSettingsModal);
     closeSettingsModal.addEventListener('click', closeSettingsModalHandler);
     closeSettingsBtn.addEventListener('click', closeSettingsModalHandler);
@@ -1299,7 +1219,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderBoard();
     });
 
-    symbolImageFile.addEventListener('change', () => {});
+    symbolImageFile.addEventListener('change', () => { });
 
     settingsVoiceSelect.addEventListener('change', () => {
         const selectedVoice = settingsVoiceSelect.value;
@@ -1326,7 +1246,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // PWA Events
     window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         deferredPrompt = e;
@@ -1385,5 +1304,5 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(loadVoices, 1000);
     }
 
-    init();
-});
+    document.addEventListener('DOMContentLoaded', init);
+})();
