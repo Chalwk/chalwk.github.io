@@ -76,186 +76,13 @@ Social Script Builder JavaScript
                 { id: "b7", type: "reminder", text: "Pre-identify 3 non-negotiable boundaries", order: 6 },
                 { id: "b8", type: "reminder", text: "Practice power stance (feet apart, shoulders back) before speaking", order: 7 }
             ]
-        },
-        {
-            id: "ending-script",
-            title: "Ending Conversations",
-            description: "Need to leave or feeling drained",
-            steps: [
-                { id: "e1", type: "statement", text: "It was great talking with you!", order: 0 },
-                { id: "e2", type: "action", text: "Start gathering belongings", order: 1 },
-                { id: "e3", type: "statement", text: "I need to [specific reason] now.", order: 2 },
-                { id: "e4", type: "statement", text: "Examples: '...get to my next meeting', '...recharge alone for a bit'", order: 3 },
-                { id: "e5", type: "question", text: "Wait - one more thing!", order: 4 },
-                { id: "e6", type: "statement", text: "I have 1 minute - what's most important?", order: 5 },
-                { id: "e7", type: "reminder", text: "Set phone vibration alert at exit time", order: 6 },
-                { id: "e8", type: "reminder", text: "Have exit phrase ready: 'My social battery is low - need to recharge'", order: 7 }
-            ]
-        },
-        {
-            id: "smalltalk-script",
-            title: "Small Talk",
-            description: "Filling silence with acquaintances",
-            steps: [
-                { id: "s1", type: "statement", text: "This [event/place] has great [observation], doesn't it?", order: 0 },
-                { id: "s2", type: "statement", text: "Examples: 'The coffee here is strong today!', 'This webinar has useful slides'", order: 1 },
-                { id: "s3", type: "question", text: "Yes! I especially like...", order: 2 },
-                { id: "s4", type: "statement", text: "What's your favorite part?", order: 3 },
-                { id: "s5", type: "question", text: "Meh, it's okay.", order: 4 },
-                { id: "s6", type: "statement", text: "Are you working on anything interesting lately?", order: 5 },
-                { id: "s7", type: "reminder", text: "Prepare 3 universal questions: 'Seen any good movies?', 'Tried new food spots?', 'Working on any projects?'", order: 6 },
-                { id: "s8", type: "reminder", text: "Allow 5-second pauses - silence is normal", order: 7 }
-            ]
-        },
-        {
-            id: "needs-script",
-            title: "Discussing My Needs",
-            description: "Meetings or new social settings",
-            steps: [
-                { id: "n1", type: "statement", text: "I thrive when I have [accommodation]. This helps me [benefit].", order: 0 },
-                { id: "n2", type: "statement", text: "Example: 'I do best with written instructions. This helps me deliver accurate information.'", order: 1 },
-                { id: "n3", type: "question", text: "We can arrange that!", order: 2 },
-                { id: "n4", type: "statement", text: "Would Thursday deadlines work better than Friday?", order: 3 },
-                { id: "n5", type: "question", text: "That's unusual.", order: 4 },
-                { id: "n6", type: "statement", text: "Many neurodivergent people need this. Here's a helpful article...", order: 5 },
-                { id: "n7", type: "reminder", text: "Bring printed accommodation suggestions", order: 6 },
-                { id: "n8", type: "reminder", text: "Script key phrases on index card", order: 7 }
-            ]
-        },
-        {
-            id: "interruption-script",
-            title: "Handling Interruptions",
-            description: "When someone interrupts me while speaking",
-            steps: [
-                { id: "int1", type: "statement", text: "I'd like to finish my thought first.", order: 0 },
-                { id: "int2", type: "action", text: "Hold up one finger briefly to signal 'one moment'", order: 1 },
-                { id: "int3", type: "statement", text: "As I was saying...", order: 2 },
-                { id: "int4", type: "question", text: "But this is more important!", order: 3 },
-                { id: "int5", type: "statement", text: "I understand it's important. I'll be done in a moment.", order: 4 },
-                { id: "int6", type: "reminder", text: "It's okay to assert my right to speak", order: 5 },
-                { id: "int7", type: "boundary", text: "I deserve to finish my sentences without interruption", order: 6 }
-            ]
-        },
-        {
-            id: "overwhelm-script",
-            title: "Managing Sensory Overload",
-            description: "When environments become overwhelming",
-            steps: [
-                { id: "ov1", type: "observation", text: "I notice the lights/sounds are becoming overwhelming", order: 0 },
-                { id: "ov2", type: "statement", text: "I need to take a brief break to reset.", order: 1 },
-                { id: "ov3", type: "action", text: "Move to a quieter space or step outside", order: 2 },
-                { id: "ov4", type: "action", text: "Use noise-canceling headphones or sunglasses if available", order: 3 },
-                { id: "ov5", type: "reminder", text: "Focus on breathing slowly for 60 seconds", order: 4 },
-                { id: "ov6", type: "reminder", text: "This feeling will pass - I am safe", order: 5 },
-                { id: "ov7", type: "statement", text: "I'm ready to return now.", order: 6 }
-            ]
-        },
-        {
-            id: "conflict-script",
-            title: "Resolving Disagreements",
-            description: "Navigating differences of opinion calmly",
-            steps: [
-                { id: "c1", type: "validation", text: "I understand we see this differently.", order: 0 },
-                { id: "c2", type: "statement", text: "Can you help me understand your perspective?", order: 1 },
-                { id: "c3", type: "statement", text: "From my point of view...", order: 2 },
-                { id: "c4", type: "question", text: "You're wrong about this.", order: 3 },
-                { id: "c5", type: "statement", text: "I respect that we may not agree on this.", order: 4 },
-                { id: "c6", type: "boundary", text: "Let's focus on the issue, not personal attacks", order: 5 },
-                { id: "c7", type: "closure", text: "I think we've both shared our views. Should we move on?", order: 6 }
-            ]
-        },
-        {
-            id: "group-script",
-            title: "Joining Group Conversations",
-            description: "Entering existing conversations smoothly",
-            steps: [
-                { id: "gr1", type: "observation", text: "Observe the conversation topic before joining", order: 0 },
-                { id: "gr2", type: "action", text: "Make eye contact with one person and smile", order: 1 },
-                { id: "gr3", type: "statement", text: "Mind if I join you?", order: 2 },
-                { id: "gr4", type: "transition", text: "That reminds me of...", order: 3 },
-                { id: "gr5", type: "question", text: "What were you discussing?", order: 4 },
-                { id: "gr6", type: "reminder", text: "It's okay to listen more than speak at first", order: 5 },
-                { id: "gr7", type: "reminder", text: "Groups are loud - it's fine to step back if needed", order: 6 }
-            ]
-        },
-        {
-            id: "feedback-script",
-            title: "Giving and Receiving Feedback",
-            description: "Constructive communication in work/school settings",
-            steps: [
-                { id: "f1", type: "statement", text: "I have some thoughts about the project. Is now a good time?", order: 0 },
-                { id: "f2", type: "statement", text: "I noticed [specific observation].", order: 1 },
-                { id: "f3", type: "statement", text: "One suggestion I have is...", order: 2 },
-                { id: "f4", type: "question", text: "I need feedback on my work.", order: 3 },
-                { id: "f5", type: "action", text: "Take notes during feedback to process later", order: 4 },
-                { id: "f6", type: "reminder", text: "Feedback is about the work, not me as a person", order: 5 },
-                { id: "f7", type: "validation", text: "Thank you for this feedback - it's helpful.", order: 6 }
-            ]
-        },
-        {
-            id: "phone-script",
-            title: "Phone Calls",
-            description: "Structured approach to telephone conversations",
-            steps: [
-                { id: "p1", type: "statement", text: "Hello, this is [Name] speaking.", order: 0 },
-                { id: "p2", type: "statement", text: "I'm calling about [specific reason].", order: 1 },
-                { id: "p3", type: "action", text: "Have pen and paper ready for important information", order: 2 },
-                { id: "p4", type: "question", text: "Could you repeat that please?", order: 3 },
-                { id: "p5", type: "statement", text: "Let me read that back to confirm...", order: 4 },
-                { id: "p6", type: "reminder", text: "It's okay to ask for a moment to process", order: 5 },
-                { id: "p7", type: "closure", text: "Thank you for your help. Goodbye.", order: 6 }
-            ]
-        },
-        {
-            id: "dating-script",
-            title: "Dating Situations",
-            description: "Navigating romantic social interactions",
-            steps: [
-                { id: "d1", type: "statement", text: "I've enjoyed getting to know you.", order: 0 },
-                { id: "d2", type: "question", text: "What are you looking for in a relationship?", order: 1 },
-                { id: "d3", type: "boundary", text: "I prefer to take physical intimacy slowly.", order: 2 },
-                { id: "d4", type: "statement", text: "As an autistic person, I sometimes...", order: 3 },
-                { id: "d5", type: "validation", text: "I appreciate you sharing that with me.", order: 4 },
-                { id: "d6", type: "reminder", text: "My needs and boundaries are valid", order: 5 },
-                { id: "d7", type: "closure", text: "I'd like to see you again if you're interested.", order: 6 }
-            ]
-        },
-        {
-            id: "medical-script",
-            title: "Medical Appointments",
-            description: "Communicating effectively with healthcare providers",
-            steps: [
-                { id: "m1", type: "action", text: "Bring written list of questions and concerns", order: 0 },
-                { id: "m2", type: "statement", text: "I have some specific things I'd like to discuss today.", order: 1 },
-                { id: "m3", type: "statement", text: "As an autistic person, I need...", order: 2 },
-                { id: "m4", type: "question", text: "Could you explain that in simpler terms?", order: 3 },
-                { id: "m5", type: "statement", text: "I'd like to take notes or record this conversation.", order: 4 },
-                { id: "m6", type: "boundary", text: "I need to understand all procedures before consenting", order: 5 },
-                { id: "m7", type: "closure", text: "Thank you for taking the time to explain everything.", order: 6 }
-            ]
-        },
-        {
-            id: "restaurant-script",
-            title: "Restaurant Interactions",
-            description: "Ordering food and managing dining situations",
-            steps: [
-                { id: "r1", type: "observation", text: "Review menu online before arriving", order: 0 },
-                { id: "r2", type: "statement", text: "I need a few more minutes to decide, please.", order: 1 },
-                { id: "r3", type: "statement", text: "I'd like to order the [dish], with modifications...", order: 2 },
-                { id: "r4", type: "question", text: "What ingredients are in this sauce?", order: 3 },
-                { id: "r5", type: "action", text: "Use noise-canceling earbuds if the environment is loud", order: 4 },
-                { id: "r6", type: "reminder", text: "It's okay to send food back if it's wrong", order: 5 },
-                { id: "r7", type: "closure", text: "Check, please. Thank you for the meal.", order: 6 }
-            ]
         }
     ];
 
-    // ----- helpers -----
     const el = (sel, root = document) => root.querySelector(sel);
     const els = (sel, root = document) => Array.from(root.querySelectorAll(sel));
     const escapeHtml = s => String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[m]));
 
-    // ----- DOM refs -----
     const scriptTitle = el("#script-title");
     const scriptDescription = el("#script-description");
     const stepsList = el("#steps-list");
@@ -363,7 +190,7 @@ Social Script Builder JavaScript
         stepsList.innerHTML = "";
 
         if (currentScript.steps.length === 0) {
-            stepsList.innerHTML = `<div class="muted">No steps yet. Add your first step above.</div>`;
+            stepsList.innerHTML = `<div style="color: var(--gray); text-align: center; padding: 2rem;">No steps yet. Add your first step above.</div>`;
             return;
         }
 
@@ -379,16 +206,16 @@ Social Script Builder JavaScript
                     >${escapeHtml(step.text)}</textarea>
                 </div>
                 <div class="step-type">
-                    <select id="step-${step.id}-type" aria-label="Step type">
+                    <select id="step-${step.id}-type" aria-label="Step type" style="padding: 0.5rem; border: 1px solid var(--gray-light); border-radius: var(--radius); width: 100%;">
                         ${Object.entries(STEP_TYPES).map(([key, value]) =>
                             `<option value="${key}" ${step.type === key ? 'selected' : ''}>${value.name}</option>`
                         ).join('')}
                     </select>
                 </div>
                 <div class="step-actions">
-                    <button type="button" class="btn small" onclick="moveStep('${step.id}', 'up')" ${index === 0 ? 'disabled' : ''} aria-label="Move step up">↑</button>
-                    <button type="button" class="btn small" onclick="moveStep('${step.id}', 'down')" ${index === currentScript.steps.length - 1 ? 'disabled' : ''} aria-label="Move step down">↓</button>
-                    <button type="button" class="btn small" onclick="removeStep('${step.id}')" aria-label="Remove step">×</button>
+                    <button type="button" class="btn btn-secondary" onclick="moveStep('${step.id}', 'up')" ${index === 0 ? 'disabled' : ''} aria-label="Move step up" style="padding: 0.5rem;">↑</button>
+                    <button type="button" class="btn btn-secondary" onclick="moveStep('${step.id}', 'down')" ${index === currentScript.steps.length - 1 ? 'disabled' : ''} aria-label="Move step down" style="padding: 0.5rem;">↓</button>
+                    <button type="button" class="btn btn-secondary" onclick="removeStep('${step.id}')" aria-label="Remove step" style="padding: 0.5rem;">×</button>
                 </div>
             `;
             stepsList.appendChild(stepEl);
@@ -413,7 +240,7 @@ Social Script Builder JavaScript
         scriptsLibrary.innerHTML = "";
 
         if (scripts.length === 0) {
-            scriptsLibrary.innerHTML = `<div class="muted">No scripts saved yet. Create your first script!</div>`;
+            scriptsLibrary.innerHTML = `<div style="color: var(--gray); text-align: center; padding: 2rem;">No scripts saved yet. Create your first script!</div>`;
             return;
         }
 
@@ -422,7 +249,7 @@ Social Script Builder JavaScript
         );
 
         if (filteredScripts.length === 0) {
-            scriptsLibrary.innerHTML = `<div class="muted">No scripts match your search.</div>`;
+            scriptsLibrary.innerHTML = `<div style="color: var(--gray); text-align: center; padding: 2rem;">No scripts match your search.</div>`;
             return;
         }
 
@@ -433,9 +260,9 @@ Social Script Builder JavaScript
                 <h4>${escapeHtml(script.title)}</h4>
                 <p>${escapeHtml(script.description || "No description")} • ${script.steps.length} steps</p>
                 <div class="script-card-actions">
-                    <button class="btn small" onclick="loadScriptForEdit('${script.id}')">Edit</button>
-                    <button class="btn small" onclick="startPractice('${script.id}')">Practice</button>
-                    <button class="btn small" onclick="deleteScript('${script.id}')">Delete</button>
+                    <button class="btn btn-secondary" onclick="loadScriptForEdit('${script.id}')" style="padding: 0.5rem 0.75rem; font-size: 0.875rem;">Edit</button>
+                    <button class="btn btn-primary" onclick="startPractice('${script.id}')" style="padding: 0.5rem 0.75rem; font-size: 0.875rem;">Practice</button>
+                    <button class="btn btn-secondary" onclick="deleteScript('${script.id}')" style="padding: 0.5rem 0.75rem; font-size: 0.875rem;">Delete</button>
                 </div>
             `;
             scriptsLibrary.appendChild(card);
@@ -452,8 +279,8 @@ Social Script Builder JavaScript
                 <h4>${escapeHtml(script.title)}</h4>
                 <p>${escapeHtml(script.description || "No description")} • ${script.steps.length} steps</p>
                 <div class="script-card-actions">
-                    <button class="btn small primary" onclick="loadPremadeScript('${script.id}')">Use This Template</button>
-                    <button class="btn small" onclick="previewPremadeScript('${script.id}')">Preview</button>
+                    <button class="btn btn-primary" onclick="loadPremadeScript('${script.id}')" style="padding: 0.5rem 0.75rem; font-size: 0.875rem;">Use This Template</button>
+                    <button class="btn btn-secondary" onclick="previewPremadeScript('${script.id}')" style="padding: 0.5rem 0.75rem; font-size: 0.875rem;">Preview</button>
                 </div>
             `;
             premadeScripts.appendChild(card);
@@ -479,8 +306,8 @@ Social Script Builder JavaScript
         const script = PREMADE_SCRIPTS.find(s => s.id === scriptId);
         if (!script) return;
 
-        let previewContent = `<h4>${escapeHtml(script.title)}</h4>`;
-        previewContent += `<p><em>${escapeHtml(script.description)}</em></p>`;
+        let previewContent = `<h4 style="color: var(--dark); margin-bottom: 0.5rem;">${escapeHtml(script.title)}</h4>`;
+        previewContent += `<p style="color: var(--gray); margin-bottom: 1rem;"><em>${escapeHtml(script.description)}</em></p>`;
         previewContent += `<div class="preview-steps">`;
 
         script.steps.forEach(step => {
@@ -498,16 +325,16 @@ Social Script Builder JavaScript
         const previewModal = document.createElement("dialog");
         previewModal.className = "preview-modal";
         previewModal.innerHTML = `
-            <div class="modal-header">
-                <h3>Script Preview</h3>
-                <button class="btn ghost close-preview" aria-label="Close preview">×</button>
+            <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; padding: 1.5rem; border-bottom: 1px solid var(--gray-light);">
+                <h3 style="margin: 0;">Script Preview</h3>
+                <button class="btn btn-secondary close-preview" aria-label="Close preview" style="padding: 0.5rem 0.75rem;">×</button>
             </div>
             <div class="preview-content">
                 ${previewContent}
             </div>
-            <div class="modal-actions">
-                <button class="btn primary load-preview-script" data-script-id="${scriptId}">Use This Template</button>
-                <button class="btn close-preview">Close</button>
+            <div class="modal-actions" style="padding: 1rem 1.5rem; border-top: 1px solid var(--gray-light); display: flex; justify-content: flex-end; gap: 0.75rem;">
+                <button class="btn btn-primary load-preview-script" data-script-id="${scriptId}">Use This Template</button>
+                <button class="btn btn-secondary close-preview">Close</button>
             </div>
         `;
 
@@ -766,27 +593,6 @@ Social Script Builder JavaScript
             }
         });
     }
-
-    function updateOnlineStatus() {
-        const offlineIndicator = document.getElementById('offline-indicator');
-        if (!offlineIndicator) return;
-
-        if (navigator.onLine) {
-            offlineIndicator.classList.remove('show');
-        } else {
-            offlineIndicator.classList.add('show');
-        }
-    }
-
-    const offlineIndicator = document.createElement('div');
-    offlineIndicator.id = 'offline-indicator';
-    offlineIndicator.className = 'offline-indicator';
-    offlineIndicator.textContent = 'You are currently offline. Some features may be limited.';
-    document.body.prepend(offlineIndicator);
-
-    window.addEventListener('online', updateOnlineStatus);
-    window.addEventListener('offline', updateOnlineStatus);
-    updateOnlineStatus();
 
     document.addEventListener("DOMContentLoaded", () => {
         window.moveStep = moveStep;

@@ -16,161 +16,222 @@ Social Script Builder
     <meta content="default" name="apple-mobile-web-app-status-bar-style">
     <meta content="Social Script Builder" name="apple-mobile-web-app-title">
     <link href="icons/icon-192x192.png" rel="apple-touch-icon">
-
     <link href="manifest.json" rel="manifest">
-
+    <link href="../../../core.css" rel="stylesheet"/>
     <link href="style.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
+          rel="stylesheet">
 </head>
+
 <body>
-<a class="skip" href="#app">Skip to main content</a>
+<header class="header">
+    <div class="container">
+        <a class="logo" href="../../../index.html"> <i class="fas fa-code"></i> Jericho </a>
 
-<header class="site-header" role="banner">
-    <div class="container header-inner">
-        <div class="brand">
-            <svg aria-hidden="true" class="logo" height="36" viewBox="0 0 24 24" width="36">
-                <circle cx="12" cy="12" fill="#7c3aed" r="10"/>
-                <path d="M8 8h8M8 12h6M8 16h4" stroke="#fff" stroke-linecap="round" stroke-width="1.5"/>
-            </svg>
-            <div class="title-wrap">
-                <h1>Social Script Builder</h1>
-                <p class="tagline">Prepare for social situations with customizable scripts and practice tools.</p>
-            </div>
+        <nav class="nav-desktop">
+            <ul class="nav-links">
+                <li><a href="../../../index.html#about">About</a></li>
+                <li><a href="../../../browser-apps/apps_and_tools.html">Apps & Tools</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" href="#">Other Stuff <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://chalwk.github.io/CPAS/">CPAS</a></li>
+                        <li class="dropdown-submenu">
+                            <a class="submenu-toggle" href="#">Education <i class="fas fa-chevron-right"></i></a>
+                            <ul class="submenu">
+                                <li><a href="../../../education/understanding-autism.html">Understanding Autism</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Script Builder</a></li>
+            </ul>
+        </nav>
+
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
         </div>
 
-        <div aria-label="App actions" class="header-actions" role="toolbar">
-            <button aria-label="Help" class="btn ghost" id="help-btn">Help</button>
-            <button class="btn primary" id="practice-btn">Practice Mode</button>
-        </div>
+        <nav class="nav-mobile">
+            <ul class="nav-mobile-links">
+                <li><a href="../../../index.html#about">About</a></li>
+                <li><a href="../../../browser-apps/apps_and_tools.html">Apps & Tools</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" href="#">Other Stuff <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://chalwk.github.io/CPAS/">CPAS</a></li>
+                        <li class="dropdown-submenu">
+                            <a class="submenu-toggle" href="#">Education <i class="fas fa-chevron-right"></i></a>
+                            <ul class="submenu">
+                                <li><a href="../../../education/understanding-autism.html">Understanding Autism</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Script Builder</a></li>
+            </ul>
+        </nav>
     </div>
 </header>
 
-<main class="container app-grid" id="app" role="main">
-    <section aria-labelledby="editor-heading" class="panel panel-left">
-        <div class="panel-head">
-            <h2 id="editor-heading">Script Editor</h2>
-            <p class="muted small">Build your social script step by step.</p>
-        </div>
+<main>
+    <div class="container">
+        <div class="app-grid" style="margin-top: 2rem;">
+            <section class="panel"
+                     style="background: var(--light); border: 1px solid var(--gray-light); border-radius: var(--radius-lg); padding: 1.5rem;">
+                <div class="panel-head">
+                    <h2 style="color: var(--primary); margin-bottom: 0.5rem;">Script Editor</h2>
+                    <p class="small" style="color: var(--gray);">Build your social script step by step.</p>
+                </div>
 
-        <div class="script-meta">
-            <label class="field">
-                <span>Script Title</span>
-                <input id="script-title" placeholder="e.g., Ordering coffee, Phone call to doctor" type="text"/>
-            </label>
-            <label class="field">
-                <span>Situation Description</span>
-                <textarea id="script-description" placeholder="Describe the social situation this script is for..."
-                          rows="2"></textarea>
-            </label>
-        </div>
+                <div class="script-meta">
+                    <label class="field">
+                        <span>Script Title</span>
+                        <input id="script-title" placeholder="e.g., Ordering coffee, Phone call to doctor" type="text"/>
+                    </label>
+                    <label class="field">
+                        <span>Situation Description</span>
+                        <textarea id="script-description"
+                                  placeholder="Describe the social situation this script is for..."
+                                  rows="2"></textarea>
+                    </label>
+                </div>
 
-        <div class="script-steps">
-            <h3>Script Steps</h3>
-            <div aria-label="Script steps" class="steps-list" id="steps-list" role="list"></div>
+                <div class="script-steps">
+                    <h3 style="color: var(--dark); margin-bottom: 1rem;">Script Steps</h3>
+                    <div aria-label="Script steps" class="steps-list" id="steps-list" role="list"></div>
 
-            <div class="step-actions">
-                <button class="btn" id="add-step" type="button">+ Add Step</button>
-                <select aria-label="Step type" id="step-type">
-                    <option value="statement">I Say</option>
-                    <option value="question">They Might Say</option>
-                    <option value="action">Action I Take</option>
-                    <option value="reminder">Reminder to Self</option>
-                    <option value="transition">Transition</option>
-                    <option value="observation">Observation</option>
-                    <option value="validation">Validation</option>
-                    <option value="boundary">Boundary</option>
-                    <option value="followup">Follow-up</option>
-                    <option value="closure">Closure</option>
-                </select>
-            </div>
-        </div>
+                    <div class="step-actions" style="display: flex; gap: 1rem; margin-top: 1rem; align-items: center;">
+                        <button class="btn btn-primary" id="add-step" type="button">+ Add Step</button>
+                        <select aria-label="Step type" id="step-type"
+                                style="padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius);">
+                            <option value="statement">I Say</option>
+                            <option value="question">They Might Say</option>
+                            <option value="action">Action I Take</option>
+                            <option value="reminder">Reminder to Self</option>
+                            <option value="transition">Transition</option>
+                            <option value="observation">Observation</option>
+                            <option value="validation">Validation</option>
+                            <option value="boundary">Boundary</option>
+                            <option value="followup">Follow-up</option>
+                            <option value="closure">Closure</option>
+                        </select>
+                    </div>
+                </div>
 
-        <div class="script-actions">
-            <button class="btn primary" id="save-script">Save Script</button>
-            <button class="btn" id="new-script">New Script</button>
-            <button class="btn" id="export-script">Export</button>
-        </div>
-    </section>
+                <div class="script-actions" style="display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap;">
+                    <button class="btn btn-primary" id="save-script">Save Script</button>
+                    <button class="btn btn-secondary" id="new-script">New Script</button>
+                    <button class="btn btn-secondary" id="export-script">Export</button>
+                </div>
+            </section>
 
-    <section aria-labelledby="library-heading" class="panel panel-right">
-        <div class="panel-head">
-            <h2 id="library-heading">Script Library</h2>
-            <p class="muted small">Your saved scripts and practice tools.</p>
-        </div>
+            <section class="panel"
+                     style="background: var(--light); border: 1px solid var(--gray-light); border-radius: var(--radius-lg); padding: 1.5rem;">
+                <div class="panel-head">
+                    <h2 style="color: var(--primary); margin-bottom: 0.5rem;">Script Library</h2>
+                    <p class="small" style="color: var(--gray);">Your saved scripts and practice tools.</p>
+                </div>
 
-        <div class="search-controls">
-            <input aria-label="Search scripts" id="search-scripts" placeholder="Search scripts..." type="text"/>
-        </div>
+                <div class="search-controls" style="margin-bottom: 1rem;">
+                    <input aria-label="Search scripts" id="search-scripts" placeholder="Search scripts..." type="text"
+                           style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius);"/>
+                </div>
 
-        <div aria-label="Saved scripts" class="scripts-library" id="scripts-library" role="list">
-            <div class="muted">No scripts saved yet. Create your first script!</div>
-        </div>
+                <div aria-label="Saved scripts" class="scripts-library" id="scripts-library" role="list">
+                    <div style="color: var(--gray); text-align: center; padding: 2rem;">No scripts saved yet. Create
+                        your first script!
+                    </div>
+                </div>
 
-        <div class="premade-scripts-section">
-            <h3>Pre-made Script Templates</h3>
-            <p class="muted small">Based on common social situations</p>
-            <div aria-label="Pre-made scripts" class="premade-scripts" id="premade-scripts" role="list">
-            </div>
-        </div>
+                <div class="premade-scripts-section"
+                     style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--gray-light);">
+                    <h3 style="color: var(--dark); margin-bottom: 0.5rem;">Pre-made Script Templates</h3>
+                    <p class="small" style="color: var(--gray); margin-bottom: 1rem;">Based on common social
+                        situations</p>
+                    <div aria-label="Pre-made scripts" class="premade-scripts" id="premade-scripts" role="list"></div>
+                </div>
 
-        <div class="practice-tools">
-            <h3>Practice Tools</h3>
-            <div class="tool-options">
-                <label class="checkbox">
-                    <input id="show-timer" type="checkbox"/>
-                    <span>Show practice timer</span>
-                </label>
-                <label class="checkbox">
-                    <input id="auto-advance" type="checkbox"/>
-                    <span>Auto-advance steps</span>
-                </label>
-            </div>
+                <div class="practice-tools" style="margin-top: 2rem;">
+                    <h3 style="color: var(--dark); margin-bottom: 1rem;">Practice Tools</h3>
+                    <div class="tool-options" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                        <label class="checkbox"
+                               style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                            <input id="show-timer" type="checkbox" style="width: 1.25rem; height: 1.25rem;"/>
+                            <span>Show practice timer</span>
+                        </label>
+                        <label class="checkbox"
+                               style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                            <input id="auto-advance" type="checkbox" style="width: 1.25rem; height: 1.25rem;"/>
+                            <span>Auto-advance steps</span>
+                        </label>
+                    </div>
+                </div>
+            </section>
         </div>
-    </section>
+    </div>
 </main>
 
-<dialog aria-labelledby="practice-title" id="practice-modal">
-    <div class="modal-header">
-        <h3 id="practice-title">Practice: <span id="practice-script-name"></span></h3>
-        <button aria-label="Close practice" class="btn ghost" id="close-practice">×</button>
+<dialog aria-labelledby="practice-title" id="practice-modal"
+        style="border: none; border-radius: var(--radius-lg); padding: 0; max-width: 500px; width: 90vw; box-shadow: var(--shadow-lg);">
+    <div class="modal-header"
+         style="display: flex; justify-content: space-between; align-items: center; padding: 1.5rem; border-bottom: 1px solid var(--gray-light);">
+        <h3 id="practice-title" style="margin: 0;">Practice: <span id="practice-script-name"></span></h3>
+        <button aria-label="Close practice" class="btn btn-secondary" id="close-practice"
+                style="padding: 0.5rem 0.75rem;">×
+        </button>
     </div>
 
-    <div class="practice-content">
-        <div class="practice-step" id="practice-step">
-            <div class="step-content" id="current-step-text"></div>
-            <div class="step-type-badge" id="current-step-type"></div>
+    <div class="practice-content" style="padding: 1.5rem;">
+        <div class="practice-step" id="practice-step"
+             style="text-align: center; padding: 2rem; border-radius: var(--radius); background: var(--light); margin-bottom: 1.5rem; min-height: 120px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+            <div class="step-content" id="current-step-text"
+                 style="font-size: 1.1rem; line-height: 1.5; margin-bottom: 1rem;"></div>
+            <div class="step-type-badge" id="current-step-type"
+                 style="padding: 0.25rem 1rem; border-radius: 999px; font-size: 0.875rem; font-weight: 600;"></div>
         </div>
 
-        <div class="practice-progress">
-            <div class="progress-bar">
-                <div class="progress-fill" id="progress-fill"></div>
+        <div class="practice-progress" style="margin: 1.5rem 0;">
+            <div class="progress-bar"
+                 style="height: 6px; background: var(--gray-light); border-radius: 3px; overflow: hidden; margin-bottom: 0.5rem;">
+                <div class="progress-fill" id="progress-fill"
+                     style="height: 100%; background: var(--primary); transition: width 0.3s; width: 0%;"></div>
             </div>
-            <span id="progress-text">Step 1 of 1</span>
+            <span id="progress-text" style="color: var(--gray); font-size: 0.9rem;">Step 1 of 1</span>
         </div>
 
-        <div class="practice-controls">
-            <button class="btn" id="prev-step">Previous</button>
-            <button class="btn primary" id="next-step">Next</button>
-            <button class="btn" id="reset-practice">Restart</button>
+        <div class="practice-controls"
+             style="display: flex; gap: 1rem; justify-content: center; margin-bottom: 1.5rem;">
+            <button class="btn btn-secondary" id="prev-step">Previous</button>
+            <button class="btn btn-primary" id="next-step">Next</button>
+            <button class="btn btn-secondary" id="reset-practice">Restart</button>
         </div>
 
-        <div class="practice-timer" id="practice-timer" style="display: none;">
+        <div class="practice-timer" id="practice-timer"
+             style="display: none; text-align: center; margin-top: 1rem; padding: 0.75rem; background: var(--light); border-radius: var(--radius); font-weight: 600;">
             <span>Time: </span>
             <span id="timer-display">00:00</span>
         </div>
     </div>
 </dialog>
 
-<dialog aria-labelledby="help-title" id="help-modal">
-    <div class="modal-header">
-        <h3 id="help-title">How to Use Social Script Builder</h3>
-        <button aria-label="Close help" class="btn ghost" id="close-help">×</button>
+<dialog aria-labelledby="help-title" id="help-modal"
+        style="border: none; border-radius: var(--radius-lg); padding: 0; max-width: 600px; width: 90vw; box-shadow: var(--shadow-lg);">
+    <div class="modal-header"
+         style="display: flex; justify-content: space-between; align-items: center; padding: 1.5rem; border-bottom: 1px solid var(--gray-light);">
+        <h3 id="help-title" style="margin: 0;">How to Use Social Script Builder</h3>
+        <button aria-label="Close help" class="btn btn-secondary" id="close-help" style="padding: 0.5rem 0.75rem;">×
+        </button>
     </div>
 
-    <div class="help-content">
-        <div class="help-section">
-            <h4>Creating Scripts</h4>
+    <div class="help-content" style="padding: 1.5rem; max-height: 60vh; overflow-y: auto;">
+        <div class="help-section" style="margin-bottom: 1.5rem;">
+            <h4 style="margin: 0 0 0.5rem; color: var(--dark);">Creating Scripts</h4>
             <p>Build scripts for social situations that feel challenging. Add different types of steps:</p>
-            <ul>
+            <ul style="padding-left: 1.5rem; color: var(--dark);">
                 <li><strong>I Say</strong>: Things you will say</li>
                 <li><strong>They Might Say</strong>: Possible responses from others</li>
                 <li><strong>Action I Take</strong>: Physical actions or behaviors</li>
@@ -178,21 +239,21 @@ Social Script Builder
             </ul>
         </div>
 
-        <div class="help-section">
-            <h4>Pre-made Templates</h4>
+        <div class="help-section" style="margin-bottom: 1.5rem;">
+            <h4 style="margin: 0 0 0.5rem; color: var(--dark);">Pre-made Templates</h4>
             <p>Use our pre-made script templates for common social situations. These are based on proven social
                 scripting techniques and can be customized to fit your needs.</p>
         </div>
 
-        <div class="help-section">
-            <h4>Practice Mode</h4>
+        <div class="help-section" style="margin-bottom: 1.5rem;">
+            <h4 style="margin: 0 0 0.5rem; color: var(--dark);">Practice Mode</h4>
             <p>Use practice mode to rehearse your scripts. This helps build muscle memory and reduces anxiety in real
                 situations.</p>
         </div>
 
-        <div class="help-section">
-            <h4>Tips for Success</h4>
-            <ul>
+        <div class="help-section" style="margin-bottom: 1.5rem;">
+            <h4 style="margin: 0 0 0.5rem; color: var(--dark);">Tips for Success</h4>
+            <ul style="padding-left: 1.5rem; color: var(--dark);">
                 <li>Start with simple, frequently encountered situations</li>
                 <li>Practice in a low-stress environment first</li>
                 <li>Modify scripts based on real-world experience</li>
@@ -201,35 +262,29 @@ Social Script Builder
         </div>
     </div>
 
-    <div class="modal-actions">
-        <button class="btn primary" id="close-help-btn">Got it!</button>
+    <div class="modal-actions"
+         style="padding: 1rem 1.5rem; border-top: 1px solid var(--gray-light); display: flex; justify-content: flex-end;">
+        <button class="btn btn-primary" id="close-help-btn">Got it!</button>
     </div>
 </dialog>
 
 <input accept=".json" id="import-file" style="display: none;" type="file"/>
 
-<footer class="site-footer" role="contentinfo">
-    <div class="container footer-inner">
-        <small>© 2025 Social Script Builder - Jericho Crosby (Chalwk)</small>
+<footer>
+    <div class="footer-container">
+        <div class="social-icons">
+            <a href="https://discord.com/channels/@me/707058110396760094" target="_blank" aria-label="Discord"> <i
+                    class="fab fa-discord"></i></a>
+            <a href="https://github.com/Chalwk" target="_blank" aria-label="GitHub"> <i class="fab fa-github"></i></a>
+        </div>
+        <p class="footer-copyright"></p>
     </div>
 </footer>
 
+<script defer src="../../../nav.js"></script>
 <script src="script.js"></script>
 
 <script>
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-            const scope = '/browser-apps/tools/social-script-builder/';
-            navigator.serviceWorker.register('sw.js', { scope: scope })
-                .then(function(registration) {
-                console.log('SW registered: ', registration);
-            })
-                .catch(function(registrationError) {
-                console.log('SW registration failed: ', registrationError);
-            });
-        });
-    }
-
     let deferredPrompt;
     const installButton = document.createElement('button');
 
@@ -239,7 +294,7 @@ Social Script Builder
 
         installButton.style.display = 'block';
         installButton.textContent = 'Install App';
-        installButton.className = 'btn primary';
+        installButton.className = 'btn btn-primary';
         installButton.style.margin = '10px auto';
         installButton.style.display = 'block';
 
@@ -256,7 +311,7 @@ Social Script Builder
             });
         });
 
-        document.querySelector('.site-footer').prepend(installButton);
+        document.querySelector('.footer-container').prepend(installButton);
     });
 
     window.addEventListener('appinstalled', () => {
@@ -264,6 +319,37 @@ Social Script Builder
         installButton.style.display = 'none';
         console.log('PWA was installed');
     });
+
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+            const scope = '/browser-apps/tools/social-script-builder/';
+            navigator.serviceWorker.register('sw.js', { scope: scope })
+                .then(function(registration) {
+                console.log('SW registered: ', registration);
+            })
+                .catch(function(registrationError) {
+                console.log('SW registration failed: ', registrationError);
+            });
+        });
+    }
+
+    const offlineIndicator = document.createElement('div');
+    offlineIndicator.id = 'offline-indicator';
+    offlineIndicator.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; background: var(--warning); color: #92400e; text-align: center; padding: 8px; font-size: 0.9rem; z-index: 1000; display: none;';
+    offlineIndicator.textContent = 'You are currently offline. Some features may be limited.';
+    document.body.prepend(offlineIndicator);
+
+    function updateOnlineStatus() {
+        if (!navigator.onLine) {
+            offlineIndicator.style.display = 'block';
+        } else {
+            offlineIndicator.style.display = 'none';
+        }
+    }
+
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+    updateOnlineStatus();
 </script>
 </body>
 </html>
