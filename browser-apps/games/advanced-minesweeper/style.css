@@ -92,7 +92,6 @@ Advanced Minesweeper stylesheet
     box-shadow: var(--shadow-lg);
 }
 
-/* Best times list */
 #bestTimesList {
     list-style: none;
     padding: 0;
@@ -122,6 +121,17 @@ body.dark .cell.revealed {
 
 body.dark .cell:hover {
     background: #374151;
+}
+
+.btn.btn-secondary {
+    background: transparent;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+}
+
+.btn.btn-secondary:hover {
+    background: var(--primary);
+    color: white;
 }
 
 @media (max-width: 768px) {

@@ -43,6 +43,17 @@ Asteroids stylesheet
     border-radius: var(--radius);
 }
 
+.btn.btn-secondary {
+    background: transparent;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+}
+
+.btn.btn-secondary:hover {
+    background: var(--primary);
+    color: white;
+}
+
 @media (max-width: 768px) {
     #gameCanvas {
         width: 100%;

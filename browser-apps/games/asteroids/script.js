@@ -192,10 +192,10 @@ function wrap(obj){
 function update() {
     if(gameOver) return;
 
-    if(keys['ArrowLeft']) player.angle -= 0.05;
-    if(keys['ArrowRight']) player.angle += 0.05;
+    if(keys['ArrowLeft']) player.angle -= 0.07;
+    if(keys['ArrowRight']) player.angle += 0.07;
     if(keys['ArrowUp']){
-        player.speed = 3;
+        player.speed = 5;
         player.x += Math.cos(player.angle)*player.speed;
         player.y += Math.sin(player.angle)*player.speed;
     } else player.speed=0;
