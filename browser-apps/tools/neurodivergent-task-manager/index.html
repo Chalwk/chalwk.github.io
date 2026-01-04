@@ -39,7 +39,7 @@ Neurodivergent Task Manager - HTML
                         </li>
                     </ul>
                 </li>
-                <li><a class="btn btn-secondary" href="index.html">Task Manager</a></li>
+                <li><a class="btn btn-secondary" href="index.html">Neurodivergent Task Manager</a></li>
             </ul>
         </nav>
 
@@ -65,7 +65,7 @@ Neurodivergent Task Manager - HTML
                         </li>
                     </ul>
                 </li>
-                <li><a class="btn btn-secondary" href="index.html">Task Manager</a></li>
+                <li><a class="btn btn-secondary" href="index.html">Neurodivergent Task Manager</a></li>
             </ul>
         </nav>
     </div>
@@ -73,236 +73,159 @@ Neurodivergent Task Manager - HTML
 
 <main>
     <div class="container">
-        <div class="app-grid" style="margin-top: 2rem;">
-            <div class="panel"
-                 style="background: var(--light); border: 1px solid var(--gray-light); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 2rem;">
+        <div class="app-grid task-manager-app">
+            <div class="panel task-manager-header">
                 <div class="panel-head">
-                    <h2 style="color: var(--primary); margin-bottom: 0.5rem;">Neurodivergent Task Manager</h2>
-                    <p class="muted small">Designed with neurodivergent needs in mind - visual timers, task chunking,
+                    <h2 class="task-manager-title">Neurodivergent Task Manager</h2>
+                    <p class="muted small task-manager-subtitle">Designed with neurodivergent needs in mind - visual
+                        timers, task chunking,
                         and gamification.</p>
                 </div>
 
-                <div class="user-stats" style="display: flex; gap: 1.5rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
-                    <div class="stat"
-                         style="background: rgba(37, 99, 235, 0.1); padding: 1rem; border-radius: var(--radius); text-align: center; min-width: 120px;">
-                        <div class="stat-value" id="points"
-                             style="font-size: 1.8rem; font-weight: 700; color: var(--primary);">0
-                        </div>
-                        <div class="stat-label" style="color: var(--gray); font-size: 0.9rem;">Points</div>
+                <div class="user-stats task-user-stats">
+                    <div class="stat task-stat stat-points">
+                        <div class="stat-value" id="points">0</div>
+                        <div class="stat-label">Points</div>
                     </div>
-                    <div class="stat"
-                         style="background: rgba(124, 58, 237, 0.1); padding: 1rem; border-radius: var(--radius); text-align: center; min-width: 120px;">
-                        <div class="stat-value" id="streak"
-                             style="font-size: 1.8rem; font-weight: 700; color: var(--secondary);">0
-                        </div>
-                        <div class="stat-label" style="color: var(--gray); font-size: 0.9rem;">Day Streak</div>
+                    <div class="stat task-stat stat-streak">
+                        <div class="stat-value" id="streak">0</div>
+                        <div class="stat-label">Day Streak</div>
                     </div>
-                    <div class="stat"
-                         style="background: rgba(6, 182, 212, 0.1); padding: 1rem; border-radius: var(--radius); text-align: center; min-width: 120px;">
-                        <div class="stat-value" id="tasks-completed"
-                             style="font-size: 1.8rem; font-weight: 700; color: var(--accent);">0
-                        </div>
-                        <div class="stat-label" style="color: var(--gray); font-size: 0.9rem;">Tasks Done</div>
+                    <div class="stat task-stat stat-completed">
+                        <div class="stat-value" id="tasks-completed">0</div>
+                        <div class="stat-label">Tasks Done</div>
                     </div>
                 </div>
             </div>
 
-            <div class="main-content" style="display: grid; grid-template-columns: 1fr 2fr 1fr; gap: 1.5rem;">
+            <div class="main-content task-main-content">
                 <div class="left-column">
-                    <div class="panel"
-                         style="background: var(--light); border: 1px solid var(--gray-light); border-radius: var(--radius-lg); padding: 1.5rem;">
-                        <h3 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.25rem;">Create New Task</h3>
-                        <form id="task-form" style="display: flex; flex-direction: column; gap: 1rem;">
-                            <div class="form-group">
-                                <label for="task-title"
-                                       style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--dark);">Task
-                                    Title</label>
-                                <input id="task-title" placeholder="What needs to be done?" required
-                                       style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius);"
+                    <div class="panel task-form-panel">
+                        <h3 class="task-form-title">Create New Task</h3>
+                        <form id="task-form" class="task-form">
+                            <div class="form-group task-form-group">
+                                <label for="task-title" class="form-label">Task Title</label>
+                                <input id="task-title" class="form-input" placeholder="What needs to be done?" required
                                        type="text">
                             </div>
-                            <div class="form-group">
-                                <label for="task-description"
-                                       style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--dark);">Description</label>
-                                <textarea id="task-description" placeholder="More details about the task..." rows="3"
-                                          style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius); resize: vertical;"></textarea>
+                            <div class="form-group task-form-group">
+                                <label for="task-description" class="form-label">Description</label>
+                                <textarea id="task-description" class="form-input textarea-input"
+                                          placeholder="More details about the task..." rows="3"></textarea>
                             </div>
-                            <div class="form-group">
-                                <label for="task-priority"
-                                       style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--dark);">Priority</label>
-                                <select id="task-priority"
-                                        style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius);">
+                            <div class="form-group task-form-group">
+                                <label for="task-priority" class="form-label">Priority</label>
+                                <select id="task-priority" class="form-input">
                                     <option value="low">Low</option>
                                     <option value="medium">Medium</option>
                                     <option value="high">High</option>
                                 </select>
                             </div>
-                            <div class="form-group">
-                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--dark);">Break
-                                    into Steps (Chunking)</label>
-                                <div id="steps-container" style="margin-bottom: 0.75rem;">
-                                    <div class="step-input"
-                                         style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem; align-items: center;">
+                            <div class="form-group task-form-group">
+                                <label class="form-label">Break into Steps (Chunking)</label>
+                                <div id="steps-container" class="steps-container">
+                                    <div class="step-input">
                                         <label>
-                                            <input class="step-text" placeholder="Step 1"
-                                                   style="flex: 1; padding: 0.5rem; border: 1px solid var(--gray-light); border-radius: var(--radius);"
-                                                   type="text">
+                                            <input class="step-text" placeholder="Step 1" type="text">
                                         </label>
-                                        <button class="btn-remove-step" disabled
-                                                style="background: var(--error); color: white; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;"
-                                                type="button">
-                                            ×
-                                        </button>
+                                        <button class="btn-remove-step" disabled type="button">×</button>
                                     </div>
                                 </div>
-                                <button class="btn btn-secondary" id="add-step" style="width: 100%;" type="button">+ Add
-                                    Step
-                                </button>
+                                <button class="btn btn-secondary" id="add-step" type="button">+ Add Step</button>
                             </div>
-                            <div class="form-group">
-                                <label for="task-timer"
-                                       style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--dark);">Timer
-                                    (minutes)</label>
-                                <input id="task-timer" min="1"
-                                       style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius);"
-                                       type="number"
-                                       value="25">
+                            <div class="form-group task-form-group">
+                                <label for="task-timer" class="form-label">Timer (minutes)</label>
+                                <input id="task-timer" class="form-input" min="1" type="number" value="25">
                             </div>
-                            <div class="form-group">
-                                <label for="task-reminder"
-                                       style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--dark);">Reminder</label>
-                                <input id="task-reminder"
-                                       style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius);"
-                                       type="datetime-local">
+                            <div class="form-group task-form-group">
+                                <label for="task-reminder" class="form-label">Reminder</label>
+                                <input id="task-reminder" class="form-input" type="datetime-local">
                             </div>
-                            <button class="btn btn-primary" style="width: 100%;" type="submit">Create Task</button>
+                            <button class="btn btn-primary" type="submit">Create Task</button>
                         </form>
                     </div>
 
-                    <div class="panel"
-                         style="background: var(--light); border: 1px solid var(--gray-light); border-radius: var(--radius-lg); padding: 1.5rem; margin-top: 1.5rem;">
-                        <h3 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.25rem;">Task Templates
-                            🎯</h3>
-                        <label for="template-dropdown"></label><select class="template-dropdown" id="template-dropdown"
-                                                                       style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius); margin-bottom: 1rem;">
-                        <option value="">Select a template</option>
-                    </select>
-                        <button class="btn btn-secondary" id="use-template-btn" style="width: 100%;">Use Template
-                        </button>
+                    <div class="panel templates-panel">
+                        <h3 class="templates-title">Task Templates 🎯</h3>
+                        <label for="template-dropdown"></label>
+                        <select class="template-dropdown form-input" id="template-dropdown">
+                            <option value="">Select a template</option>
+                        </select>
+                        <button class="btn btn-secondary" id="use-template-btn">Use Template</button>
                     </div>
                 </div>
 
                 <div class="middle-column">
-                    <div class="panel"
-                         style="background: var(--light); border: 1px solid var(--gray-light); border-radius: var(--radius-lg); padding: 1.5rem;">
-                        <h3 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.25rem;">Today's Tasks</h3>
-                        <div id="tasks-list" style="min-height: 200px;"></div>
+                    <div class="panel tasks-list-panel">
+                        <h3 class="tasks-list-title">Today's Tasks</h3>
+                        <div id="tasks-list" class="tasks-list"></div>
                     </div>
 
-                    <div class="panel"
-                         style="background: var(--light); border: 1px solid var(--gray-light); border-radius: var(--radius-lg); padding: 1.5rem; margin-top: 1.5rem;">
-                        <h3 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.25rem;">Completed Tasks</h3>
-                        <div id="completed-tasks" style="min-height: 200px;"></div>
+                    <div class="panel completed-tasks-panel">
+                        <h3 class="completed-tasks-title">Completed Tasks</h3>
+                        <div id="completed-tasks" class="completed-tasks"></div>
                     </div>
                 </div>
 
                 <div class="right-column">
-                    <div class="panel"
-                         style="background: var(--light); border: 1px solid var(--gray-light); border-radius: var(--radius-lg); padding: 1.5rem;">
-                        <h3 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.25rem;">Upcoming
-                            Reminders</h3>
-                        <div id="reminders-list" style="min-height: 150px;"></div>
+                    <div class="panel reminders-panel">
+                        <h3 class="reminders-title">Upcoming Reminders</h3>
+                        <div id="reminders-list" class="reminders-list"></div>
                     </div>
 
-                    <div class="panel"
-                         style="background: var(--light); border: 1px solid var(--gray-light); border-radius: var(--radius-lg); padding: 1.5rem; margin-top: 1.5rem;">
-                        <h3 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.25rem;">Achievements</h3>
-                        <div class="achievements" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
-                            <div class="achievement locked" id="achievement-1"
-                                 style="background: rgba(0,0,0,0.05); padding: 0.75rem; border-radius: var(--radius); text-align: center;">
-                                <div class="achievement-icon" style="font-size: 1.5rem; margin-bottom: 0.25rem;">⭐</div>
-                                <div class="achievement-title" style="font-size: 0.8rem; font-weight: 500;">First Task
-                                </div>
+                    <div class="panel achievements-panel">
+                        <h3 class="achievements-title">Achievements</h3>
+                        <div class="achievements-grid">
+                            <div class="achievement locked" id="achievement-1">
+                                <div class="achievement-icon">⭐</div>
+                                <div class="achievement-title">First Task</div>
                             </div>
-                            <div class="achievement locked" id="achievement-2"
-                                 style="background: rgba(0,0,0,0.05); padding: 0.75rem; border-radius: var(--radius); text-align: center;">
-                                <div class="achievement-icon" style="font-size: 1.5rem; margin-bottom: 0.25rem;">🔥</div>
-                                <div class="achievement-title" style="font-size: 0.8rem; font-weight: 500;">3-Day
-                                    Streak
-                                </div>
+                            <div class="achievement locked" id="achievement-2">
+                                <div class="achievement-icon">🔥</div>
+                                <div class="achievement-title">3-Day Streak</div>
                             </div>
-                            <div class="achievement locked" id="achievement-3"
-                                 style="background: rgba(0,0,0,0.05); padding: 0.75rem; border-radius: var(--radius); text-align: center;">
-                                <div class="achievement-icon" style="font-size: 1.5rem; margin-bottom: 0.25rem;">🏆</div>
-                                <div class="achievement-title" style="font-size: 0.8rem; font-weight: 500;">Task
-                                    Master
-                                </div>
+                            <div class="achievement locked" id="achievement-3">
+                                <div class="achievement-icon">🏆</div>
+                                <div class="achievement-title">Task Master</div>
                             </div>
-                            <div class="achievement locked" id="achievement-4"
-                                 style="background: rgba(0,0,0,0.05); padding: 0.75rem; border-radius: var(--radius); text-align: center;">
-                                <div class="achievement-icon" style="font-size: 1.5rem; margin-bottom: 0.25rem;">⏰</div>
-                                <div class="achievement-title" style="font-size: 0.8rem; font-weight: 500;">Timer User
-                                </div>
+                            <div class="achievement locked" id="achievement-4">
+                                <div class="achievement-icon">⏰</div>
+                                <div class="achievement-title">Timer User</div>
                             </div>
-                            <div class="achievement locked" id="achievement-5"
-                                 style="background: rgba(0,0,0,0.05); padding: 0.75rem; border-radius: var(--radius); text-align: center;">
-                                <div class="achievement-icon" style="font-size: 1.5rem; margin-bottom: 0.25rem;">🚀</div>
-                                <div class="achievement-title" style="font-size: 0.8rem; font-weight: 500;">Productivity
-                                    Pro
-                                </div>
+                            <div class="achievement locked" id="achievement-5">
+                                <div class="achievement-icon">🚀</div>
+                                <div class="achievement-title">Productivity Pro</div>
                             </div>
-                            <div class="achievement locked" id="achievement-6"
-                                 style="background: rgba(0,0,0,0.05); padding: 0.75rem; border-radius: var(--radius); text-align: center;">
-                                <div class="achievement-icon" style="font-size: 1.5rem; margin-bottom: 0.25rem;">🛡️
-                                </div>
-                                <div class="achievement-title" style="font-size: 0.8rem; font-weight: 500;">Week
-                                    Warrior
-                                </div>
+                            <div class="achievement locked" id="achievement-6">
+                                <div class="achievement-icon">🛡️</div>
+                                <div class="achievement-title">Week Warrior</div>
                             </div>
-                            <div class="achievement locked" id="achievement-7"
-                                 style="background: rgba(0,0,0,0.05); padding: 0.75rem; border-radius: var(--radius); text-align: center;">
-                                <div class="achievement-icon" style="font-size: 1.5rem; margin-bottom: 0.25rem;">📝</div>
-                                <div class="achievement-title" style="font-size: 0.8rem; font-weight: 500;">Step
-                                    Master
-                                </div>
+                            <div class="achievement locked" id="achievement-7">
+                                <div class="achievement-icon">📝</div>
+                                <div class="achievement-title">Step Master</div>
                             </div>
-                            <div class="achievement locked" id="achievement-8"
-                                 style="background: rgba(0,0,0,0.05); padding: 0.75rem; border-radius: var(--radius); text-align: center;">
-                                <div class="achievement-icon" style="font-size: 1.5rem; margin-bottom: 0.25rem;">🎯</div>
-                                <div class="achievement-title" style="font-size: 0.8rem; font-weight: 500;">Priority
-                                    Finisher
-                                </div>
+                            <div class="achievement locked" id="achievement-8">
+                                <div class="achievement-icon">🎯</div>
+                                <div class="achievement-title">Priority Finisher</div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="panel"
-                         style="background: var(--light); border: 1px solid var(--gray-light); border-radius: var(--radius-lg); padding: 1.5rem; margin-top: 1.5rem;">
-                        <h3 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.25rem;">Visual Timer</h3>
-                        <div class="timer-container" style="text-align: center;">
-                            <div class="timer-circle"
-                                 style="width: 180px; height: 180px; border-radius: 50%; background: conic-gradient(var(--accent) 0%, var(--light) 0%); margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; position: relative; box-shadow: var(--shadow);">
-                                <div class="timer-text" id="visual-timer"
-                                     style="font-size: 1.75rem; font-weight: 700; color: var(--dark);">25:00
-                                </div>
+                    <div class="panel timer-panel">
+                        <h3 class="timer-title">Visual Timer</h3>
+                        <div class="timer-container">
+                            <div class="timer-circle">
+                                <div class="timer-text" id="visual-timer">25:00</div>
                             </div>
-                            <div class="timer-controls"
-                                 style="display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 1rem;">
+                            <div class="timer-controls">
                                 <button class="btn btn-success" id="start-timer">Start</button>
                                 <button class="btn btn-warning" id="pause-timer">Pause</button>
                                 <button class="btn btn-danger" id="reset-timer">Reset</button>
                             </div>
                             <div class="form-group">
-                                <label for="custom-timer"
-                                       style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--dark);">Custom
-                                    Timer (minutes)</label>
-                                <input id="custom-timer" min="1"
-                                       style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius);"
-                                       type="number"
-                                       value="25">
-                                <button class="btn btn-secondary" id="set-custom-timer"
-                                        style="width: 100%; margin-top: 0.75rem;">Set Timer
-                                </button>
+                                <label for="custom-timer" class="form-label">Custom Timer (minutes)</label>
+                                <input id="custom-timer" class="form-input" min="1" type="number" value="25">
+                                <button class="btn btn-secondary" id="set-custom-timer">Set Timer</button>
                             </div>
                         </div>
                     </div>

@@ -307,3 +307,246 @@ Neurodivergent Task Manager - Stylesheet
         min-width: 80px;
     }
 }
+
+.task-manager-app {
+    margin-top: 2rem;
+}
+
+.task-manager-header {
+    background: var(--light);
+    border: 1px solid var(--gray-light);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.task-manager-title {
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+.task-manager-subtitle {
+    color: var(--gray);
+}
+
+.task-user-stats {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.task-stat {
+    background: rgba(37, 99, 235, 0.1);
+    padding: 1rem;
+    border-radius: var(--radius);
+    text-align: center;
+    min-width: 120px;
+}
+
+.stat-points .stat-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.stat-streak {
+    background: rgba(124, 58, 237, 0.1);
+}
+
+.stat-streak .stat-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--secondary);
+}
+
+.stat-completed {
+    background: rgba(6, 182, 212, 0.1);
+}
+
+.stat-completed .stat-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--accent);
+}
+
+.stat-label {
+    color: var(--gray);
+    font-size: 0.9rem;
+}
+
+.task-main-content {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 1.5rem;
+}
+
+.task-form-panel,
+.templates-panel,
+.tasks-list-panel,
+.completed-tasks-panel,
+.reminders-panel,
+.achievements-panel,
+.timer-panel {
+    background: var(--light);
+    border: 1px solid var(--gray-light);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+}
+
+.templates-panel,
+.completed-tasks-panel,
+.achievements-panel,
+.timer-panel {
+    margin-top: 1.5rem;
+}
+
+.task-form-title,
+.templates-title,
+.tasks-list-title,
+.completed-tasks-title,
+.reminders-title,
+.achievements-title,
+.timer-title {
+    color: var(--primary);
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+}
+
+.task-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.task-form-group {
+    margin-bottom: 1rem;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--dark);
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--gray-light);
+    border-radius: var(--radius);
+}
+
+.textarea-input {
+    resize: vertical;
+}
+
+.steps-container {
+    margin-bottom: 0.75rem;
+}
+
+.step-input {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    align-items: center;
+}
+
+.step-text {
+    flex: 1;
+    padding: 0.5rem;
+    border: 1px solid var(--gray-light);
+    border-radius: var(--radius);
+}
+
+.btn-remove-step {
+    background: var(--error);
+    color: white;
+    border: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.btn-remove-step:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.tasks-list,
+.completed-tasks,
+.reminders-list {
+    min-height: 200px;
+}
+
+.achievements-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+}
+
+.achievement {
+    background: rgba(0,0,0,0.05);
+    padding: 0.75rem;
+    border-radius: var(--radius);
+    text-align: center;
+}
+
+.achievement-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+}
+
+.achievement-title {
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.timer-container {
+    text-align: center;
+}
+
+.timer-circle {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: conic-gradient(var(--accent) 0%, var(--light) 0%);
+    margin: 0 auto 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: var(--shadow);
+}
+
+.timer-text {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--dark);
+}
+
+.timer-controls {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+#set-custom-timer {
+    width: 100%;
+    margin-top: 0.75rem;
+}
+
+#add-step,
+#use-template-btn {
+    width: 100%;
+}
+
+.template-dropdown {
+    margin-bottom: 1rem;
+}
