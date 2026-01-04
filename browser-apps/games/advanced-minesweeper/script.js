@@ -109,7 +109,10 @@ Advanced Minesweeper JavaScript
             return;
         }
 
-        if(cellObj.adjacent > 0){ el.textContent = cellObj.adjacent; el.style.color = colorForNumber(cellObj.adjacent); }
+        if(cellObj.adjacent > 0){
+            el.textContent = cellObj.adjacent;
+            el.style.color = colorForNumber(cellObj.adjacent);
+        }
         else {
             for(let dr=-1;dr<=1;dr++)for(let dc=-1;dc<=1;dc++){
                 if(dr===0 && dc===0) continue;
@@ -133,25 +136,44 @@ Advanced Minesweeper JavaScript
             for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){
                 const obj = board[r][c];
                 const el = getCellEl(r,c);
-                if(obj.isMine && !obj.revealed){ el.classList.add('revealed','mine'); el.textContent = '💣'; }
+                if(obj.isMine && !obj.revealed){
+                    el.classList.add('revealed','mine');
+                    el.textContent = '💣';
+                }
             }
+            setTimeout(()=>alert('Game Over! You hit a mine.'), 100);
         } else {
             saveBestTime(rows,cols,mines,seconds);
-            setTimeout(()=>alert('You win! Time: '+formatTime(seconds)), 100);
+            setTimeout(()=>alert(`You win! Time: ${formatTime(seconds)}`), 100);
         }
     }
 
     function getCellEl(r,c){ return boardEl.querySelector(`.cell[data-r='${r}'][data-c='${c}']`); }
     function colorForNumber(n){
-        const map = {1:'#0b61f7',2:'#0b8f1a',3:'#f22f2f',4:'#1b2f6b',5:'#7b1f1f',6:'#096',7:'#333',8:'#666'}; return map[n]||'#000';
+        const map = {
+            1:'#0b61f7',
+            2:'#0b8f1a',
+            3:'#f22f2f',
+            4:'#1b2f6b',
+            5:'#7b1f1f',
+            6:'#009966',
+            7:'#333333',
+            8:'#666666'
+        };
+        return map[n]||'#000';
     }
 
     function onCellClick(e){
         if(ended) return;
-        const el = e.currentTarget; const r = Number(el.dataset.r); const c = Number(el.dataset.c);
+        const el = e.currentTarget;
+        const r = Number(el.dataset.r);
+        const c = Number(el.dataset.c);
 
         if(firstClick){
-            placeMines(r,c); startTimer(); started=true; firstClick=false;
+            placeMines(r,c);
+            startTimer();
+            started=true;
+            firstClick=false;
         }
 
         const obj = board[r][c];
@@ -160,19 +182,40 @@ Advanced Minesweeper JavaScript
     }
 
     function onCellRightClick(e){
-        e.preventDefault(); if(ended) return;
-        const el = e.currentTarget; const r = Number(el.dataset.r); const c = Number(el.dataset.c);
+        e.preventDefault();
+        if(ended) return;
+        const el = e.currentTarget;
+        const r = Number(el.dataset.r);
+        const c = Number(el.dataset.c);
         const obj = board[r][c];
         if(obj.revealed) return;
-        if(!obj.flagged && !obj.question){ obj.flagged=true; el.classList.add('flag'); el.textContent = '🚩'; mineCounter--; }
-        else if(obj.flagged){ obj.flagged=false; obj.question=true; el.classList.remove('flag'); el.classList.add('question'); el.textContent = '?'; mineCounter++; }
-        else { obj.question=false; el.classList.remove('question'); el.textContent = ''; }
+        if(!obj.flagged && !obj.question){
+            obj.flagged=true;
+            el.classList.add('flag');
+            el.textContent = '🚩';
+            mineCounter--;
+        }
+        else if(obj.flagged){
+            obj.flagged=false;
+            obj.question=true;
+            el.classList.remove('flag');
+            el.classList.add('question');
+            el.textContent = '?';
+            mineCounter++;
+        }
+        else {
+            obj.question=false;
+            el.classList.remove('question');
+            el.textContent = '';
+        }
         updateMineCounter();
     }
 
     function onCellDblClick(e){
         if(ended) return;
-        const el = e.currentTarget; const r = Number(el.dataset.r); const c = Number(el.dataset.c);
+        const el = e.currentTarget;
+        const r = Number(el.dataset.r);
+        const c = Number(el.dataset.c);
         const obj = board[r][c];
         if(!obj.revealed || obj.adjacent === 0) return;
         let flags = 0;
@@ -188,21 +231,37 @@ Advanced Minesweeper JavaScript
         }
     }
 
-    function updateMineCounter(){ mineCountEl.textContent = `Mines: ${mineCounter}`; }
+    function updateMineCounter(){
+        mineCountEl.textContent = `Mines: ${mineCounter}`;
+    }
 
     function startTimer(){
         if(timer) return;
-        timer = setInterval(()=>{ seconds++; timerEl.textContent = formatTime(seconds); }, 1000);
+        timer = setInterval(()=>{
+            seconds++;
+            timerEl.textContent = formatTime(seconds);
+        }, 1000);
     }
 
-    function formatTime(s){ const mm = String(Math.floor(s/60)).padStart(2,'0'); const ss = String(s%60).padStart(2,'0'); return `${mm}:${ss}`; }
+    function formatTime(s){
+        const mm = String(Math.floor(s/60)).padStart(2,'0');
+        const ss = String(s%60).padStart(2,'0');
+        return `${mm}:${ss}`;
+    }
 
     newBtn.addEventListener('click', ()=> startNewGame());
     difficultySelect.addEventListener('change', ()=>{
         const val = difficultySelect.value;
-        if(val === 'custom') customPanel.classList.remove('hidden'); else customPanel.classList.add('hidden');
-        if(presets[val]){
-            const p = presets[val]; rowsInput.value=p.rows; colsInput.value=p.cols; minesInput.value=p.mines;
+        if(val === 'custom') {
+            customPanel.classList.remove('hidden');
+        } else {
+            customPanel.classList.add('hidden');
+            const p = presets[val];
+            if(p) {
+                rowsInput.value = p.rows;
+                colsInput.value = p.cols;
+                minesInput.value = p.mines;
+            }
         }
     });
 
@@ -210,49 +269,95 @@ Advanced Minesweeper JavaScript
         const r = clamp(Number(rowsInput.value)||9,5,50);
         const c = clamp(Number(colsInput.value)||9,5,80);
         const m = clamp(Number(minesInput.value)||10,1, r*c-1);
-        rows = r; cols = c; mines = m; resetState(rows,cols,mines);
+        rows = r; cols = c; mines = m;
+        resetState(rows,cols,mines);
     });
 
     revealAllBtn.addEventListener('click', ()=>{
         for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){
-            const obj = board[r][c]; if(!obj.revealed){ const el=getCellEl(r,c); obj.revealed=true; el.classList.add('revealed'); if(obj.isMine){el.classList.add('mine'); el.textContent='💣'} else if(obj.adjacent>0){el.textContent=obj.adjacent; el.style.color=colorForNumber(obj.adjacent);} }
+            const obj = board[r][c];
+            if(!obj.revealed){
+                const el=getCellEl(r,c);
+                obj.revealed=true;
+                el.classList.add('revealed');
+                if(obj.isMine){
+                    el.classList.add('mine');
+                    el.textContent='💣';
+                } else if(obj.adjacent>0){
+                    el.textContent=obj.adjacent;
+                    el.style.color=colorForNumber(obj.adjacent);
+                }
+            }
         }
-        ended=true; clearInterval(timer);
+        ended=true;
+        clearInterval(timer);
     });
 
     hintBtn.addEventListener('click', ()=>{
         if(ended) return;
         for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){
-            if(!board[r][c].isMine && !board[r][c].revealed){ revealCell(r,c); return; }
+            if(!board[r][c].isMine && !board[r][c].revealed){
+                revealCell(r,c);
+                return;
+            }
         }
     });
 
-    flagToggle.addEventListener('click', ()=>{ flagsMode = !flagsMode; flagToggle.textContent = flagsMode ? 'Toggle Flagging' : 'Flagging Off'; });
-    themeToggle.addEventListener('change', ()=>{ document.body.classList.toggle('dark', themeToggle.checked); });
-    bestTimesBtn.addEventListener('click', ()=>{
+    flagToggle.addEventListener('click', ()=> {
+        flagsMode = !flagsMode;
+        flagToggle.innerHTML = flagsMode ?
+        '<i class="fas fa-flag"></i> Toggle Flagging' :
+        '<i class="fas fa-ban"></i> Flagging Off';
+    });
+
+    themeToggle.addEventListener('change', ()=> {
+        document.body.classList.toggle('dark', themeToggle.checked);
+    });
+
+    bestTimesBtn.addEventListener('click', ()=> {
         showBestTimes();
     });
-    closeBestTimes.addEventListener('click', ()=>{ bestTimesModal.classList.add('hidden'); });
+
+    closeBestTimes.addEventListener('click', ()=> {
+        bestTimesModal.classList.add('hidden');
+    });
 
     function saveBestTime(r,c,m,t){
         const key = `best_${r}x${c}_${m}`;
         const prev = JSON.parse(localStorage.getItem(key) || '[]');
-        prev.push(t); prev.sort((a,b)=>a-b);
+        prev.push(t);
+        prev.sort((a,b)=>a-b);
         localStorage.setItem(key, JSON.stringify(prev.slice(0,10)));
     }
+
     function showBestTimes(){
         bestTimesList.innerHTML = '';
         const key = `best_${rows}x${cols}_${mines}`;
         const list = JSON.parse(localStorage.getItem(key) || '[]');
-        if(list.length === 0) bestTimesList.innerHTML = '<li>No best times yet</li>';
-        else list.forEach((s,i)=>{ const li = document.createElement('li'); li.textContent = `${i+1}. ${formatTime(s)}`; bestTimesList.appendChild(li); });
+        if(list.length === 0) {
+            bestTimesList.innerHTML = '<li>No best times yet</li>';
+        } else {
+            list.forEach((s,i)=> {
+                const li = document.createElement('li');
+                li.textContent = `${i+1}. ${formatTime(s)}`;
+                bestTimesList.appendChild(li);
+            });
+        }
         bestTimesModal.classList.remove('hidden');
     }
 
     function startNewGame(){
         const val = difficultySelect.value;
-        if(presets[val]){ const p = presets[val]; rows=p.rows; cols=p.cols; mines=p.mines; }
-        else { rows = clamp(Number(rowsInput.value)||9,5,50); cols = clamp(Number(colsInput.value)||9,5,80); mines = clamp(Number(minesInput.value)||10,1,rows*cols-1); }
+        if(presets[val]){
+            const p = presets[val];
+            rows=p.rows;
+            cols=p.cols;
+            mines=p.mines;
+        } else {
+            rows = clamp(Number(rowsInput.value)||9,5,50);
+            cols = clamp(Number(colsInput.value)||9,5,80);
+            mines = clamp(Number(minesInput.value)||10,1,rows*cols-1);
+        }
         resetState(rows,cols,mines);
     }
 

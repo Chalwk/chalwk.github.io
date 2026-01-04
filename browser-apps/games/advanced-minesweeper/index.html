@@ -10,63 +10,169 @@ Advanced Minesweeper
     <meta charset="utf-8"/>
     <meta content="width=device-width,initial-scale=1" name="viewport"/>
     <title>Advanced Minesweeper</title>
+    <meta content="Advanced Minesweeper game with multiple difficulty levels" name="description"/>
+    <link href="../../../core.css" rel="stylesheet"/>
     <link href="style.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
+          rel="stylesheet">
 </head>
+
 <body>
-<header class="topbar">
-    <div class="title">Advanced Minesweeper</div>
-    <div class="controls">
-        <button class="btn" id="newBtn">New Game</button>
+<header class="header">
+    <div class="container">
+        <a class="logo" href="../../../index.html"> <i class="fas fa-code"></i> Jericho </a>
 
-        <label class="sr-only" for="difficulty">Difficulty</label>
-        <select class="select" id="difficulty">
-            <option value="beginner">Beginner (9×9, 10)</option>
-            <option value="intermediate">Intermediate (16×16, 40)</option>
-            <option value="expert">Expert (16×30, 99)</option>
-            <option value="custom">Custom</option>
-        </select>
+        <nav class="nav-desktop">
+            <ul class="nav-links">
+                <li><a href="../../../index.html#about">About</a></li>
+                <li><a href="../../../browser-apps/apps_and_tools.html">Apps & Tools</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" href="#">Other Stuff <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://chalwk.github.io/CPAS/">CPAS</a></li>
+                        <li class="dropdown-submenu">
+                            <a class="submenu-toggle" href="#">Education <i class="fas fa-chevron-right"></i></a>
+                            <ul class="submenu">
+                                <li><a href="../../../education/understanding-autism.html">Understanding Autism</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Minesweeper</a></li>
+            </ul>
+        </nav>
 
-        <div class="custom hidden" id="customPanel">
-            <button class="btn small" id="applyCustom">Apply</button>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
         </div>
 
-        <button class="btn" id="flagToggle">Toggle Flagging</button>
-        <button class="btn" id="revealAllBtn">Reveal Solution</button>
-
-        <div class="status">
-            <span id="mineCount">Mines: 0</span>
-            <span id="timer">00:00</span>
-        </div>
-
+        <nav class="nav-mobile">
+            <ul class="nav-mobile-links">
+                <li><a href="../../../index.html#about">About</a></li>
+                <li><a href="../../../browser-apps/apps_and_tools.html">Apps & Tools</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" href="#">Other Stuff <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://chalwk.github.io/CPAS/">CPAS</a></li>
+                        <li class="dropdown-submenu">
+                            <a class="submenu-toggle" href="#">Education <i class="fas fa-chevron-right"></i></a>
+                            <ul class="submenu">
+                                <li><a href="../../../education/understanding-autism.html">Understanding Autism</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Minesweeper</a></li>
+            </ul>
+        </nav>
     </div>
 </header>
 
 <main>
-    <div id="boardWrap">
-        <div aria-label="Minesweeper board" id="board" tabindex="0"></div>
-    </div>
+    <div class="container">
+        <div class="app-grid" style="margin-top: 2rem;">
+            <section class="panel"
+                     style="background: var(--light); border: 1px solid var(--gray-light); border-radius: var(--radius-lg); padding: 1.5rem;">
+                <div class="panel-head">
+                    <h1 style="color: var(--primary); margin-bottom: 0.5rem;">Advanced Minesweeper</h1>
+                    <p class="muted small">Classic Minesweeper with multiple difficulty levels and custom options.</p>
+                </div>
 
-    <aside class="menu">
-        <h3>Options</h3>
-        <button class="btn" id="hintBtn">Hint (reveals safe cell)</button>
-        <button class="btn" id="bestTimesBtn">Show Best Times</button>
-        <label><input id="themeToggle" type="checkbox"> Dark theme</label>
-        <div class="note">Tip: Right-click to cycle flag/question/clear. Double-click (or double tap) a number to
-            chord.
+                <div class="game-controls" style="display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem; align-items: center;">
+                    <button class="btn btn-primary" id="newBtn">
+                        <i class="fas fa-plus-circle"></i> New Game
+                    </button>
+
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <label for="difficulty" style="font-weight: 500; color: var(--dark);">Difficulty:</label>
+                        <select class="select" id="difficulty" style="padding: 0.5rem; border: 1px solid var(--gray-light); border-radius: var(--radius);">
+                            <option value="beginner">Beginner (9×9, 10)</option>
+                            <option value="intermediate">Intermediate (16×16, 40)</option>
+                            <option value="expert">Expert (16×30, 99)</option>
+                            <option value="custom">Custom</option>
+                        </select>
+                    </div>
+
+                    <div class="custom hidden" id="customPanel" style="display: flex; gap: 0.5rem; align-items: center;">
+                        <div style="display: flex; align-items: center; gap: 0.25rem;">
+                            <label class="sr-only" for="rows">Rows</label>
+                            <input type="number" id="rows" placeholder="Rows" min="5" max="50"
+                                   style="width: 70px; padding: 0.5rem; border: 1px solid var(--gray-light); border-radius: var(--radius);">
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.25rem;">
+                            <label class="sr-only" for="cols">Columns</label>
+                            <input type="number" id="cols" placeholder="Cols" min="5" max="80"
+                                   style="width: 70px; padding: 0.5rem; border: 1px solid var(--gray-light); border-radius: var(--radius);">
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.25rem;">
+                            <label class="sr-only" for="mines">Mines</label>
+                            <input type="number" id="mines" placeholder="Mines" min="1"
+                                   style="width: 70px; padding: 0.5rem; border: 1px solid var(--gray-light); border-radius: var(--radius);">
+                        </div>
+                        <button class="btn btn-secondary small" id="applyCustom">Apply</button>
+                    </div>
+
+                    <div class="status-display" style="display: flex; gap: 1.5rem; margin-left: auto;">
+                        <div style="font-family: var(--font-mono); font-weight: 500;">
+                            <span id="mineCount">Mines: 10</span>
+                        </div>
+                        <div style="font-family: var(--font-mono); font-weight: 500;">
+                            <span id="timer">00:00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="boardWrap" style="display: flex; justify-content: center; margin-bottom: 2rem;">
+                    <div aria-label="Minesweeper board" id="board" tabindex="0"
+                         style="display: grid; gap: 2px; touch-action: manipulation; user-select: none; padding: 1rem; background: var(--light); border-radius: var(--radius);"></div>
+                </div>
+
+                <div class="game-actions" style="display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;">
+                    <button class="btn btn-secondary" id="flagToggle">
+                        <i class="fas fa-flag"></i> Toggle Flagging
+                    </button>
+                    <button class="btn btn-secondary" id="hintBtn">
+                        <i class="fas fa-lightbulb"></i> Hint
+                    </button>
+                    <button class="btn btn-secondary" id="revealAllBtn">
+                        <i class="fas fa-eye"></i> Reveal Solution
+                    </button>
+                    <button class="btn btn-secondary" id="bestTimesBtn">
+                        <i class="fas fa-trophy"></i> Best Times
+                    </button>
+                    <label class="btn btn-secondary" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                        <input id="themeToggle" type="checkbox" style="display: none;">
+                        <i class="fas fa-moon"></i> Dark Theme
+                    </label>
+                </div>
+            </section>
         </div>
-    </aside>
+    </div>
 </main>
 
-<footer class="meta">&copy; 2025. Jericho Crosby (Chalwk)</footer>
+<footer>
+    <div class="footer-container">
+        <div class="social-icons">
+            <a href="https://discord.com/channels/@me/707058110396760094" target="_blank" aria-label="Discord"> <i
+                    class="fab fa-discord"></i></a>
+            <a href="https://github.com/Chalwk" target="_blank" aria-label="GitHub"> <i class="fab fa-github"></i></a>
+        </div>
+        <p class="footer-copyright"></p>
+    </div>
+</footer>
 
-<div class="modal hidden" id="bestTimesModal">
-    <div class="modal-inner">
-        <h3>Best Times</h3>
-        <ul id="bestTimesList"></ul>
-        <button class="btn" id="closeBestTimes">Close</button>
+<div class="modal hidden" id="bestTimesModal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 2000;">
+    <div class="modal-inner" style="background: var(--light); padding: 2rem; border-radius: var(--radius-lg); max-width: 400px; width: 90%; box-shadow: var(--shadow-lg);">
+        <h3 style="color: var(--primary); margin-bottom: 1rem;">Best Times</h3>
+        <ul id="bestTimesList" style="list-style: none; padding: 0; margin-bottom: 1.5rem;"></ul>
+        <button class="btn btn-primary" id="closeBestTimes" style="width: 100%;">Close</button>
     </div>
 </div>
 
+<script defer src="../../../nav.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
