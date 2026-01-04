@@ -1,118 +1,191 @@
 <!--
 Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
 
-Snake
+Snake - HTML
 -->
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width,initial-scale=1" name="viewport"/>
-    <title>Snake</title>
-    <link href="style.css" rel="stylesheet"/>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Snake Game</title>
+    <link href="../../../core.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
+          rel="stylesheet">
 </head>
 <body>
-<div id="app">
-    <header class="topbar">
-        <div class="brand">Snake</div>
-        <div class="info">
-            <div id="score">Score: 0</div>
-            <div id="best">Best: 0</div>
+
+<header class="header">
+    <div class="container">
+        <a class="logo" href="../../../index.html"> <i class="fas fa-code"></i> Jericho </a>
+        <nav class="nav-desktop">
+            <ul class="nav-links">
+                <li><a href="../../../index.html#about">About</a></li>
+                <li><a href="../../../browser-apps/apps_and_tools.html">Apps & Tools</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" href="#">Other Stuff <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://chalwk.github.io/CPAS/">CPAS</a></li>
+                        <li class="dropdown-submenu">
+                            <a class="submenu-toggle" href="#">Education <i class="fas fa-chevron-right"></i></a>
+                            <ul class="submenu">
+                                <li><a href="../../../education/understanding-autism.html">Understanding Autism</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Snake</a></li>
+            </ul>
+        </nav>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
         </div>
-        <div class="powerup-message" id="powerup-message"></div>
-        <div class="controls">
-            <button class="btn" id="btn-pause">Pause</button>
-            <button class="btn" id="btn-sound">🔊</button>
-        </div>
-    </header>
+        <nav class="nav-mobile">
+            <ul class="nav-mobile-links">
+                <li><a href="../../../index.html#about">About</a></li>
+                <li><a href="../../../browser-apps/apps_and_tools.html">Apps & Tools</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" href="#">Other Stuff <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://chalwk.github.io/CPAS/">CPAS</a></li>
+                        <li class="dropdown-submenu">
+                            <a class="submenu-toggle" href="#">Education <i class="fas fa-chevron-right"></i></a>
+                            <ul class="submenu">
+                                <li><a href="../../../education/understanding-autism.html">Understanding Autism</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Snake</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
 
-    <main class="game-area">
-        <canvas id="gameCanvas" tabindex="0"></canvas>
-        <div class="overlay menu" id="overlay">
-            <div class="menu-card">
-                <h1>Snake</h1>
-                <p class="tagline">Fast. Fancy. Frenetic.</p>
-
-                <div class="menu-controls">
-                    <label>Mode
-                        <select id="modeSelect">
-                            <option value="classic">Classic</option>
-                            <option value="walls">Walls</option>
-                            <option value="obstacles">Obstacles</option>
-                            <option value="portal">Portals</option>
-                        </select>
-                    </label>
-
-                    <label>Difficulty
-                        <select id="difficultySelect">
-                            <option value="easy">Easy</option>
-                            <option selected value="normal">Normal</option>
-                            <option value="hard">Hard</option>
-                        </select>
-                    </label>
-
-                    <label>Controls
-                        <select id="controlSelect">
-                            <option value="arrows">Arrows</option>
-                            <option value="wasd">WASD</option>
-                        </select>
-                    </label>
+<main>
+    <div class="container">
+        <section class="panel"
+                 style="background: var(--light); border: 1px solid var(--gray-light); border-radius: var(--radius-lg); padding: 1.5rem; margin-top: 2rem;">
+            <div class="panel-head">
+                <h1 style="color: var(--primary); margin-bottom: 0.5rem;">Snake Game</h1>
+                <p class="muted small" style="color: var(--gray); margin-bottom: 1.5rem;">Fast. Fancy. Frenetic.</p>
+            </div>
+            <div class="game-area">
+                <div class="game-header">
+                    <div class="game-info">
+                        <div id="score">Score: 0</div>
+                        <div id="best">Best: 0</div>
+                    </div>
+                    <div class="powerup-message" id="powerup-message"></div>
+                    <div class="game-controls">
+                        <button class="btn btn-secondary" id="btn-pause">Pause</button>
+                        <button class="btn btn-secondary" id="btn-sound">🔊</button>
+                    </div>
                 </div>
 
-                <div class="menu-buttons">
-                    <button class="btn big" id="btn-start">Start</button>
-                    <button class="btn" id="btn-how">How to play</button>
-                    <button class="btn" id="btn-stats">Stats</button>
+                <div id="gameContainer">
+                    <canvas id="gameCanvas" tabindex="0"></canvas>
                 </div>
 
-                <div class="smallprint">Tip: Golden apples are worth a lot. Powerups are temporary but game changing.
+                <div class="overlay menu" id="overlay">
+                    <div class="menu-card">
+                        <h2>Snake</h2>
+                        <p class="tagline" style="color: var(--gray); margin-bottom: 1.5rem;">Fast. Fancy. Frenetic.</p>
+
+                        <div class="menu-controls">
+                            <label>Mode
+                                <select id="modeSelect">
+                                    <option value="classic">Classic</option>
+                                    <option value="walls">Walls</option>
+                                    <option value="obstacles">Obstacles</option>
+                                    <option value="portal">Portals</option>
+                                </select>
+                            </label>
+
+                            <label>Difficulty
+                                <select id="difficultySelect">
+                                    <option value="easy">Easy</option>
+                                    <option selected value="normal">Normal</option>
+                                    <option value="hard">Hard</option>
+                                </select>
+                            </label>
+
+                            <label>Controls
+                                <select id="controlSelect">
+                                    <option value="arrows">Arrows</option>
+                                    <option value="wasd">WASD</option>
+                                </select>
+                            </label>
+                        </div>
+
+                        <div class="menu-buttons">
+                            <button class="btn btn-primary" id="btn-start">Start</button>
+                            <button class="btn btn-secondary" id="btn-how">How to play</button>
+                        </div>
+
+                        <div class="smallprint" style="color: var(--gray); font-size: 0.85rem; margin-top: 1rem;">
+                            Tip: Golden apples are worth a lot. Powerups are temporary but game changing.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="overlay info-panel hidden" id="overlay-info">
+                    <div class="info-card">
+                        <h3>How to play</h3>
+                        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                            <li>Eat food to grow and score points.</li>
+                            <li>Use powerups for short advantages.</li>
+                            <li>Avoid colliding with yourself and (depending on mode) walls or obstacles.</li>
+                            <li>Pause with Space or the Pause button. Touch controls supported.</li>
+                        </ul>
+                        <button class="btn btn-secondary" id="btn-back">Back</button>
+                    </div>
+                </div>
+
+                <div class="overlay game-over hidden" id="overlay-gameover">
+                    <div class="gameover-card">
+                        <h3>Game Over</h3>
+                        <p id="go-score" style="margin: 0.5rem 0; font-size: 1.2rem;">Score: 0</p>
+                        <p id="go-best" style="margin: 0.5rem 0 1.5rem;">Best: 0</p>
+                        <div class="menu-buttons">
+                            <button class="btn btn-primary" id="btn-restart">Restart</button>
+                            <button class="btn btn-secondary" id="btn-menu">Main Menu</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="touch-controls hidden" id="touch-controls">
+                    <div class="dpad">
+                        <button class="tc btn-round" data-dir="up">▲</button>
+                        <div class="tc-row">
+                            <button class="tc btn-round" data-dir="left">◄</button>
+                            <button class="tc btn-round" data-dir="down">▼</button>
+                            <button class="tc btn-round" data-dir="right">►</button>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </section>
+    </div>
+</main>
+
+<footer>
+    <div class="footer-container">
+        <div class="social-icons">
+            <a href="https://discord.com/channels/@me/707058110396760094" target="_blank" aria-label="Discord"> <i
+                    class="fab fa-discord"></i></a>
+            <a href="https://github.com/Chalwk" target="_blank" aria-label="GitHub"> <i class="fab fa-github"></i></a>
         </div>
+        <p class="footer-copyright"></p>
+    </div>
+</footer>
 
-        <div class="overlay info-panel hidden" id="overlay-info">
-            <div class="info-card">
-                <h2>How to play</h2>
-                <ul>
-                    <li>Eat food to grow and score points.</li>
-                    <li>Use powerups for short advantages.</li>
-                    <li>Avoid colliding with yourself and (depending on mode) walls or obstacles.</li>
-                    <li>Pause with Space or the Pause button. Touch controls supported.</li>
-                </ul>
-                <button class="btn" id="btn-back">Back</button>
-            </div>
-        </div>
-
-        <div class="overlay game-over hidden" id="overlay-gameover">
-            <div class="gameover-card">
-                <h2>Game Over</h2>
-                <p id="go-score">Score: 0</p>
-                <p id="go-best">Best: 0</p>
-                <div class="menu-buttons">
-                    <button class="btn big" id="btn-restart">Restart</button>
-                    <button class="btn" id="btn-menu">Main Menu</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="touch-controls hidden" id="touch-controls">
-            <div class="dpad">
-                <button class="tc btn-round" data-dir="up">▲</button>
-                <div class="tc-row">
-                    <button class="tc btn-round" data-dir="left">◄</button>
-                    <button class="tc btn-round" data-dir="down">▼</button>
-                    <button class="tc btn-round" data-dir="right">►</button>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <footer class="footer">
-        <div>&copy; 2025. Jericho Crosby (Chalwk)</div>
-    </footer>
-</div>
-
+<script defer src="../../../nav.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
