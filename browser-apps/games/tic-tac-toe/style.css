@@ -69,6 +69,7 @@ Tic-Tac-Toe - Stylesheet
     border-radius: var(--radius-sm);
     border: 2px solid transparent;
     transition: border-color 0.3s ease;
+    place-items: center;
 }
 
 .small-board.active {
