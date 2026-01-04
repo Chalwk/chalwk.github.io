@@ -1,7 +1,7 @@
 <!--
 Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
 
-Asteroids Adaptation
+Asteroids
 -->
 
 <!DOCTYPE html>
@@ -10,11 +10,117 @@ Asteroids Adaptation
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Asteroids Adaptation</title>
+    <link href="../../../core.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
+          rel="stylesheet">
 </head>
 <body>
-<canvas id="gameCanvas"></canvas>
-<script src="script.js"></script>
 
+<header class="header">
+    <div class="container">
+        <a class="logo" href="../../../index.html"> <i class="fas fa-code"></i> Jericho </a>
+        <nav class="nav-desktop">
+            <ul class="nav-links">
+                <li><a href="../../../index.html#about">About</a></li>
+                <li><a href="../../../browser-apps/apps_and_tools.html">Apps & Tools</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" href="#">Other Stuff <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://chalwk.github.io/CPAS/">CPAS</a></li>
+                        <li class="dropdown-submenu">
+                            <a class="submenu-toggle" href="#">Education <i class="fas fa-chevron-right"></i></a>
+                            <ul class="submenu">
+                                <li><a href="../../../education/understanding-autism.html">Understanding Autism</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Asteroids</a></li>
+            </ul>
+        </nav>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <nav class="nav-mobile">
+            <ul class="nav-mobile-links">
+                <li><a href="../../../index.html#about">About</a></li>
+                <li><a href="../../../browser-apps/apps_and_tools.html">Apps & Tools</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" href="#">Other Stuff <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://chalwk.github.io/CPAS/">CPAS</a></li>
+                        <li class="dropdown-submenu">
+                            <a class="submenu-toggle" href="#">Education <i class="fas fa-chevron-right"></i></a>
+                            <ul class="submenu">
+                                <li><a href="../../../education/understanding-autism.html">Understanding Autism</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Asteroids</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <div class="container">
+        <section class="panel"
+                 style="background: var(--light); border: 1px solid var(--gray-light); border-radius: var(--radius-lg); padding: 1.5rem; margin-top: 2rem;">
+            <div class="panel-head">
+                <h1 style="color: var(--primary); margin-bottom: 0.5rem;">Asteroids Adaptation</h1>
+                <p class="muted small">Classic arcade game with spaceship controls and asteroid destruction.</p>
+            </div>
+            <div class="game-instructions"
+                 style="margin-bottom: 1.5rem; padding: 1rem; background: rgba(203, 213, 225, 0.1); border-radius: var(--radius);">
+                <h4 style="color: var(--dark); margin-bottom: 0.5rem;"><i class="fas fa-info-circle"></i> Controls:</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.5rem;">
+                    <div><i class="fas fa-arrow-left"></i> <strong>Arrow Left:</strong> Rotate left</div>
+                    <div><i class="fas fa-arrow-right"></i> <strong>Arrow Right:</strong> Rotate right</div>
+                    <div><i class="fas fa-arrow-up"></i> <strong>Arrow Up:</strong> Thrust forward</div>
+                    <div><i class="fas fa-space-shuttle"></i> <strong>Space:</strong> Shoot</div>
+                    <div><i class="fas fa-redo"></i> <strong>R:</strong> Restart game</div>
+                </div>
+            </div>
+            <div id="gameContainer" style="display: flex; justify-content: center; margin-bottom: 1rem;">
+                <canvas id="gameCanvas" tabindex="0"></canvas>
+            </div>
+            <div class="game-stats"
+                 style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: rgba(203, 213, 225, 0.1); border-radius: var(--radius);">
+                <div>
+                    <strong style="color: var(--primary);">Score:</strong>
+                    <span id="scoreDisplay"
+                          style="font-family: var(--font-mono); font-weight: 600; margin-left: 0.5rem;">0</span>
+                </div>
+                <div>
+                    <strong style="color: var(--primary);">Lives:</strong>
+                    <span id="livesDisplay"
+                          style="font-family: var(--font-mono); font-weight: 600; margin-left: 0.5rem;">3</span>
+                </div>
+                <button class="btn btn-secondary" id="restartBtn" style="display: none;">
+                    <i class="fas fa-redo"></i> Restart Game
+                </button>
+            </div>
+        </section>
+    </div>
+</main>
+
+<footer>
+    <div class="footer-container">
+        <div class="social-icons">
+            <a href="https://discord.com/channels/@me/707058110396760094" target="_blank" aria-label="Discord"> <i
+                    class="fab fa-discord"></i></a>
+            <a href="https://github.com/Chalwk" target="_blank" aria-label="GitHub"> <i class="fab fa-github"></i></a>
+        </div>
+        <p class="footer-copyright"></p>
+    </div>
+</footer>
+
+<script defer src="../../../nav.js"></script>
+<script src="script.js"></script>
 </body>
 </html>

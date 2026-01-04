@@ -6,12 +6,28 @@ Asteroids JavaScript
 
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+const scoreDisplay = document.getElementById('scoreDisplay');
+const livesDisplay = document.getElementById('livesDisplay');
+const restartBtn = document.getElementById('restartBtn');
+
+canvas.width = Math.min(800, window.innerWidth - 60);
+canvas.height = canvas.width * 0.75;
 
 const keys = {};
-document.addEventListener('keydown', e => keys[e.code] = true);
-document.addEventListener('keyup', e => keys[e.code] = false);
+
+document.addEventListener('keydown', e => {
+    if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) {
+        e.preventDefault();
+    }
+    keys[e.code] = true;
+});
+
+document.addEventListener('keyup', e => {
+    if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) {
+        e.preventDefault();
+    }
+    keys[e.code] = false;
+});
 
 let score = 0;
 let lives = 3;
@@ -164,7 +180,7 @@ class Enemy {
 }
 
 let enemy = null;
-let enemySpawnTimer = Math.floor(Math.random() * 500) + 500; // ~8-16s
+let enemySpawnTimer = Math.floor(Math.random() * 500) + 500;
 
 function wrap(obj){
     if(obj.x < 0) obj.x = canvas.width;
@@ -208,7 +224,7 @@ function update() {
         enemySpawnTimer--;
         if(enemySpawnTimer <= 0){
             enemy = new Enemy();
-            enemySpawnTimer = Math.floor(Math.random() * 1000) + 800; // next random spawn
+            enemySpawnTimer = Math.floor(Math.random() * 1000) + 800;
         }
     }
 
@@ -222,8 +238,10 @@ function update() {
             if(dist < player.radius){
                 enemy.bullets.splice(i,1);
                 lives--;
+                livesDisplay.textContent = lives;
                 if(lives <= 0){
                     gameOver = true;
+                    restartBtn.style.display = 'flex';
                 }
             }
         });
@@ -242,6 +260,7 @@ function update() {
                 player.bullets.splice(i,1);
                 asteroids.splice(j,1);
                 score += 10;
+                scoreDisplay.textContent = score;
                 if(a.radius>15){
                     asteroids.push(new Asteroid(a.x,a.y,a.radius/2,{x:(Math.random()-0.5)*2, y:(Math.random()-0.5)*2}));
                     asteroids.push(new Asteroid(a.x,a.y,a.radius/2,{x:(Math.random()-0.5)*2, y:(Math.random()-0.5)*2}));
@@ -256,11 +275,14 @@ function update() {
         const dist = Math.sqrt(dx*dx + dy*dy);
         if(dist < a.radius + player.radius){
             lives--;
+            livesDisplay.textContent = lives;
             if(lives <= 0){
                 gameOver = true;
+                restartBtn.style.display = 'flex';
             }
             asteroids.splice(i, 1);
             score += 10;
+            scoreDisplay.textContent = score;
             if(a.radius > 15){
                 asteroids.push(new Asteroid(a.x, a.y, a.radius/2, {x:(Math.random()-0.5)*2, y:(Math.random()-0.5)*2}));
                 asteroids.push(new Asteroid(a.x, a.y, a.radius/2, {x:(Math.random()-0.5)*2, y:(Math.random()-0.5)*2}));
@@ -287,25 +309,6 @@ function draw() {
 
     if(enemy) enemy.draw();
 
-    for(let i=0;i<lives;i++){
-        ctx.save();
-        ctx.translate(30 + i*40, 30);
-        ctx.rotate(0);
-        ctx.strokeStyle = 'white';
-        ctx.beginPath();
-        ctx.moveTo(10,0);
-        ctx.lineTo(-7.5,5);
-        ctx.lineTo(-5,0);
-        ctx.lineTo(-7.5,-5);
-        ctx.closePath();
-        ctx.stroke();
-        ctx.restore();
-    }
-    ctx.fillStyle = 'white';
-    ctx.font = '20px sans-serif';
-    ctx.textAlign = 'left';
-    ctx.fillText(`Score: ${score}`, canvas.width - 120, 30);
-
     if(gameOver){
         ctx.fillStyle = 'rgba(0,0,0,0.7)';
         ctx.fillRect(0,0,canvas.width,canvas.height);
@@ -323,14 +326,47 @@ function draw() {
 
 document.addEventListener('keydown', e=>{
     if(gameOver && e.key.toLowerCase() === 'r'){
-        window.location.reload();
+        e.preventDefault();
+        restartGame();
     }
 });
+
+restartBtn.addEventListener('click', restartGame);
+
+function restartGame() {
+    score = 0;
+    lives = 3;
+    gameOver = false;
+    player.x = canvas.width/2;
+    player.y = canvas.height/2;
+    player.angle = 0;
+    player.bullets = [];
+    asteroids.length = 0;
+    enemy = null;
+    scoreDisplay.textContent = score;
+    livesDisplay.textContent = lives;
+    restartBtn.style.display = 'none';
+    spawnAsteroids();
+}
 
 function gameLoop() {
     update();
     draw();
     requestAnimationFrame(gameLoop);
 }
+
+window.addEventListener('load', () => {
+    canvas.focus();
+});
+
+canvas.addEventListener('click', () => {
+    canvas.focus();
+});
+
+canvas.addEventListener('keydown', (e) => {
+    if (e.code === 'Space') {
+        e.preventDefault();
+    }
+});
 
 gameLoop();
