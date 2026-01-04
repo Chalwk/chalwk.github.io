@@ -18,7 +18,7 @@ Bowel Movement Logger - Stylesheet
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     padding: 1.5rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
     box-shadow: var(--shadow-sm);
 }
 
@@ -40,7 +40,7 @@ Bowel Movement Logger - Stylesheet
 }
 
 .search-container {
-    margin: 1.5rem 0;
+    margin: 2rem 0;
 }
 
 .form-control {
@@ -174,7 +174,7 @@ Bowel Movement Logger - Stylesheet
     flex-wrap: wrap;
     gap: 1rem;
     align-items: center;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
 }
 
 .filter-controls {
@@ -544,6 +544,37 @@ Bowel Movement Logger - Stylesheet
 .hour-cell.peak {
     background: var(--accent);
     box-shadow: 0 0 0 1px white;
+}
+
+.flex-group {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-full-width {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.small-note {
+    color: var(--gray);
+    display: block;
+    margin-top: 5px;
+}
+
+.bordered-top {
+    border-top: 1px solid var(--gray-light);
+    padding-top: 20px;
+}
+
+.mt-20 {
+    margin-top: 20px;
+}
+
+.large-modal {
+    max-width: 800px;
+    max-height: 80vh;
+    overflow-y: auto;
 }
 
 @media (max-width: 768px) {

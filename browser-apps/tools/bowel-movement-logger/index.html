@@ -90,12 +90,13 @@ Bowel Movement Logger - HTML
                 </div>
             </div>
 
-            <div class="search-container" style="margin: 2rem 0;">
-                <label for="searchInput"></label><input class="form-control" id="searchInput" placeholder="Search entries..."
+            <div class="search-container">
+                <label for="searchInput"></label><input class="form-control" id="searchInput"
+                                                        placeholder="Search entries..."
                                                         type="text">
             </div>
 
-            <section class="panel" style="margin-bottom: 2rem;">
+            <section class="panel">
                 <div class="panel-head">
                     <h2><i class="fas fa-chart-bar highlight"></i> Predictive Analysis</h2>
                 </div>
@@ -115,7 +116,7 @@ Bowel Movement Logger - HTML
                 </div>
             </section>
 
-            <section class="panel" style="margin-bottom: 2rem;">
+            <section class="panel">
                 <div class="panel-head">
                     <h2><i class="fas fa-chart-pie highlight"></i> Statistics</h2>
                 </div>
@@ -139,7 +140,7 @@ Bowel Movement Logger - HTML
                 </div>
             </section>
 
-            <div class="controls" style="margin-bottom: 2rem;">
+            <div class="controls">
                 <div class="filter-controls">
                     <label for="typeFilter"></label><select class="form-control" id="typeFilter">
                     <option value="all">All Types</option>
@@ -170,7 +171,7 @@ Bowel Movement Logger - HTML
                 </div>
             </div>
 
-            <section class="panel" style="margin-bottom: 2rem;">
+            <section class="panel">
                 <div class="panel-head">
                     <h2><i class="fas fa-info-circle highlight"></i> Bristol Stool Chart</h2>
                 </div>
@@ -238,7 +239,7 @@ Bowel Movement Logger - HTML
                 <label for="entryNotes">Notes</label>
                 <textarea class="form-control" id="entryNotes" rows="3"></textarea>
             </div>
-            <div class="form-group" style="display: flex; gap: 10px;">
+            <div class="form-group flex-group">
                 <button class="btn btn-primary" type="submit">
                     <i class="fas fa-save"></i> Save
                 </button>
@@ -258,30 +259,30 @@ Bowel Movement Logger - HTML
         </div>
         <div class="form-group">
             <p>Export your data as a JSON file for backup or transfer.</p>
-            <button class="btn btn-primary" id="exportBtn" style="width: 100%; margin-bottom: 10px;">
+            <button class="btn btn-primary btn-full-width" id="exportBtn">
                 <i class="fas fa-download"></i> Export Data as JSON
             </button>
         </div>
         <div class="form-group">
             <p>Import previously exported data (will replace current data).</p>
-            <button class="btn btn-secondary" id="importBtn" style="width: 100%; margin-bottom: 10px;">
+            <button class="btn btn-secondary btn-full-width" id="importBtn">
                 <i class="fas fa-upload"></i> Import JSON File
             </button>
-            <small style="color: var(--gray); display: block; margin-top: 5px;">
+            <small class="small-note">
                 Note: Importing will replace all current entries.
             </small>
         </div>
-        <div class="form-group" style="border-top: 1px solid var(--gray-light); padding-top: 20px;">
+        <div class="form-group bordered-top">
             <p>Load sample data to see how the app works. This will replace your current data.</p>
-            <button class="btn btn-secondary" id="loadSampleDataBtn" style="width: 100%; margin-bottom: 10px;">
+            <button class="btn btn-secondary btn-full-width" id="loadSampleDataBtn">
                 <i class="fas fa-clipboard"></i> Load Sample Data
             </button>
-            <small style="color: var(--gray); display: block; margin-top: 5px;">
+            <small class="small-note">
                 Note: Loading sample data will replace all current entries with demonstration data.
             </small>
         </div>
-        <div class="form-group" style="display: flex; gap: 10px; margin-top: 20px;">
-            <button class="btn btn-secondary" id="cancelImportExportBtn" style="flex: 1;">
+        <div class="form-group flex-group mt-20">
+            <button class="btn btn-secondary" id="cancelImportExportBtn">
                 <i class="fas fa-times"></i> Close
             </button>
         </div>
@@ -289,7 +290,7 @@ Bowel Movement Logger - HTML
 </div>
 
 <div class="modal" id="analyticsModal">
-    <div class="modal-content" style="max-width: 800px; max-height: 80vh; overflow-y: auto;">
+    <div class="modal-content large-modal">
         <div class="modal-header">
             <h3 class="modal-title">Advanced Analytics & Patterns</h3>
             <button class="close-btn" id="closeAnalyticsBtn">&times;</button>
