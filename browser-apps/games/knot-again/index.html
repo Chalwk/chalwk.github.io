@@ -1,79 +1,175 @@
 <!--
 Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
 
-Knot Again
+Knot Again - HTML
 -->
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport"/>
-    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Knot Again</title>
+    <link href="../../../core.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
+          rel="stylesheet">
 </head>
 <body>
-<div class="app">
-    <header class="topbar">
-        <div class="brand">Knot Again</div>
-        <div class="controls">
-            <button class="btn" id="resetBtn">Reset</button>
-            <button class="btn" id="shuffleBtn">Shuffle</button>
-            <button class="btn primary" id="nextBtn">Next Level</button>
+
+<header class="header">
+    <div class="container">
+        <a class="logo" href="../../../index.html"> <i class="fas fa-code"></i> Jericho </a>
+        <nav class="nav-desktop">
+            <ul class="nav-links">
+                <li><a href="../../../index.html#about">About</a></li>
+                <li><a href="../../../browser-apps/apps_and_tools.html">Apps & Tools</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" href="#">Other Stuff <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://chalwk.github.io/CPAS/">CPAS</a></li>
+                        <li class="dropdown-submenu">
+                            <a class="submenu-toggle" href="#">Education <i class="fas fa-chevron-right"></i></a>
+                            <ul class="submenu">
+                                <li><a href="../../../education/understanding-autism.html">Understanding Autism</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Knot Again</a></li>
+            </ul>
+        </nav>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
         </div>
-    </header>
+        <nav class="nav-mobile">
+            <ul class="nav-mobile-links">
+                <li><a href="../../../index.html#about">About</a></li>
+                <li><a href="../../../browser-apps/apps_and_tools.html">Apps & Tools</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" href="#">Other Stuff <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://chalwk.github.io/CPAS/">CPAS</a></li>
+                        <li class="dropdown-submenu">
+                            <a class="submenu-toggle" href="#">Education <i class="fas fa-chevron-right"></i></a>
+                            <ul class="submenu">
+                                <li><a href="../../../education/understanding-autism.html">Understanding Autism</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Knot Again</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
 
-    <main class="game-area">
-        <aside class="sidebar">
-            <div class="panel">
-                <h3>Level</h3>
-                <div id="levelLabel">1</div>
+<main>
+    <div class="container">
+        <section class="panel"
+                 style="background: var(--light); border: 1px solid var(--gray-light); border-radius: var(--radius-lg); padding: 1.5rem; margin-top: 2rem;">
+            <div class="panel-head">
+                <h1 style="color: var(--primary); margin-bottom: 0.5rem;">Knot Again</h1>
+                <p class="muted small">Untangle the ropes by dragging the dots. Clear all red crossings to win!</p>
             </div>
-            <div class="panel">
-                <h3>Edges</h3>
-                <div id="edgeCount">0</div>
-            </div>
-            <div class="panel">
-                <h3>Crossings</h3>
-                <div id="crossCount">0</div>
-            </div>
-            <div class="panel note">
-                Drag the dots to untangle the ropes. Clear all crossings to win.
-            </div>
-        </aside>
 
-        <section class="canvas-wrap">
-            <svg class="svg-canvas" id="svg" preserveAspectRatio="xMidYMid meet" viewBox="0 0 1000 700"></svg>
+            <div class="game-container" style="display: flex; flex-direction: row; gap: 1.5rem; margin-bottom: 1.5rem;">
+                <div class="game-stats-panel"
+                     style="background: rgba(203, 213, 225, 0.1); border-radius: var(--radius); padding: 1rem; min-width: 200px;">
+                    <h4 style="color: var(--dark); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-chart-line"></i> Game Stats
+                    </h4>
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                        <div>
+                            <div style="font-size: 0.875rem; color: var(--gray); margin-bottom: 0.25rem;">Level</div>
+                            <div id="levelLabel"
+                                 style="font-family: var(--font-mono); font-size: 1.5rem; font-weight: 600; color: var(--primary);">
+                                1
+                            </div>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.875rem; color: var(--gray); margin-bottom: 0.25rem;">Edges</div>
+                            <div id="edgeCount"
+                                 style="font-family: var(--font-mono); font-size: 1.25rem; font-weight: 600; color: var(--dark);">
+                                0
+                            </div>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.875rem; color: var(--gray); margin-bottom: 0.25rem;">Crossings
+                            </div>
+                            <div id="crossCount"
+                                 style="font-family: var(--font-mono); font-size: 1.25rem; font-weight: 600; color: var(--error);">
+                                0
+                            </div>
+                        </div>
+                    </div>
 
-            <div class="win-overlay hidden" id="winOverlay">
-                <div class="win-card">
-                    <h2>Nice! Puzzle solved.</h2>
-                    <p>Ready for the next one?</p>
-                    <div class="win-actions">
-                        <button class="btn primary" id="winNext">Next Level</button>
-                        <button class="btn" id="winShuffle">Shuffle</button>
+                    <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--gray-light);">
+                        <h5 style="color: var(--dark); margin-bottom: 0.5rem; font-size: 0.9rem;">How to Play:</h5>
+                        <ul style="font-size: 0.85rem; color: var(--gray); padding-left: 1rem; margin: 0;">
+                            <li>Drag the colored dots</li>
+                            <li>Clear all red crossings</li>
+                            <li>Solve the puzzle to win!</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="game-area" style="flex: 1; position: relative;">
+                    <div class="canvas-wrapper"
+                         style="background: var(--darker); border-radius: var(--radius); overflow: hidden; position: relative;">
+                        <svg class="svg-canvas" id="svg" preserveAspectRatio="xMidYMid meet" viewBox="0 0 1000 700"
+                             style="display: block; width: 100%; height: 500px;"></svg>
+
+                        <div class="win-overlay hidden" id="winOverlay"
+                             style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.8);">
+                            <div class="win-card"
+                                 style="background: var(--light); padding: 2rem; border-radius: var(--radius-lg); text-align: center; max-width: 400px; margin: 1rem;">
+                                <h2 style="color: var(--success); margin-bottom: 0.5rem;">Nice! Puzzle solved.</h2>
+                                <p style="color: var(--dark); margin-bottom: 1.5rem;">Ready for the next one?</p>
+                                <div class="win-actions" style="display: flex; gap: 1rem; justify-content: center;">
+                                    <button class="btn btn-primary" id="winNext">Next Level</button>
+                                    <button class="btn btn-secondary" id="winShuffle">Shuffle</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="game-controls"
+                         style="display: flex; gap: 1rem; margin-top: 1rem; justify-content: center;">
+                        <button class="btn btn-secondary" id="resetBtn">
+                            <i class="fas fa-undo"></i> Reset
+                        </button>
+                        <button class="btn btn-secondary" id="shuffleBtn">
+                            <i class="fas fa-random"></i> Shuffle
+                        </button>
+                        <button class="btn btn-primary" id="nextBtn">
+                            <i class="fas fa-forward"></i> Next Level
+                        </button>
                     </div>
                 </div>
             </div>
         </section>
-    </main>
-
-    <footer class="footer">
-        <div class="credit">&copy; 2025. Jericho Crosby (Chalwk)</div>
-    </footer>
-</div>
-
-<div class="mobile-instructions hidden" id="mobileInstructions">
-    <div class="instructions-content">
-        <h3>How to Play</h3>
-        <p>👆 Drag the colored dots</p>
-        <p>🎯 Clear all red crossings</p>
-        <p>✨ Solve the puzzle to win!</p>
-        <button class="btn primary" id="closeInstructions">Got it!</button>
     </div>
-</div>
+</main>
 
+<footer>
+    <div class="footer-container">
+        <div class="social-icons">
+            <a href="https://discord.com/channels/@me/707058110396760094" target="_blank" aria-label="Discord">
+                <i class="fab fa-discord"></i>
+            </a>
+            <a href="https://github.com/Chalwk" target="_blank" aria-label="GitHub">
+                <i class="fab fa-github"></i>
+            </a>
+        </div>
+        <p class="footer-copyright"></p>
+    </div>
+</footer>
+
+<script defer src="../../../nav.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
