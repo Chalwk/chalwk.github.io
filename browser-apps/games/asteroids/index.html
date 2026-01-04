@@ -83,6 +83,9 @@ Asteroids - HTML
                     <div><i class="fas fa-space-shuttle"></i> <strong>Space:</strong> Shoot</div>
                     <div><i class="fas fa-redo"></i> <strong>R:</strong> Restart game</div>
                 </div>
+                <div class="mobile-instructions">
+                    <strong><i class="fas fa-mobile-alt"></i> Touch Controls:</strong> Use buttons below for mobile play
+                </div>
             </div>
             <div id="gameContainer">
                 <canvas id="gameCanvas" tabindex="0"></canvas>
@@ -99,6 +102,27 @@ Asteroids - HTML
                 <button class="btn btn-secondary" id="restartBtn" style="display: none;">
                     <i class="fas fa-redo"></i> Restart Game
                 </button>
+            </div>
+            <div class="mobile-controls" id="mobileControls">
+                <div class="controls-row">
+                    <button class="control-btn rotate-left" id="rotateLeftBtn">
+                        <i class="fas fa-undo"></i> Left
+                    </button>
+                    <button class="control-btn thrust" id="thrustBtn">
+                        <i class="fas fa-arrow-up"></i> Thrust
+                    </button>
+                    <button class="control-btn rotate-right" id="rotateRightBtn">
+                        <i class="fas fa-redo"></i> Right
+                    </button>
+                </div>
+                <div class="controls-row">
+                    <button class="control-btn shoot" id="shootBtn">
+                        <i class="fas fa-space-shuttle"></i> Shoot
+                    </button>
+                    <button class="control-btn restart" id="mobileRestartBtn">
+                        <i class="fas fa-redo"></i> Restart
+                    </button>
+                </div>
             </div>
         </section>
     </div>
