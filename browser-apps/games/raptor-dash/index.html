@@ -1,46 +1,132 @@
 <!--
 Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
 
-Raptor Dash
+Raptor Dash - HTML
 -->
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width,initial-scale=1" name="viewport"/>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Raptor Dash</title>
+    <link href="../../../core.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
+          rel="stylesheet">
 </head>
 <body>
-<main class="wrap">
-    <header class="hud">
-        <div class="brand">Raptor Dash</div>
-        <div class="controls">
-            <button class="btn" id="btn-start">Start</button>
-            <button class="btn" id="btn-pause">Pause</button>
-        </div>
-        <div class="scoreboard">
-            <div id="score">Score: 0</div>
-            <div id="level">Level: 1</div>
-        </div>
-    </header>
 
-    <section class="game-area">
-        <canvas id="game"></canvas>
-        <aside class="overlay">
-            <div class="title">Raptor Dash</div>
-            <p class="subtitle">Jump, dodge, and ride the thermals. Procedurally generated levels - every run is
-                new.</p>
-            <div class="tips">Controls: Space / Up / Click to jump. Hold for longer hops. Double-tap to boost (if
-                available). Down Arrow to crouch.
+<header class="header">
+    <div class="container">
+        <a class="logo" href="../../../index.html"> <i class="fas fa-code"></i> Jericho </a>
+        <nav class="nav-desktop">
+            <ul class="nav-links">
+                <li><a href="../../../index.html#about">About</a></li>
+                <li><a href="../../../browser-apps/apps_and_tools.html">Apps & Tools</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" href="#">Other Stuff <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://chalwk.github.io/CPAS/">CPAS</a></li>
+                        <li class="dropdown-submenu">
+                            <a class="submenu-toggle" href="#">Education <i class="fas fa-chevron-right"></i></a>
+                            <ul class="submenu">
+                                <li><a href="../../../education/understanding-autism.html">Understanding Autism</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Raptor Dash</a></li>
+            </ul>
+        </nav>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <nav class="nav-mobile">
+            <ul class="nav-mobile-links">
+                <li><a href="../../../index.html#about">About</a></li>
+                <li><a href="../../../browser-apps/apps_and_tools.html">Apps & Tools</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" href="#">Other Stuff <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://chalwk.github.io/CPAS/">CPAS</a></li>
+                        <li class="dropdown-submenu">
+                            <a class="submenu-toggle" href="#">Education <i class="fas fa-chevron-right"></i></a>
+                            <ul class="submenu">
+                                <li><a href="../../../education/understanding-autism.html">Understanding Autism</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Raptor Dash</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <div class="container">
+        <section class="panel" style="background: var(--light); border: 1px solid var(--gray-light); border-radius: var(--radius-lg); padding: 2rem; margin-top: 2rem;">
+            <div class="panel-head">
+                <h1 style="color: var(--primary); margin-bottom: 0.5rem;">Raptor Dash</h1>
+                <p class="muted small">Jump, dodge, and ride the thermals. Procedurally generated levels - every run is new.</p>
             </div>
-        </aside>
-    </section>
 
-    <footer class="meta">&copy; 2025. Jericho Crosby (Chalwk)</footer>
+            <div class="game-instructions" style="margin-bottom: 1.5rem; padding: 1rem; background: rgba(203, 213, 225, 0.1); border-radius: var(--radius);">
+                <h4 style="color: var(--dark); margin-bottom: 0.5rem;"><i class="fas fa-gamepad"></i> Controls:</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.5rem;">
+                    <div><i class="fas fa-space-shuttle"></i> <strong>Space / Up / Click:</strong> Jump</div>
+                    <div><i class="fas fa-arrow-down"></i> <strong>Down Arrow:</strong> Crouch</div>
+                    <div><i class="fas fa-redo"></i> <strong>Double-tap Jump:</strong> Boost (if available)</div>
+                    <div><i class="fas fa-play"></i> <strong>Start Button:</strong> Begin/Restart game</div>
+                    <div><i class="fas fa-pause"></i> <strong>Pause Button:</strong> Pause/Resume</div>
+                </div>
+            </div>
+
+            <div class="game-area" style="position: relative; display: flex; align-items: center; justify-content: center; padding: 1rem;">
+                <canvas id="game"></canvas>
+            </div>
+
+            <div class="game-controls" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: rgba(203, 213, 225, 0.1); border-radius: var(--radius);">
+                <div class="game-stats" style="display: flex; gap: 1.5rem;">
+                    <div>
+                        <strong style="color: var(--primary);">Score:</strong>
+                        <span id="score" style="font-family: var(--font-mono); font-weight: 600; margin-left: 0.5rem;">0</span>
+                    </div>
+                    <div>
+                        <strong style="color: var(--primary);">Level:</strong>
+                        <span id="level" style="font-family: var(--font-mono); font-weight: 600; margin-left: 0.5rem;">1</span>
+                    </div>
+                </div>
+
+                <div class="controls" style="display: flex; gap: 0.75rem;">
+                    <button class="btn" id="btn-start">
+                        <i class="fas fa-play"></i> Start
+                    </button>
+                    <button class="btn btn-secondary" id="btn-pause">
+                        <i class="fas fa-pause"></i> Pause
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
 </main>
 
-<script defer src="script.js"></script>
+<footer>
+    <div class="footer-container">
+        <div class="social-icons">
+            <a href="https://discord.com/channels/@me/707058110396760094" target="_blank" aria-label="Discord"> <i
+                    class="fab fa-discord"></i></a>
+            <a href="https://github.com/Chalwk" target="_blank" aria-label="GitHub"> <i class="fab fa-github"></i></a>
+        </div>
+        <p class="footer-copyright"></p>
+    </div>
+</footer>
+
+<script defer src="../../../nav.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
