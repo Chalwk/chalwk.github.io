@@ -1,85 +1,176 @@
 <!--
 Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
 
-Maze Solver
+Saze Solver - HTML
 -->
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width,initial-scale=1" name="viewport"/>
-    <title>Maze Solver</title>
-    <meta content="#0f172a" name="theme-color">
-    <link href="style.css" rel="stylesheet"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maze Solver | Jericho Crosby</title>
+    <link href="../../../core.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
+          rel="stylesheet">
 </head>
 <body>
-<div class="app">
-    <header class="topbar">
-        <div class="brand">
-            <h1>Maze <span>Solver</span></h1>
-            <p class="tag">WASD / Arrows • Touch-friendly • Hint included</p>
-        </div>
 
-        <div class="hud">
-            <div aria-live="polite" class="hud-item" id="score">Moves: 0</div>
-            <div class="hud-item" id="timer">Time: 0s</div>
-            <div class="hud-item" id="best">Best: -</div>
+<header class="header">
+    <div class="container">
+        <a class="logo" href="../../../index.html"><i class="fas fa-code"></i> Jericho</a>
+        <nav class="nav-desktop">
+            <ul class="nav-links">
+                <li><a href="../../../index.html#about">About</a></li>
+                <li><a href="../../../browser-apps/apps_and_tools.html">Apps & Tools</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" href="#">Other Stuff <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://chalwk.github.io/CPAS/">CPAS</a></li>
+                        <li class="dropdown-submenu">
+                            <a class="submenu-toggle" href="#">Education <i class="fas fa-chevron-right"></i></a>
+                            <ul class="submenu">
+                                <li><a href="../../../education/understanding-autism.html">Understanding Autism</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Maze Solver</a></li>
+            </ul>
+        </nav>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
         </div>
-    </header>
+        <nav class="nav-mobile">
+            <ul class="nav-mobile-links">
+                <li><a href="../../../index.html#about">About</a></li>
+                <li><a href="../../../browser-apps/apps_and_tools.html">Apps & Tools</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" href="#">Other Stuff <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://chalwk.github.io/CPAS/">CPAS</a></li>
+                        <li class="dropdown-submenu">
+                            <a class="submenu-toggle" href="#">Education <i class="fas fa-chevron-right"></i></a>
+                            <ul class="submenu">
+                                <li><a href="../../../education/understanding-autism.html">Understanding Autism</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Maze Solver</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
 
-    <main class="main">
-        <section class="card" id="game-area">
-            <div class="controls-top" id="game-controls">
-                <div class="left-controls">
-                    <button class="btn primary" id="reset-btn">Restart</button>
-                    <button class="btn" id="hint-btn">Show Hint</button>
+<main>
+    <div class="container">
+        <section class="panel"
+                 style="background: var(--light); border: 1px solid var(--gray-light); border-radius: var(--radius-lg); padding: 1.5rem; margin-top: 2rem;">
+            <div class="panel-head">
+                <h1 style="color: var(--primary); margin-bottom: 0.5rem;">Maze Solver</h1>
+                <p class="muted small">WASD / Arrows • Touch-friendly • Hint included</p>
+            </div>
+
+            <div class="game-instructions"
+                 style="margin-bottom: 1.5rem; padding: 1rem; background: rgba(203, 213, 225, 0.1); border-radius: var(--radius);">
+                <h4 style="color: var(--dark); margin-bottom: 0.5rem;"><i class="fas fa-info-circle"></i> Objective:
+                </h4>
+                <p>Move your <span class="pill green">player</span> to the <span class="pill red">goal</span>. Use WASD
+                    or arrow keys, or the touch D-pad below.</p>
+            </div>
+
+            <div class="controls-top"
+                 style="display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+                <div class="left-controls" style="display: flex; gap: 0.5rem;">
+                    <button class="btn" id="reset-btn"><i class="fas fa-redo"></i> Restart</button>
+                    <button class="btn btn-secondary" id="hint-btn"><i class="fas fa-lightbulb"></i> Show Hint</button>
                 </div>
-                <div class="right-controls">
-                    <label class="size-label">Size
-                        <select aria-label="Maze size" id="size-select">
+                <div class="right-controls" style="display: flex; gap: 0.5rem; align-items: center;">
+                    <label style="font-weight: 500; color: var(--dark);">
+                        Maze Size:
+                        <select id="size-select"
+                                style="padding: 0.5rem; border-radius: var(--radius-sm); border: 1px solid var(--gray-light); background: white; margin-left: 0.5rem;">
                             <option value="11">11 × 11</option>
                             <option selected value="15">15 × 15</option>
                             <option value="21">21 × 21</option>
                             <option value="31">31 × 31</option>
                         </select>
                     </label>
-                    <button class="btn subtle" id="browser-btn">Return</button>
+                    <button class="btn btn-secondary" id="browser-btn"><i class="fas fa-arrow-left"></i> Return</button>
                 </div>
             </div>
 
-            <div class="game-container" id="game-container">
-                <div aria-hidden="false" id="maze-container"></div>
+            <div class="game-stats"
+                 style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: rgba(203, 213, 225, 0.1); border-radius: var(--radius); margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <strong style="color: var(--primary);">Moves:</strong>
+                    <span id="score"
+                          style="font-family: var(--font-mono); font-weight: 600; margin-left: 0.5rem;">0</span>
+                </div>
+                <div>
+                    <strong style="color: var(--primary);">Time:</strong>
+                    <span id="timer"
+                          style="font-family: var(--font-mono); font-weight: 600; margin-left: 0.5rem;">0s</span>
+                </div>
+                <div>
+                    <strong style="color: var(--primary);">Best:</strong>
+                    <span id="best"
+                          style="font-family: var(--font-mono); font-weight: 600; margin-left: 0.5rem;">-</span>
+                </div>
             </div>
 
-            <div class="instructions">
-                <p>Move your <span class="pill green">player</span> to the <span class="pill red">goal</span>. Use WASD
-                    or arrow keys, or the touch D-pad below.</p>
+            <div class="game-container" id="game-container"
+                 style="display: flex; justify-content: center; margin-bottom: 1.5rem; min-height: 300px;">
+                <div id="maze-container"
+                     style="display: grid; gap: 3px; background: var(--darker); padding: 12px; border-radius: var(--radius); box-shadow: var(--shadow-lg);"></div>
             </div>
 
-            <div aria-label="Touch controls" class="dpad" id="touch-controls" role="group">
-                <button class="dpad-btn" data-dir="up">▲</button>
-                <div class="dpad-row">
-                    <button class="dpad-btn" data-dir="left">◀</button>
-                    <button class="dpad-btn" data-dir="down">▼</button>
-                    <button class="dpad-btn" data-dir="right">▶</button>
+            <div class="instructions" style="text-align: center; margin-bottom: 1.5rem;">
+                <h4 style="color: var(--dark); margin-bottom: 0.5rem;"><i class="fas fa-gamepad"></i> Touch Controls:
+                </h4>
+                <div class="dpad" id="touch-controls"
+                     style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+                    <button class="dpad-btn" data-dir="up"
+                            style="width: 60px; height: 60px; border-radius: var(--radius); background: var(--primary); color: white; border: none; font-size: 1.5rem; cursor: pointer;">
+                        ▲
+                    </button>
+                    <div class="dpad-row" style="display: flex; gap: 0.5rem;">
+                        <button class="dpad-btn" data-dir="left"
+                                style="width: 60px; height: 60px; border-radius: var(--radius); background: var(--primary); color: white; border: none; font-size: 1.5rem; cursor: pointer;">
+                            ◀
+                        </button>
+                        <button class="dpad-btn" data-dir="down"
+                                style="width: 60px; height: 60px; border-radius: var(--radius); background: var(--primary); color: white; border: none; font-size: 1.5rem; cursor: pointer;">
+                            ▼
+                        </button>
+                        <button class="dpad-btn" data-dir="right"
+                                style="width: 60px; height: 60px; border-radius: var(--radius); background: var(--primary); color: white; border: none; font-size: 1.5rem; cursor: pointer;">
+                            ▶
+                        </button>
+                    </div>
                 </div>
             </div>
         </section>
+    </div>
+</main>
 
-        <aside class="info card">
-            <h3>Tips</h3>
-            <ul>
-                <li>Try larger mazes for a challenge.</li>
-                <li>Use <strong>Show Hint</strong> if you get stuck (briefly shows shortest path).</li>
-                <li>Best score is saved locally (moves).</li>
-            </ul>
-        </aside>
-        <footer class="meta">&copy; 2025. Jericho Crosby (Chalwk)</footer>
-    </main>
-</div>
+<footer>
+    <div class="footer-container">
+        <div class="social-icons">
+            <a href="https://discord.com/channels/@me/707058110396760094" target="_blank" aria-label="Discord"><i
+                    class="fab fa-discord"></i></a>
+            <a href="https://github.com/Chalwk" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+        </div>
+        <p class="footer-copyright"></p>
+    </div>
+</footer>
 
+<script defer src="../../../nav.js"></script>
 <script src="script.js"></script>
-<div aria-live="polite" class="message-overlay" id="message-overlay"></div>
 </body>
 </html>
