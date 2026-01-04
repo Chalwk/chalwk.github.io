@@ -61,17 +61,6 @@ canvas {
     border-color: var(--primary);
 }
 
-.btn.btn-secondary {
-    background: transparent;
-    border: 2px solid var(--primary);
-    color: var(--primary);
-}
-
-.btn.btn-secondary:hover {
-    background: var(--primary);
-    color: white;
-}
-
 .slider-row {
     display: flex;
     align-items: center;

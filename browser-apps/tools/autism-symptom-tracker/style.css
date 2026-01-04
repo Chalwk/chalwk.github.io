@@ -371,17 +371,6 @@ details > p {
     background: var(--primary-dark);
 }
 
-.btn.btn-secondary {
-    background: transparent;
-    border: 2px solid var(--primary);
-    color: var(--primary);
-}
-
-.btn.btn-secondary:hover {
-    background: var(--primary);
-    color: white;
-}
-
 .btn.ghost {
     background: transparent;
     border: none;

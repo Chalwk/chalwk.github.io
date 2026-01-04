@@ -123,17 +123,6 @@ body.dark .cell:hover {
     background: #374151;
 }
 
-.btn.btn-secondary {
-    background: transparent;
-    border: 2px solid var(--primary);
-    color: var(--primary);
-}
-
-.btn.btn-secondary:hover {
-    background: var(--primary);
-    color: white;
-}
-
 @media (max-width: 768px) {
     .cell {
         width: 30px;
