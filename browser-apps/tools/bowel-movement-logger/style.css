@@ -210,6 +210,17 @@ Bowel Movement Logger stylesheet
     font-size: 0.85rem;
 }
 
+.btn.btn-secondary {
+    background: transparent;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+}
+
+.btn.btn-secondary:hover {
+    background: var(--primary);
+    color: white;
+}
+
 .table-container {
     overflow-x: auto;
     border-radius: var(--radius);

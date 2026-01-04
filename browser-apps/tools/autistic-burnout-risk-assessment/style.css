@@ -206,6 +206,17 @@ Autistic Burnout Risk Assessment stylesheet
     text-align: center;
 }
 
+.btn.btn-secondary {
+    background: transparent;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+}
+
+.btn.btn-secondary:hover {
+    background: var(--primary);
+    color: white;
+}
+
 .actions {
     display: flex;
     gap: 10px;

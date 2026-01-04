@@ -175,6 +175,17 @@ Social Script Builder stylesheet
     line-height: 1.4;
 }
 
+.btn.btn-secondary {
+    background: transparent;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+}
+
+.btn.btn-secondary:hover {
+    background: var(--primary);
+    color: white;
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;

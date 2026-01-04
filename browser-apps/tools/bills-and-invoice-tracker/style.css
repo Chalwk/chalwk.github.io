@@ -143,6 +143,17 @@ tr:hover {
     background-color: #0891b2;
 }
 
+.btn.btn-secondary {
+    background: transparent;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+}
+
+.btn.btn-secondary:hover {
+    background: var(--primary);
+    color: white;
+}
+
 .modal {
     display: none;
     position: fixed;

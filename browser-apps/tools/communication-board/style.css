@@ -150,6 +150,17 @@ Communication Board stylesheet
     display: none;
 }
 
+.btn.btn-secondary {
+    background: transparent;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+}
+
+.btn.btn-secondary:hover {
+    background: var(--primary);
+    color: white;
+}
+
 .main-content {
     display: flex;
     flex-direction: column;
