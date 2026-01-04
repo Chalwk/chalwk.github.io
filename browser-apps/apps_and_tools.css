@@ -1,7 +1,7 @@
 /*
 Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
 
-Apps & Tools Landing Page stylesheet
+Apps & Tools Landing Page - Stylesheet
 */
 
 body.apps-tools-page {
@@ -207,36 +207,6 @@ body.apps-tools-page {
 
 .play-button:hover i {
     transform: translateX(5px);
-}
-
-.back-button-container {
-    display: flex;
-    justify-content: center;
-    margin: 30px 0 50px;
-}
-
-.back-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 30px;
-    padding: 12px 25px;
-    font-weight: 500;
-    font-size: 1rem;
-    color: var(--dark);
-    background: white;
-    border: 1px solid var(--gray-light);
-    border-radius: 50px;
-    text-decoration: none;
-    transition: var(--transition);
-    box-shadow: var(--shadow);
-}
-
-.back-link:hover {
-    color: var(--primary);
-    background: var(--light);
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-lg);
 }
 
 @media (max-width: 768px) {

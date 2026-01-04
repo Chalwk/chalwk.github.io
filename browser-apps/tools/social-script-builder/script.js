@@ -1,7 +1,7 @@
 /*
 Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
 
-Social Script Builder JavaScript
+Social Script Builder - JavaScript
 */
 
 (() => {

@@ -1,7 +1,7 @@
 /*
 Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
 
-Communication Board service worker (SW) JavaScript
+Communication Board - JavaScript (service worker)
 */
 
 const CACHE_NAME = 'communication-board-v1.4';

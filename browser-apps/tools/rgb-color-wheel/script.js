@@ -1,7 +1,7 @@
 /*
 Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
 
-RGB Color Wheel JavaScript
+RGB Color Wheel - JavaScript
 */
 
 (() => {

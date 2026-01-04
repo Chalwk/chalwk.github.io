@@ -1,7 +1,7 @@
 /*
 Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
 
-Grocery List service worker (SW) JavaScript
+Grocery List - JavaScript (service worker)
 */
 
 const CACHE_NAME = 'grocery-list-v1.0.0';

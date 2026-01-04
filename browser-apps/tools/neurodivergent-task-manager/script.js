@@ -1,7 +1,7 @@
 /*
 Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
 
-Neurodivergent Task Manager JavaScript
+Neurodivergent Task Manager - JavaScript
 */
 
 const taskForm = document.getElementById('task-form');

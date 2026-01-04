@@ -1,7 +1,7 @@
 /*
 Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
 
-Bowel Movement Logger JavaScript
+Bowel Movement Logger - JavaScript
 */
 
 let bowelMovementData = [];

@@ -1,7 +1,7 @@
 /*
 Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
 
-Grocery List JavaScript
+Grocery List - JavaScript
 */
 
 let groceryData = {};
