@@ -20,7 +20,7 @@ Communication Board - Stylesheet
     border: 1px solid var(--gray-light);
     border-radius: var(--radius-lg);
     overflow: hidden;
-    margin-top: 1rem;
+    margin-top: 2rem;
     position: relative;
 }
 
@@ -148,6 +148,10 @@ Communication Board - Stylesheet
 
 .settings-group label.btn input {
     display: none;
+}
+
+.import-label {
+    cursor: pointer;
 }
 
 .main-content {
@@ -490,6 +494,11 @@ Communication Board - Stylesheet
     border-top: 1px solid var(--gray-light);
 }
 
+.modal-buttons {
+    display: flex;
+    gap: 8px;
+}
+
 .categories-list {
     margin: 1.5rem 0;
     max-height: 300px;
@@ -593,6 +602,12 @@ Communication Board - Stylesheet
 
 body.clicked-outside .settings-dropdown.active .settings-menu {
     display: none;
+}
+
+.install-btn {
+    display: none;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 @media (max-width: 768px) {

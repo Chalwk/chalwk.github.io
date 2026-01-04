@@ -84,10 +84,10 @@ Communication Board - HTML
 
 <main>
     <div class="container">
-        <div class="app-container" style="margin-top: 2rem;">
+        <div class="app-container">
             <div class="app-header">
                 <div class="header-left">
-                    <h2 style="color: white; font-size: 1.2rem; margin: 0;">Communication Board</h2>
+                    <h2>Communication Board</h2>
                     <div class="header-sub">
                         <label class="visually-hidden" for="categorySelect">Filter symbols by category</label>
                         <select id="categorySelect" title="Filter by category">
@@ -114,10 +114,9 @@ Communication Board - HTML
                                 <button class="btn btn-secondary" id="exportBtn" title="Export symbols and settings">
                                     <i class="fas fa-download"></i> Export
                                 </button>
-                                <label class="btn btn-secondary" for="importFile" style="cursor: pointer;"
-                                       title="Import symbols">
+                                <label class="btn btn-secondary import-label" for="importFile" title="Import symbols">
                                     <i class="fas fa-upload"></i> Import
-                                    <input accept="application/json" id="importFile" style="display:none" type="file">
+                                    <input accept="application/json" id="importFile" type="file">
                                 </label>
                             </div>
                             <div class="settings-group">
@@ -133,7 +132,7 @@ Communication Board - HTML
                         </div>
                     </div>
 
-                    <button class="btn btn-secondary" id="installBtn" style="display:none;" title="Install App">
+                    <button class="btn btn-secondary install-btn" id="installBtn" title="Install App">
                         <i class="fas fa-download"></i> Install
                     </button>
                 </div>
@@ -212,7 +211,7 @@ Communication Board - HTML
                     <button class="btn btn-danger" id="deleteBtn" type="button">
                         <i class="fas fa-trash"></i> Delete
                     </button>
-                    <div style="display:flex; gap:8px">
+                    <div class="modal-buttons">
                         <button class="btn btn-secondary" id="cancelEdit" type="button">
                             <i class="fas fa-times"></i> Cancel
                         </button>
