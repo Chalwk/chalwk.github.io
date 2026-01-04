@@ -4,245 +4,83 @@ Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
 Neurodivergent Task Manager stylesheet
 */
 
-:root {
-    --primary: #4a6fa5;
-    --secondary: #6b8cbc;
-    --accent: #ff9e44;
-    --light: #f5f7fa;
-    --dark: #2c3e50;
-    --success: #2ecc71;
-    --warning: #f39c12;
-    --danger: #e74c3c;
-    --border-radius: 8px;
-    --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-body {
-    background-color: var(--light);
-    color: var(--dark);
-    line-height: 1.6;
-}
-
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-header {
-    background-color: var(--primary);
-    color: white;
-    padding: 20px;
-    border-radius: var(--border-radius);
-    margin-bottom: 30px;
-    box-shadow: var(--box-shadow);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-footer {
-    text-align: center;
-    margin-top: 40px;
-    padding: 20px;
-    color: var(--text-muted);
-    font-size: 0.9rem;
-}
-
-h1 {
-    font-size: 2.2rem;
-}
-
-.user-stats {
-    display: flex;
-    gap: 20px;
-}
-
-.stat {
-    background-color: rgba(255, 255, 255, 0.2);
-    padding: 10px 15px;
-    border-radius: var(--border-radius);
-    text-align: center;
-}
-
-.stat-value {
-    font-size: 1.8rem;
-    font-weight: bold;
-}
-
 .main-content {
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
-    gap: 20px;
-}
-
-.card {
-    background-color: white;
-    border-radius: var(--border-radius);
-    box-shadow: var(--box-shadow);
-    padding: 20px;
-    margin-bottom: 20px;
-}
-
-.card-title {
-    font-size: 1.4rem;
-    margin-bottom: 15px;
-    color: var(--primary);
-    border-bottom: 2px solid var(--light);
-    padding-bottom: 10px;
-}
-
-.form-group {
-    margin-bottom: 15px;
-}
-
-label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: 600;
-}
-
-input, textarea, select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: var(--border-radius);
-    font-size: 1rem;
-}
-
-.btn {
-    background-color: var(--primary);
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s;
-}
-
-.btn:hover {
-    background-color: var(--secondary);
-}
-
-.btn-success {
-    background-color: var(--success);
-}
-
-.btn-warning {
-    background-color: var(--warning);
-}
-
-.btn-danger {
-    background-color: var(--danger);
-}
-
-.step-input {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 10px;
-    align-items: center;
-}
-
-.step-input .step-text {
-    flex: 1;
-}
-
-.btn-remove-step {
-    background-color: var(--danger);
-    color: white;
-    border: none;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-    padding: 0;
-}
-
-.btn-remove-step:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-}
-
-.btn-remove-step:not(:disabled):hover {
-    background-color: #c0392b;
+    gap: 1.5rem;
 }
 
 .task-item {
     background-color: white;
-    border-left: 5px solid var(--primary);
-    padding: 15px;
-    margin-bottom: 15px;
-    border-radius: var(--border-radius);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    transition: transform 0.2s;
+    border-left: 4px solid var(--primary);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+    border: 1px solid var(--gray-light);
 }
 
 .task-item:hover {
-    transform: translateY(-3px);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
 }
 
 .task-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 0.75rem;
 }
 
 .task-title {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: 600;
+    color: var(--darker);
 }
 
 .task-description {
-    color: #666;
-    margin-bottom: 15px;
-    font-style: italic;
+    color: var(--gray);
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
 }
 
 .task-priority {
-    padding: 3px 8px;
+    padding: 0.25rem 0.75rem;
     border-radius: 20px;
     font-size: 0.8rem;
-    font-weight: bold;
+    font-weight: 600;
+    text-transform: uppercase;
 }
 
 .priority-high {
-    background-color: var(--danger);
-    color: white;
+    background-color: rgba(239, 68, 68, 0.15);
+    color: var(--error);
+    border: 1px solid rgba(239, 68, 68, 0.3);
 }
 
 .priority-medium {
-    background-color: var(--warning);
-    color: white;
+    background-color: rgba(245, 158, 11, 0.15);
+    color: var(--warning);
+    border: 1px solid rgba(245, 158, 11, 0.3);
 }
 
 .priority-low {
-    background-color: var(--success);
-    color: white;
+    background-color: rgba(16, 185, 129, 0.15);
+    color: var(--success);
+    border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
 .task-steps {
-    margin: 15px 0;
-    background-color: var(--light);
-    padding: 15px;
-    border-radius: var(--border-radius);
+    margin: 1rem 0;
+    background-color: rgba(248, 250, 252, 0.8);
+    padding: 1rem;
+    border-radius: var(--radius);
 }
 
 .steps-title {
-    font-size: 1rem;
-    margin-bottom: 10px;
+    font-size: 0.95rem;
+    margin-bottom: 0.75rem;
     color: var(--primary);
     font-weight: 600;
 }
@@ -250,25 +88,25 @@ input, textarea, select {
 .step-item {
     display: flex;
     align-items: center;
-    margin-bottom: 8px;
-    padding: 8px;
+    margin-bottom: 0.5rem;
+    padding: 0.5rem;
     background-color: white;
-    border-radius: var(--border-radius);
+    border-radius: var(--radius-sm);
     transition: background-color 0.2s;
 }
 
 .step-item:hover {
-    background-color: #f0f0f0;
+    background-color: rgba(248, 250, 252, 0.9);
 }
 
 .step-item.completed {
-    background-color: rgba(46, 204, 113, 0.1);
+    background-color: rgba(16, 185, 129, 0.08);
 }
 
 .step-checkbox-container {
     display: flex;
     align-items: center;
-    margin-right: 10px;
+    margin-right: 0.75rem;
     cursor: pointer;
 }
 
@@ -279,12 +117,12 @@ input, textarea, select {
 .checkmark {
     width: 20px;
     height: 20px;
-    border: 2px solid #ddd;
+    border: 2px solid var(--gray-light);
     border-radius: 4px;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.2s;
+    transition: var(--transition);
 }
 
 .step-checkbox:checked + .checkmark {
@@ -295,33 +133,29 @@ input, textarea, select {
 .step-checkbox:checked + .checkmark::after {
     content: "✓";
     color: white;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: bold;
-}
-
-.step-text {
-    flex: 1;
 }
 
 .step-item.completed .step-text {
     text-decoration: line-through;
-    color: #888;
+    color: var(--gray);
 }
 
 .progress-container {
-    margin: 15px 0;
+    margin: 1rem 0;
 }
 
 .progress-label {
     font-size: 0.9rem;
-    margin-bottom: 5px;
+    margin-bottom: 0.5rem;
     color: var(--dark);
 }
 
 .progress-bar {
-    height: 10px;
-    background-color: #e0e0e0;
-    border-radius: 5px;
+    height: 8px;
+    background-color: var(--gray-light);
+    border-radius: 4px;
     overflow: hidden;
 }
 
@@ -333,157 +167,143 @@ input, textarea, select {
 }
 
 .task-timer {
-    background-color: var(--light);
-    padding: 10px;
-    border-radius: var(--border-radius);
-    margin: 10px 0;
+    background-color: rgba(248, 250, 252, 0.8);
+    padding: 0.75rem;
+    border-radius: var(--radius);
+    margin: 0.75rem 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
 .timer-display {
-    font-size: 1.5rem;
-    font-weight: bold;
+    font-size: 1.25rem;
+    font-weight: 600;
     color: var(--primary);
-}
-
-.timer-controls {
-    display: flex;
-    gap: 5px;
+    font-family: var(--font-mono);
 }
 
 .task-actions {
     display: flex;
-    gap: 10px;
-    margin-top: 10px;
-}
-
-.timer-container {
-    text-align: center;
-    padding: 20px;
-}
-
-.timer-circle {
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    background: conic-gradient(var(--accent) 0%, var(--light) 0%);
-    margin: 0 auto 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-}
-
-.timer-text {
-    font-size: 2rem;
-    font-weight: bold;
-    color: var(--dark);
+    gap: 0.5rem;
+    margin-top: 0.75rem;
 }
 
 .completed-task-actions {
-    margin-top: 10px;
+    margin-top: 0.5rem;
     text-align: right;
 }
 
-#add-step {
-    margin-top: 10px;
+.btn-success {
+    background-color: var(--success);
 }
 
-.btn-delete-completed {
-    background-color: var(--danger);
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    font-size: 0.8rem;
+.btn-warning {
+    background-color: var(--warning);
 }
 
-.btn-delete-completed:hover {
-    background-color: #c0392b;
+.btn-danger {
+    background-color: var(--error);
 }
 
-.templates-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 10px;
+.btn-success:hover {
+    background-color: #0da271;
 }
 
-.template-item {
-    background-color: var(--light);
-    padding: 15px;
-    border-radius: var(--border-radius);
-    border-left: 4px solid var(--accent);
-    transition: transform 0.2s, box-shadow 0.2s;
+.btn-warning:hover {
+    background-color: #dd8b0a;
 }
 
-.template-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.template-title {
-    font-weight: 600;
-    margin-bottom: 5px;
-    font-size: 1.1rem;
-}
-
-.template-steps {
-    font-size: 0.9rem;
-    color: var(--secondary);
-    margin-bottom: 10px;
-}
-
-.btn-use-template {
-    background-color: var(--accent);
-    padding: 5px 10px;
-    font-size: 0.9rem;
-    margin-top: 10px;
-}
-
-.btn-use-template:hover {
-    background-color: #e68a00;
-}
-
-.achievements {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-}
-
-.achievement {
-    background-color: var(--light);
-    padding: 10px;
-    border-radius: var(--border-radius);
-    text-align: center;
-    transition: all 0.3s;
-}
-
-.achievement-icon {
-    font-size: 1.5rem;
-    margin-bottom: 5px;
-}
-
-.achievement.locked {
-    opacity: 0.6;
+.btn-danger:hover {
+    background-color: #dc2626;
 }
 
 .achievement.unlocked {
-    background-color: var(--accent);
-    color: white;
+    background-color: rgba(6, 182, 212, 0.15) !important;
+    border: 1px solid var(--accent);
     transform: scale(1.05);
+    box-shadow: var(--shadow-sm);
 }
 
-.achievement-title {
-    font-size: 0.8rem;
-    font-weight: 600;
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius);
+    color: white;
+    z-index: 2000;
+    box-shadow: var(--shadow-lg);
+    font-weight: 500;
+    max-width: 300px;
 }
 
-@media (max-width: 900px) {
+.notification-success {
+    background-color: var(--success);
+}
+
+.notification-info {
+    background-color: var(--primary);
+}
+
+@media (max-width: 1024px) {
+    .main-content {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .right-column {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
     .main-content {
         grid-template-columns: 1fr;
+    }
+
+    .right-column {
+        grid-template-columns: 1fr;
+    }
+
+    .task-item {
+        padding: 0.875rem;
+    }
+
+    .task-actions {
+        flex-wrap: wrap;
+    }
+
+    .user-stats {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .stat {
+        width: 100%;
+        max-width: 200px;
+    }
+}
+
+@media (max-width: 480px) {
+    .task-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .task-priority {
+        align-self: flex-start;
+    }
+
+    .timer-controls {
+        flex-wrap: wrap;
+    }
+
+    .timer-controls .btn {
+        flex: 1;
+        min-width: 80px;
     }
 }
