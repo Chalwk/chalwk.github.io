@@ -37,7 +37,7 @@ Raptor Dash - HTML
                         </li>
                     </ul>
                 </li>
-                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Raptor Dash</a></li>
+                <li><a class="btn btn-secondary" href="index.html">Raptor Dash</a></li>
             </ul>
         </nav>
         <div class="hamburger">
@@ -61,7 +61,7 @@ Raptor Dash - HTML
                         </li>
                     </ul>
                 </li>
-                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Raptor Dash</a></li>
+                <li><a class="btn btn-secondary" href="index.html">Raptor Dash</a></li>
             </ul>
         </nav>
     </div>
@@ -69,15 +69,16 @@ Raptor Dash - HTML
 
 <main>
     <div class="container">
-        <section class="panel" style="background: var(--light); border: 1px solid var(--gray-light); border-radius: var(--radius-lg); padding: 2rem; margin-top: 2rem;">
+        <section class="panel">
             <div class="panel-head">
-                <h1 style="color: var(--primary); margin-bottom: 0.5rem;">Raptor Dash</h1>
-                <p class="muted small">Jump, dodge, and ride the thermals. Procedurally generated levels - every run is new.</p>
+                <h1>Raptor Dash</h1>
+                <p class="muted small">Jump, dodge, and ride the thermals. Procedurally generated levels - every run is
+                    new.</p>
             </div>
 
-            <div class="game-instructions" style="margin-bottom: 1.5rem; padding: 1rem; background: rgba(203, 213, 225, 0.1); border-radius: var(--radius);">
-                <h4 style="color: var(--dark); margin-bottom: 0.5rem;"><i class="fas fa-gamepad"></i> Controls:</h4>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.5rem;">
+            <div class="game-instructions">
+                <h4><i class="fas fa-gamepad"></i> Controls:</h4>
+                <div>
                     <div><i class="fas fa-space-shuttle"></i> <strong>Space / Up / Click:</strong> Jump</div>
                     <div><i class="fas fa-arrow-down"></i> <strong>Down Arrow:</strong> Crouch</div>
                     <div><i class="fas fa-redo"></i> <strong>Double-tap Jump:</strong> Boost (if available)</div>
@@ -86,23 +87,23 @@ Raptor Dash - HTML
                 </div>
             </div>
 
-            <div class="game-area" style="position: relative; display: flex; align-items: center; justify-content: center; padding: 1rem;">
+            <div class="game-area">
                 <canvas id="game"></canvas>
             </div>
 
-            <div class="game-controls" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: rgba(203, 213, 225, 0.1); border-radius: var(--radius);">
-                <div class="game-stats" style="display: flex; gap: 1.5rem;">
+            <div class="game-controls">
+                <div class="game-stats">
                     <div>
-                        <strong style="color: var(--primary);">Score:</strong>
-                        <span id="score" style="font-family: var(--font-mono); font-weight: 600; margin-left: 0.5rem;">0</span>
+                        <strong>Score:</strong>
+                        <span id="score">0</span>
                     </div>
                     <div>
-                        <strong style="color: var(--primary);">Level:</strong>
-                        <span id="level" style="font-family: var(--font-mono); font-weight: 600; margin-left: 0.5rem;">1</span>
+                        <strong>Level:</strong>
+                        <span id="level">1</span>
                     </div>
                 </div>
 
-                <div class="controls" style="display: flex; gap: 0.75rem;">
+                <div class="controls">
                     <button class="btn" id="btn-start">
                         <i class="fas fa-play"></i> Start
                     </button>
@@ -118,9 +119,9 @@ Raptor Dash - HTML
 <footer>
     <div class="footer-container">
         <div class="social-icons">
-            <a href="https://discord.com/channels/@me/707058110396760094" target="_blank" aria-label="Discord"> <i
+            <a aria-label="Discord" href="https://discord.com/channels/@me/707058110396760094" target="_blank"> <i
                     class="fab fa-discord"></i></a>
-            <a href="https://github.com/Chalwk" target="_blank" aria-label="GitHub"> <i class="fab fa-github"></i></a>
+            <a aria-label="GitHub" href="https://github.com/Chalwk" target="_blank"> <i class="fab fa-github"></i></a>
         </div>
         <p class="footer-copyright"></p>
     </div>

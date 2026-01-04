@@ -9,7 +9,7 @@ Knot Again - HTML
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Knot Again</title>
+    <title>Knot Again!</title>
     <link href="../../../core.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -37,7 +37,7 @@ Knot Again - HTML
                         </li>
                     </ul>
                 </li>
-                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Knot Again</a></li>
+                <li><a class="btn btn-secondary" href="index.html">Knot Again!</a></li>
             </ul>
         </nav>
         <div class="hamburger">
@@ -61,7 +61,7 @@ Knot Again - HTML
                         </li>
                     </ul>
                 </li>
-                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Knot Again</a></li>
+                <li><a class="btn btn-secondary" href="index.html">Knot Again!</a></li>
             </ul>
         </nav>
     </div>
@@ -69,47 +69,36 @@ Knot Again - HTML
 
 <main>
     <div class="container">
-        <section class="panel"
-                 style="background: var(--light); border: 1px solid var(--gray-light); border-radius: var(--radius-lg); padding: 1.5rem; margin-top: 2rem;">
+        <section class="panel knot-panel">
             <div class="panel-head">
-                <h1 style="color: var(--primary); margin-bottom: 0.5rem;">Knot Again</h1>
-                <p class="muted small">Untangle the ropes by dragging the dots. Clear all red crossings to win!</p>
+                <h1 class="knot-title">Knot Again</h1>
+                <p class="muted small knot-description">Untangle the ropes by dragging the dots. Clear all red crossings
+                    to win!</p>
             </div>
 
-            <div class="game-container" style="display: flex; flex-direction: row; gap: 1.5rem; margin-bottom: 1.5rem;">
-                <div class="game-stats-panel"
-                     style="background: rgba(203, 213, 225, 0.1); border-radius: var(--radius); padding: 1rem; min-width: 200px;">
-                    <h4 style="color: var(--dark); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+            <div class="knot-game-container">
+                <div class="knot-stats-panel">
+                    <h4 class="stats-title">
                         <i class="fas fa-chart-line"></i> Game Stats
                     </h4>
-                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-                        <div>
-                            <div style="font-size: 0.875rem; color: var(--gray); margin-bottom: 0.25rem;">Level</div>
-                            <div id="levelLabel"
-                                 style="font-family: var(--font-mono); font-size: 1.5rem; font-weight: 600; color: var(--primary);">
-                                1
-                            </div>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-label">Level</div>
+                            <div id="levelLabel" class="stat-value level-value">1</div>
                         </div>
-                        <div>
-                            <div style="font-size: 0.875rem; color: var(--gray); margin-bottom: 0.25rem;">Edges</div>
-                            <div id="edgeCount"
-                                 style="font-family: var(--font-mono); font-size: 1.25rem; font-weight: 600; color: var(--dark);">
-                                0
-                            </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Edges</div>
+                            <div id="edgeCount" class="stat-value edge-value">0</div>
                         </div>
-                        <div>
-                            <div style="font-size: 0.875rem; color: var(--gray); margin-bottom: 0.25rem;">Crossings
-                            </div>
-                            <div id="crossCount"
-                                 style="font-family: var(--font-mono); font-size: 1.25rem; font-weight: 600; color: var(--error);">
-                                0
-                            </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Crossings</div>
+                            <div id="crossCount" class="stat-value cross-value">0</div>
                         </div>
                     </div>
 
-                    <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--gray-light);">
-                        <h5 style="color: var(--dark); margin-bottom: 0.5rem; font-size: 0.9rem;">How to Play:</h5>
-                        <ul style="font-size: 0.85rem; color: var(--gray); padding-left: 1rem; margin: 0;">
+                    <div class="how-to-play">
+                        <h5>How to Play:</h5>
+                        <ul>
                             <li>Drag the colored dots</li>
                             <li>Clear all red crossings</li>
                             <li>Solve the puzzle to win!</li>
@@ -117,19 +106,16 @@ Knot Again - HTML
                     </div>
                 </div>
 
-                <div class="game-area" style="flex: 1; position: relative;">
-                    <div class="canvas-wrapper"
-                         style="background: var(--darker); border-radius: var(--radius); overflow: hidden; position: relative;">
-                        <svg class="svg-canvas" id="svg" preserveAspectRatio="xMidYMid meet" viewBox="0 0 1000 700"
-                             style="display: block; width: 100%; height: 500px;"></svg>
+                <div class="knot-game-area">
+                    <div class="canvas-wrapper">
+                        <svg class="svg-canvas" id="svg" preserveAspectRatio="xMidYMid meet"
+                             viewBox="0 0 1000 700"></svg>
 
-                        <div class="win-overlay hidden" id="winOverlay"
-                             style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.8);">
-                            <div class="win-card"
-                                 style="background: var(--light); padding: 2rem; border-radius: var(--radius-lg); text-align: center; max-width: 400px; margin: 1rem;">
-                                <h2 style="color: var(--success); margin-bottom: 0.5rem;">Nice! Puzzle solved.</h2>
-                                <p style="color: var(--dark); margin-bottom: 1.5rem;">Ready for the next one?</p>
-                                <div class="win-actions" style="display: flex; gap: 1rem; justify-content: center;">
+                        <div class="win-overlay hidden" id="winOverlay">
+                            <div class="win-card">
+                                <h2 class="win-title">Nice! Puzzle solved.</h2>
+                                <p class="win-message">Ready for the next one?</p>
+                                <div class="win-actions">
                                     <button class="btn btn-primary" id="winNext">Next Level</button>
                                     <button class="btn btn-secondary" id="winShuffle">Shuffle</button>
                                 </div>
@@ -137,8 +123,7 @@ Knot Again - HTML
                         </div>
                     </div>
 
-                    <div class="game-controls"
-                         style="display: flex; gap: 1rem; margin-top: 1rem; justify-content: center;">
+                    <div class="knot-controls">
                         <button class="btn btn-secondary" id="resetBtn">
                             <i class="fas fa-undo"></i> Reset
                         </button>
@@ -158,10 +143,10 @@ Knot Again - HTML
 <footer>
     <div class="footer-container">
         <div class="social-icons">
-            <a href="https://discord.com/channels/@me/707058110396760094" target="_blank" aria-label="Discord">
+            <a aria-label="Discord" href="https://discord.com/channels/@me/707058110396760094" target="_blank">
                 <i class="fab fa-discord"></i>
             </a>
-            <a href="https://github.com/Chalwk" target="_blank" aria-label="GitHub">
+            <a aria-label="GitHub" href="https://github.com/Chalwk" target="_blank">
                 <i class="fab fa-github"></i>
             </a>
         </div>

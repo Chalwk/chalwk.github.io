@@ -4,6 +4,24 @@ Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
 Snake - Stylesheet
 */
 
+.panel {
+    background: var(--light);
+    border: 1px solid var(--gray-light);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin-top: 2rem;
+}
+
+.panel-head h1 {
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+.panel-head .muted.small {
+    color: var(--gray);
+    margin-bottom: 1.5rem;
+}
+
 .game-area {
     position: relative;
     width: 100%;
@@ -90,6 +108,11 @@ Snake - Stylesheet
     box-shadow: var(--shadow-lg);
 }
 
+.menu-card .tagline {
+    color: var(--gray);
+    margin-bottom: 1.5rem;
+}
+
 .menu-controls {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -120,6 +143,26 @@ Snake - Stylesheet
     justify-content: center;
     flex-wrap: wrap;
     margin-top: 1.5rem;
+}
+
+.info-card ul {
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+}
+
+.gameover-card #go-score {
+    margin: 0.5rem 0;
+    font-size: 1.2rem;
+}
+
+.gameover-card #go-best {
+    margin: 0.5rem 0 1.5rem;
+}
+
+.smallprint {
+    color: var(--gray);
+    font-size: 0.85rem;
+    margin-top: 1rem;
 }
 
 .touch-controls {

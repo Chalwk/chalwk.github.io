@@ -15,16 +15,6 @@ Giggle Factory - HTML
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
           rel="stylesheet">
-    <style>
-        :root {
-            --bg-1: #0f172a;
-            --bg-2: #0b2545;
-            --glass: rgba(255,255,255,0.06);
-            --accent: #7dd3fc;
-            --accent-2: #60a5fa;
-            --muted: #94a3b8;
-        }
-    </style>
 </head>
 <body>
 
@@ -47,7 +37,7 @@ Giggle Factory - HTML
                         </li>
                     </ul>
                 </li>
-                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Giggle Factory</a></li>
+                <li><a class="btn btn-secondary" href="index.html">Giggle Factory</a></li>
             </ul>
         </nav>
         <div class="hamburger">
@@ -71,7 +61,7 @@ Giggle Factory - HTML
                         </li>
                     </ul>
                 </li>
-                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Giggle Factory</a></li>
+                <li><a class="btn btn-secondary" href="index.html">Giggle Factory</a></li>
             </ul>
         </nav>
     </div>
@@ -79,34 +69,27 @@ Giggle Factory - HTML
 
 <main>
     <div class="container">
-        <section class="panel"
-                 style="background: linear-gradient(160deg, var(--bg-1), var(--bg-2)); border-radius: var(--radius-lg); padding: 2rem; margin-top: 2rem;">
-            <div class="panel-head" style="text-align: center; margin-bottom: 2rem;">
-                <div class="logo"
-                     style="width: 60px; height: 60px; margin: 0 auto 1rem; background: linear-gradient(45deg, var(--accent), var(--accent-2)); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                    <i class="fas fa-laugh-beam" style="color: #042033; font-size: 1.8rem;"></i>
+        <section class="panel giggle-panel">
+            <div class="panel-head giggle-panel-head">
+                <div class="giggle-logo">
+                    <i class="fas fa-laugh-beam giggle-logo-icon"></i>
                 </div>
-                <h1 style="color: white; margin-bottom: 0.5rem;">Giggle Factory</h1>
-                <p class="muted" style="color: var(--muted); max-width: 600px; margin: 0 auto;">Fetch fresh jokes from
-                    multiple APIs. Click the big button or double-click to cycle APIs. Try not to snort.</p>
+                <h1 class="giggle-title">Giggle Factory</h1>
+                <p class="muted giggle-description">Fetch fresh jokes from multiple APIs. Click the big button or
+                    double-click to cycle APIs. Try not to snort.</p>
             </div>
 
-            <div class="card" id="jokeCard"
-                 style="background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02)); border: 1px solid rgba(255,255,255,0.03); border-radius: var(--radius-lg); padding: 2rem; margin-bottom: 2rem;">
-                <div class="joke-meta" style="display: flex; gap: 0.75rem; align-items: center; margin-bottom: 1rem;">
-                    <span class="badge" id="jokeType"
-                          style="background: linear-gradient(90deg, var(--accent), var(--accent-2)); padding: 0.4rem 0.75rem; border-radius: 999px; font-weight: 700; font-size: 0.8rem; color: #05203a;">dad joke</span>
-                    <span class="muted" id="jokeSource"
-                          style="color: var(--muted); font-size: 0.8rem;">icanhazdadjoke</span>
+            <div class="card giggle-card" id="jokeCard">
+                <div class="joke-meta">
+                    <span class="badge joke-type-badge" id="jokeType">dad joke</span>
+                    <span class="muted joke-source" id="jokeSource">icanhazdadjoke</span>
                 </div>
 
-                <p class="joke" id="jokeText"
-                   style="font-size: 1.4rem; line-height: 1.5; margin: 1.5rem 0; color: #e6eef8;">Loading a joke for
-                    you...</p>
+                <p class="joke joke-text" id="jokeText">Loading a joke for you...</p>
 
-                <div class="controls" style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1.5rem;">
-                    <button class="btn primary" id="newJokeBtn" title="Get a new joke (double-click to cycle API)"
-                            style="background: linear-gradient(90deg, var(--accent), var(--accent-2)); color: #042033; border: 0;">
+                <div class="controls joke-controls">
+                    <button class="btn primary btn-new-joke" id="newJokeBtn"
+                            title="Get a new joke (double-click to cycle API)">
                         <i class="fas fa-sync-alt"></i> New Joke
                     </button>
                     <button class="btn btn-secondary" id="copyBtn" title="Copy joke">
@@ -115,22 +98,17 @@ Giggle Factory - HTML
                     <button class="btn btn-secondary" id="tweetBtn" title="Tweet joke">
                         <i class="fab fa-twitter"></i> Tweet
                     </button>
-                    <button class="btn btn-secondary" id="fallbackBtn" title="Use a local fallback joke"
-                            style="border-style: dashed; opacity: 0.9;">
+                    <button class="btn btn-secondary btn-fallback" id="fallbackBtn" title="Use a local fallback joke">
                         <i class="fas fa-database"></i> Local Fallback
                     </button>
                 </div>
 
-                <div class="extras"
-                     style="display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: var(--muted);">
-                    <div>
-                        <i class="fas fa-keyboard"></i> Tip: Press <kbd
-                            style="background: rgba(255,255,255,0.04); border-radius: 4px; padding: 0.2rem 0.4rem; font-weight: 600;">J</kbd>
-                        for new joke, <kbd
-                            style="background: rgba(255,255,255,0.04); border-radius: 4px; padding: 0.2rem 0.4rem; font-weight: 600;">A</kbd>
-                        to cycle API
+                <div class="extras joke-extras">
+                    <div class="extras-tip">
+                        <i class="fas fa-keyboard"></i> Tip: Press <kbd class="kbd">J</kbd> for new joke, <kbd
+                            class="kbd">A</kbd> to cycle API
                     </div>
-                    <div class="status" id="status" style="color: var(--accent);"></div>
+                    <div class="status joke-status" id="status"></div>
                 </div>
             </div>
         </section>
@@ -140,9 +118,9 @@ Giggle Factory - HTML
 <footer>
     <div class="footer-container">
         <div class="social-icons">
-            <a href="https://discord.com/channels/@me/707058110396760094" target="_blank" aria-label="Discord"> <i
+            <a aria-label="Discord" href="https://discord.com/channels/@me/707058110396760094" target="_blank"> <i
                     class="fab fa-discord"></i></a>
-            <a href="https://github.com/Chalwk" target="_blank" aria-label="GitHub"> <i class="fab fa-github"></i></a>
+            <a aria-label="GitHub" href="https://github.com/Chalwk" target="_blank"> <i class="fab fa-github"></i></a>
         </div>
         <p class="footer-copyright"></p>
     </div>

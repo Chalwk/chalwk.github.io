@@ -13,12 +13,16 @@ Giggle Factory - CSS
     --muted: #94a3b8;
 }
 
-.panel {
+.giggle-panel {
+    background: linear-gradient(160deg, var(--bg-1), var(--bg-2));
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    margin-top: 2rem;
     position: relative;
     overflow: hidden;
 }
 
-.panel::before {
+.giggle-panel::before {
     content: '';
     position: absolute;
     top: -50%;
@@ -29,9 +33,81 @@ Giggle Factory - CSS
     z-index: -1;
 }
 
-.card {
+.giggle-panel-head {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.giggle-logo {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 1rem;
+    background: linear-gradient(45deg, var(--accent), var(--accent-2));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.giggle-logo-icon {
+    color: #042033;
+    font-size: 1.8rem;
+}
+
+.giggle-title {
+    color: white;
+    margin-bottom: 0.5rem;
+}
+
+.giggle-description {
+    color: var(--muted);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.giggle-card {
+    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+    border: 1px solid rgba(255,255,255,0.03);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    margin-bottom: 2rem;
     backdrop-filter: blur(10px);
     box-shadow: 0 10px 30px rgba(2,6,23,0.6);
+}
+
+.joke-meta {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.joke-type-badge {
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    padding: 0.4rem 0.75rem;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: #05203a;
+}
+
+.joke-source {
+    color: var(--muted);
+    font-size: 0.8rem;
+}
+
+.joke-text {
+    font-size: 1.4rem;
+    line-height: 1.5;
+    margin: 1.5rem 0;
+    color: #e6eef8;
+}
+
+.joke-controls {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
 }
 
 .btn {
@@ -50,28 +126,57 @@ Giggle Factory - CSS
     font-weight: 600;
 }
 
+.btn-new-joke {
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    color: #042033;
+    border: 0;
+}
+
+.btn-fallback {
+    border-style: dashed;
+    opacity: 0.9;
+}
+
+.joke-extras {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+.extras-tip {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
 .kbd {
     background: rgba(255,255,255,0.04);
-    padding: 0.2rem 0.4rem;
     border-radius: 4px;
+    padding: 0.2rem 0.4rem;
     font-weight: 600;
 }
 
+.joke-status {
+    color: var(--accent);
+}
+
 @media (max-width: 768px) {
-    .joke {
+    .joke-text {
         font-size: 1.2rem !important;
     }
 
-    .controls {
+    .joke-controls {
         flex-direction: column;
     }
 
-    .controls .btn {
+    .joke-controls .btn {
         width: 100%;
         justify-content: center;
     }
 
-    .extras {
+    .joke-extras {
         flex-direction: column;
         gap: 0.5rem;
         align-items: flex-start;
@@ -79,15 +184,15 @@ Giggle Factory - CSS
 }
 
 @media (max-width: 480px) {
-    .panel {
+    .giggle-panel {
         padding: 1.5rem !important;
     }
 
-    .card {
+    .giggle-card {
         padding: 1.5rem !important;
     }
 
-    h1 {
+    .giggle-title {
         font-size: 2rem !important;
     }
 }

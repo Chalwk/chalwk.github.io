@@ -40,7 +40,7 @@ Random Password Generator - HTML
                         </li>
                     </ul>
                 </li>
-                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Password Generator</a>
+                <li><a class="btn btn-secondary" href="index.html" style="margin-left: 10px;">Password Generator</a>
                 </li>
             </ul>
         </nav>
@@ -67,7 +67,7 @@ Random Password Generator - HTML
                         </li>
                     </ul>
                 </li>
-                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Password Generator</a>
+                <li><a class="btn btn-secondary" href="index.html" style="margin-left: 10px;">Password Generator</a>
                 </li>
             </ul>
         </nav>
@@ -90,7 +90,7 @@ Random Password Generator - HTML
                         <label for="length">
                             Length: <span class="highlight" id="lengthVal">16</span>
                         </label>
-                        <input id="length" max="128" min="4" type="range" value="16" class="range-input"/>
+                        <input class="range-input" id="length" max="128" min="4" type="range" value="16"/>
                     </div>
 
                     <fieldset aria-label="Character sets" class="char-sets">
@@ -133,7 +133,7 @@ Random Password Generator - HTML
                         </label>
                         <label class="field" style="min-width: 120px;">
                             <span>Words:</span>
-                            <input id="passphraseWords" max="10" min="3" type="number" value="4" disabled/>
+                            <input disabled id="passphraseWords" max="10" min="3" type="number" value="4"/>
                         </label>
                     </div>
 
@@ -174,10 +174,10 @@ Random Password Generator - HTML
                     <div class="strength-display">
                         <div class="strength-header">
                             <span>Password Strength</span>
-                            <span id="strengthLabel" class="strength-label">-</span>
+                            <span class="strength-label" id="strengthLabel">-</span>
                         </div>
                         <div aria-hidden="true" class="strength-bar">
-                            <div id="strengthBar" class="strength-bar-fill"></div>
+                            <div class="strength-bar-fill" id="strengthBar"></div>
                         </div>
                     </div>
 
@@ -250,9 +250,9 @@ Random Password Generator - HTML
 <footer>
     <div class="footer-container">
         <div class="social-icons">
-            <a href="https://discord.com/channels/@me/707058110396760094" target="_blank" aria-label="Discord"> <i
+            <a aria-label="Discord" href="https://discord.com/channels/@me/707058110396760094" target="_blank"> <i
                     class="fab fa-discord"></i></a>
-            <a href="https://github.com/Chalwk" target="_blank" aria-label="GitHub"> <i class="fab fa-github"></i></a>
+            <a aria-label="GitHub" href="https://github.com/Chalwk" target="_blank"> <i class="fab fa-github"></i></a>
         </div>
         <p class="footer-copyright"></p>
     </div>

@@ -4,9 +4,43 @@ Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
 Raptor Dash - Stylesheet
 */
 
+.panel {
+    background: var(--light);
+    border: 1px solid var(--gray-light);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    margin-top: 2rem;
+}
+
+.panel-head h1 {
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+.game-instructions {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: rgba(203, 213, 225, 0.1);
+    border-radius: var(--radius);
+}
+
+.game-instructions h4 {
+    color: var(--dark);
+    margin-bottom: 0.5rem;
+}
+
+.game-instructions > div {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.5rem;
+}
+
 .game-area {
+    position: relative;
     display: flex;
+    align-items: center;
     justify-content: center;
+    padding: 1rem;
     margin-bottom: 1.5rem;
     min-height: 400px;
 }
@@ -43,17 +77,20 @@ Raptor Dash - Stylesheet
     align-items: center;
 }
 
+.game-stats strong {
+    color: var(--primary);
+}
+
+.game-stats span {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    margin-left: 0.5rem;
+}
+
 .controls {
     display: flex;
     gap: 0.75rem;
     align-items: center;
-}
-
-.game-instructions {
-    margin-bottom: 1.5rem;
-    padding: 1rem;
-    background: rgba(203, 213, 225, 0.1);
-    border-radius: var(--radius);
 }
 
 @media (max-width: 768px) {

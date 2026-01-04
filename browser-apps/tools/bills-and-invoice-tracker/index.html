@@ -39,7 +39,7 @@ Bills & Invoices Tracker - HTML
                         </li>
                     </ul>
                 </li>
-                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Bills Tracker</a></li>
+                <li><a class="btn btn-secondary" href="index.html" style="margin-left: 10px;">Bills Tracker</a></li>
             </ul>
         </nav>
 
@@ -65,7 +65,7 @@ Bills & Invoices Tracker - HTML
                         </li>
                     </ul>
                 </li>
-                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Bills Tracker</a></li>
+                <li><a class="btn btn-secondary" href="index.html" style="margin-left: 10px;">Bills Tracker</a></li>
             </ul>
         </nav>
     </div>
@@ -106,7 +106,7 @@ Bills & Invoices Tracker - HTML
                 <button class="btn btn-info" id="import-data">
                     <i class="fas fa-file-import"></i> Import Data
                 </button>
-                <input type="file" id="import-file" accept=".json" style="display: none;">
+                <input accept=".json" id="import-file" style="display: none;" type="file">
                 <button class="btn btn-success" id="export-data">
                     <i class="fas fa-file-export"></i> Export Data
                 </button>
@@ -258,9 +258,9 @@ Bills & Invoices Tracker - HTML
 <footer>
     <div class="footer-container">
         <div class="social-icons">
-            <a href="https://discord.com/channels/@me/707058110396760094" target="_blank" aria-label="Discord"> <i
+            <a aria-label="Discord" href="https://discord.com/channels/@me/707058110396760094" target="_blank"> <i
                     class="fab fa-discord"></i></a>
-            <a href="https://github.com/Chalwk" target="_blank" aria-label="GitHub"> <i class="fab fa-github"></i></a>
+            <a aria-label="GitHub" href="https://github.com/Chalwk" target="_blank"> <i class="fab fa-github"></i></a>
         </div>
         <p class="footer-copyright"></p>
     </div>
@@ -378,7 +378,7 @@ Bills & Invoices Tracker - HTML
 
             <div class="form-group">
                 <label for="income-name">Income Source</label>
-                <input id="income-name" required type="text" placeholder="e.g., Part-time Job">
+                <input id="income-name" placeholder="e.g., Part-time Job" required type="text">
             </div>
 
             <div class="form-group">
@@ -432,12 +432,12 @@ Bills & Invoices Tracker - HTML
 
             <div class="form-group">
                 <label for="affordability-name">Item Name</label>
-                <input id="affordability-name" required type="text" placeholder="e.g., Laptop, Gaming Console">
+                <input id="affordability-name" placeholder="e.g., Laptop, Gaming Console" required type="text">
             </div>
 
             <div class="form-group">
                 <label for="affordability-description">Description (Optional)</label>
-                <input id="affordability-description" type="text" placeholder="e.g., Birthday Present">
+                <input id="affordability-description" placeholder="e.g., Birthday Present" type="text">
             </div>
 
             <div class="form-group">
@@ -452,7 +452,7 @@ Bills & Invoices Tracker - HTML
 
             <div class="form-group">
                 <label for="affordability-timeframe">Timeframe (weeks)</label>
-                <input id="affordability-timeframe" type="number" min="0" value="52">
+                <input id="affordability-timeframe" min="0" type="number" value="52">
                 <small class="help-text">How many weeks do you want to pay this off in?</small>
             </div>
 

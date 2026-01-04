@@ -8,11 +8,11 @@ FatPoly - HTML
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>FatPoly</title>
     <link href="../../../core.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
           rel="stylesheet">
 </head>
@@ -36,7 +36,7 @@ FatPoly - HTML
                         </li>
                     </ul>
                 </li>
-                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">FatPoly</a></li>
+                <li><a class="btn btn-secondary" href="index.html">FatPoly</a></li>
             </ul>
         </nav>
         <div class="hamburger">
@@ -60,7 +60,7 @@ FatPoly - HTML
                         </li>
                     </ul>
                 </li>
-                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">FatPoly</a></li>
+                <li><a class="btn btn-secondary" href="index.html">FatPoly</a></li>
             </ul>
         </nav>
     </div>
@@ -68,17 +68,16 @@ FatPoly - HTML
 
 <main>
     <div class="container">
-        <section class="panel"
-                 style="background: var(--light); border: 1px solid var(--gray-light); border-radius: var(--radius-lg); padding: 1.5rem; margin-top: 2rem;">
+        <section class="panel fatpoly-panel">
             <div class="panel-head">
-                <h1 style="color: var(--primary); margin-bottom: 0.5rem;">FatPoly</h1>
-                <p class="muted small">Eat healthy shapes, avoid unhealthy ones. Reach level 10 to win!</p>
+                <h1 class="fatpoly-title">FatPoly</h1>
+                <p class="muted small fatpoly-description">Eat healthy shapes, avoid unhealthy ones. Reach level 10 to
+                    win!</p>
             </div>
 
-            <div class="game-instructions"
-                 style="margin-bottom: 1.5rem; padding: 1rem; background: rgba(203, 213, 225, 0.1); border-radius: var(--radius);">
-                <h4 style="color: var(--dark); margin-bottom: 0.5rem;"><i class="fas fa-info-circle"></i> Controls:</h4>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.5rem;">
+            <div class="fatpoly-instructions">
+                <h4 class="instructions-title"><i class="fas fa-info-circle"></i> Controls:</h4>
+                <div class="instructions-grid">
                     <div><i class="fas fa-arrow-up"></i> <strong>Arrow Up/W:</strong> Move up</div>
                     <div><i class="fas fa-arrow-down"></i> <strong>Arrow Down/S:</strong> Move down</div>
                     <div><i class="fas fa-arrow-left"></i> <strong>Arrow Left/A:</strong> Move left</div>
@@ -88,28 +87,23 @@ FatPoly - HTML
                 </div>
             </div>
 
-            <div id="gameContainer" style="display: flex; justify-content: center; margin-bottom: 1rem;">
+            <div class="fatpoly-game-container" id="gameContainer">
                 <canvas id="gameCanvas" tabindex="0"></canvas>
             </div>
 
-            <div class="game-stats"
-                 style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: rgba(203, 213, 225, 0.1); border-radius: var(--radius); margin-bottom: 1rem;">
-                <div>
-                    <strong style="color: var(--primary);">Score:</strong>
-                    <span id="score"
-                          style="font-family: var(--font-mono); font-weight: 600; margin-left: 0.5rem;">0</span>
+            <div class="fatpoly-stats top-stats">
+                <div class="stat-item">
+                    <strong class="stat-label">Score:</strong>
+                    <span class="stat-value" id="score">0</span>
                 </div>
-                <div>
-                    <strong style="color: var(--primary);">Level:</strong>
-                    <span id="level"
-                          style="font-family: var(--font-mono); font-weight: 600; margin-left: 0.5rem;">1</span>
+                <div class="stat-item">
+                    <strong class="stat-label">Level:</strong>
+                    <span class="stat-value" id="level">1</span>
                 </div>
-                <div>
-                    <strong style="color: var(--primary);">Health:</strong>
-                    <div class="bar" id="healthBar"
-                         style="display: inline-block; width: 100px; height: 20px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; margin-left: 0.5rem;">
-                        <div class="bar-fill" id="healthFill"
-                             style="height: 100%; width: 100%; background: linear-gradient(90deg, var(--success), var(--accent)); transition: width 200ms linear;"></div>
+                <div class="stat-item">
+                    <strong class="stat-label">Health:</strong>
+                    <div class="fatpoly-health-bar" id="healthBar">
+                        <div class="bar-fill" id="healthFill"></div>
                     </div>
                 </div>
                 <button class="btn btn-secondary" id="btn-start">
@@ -117,18 +111,15 @@ FatPoly - HTML
                 </button>
             </div>
 
-            <div class="game-stats"
-                 style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: rgba(203, 213, 225, 0.1); border-radius: var(--radius);">
-                <div>
-                    <strong style="color: var(--primary);">Eaten:</strong>
-                    <span id="eaten"
-                          style="font-family: var(--font-mono); font-weight: 600; margin-left: 0.5rem;">0</span>
-                    <span style="color: var(--gray); margin: 0 0.5rem;">/</span>
-                    <strong style="color: var(--primary);">Target:</strong>
-                    <span id="target"
-                          style="font-family: var(--font-mono); font-weight: 600; margin-left: 0.5rem;">10</span>
+            <div class="fatpoly-stats bottom-stats">
+                <div class="stat-item">
+                    <strong class="stat-label">Eaten:</strong>
+                    <span class="stat-value" id="eaten">0</span>
+                    <span class="stat-divider">/</span>
+                    <strong class="stat-label">Target:</strong>
+                    <span class="stat-value" id="target">10</span>
                 </div>
-                <div style="display: flex; gap: 0.5rem;">
+                <div class="button-group">
                     <button class="btn btn-secondary" id="btn-pause">
                         <i class="fas fa-pause"></i> Pause
                     </button>
@@ -147,10 +138,10 @@ FatPoly - HTML
 <footer>
     <div class="footer-container">
         <div class="social-icons">
-            <a href="https://discord.com/channels/@me/707058110396760094" target="_blank" aria-label="Discord">
+            <a aria-label="Discord" href="https://discord.com/channels/@me/707058110396760094" target="_blank">
                 <i class="fab fa-discord"></i>
             </a>
-            <a href="https://github.com/Chalwk" target="_blank" aria-label="GitHub">
+            <a aria-label="GitHub" href="https://github.com/Chalwk" target="_blank">
                 <i class="fab fa-github"></i>
             </a>
         </div>

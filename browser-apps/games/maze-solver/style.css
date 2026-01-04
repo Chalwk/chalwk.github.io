@@ -4,6 +4,167 @@ Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
 Saze Solver - Stylesheet
 */
 
+.maze-panel {
+    background: var(--light);
+    border: 1px solid var(--gray-light);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin-top: 2rem;
+}
+
+.maze-title {
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+.maze-subtitle {
+    color: var(--gray);
+}
+
+.maze-instructions {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: rgba(203, 213, 225, 0.1);
+    border-radius: var(--radius);
+}
+
+.instructions-title {
+    color: var(--dark);
+    margin-bottom: 0.5rem;
+}
+
+.pill {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 999px;
+    font-weight: 700;
+    margin: 0 6px;
+}
+
+.pill.green {
+    background: rgba(34, 197, 94, 0.12);
+    color: #9ef0b4;
+}
+
+.pill.red {
+    background: rgba(239, 68, 68, 0.12);
+    color: #ffb4b4;
+}
+
+.maze-controls-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.maze-left-controls {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.maze-right-controls {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.size-select-label {
+    font-weight: 500;
+    color: var(--dark);
+}
+
+.maze-size-select {
+    padding: 0.5rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--gray-light);
+    background: white;
+    margin-left: 0.5rem;
+}
+
+.maze-game-stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: rgba(203, 213, 225, 0.1);
+    border-radius: var(--radius);
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+}
+
+.stat-label {
+    color: var(--primary);
+}
+
+.stat-value {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    margin-left: 0.5rem;
+}
+
+.maze-game-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    min-height: 300px;
+}
+
+.maze-container {
+    display: grid;
+    gap: 3px;
+    background: var(--darker);
+    padding: 12px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+}
+
+.maze-touch-controls {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.touch-controls-title {
+    color: var(--dark);
+    margin-bottom: 0.5rem;
+}
+
+.dpad {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.dpad-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: var(--radius);
+    background: var(--primary);
+    color: white;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.dpad-btn:active {
+    transform: translateY(2px);
+    opacity: 0.9;
+}
+
+.dpad-row {
+    display: flex;
+    gap: 0.5rem;
+}
+
 .cell {
     width: var(--cell-size);
     height: var(--cell-size);
@@ -63,41 +224,18 @@ Saze Solver - Stylesheet
     100% { transform: scale(1); opacity: 1; }
 }
 
-.pill {
-    display: inline-block;
-    padding: 4px 8px;
-    border-radius: 999px;
-    font-weight: 700;
-    margin: 0 6px;
-}
-
-.pill.green {
-    background: rgba(34, 197, 94, 0.12);
-    color: #9ef0b4;
-}
-
-.pill.red {
-    background: rgba(239, 68, 68, 0.12);
-    color: #ffb4b4;
-}
-
-.dpad-btn:active {
-    transform: translateY(2px);
-    opacity: 0.9;
-}
-
 @media (max-width: 768px) {
-    .controls-top {
+    .maze-controls-top {
         flex-direction: column;
         align-items: stretch;
     }
 
-    .left-controls, .right-controls {
+    .maze-left-controls, .maze-right-controls {
         width: 100%;
         justify-content: center;
     }
 
-    #maze-container {
+    .maze-container {
         max-width: 90vw;
         overflow: auto;
     }

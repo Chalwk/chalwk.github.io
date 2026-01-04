@@ -4,11 +4,49 @@ Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
 Tic-Tac-Toe - Stylesheet
 */
 
+.panel {
+    background: var(--light);
+    border: 1px solid var(--gray-light);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin-top: 2rem;
+}
+
+.panel-head h1 {
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+.game-instructions {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: rgba(203, 213, 225, 0.1);
+    border-radius: var(--radius);
+}
+
+.game-instructions h4 {
+    color: var(--dark);
+    margin-bottom: 0.5rem;
+}
+
+.game-instructions > div {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.5rem;
+}
+
+#mode-selection {
+    margin-bottom: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
 #game-container {
+    position: relative;
+    margin-bottom: 1.5rem;
     display: flex;
     justify-content: center;
-    margin-bottom: 1rem;
-    overflow: auto;
 }
 
 #game-board {
@@ -93,6 +131,25 @@ Tic-Tac-Toe - Stylesheet
     transform-origin: 0 0;
     box-shadow: 0 0 15px rgba(245, 158, 11, 0.8);
     z-index: 10;
+}
+
+.game-stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: rgba(203, 213, 225, 0.1);
+    border-radius: var(--radius);
+}
+
+.game-stats strong {
+    color: var(--primary);
+}
+
+.game-stats span {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    margin-left: 0.5rem;
 }
 
 #status {

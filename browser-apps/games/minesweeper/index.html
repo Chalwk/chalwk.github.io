@@ -39,7 +39,7 @@ Minesweeper - HTML
                         </li>
                     </ul>
                 </li>
-                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Minesweeper</a></li>
+                <li><a class="btn btn-secondary" href="index.html">Minesweeper</a></li>
             </ul>
         </nav>
 
@@ -65,7 +65,7 @@ Minesweeper - HTML
                         </li>
                     </ul>
                 </li>
-                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Minesweeper</a></li>
+                <li><a class="btn btn-secondary" href="index.html">Minesweeper</a></li>
             </ul>
         </nav>
     </div>
@@ -73,22 +73,22 @@ Minesweeper - HTML
 
 <main>
     <div class="container">
-        <div class="app-grid" style="margin-top: 2rem;">
-            <section class="panel"
-                     style="background: var(--light); border: 1px solid var(--gray-light); border-radius: var(--radius-lg); padding: 1.5rem;">
+        <div class="app-grid">
+            <section class="panel minesweeper-panel">
                 <div class="panel-head">
-                    <h1 style="color: var(--primary); margin-bottom: 0.5rem;">Minesweeper</h1>
-                    <p class="muted small">Classic Minesweeper with multiple difficulty levels and custom options.</p>
+                    <h1 class="minesweeper-title">Minesweeper</h1>
+                    <p class="muted small minesweeper-description">Classic Minesweeper with multiple difficulty levels
+                        and custom options.</p>
                 </div>
 
-                <div class="game-controls" style="display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem; align-items: center;">
+                <div class="minesweeper-game-controls">
                     <button class="btn btn-primary" id="newBtn">
                         <i class="fas fa-plus-circle"></i> New Game
                     </button>
 
-                    <div style="display: flex; align-items: center; gap: 0.5rem;">
-                        <label for="difficulty" style="font-weight: 500; color: var(--dark);">Difficulty:</label>
-                        <select class="select" id="difficulty" style="padding: 0.5rem; border: 1px solid var(--gray-light); border-radius: var(--radius);">
+                    <div class="difficulty-select">
+                        <label for="difficulty">Difficulty:</label>
+                        <select class="select" id="difficulty">
                             <option value="beginner">Beginner (9×9, 10)</option>
                             <option value="intermediate">Intermediate (16×16, 40)</option>
                             <option value="expert">Expert (16×30, 99)</option>
@@ -96,41 +96,37 @@ Minesweeper - HTML
                         </select>
                     </div>
 
-                    <div class="custom hidden" id="customPanel" style="display: flex; gap: 0.5rem; align-items: center;">
-                        <div style="display: flex; align-items: center; gap: 0.25rem;">
+                    <div class="minesweeper-custom-panel hidden" id="customPanel">
+                        <div class="custom-input">
                             <label class="sr-only" for="rows">Rows</label>
-                            <input type="number" id="rows" placeholder="Rows" min="5" max="50"
-                                   style="width: 70px; padding: 0.5rem; border: 1px solid var(--gray-light); border-radius: var(--radius);">
+                            <input id="rows" max="50" min="5" placeholder="Rows" type="number">
                         </div>
-                        <div style="display: flex; align-items: center; gap: 0.25rem;">
+                        <div class="custom-input">
                             <label class="sr-only" for="cols">Columns</label>
-                            <input type="number" id="cols" placeholder="Cols" min="5" max="80"
-                                   style="width: 70px; padding: 0.5rem; border: 1px solid var(--gray-light); border-radius: var(--radius);">
+                            <input id="cols" max="80" min="5" placeholder="Cols" type="number">
                         </div>
-                        <div style="display: flex; align-items: center; gap: 0.25rem;">
+                        <div class="custom-input">
                             <label class="sr-only" for="mines">Mines</label>
-                            <input type="number" id="mines" placeholder="Mines" min="1"
-                                   style="width: 70px; padding: 0.5rem; border: 1px solid var(--gray-light); border-radius: var(--radius);">
+                            <input id="mines" min="1" placeholder="Mines" type="number">
                         </div>
                         <button class="btn btn-secondary small" id="applyCustom">Apply</button>
                     </div>
 
-                    <div class="status-display" style="display: flex; gap: 1.5rem; margin-left: auto;">
-                        <div style="font-family: var(--font-mono); font-weight: 500;">
+                    <div class="minesweeper-status-display">
+                        <div class="status-item">
                             <span id="mineCount">Mines: 10</span>
                         </div>
-                        <div style="font-family: var(--font-mono); font-weight: 500;">
+                        <div class="status-item">
                             <span id="timer">00:00</span>
                         </div>
                     </div>
                 </div>
 
-                <div id="boardWrap" style="display: flex; justify-content: center; margin-bottom: 2rem;">
-                    <div aria-label="Minesweeper board" id="board" tabindex="0"
-                         style="display: grid; gap: 2px; touch-action: manipulation; user-select: none; padding: 1rem; background: var(--light); border-radius: var(--radius);"></div>
+                <div id="boardWrap" class="minesweeper-board-wrap">
+                    <div aria-label="Minesweeper board" id="board" class="minesweeper-board" tabindex="0"></div>
                 </div>
 
-                <div class="game-actions" style="display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;">
+                <div class="minesweeper-game-actions">
                     <button class="btn btn-secondary" id="flagToggle">
                         <i class="fas fa-flag"></i> Toggle Flagging
                     </button>
@@ -143,8 +139,8 @@ Minesweeper - HTML
                     <button class="btn btn-secondary" id="bestTimesBtn">
                         <i class="fas fa-trophy"></i> Best Times
                     </button>
-                    <label class="btn btn-secondary" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                        <input id="themeToggle" type="checkbox" style="display: none;">
+                    <label class="btn btn-secondary theme-toggle-label">
+                        <input id="themeToggle" type="checkbox">
                         <i class="fas fa-moon"></i> Dark Theme
                     </label>
                 </div>
@@ -156,19 +152,19 @@ Minesweeper - HTML
 <footer>
     <div class="footer-container">
         <div class="social-icons">
-            <a href="https://discord.com/channels/@me/707058110396760094" target="_blank" aria-label="Discord"> <i
+            <a aria-label="Discord" href="https://discord.com/channels/@me/707058110396760094" target="_blank"> <i
                     class="fab fa-discord"></i></a>
-            <a href="https://github.com/Chalwk" target="_blank" aria-label="GitHub"> <i class="fab fa-github"></i></a>
+            <a aria-label="GitHub" href="https://github.com/Chalwk" target="_blank"> <i class="fab fa-github"></i></a>
         </div>
         <p class="footer-copyright"></p>
     </div>
 </footer>
 
-<div class="modal hidden" id="bestTimesModal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 2000;">
-    <div class="modal-inner" style="background: var(--light); padding: 2rem; border-radius: var(--radius-lg); max-width: 400px; width: 90%; box-shadow: var(--shadow-lg);">
-        <h3 style="color: var(--primary); margin-bottom: 1rem;">Best Times</h3>
-        <ul id="bestTimesList" style="list-style: none; padding: 0; margin-bottom: 1.5rem;"></ul>
-        <button class="btn btn-primary" id="closeBestTimes" style="width: 100%;">Close</button>
+<div class="modal hidden" id="bestTimesModal">
+    <div class="modal-inner">
+        <h3 class="modal-title">Best Times</h3>
+        <ul id="bestTimesList" class="best-times-list"></ul>
+        <button class="btn btn-primary" id="closeBestTimes">Close</button>
     </div>
 </div>
 

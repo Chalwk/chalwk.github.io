@@ -39,7 +39,7 @@ Neurodivergent Task Manager - HTML
                         </li>
                     </ul>
                 </li>
-                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Task Manager</a></li>
+                <li><a class="btn btn-secondary" href="index.html" style="margin-left: 10px;">Task Manager</a></li>
             </ul>
         </nav>
 
@@ -65,7 +65,7 @@ Neurodivergent Task Manager - HTML
                         </li>
                     </ul>
                 </li>
-                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Task Manager</a></li>
+                <li><a class="btn btn-secondary" href="index.html" style="margin-left: 10px;">Task Manager</a></li>
             </ul>
         </nav>
     </div>
@@ -117,8 +117,8 @@ Neurodivergent Task Manager - HTML
                                 <label for="task-title"
                                        style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--dark);">Task
                                     Title</label>
-                                <input id="task-title" placeholder="What needs to be done?" required type="text"
-                                       style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius);">
+                                <input id="task-title" placeholder="What needs to be done?" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius);"
+                                       type="text">
                             </div>
                             <div class="form-group">
                                 <label for="task-description"
@@ -143,16 +143,16 @@ Neurodivergent Task Manager - HTML
                                     <div class="step-input"
                                          style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem; align-items: center;">
                                         <label>
-                                            <input class="step-text" placeholder="Step 1" type="text"
-                                                   style="flex: 1; padding: 0.5rem; border: 1px solid var(--gray-light); border-radius: var(--radius);">
+                                            <input class="step-text" placeholder="Step 1" style="flex: 1; padding: 0.5rem; border: 1px solid var(--gray-light); border-radius: var(--radius);"
+                                                   type="text">
                                         </label>
-                                        <button class="btn-remove-step" disabled type="button"
-                                                style="background: var(--error); color: white; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                                        <button class="btn-remove-step" disabled style="background: var(--error); color: white; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;"
+                                                type="button">
                                             ×
                                         </button>
                                     </div>
                                 </div>
-                                <button class="btn btn-secondary" id="add-step" type="button" style="width: 100%;">+ Add
+                                <button class="btn btn-secondary" id="add-step" style="width: 100%;" type="button">+ Add
                                     Step
                                 </button>
                             </div>
@@ -160,16 +160,16 @@ Neurodivergent Task Manager - HTML
                                 <label for="task-timer"
                                        style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--dark);">Timer
                                     (minutes)</label>
-                                <input id="task-timer" min="1" type="number" value="25"
-                                       style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius);">
+                                <input id="task-timer" min="1" style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius);" type="number"
+                                       value="25">
                             </div>
                             <div class="form-group">
                                 <label for="task-reminder"
                                        style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--dark);">Reminder</label>
-                                <input id="task-reminder" type="datetime-local"
-                                       style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius);">
+                                <input id="task-reminder" style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius);"
+                                       type="datetime-local">
                             </div>
-                            <button class="btn btn-primary" type="submit" style="width: 100%;">Create Task</button>
+                            <button class="btn btn-primary" style="width: 100%;" type="submit">Create Task</button>
                         </form>
                     </div>
 
@@ -177,11 +177,11 @@ Neurodivergent Task Manager - HTML
                          style="background: var(--light); border: 1px solid var(--gray-light); border-radius: var(--radius-lg); padding: 1.5rem; margin-top: 1.5rem;">
                         <h3 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.25rem;">Task Templates
                             🎯</h3>
-                        <label for="template-dropdown"></label><select id="template-dropdown" class="template-dropdown"
+                        <label for="template-dropdown"></label><select class="template-dropdown" id="template-dropdown"
                                                                        style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius); margin-bottom: 1rem;">
                         <option value="">Select a template</option>
                     </select>
-                        <button id="use-template-btn" class="btn btn-secondary" style="width: 100%;">Use Template
+                        <button class="btn btn-secondary" id="use-template-btn" style="width: 100%;">Use Template
                         </button>
                     </div>
                 </div>
@@ -290,8 +290,8 @@ Neurodivergent Task Manager - HTML
                                 <label for="custom-timer"
                                        style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--dark);">Custom
                                     Timer (minutes)</label>
-                                <input id="custom-timer" min="1" type="number" value="25"
-                                       style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius);">
+                                <input id="custom-timer" min="1" style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius);" type="number"
+                                       value="25">
                                 <button class="btn btn-secondary" id="set-custom-timer"
                                         style="width: 100%; margin-top: 0.75rem;">Set Timer
                                 </button>
@@ -307,9 +307,9 @@ Neurodivergent Task Manager - HTML
 <footer>
     <div class="footer-container">
         <div class="social-icons">
-            <a href="https://discord.com/channels/@me/707058110396760094" target="_blank" aria-label="Discord"> <i
+            <a aria-label="Discord" href="https://discord.com/channels/@me/707058110396760094" target="_blank"> <i
                     class="fab fa-discord"></i></a>
-            <a href="https://github.com/Chalwk" target="_blank" aria-label="GitHub"> <i class="fab fa-github"></i></a>
+            <a aria-label="GitHub" href="https://github.com/Chalwk" target="_blank"> <i class="fab fa-github"></i></a>
         </div>
         <p class="footer-copyright"></p>
     </div>

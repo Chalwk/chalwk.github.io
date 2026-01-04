@@ -37,7 +37,7 @@ Tic-Tac-Toe - HTML
                         </li>
                     </ul>
                 </li>
-                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Tic-Tac-Toe</a></li>
+                <li><a class="btn btn-secondary" href="index.html">Tic-Tac-Toe</a></li>
             </ul>
         </nav>
         <div class="hamburger">
@@ -61,7 +61,7 @@ Tic-Tac-Toe - HTML
                         </li>
                     </ul>
                 </li>
-                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Tic-Tac-Toe</a></li>
+                <li><a class="btn btn-secondary" href="index.html">Tic-Tac-Toe</a></li>
             </ul>
         </nav>
     </div>
@@ -69,18 +69,16 @@ Tic-Tac-Toe - HTML
 
 <main>
     <div class="container">
-        <section class="panel"
-                 style="background: var(--light); border: 1px solid var(--gray-light); border-radius: var(--radius-lg); padding: 1.5rem; margin-top: 2rem;">
+        <section class="panel">
             <div class="panel-head">
-                <h1 style="color: var(--primary); margin-bottom: 0.5rem;">Ultimate Tic-Tac-Toe</h1>
+                <h1>Ultimate Tic-Tac-Toe</h1>
                 <p class="muted small">Win 3 small boards in a row to win the game. Next move is dictated by previous
                     move's position.</p>
             </div>
 
-            <div class="game-instructions"
-                 style="margin-bottom: 1.5rem; padding: 1rem; background: rgba(203, 213, 225, 0.1); border-radius: var(--radius);">
-                <h4 style="color: var(--dark); margin-bottom: 0.5rem;"><i class="fas fa-info-circle"></i> Rules:</h4>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.5rem;">
+            <div class="game-instructions">
+                <h4><i class="fas fa-info-circle"></i> Rules:</h4>
+                <div>
                     <div><i class="fas fa-times"></i> <strong>Player X:</strong> Starts the game</div>
                     <div><i class="fas fa-circle"></i> <strong>Player O:</strong> Second player</div>
                     <div><i class="fas fa-arrow-right"></i> <strong>Next Board:</strong> Determined by opponent's last
@@ -91,31 +89,28 @@ Tic-Tac-Toe - HTML
                 </div>
             </div>
 
-            <div id="mode-selection" style="margin-bottom: 1.5rem; display: flex; gap: 1rem; justify-content: center;">
+            <div id="mode-selection">
                 <button class="btn btn-secondary" id="pvp">Player vs Player</button>
                 <button class="btn" id="pvai">Player vs AI</button>
             </div>
 
-            <div id="game-container"
-                 style="position: relative; margin-bottom: 1.5rem; display: flex; justify-content: center;">
+            <div id="game-container">
                 <div id="game-board"></div>
                 <div id="winning-line"></div>
             </div>
 
-            <div class="game-stats"
-                 style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: rgba(203, 213, 225, 0.1); border-radius: var(--radius);">
+            <div class="game-stats">
                 <div>
-                    <strong style="color: var(--primary);">Current Player:</strong>
-                    <span id="current-player"
-                          style="font-family: var(--font-mono); font-weight: 600; margin-left: 0.5rem;">X</span>
+                    <strong>Current Player:</strong>
+                    <span id="current-player">X</span>
                 </div>
                 <div>
-                    <strong style="color: var(--primary);">Next Board:</strong>
-                    <span id="next-board" style="font-family: var(--font-mono); font-weight: 600; margin-left: 0.5rem;">Any</span>
+                    <strong>Next Board:</strong>
+                    <span id="next-board">Any</span>
                 </div>
                 <div>
-                    <strong style="color: var(--primary);">Status:</strong>
-                    <span id="status" style="font-family: var(--font-mono); font-weight: 600; margin-left: 0.5rem;">Player X's turn</span>
+                    <strong>Status:</strong>
+                    <span id="status">Player X's turn</span>
                 </div>
                 <button class="btn btn-secondary" id="reset">
                     <i class="fas fa-redo"></i> New Game
@@ -128,9 +123,9 @@ Tic-Tac-Toe - HTML
 <footer>
     <div class="footer-container">
         <div class="social-icons">
-            <a href="https://discord.com/channels/@me/707058110396760094" target="_blank" aria-label="Discord"> <i
+            <a aria-label="Discord" href="https://discord.com/channels/@me/707058110396760094" target="_blank"> <i
                     class="fab fa-discord"></i></a>
-            <a href="https://github.com/Chalwk" target="_blank" aria-label="GitHub"> <i class="fab fa-github"></i></a>
+            <a aria-label="GitHub" href="https://github.com/Chalwk" target="_blank"> <i class="fab fa-github"></i></a>
         </div>
         <p class="footer-copyright"></p>
     </div>

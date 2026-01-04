@@ -4,7 +4,88 @@ Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
 Minesweeper - JavaScript
 */
 
-#board {
+.app-grid {
+    margin-top: 2rem;
+}
+
+.minesweeper-panel {
+    background: var(--light);
+    border: 1px solid var(--gray-light);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+}
+
+.minesweeper-title {
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+.minesweeper-description {
+    color: var(--gray);
+}
+
+.minesweeper-game-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    align-items: center;
+}
+
+.difficulty-select {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.difficulty-select label {
+    font-weight: 500;
+    color: var(--dark);
+}
+
+.difficulty-select .select {
+    padding: 0.5rem;
+    border: 1px solid var(--gray-light);
+    border-radius: var(--radius);
+}
+
+.minesweeper-custom-panel {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.custom-input {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.custom-input input {
+    width: 70px;
+    padding: 0.5rem;
+    border: 1px solid var(--gray-light);
+    border-radius: var(--radius);
+}
+
+.minesweeper-status-display {
+    display: flex;
+    gap: 1.5rem;
+    margin-left: auto;
+}
+
+.status-item {
+    font-family: var(--font-mono);
+    font-weight: 500;
+}
+
+.minesweeper-board-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.minesweeper-board {
     display: grid;
     gap: 2px;
     touch-action: manipulation;
@@ -57,14 +138,32 @@ Minesweeper - JavaScript
     color: #8b7d7d;
 }
 
-.cell[style*="color:#0b61f7"] { color: #0b61f7; } /* 1 */
-.cell[style*="color:#0b8f1a"] { color: #0b8f1a; } /* 2 */
-.cell[style*="color:#f22f2f"] { color: #f22f2f; } /* 3 */
-.cell[style*="color:#1b2f6b"] { color: #1b2f6b; } /* 4 */
-.cell[style*="color:#7b1f1f"] { color: #7b1f1f; } /* 5 */
-.cell[style*="color:#009966"] { color: #009966; } /* 6 */
-.cell[style*="color:#333333"] { color: #333333; } /* 7 */
-.cell[style*="color:#666666"] { color: #666666; } /* 8 */
+.cell[style*="color:#0b61f7"] { color: #0b61f7; }
+.cell[style*="color:#0b8f1a"] { color: #0b8f1a; }
+.cell[style*="color:#f22f2f"] { color: #f22f2f; }
+.cell[style*="color:#1b2f6b"] { color: #1b2f6b; }
+.cell[style*="color:#7b1f1f"] { color: #7b1f1f; }
+.cell[style*="color:#009966"] { color: #009966; }
+.cell[style*="color:#333333"] { color: #333333; }
+.cell[style*="color:#666666"] { color: #666666; }
+
+.minesweeper-game-actions {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.theme-toggle-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+.theme-toggle-label input {
+    display: none;
+}
 
 .modal {
     position: fixed;
@@ -92,13 +191,18 @@ Minesweeper - JavaScript
     box-shadow: var(--shadow-lg);
 }
 
-#bestTimesList {
+.modal-title {
+    color: var(--primary);
+    margin-bottom: 1rem;
+}
+
+.best-times-list {
     list-style: none;
     padding: 0;
     margin-bottom: 1.5rem;
 }
 
-#bestTimesList li {
+.best-times-list li {
     padding: 0.75rem;
     border-bottom: 1px solid var(--gray-light);
     font-family: var(--font-mono);
@@ -106,7 +210,7 @@ Minesweeper - JavaScript
     justify-content: space-between;
 }
 
-#bestTimesList li:last-child {
+.best-times-list li:last-child {
     border-bottom: none;
 }
 
@@ -130,13 +234,13 @@ body.dark .cell:hover {
         font-size: 0.8rem;
     }
 
-    .game-controls {
+    .minesweeper-game-controls {
         flex-direction: column;
-        align-items: flex-start !important;
+        align-items: flex-start;
     }
 
-    .status-display {
-        margin-left: 0 !important;
+    .minesweeper-status-display {
+        margin-left: 0;
         width: 100%;
         justify-content: space-between;
     }
@@ -149,11 +253,11 @@ body.dark .cell:hover {
         font-size: 0.7rem;
     }
 
-    .game-actions {
+    .minesweeper-game-actions {
         flex-direction: column;
     }
 
-    .game-actions .btn {
+    .minesweeper-game-actions .btn {
         width: 100%;
         justify-content: center;
     }

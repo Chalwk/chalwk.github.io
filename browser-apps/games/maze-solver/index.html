@@ -8,7 +8,7 @@ Saze Solver - HTML
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Maze Solver | Jericho Crosby</title>
     <link href="../../../core.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
@@ -37,7 +37,7 @@ Saze Solver - HTML
                         </li>
                     </ul>
                 </li>
-                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Maze Solver</a></li>
+                <li><a class="btn btn-secondary" href="index.html">Maze Solver</a></li>
             </ul>
         </nav>
         <div class="hamburger">
@@ -61,7 +61,7 @@ Saze Solver - HTML
                         </li>
                     </ul>
                 </li>
-                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Maze Solver</a></li>
+                <li><a class="btn btn-secondary" href="index.html">Maze Solver</a></li>
             </ul>
         </nav>
     </div>
@@ -69,32 +69,27 @@ Saze Solver - HTML
 
 <main>
     <div class="container">
-        <section class="panel"
-                 style="background: var(--light); border: 1px solid var(--gray-light); border-radius: var(--radius-lg); padding: 1.5rem; margin-top: 2rem;">
+        <section class="panel maze-panel">
             <div class="panel-head">
-                <h1 style="color: var(--primary); margin-bottom: 0.5rem;">Maze Solver</h1>
-                <p class="muted small">WASD / Arrows • Touch-friendly • Hint included</p>
+                <h1 class="maze-title">Maze Solver</h1>
+                <p class="muted small maze-subtitle">WASD / Arrows • Touch-friendly • Hint included</p>
             </div>
 
-            <div class="game-instructions"
-                 style="margin-bottom: 1.5rem; padding: 1rem; background: rgba(203, 213, 225, 0.1); border-radius: var(--radius);">
-                <h4 style="color: var(--dark); margin-bottom: 0.5rem;"><i class="fas fa-info-circle"></i> Objective:
-                </h4>
+            <div class="maze-instructions">
+                <h4 class="instructions-title"><i class="fas fa-info-circle"></i> Objective:</h4>
                 <p>Move your <span class="pill green">player</span> to the <span class="pill red">goal</span>. Use WASD
                     or arrow keys, or the touch D-pad below.</p>
             </div>
 
-            <div class="controls-top"
-                 style="display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
-                <div class="left-controls" style="display: flex; gap: 0.5rem;">
+            <div class="maze-controls-top">
+                <div class="maze-left-controls">
                     <button class="btn" id="reset-btn"><i class="fas fa-redo"></i> Restart</button>
                     <button class="btn btn-secondary" id="hint-btn"><i class="fas fa-lightbulb"></i> Show Hint</button>
                 </div>
-                <div class="right-controls" style="display: flex; gap: 0.5rem; align-items: center;">
-                    <label style="font-weight: 500; color: var(--dark);">
+                <div class="maze-right-controls">
+                    <label class="size-select-label">
                         Maze Size:
-                        <select id="size-select"
-                                style="padding: 0.5rem; border-radius: var(--radius-sm); border: 1px solid var(--gray-light); background: white; margin-left: 0.5rem;">
+                        <select id="size-select" class="maze-size-select">
                             <option value="11">11 × 11</option>
                             <option selected value="15">15 × 15</option>
                             <option value="21">21 × 21</option>
@@ -105,53 +100,33 @@ Saze Solver - HTML
                 </div>
             </div>
 
-            <div class="game-stats"
-                 style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: rgba(203, 213, 225, 0.1); border-radius: var(--radius); margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
-                <div>
-                    <strong style="color: var(--primary);">Moves:</strong>
-                    <span id="score"
-                          style="font-family: var(--font-mono); font-weight: 600; margin-left: 0.5rem;">0</span>
+            <div class="maze-game-stats">
+                <div class="stat-item">
+                    <strong class="stat-label">Moves:</strong>
+                    <span id="score" class="stat-value">0</span>
                 </div>
-                <div>
-                    <strong style="color: var(--primary);">Time:</strong>
-                    <span id="timer"
-                          style="font-family: var(--font-mono); font-weight: 600; margin-left: 0.5rem;">0s</span>
+                <div class="stat-item">
+                    <strong class="stat-label">Time:</strong>
+                    <span id="timer" class="stat-value">0s</span>
                 </div>
-                <div>
-                    <strong style="color: var(--primary);">Best:</strong>
-                    <span id="best"
-                          style="font-family: var(--font-mono); font-weight: 600; margin-left: 0.5rem;">-</span>
+                <div class="stat-item">
+                    <strong class="stat-label">Best:</strong>
+                    <span id="best" class="stat-value">-</span>
                 </div>
             </div>
 
-            <div class="game-container" id="game-container"
-                 style="display: flex; justify-content: center; margin-bottom: 1.5rem; min-height: 300px;">
-                <div id="maze-container"
-                     style="display: grid; gap: 3px; background: var(--darker); padding: 12px; border-radius: var(--radius); box-shadow: var(--shadow-lg);"></div>
+            <div class="maze-game-container" id="game-container">
+                <div id="maze-container" class="maze-container"></div>
             </div>
 
-            <div class="instructions" style="text-align: center; margin-bottom: 1.5rem;">
-                <h4 style="color: var(--dark); margin-bottom: 0.5rem;"><i class="fas fa-gamepad"></i> Touch Controls:
-                </h4>
-                <div class="dpad" id="touch-controls"
-                     style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
-                    <button class="dpad-btn" data-dir="up"
-                            style="width: 60px; height: 60px; border-radius: var(--radius); background: var(--primary); color: white; border: none; font-size: 1.5rem; cursor: pointer;">
-                        ▲
-                    </button>
-                    <div class="dpad-row" style="display: flex; gap: 0.5rem;">
-                        <button class="dpad-btn" data-dir="left"
-                                style="width: 60px; height: 60px; border-radius: var(--radius); background: var(--primary); color: white; border: none; font-size: 1.5rem; cursor: pointer;">
-                            ◀
-                        </button>
-                        <button class="dpad-btn" data-dir="down"
-                                style="width: 60px; height: 60px; border-radius: var(--radius); background: var(--primary); color: white; border: none; font-size: 1.5rem; cursor: pointer;">
-                            ▼
-                        </button>
-                        <button class="dpad-btn" data-dir="right"
-                                style="width: 60px; height: 60px; border-radius: var(--radius); background: var(--primary); color: white; border: none; font-size: 1.5rem; cursor: pointer;">
-                            ▶
-                        </button>
+            <div class="maze-touch-controls">
+                <h4 class="touch-controls-title"><i class="fas fa-gamepad"></i> Touch Controls:</h4>
+                <div class="dpad" id="touch-controls">
+                    <button class="dpad-btn" data-dir="up">▲</button>
+                    <div class="dpad-row">
+                        <button class="dpad-btn" data-dir="left">◀</button>
+                        <button class="dpad-btn" data-dir="down">▼</button>
+                        <button class="dpad-btn" data-dir="right">▶</button>
                     </div>
                 </div>
             </div>
@@ -162,9 +137,9 @@ Saze Solver - HTML
 <footer>
     <div class="footer-container">
         <div class="social-icons">
-            <a href="https://discord.com/channels/@me/707058110396760094" target="_blank" aria-label="Discord"><i
+            <a aria-label="Discord" href="https://discord.com/channels/@me/707058110396760094" target="_blank"><i
                     class="fab fa-discord"></i></a>
-            <a href="https://github.com/Chalwk" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+            <a aria-label="GitHub" href="https://github.com/Chalwk" target="_blank"><i class="fab fa-github"></i></a>
         </div>
         <p class="footer-copyright"></p>
     </div>

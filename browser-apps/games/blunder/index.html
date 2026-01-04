@@ -40,7 +40,7 @@ Blunder - HTML
                         </li>
                     </ul>
                 </li>
-                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Blunder</a></li>
+                <li><a class="btn btn-secondary" href="index.html">Blunder</a></li>
             </ul>
         </nav>
 
@@ -66,7 +66,7 @@ Blunder - HTML
                         </li>
                     </ul>
                 </li>
-                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Blunder</a></li>
+                <li><a class="btn btn-secondary" href="index.html">Blunder</a></li>
             </ul>
         </nav>
     </div>
@@ -74,27 +74,26 @@ Blunder - HTML
 
 <main>
     <div class="container">
-        <section class="panel"
-                 style="background: var(--light); border: 1px solid var(--gray-light); border-radius: var(--radius-lg); padding: 2rem; margin-top: 2rem;">
+        <section class="panel blunder-panel">
             <div class="panel-head">
-                <h1 style="color: var(--primary); margin-bottom: 0.5rem; font-size: 2.5rem; font-weight: 800; letter-spacing: 0.5px;">
-                    <i class="fas fa-puzzle-piece" style="margin-right: 0.5rem;"></i>Blunder
+                <h1 class="blunder-title">
+                    <i class="fas fa-puzzle-piece blunder-title-icon"></i>Blunder
                 </h1>
-                <p class="muted" style="color: var(--gray); margin-bottom: 1.5rem;">
+                <p class="muted blunder-description">
                     Guess the 5-letter word in 6 tries. Hit Enter to submit. Click tiles to toggle focus.
                 </p>
             </div>
 
             <div class="game-container">
-                <div class="controls-row" style="display: flex; justify-content: space-between; margin-bottom: 1.5rem;">
-                    <div class="controls" style="display: flex; gap: 0.5rem;">
-                        <button id="newGameBtn" class="btn" style="background: var(--primary); color: white;">
+                <div class="blunder-controls-row">
+                    <div class="blunder-controls">
+                        <button class="btn blunder-new-game-btn" id="newGameBtn">
                             <i class="fas fa-redo"></i> New Game
                         </button>
-                        <button id="statsBtn" class="btn btn-secondary">
+                        <button class="btn btn-secondary" id="statsBtn">
                             <i class="fas fa-chart-bar"></i> Stats
                         </button>
-                        <button id="helpBtn" class="btn btn-secondary">
+                        <button class="btn btn-secondary" id="helpBtn">
                             <i class="fas fa-question-circle"></i> Help
                         </button>
                     </div>
@@ -110,9 +109,9 @@ Blunder - HTML
 <footer>
     <div class="footer-container">
         <div class="social-icons">
-            <a href="https://discord.com/channels/@me/707058110396760094" target="_blank" aria-label="Discord"> <i
+            <a aria-label="Discord" href="https://discord.com/channels/@me/707058110396760094" target="_blank"> <i
                     class="fab fa-discord"></i></a>
-            <a href="https://github.com/Chalwk" target="_blank" aria-label="GitHub"> <i class="fab fa-github"></i></a>
+            <a aria-label="GitHub" href="https://github.com/Chalwk" target="_blank"> <i class="fab fa-github"></i></a>
         </div>
         <p class="footer-copyright"></p>
     </div>

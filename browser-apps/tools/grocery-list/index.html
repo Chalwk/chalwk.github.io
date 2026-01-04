@@ -8,23 +8,23 @@ Grocery List - HTML
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#4a86e8">
-    <meta name="description" content="⚠️ Check an item to indicate that it needs to be purchased.">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="#4a86e8" name="theme-color">
+    <meta content="⚠️ Check an item to indicate that it needs to be purchased." name="description">
     <title>Grocery List</title>
 
-    <link rel="stylesheet" href="../../../core.css">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap">
+    <link href="../../../core.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
+          rel="stylesheet">
 
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" type="image/png" href="icons/icon-192x192.png">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Grocery List">
-    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+    <link href="manifest.json" rel="manifest">
+    <link href="icons/icon-192x192.png" rel="icon" type="image/png">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="default" name="apple-mobile-web-app-status-bar-style">
+    <meta content="Grocery List" name="apple-mobile-web-app-title">
+    <link href="icons/icon-192x192.png" rel="apple-touch-icon">
 </head>
 
 <body>
@@ -54,7 +54,7 @@ Grocery List - HTML
                         </li>
                     </ul>
                 </li>
-                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Grocery List</a></li>
+                <li><a class="btn btn-secondary" href="index.html" style="margin-left: 10px;">Grocery List</a></li>
             </ul>
         </nav>
 
@@ -84,7 +84,7 @@ Grocery List - HTML
                         </li>
                     </ul>
                 </li>
-                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Grocery List</a></li>
+                <li><a class="btn btn-secondary" href="index.html" style="margin-left: 10px;">Grocery List</a></li>
             </ul>
         </nav>
     </div>
@@ -104,10 +104,10 @@ Grocery List - HTML
 
             <div class="search-container" style="margin-bottom: 1.5rem;">
                 <div style="max-width: 500px; margin: 0 auto;">
-                    <label for="searchInput"></label><input id="searchInput" type="text"
-                                                            placeholder="Search groceries..."
+                    <label for="searchInput"></label><input id="searchInput" placeholder="Search groceries..."
                                                             style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--gray-light);
-                                  border-radius: var(--radius); font-size: 1rem;">
+                                  border-radius: var(--radius); font-size: 1rem;"
+                                                            type="text">
                 </div>
             </div>
 
@@ -181,11 +181,11 @@ Grocery List - HTML
             <label for="categoryName"
                    style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--dark);">Category
                 Name:</label>
-            <input id="categoryName" type="text" required style="width: 100%; padding: 0.75rem; margin-bottom: 1.5rem;
-                   border: 1px solid var(--gray-light); border-radius: var(--radius);">
+            <input id="categoryName" required style="width: 100%; padding: 0.75rem; margin-bottom: 1.5rem;
+                   border: 1px solid var(--gray-light); border-radius: var(--radius);" type="text">
             <div class="modal-buttons" style="display: flex; gap: 0.5rem; justify-content: flex-end;">
-                <button type="submit" class="btn btn-primary">Save</button>
-                <button id="cancelCategory" type="button" class="btn btn-secondary">Cancel</button>
+                <button class="btn btn-primary" type="submit">Save</button>
+                <button class="btn btn-secondary" id="cancelCategory" type="button">Cancel</button>
             </div>
         </form>
     </div>
@@ -209,22 +209,22 @@ Grocery List - HTML
                     <label for="itemName"
                            style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--dark);">Item
                         Name:</label>
-                    <input id="itemName" type="text" required
-                           style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius);">
+                    <input id="itemName" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius);"
+                           type="text">
                 </div>
 
                 <div>
                     <label for="itemPrice"
                            style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--dark);">Price:</label>
-                    <input id="itemPrice" type="text" placeholder="$0.00"
-                           style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius);">
+                    <input id="itemPrice" placeholder="$0.00" style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius);"
+                           type="text">
                 </div>
 
                 <div>
                     <label for="itemLocation"
                            style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--dark);">Store/Location:</label>
-                    <input id="itemLocation" type="text"
-                           style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius);">
+                    <input id="itemLocation" style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius);"
+                           type="text">
                 </div>
 
                 <div>
@@ -235,10 +235,10 @@ Grocery List - HTML
                 </div>
 
                 <div class="modal-buttons" style="display: flex; gap: 0.5rem; justify-content: flex-end;">
-                    <button type="submit" class="btn btn-primary">Save</button>
-                    <button id="cancelItem" type="button" class="btn btn-secondary">Cancel</button>
-                    <button id="deleteItem" type="button" class="btn"
-                            style="background-color: var(--error); color: white; display: none;">Delete
+                    <button class="btn btn-primary" type="submit">Save</button>
+                    <button class="btn btn-secondary" id="cancelItem" type="button">Cancel</button>
+                    <button class="btn" id="deleteItem" style="background-color: var(--error); color: white; display: none;"
+                            type="button">Delete
                     </button>
                 </div>
             </div>
@@ -246,15 +246,15 @@ Grocery List - HTML
     </div>
 </div>
 
-<input type="file" id="importFile" accept=".json" style="display: none;">
+<input accept=".json" id="importFile" style="display: none;" type="file">
 
 <footer>
     <div class="footer-container">
         <div class="social-icons">
-            <a href="https://discord.com/channels/@me/707058110396760094" target="_blank" aria-label="Discord">
+            <a aria-label="Discord" href="https://discord.com/channels/@me/707058110396760094" target="_blank">
                 <i class="fab fa-discord"></i>
             </a>
-            <a href="https://github.com/Chalwk" target="_blank" aria-label="GitHub">
+            <a aria-label="GitHub" href="https://github.com/Chalwk" target="_blank">
                 <i class="fab fa-github"></i>
             </a>
         </div>
