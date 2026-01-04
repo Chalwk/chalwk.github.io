@@ -89,7 +89,7 @@ Saze Solver - HTML
                 <div class="maze-right-controls">
                     <label class="size-select-label">
                         Maze Size:
-                        <select id="size-select" class="maze-size-select">
+                        <select class="maze-size-select" id="size-select">
                             <option value="11">11 × 11</option>
                             <option selected value="15">15 × 15</option>
                             <option value="21">21 × 21</option>
@@ -103,20 +103,20 @@ Saze Solver - HTML
             <div class="maze-game-stats">
                 <div class="stat-item">
                     <strong class="stat-label">Moves:</strong>
-                    <span id="score" class="stat-value">0</span>
+                    <span class="stat-value" id="score">0</span>
                 </div>
                 <div class="stat-item">
                     <strong class="stat-label">Time:</strong>
-                    <span id="timer" class="stat-value">0s</span>
+                    <span class="stat-value" id="timer">0s</span>
                 </div>
                 <div class="stat-item">
                     <strong class="stat-label">Best:</strong>
-                    <span id="best" class="stat-value">-</span>
+                    <span class="stat-value" id="best">-</span>
                 </div>
             </div>
 
             <div class="maze-game-container" id="game-container">
-                <div id="maze-container" class="maze-container"></div>
+                <div class="maze-container" id="maze-container"></div>
             </div>
 
             <div class="maze-touch-controls">

@@ -371,6 +371,7 @@ Random Password Generator - Stylesheet
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
+    margin-top: 2rem;
 }
 
 .export-actions {
@@ -423,6 +424,31 @@ Random Password Generator - Stylesheet
     align-items: center;
     gap: 1rem;
     flex-wrap: wrap;
+}
+
+.app-grid {
+    margin-top: 2rem;
+}
+
+#generator-heading,
+#output-heading,
+#history-heading {
+    color: var(--primary);
+}
+
+.passphrase-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.passphrase-words {
+    min-width: 120px;
+}
+
+.custom-chars {
+    margin-top: 1rem;
 }
 
 @media (max-width: 768px) {

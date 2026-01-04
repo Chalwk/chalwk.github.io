@@ -279,3 +279,205 @@ Social Script Builder - Stylesheet
     box-shadow: var(--shadow);
     z-index: 1001;
 }
+
+.panel-style {
+    background: var(--light);
+    border: 1px solid var(--gray-light);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+}
+
+.step-actions-container {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    align-items: center;
+}
+
+.script-actions-container {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--gray-light);
+    border-radius: var(--radius);
+}
+
+.premade-scripts-section {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--gray-light);
+}
+
+.practice-tools-section {
+    margin-top: 2rem;
+}
+
+.tool-option-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+.checkbox-input {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.modal-base {
+    border: none;
+    border-radius: var(--radius-lg);
+    padding: 0;
+    width: 90vw;
+    box-shadow: var(--shadow-lg);
+}
+
+.practice-modal {
+    max-width: 500px;
+}
+
+.help-modal {
+    max-width: 600px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--gray-light);
+}
+
+.practice-content {
+    padding: 1.5rem;
+}
+
+.practice-step {
+    text-align: center;
+    padding: 2rem;
+    border-radius: var(--radius);
+    background: var(--light);
+    margin-bottom: 1.5rem;
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.step-content {
+    font-size: 1.1rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+}
+
+.step-type-badge {
+    padding: 0.25rem 1rem;
+    border-radius: 999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.practice-progress {
+    margin: 1.5rem 0;
+}
+
+.progress-bar {
+    height: 6px;
+    background: var(--gray-light);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--primary);
+    transition: width 0.3s;
+    width: 0%;
+}
+
+.practice-controls {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.practice-timer {
+    display: none;
+    text-align: center;
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background: var(--light);
+    border-radius: var(--radius);
+    font-weight: 600;
+}
+
+.help-content {
+    padding: 1.5rem;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.help-section {
+    margin-bottom: 1.5rem;
+}
+
+.help-section h4 {
+    margin: 0 0 0.5rem;
+    color: var(--dark);
+}
+
+.help-section ul {
+    padding-left: 1.5rem;
+    color: var(--dark);
+}
+
+.modal-actions {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--gray-light);
+    display: flex;
+    justify-content: flex-end;
+}
+
+.empty-library {
+    color: var(--gray);
+    text-align: center;
+    padding: 2rem;
+}
+
+.panel-head h2 {
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+.panel-head .small {
+    color: var(--gray);
+}
+
+.script-steps h3 {
+    color: var(--dark);
+    margin-bottom: 1rem;
+}
+
+.premade-scripts-section h3 {
+    color: var(--dark);
+    margin-bottom: 0.5rem;
+}
+
+.premade-scripts-section .small {
+    color: var(--gray);
+    margin-bottom: 1rem;
+}
+
+.practice-tools h3 {
+    color: var(--dark);
+    margin-bottom: 1rem;
+}

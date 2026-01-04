@@ -40,7 +40,7 @@ Random Password Generator - HTML
                         </li>
                     </ul>
                 </li>
-                <li><a class="btn btn-secondary" href="index.html">Password Generator</a>
+                <li><a class="btn btn-secondary" href="index.html">Random Password Generator</a>
                 </li>
             </ul>
         </nav>
@@ -67,7 +67,7 @@ Random Password Generator - HTML
                         </li>
                     </ul>
                 </li>
-                <li><a class="btn btn-secondary" href="index.html">Password Generator</a>
+                <li><a class="btn btn-secondary" href="index.html">Random Password Generator</a>
                 </li>
             </ul>
         </nav>
@@ -76,12 +76,12 @@ Random Password Generator - HTML
 
 <main>
     <div class="container">
-        <div aria-labelledby="app-title" class="app-grid" id="app" role="main" style="margin-top: 2rem;">
+        <div aria-labelledby="app-title" class="app-grid" id="app" role="main">
             <h2 class="sr-only" id="app-title">Password Generator</h2>
 
             <section aria-labelledby="generator-heading" class="panel panel-left" id="generator-panel">
                 <div class="panel-head">
-                    <h2 id="generator-heading" style="color: var(--primary);">Password Settings</h2>
+                    <h2 id="generator-heading">Password Settings</h2>
                     <p class="muted small">Configure your password criteria and generate secure passwords.</p>
                 </div>
 
@@ -113,7 +113,7 @@ Random Password Generator - HTML
                                 <span>Symbols (#$&)</span>
                             </label>
                         </div>
-                        <label class="field" style="margin-top: 1rem;">
+                        <label class="field custom-chars">
                             <span>Custom characters (optional)</span>
                             <input id="custom" maxlength="32" placeholder="e.g. ±§♥" type="text"/>
                         </label>
@@ -126,12 +126,12 @@ Random Password Generator - HTML
                         </label>
                     </div>
 
-                    <div class="form-row" style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+                    <div class="form-row passphrase-row">
                         <label class="checkbox">
                             <input id="passphraseMode" type="checkbox">
                             <span>Passphrase mode</span>
                         </label>
-                        <label class="field" style="min-width: 120px;">
+                        <label class="field passphrase-words">
                             <span>Words:</span>
                             <input disabled id="passphraseWords" max="10" min="3" type="number" value="4"/>
                         </label>
@@ -146,7 +146,7 @@ Random Password Generator - HTML
                         <input aria-describedby="patternDesc" id="pattern" placeholder="e.g. Ccc123!Ccc" type="text"/>
                     </div>
 
-                    <div class="actions-row" style="margin-top: 2rem;">
+                    <div class="actions-row">
                         <button class="btn btn-primary" id="generate">
                             <i class="fas fa-key"></i> Generate Password
                         </button>
@@ -162,7 +162,7 @@ Random Password Generator - HTML
 
             <section aria-labelledby="output-heading" class="panel panel-right" id="output-panel">
                 <div class="panel-head">
-                    <h2 id="output-heading" style="color: var(--primary);">Generated Password</h2>
+                    <h2 id="output-heading">Generated Password</h2>
                     <p class="muted small">Your secure password with strength analysis.</p>
                 </div>
 
@@ -210,7 +210,7 @@ Random Password Generator - HTML
             <section aria-labelledby="history-heading" class="panel panel-bottom" id="history-panel">
                 <div class="panel-head row-between">
                     <div>
-                        <h2 id="history-heading" style="color: var(--primary);">Password History</h2>
+                        <h2 id="history-heading">Password History</h2>
                         <p class="muted small">Previously generated passwords are stored locally in your browser.</p>
                     </div>
                     <div aria-label="Export and import actions" class="export-actions" role="group">

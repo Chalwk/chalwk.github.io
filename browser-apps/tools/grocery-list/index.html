@@ -104,7 +104,7 @@ Grocery List - HTML
 
             <div class="search-container">
                 <div class="search-inner">
-                    <label for="searchInput"></label><input id="searchInput" class="search-input"
+                    <label for="searchInput"></label><input class="search-input" id="searchInput"
                                                             placeholder="Search groceries..." type="text">
                 </div>
             </div>
@@ -152,8 +152,8 @@ Grocery List - HTML
         <span class="close">&times;</span>
         <h3 id="categoryModalTitle">Add Category</h3>
         <form id="categoryForm">
-            <label for="categoryName" class="form-label">Category Name:</label>
-            <input id="categoryName" class="form-input" required type="text">
+            <label class="form-label" for="categoryName">Category Name:</label>
+            <input class="form-input" id="categoryName" required type="text">
             <div class="modal-buttons">
                 <button class="btn btn-primary" type="submit">Save</button>
                 <button class="btn btn-secondary" id="cancelCategory" type="button">Cancel</button>
@@ -169,28 +169,28 @@ Grocery List - HTML
         <form id="itemForm">
             <div class="item-form-grid">
                 <div>
-                    <label for="itemCategory" class="form-label">Category:</label>
-                    <select id="itemCategory" class="form-input" required></select>
+                    <label class="form-label" for="itemCategory">Category:</label>
+                    <select class="form-input" id="itemCategory" required></select>
                 </div>
 
                 <div>
-                    <label for="itemName" class="form-label">Item Name:</label>
-                    <input id="itemName" class="form-input" required type="text">
+                    <label class="form-label" for="itemName">Item Name:</label>
+                    <input class="form-input" id="itemName" required type="text">
                 </div>
 
                 <div>
-                    <label for="itemPrice" class="form-label">Price:</label>
-                    <input id="itemPrice" class="form-input" placeholder="$0.00" type="text">
+                    <label class="form-label" for="itemPrice">Price:</label>
+                    <input class="form-input" id="itemPrice" placeholder="$0.00" type="text">
                 </div>
 
                 <div>
-                    <label for="itemLocation" class="form-label">Store/Location:</label>
-                    <input id="itemLocation" class="form-input" type="text">
+                    <label class="form-label" for="itemLocation">Store/Location:</label>
+                    <input class="form-input" id="itemLocation" type="text">
                 </div>
 
                 <div>
-                    <label for="itemDescription" class="form-label">Description:</label>
-                    <textarea id="itemDescription" class="form-input textarea-input" rows="3"></textarea>
+                    <label class="form-label" for="itemDescription">Description:</label>
+                    <textarea class="form-input textarea-input" id="itemDescription" rows="3"></textarea>
                 </div>
 
                 <div class="modal-buttons">

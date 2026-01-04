@@ -102,20 +102,20 @@ Neurodivergent Task Manager - HTML
                 <div class="left-column">
                     <div class="panel task-form-panel">
                         <h3 class="task-form-title">Create New Task</h3>
-                        <form id="task-form" class="task-form">
+                        <form class="task-form" id="task-form">
                             <div class="form-group task-form-group">
-                                <label for="task-title" class="form-label">Task Title</label>
-                                <input id="task-title" class="form-input" placeholder="What needs to be done?" required
+                                <label class="form-label" for="task-title">Task Title</label>
+                                <input class="form-input" id="task-title" placeholder="What needs to be done?" required
                                        type="text">
                             </div>
                             <div class="form-group task-form-group">
-                                <label for="task-description" class="form-label">Description</label>
-                                <textarea id="task-description" class="form-input textarea-input"
+                                <label class="form-label" for="task-description">Description</label>
+                                <textarea class="form-input textarea-input" id="task-description"
                                           placeholder="More details about the task..." rows="3"></textarea>
                             </div>
                             <div class="form-group task-form-group">
-                                <label for="task-priority" class="form-label">Priority</label>
-                                <select id="task-priority" class="form-input">
+                                <label class="form-label" for="task-priority">Priority</label>
+                                <select class="form-input" id="task-priority">
                                     <option value="low">Low</option>
                                     <option value="medium">Medium</option>
                                     <option value="high">High</option>
@@ -123,7 +123,7 @@ Neurodivergent Task Manager - HTML
                             </div>
                             <div class="form-group task-form-group">
                                 <label class="form-label">Break into Steps (Chunking)</label>
-                                <div id="steps-container" class="steps-container">
+                                <div class="steps-container" id="steps-container">
                                     <div class="step-input">
                                         <label>
                                             <input class="step-text" placeholder="Step 1" type="text">
@@ -134,12 +134,12 @@ Neurodivergent Task Manager - HTML
                                 <button class="btn btn-secondary" id="add-step" type="button">+ Add Step</button>
                             </div>
                             <div class="form-group task-form-group">
-                                <label for="task-timer" class="form-label">Timer (minutes)</label>
-                                <input id="task-timer" class="form-input" min="1" type="number" value="25">
+                                <label class="form-label" for="task-timer">Timer (minutes)</label>
+                                <input class="form-input" id="task-timer" min="1" type="number" value="25">
                             </div>
                             <div class="form-group task-form-group">
-                                <label for="task-reminder" class="form-label">Reminder</label>
-                                <input id="task-reminder" class="form-input" type="datetime-local">
+                                <label class="form-label" for="task-reminder">Reminder</label>
+                                <input class="form-input" id="task-reminder" type="datetime-local">
                             </div>
                             <button class="btn btn-primary" type="submit">Create Task</button>
                         </form>
@@ -158,19 +158,19 @@ Neurodivergent Task Manager - HTML
                 <div class="middle-column">
                     <div class="panel tasks-list-panel">
                         <h3 class="tasks-list-title">Today's Tasks</h3>
-                        <div id="tasks-list" class="tasks-list"></div>
+                        <div class="tasks-list" id="tasks-list"></div>
                     </div>
 
                     <div class="panel completed-tasks-panel">
                         <h3 class="completed-tasks-title">Completed Tasks</h3>
-                        <div id="completed-tasks" class="completed-tasks"></div>
+                        <div class="completed-tasks" id="completed-tasks"></div>
                     </div>
                 </div>
 
                 <div class="right-column">
                     <div class="panel reminders-panel">
                         <h3 class="reminders-title">Upcoming Reminders</h3>
-                        <div id="reminders-list" class="reminders-list"></div>
+                        <div class="reminders-list" id="reminders-list"></div>
                     </div>
 
                     <div class="panel achievements-panel">
@@ -223,8 +223,8 @@ Neurodivergent Task Manager - HTML
                                 <button class="btn btn-danger" id="reset-timer">Reset</button>
                             </div>
                             <div class="form-group">
-                                <label for="custom-timer" class="form-label">Custom Timer (minutes)</label>
-                                <input id="custom-timer" class="form-input" min="1" type="number" value="25">
+                                <label class="form-label" for="custom-timer">Custom Timer (minutes)</label>
+                                <input class="form-input" id="custom-timer" min="1" type="number" value="25">
                                 <button class="btn btn-secondary" id="set-custom-timer">Set Timer</button>
                             </div>
                         </div>

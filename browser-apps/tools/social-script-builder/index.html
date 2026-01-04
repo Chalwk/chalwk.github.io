@@ -45,7 +45,7 @@ Social Script Builder - HTML
                         </li>
                     </ul>
                 </li>
-                <li><a class="btn btn-secondary" href="index.html">Script Builder</a></li>
+                <li><a class="btn btn-secondary" href="index.html">Social Script Builder</a></li>
             </ul>
         </nav>
 
@@ -71,7 +71,7 @@ Social Script Builder - HTML
                         </li>
                     </ul>
                 </li>
-                <li><a class="btn btn-secondary" href="index.html">Script Builder</a></li>
+                <li><a class="btn btn-secondary" href="index.html">Social Script Builder</a></li>
             </ul>
         </nav>
     </div>
@@ -79,12 +79,11 @@ Social Script Builder - HTML
 
 <main>
     <div class="container">
-        <div class="app-grid" style="margin-top: 2rem;">
-            <section class="panel"
-                     style="background: var(--light); border: 1px solid var(--gray-light); border-radius: var(--radius-lg); padding: 1.5rem;">
+        <div class="app-grid">
+            <section class="panel panel-style">
                 <div class="panel-head">
-                    <h2 style="color: var(--primary); margin-bottom: 0.5rem;">Script Editor</h2>
-                    <p class="small" style="color: var(--gray);">Build your social script step by step.</p>
+                    <h2>Script Editor</h2>
+                    <p class="small">Build your social script step by step.</p>
                 </div>
 
                 <div class="script-meta">
@@ -101,13 +100,12 @@ Social Script Builder - HTML
                 </div>
 
                 <div class="script-steps">
-                    <h3 style="color: var(--dark); margin-bottom: 1rem;">Script Steps</h3>
+                    <h3>Script Steps</h3>
                     <div aria-label="Script steps" class="steps-list" id="steps-list" role="list"></div>
 
-                    <div class="step-actions" style="display: flex; gap: 1rem; margin-top: 1rem; align-items: center;">
+                    <div class="step-actions step-actions-container">
                         <button class="btn btn-primary" id="add-step" type="button">+ Add Step</button>
-                        <select aria-label="Step type" id="step-type"
-                                style="padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius);">
+                        <select aria-label="Step type" id="step-type">
                             <option value="statement">I Say</option>
                             <option value="question">They Might Say</option>
                             <option value="action">Action I Take</option>
@@ -122,50 +120,43 @@ Social Script Builder - HTML
                     </div>
                 </div>
 
-                <div class="script-actions" style="display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap;">
+                <div class="script-actions script-actions-container">
                     <button class="btn btn-primary" id="save-script">Save Script</button>
                     <button class="btn btn-secondary" id="new-script">New Script</button>
                     <button class="btn btn-secondary" id="export-script">Export</button>
                 </div>
             </section>
 
-            <section class="panel"
-                     style="background: var(--light); border: 1px solid var(--gray-light); border-radius: var(--radius-lg); padding: 1.5rem;">
+            <section class="panel panel-style">
                 <div class="panel-head">
-                    <h2 style="color: var(--primary); margin-bottom: 0.5rem;">Script Library</h2>
-                    <p class="small" style="color: var(--gray);">Your saved scripts and practice tools.</p>
+                    <h2>Script Library</h2>
+                    <p class="small">Your saved scripts and practice tools.</p>
                 </div>
 
-                <div class="search-controls" style="margin-bottom: 1rem;">
-                    <input aria-label="Search scripts" id="search-scripts" placeholder="Search scripts..." style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius);"
-                           type="text"/>
+                <div class="search-controls">
+                    <input aria-label="Search scripts" class="search-input" id="search-scripts"
+                           placeholder="Search scripts..." type="text"/>
                 </div>
 
                 <div aria-label="Saved scripts" class="scripts-library" id="scripts-library" role="list">
-                    <div style="color: var(--gray); text-align: center; padding: 2rem;">No scripts saved yet. Create
-                        your first script!
-                    </div>
+                    <div class="empty-library">No scripts saved yet. Create your first script!</div>
                 </div>
 
-                <div class="premade-scripts-section"
-                     style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--gray-light);">
-                    <h3 style="color: var(--dark); margin-bottom: 0.5rem;">Pre-made Script Templates</h3>
-                    <p class="small" style="color: var(--gray); margin-bottom: 1rem;">Based on common social
-                        situations</p>
+                <div class="premade-scripts-section">
+                    <h3>Pre-made Script Templates</h3>
+                    <p class="small">Based on common social situations</p>
                     <div aria-label="Pre-made scripts" class="premade-scripts" id="premade-scripts" role="list"></div>
                 </div>
 
-                <div class="practice-tools" style="margin-top: 2rem;">
-                    <h3 style="color: var(--dark); margin-bottom: 1rem;">Practice Tools</h3>
-                    <div class="tool-options" style="display: flex; flex-direction: column; gap: 0.75rem;">
-                        <label class="checkbox"
-                               style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                            <input id="show-timer" style="width: 1.25rem; height: 1.25rem;" type="checkbox"/>
+                <div class="practice-tools practice-tools-section">
+                    <h3>Practice Tools</h3>
+                    <div class="tool-options">
+                        <label class="checkbox tool-option-label">
+                            <input class="checkbox-input" id="show-timer" type="checkbox"/>
                             <span>Show practice timer</span>
                         </label>
-                        <label class="checkbox"
-                               style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                            <input id="auto-advance" style="width: 1.25rem; height: 1.25rem;" type="checkbox"/>
+                        <label class="checkbox tool-option-label">
+                            <input class="checkbox-input" id="auto-advance" type="checkbox"/>
                             <span>Auto-advance steps</span>
                         </label>
                     </div>
@@ -175,63 +166,49 @@ Social Script Builder - HTML
     </div>
 </main>
 
-<dialog aria-labelledby="practice-title" id="practice-modal"
-        style="border: none; border-radius: var(--radius-lg); padding: 0; max-width: 500px; width: 90vw; box-shadow: var(--shadow-lg);">
-    <div class="modal-header"
-         style="display: flex; justify-content: space-between; align-items: center; padding: 1.5rem; border-bottom: 1px solid var(--gray-light);">
-        <h3 id="practice-title" style="margin: 0;">Practice: <span id="practice-script-name"></span></h3>
-        <button aria-label="Close practice" class="btn btn-secondary" id="close-practice"
-                style="padding: 0.5rem 0.75rem;">×
-        </button>
+<dialog aria-labelledby="practice-title" class="modal-base practice-modal" id="practice-modal">
+    <div class="modal-header">
+        <h3 id="practice-title">Practice: <span id="practice-script-name"></span></h3>
+        <button aria-label="Close practice" class="btn btn-secondary" id="close-practice">×</button>
     </div>
 
-    <div class="practice-content" style="padding: 1.5rem;">
-        <div class="practice-step" id="practice-step"
-             style="text-align: center; padding: 2rem; border-radius: var(--radius); background: var(--light); margin-bottom: 1.5rem; min-height: 120px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
-            <div class="step-content" id="current-step-text"
-                 style="font-size: 1.1rem; line-height: 1.5; margin-bottom: 1rem;"></div>
-            <div class="step-type-badge" id="current-step-type"
-                 style="padding: 0.25rem 1rem; border-radius: 999px; font-size: 0.875rem; font-weight: 600;"></div>
+    <div class="practice-content">
+        <div class="practice-step">
+            <div class="step-content" id="current-step-text"></div>
+            <div class="step-type-badge" id="current-step-type"></div>
         </div>
 
-        <div class="practice-progress" style="margin: 1.5rem 0;">
-            <div class="progress-bar"
-                 style="height: 6px; background: var(--gray-light); border-radius: 3px; overflow: hidden; margin-bottom: 0.5rem;">
-                <div class="progress-fill" id="progress-fill"
-                     style="height: 100%; background: var(--primary); transition: width 0.3s; width: 0%;"></div>
+        <div class="practice-progress">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
             </div>
-            <span id="progress-text" style="color: var(--gray); font-size: 0.9rem;">Step 1 of 1</span>
+            <span id="progress-text">Step 1 of 1</span>
         </div>
 
-        <div class="practice-controls"
-             style="display: flex; gap: 1rem; justify-content: center; margin-bottom: 1.5rem;">
+        <div class="practice-controls">
             <button class="btn btn-secondary" id="prev-step">Previous</button>
             <button class="btn btn-primary" id="next-step">Next</button>
             <button class="btn btn-secondary" id="reset-practice">Restart</button>
         </div>
 
-        <div class="practice-timer" id="practice-timer"
-             style="display: none; text-align: center; margin-top: 1rem; padding: 0.75rem; background: var(--light); border-radius: var(--radius); font-weight: 600;">
+        <div class="practice-timer" id="practice-timer">
             <span>Time: </span>
             <span id="timer-display">00:00</span>
         </div>
     </div>
 </dialog>
 
-<dialog aria-labelledby="help-title" id="help-modal"
-        style="border: none; border-radius: var(--radius-lg); padding: 0; max-width: 600px; width: 90vw; box-shadow: var(--shadow-lg);">
-    <div class="modal-header"
-         style="display: flex; justify-content: space-between; align-items: center; padding: 1.5rem; border-bottom: 1px solid var(--gray-light);">
-        <h3 id="help-title" style="margin: 0;">How to Use Social Script Builder</h3>
-        <button aria-label="Close help" class="btn btn-secondary" id="close-help" style="padding: 0.5rem 0.75rem;">×
-        </button>
+<dialog aria-labelledby="help-title" class="modal-base help-modal" id="help-modal">
+    <div class="modal-header">
+        <h3 id="help-title">How to Use Social Script Builder</h3>
+        <button aria-label="Close help" class="btn btn-secondary" id="close-help">×</button>
     </div>
 
-    <div class="help-content" style="padding: 1.5rem; max-height: 60vh; overflow-y: auto;">
-        <div class="help-section" style="margin-bottom: 1.5rem;">
-            <h4 style="margin: 0 0 0.5rem; color: var(--dark);">Creating Scripts</h4>
+    <div class="help-content">
+        <div class="help-section">
+            <h4>Creating Scripts</h4>
             <p>Build scripts for social situations that feel challenging. Add different types of steps:</p>
-            <ul style="padding-left: 1.5rem; color: var(--dark);">
+            <ul>
                 <li><strong>I Say</strong>: Things you will say</li>
                 <li><strong>They Might Say</strong>: Possible responses from others</li>
                 <li><strong>Action I Take</strong>: Physical actions or behaviors</li>
@@ -239,21 +216,21 @@ Social Script Builder - HTML
             </ul>
         </div>
 
-        <div class="help-section" style="margin-bottom: 1.5rem;">
-            <h4 style="margin: 0 0 0.5rem; color: var(--dark);">Pre-made Templates</h4>
+        <div class="help-section">
+            <h4>Pre-made Templates</h4>
             <p>Use our pre-made script templates for common social situations. These are based on proven social
                 scripting techniques and can be customized to fit your needs.</p>
         </div>
 
-        <div class="help-section" style="margin-bottom: 1.5rem;">
-            <h4 style="margin: 0 0 0.5rem; color: var(--dark);">Practice Mode</h4>
+        <div class="help-section">
+            <h4>Practice Mode</h4>
             <p>Use practice mode to rehearse your scripts. This helps build muscle memory and reduces anxiety in real
                 situations.</p>
         </div>
 
-        <div class="help-section" style="margin-bottom: 1.5rem;">
-            <h4 style="margin: 0 0 0.5rem; color: var(--dark);">Tips for Success</h4>
-            <ul style="padding-left: 1.5rem; color: var(--dark);">
+        <div class="help-section">
+            <h4>Tips for Success</h4>
+            <ul>
                 <li>Start with simple, frequently encountered situations</li>
                 <li>Practice in a low-stress environment first</li>
                 <li>Modify scripts based on real-world experience</li>
@@ -262,8 +239,7 @@ Social Script Builder - HTML
         </div>
     </div>
 
-    <div class="modal-actions"
-         style="padding: 1rem 1.5rem; border-top: 1px solid var(--gray-light); display: flex; justify-content: flex-end;">
+    <div class="modal-actions">
         <button class="btn btn-primary" id="close-help-btn">Got it!</button>
     </div>
 </dialog>
