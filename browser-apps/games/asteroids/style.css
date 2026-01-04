@@ -4,14 +4,45 @@ Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
 Asteroids - Stylesheet
 */
 
+.asteroids-panel {
+    background: var(--light);
+    border: 1px solid var(--gray-light);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin-top: 2rem;
+}
+
+.panel-head {
+    margin-bottom: 1rem;
+}
+
+.panel-title {
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+.game-instructions {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: rgba(203, 213, 225, 0.1);
+    border-radius: var(--radius);
+}
+
+.instructions-title {
+    color: var(--dark);
+    margin-bottom: 0.5rem;
+}
+
+.instructions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.5rem;
+}
+
 #gameContainer {
     display: flex;
     justify-content: center;
     margin-bottom: 1rem;
-}
-
-#gameCanvas:focus {
-    outline: none;
 }
 
 #gameCanvas {
@@ -26,6 +57,10 @@ Asteroids - Stylesheet
     -webkit-user-select: none;
 }
 
+#gameCanvas:focus {
+    outline: none;
+}
+
 .game-stats {
     display: flex;
     justify-content: space-between;
@@ -36,11 +71,19 @@ Asteroids - Stylesheet
     margin-bottom: 1rem;
 }
 
-.game-instructions {
-    margin-bottom: 1.5rem;
-    padding: 1rem;
-    background: rgba(203, 213, 225, 0.1);
-    border-radius: var(--radius);
+.stat-item {
+    display: flex;
+    align-items: center;
+}
+
+.stat-label {
+    color: var(--primary);
+}
+
+.stat-value {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    margin-left: 0.5rem;
 }
 
 @media (max-width: 768px) {

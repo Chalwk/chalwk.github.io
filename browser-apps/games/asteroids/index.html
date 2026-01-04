@@ -69,16 +69,14 @@ Asteroids - HTML
 
 <main>
     <div class="container">
-        <section class="panel"
-                 style="background: var(--light); border: 1px solid var(--gray-light); border-radius: var(--radius-lg); padding: 1.5rem; margin-top: 2rem;">
+        <section class="panel asteroids-panel">
             <div class="panel-head">
-                <h1 style="color: var(--primary); margin-bottom: 0.5rem;">Asteroids Adaptation</h1>
+                <h1 class="panel-title">Asteroids Adaptation</h1>
                 <p class="muted small">Classic arcade game with spaceship controls and asteroid destruction.</p>
             </div>
-            <div class="game-instructions"
-                 style="margin-bottom: 1.5rem; padding: 1rem; background: rgba(203, 213, 225, 0.1); border-radius: var(--radius);">
-                <h4 style="color: var(--dark); margin-bottom: 0.5rem;"><i class="fas fa-info-circle"></i> Controls:</h4>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.5rem;">
+            <div class="game-instructions">
+                <h4 class="instructions-title"><i class="fas fa-info-circle"></i> Controls:</h4>
+                <div class="instructions-grid">
                     <div><i class="fas fa-arrow-left"></i> <strong>Arrow Left:</strong> Rotate left</div>
                     <div><i class="fas fa-arrow-right"></i> <strong>Arrow Right:</strong> Rotate right</div>
                     <div><i class="fas fa-arrow-up"></i> <strong>Arrow Up:</strong> Thrust forward</div>
@@ -86,20 +84,17 @@ Asteroids - HTML
                     <div><i class="fas fa-redo"></i> <strong>R:</strong> Restart game</div>
                 </div>
             </div>
-            <div id="gameContainer" style="display: flex; justify-content: center; margin-bottom: 1rem;">
+            <div id="gameContainer">
                 <canvas id="gameCanvas" tabindex="0"></canvas>
             </div>
-            <div class="game-stats"
-                 style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: rgba(203, 213, 225, 0.1); border-radius: var(--radius);">
-                <div>
-                    <strong style="color: var(--primary);">Score:</strong>
-                    <span id="scoreDisplay"
-                          style="font-family: var(--font-mono); font-weight: 600; margin-left: 0.5rem;">0</span>
+            <div class="game-stats">
+                <div class="stat-item">
+                    <strong class="stat-label">Score:</strong>
+                    <span id="scoreDisplay" class="stat-value">0</span>
                 </div>
-                <div>
-                    <strong style="color: var(--primary);">Lives:</strong>
-                    <span id="livesDisplay"
-                          style="font-family: var(--font-mono); font-weight: 600; margin-left: 0.5rem;">3</span>
+                <div class="stat-item">
+                    <strong class="stat-label">Lives:</strong>
+                    <span id="livesDisplay" class="stat-value">3</span>
                 </div>
                 <button class="btn btn-secondary" id="restartBtn" style="display: none;">
                     <i class="fas fa-redo"></i> Restart Game
