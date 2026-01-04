@@ -631,48 +631,16 @@ function updateEnhancedPredictionDisplay(prediction) {
 }
 
 function updateDetailedStatistics(prediction) {
-    const stats = calculateStatistics();
-    document.getElementById('totalEntries').textContent = stats.totalEntries;
-    document.getElementById('avgDaysBetween').textContent = stats.avgDaysBetween;
-    document.getElementById('mostCommonType').textContent = stats.mostCommonType;
-    document.getElementById('currentStreak').textContent = stats.currentStreak;
-
-    let detailedStatsContainer = document.getElementById('detailedStats');
-    if (!detailedStatsContainer && prediction.stats && Object.keys(prediction.stats).length > 0) {
-        detailedStatsContainer = document.createElement('div');
-        detailedStatsContainer.id = 'detailedStats';
-        detailedStatsContainer.className = 'detailed-stats';
-        detailedStatsContainer.innerHTML = `
-            <div class="stat-card small">
-                <div class="stat-value">${prediction.stats.eventsPerDay || '0.0'}</div>
-                <div class="stat-label">Events/Day</div>
-            </div>
-            <div class="stat-card small">
-                <div class="stat-value">${prediction.stats.medianInterval || '0.0'}</div>
-                <div class="stat-label">Median Interval</div>
-            </div>
-            <div class="stat-card small">
-                <div class="stat-value">${prediction.stats.weightedMean || '0.0'}</div>
-                <div class="stat-label">Weighted Mean</div>
-            </div>
-            <div class="stat-card small">
-                <div class="stat-value">${prediction.stats.outlierCount || '0'}</div>
-                <div class="stat-label">Outliers</div>
-            </div>
-        `;
-
-        const statsGrid = document.querySelector('.stats-grid');
-        if (statsGrid) {
-            statsGrid.appendChild(detailedStatsContainer);
-        }
-    } else if (detailedStatsContainer && prediction.stats) {
-        const statCards = detailedStatsContainer.querySelectorAll('.stat-card');
-        if (statCards.length >= 4) {
-            statCards[0].querySelector('.stat-value').textContent = prediction.stats.eventsPerDay || '0.0';
-            statCards[1].querySelector('.stat-value').textContent = prediction.stats.medianInterval || '0.0';
-            statCards[2].querySelector('.stat-value').textContent = prediction.stats.weightedMean || '0.0';
-            statCards[3].querySelector('.stat-value').textContent = prediction.stats.outlierCount || '0';
-        }
+    if (prediction.stats && Object.keys(prediction.stats).length > 0) {
+        document.getElementById('eventsPerDay').textContent = prediction.stats.eventsPerDay || '0.0';
+        document.getElementById('medianInterval').textContent = prediction.stats.medianInterval || '0.0';
+        document.getElementById('weightedMean').textContent = prediction.stats.weightedMean || '0.0';
+        document.getElementById('outlierCount').textContent = prediction.stats.outlierCount || '0';
+    } else {
+        document.getElementById('eventsPerDay').textContent = '0.0';
+        document.getElementById('medianInterval').textContent = '0.0';
+        document.getElementById('weightedMean').textContent = '0.0';
+        document.getElementById('outlierCount').textContent = '0';
     }
 }
 
