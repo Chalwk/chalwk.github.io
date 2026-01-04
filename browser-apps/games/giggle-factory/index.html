@@ -1,62 +1,154 @@
 <!--
 Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
 
-Giggle Factory
+Giggle Factory - HTML
 -->
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width,initial-scale=1" name="viewport"/>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Giggle Factory</title>
-    <link href="https://fonts.googleapis.com" rel="preconnect">
-    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="../../../core.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
+          rel="stylesheet">
+    <style>
+        :root {
+            --bg-1: #0f172a;
+            --bg-2: #0b2545;
+            --glass: rgba(255,255,255,0.06);
+            --accent: #7dd3fc;
+            --accent-2: #60a5fa;
+            --muted: #94a3b8;
+        }
+    </style>
 </head>
 <body>
-<a aria-label="Return to main" class="return-btn" href="../../index.html">← Return</a>
 
-<main class="wrap">
-    <header class="hero">
-        <div class="logo">
-            <svg aria-hidden="true" viewBox="0 0 24 24">
-                <path d="M12 2c2.8 0 5 2.2 5 5v1c0 2.8-2.2 5-5 5s-5-2.2-5-5V7c0-2.8 2.2-5 5-5zM5 19c0-3.3 2.7-6 6-6h2c3.3 0 6 2.7 6 6v1H5v-1z"/>
-            </svg>
+<header class="header">
+    <div class="container">
+        <a class="logo" href="../../../index.html"> <i class="fas fa-code"></i> Jericho </a>
+        <nav class="nav-desktop">
+            <ul class="nav-links">
+                <li><a href="../../../index.html#about">About</a></li>
+                <li><a href="../../../browser-apps/apps_and_tools.html">Apps & Tools</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" href="#">Other Stuff <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://chalwk.github.io/CPAS/">CPAS</a></li>
+                        <li class="dropdown-submenu">
+                            <a class="submenu-toggle" href="#">Education <i class="fas fa-chevron-right"></i></a>
+                            <ul class="submenu">
+                                <li><a href="../../../education/understanding-autism.html">Understanding Autism</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Giggle Factory</a></li>
+            </ul>
+        </nav>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
         </div>
-        <h1>Giggle Factory</h1>
-        <p class="lead">Fetch fresh jokes from multiple APIs. Click the big button or double-click to cycle APIs. Try
-            not to snort.</p>
-    </header>
+        <nav class="nav-mobile">
+            <ul class="nav-mobile-links">
+                <li><a href="../../../index.html#about">About</a></li>
+                <li><a href="../../../browser-apps/apps_and_tools.html">Apps & Tools</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" href="#">Other Stuff <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://chalwk.github.io/CPAS/">CPAS</a></li>
+                        <li class="dropdown-submenu">
+                            <a class="submenu-toggle" href="#">Education <i class="fas fa-chevron-right"></i></a>
+                            <ul class="submenu">
+                                <li><a href="../../../education/understanding-autism.html">Understanding Autism</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Giggle Factory</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
 
-    <section aria-live="polite" class="card" id="jokeCard">
-        <div class="joke-meta">
-            <span class="badge" id="jokeType">dad joke</span>
-            <span class="muted" id="jokeSource">icanhazdadjoke</span>
-        </div>
+<main>
+    <div class="container">
+        <section class="panel"
+                 style="background: linear-gradient(160deg, var(--bg-1), var(--bg-2)); border-radius: var(--radius-lg); padding: 2rem; margin-top: 2rem;">
+            <div class="panel-head" style="text-align: center; margin-bottom: 2rem;">
+                <div class="logo"
+                     style="width: 60px; height: 60px; margin: 0 auto 1rem; background: linear-gradient(45deg, var(--accent), var(--accent-2)); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-laugh-beam" style="color: #042033; font-size: 1.8rem;"></i>
+                </div>
+                <h1 style="color: white; margin-bottom: 0.5rem;">Giggle Factory</h1>
+                <p class="muted" style="color: var(--muted); max-width: 600px; margin: 0 auto;">Fetch fresh jokes from
+                    multiple APIs. Click the big button or double-click to cycle APIs. Try not to snort.</p>
+            </div>
 
-        <p class="joke" id="jokeText">Loading a joke for you...</p>
+            <div class="card" id="jokeCard"
+                 style="background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02)); border: 1px solid rgba(255,255,255,0.03); border-radius: var(--radius-lg); padding: 2rem; margin-bottom: 2rem;">
+                <div class="joke-meta" style="display: flex; gap: 0.75rem; align-items: center; margin-bottom: 1rem;">
+                    <span class="badge" id="jokeType"
+                          style="background: linear-gradient(90deg, var(--accent), var(--accent-2)); padding: 0.4rem 0.75rem; border-radius: 999px; font-weight: 700; font-size: 0.8rem; color: #05203a;">dad joke</span>
+                    <span class="muted" id="jokeSource"
+                          style="color: var(--muted); font-size: 0.8rem;">icanhazdadjoke</span>
+                </div>
 
-        <div class="controls">
-            <button class="btn primary" id="newJokeBtn" title="Get a new joke (double-click to cycle API)">New joke
-            </button>
-            <button class="btn" id="copyBtn" title="Copy joke">Copy</button>
-            <button class="btn" id="tweetBtn" title="Tweet joke">Tweet</button>
-            <button class="btn ghost" id="fallbackBtn" title="Use a local fallback joke">Local fallback</button>
-        </div>
+                <p class="joke" id="jokeText"
+                   style="font-size: 1.4rem; line-height: 1.5; margin: 1.5rem 0; color: #e6eef8;">Loading a joke for
+                    you...</p>
 
-        <div class="extras">
-            <div class="small">Tip: Press <kbd>J</kbd> for a new joke, <kbd>A</kbd> to cycle API</div>
-            <div class="status" id="status"></div>
-        </div>
-    </section>
+                <div class="controls" style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1.5rem;">
+                    <button class="btn primary" id="newJokeBtn" title="Get a new joke (double-click to cycle API)"
+                            style="background: linear-gradient(90deg, var(--accent), var(--accent-2)); color: #042033; border: 0;">
+                        <i class="fas fa-sync-alt"></i> New Joke
+                    </button>
+                    <button class="btn btn-secondary" id="copyBtn" title="Copy joke">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
+                    <button class="btn btn-secondary" id="tweetBtn" title="Tweet joke">
+                        <i class="fab fa-twitter"></i> Tweet
+                    </button>
+                    <button class="btn btn-secondary" id="fallbackBtn" title="Use a local fallback joke"
+                            style="border-style: dashed; opacity: 0.9;">
+                        <i class="fas fa-database"></i> Local Fallback
+                    </button>
+                </div>
 
-    <footer class="footer">
-        <small>&copy; 2025. Jericho Crosby (Chalwk)</small>
-    </footer>
+                <div class="extras"
+                     style="display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: var(--muted);">
+                    <div>
+                        <i class="fas fa-keyboard"></i> Tip: Press <kbd
+                            style="background: rgba(255,255,255,0.04); border-radius: 4px; padding: 0.2rem 0.4rem; font-weight: 600;">J</kbd>
+                        for new joke, <kbd
+                            style="background: rgba(255,255,255,0.04); border-radius: 4px; padding: 0.2rem 0.4rem; font-weight: 600;">A</kbd>
+                        to cycle API
+                    </div>
+                    <div class="status" id="status" style="color: var(--accent);"></div>
+                </div>
+            </div>
+        </section>
+    </div>
 </main>
 
-<script defer src="script.js"></script>
+<footer>
+    <div class="footer-container">
+        <div class="social-icons">
+            <a href="https://discord.com/channels/@me/707058110396760094" target="_blank" aria-label="Discord"> <i
+                    class="fab fa-discord"></i></a>
+            <a href="https://github.com/Chalwk" target="_blank" aria-label="GitHub"> <i class="fab fa-github"></i></a>
+        </div>
+        <p class="footer-copyright"></p>
+    </div>
+</footer>
+
+<script defer src="../../../nav.js"></script>
+<script src="script.js"></script>
 </body>
 </html>

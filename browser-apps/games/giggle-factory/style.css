@@ -1,73 +1,93 @@
 /*
 Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
 
-FatPoly stylesheet
+Giggle Factory - CSS
 */
 
-:root{
+:root {
     --bg-1: #0f172a;
     --bg-2: #0b2545;
     --glass: rgba(255,255,255,0.06);
     --accent: #7dd3fc;
     --accent-2: #60a5fa;
     --muted: #94a3b8;
-    --card-radius: 16px;
-    --shadow: 0 10px 30px rgba(2,6,23,0.6);
-    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
 }
 
-*{box-sizing:border-box}
-html,body{height:100%}
-body{
-    margin:0;
-    background: radial-gradient(1200px 600px at 10% 10%, rgba(96,165,250,0.08), transparent),
-    linear-gradient(160deg,var(--bg-1),var(--bg-2));
-    color:#e6eef8;
-    -webkit-font-smoothing:antialiased;
-    -moz-osx-font-smoothing:grayscale;
+.panel {
+    position: relative;
+    overflow: hidden;
 }
 
-.return-btn{
-    position:fixed;left:18px;top:18px;background:transparent;border:0;color:rgba(230,238,248,0.85);
-    padding:8px 12px;border-radius:10px;text-decoration:none;font-weight:600;backdrop-filter:blur(6px);
+.panel::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(1200px 600px at 10% 10%, rgba(96,165,250,0.08), transparent);
+    z-index: -1;
 }
-.return-btn:hover{transform:translateY(-2px)}
 
-.wrap{
-    min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 20px;
+.card {
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 30px rgba(2,6,23,0.6);
 }
-.hero{max-width:780px;text-align:center;margin-bottom:20px}
-.logo svg{width:56px;height:56px;fill:linear-gradient(45deg,var(--accent),var(--accent-2));filter:drop-shadow(0 6px 18px rgba(96,165,250,0.12));}
-h1{font-size:34px;margin:8px 0 6px;letter-spacing:-0.02em}
-.lead{color:var(--muted);margin:0 0 18px}
 
-.card{
-    width:100%;max-width:820px;background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
-    border-radius:var(--card-radius);padding:28px 28px 20px;box-shadow:var(--shadow);border:1px solid rgba(255,255,255,0.03);
+.btn {
+    transition: all 0.2s ease !important;
 }
-.joke-meta{display:flex;gap:10px;align-items:center;margin-bottom:14px}
-.badge{background:linear-gradient(90deg,var(--accent),var(--accent-2));padding:6px 10px;border-radius:999px;font-weight:700;font-size:13px;color:#05203a}
-.muted{color:var(--muted);font-size:13px}
 
-.joke{font-size:22px;line-height:1.4;margin:10px 0 20px}
-.controls{display:flex;gap:10px;flex-wrap:wrap}
-.btn{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:10px 14px;border-radius:12px;color:inherit;font-weight:600;cursor:pointer;transition:all .18s ease;}
-.btn:hover{transform:translateY(-3px);box-shadow:0 8px 22px rgba(2,6,23,0.5)}
-.btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#042033;border:0}
-.btn.ghost{background:transparent;border-style:dashed;opacity:0.95}
+.btn:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 22px rgba(2,6,23,0.5) !important;
+}
 
-.extras{display:flex;justify-content:space-between;align-items:center;margin-top:16px}
-.small{color:var(--muted);font-size:13px}
-.kbd{background:rgba(255,255,255,0.04);padding:4px 8px;border-radius:6px}
-.status{font-size:13px;color:var(--muted)}
+.btn.primary {
+    background: linear-gradient(90deg, var(--accent), var(--accent-2)) !important;
+    color: #042033 !important;
+    border: none !important;
+    font-weight: 600;
+}
 
-.footer{margin-top:20px;color:var(--muted);text-align:center}
+.kbd {
+    background: rgba(255,255,255,0.04);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-weight: 600;
+}
 
-kbd{background:rgba(255,255,255,0.04);border-radius:6px;padding:4px 7px;font-weight:700}
+@media (max-width: 768px) {
+    .joke {
+        font-size: 1.2rem !important;
+    }
 
-@media (max-width:520px){
-    .joke{font-size:18px}
-    h1{font-size:26px}
-    .card{padding:20px}
-    .extras{flex-direction:column;gap:8px;align-items:flex-start}
+    .controls {
+        flex-direction: column;
+    }
+
+    .controls .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .extras {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 480px) {
+    .panel {
+        padding: 1.5rem !important;
+    }
+
+    .card {
+        padding: 1.5rem !important;
+    }
+
+    h1 {
+        font-size: 2rem !important;
+    }
 }

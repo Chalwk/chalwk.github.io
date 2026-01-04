@@ -1,7 +1,7 @@
 /*
 Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
 
-FatPoly JavaScript
+Giggle Factory - JavaScript
 */
 
 const jokeText = document.getElementById('jokeText');
@@ -24,7 +24,6 @@ const FALLBACK_JOKES = [
 let lastJoke = '';
 let currentApiIndex = 0;
 
-// Available joke APIs
 const JOKE_APIS = [
     {
         name: 'Dad Jokes',
@@ -77,13 +76,11 @@ const JOKE_APIS = [
     }
 ];
 
-// Function to cycle through APIs
 function cycleApi() {
     currentApiIndex = (currentApiIndex + 1) % JOKE_APIS.length;
     return JOKE_APIS[currentApiIndex];
 }
 
-// Function to get current API
 function getCurrentApi() {
     return JOKE_APIS[currentApiIndex];
 }
@@ -104,7 +101,6 @@ async function fetchJoke() {
         const data = await res.json();
         let text = api.parser(data);
 
-        // Handle empty responses
         if (!text || text.trim() === '') {
             throw new Error('Empty joke response');
         }
@@ -115,7 +111,6 @@ async function fetchJoke() {
     } catch (err) {
         console.warn(`Fetch from ${api.source} failed:`, err);
 
-        // Try next API on failure
         const nextApi = cycleApi();
         setStatus(`${api.source} failed, trying ${nextApi.source}`);
 
@@ -188,7 +183,6 @@ tweetBtn.addEventListener('click', () => {
     window.open(url, '_blank');
 });
 
-// Keyboard shortcuts
 window.addEventListener('keydown', (e) => {
     if (e.key.toLowerCase() === 'j') {
         fetchJoke();
@@ -199,5 +193,4 @@ window.addEventListener('keydown', (e) => {
     }
 });
 
-// Initial joke
 fetchJoke();
