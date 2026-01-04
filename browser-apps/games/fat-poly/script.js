@@ -1,7 +1,7 @@
 /*
 Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
 
-FatPoly JavaScript
+FatPoly - JavaScript
 */
 
 (() => {
@@ -12,14 +12,10 @@ FatPoly JavaScript
     let running = false;
 
     const healthFill = document.getElementById('healthFill');
-    const progressFill = document.getElementById('progressFill');
     const scoreEl = document.getElementById('score');
     const levelEl = document.getElementById('level');
     const eatenEl = document.getElementById('eaten');
     const targetEl = document.getElementById('target');
-    const overlay = document.getElementById('overlay');
-    const overlayBtn = document.getElementById('overlayBtn');
-    const overlayText = document.getElementById('overlayText');
     const btnStart = document.getElementById('btn-start');
     const btnPause = document.getElementById('btn-pause');
     const btnSound = document.getElementById('btn-sound');
@@ -64,13 +60,13 @@ FatPoly JavaScript
     };
 
     function resize() {
-        const rect = canvas.getBoundingClientRect();
-        W = Math.max(300, Math.floor(rect.width));
-        H = Math.max(200, Math.floor(rect.height));
+        const rect = canvas.parentElement.getBoundingClientRect();
+        W = Math.max(400, Math.floor(rect.width));
+        H = Math.max(300, Math.floor(W * 0.75));
         canvas.width = Math.floor(W * DPR);
         canvas.height = Math.floor(H * DPR);
-        canvas.style.width = rect.width + 'px';
-        canvas.style.height = rect.height + 'px';
+        canvas.style.width = W + 'px';
+        canvas.style.height = H + 'px';
         ctx.setTransform(DPR,0,0,DPR,0,0);
     }
     window.addEventListener('resize', resize);
@@ -86,7 +82,7 @@ FatPoly JavaScript
             this.size = 28;
             this.x = W/2;
             this.y = H/2;
-            this.speed = 280; // px/s
+            this.speed = 280;
             this.vx = 0; this.vy = 0;
             this.target = { x: this.x, y: this.y };
             this.color = '#ffffff';
@@ -94,7 +90,6 @@ FatPoly JavaScript
             this.moveKeys = { up:false,down:false,left:false,right:false };
         }
         update(dt){
-
             let mx=0,my=0;
             if(this.moveKeys.up) my-=1;
             if(this.moveKeys.down) my+=1;
@@ -107,7 +102,6 @@ FatPoly JavaScript
                 this.target.x = this.x + this.vx * 0.12;
                 this.target.y = this.y + this.vy * 0.12;
             } else {
-
                 const dx = this.target.x - this.x;
                 const dy = this.target.y - this.y;
                 this.vx = dx * 6;
@@ -124,7 +118,6 @@ FatPoly JavaScript
             ctx.shadowColor = 'rgba(0,0,0,0.6)';
             ctx.shadowBlur = 16;
             ctx.fillStyle = this.color;
-
             const s = this.size;
             const r = Math.min(8, s*0.12);
             roundRect(ctx, -s/2, -s/2, s, s, r);
@@ -135,19 +128,15 @@ FatPoly JavaScript
 
     class Particle {
         constructor(kind, x, y, radius, angle, speed) {
-            this.kind = kind; // shape type string
+            this.kind = kind;
             this.x = x; this.y = y;
             this.r = radius;
             this.angle = angle;
             this.speed = speed;
             this.rotation = Math.random()*Math.PI*2;
             this.spin = rand(-1.2,1.2);
-            this.hue = kindHue(kind);
-
             this.isHealthy = healthySet.has(kind) || (!unhealthySet.has(kind) && Math.random() < 0.55);
-
             this.color = this.isHealthy ? '#39b54a' : '#e94b3c';
-
             this.reversed = false;
             this.birth = performance.now();
         }
@@ -155,7 +144,6 @@ FatPoly JavaScript
             this.x += Math.cos(this.angle) * this.speed * dt * speedMultiplier();
             this.y += Math.sin(this.angle) * this.speed * dt * speedMultiplier();
             this.rotation += this.spin * dt;
-
             if(this.x < -40) this.x = W + 40;
             if(this.x > W + 40) this.x = -40;
             if(this.y < -40) this.y = H + 40;
@@ -165,10 +153,8 @@ FatPoly JavaScript
             ctx.save();
             ctx.translate(this.x, this.y);
             ctx.rotate(this.rotation);
-
             ctx.lineWidth = 1.5;
             ctx.strokeStyle = 'rgba(0,0,0,0.25)';
-
             const fill = (this.reversed ? (this.isHealthy ? '#e94b3c' : '#39b54a') : this.color);
             drawShape(ctx, this.kind, this.r, fill, '#00000030');
             ctx.restore();
@@ -196,7 +182,6 @@ FatPoly JavaScript
             ctx.arc(0,0,this.r,0,Math.PI*2);
             ctx.stroke();
             ctx.restore();
-
             ctx.save();
             ctx.fillStyle = 'rgba(255,255,255,0.9)';
             ctx.font = '11px sans-serif';
@@ -220,6 +205,7 @@ FatPoly JavaScript
         ctx.arcTo(x,y,x+w,y,r);
         ctx.closePath();
     }
+
     function drawShape(ctx, type, size, fill, stroke){
         ctx.fillStyle = fill || '#fff';
         ctx.strokeStyle = stroke || 'rgba(0,0,0,0.2)';
@@ -267,10 +253,10 @@ FatPoly JavaScript
             case 'torus':
                 torus(ctx,size); break;
             default:
-
                 ctx.beginPath(); ctx.arc(0,0,size,0,Math.PI*2); ctx.fill(); ctx.stroke();
         }
     }
+
     function poly(ctx,sides,size){
         const ang = Math.PI*2/sides;
         ctx.beginPath();
@@ -282,6 +268,7 @@ FatPoly JavaScript
         }
         ctx.closePath(); ctx.fill(); ctx.stroke();
     }
+
     function star(ctx,points,outer,inner){
         const step = Math.PI/points;
         ctx.beginPath();
@@ -293,6 +280,7 @@ FatPoly JavaScript
         }
         ctx.closePath(); ctx.fill(); ctx.stroke();
     }
+
     function gear(ctx,size,teeth){
         ctx.beginPath();
         for(let i=0;i<teeth*2;i++){
@@ -304,6 +292,7 @@ FatPoly JavaScript
         ctx.closePath(); ctx.fill(); ctx.stroke();
         ctx.beginPath(); ctx.arc(0,0,size*0.46,0,Math.PI*2); ctx.fillStyle='rgba(0,0,0,0.12)'; ctx.fill();
     }
+
     function spiral(ctx,size){
         ctx.beginPath();
         for(let i=0;i<24;i++){
@@ -314,6 +303,7 @@ FatPoly JavaScript
         }
         ctx.stroke();
     }
+
     function drawCube(ctx,size){
         const s = size*0.7;
         ctx.beginPath();
@@ -323,19 +313,18 @@ FatPoly JavaScript
         ctx.beginPath();
         ctx.moveTo(s,-s); ctx.lineTo(s*0.6,-s*1.4); ctx.lineTo(s*0.6,s* -1.4 + s*1.4); ctx.lineTo(s,s); ctx.closePath(); ctx.fill(); ctx.stroke();
     }
+
     function cylinder(ctx,size){
         ctx.beginPath(); ctx.ellipse(0,-size*0.7,size*0.9,size*0.35,0,0,Math.PI*2); ctx.fill(); ctx.stroke();
         ctx.beginPath(); ctx.rect(-size*0.9,-size*0.7,size*1.8,size*1.2); ctx.fill(); ctx.stroke();
     }
+
     function cone(ctx,size){
         ctx.beginPath(); ctx.moveTo(0,-size); ctx.lineTo(size*0.9,size); ctx.lineTo(-size*0.9,size); ctx.closePath(); ctx.fill(); ctx.stroke();
     }
+
     function torus(ctx,size){
         ctx.beginPath(); ctx.arc(0,0,size,0,Math.PI*2); ctx.fill(); ctx.globalCompositeOperation='destination-out'; ctx.beginPath(); ctx.arc(0,0,size*0.55,0,Math.PI*2); ctx.fill(); ctx.globalCompositeOperation='source-over'; ctx.stroke();
-    }
-
-    function kindHue(kind){
-        return Math.abs(kind.split('').reduce((a,c)=>a+c.charCodeAt(0),0)) % 360;
     }
 
     function speedMultiplier(){
@@ -348,6 +337,7 @@ FatPoly JavaScript
     function spawnMany(count){
         for(let i=0;i<count;i++) spawnParticle();
     }
+
     function spawnParticle(kind){
         kind = kind || SHAPE_TYPES[irand(0, SHAPE_TYPES.length-1)];
         const size = rand(8, 22) * (0.9 + state.level*0.03);
@@ -377,14 +367,12 @@ FatPoly JavaScript
             const p = state.particles[i];
             const d = dist(pl.x,pl.y,p.x,p.y);
             if(d < pr + p.r*0.9){
-
                 eatParticle(p);
                 state.particles.splice(i,1);
                 screenShake(6);
                 spawnParticlesEffect(p.x,p.y, p.color, 8);
             }
         }
-
         for(let i=state.specials.length-1;i>=0;i--){
             const s = state.specials[i];
             const d = dist(pl.x,pl.y,s.x,s.y);
@@ -397,33 +385,27 @@ FatPoly JavaScript
     }
 
     function eatParticle(p){
-
         let healthy = p.isHealthy ^ !!state.effects.REVERSE;
         if(p.reversed) healthy = !healthy;
         if(healthy){
-
             const gain = 4 + Math.round(p.r*0.08);
             state.player.size += gain;
             state.score += 10 + Math.round(p.r);
             state.particlesEaten++;
             audioBeep(880, 0.06);
         } else {
-
             const dmg = 6 + Math.round(p.r*0.06) + (state.level-1);
             state.health = clamp(state.health - dmg, 0, 100);
             state.score -= Math.max(0, 6 - state.level);
             audioBeep(220, 0.08);
-
         }
         updateUI();
-
         if(state.particlesEaten >= state.targetToAdvance){
             levelUp();
         }
     }
 
     function applySpecial(effect){
-
         switch(effect){
             case 'RUSH': state.effects.RUSH = 12; break;
             case 'JAM': state.effects.JAM = 12; break;
@@ -434,12 +416,10 @@ FatPoly JavaScript
             case 'WEIGHT-':
                 state.player.size = Math.max(12, state.player.size - 8); audioBeep(580,0.12); break;
         }
-
     }
 
     function reverseAllParticles(flag){
         for(const p of state.particles) p.reversed = !flag ? false : p.reversed;
-
         if(flag){
             for(const p of state.particles) p.reversed = !p.reversed;
         }
@@ -450,11 +430,8 @@ FatPoly JavaScript
         state.level++;
         state.particlesEaten = 0;
         state.targetToAdvance = BASE_TARGET + Math.floor(state.level * 1.9);
-
         state.player.size = Math.max(14, state.player.size - Math.floor(state.level*1.1));
-
         spawnMany(BASE_PARTICLES + Math.floor(state.level*3));
-
         state.effects = {};
         audioBeep(1200, 0.16);
         shakeScreen(14);
@@ -463,29 +440,37 @@ FatPoly JavaScript
 
     function win(){
         running = false;
-        overlayTitleText('You beat FatPoly! 🎉', `Score ${state.score} • Level ${state.level}`);
-        overlay.classList.remove('hidden');
+        showMessage('You beat FatPoly! 🎉', `Score ${state.score} • Level ${state.level}`);
     }
 
     function lose(){
         running = false;
-        overlayTitleText('You Died', `You reached 0 health. Score ${state.score}`);
-        overlay.classList.remove('hidden');
+        showMessage('You Died', `You reached 0 health. Score ${state.score}`);
     }
 
-    function overlayTitleText(title, text){
-        document.getElementById('overlayTitle').innerText = title;
-        overlayText.innerText = text;
-        overlayBtn.innerText = 'Restart';
+    function showMessage(title, text){
+        const overlay = document.createElement('div');
+        overlay.className = 'overlay';
+        overlay.innerHTML = `
+            <div class="overlay-content">
+                <h1>${title}</h1>
+                <p>${text}</p>
+                <button class="btn btn-primary" id="closeOverlay">Play Again</button>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+        document.getElementById('closeOverlay').addEventListener('click', () => {
+            overlay.remove();
+            startGame();
+        });
     }
 
     function updateUI(){
         healthFill.style.width = Math.max(0, state.health) + '%';
-        progressFill.style.width = Math.min(100, state.particlesEaten / state.targetToAdvance * 100) + '%';
-        scoreEl.innerText = 'Score: ' + Math.max(0, state.score);
-        levelEl.innerText = 'Level: ' + state.level;
-        eatenEl.innerText = 'Eaten: ' + state.particlesEaten;
-        targetEl.innerText = 'Target: ' + state.targetToAdvance;
+        scoreEl.textContent = Math.max(0, state.score);
+        levelEl.textContent = state.level;
+        eatenEl.textContent = state.particlesEaten;
+        targetEl.textContent = state.targetToAdvance;
     }
 
     function resetGame(){
@@ -501,7 +486,6 @@ FatPoly JavaScript
         state.shake = 0;
         spawnMany(BASE_PARTICLES);
         updateUI();
-        overlay.classList.add('hidden');
     }
 
     const effectsBuffer = [];
@@ -526,6 +510,7 @@ FatPoly JavaScript
     function screenShake(amount){
         state.shake = Math.max(state.shake, amount);
     }
+
     function shakeScreen(amount){
         screenShake(amount);
     }
@@ -543,46 +528,36 @@ FatPoly JavaScript
 
     function step(dt){
         state.time += dt;
-
         for(const k of Object.keys(state.effects)){
             if(state.effects[k] !== false){
                 state.effects[k] -= dt;
                 if(state.effects[k] <= 0) delete state.effects[k];
             }
         }
-
         if(state.time - state.lastSpecial > Math.max(6, 18 - state.level*1.2)){
             state.lastSpecial = state.time;
             spawnSpecial();
         }
-
         if(state.time - state.lastSpawn > Math.max(0.4, 1.6 - state.level*0.12)){
             state.lastSpawn = state.time;
             spawnParticle();
         }
-
         state.player.update(dt);
         for(const p of state.particles) p.update(dt, state.time);
         for(const s of state.specials) s.update(dt);
-
         updateEffects(dt);
-
         checkCollisions();
-
         if(state.health <= 0) lose();
     }
 
     function render(now){
-
         ctx.save();
         const g = ctx.createLinearGradient(0,0,0,H);
         g.addColorStop(0, '#071026');
         g.addColorStop(1, '#0f1628');
         ctx.fillStyle = g;
         ctx.fillRect(0,0,W,H);
-
         drawBackgroundOrbs(now);
-
         let ox = 0, oy = 0;
         if(state.shake > 0){
             ox = rand(-state.shake, state.shake);
@@ -590,13 +565,9 @@ FatPoly JavaScript
             state.shake = Math.max(0, state.shake - 0.7);
         }
         ctx.translate(ox, oy);
-
         for(const s of state.specials) s.draw(ctx);
-
         for(const p of state.particles) p.draw(ctx);
-
         state.player.draw(ctx);
-
         for(const e of effectsBuffer){
             ctx.beginPath();
             ctx.globalAlpha = Math.max(0, e.life);
@@ -605,13 +576,6 @@ FatPoly JavaScript
             ctx.fill();
             ctx.globalAlpha = 1.0;
         }
-
-        ctx.restore();
-
-        ctx.save();
-        ctx.font = '12px sans-serif';
-        ctx.fillStyle = 'rgba(255,255,255,1)';
-        ctx.fillText(`Level ${state.level} • Score ${state.score}`, 12, 20);
         ctx.restore();
     }
 
@@ -642,7 +606,6 @@ FatPoly JavaScript
         state.player.target.y = clamp(y, state.player.size/2, H - state.player.size/2);
     });
 
-    let dragging = false;
     canvas.addEventListener('pointermove', (e)=>{
         if(e.buttons === 1){
             const rect = canvas.getBoundingClientRect();
@@ -660,6 +623,7 @@ FatPoly JavaScript
         if(e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') state.player.moveKeys.right = true;
         if(e.key === ' '){ e.preventDefault(); toggleRunning(); }
     });
+
     window.addEventListener('keyup', (e)=>{
         if(e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') state.player.moveKeys.up = false;
         if(e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') state.player.moveKeys.down = false;
@@ -668,17 +632,25 @@ FatPoly JavaScript
     });
 
     btnStart.addEventListener('click', ()=>{ startGame(); });
-    overlayBtn.addEventListener('click', ()=>{ startGame(); });
     btnPause.addEventListener('click', ()=>{ toggleRunning(); });
-    btnSound.addEventListener('click', ()=>{ audioEnabled = !audioEnabled; btnSound.innerText = audioEnabled ? '🔊' : '🔈'; });
-    btnReset.addEventListener('click', ()=>{ resetGame(); overlay.classList.add('hidden'); running=true; });
+    btnSound.addEventListener('click', ()=>{
+        audioEnabled = !audioEnabled;
+        btnSound.innerHTML = audioEnabled ? '<i class="fas fa-volume-up"></i>' : '<i class="fas fa-volume-mute"></i>';
+    });
+    btnReset.addEventListener('click', ()=>{
+        resetGame();
+        running = true;
+    });
 
     function startGame(){
         resetGame();
         running = true;
-        overlay.classList.add('hidden');
     }
-    function toggleRunning(){ running = !running; overlay.classList.toggle('hidden', running); }
+
+    function toggleRunning(){
+        running = !running;
+        btnPause.innerHTML = running ? '<i class="fas fa-pause"></i> Pause' : '<i class="fas fa-play"></i> Resume';
+    }
 
     const Audio = (()=>{
         const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -696,19 +668,11 @@ FatPoly JavaScript
                     g.gain.exponentialRampToValueAtTime(0.0001, now + time);
                     o.start(now); o.stop(now + time + 0.02);
                 }catch(e){}
-            },
-            musicLoop:()=>{
-
             }
         };
     })();
 
     function audioBeep(freq, time){ Audio.beep(freq, time); }
-
-    function updateCanvasSize(){
-        resize();
-
-    }
 
     window.addEventListener('load', ()=>{
         resize();
@@ -717,7 +681,4 @@ FatPoly JavaScript
     });
 
     resetGame();
-
-    window.fatpoly = { state };
-
 })();

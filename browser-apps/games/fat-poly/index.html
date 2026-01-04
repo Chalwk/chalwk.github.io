@@ -1,85 +1,164 @@
 <!--
 Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
 
-FatPoly
+FatPoly - HTML
 -->
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width,initial-scale=1" name="viewport"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FatPoly</title>
+    <link href="../../../core.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
+          rel="stylesheet">
 </head>
 <body>
-<header class="topbar">
-    <div aria-hidden="true" class="logo" id="logo">
-        <svg class="logo-svg" preserveAspectRatio="xMidYMid meet" viewBox="0 0 600 120">
-            <defs>
-                <linearGradient id="g1" x1="0" x2="1">
-                    <stop offset="0" stop-color="#FFF"/>
-                    <stop offset="1" stop-color="#a9f"/>
-                </linearGradient>
-            </defs>
-            <rect fill="#222" height="108" opacity="0.85" rx="12" width="108" x="6" y="6"/>
-            <g transform="translate(8,8)">
-                <rect fill="#fff" height="96" rx="10" width="96" x="0" y="0"/>
-                <text fill="url(#g1)" font-family="Segoe UI, Roboto, sans-serif" font-size="48" font-weight="700"
-                      text-anchor="middle" x="48" y="58">P
-                </text>
-            </g>
-            <text fill="#fff" font-family="Segoe UI, Roboto, sans-serif" font-size="64"
-                  font-weight="800" opacity="0.95" x="140" y="70">Fat
-            </text>
-            <text fill="#a9f" font-family="Segoe UI, Roboto, sans-serif" font-size="64"
-                  font-weight="800" x="260" y="70">Poly
-            </text>
-        </svg>
-    </div>
-    <div class="info">
-        <div id="score">Score: 0</div>
-        <div id="level">Level: 1</div>
-    </div>
-    <div class="controls">
-        <button class="btn" id="btn-start">Start</button>
-        <button class="btn" id="btn-pause">Pause</button>
-        <button class="btn" id="btn-sound">🔊</button>
-        <button class="btn" id="btn-reset">Restart</button>
+<header class="header">
+    <div class="container">
+        <a class="logo" href="../../../index.html"> <i class="fas fa-code"></i> Jericho </a>
+        <nav class="nav-desktop">
+            <ul class="nav-links">
+                <li><a href="../../../index.html#about">About</a></li>
+                <li><a href="../../../browser-apps/apps_and_tools.html">Apps & Tools</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" href="#">Other Stuff <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://chalwk.github.io/CPAS/">CPAS</a></li>
+                        <li class="dropdown-submenu">
+                            <a class="submenu-toggle" href="#">Education <i class="fas fa-chevron-right"></i></a>
+                            <ul class="submenu">
+                                <li><a href="../../../education/understanding-autism.html">Understanding Autism</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">FatPoly</a></li>
+            </ul>
+        </nav>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <nav class="nav-mobile">
+            <ul class="nav-mobile-links">
+                <li><a href="../../../index.html#about">About</a></li>
+                <li><a href="../../../browser-apps/apps_and_tools.html">Apps & Tools</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" href="#">Other Stuff <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://chalwk.github.io/CPAS/">CPAS</a></li>
+                        <li class="dropdown-submenu">
+                            <a class="submenu-toggle" href="#">Education <i class="fas fa-chevron-right"></i></a>
+                            <ul class="submenu">
+                                <li><a href="../../../education/understanding-autism.html">Understanding Autism</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">FatPoly</a></li>
+            </ul>
+        </nav>
     </div>
 </header>
 
-<main class="game-area">
-    <canvas id="gameCanvas"></canvas>
+<main>
+    <div class="container">
+        <section class="panel"
+                 style="background: var(--light); border: 1px solid var(--gray-light); border-radius: var(--radius-lg); padding: 1.5rem; margin-top: 2rem;">
+            <div class="panel-head">
+                <h1 style="color: var(--primary); margin-bottom: 0.5rem;">FatPoly</h1>
+                <p class="muted small">Eat healthy shapes, avoid unhealthy ones. Reach level 10 to win!</p>
+            </div>
 
-    <div class="hud">
-        <div class="bar-label">Health</div>
-        <div class="bar" id="healthBar">
-            <div class="bar-fill" id="healthFill"></div>
-        </div>
-        <div class="bar-label">Progress</div>
-        <div class="bar" id="progressBar">
-            <div class="bar-fill" id="progressFill"></div>
-        </div>
-        <div class="stats">
-            <div id="eaten">Eaten: 0</div>
-            <div id="target">Target: 10</div>
-        </div>
-    </div>
+            <div class="game-instructions"
+                 style="margin-bottom: 1.5rem; padding: 1rem; background: rgba(203, 213, 225, 0.1); border-radius: var(--radius);">
+                <h4 style="color: var(--dark); margin-bottom: 0.5rem;"><i class="fas fa-info-circle"></i> Controls:</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.5rem;">
+                    <div><i class="fas fa-arrow-up"></i> <strong>Arrow Up/W:</strong> Move up</div>
+                    <div><i class="fas fa-arrow-down"></i> <strong>Arrow Down/S:</strong> Move down</div>
+                    <div><i class="fas fa-arrow-left"></i> <strong>Arrow Left/A:</strong> Move left</div>
+                    <div><i class="fas fa-arrow-right"></i> <strong>Arrow Right/D:</strong> Move right</div>
+                    <div><i class="fas fa-mouse-pointer"></i> <strong>Click/Drag:</strong> Move player</div>
+                    <div><i class="fas fa-space-shuttle"></i> <strong>Space:</strong> Pause/Resume</div>
+                </div>
+            </div>
 
-    <div class="overlay hidden" id="overlay">
-        <div class="overlay-content" id="overlayContent">
-            <h1 id="overlayTitle">FatPoly</h1>
-            <p id="overlayText">Press Start to play</p>
-            <button class="btn" id="overlayBtn">Play</button>
-        </div>
+            <div id="gameContainer" style="display: flex; justify-content: center; margin-bottom: 1rem;">
+                <canvas id="gameCanvas" tabindex="0"></canvas>
+            </div>
+
+            <div class="game-stats"
+                 style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: rgba(203, 213, 225, 0.1); border-radius: var(--radius); margin-bottom: 1rem;">
+                <div>
+                    <strong style="color: var(--primary);">Score:</strong>
+                    <span id="score"
+                          style="font-family: var(--font-mono); font-weight: 600; margin-left: 0.5rem;">0</span>
+                </div>
+                <div>
+                    <strong style="color: var(--primary);">Level:</strong>
+                    <span id="level"
+                          style="font-family: var(--font-mono); font-weight: 600; margin-left: 0.5rem;">1</span>
+                </div>
+                <div>
+                    <strong style="color: var(--primary);">Health:</strong>
+                    <div class="bar" id="healthBar"
+                         style="display: inline-block; width: 100px; height: 20px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; margin-left: 0.5rem;">
+                        <div class="bar-fill" id="healthFill"
+                             style="height: 100%; width: 100%; background: linear-gradient(90deg, var(--success), var(--accent)); transition: width 200ms linear;"></div>
+                    </div>
+                </div>
+                <button class="btn btn-secondary" id="btn-start">
+                    <i class="fas fa-play"></i> Start
+                </button>
+            </div>
+
+            <div class="game-stats"
+                 style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: rgba(203, 213, 225, 0.1); border-radius: var(--radius);">
+                <div>
+                    <strong style="color: var(--primary);">Eaten:</strong>
+                    <span id="eaten"
+                          style="font-family: var(--font-mono); font-weight: 600; margin-left: 0.5rem;">0</span>
+                    <span style="color: var(--gray); margin: 0 0.5rem;">/</span>
+                    <strong style="color: var(--primary);">Target:</strong>
+                    <span id="target"
+                          style="font-family: var(--font-mono); font-weight: 600; margin-left: 0.5rem;">10</span>
+                </div>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button class="btn btn-secondary" id="btn-pause">
+                        <i class="fas fa-pause"></i> Pause
+                    </button>
+                    <button class="btn btn-secondary" id="btn-sound">
+                        <i class="fas fa-volume-up"></i>
+                    </button>
+                    <button class="btn btn-secondary" id="btn-reset">
+                        <i class="fas fa-redo"></i> Restart
+                    </button>
+                </div>
+            </div>
+        </section>
     </div>
 </main>
 
-<footer class="footer">
-    <small>© 2025 FatPoly - Jericho Crosby (Chalwk). All rights reserved.</small>
+<footer>
+    <div class="footer-container">
+        <div class="social-icons">
+            <a href="https://discord.com/channels/@me/707058110396760094" target="_blank" aria-label="Discord">
+                <i class="fab fa-discord"></i>
+            </a>
+            <a href="https://github.com/Chalwk" target="_blank" aria-label="GitHub">
+                <i class="fab fa-github"></i>
+            </a>
+        </div>
+        <p class="footer-copyright"></p>
+    </div>
 </footer>
 
+<script defer src="../../../nav.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
