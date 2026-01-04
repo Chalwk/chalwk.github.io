@@ -341,3 +341,134 @@ Grocery List - Stylesheet
         padding: 1rem;
     }
 }
+
+.grocery-main {
+    padding-top: 2rem;
+}
+
+.grocery-panel-head {
+    text-align: center;
+}
+
+.grocery-title {
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+.grocery-subtitle {
+    color: var(--gray);
+    margin-bottom: 1rem;
+}
+
+.search-container {
+    margin-bottom: 1.5rem;
+}
+
+.search-inner {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--gray-light);
+    border-radius: var(--radius);
+    font-size: 1rem;
+}
+
+.grocery-controls {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.dropdown-menu-actions {
+    top: 100%;
+    left: 0;
+    margin-top: 0.5rem;
+}
+
+.dropdown-menu-btn {
+    justify-content: flex-start;
+    width: 100%;
+    border: none;
+    border-radius: 0;
+}
+
+.grocery-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    background: var(--light);
+    padding: 1rem;
+    border-radius: var(--radius);
+    margin-bottom: 2rem;
+    border: 1px solid var(--gray-light);
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: var(--gray);
+}
+
+.modal-category {
+    max-width: 400px;
+}
+
+.modal-item {
+    max-width: 500px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--dark);
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--gray-light);
+    border-radius: var(--radius);
+}
+
+.textarea-input {
+    resize: vertical;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+}
+
+.btn-danger {
+    background-color: var(--error);
+    color: white;
+    display: none;
+}
+
+.item-form-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.dropdown-toggle i {
+    font-size: 0.8rem;
+}

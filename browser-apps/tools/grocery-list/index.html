@@ -90,81 +90,55 @@ Grocery List - HTML
     </div>
 </header>
 
-<main class="section" style="padding-top: 2rem;">
+<main class="section grocery-main">
     <div class="container">
-        <section class="panel" style="margin-bottom: 2rem;">
-            <div class="panel-head" style="text-align: center;">
-                <h1 style="color: var(--primary); margin-bottom: 0.5rem;">
+        <section class="panel">
+            <div class="panel-head grocery-panel-head">
+                <h1 class="grocery-title">
                     <i class="fas fa-shopping-cart"></i> Grocery List
                 </h1>
-                <p class="muted" style="color: var(--gray); margin-bottom: 1rem;">
+                <p class="muted grocery-subtitle">
                     ⚠️ Check an item to indicate that it needs to be purchased.
                 </p>
             </div>
 
-            <div class="search-container" style="margin-bottom: 1.5rem;">
-                <div style="max-width: 500px; margin: 0 auto;">
-                    <label for="searchInput"></label><input id="searchInput" placeholder="Search groceries..."
-                                                            style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--gray-light);
-                                  border-radius: var(--radius); font-size: 1rem;"
-                                                            type="text">
+            <div class="search-container">
+                <div class="search-inner">
+                    <label for="searchInput"></label><input id="searchInput" class="search-input"
+                                                            placeholder="Search groceries..." type="text">
                 </div>
             </div>
 
-            <div class="controls"
-                 style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; margin-bottom: 1.5rem;">
+            <div class="controls grocery-controls">
                 <button class="btn btn-primary active" data-filter="all">All Items</button>
                 <button class="btn btn-secondary" data-filter="needed">Items Needed</button>
 
                 <div class="dropdown">
                     <button class="btn btn-secondary dropdown-toggle">
-                        More Actions <i class="fas fa-chevron-down" style="font-size: 0.8rem;"></i>
+                        More Actions <i class="fas fa-chevron-down"></i>
                     </button>
-                    <div class="dropdown-menu" style="top: 100%; left: 0; margin-top: 0.5rem;">
-                        <button class="btn btn-secondary" id="clearAll"
-                                style="justify-content: flex-start; width: 100%; border: none; border-radius: 0;">Clear
-                            All
-                        </button>
-                        <button class="btn btn-secondary" id="exportBtn"
-                                style="justify-content: flex-start; width: 100%; border: none; border-radius: 0;">Export
-                            List
-                        </button>
-                        <button class="btn btn-secondary" id="importBtn"
-                                style="justify-content: flex-start; width: 100%; border: none; border-radius: 0;">Import
-                            List
-                        </button>
-                        <button class="btn btn-secondary" id="addCategoryBtn"
-                                style="justify-content: flex-start; width: 100%; border: none; border-radius: 0;">Add
-                            Category
-                        </button>
-                        <button class="btn btn-secondary" id="addItemBtn"
-                                style="justify-content: flex-start; width: 100%; border: none; border-radius: 0;">Add
-                            Item
-                        </button>
+                    <div class="dropdown-menu dropdown-menu-actions">
+                        <button class="btn btn-secondary dropdown-menu-btn" id="clearAll">Clear All</button>
+                        <button class="btn btn-secondary dropdown-menu-btn" id="exportBtn">Export List</button>
+                        <button class="btn btn-secondary dropdown-menu-btn" id="importBtn">Import List</button>
+                        <button class="btn btn-secondary dropdown-menu-btn" id="addCategoryBtn">Add Category</button>
+                        <button class="btn btn-secondary dropdown-menu-btn" id="addItemBtn">Add Item</button>
                     </div>
                 </div>
             </div>
 
-            <div class="stats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-                    gap: 1rem; background: var(--light); padding: 1rem; border-radius: var(--radius);
-                    margin-bottom: 2rem; border: 1px solid var(--gray-light);">
-                <div class="stat-item" style="text-align: center;">
-                    <div class="stat-value" id="totalItems"
-                         style="font-size: 1.75rem; font-weight: 700; color: var(--primary);">0
-                    </div>
-                    <div class="stat-label" style="font-size: 0.9rem; color: var(--gray);">Total Items</div>
+            <div class="stats grocery-stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="totalItems">0</div>
+                    <div class="stat-label">Total Items</div>
                 </div>
-                <div class="stat-item" style="text-align: center;">
-                    <div class="stat-value" id="neededItems"
-                         style="font-size: 1.75rem; font-weight: 700; color: var(--primary);">0
-                    </div>
-                    <div class="stat-label" style="font-size: 0.9rem; color: var(--gray);">Items Needed</div>
+                <div class="stat-item">
+                    <div class="stat-value" id="neededItems">0</div>
+                    <div class="stat-label">Items Needed</div>
                 </div>
-                <div class="stat-item" style="text-align: center;">
-                    <div class="stat-value" id="totalPrice"
-                         style="font-size: 1.75rem; font-weight: 700; color: var(--primary);">$0.00
-                    </div>
-                    <div class="stat-label" style="font-size: 0.9rem; color: var(--gray);">Total Price</div>
+                <div class="stat-item">
+                    <div class="stat-value" id="totalPrice">$0.00</div>
+                    <div class="stat-label">Total Price</div>
                 </div>
             </div>
 
@@ -174,16 +148,13 @@ Grocery List - HTML
 </main>
 
 <div class="modal" id="categoryModal">
-    <div class="modal-content" style="max-width: 400px;">
+    <div class="modal-content modal-category">
         <span class="close">&times;</span>
-        <h3 id="categoryModalTitle" style="color: var(--primary); margin-bottom: 1rem;">Add Category</h3>
+        <h3 id="categoryModalTitle">Add Category</h3>
         <form id="categoryForm">
-            <label for="categoryName"
-                   style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--dark);">Category
-                Name:</label>
-            <input id="categoryName" required style="width: 100%; padding: 0.75rem; margin-bottom: 1.5rem;
-                   border: 1px solid var(--gray-light); border-radius: var(--radius);" type="text">
-            <div class="modal-buttons" style="display: flex; gap: 0.5rem; justify-content: flex-end;">
+            <label for="categoryName" class="form-label">Category Name:</label>
+            <input id="categoryName" class="form-input" required type="text">
+            <div class="modal-buttons">
                 <button class="btn btn-primary" type="submit">Save</button>
                 <button class="btn btn-secondary" id="cancelCategory" type="button">Cancel</button>
             </div>
@@ -192,54 +163,40 @@ Grocery List - HTML
 </div>
 
 <div class="modal" id="itemModal">
-    <div class="modal-content" style="max-width: 500px;">
+    <div class="modal-content modal-item">
         <span class="close">&times;</span>
-        <h3 id="itemModalTitle" style="color: var(--primary); margin-bottom: 1rem;">Add Item</h3>
+        <h3 id="itemModalTitle">Add Item</h3>
         <form id="itemForm">
-            <div style="display: flex; flex-direction: column; gap: 1rem;">
+            <div class="item-form-grid">
                 <div>
-                    <label for="itemCategory"
-                           style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--dark);">Category:</label>
-                    <select id="itemCategory" required
-                            style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius);">
-                    </select>
+                    <label for="itemCategory" class="form-label">Category:</label>
+                    <select id="itemCategory" class="form-input" required></select>
                 </div>
 
                 <div>
-                    <label for="itemName"
-                           style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--dark);">Item
-                        Name:</label>
-                    <input id="itemName" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius);"
-                           type="text">
+                    <label for="itemName" class="form-label">Item Name:</label>
+                    <input id="itemName" class="form-input" required type="text">
                 </div>
 
                 <div>
-                    <label for="itemPrice"
-                           style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--dark);">Price:</label>
-                    <input id="itemPrice" placeholder="$0.00" style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius);"
-                           type="text">
+                    <label for="itemPrice" class="form-label">Price:</label>
+                    <input id="itemPrice" class="form-input" placeholder="$0.00" type="text">
                 </div>
 
                 <div>
-                    <label for="itemLocation"
-                           style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--dark);">Store/Location:</label>
-                    <input id="itemLocation" style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius);"
-                           type="text">
+                    <label for="itemLocation" class="form-label">Store/Location:</label>
+                    <input id="itemLocation" class="form-input" type="text">
                 </div>
 
                 <div>
-                    <label for="itemDescription"
-                           style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--dark);">Description:</label>
-                    <textarea id="itemDescription" rows="3"
-                              style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius); resize: vertical;"></textarea>
+                    <label for="itemDescription" class="form-label">Description:</label>
+                    <textarea id="itemDescription" class="form-input textarea-input" rows="3"></textarea>
                 </div>
 
-                <div class="modal-buttons" style="display: flex; gap: 0.5rem; justify-content: flex-end;">
+                <div class="modal-buttons">
                     <button class="btn btn-primary" type="submit">Save</button>
                     <button class="btn btn-secondary" id="cancelItem" type="button">Cancel</button>
-                    <button class="btn" id="deleteItem" style="background-color: var(--error); color: white; display: none;"
-                            type="button">Delete
-                    </button>
+                    <button class="btn btn-danger" id="deleteItem" type="button">Delete</button>
                 </div>
             </div>
         </form>
