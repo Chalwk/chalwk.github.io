@@ -1,20 +1,24 @@
 /*
 Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
 
-Tic-Tac-Toe JavaScript
+Tic-Tac-Toe - JavaScript
 */
 
-const cells = document.querySelectorAll('.cell');
+const gameBoard = document.getElementById('game-board');
 const status = document.getElementById('status');
 const resetBtn = document.getElementById('reset');
 const pvpBtn = document.getElementById('pvp');
 const pvaiBtn = document.getElementById('pvai');
+const currentPlayerDisplay = document.getElementById('current-player');
+const nextBoardDisplay = document.getElementById('next-board');
 const winningLine = document.getElementById('winning-line');
 
-let board = Array(9).fill('');
+let board = Array(9).fill().map(() => Array(9).fill(''));
+let smallBoardWinners = Array(9).fill('');
 let currentPlayer = 'X';
 let gameActive = true;
 let gameMode = 'pvai';
+let nextBoard = null;
 
 const winningConditions = [
     [0,1,2],[3,4,5],[6,7,8],
@@ -22,199 +26,204 @@ const winningConditions = [
     [0,4,8],[2,4,6]
 ];
 
-const sounds = {
-    move: new Audio(),
-    aiMove: new Audio(),
-    win: new Audio(),
-    tie: new Audio()
-};
+function initGame() {
+    gameBoard.innerHTML = '';
 
-function initSounds() {
-    sounds.move.src = generateBeep(800, 0.1);
-    sounds.aiMove.src = generateBeep(500, 0.1);
-    sounds.win.src = generateBeep(600, 0.5);
-    sounds.tie.src = generateBeep(300, 0.3);
-}
+    for (let boardIndex = 0; boardIndex < 9; boardIndex++) {
+        const smallBoard = document.createElement('div');
+        smallBoard.className = 'small-board';
+        smallBoard.dataset.index = boardIndex;
 
-function generateBeep(frequency, duration) {
-    const sampleRate = 44100;
-    const numSamples = Math.floor(duration * sampleRate);
-    const buffer = new ArrayBuffer(44 + numSamples * 2);
-    const view = new DataView(buffer);
+        for (let cellIndex = 0; cellIndex < 9; cellIndex++) {
+            const cell = document.createElement('div');
+            cell.className = 'cell';
+            cell.dataset.board = boardIndex;
+            cell.dataset.cell = cellIndex;
+            cell.textContent = board[boardIndex][cellIndex];
 
-    writeString(view, 0, 'RIFF');
-    view.setUint32(4, 36 + numSamples * 2, true);
-    writeString(view, 8, 'WAVE');
-    writeString(view, 12, 'fmt ');
-    view.setUint32(16, 16, true);
-    view.setUint16(20, 1, true);
-    view.setUint16(22, 1, true);
-    view.setUint32(24, sampleRate, true);
-    view.setUint32(28, sampleRate * 2, true);
-    view.setUint16(32, 2, true);
-    view.setUint16(34, 16, true);
-    writeString(view, 36, 'data');
-    view.setUint32(40, numSamples * 2, true);
+            if (board[boardIndex][cellIndex]) {
+                cell.classList.add('taken', `player-${board[boardIndex][cellIndex]}`);
+            }
 
-    const amplitude = 0.3;
-    for (let i = 0; i < numSamples; i++) {
-        const t = i / sampleRate;
-        const value = Math.sin(2 * Math.PI * frequency * t) * amplitude;
-        view.setInt16(44 + i * 2, value * 0x7FFF, true);
-    }
-
-    return URL.createObjectURL(new Blob([buffer], { type: 'audio/wav' }));
-}
-
-function writeString(view, offset, string) {
-    for (let i = 0; i < string.length; i++) {
-        view.setUint8(offset + i, string.charCodeAt(i));
-    }
-}
-
-function playSound(soundName) {
-    try {
-        const sound = sounds[soundName];
-        if (sound) {
-            sound.currentTime = 0;
-            sound.play().catch(e => console.log('Sound play failed:', e));
+            cell.addEventListener('click', handleCellClick);
+            smallBoard.appendChild(cell);
         }
-    } catch (error) {
-        console.log('Sound error:', error);
+
+        if (smallBoardWinners[boardIndex]) {
+            smallBoard.classList.add(`won-${smallBoardWinners[boardIndex]}`);
+        }
+
+        gameBoard.appendChild(smallBoard);
     }
+
+    updateBoardHighlight();
+    updateStatus();
 }
 
 function handleCellClick(e) {
-    if (!gameActive || currentPlayer === 'O' && gameMode === 'pvai') return;
+    if (!gameActive) return;
 
-    const index = e.target.dataset.index;
-    if (board[index] !== '') return;
+    const boardIndex = parseInt(e.target.dataset.board);
+    const cellIndex = parseInt(e.target.dataset.cell);
 
-    makeMove(index);
+    if (nextBoard !== null && boardIndex !== nextBoard) return;
+    if (board[boardIndex][cellIndex] !== '') return;
+    if (smallBoardWinners[boardIndex]) return;
 
-    if (gameActive && gameMode === 'pvai' && currentPlayer === 'O') {
-        setTimeout(makeAIMove, 500);
-    }
+    makeMove(boardIndex, cellIndex);
 }
 
-function makeMove(index) {
-    board[index] = currentPlayer;
-    cells[index].textContent = currentPlayer;
-    cells[index].classList.add('taken', `player-${currentPlayer}`);
-    playSound('move');
-    checkResult();
+function makeMove(boardIndex, cellIndex) {
+    board[boardIndex][cellIndex] = currentPlayer;
+
+    const cell = document.querySelector(`.cell[data-board="${boardIndex}"][data-cell="${cellIndex}"]`);
+    cell.textContent = currentPlayer;
+    cell.classList.add('taken', `player-${currentPlayer}`);
+
+    checkSmallBoardWinner(boardIndex);
+    checkOverallWinner();
+
     if (gameActive) {
+        nextBoard = cellIndex;
+        if (smallBoardWinners[nextBoard]) {
+            nextBoard = null;
+        }
+
         currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-        status.textContent = `Player ${currentPlayer}'s turn`;
+        updateBoardHighlight();
+        updateStatus();
+
+        if (gameMode === 'pvai' && currentPlayer === 'O') {
+            setTimeout(makeAIMove, 500);
+        }
     }
 }
 
 function makeAIMove() {
     if (!gameActive) return;
 
-    let availableCells = [];
-    board.forEach((cell, index) => {
-        if (cell === '') availableCells.push(index);
-    });
+    let availableMoves = [];
 
-    if (availableCells.length > 0) {
-        const randomIndex = Math.floor(Math.random() * availableCells.length);
-        makeMove(availableCells[randomIndex]);
-
-        playSound('aiMove');
-    }
-}
-
-function checkResult() {
-    let roundWon = false;
-    let winningCombo = null;
-
-    for (let condition of winningConditions) {
-        const [a, b, c] = condition;
-        if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-            roundWon = true;
-            winningCombo = condition;
-            break;
+    if (nextBoard === null) {
+        for (let b = 0; b < 9; b++) {
+            if (smallBoardWinners[b]) continue;
+            for (let c = 0; c < 9; c++) {
+                if (board[b][c] === '') {
+                    availableMoves.push({board: b, cell: c});
+                }
+            }
+        }
+    } else {
+        if (smallBoardWinners[nextBoard]) {
+            for (let b = 0; b < 9; b++) {
+                if (smallBoardWinners[b]) continue;
+                for (let c = 0; c < 9; c++) {
+                    if (board[b][c] === '') {
+                        availableMoves.push({board: b, cell: c});
+                    }
+                }
+            }
+        } else {
+            for (let c = 0; c < 9; c++) {
+                if (board[nextBoard][c] === '') {
+                    availableMoves.push({board: nextBoard, cell: c});
+                }
+            }
         }
     }
 
-    if (roundWon) {
-        status.textContent = `Player ${currentPlayer} wins!`;
-        status.className = 'win-message';
-        gameActive = false;
-        drawWinningLine(winningCombo);
-        playSound('win');
-        winningCombo.forEach(index => {
-            cells[index].classList.add('winning-cell');
-        });
-        return;
+    if (availableMoves.length > 0) {
+        const randomMove = availableMoves[Math.floor(Math.random() * availableMoves.length)];
+        makeMove(randomMove.board, randomMove.cell);
+    }
+}
+
+function checkSmallBoardWinner(boardIndex) {
+    const smallBoard = board[boardIndex];
+
+    for (let condition of winningConditions) {
+        const [a, b, c] = condition;
+        if (smallBoard[a] && smallBoard[a] === smallBoard[b] && smallBoard[a] === smallBoard[c]) {
+            smallBoardWinners[boardIndex] = smallBoard[a];
+            const smallBoardElement = document.querySelector(`.small-board[data-index="${boardIndex}"]`);
+            smallBoardElement.classList.add(`won-${smallBoard[a]}`);
+            return;
+        }
     }
 
-    if (!board.includes('')) {
+    if (!smallBoard.includes('')) {
+        smallBoardWinners[boardIndex] = 'T';
+    }
+}
+
+function checkOverallWinner() {
+    for (let condition of winningConditions) {
+        const [a, b, c] = condition;
+        if (smallBoardWinners[a] && smallBoardWinners[a] === smallBoardWinners[b] && smallBoardWinners[a] === smallBoardWinners[c] && smallBoardWinners[a] !== 'T') {
+            gameActive = false;
+            status.textContent = `Player ${smallBoardWinners[a]} wins the game!`;
+            status.className = 'win-message';
+            drawWinningLine(condition);
+            return;
+        }
+    }
+
+    if (!smallBoardWinners.includes('')) {
+        gameActive = false;
         status.textContent = "It's a tie!";
         status.className = 'tie-message';
-        gameActive = false;
-        winningLine.style.display = 'none';
-        playSound('tie');
     }
 }
 
 function drawWinningLine(winningCombo) {
     const [a, b, c] = winningCombo;
-    const cellSize = 100;
-    const gap = 5;
-
-    const cell1 = cells[a].getBoundingClientRect();
-    const cell2 = cells[c].getBoundingClientRect();
     const container = document.getElementById('game-container').getBoundingClientRect();
+
+    const smallBoard1 = document.querySelector(`.small-board[data-index="${a}"]`).getBoundingClientRect();
+    const smallBoard3 = document.querySelector(`.small-board[data-index="${c}"]`).getBoundingClientRect();
 
     let startX, startY, endX, endY, length, angle;
 
-    // Horizontal lines (rows)
     if (winningCombo[0] === 0 && winningCombo[1] === 1 && winningCombo[2] === 2) {
-        startX = cell1.left - container.left + 10;
-        startY = cell1.top - container.top + cellSize / 2;
-        endX = cell2.left - container.left + cellSize - 10;
-        endY = cell2.top - container.top + cellSize / 2;
+        startX = smallBoard1.left - container.left + 10;
+        startY = smallBoard1.top - container.top + smallBoard1.height / 2;
+        endX = smallBoard3.left - container.left + smallBoard3.width - 10;
+        endY = smallBoard3.top - container.top + smallBoard3.height / 2;
     } else if (winningCombo[0] === 3 && winningCombo[1] === 4 && winningCombo[2] === 5) {
-        startX = cell1.left - container.left + 10;
-        startY = cell1.top - container.top + cellSize / 2;
-        endX = cell2.left - container.left + cellSize - 10;
-        endY = cell2.top - container.top + cellSize / 2;
+        startX = smallBoard1.left - container.left + 10;
+        startY = smallBoard1.top - container.top + smallBoard1.height / 2;
+        endX = smallBoard3.left - container.left + smallBoard3.width - 10;
+        endY = smallBoard3.top - container.top + smallBoard3.height / 2;
     } else if (winningCombo[0] === 6 && winningCombo[1] === 7 && winningCombo[2] === 8) {
-        startX = cell1.left - container.left + 10;
-        startY = cell1.top - container.top + cellSize / 2;
-        endX = cell2.left - container.left + cellSize - 10;
-        endY = cell2.top - container.top + cellSize / 2;
-    }
-    // Vertical lines (columns)
-    else if (winningCombo[0] === 0 && winningCombo[1] === 3 && winningCombo[2] === 6) {
-        startX = cell1.left - container.left + cellSize / 2;
-        startY = cell1.top - container.top + 10;
-        endX = cell2.left - container.left + cellSize / 2;
-        endY = cell2.top - container.top + cellSize - 10;
+        startX = smallBoard1.left - container.left + 10;
+        startY = smallBoard1.top - container.top + smallBoard1.height / 2;
+        endX = smallBoard3.left - container.left + smallBoard3.width - 10;
+        endY = smallBoard3.top - container.top + smallBoard3.height / 2;
+    } else if (winningCombo[0] === 0 && winningCombo[1] === 3 && winningCombo[2] === 6) {
+        startX = smallBoard1.left - container.left + smallBoard1.width / 2;
+        startY = smallBoard1.top - container.top + 10;
+        endX = smallBoard3.left - container.left + smallBoard3.width / 2;
+        endY = smallBoard3.top - container.top + smallBoard3.height - 10;
     } else if (winningCombo[0] === 1 && winningCombo[1] === 4 && winningCombo[2] === 7) {
-        startX = cell1.left - container.left + cellSize / 2;
-        startY = cell1.top - container.top + 10;
-        endX = cell2.left - container.left + cellSize / 2;
-        endY = cell2.top - container.top + cellSize - 10;
+        startX = smallBoard1.left - container.left + smallBoard1.width / 2;
+        startY = smallBoard1.top - container.top + 10;
+        endX = smallBoard3.left - container.left + smallBoard3.width / 2;
+        endY = smallBoard3.top - container.top + smallBoard3.height - 10;
     } else if (winningCombo[0] === 2 && winningCombo[1] === 5 && winningCombo[2] === 8) {
-        startX = cell1.left - container.left + cellSize / 2;
-        startY = cell1.top - container.top + 10;
-        endX = cell2.left - container.left + cellSize / 2;
-        endY = cell2.top - container.top + cellSize - 10;
-    }
-    // Diagonal lines
-    else if (winningCombo[0] === 0 && winningCombo[1] === 4 && winningCombo[2] === 8) {
-        startX = cell1.left - container.left + 10;
-        startY = cell1.top - container.top + 10;
-        endX = cell2.left - container.left + cellSize - 10;
-        endY = cell2.top - container.top + cellSize - 10;
-    } else if (winningCombo[0] === 2 && winningCombo[1] === 4 && winningCombo[2] === 6) {
-        startX = cell1.left - container.left + cellSize - 10;
-        startY = cell1.top - container.top + 10;
-        endX = cell2.left - container.left + 10;
-        endY = cell2.top - container.top + cellSize - 10;
+        startX = smallBoard1.left - container.left + smallBoard1.width / 2;
+        startY = smallBoard1.top - container.top + 10;
+        endX = smallBoard3.left - container.left + smallBoard3.width / 2;
+        endY = smallBoard3.top - container.top + smallBoard3.height - 10;
+    } else if (winningCombo[0] === 0 && winningCombo[1] === 4 && winningCombo[2] === 8) {
+        startX = smallBoard1.left - container.left + 10;
+        startY = smallBoard1.top - container.top + 10;
+        endX = smallBoard3.left - container.left + smallBoard3.width - 10;
+        endY = smallBoard3.top - container.top + smallBoard3.height - 10;
+    } else {
+        startX = smallBoard1.left - container.left + smallBoard1.width - 10;
+        startY = smallBoard1.top - container.top + 10;
+        endX = smallBoard3.left - container.left + 10;
+        endY = smallBoard3.top - container.top + smallBoard3.height - 10;
     }
 
     length = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
@@ -227,31 +236,46 @@ function drawWinningLine(winningCombo) {
     winningLine.style.display = 'block';
 }
 
+function updateBoardHighlight() {
+    document.querySelectorAll('.small-board').forEach(board => {
+        board.classList.remove('active');
+    });
+
+    if (nextBoard !== null) {
+        const nextBoardElement = document.querySelector(`.small-board[data-index="${nextBoard}"]`);
+        if (nextBoardElement) {
+            nextBoardElement.classList.add('active');
+        }
+    }
+}
+
+function updateStatus() {
+    currentPlayerDisplay.textContent = currentPlayer;
+    nextBoardDisplay.textContent = nextBoard === null ? 'Any' : `Board ${nextBoard + 1}`;
+    status.textContent = `Player ${currentPlayer}'s turn`;
+}
+
 function resetGame() {
-    board = Array(9).fill('');
+    board = Array(9).fill().map(() => Array(9).fill(''));
+    smallBoardWinners = Array(9).fill('');
     currentPlayer = 'X';
     gameActive = true;
-    status.textContent = `Player ${currentPlayer}'s turn`;
+    nextBoard = null;
     status.className = '';
-    cells.forEach(cell => {
-        cell.textContent = '';
-        cell.classList.remove('taken', 'player-X', 'player-O', 'winning-cell');
-    });
     winningLine.style.display = 'none';
+    initGame();
 }
 
 function setGameMode(mode) {
     gameMode = mode;
     resetGame();
 
-    pvpBtn.classList.toggle('active', mode === 'pvp');
-    pvaiBtn.classList.toggle('active', mode === 'pvai');
+    pvpBtn.className = mode === 'pvp' ? 'btn' : 'btn btn-secondary';
+    pvaiBtn.className = mode === 'pvai' ? 'btn' : 'btn btn-secondary';
 }
 
-initSounds();
-setGameMode('pvai');
+initGame();
 
-cells.forEach(cell => cell.addEventListener('click', handleCellClick));
 resetBtn.addEventListener('click', resetGame);
 pvpBtn.addEventListener('click', () => setGameMode('pvp'));
 pvaiBtn.addEventListener('click', () => setGameMode('pvai'));
