@@ -1,7 +1,7 @@
 /*
 Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
 
-Blunder JavaScript
+Blunder - JavaScript
 */
 
 const MAX_GUESSES = 6;
