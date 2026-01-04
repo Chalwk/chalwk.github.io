@@ -4,43 +4,119 @@ Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
 Blunder - Wordle-like Game
 -->
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width,initial-scale=1" name="viewport"/>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Blunder - Wordle-like Game</title>
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;600&display=swap"
+    <link href="../../../core.css" rel="stylesheet"/>
+    <link href="style.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
           rel="stylesheet">
-
-    <link href="style.css" rel="stylesheet"/>
-    <meta content="Blunder - a Wordle-like game" name="description"/>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap"
+          rel="stylesheet">
 </head>
 <body>
-<main class="app">
-    <header class="title-row">
-        <h1 class="title">Blunder</h1>
-        <div class="controls">
-            <button id="newGameBtn" title="New game">New Game</button>
-            <button id="statsBtn" title="Stats">Stats</button>
-            <button id="helpBtn" title="How to play">?</button>
+
+<header class="header">
+    <div class="container">
+        <a class="logo" href="../../../index.html"> <i class="fas fa-code"></i> Jericho </a>
+
+        <nav class="nav-desktop">
+            <ul class="nav-links">
+                <li><a href="../../../index.html#about">About</a></li>
+                <li><a href="../../../browser-apps/apps_and_tools.html">Apps & Tools</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" href="#">Other Stuff <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://chalwk.github.io/CPAS/">CPAS</a></li>
+                        <li class="dropdown-submenu">
+                            <a class="submenu-toggle" href="#">Education <i class="fas fa-chevron-right"></i></a>
+                            <ul class="submenu">
+                                <li><a href="../../../education/understanding-autism.html">Understanding Autism</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Blunder</a></li>
+            </ul>
+        </nav>
+
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
         </div>
-    </header>
 
-    <section class="meta">
-        <p class="sub">Guess the 5-letter word in 6 tries. Hit enter to submit. Click tiles to toggle focus.</p>
-    </section>
-
-    <div class="game" id="game">
-        <div aria-atomic="true" aria-live="polite" class="grid" id="grid"></div>
-        <div aria-hidden="false" class="keyboard" id="keyboard"></div>
+        <nav class="nav-mobile">
+            <ul class="nav-mobile-links">
+                <li><a href="../../../index.html#about">About</a></li>
+                <li><a href="../../../browser-apps/apps_and_tools.html">Apps & Tools</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" href="#">Other Stuff <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://chalwk.github.io/CPAS/">CPAS</a></li>
+                        <li class="dropdown-submenu">
+                            <a class="submenu-toggle" href="#">Education <i class="fas fa-chevron-right"></i></a>
+                            <ul class="submenu">
+                                <li><a href="../../../education/understanding-autism.html">Understanding Autism</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="index.html" class="btn btn-secondary" style="margin-left: 10px;">Blunder</a></li>
+            </ul>
+        </nav>
     </div>
+</header>
 
-    <footer class="footer">
-        <small>&copy; 2025. Jericho Crosby (Chalwk)</small>
-    </footer>
+<main>
+    <div class="container">
+        <section class="panel"
+                 style="background: var(--light); border: 1px solid var(--gray-light); border-radius: var(--radius-lg); padding: 2rem; margin-top: 2rem;">
+            <div class="panel-head">
+                <h1 style="color: var(--primary); margin-bottom: 0.5rem; font-size: 2.5rem; font-weight: 800; letter-spacing: 0.5px;">
+                    <i class="fas fa-puzzle-piece" style="margin-right: 0.5rem;"></i>Blunder
+                </h1>
+                <p class="muted" style="color: var(--gray); margin-bottom: 1.5rem;">
+                    Guess the 5-letter word in 6 tries. Hit Enter to submit. Click tiles to toggle focus.
+                </p>
+            </div>
+
+            <div class="game-container">
+                <div class="controls-row" style="display: flex; justify-content: space-between; margin-bottom: 1.5rem;">
+                    <div class="controls" style="display: flex; gap: 0.5rem;">
+                        <button id="newGameBtn" class="btn" style="background: var(--primary); color: white;">
+                            <i class="fas fa-redo"></i> New Game
+                        </button>
+                        <button id="statsBtn" class="btn btn-secondary">
+                            <i class="fas fa-chart-bar"></i> Stats
+                        </button>
+                        <button id="helpBtn" class="btn btn-secondary">
+                            <i class="fas fa-question-circle"></i> Help
+                        </button>
+                    </div>
+                </div>
+
+                <div aria-atomic="true" aria-live="polite" class="grid" id="grid"></div>
+                <div aria-hidden="false" class="keyboard" id="keyboard"></div>
+            </div>
+        </section>
+    </div>
 </main>
+
+<footer>
+    <div class="footer-container">
+        <div class="social-icons">
+            <a href="https://discord.com/channels/@me/707058110396760094" target="_blank" aria-label="Discord"> <i
+                    class="fab fa-discord"></i></a>
+            <a href="https://github.com/Chalwk" target="_blank" aria-label="GitHub"> <i class="fab fa-github"></i></a>
+        </div>
+        <p class="footer-copyright"></p>
+    </div>
+</footer>
 
 <div aria-modal="true" class="modal hidden" id="modal" role="dialog">
     <div class="modal-card" role="document">
@@ -49,6 +125,7 @@ Blunder - Wordle-like Game
     </div>
 </div>
 
+<script defer src="../../../nav.js"></script>
 <script defer src="script.js"></script>
 </body>
 </html>

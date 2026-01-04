@@ -319,6 +319,22 @@ a:hover {
     z-index: 1001;
 }
 
+@media (min-width: 769px) {
+    .dropdown-submenu {
+        position: relative;
+    }
+
+    .dropdown-submenu:hover .submenu {
+        left: 100%;
+        right: auto;
+    }
+
+    .dropdown-submenu:hover .submenu.position-left {
+        left: auto;
+        right: 100%;
+    }
+}
+
 .dropdown-submenu:hover .submenu {
     opacity: 1;
     visibility: visible;

@@ -1,4 +1,5 @@
-/*Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
+/*
+Copyright (c) 2025-2026. Jericho Crosby (Chalwk)
 
 nav.js (script shared between pages)
 */
@@ -10,6 +11,9 @@ class NavigationManager {
         this.header = null;
         this.dropdownToggles = null;
         this.submenuToggles = null;
+        this.submenus = null;
+        this.isDesktop = window.innerWidth > 768;
+        this.resizeTimeout = null;
         this.init();
     }
 
@@ -19,8 +23,10 @@ class NavigationManager {
             this.setupHamburger();
             this.setupMobileDropdowns();
             this.setupDesktopDropdowns();
+            this.setupSubmenuResponsive();
             this.setupCloseMenuOnLinkClick();
             this.setupCloseOnOutsideClick();
+            this.setupResizeHandler();
         }, 100);
     }
 
@@ -30,6 +36,7 @@ class NavigationManager {
         this.header = document.querySelector('.header');
         this.dropdownToggles = document.querySelectorAll('.dropdown-toggle');
         this.submenuToggles = document.querySelectorAll('.submenu-toggle');
+        this.submenus = document.querySelectorAll('.dropdown-submenu');
     }
 
     setupHamburger() {
@@ -105,13 +112,13 @@ class NavigationManager {
 
         dropdowns.forEach(dropdown => {
             dropdown.addEventListener('mouseenter', () => {
-                if (window.innerWidth > 768) {
+                if (this.isDesktop) {
                     dropdown.classList.add('active');
                 }
             });
 
             dropdown.addEventListener('mouseleave', () => {
-                if (window.innerWidth > 768) {
+                if (this.isDesktop) {
                     dropdown.classList.remove('active');
 
                     dropdown.querySelectorAll('.dropdown-submenu.active').forEach(submenu => {
@@ -121,20 +128,49 @@ class NavigationManager {
             });
         });
 
-        const submenus = document.querySelectorAll('.dropdown-submenu');
-        submenus.forEach(submenu => {
+        this.submenus.forEach(submenu => {
             submenu.addEventListener('mouseenter', () => {
-                if (window.innerWidth > 768) {
+                if (this.isDesktop) {
                     submenu.classList.add('active');
+                    this.adjustSubmenuPosition(submenu);
                 }
             });
 
             submenu.addEventListener('mouseleave', () => {
-                if (window.innerWidth > 768) {
+                if (this.isDesktop) {
                     submenu.classList.remove('active');
                 }
             });
         });
+    }
+
+    setupSubmenuResponsive() {
+        if (this.isDesktop) {
+            this.submenus.forEach(submenu => {
+                if (submenu.classList.contains('active')) {
+                    this.adjustSubmenuPosition(submenu);
+                }
+            });
+        }
+    }
+
+    adjustSubmenuPosition(submenu) {
+        if (!this.isDesktop) return;
+
+        const submenuEl = submenu.querySelector('.submenu');
+        if (!submenuEl) return;
+
+        submenuEl.classList.remove('position-left');
+
+        const viewportWidth = window.innerWidth;
+        const submenuRect = submenuEl.getBoundingClientRect();
+        const parentRect = submenu.getBoundingClientRect();
+
+        const wouldOverflowRight = parentRect.right + submenuRect.width > viewportWidth;
+
+        if (wouldOverflowRight) {
+            submenuEl.classList.add('position-left');
+        }
     }
 
     setupCloseMenuOnLinkClick() {
@@ -163,7 +199,7 @@ class NavigationManager {
                 }
             }
 
-            if (window.innerWidth > 768) {
+            if (this.isDesktop) {
                 const isClickInsideDropdown = e.target.closest('.dropdown');
 
                 if (!isClickInsideDropdown) {
@@ -172,6 +208,48 @@ class NavigationManager {
                     });
                 }
             }
+        });
+    }
+
+    setupResizeHandler() {
+        window.addEventListener('resize', () => {
+            clearTimeout(this.resizeTimeout);
+
+            this.resizeTimeout = setTimeout(() => {
+                const newIsDesktop = window.innerWidth > 768;
+
+                if (this.isDesktop !== newIsDesktop) {
+                    this.isDesktop = newIsDesktop;
+
+                    if (!newIsDesktop) {
+                        const hamburger = document.querySelector('.hamburger');
+                        const navMobile = document.querySelector('.nav-mobile');
+                        const header = document.querySelector('.header');
+
+                        if (hamburger) hamburger.classList.remove('active');
+                        if (navMobile) navMobile.classList.remove('active');
+                        if (header) header.classList.remove('active');
+
+                        this.closeAllDropdowns();
+
+                        document.querySelectorAll('.submenu.position-left').forEach(submenu => {
+                            submenu.classList.remove('position-left');
+                        });
+                    } else {
+                        this.submenus.forEach(submenu => {
+                            if (submenu.classList.contains('active')) {
+                                this.adjustSubmenuPosition(submenu);
+                            }
+                        });
+                    }
+                } else if (newIsDesktop) {
+                    this.submenus.forEach(submenu => {
+                        if (submenu.classList.contains('active')) {
+                            this.adjustSubmenuPosition(submenu);
+                        }
+                    });
+                }
+            }, 250);
         });
     }
 
@@ -187,23 +265,5 @@ class NavigationManager {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    const navigationManager = new NavigationManager();
-
-    let resizeTimeout;
-    window.addEventListener('resize', () => {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(() => {
-            if (window.innerWidth > 768) {
-                const hamburger = document.querySelector('.hamburger');
-                const navMobile = document.querySelector('.nav-mobile');
-                const header = document.querySelector('.header');
-
-                if (hamburger) hamburger.classList.remove('active');
-                if (navMobile) navMobile.classList.remove('active');
-                if (header) header.classList.remove('active');
-
-                navigationManager.closeAllDropdowns();
-            }
-        }, 250);
-    });
+    new NavigationManager();
 });
