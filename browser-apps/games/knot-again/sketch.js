@@ -91,6 +91,9 @@ function setup() {
 
     document.addEventListener('keydown', handleKeyPress);
     resetGame();
+
+    gameActive = true;
+    winOverlay.classList.add('hidden');
 }
 
 function windowResized() {
@@ -118,10 +121,10 @@ function drawGrid() {
     strokeWeight(1);
     noFill();
 
-    for (let x = 0; x < width; x += 50) {
+    for (let x = 0; x <= width; x += 50) {
         line(x, 0, x, height);
     }
-    for (let y = 0; y < height; y += 50) {
+    for (let y = 0; y <= height; y += 50) {
         line(0, y, width, y);
     }
 
