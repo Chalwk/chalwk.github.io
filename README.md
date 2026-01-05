@@ -20,3 +20,12 @@ routes across New Zealand's South Island. Our flights cover Canterbury, Christch
 landscapes of the Coast and Southern Alps, offering an experience distinct from traditional virtual airlines.
 
 [![Visit the CPAS Website](https://img.shields.io/badge/Visit-CPAS%20Website-blue?style=for-the-badge&logo=github&logoColor=white)](https://chalwk.github.io/CPAS/)
+
+## License
+
+**© 2025-2026 Jericho Crosby (Chalwk). All rights reserved.**
+
+All content in this repository, including source code, images, and documentation, is proprietary. **You may not copy,
+redistribute, or use any assets without explicit prior written permission.**
+
+For the full legal terms, please read the [LICENSE](LICENSE) file.
