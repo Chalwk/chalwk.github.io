@@ -23,61 +23,9 @@ Knot Again - Stylesheet
 
 .knot-game-container {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     gap: 1.5rem;
     margin-bottom: 1.5rem;
-}
-
-.knot-stats-panel {
-    background: rgba(203, 213, 225, 0.1);
-    border-radius: var(--radius);
-    padding: 1rem;
-    min-width: 200px;
-}
-
-.stats-title {
-    color: var(--dark);
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.stats-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-}
-
-.stat-item {
-    display: flex;
-    flex-direction: column;
-}
-
-.stat-label {
-    font-size: 0.875rem;
-    color: var(--gray);
-    margin-bottom: 0.25rem;
-}
-
-.stat-value {
-    font-family: var(--font-mono);
-    font-weight: 600;
-}
-
-.level-value {
-    font-size: 1.5rem;
-    color: var(--primary);
-}
-
-.edge-value {
-    font-size: 1.25rem;
-    color: var(--dark);
-}
-
-.cross-value {
-    font-size: 1.25rem;
-    color: var(--error);
 }
 
 .knot-game-area {
@@ -90,6 +38,51 @@ Knot Again - Stylesheet
     border-radius: var(--radius);
     overflow: hidden;
     position: relative;
+}
+
+.canvas-stats-bar {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 10;
+    position: relative;
+}
+
+.canvas-stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 80px;
+}
+
+.canvas-stat-label {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 0.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.canvas-stat-value {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 1.5rem;
+}
+
+.level-value {
+    color: #7ee7c7;
+}
+
+.edge-value {
+    color: #6ea8fe;
+}
+
+.cross-value {
+    color: #ff6b6b;
 }
 
 .svg-canvas {
@@ -140,6 +133,7 @@ Knot Again - Stylesheet
     align-items: center;
     justify-content: center;
     background: rgba(0, 0, 0, 0.8);
+    z-index: 20;
 }
 
 .win-overlay.hidden {
@@ -183,8 +177,20 @@ Knot Again - Stylesheet
         flex-direction: column !important;
     }
 
-    .knot-stats-panel {
-        min-width: auto !important;
+    .canvas-stats-bar {
+        padding: 0.5rem;
+    }
+
+    .canvas-stat-item {
+        min-width: 60px;
+    }
+
+    .canvas-stat-label {
+        font-size: 0.75rem;
+    }
+
+    .canvas-stat-value {
+        font-size: 1.25rem;
     }
 
     .svg-canvas {
@@ -204,6 +210,14 @@ Knot Again - Stylesheet
 @media (max-width: 480px) {
     .svg-canvas {
         height: 350px !important;
+    }
+
+    .canvas-stat-value {
+        font-size: 1.1rem;
+    }
+
+    .canvas-stat-label {
+        font-size: 0.7rem;
     }
 
     .knot-controls {

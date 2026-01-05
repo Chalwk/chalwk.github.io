@@ -77,28 +77,23 @@ Knot Again - HTML
             </div>
 
             <div class="knot-game-container">
-                <div class="knot-stats-panel">
-                    <h4 class="stats-title">
-                        <i class="fas fa-chart-line"></i> Game Stats
-                    </h4>
-                    <div class="stats-grid">
-                        <div class="stat-item">
-                            <div class="stat-label">Level</div>
-                            <div class="stat-value level-value" id="levelLabel">1</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-label">Edges</div>
-                            <div class="stat-value edge-value" id="edgeCount">0</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-label">Crossings</div>
-                            <div class="stat-value cross-value" id="crossCount">0</div>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="knot-game-area">
                     <div class="canvas-wrapper">
+                        <div class="canvas-stats-bar">
+                            <div class="canvas-stat-item">
+                                <div class="canvas-stat-label">Level</div>
+                                <div class="canvas-stat-value level-value" id="levelLabel">1</div>
+                            </div>
+                            <div class="canvas-stat-item">
+                                <div class="canvas-stat-label">Edges</div>
+                                <div class="canvas-stat-value edge-value" id="edgeCount">0</div>
+                            </div>
+                            <div class="canvas-stat-item">
+                                <div class="canvas-stat-label">Crossings</div>
+                                <div class="canvas-stat-value cross-value" id="crossCount">0</div>
+                            </div>
+                        </div>
+
                         <svg class="svg-canvas" id="svg" preserveAspectRatio="xMidYMid meet"
                              viewBox="0 0 1000 700"></svg>
 
