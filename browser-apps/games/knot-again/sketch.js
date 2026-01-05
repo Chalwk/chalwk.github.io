@@ -57,13 +57,13 @@ function setup() {
     canvas.style('box-shadow', '0 8px 32px rgba(0, 0, 0, 0.4)');
 
     canvas.elt.addEventListener('touchstart', function(e) {
-        if (e.target === this) {
+        if (draggedNode) {
             e.preventDefault();
         }
     }, { passive: false });
 
     canvas.elt.addEventListener('touchmove', function(e) {
-        if (e.target === this) {
+        if (draggedNode) {
             e.preventDefault();
         }
     }, { passive: false });
@@ -86,14 +86,41 @@ function setup() {
     hudTime = document.getElementById('hudTime');
     complexitySelect = document.getElementById('complexity');
 
+    winOverlay.classList.add('hidden');
+
     resetBtn.addEventListener('click', resetLevel);
+    resetBtn.addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        resetLevel();
+    }, { passive: false });
+
     shuffleBtn.addEventListener('click', shuffleNodes);
+    shuffleBtn.addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        shuffleNodes();
+    }, { passive: false });
+
     nextBtn.addEventListener('click', nextLevel);
+    nextBtn.addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        nextLevel();
+    }, { passive: false });
+
     winNext.addEventListener('click', nextLevel);
+    winNext.addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        nextLevel();
+    }, { passive: false });
+
     winShuffle.addEventListener('click', () => {
         winOverlay.classList.add('hidden');
         shuffleNodes();
     });
+    winShuffle.addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        winOverlay.classList.add('hidden');
+        shuffleNodes();
+    }, { passive: false });
 
     complexitySelect.value = complexity;
     complexitySelect.addEventListener('change', function() {
@@ -105,7 +132,17 @@ function setup() {
     resetGame();
 
     gameActive = true;
-    winOverlay.classList.add('hidden');
+
+    document.addEventListener('touchstart', function(e) {
+        const hamburger = document.querySelector('.hamburger');
+        const mobileNav = document.querySelector('.nav-mobile');
+
+        if (!e.target.closest('.hamburger') && !e.target.closest('.nav-mobile') &&
+        mobileNav && mobileNav.classList.contains('active')) {
+            hamburger.classList.remove('active');
+            mobileNav.classList.remove('active');
+        }
+    });
 }
 
 function windowResized() {
@@ -327,11 +364,19 @@ function mouseReleased() {
 }
 
 function touchStarted() {
-    return mousePressed();
+    const handled = mousePressed();
+    if (handled) {
+        return false;
+    }
+    return true;
 }
 
 function touchMoved() {
-    return mouseDragged();
+    if (draggedNode) {
+        mouseDragged();
+        return false;
+    }
+    return true;
 }
 
 function touchEnded() {
@@ -587,5 +632,28 @@ function handleKeyPress(e) {
 document.addEventListener('contextmenu', (e) => {
     if (e.target.closest('#p5-canvas')) {
         e.preventDefault();
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const hamburger = document.querySelector('.hamburger');
+    const mobileNav = document.querySelector('.nav-mobile');
+
+    if (hamburger && mobileNav) {
+        const mobileLinks = mobileNav.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                mobileNav.classList.remove('active');
+            });
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.hamburger') && !e.target.closest('.nav-mobile') &&
+            mobileNav.classList.contains('active')) {
+                hamburger.classList.remove('active');
+                mobileNav.classList.remove('active');
+            }
+        });
     }
 });

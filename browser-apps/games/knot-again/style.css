@@ -8,6 +8,9 @@ html, body {
     overflow-x: hidden;
     overflow-y: auto;
     min-height: 100vh;
+    width: 100%;
+    position: relative;
+    touch-action: manipulation;
 }
 
 .knot-panel {
@@ -241,6 +244,8 @@ html, body {
     display: block;
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .win-overlay {
@@ -256,10 +261,12 @@ html, body {
     backdrop-filter: blur(8px);
     z-index: 1000;
     overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
 }
 
 .win-overlay.hidden {
     display: none !important;
+    pointer-events: none;
 }
 
 .win-card {
@@ -398,6 +405,8 @@ html, body {
     max-width: 200px;
     touch-action: manipulation;
     min-height: 44px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 .knot-controls .btn:hover {
@@ -442,6 +451,58 @@ html, body {
 .p5-credit a:hover {
     color: var(--primary);
     text-decoration: underline;
+}
+
+.hamburger {
+    cursor: pointer;
+    z-index: 1001;
+}
+
+.nav-mobile {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    height: 100vh;
+    width: 280px;
+    background: var(--light);
+    padding: 5rem 1.5rem 2rem;
+    transition: right 0.3s ease;
+    z-index: 1000;
+    overflow-y: auto;
+    box-shadow: -5px 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.nav-mobile.active {
+    right: 0;
+}
+
+.nav-mobile-links {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.nav-mobile-links > li > a {
+    display: block;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius);
+    transition: all 0.2s ease;
+}
+
+.nav-mobile-links > li > a:hover {
+    background: var(--gray-light);
+}
+
+@media (max-width: 768px) {
+    .canvas-wrapper {
+        position: relative;
+        z-index: 1;
+    }
+
+    .header {
+        position: relative;
+        z-index: 1002;
+    }
 }
 
 @media (max-width: 1024px) {
@@ -503,6 +564,12 @@ html, body {
     .dropdown-menu {
         min-width: 200px;
     }
+
+    /* Ensure body is scrollable on mobile */
+    body {
+        overflow-y: scroll;
+        -webkit-overflow-scrolling: touch;
+    }
 }
 
 @media (max-width: 480px) {
@@ -552,6 +619,7 @@ html, body {
 
 main {
     scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
 }
 
 .container {
@@ -563,9 +631,39 @@ body {
     font-size: 16px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-y: auto !important;
 }
 
 .btn {
     touch-action: manipulation;
     min-height: 44px;
+    cursor: pointer;
+}
+
+@supports (-webkit-touch-callout: none) {
+    .knot-game-container {
+        min-height: -webkit-fill-available;
+    }
+
+    .canvas-wrapper {
+        height: -webkit-fill-available;
+        max-height: 500px;
+    }
+}
+
+* {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+input, textarea, .stat-value, .hud-value {
+    -webkit-user-select: text;
+    -khtml-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
 }
