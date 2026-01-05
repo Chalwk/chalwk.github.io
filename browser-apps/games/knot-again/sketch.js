@@ -48,13 +48,23 @@ let complexitySelect;
 
 function setup() {
     const canvasContainer = document.getElementById('p5-canvas');
-    const containerWidth = canvasContainer.offsetWidth;
-    const containerHeight = Math.min(canvasContainer.offsetHeight, 600);
+
+    let containerWidth, containerHeight;
+
+    if (window.innerWidth < 769) {
+        containerWidth = canvasContainer.offsetWidth;
+        containerHeight = containerWidth;
+    } else {
+        containerWidth = canvasContainer.offsetWidth;
+        containerHeight = Math.min(canvasContainer.offsetHeight, 600);
+    }
 
     canvas = createCanvas(containerWidth, containerHeight);
     canvas.parent('p5-canvas');
     canvas.style('border-radius', '8px');
     canvas.style('box-shadow', '0 8px 32px rgba(0, 0, 0, 0.4)');
+
+    canvas.elt.style.touchAction = 'none';
 
     canvas.elt.addEventListener('touchstart', function(e) {
         if (draggedNode) {
@@ -64,6 +74,12 @@ function setup() {
 
     canvas.elt.addEventListener('touchmove', function(e) {
         if (draggedNode) {
+            e.preventDefault();
+        }
+    }, { passive: false });
+
+    document.addEventListener('touchmove', function(e) {
+        if (draggedNode || e.target.closest('#p5-canvas')) {
             e.preventDefault();
         }
     }, { passive: false });
@@ -88,29 +104,21 @@ function setup() {
 
     winOverlay.classList.add('hidden');
 
-    resetBtn.addEventListener('click', resetLevel);
-    resetBtn.addEventListener('touchstart', function(e) {
-        e.preventDefault();
-        resetLevel();
-    }, { passive: false });
+    const buttonHandler = (btn, handler) => {
+        btn.addEventListener('click', handler);
+        btn.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            handler();
+            btn.classList.add('active');
+            setTimeout(() => btn.classList.remove('active'), 200);
+        }, { passive: false });
+    };
 
-    shuffleBtn.addEventListener('click', shuffleNodes);
-    shuffleBtn.addEventListener('touchstart', function(e) {
-        e.preventDefault();
-        shuffleNodes();
-    }, { passive: false });
-
-    nextBtn.addEventListener('click', nextLevel);
-    nextBtn.addEventListener('touchstart', function(e) {
-        e.preventDefault();
-        nextLevel();
-    }, { passive: false });
-
-    winNext.addEventListener('click', nextLevel);
-    winNext.addEventListener('touchstart', function(e) {
-        e.preventDefault();
-        nextLevel();
-    }, { passive: false });
+    buttonHandler(resetBtn, resetLevel);
+    buttonHandler(shuffleBtn, shuffleNodes);
+    buttonHandler(nextBtn, nextLevel);
+    buttonHandler(winNext, nextLevel);
 
     winShuffle.addEventListener('click', () => {
         winOverlay.classList.add('hidden');
@@ -119,7 +127,7 @@ function setup() {
     winShuffle.addEventListener('touchstart', function(e) {
         e.preventDefault();
         winOverlay.classList.add('hidden');
-        shuffleNodes();
+        setTimeout(() => shuffleNodes(), 100);
     }, { passive: false });
 
     complexitySelect.value = complexity;
@@ -143,14 +151,76 @@ function setup() {
             mobileNav.classList.remove('active');
         }
     });
+
+    function setCanvasHeight() {
+        const canvasContainer = document.getElementById('p5-canvas');
+        let containerWidth, containerHeight;
+
+        if (window.innerWidth < 769) {
+            containerWidth = canvasContainer.offsetWidth;
+            const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+            containerHeight = Math.min(containerWidth, windowHeight * 0.6);
+        } else {
+            containerWidth = canvasContainer.offsetWidth;
+            containerHeight = Math.min(canvasContainer.offsetHeight, 600);
+        }
+
+        resizeCanvas(containerWidth, containerHeight);
+
+        if (nodes.length > 0) {
+            regenerateLevelPositions();
+        }
+    }
+
+    setTimeout(setCanvasHeight, 100);
+
+    window.addEventListener('resize', setCanvasHeight);
+    window.addEventListener('orientationchange', () => {
+        setTimeout(setCanvasHeight, 300);
+    });
+}
+
+function regenerateLevelPositions() {
+    const centerX = width / 2;
+    const centerY = height / 2;
+    const radius = min(width, height) * 0.35;
+
+    for (let i = 0; i < nodes.length; i++) {
+        const angle = (i / nodes.length) * TWO_PI;
+        const x = centerX + cos(angle) * radius;
+        const y = centerY + sin(angle) * radius;
+
+        const jitter = radius * 0.1;
+        const jitterX = random(-jitter, jitter);
+        const jitterY = random(-jitter, jitter);
+
+        nodes[i].x = x + jitterX;
+        nodes[i].y = y + jitterY;
+        nodes[i].originalX = x + jitterX;
+        nodes[i].originalY = y + jitterY;
+    }
+
+    checkWinCondition();
 }
 
 function windowResized() {
     const canvasContainer = document.getElementById('p5-canvas');
-    const containerWidth = canvasContainer.offsetWidth;
-    const containerHeight = Math.min(canvasContainer.offsetHeight, 600);
+    let containerWidth, containerHeight;
+
+    if (window.innerWidth < 769) {
+        containerWidth = canvasContainer.offsetWidth;
+        const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+        containerHeight = Math.min(containerWidth, windowHeight * 0.6);
+    } else {
+        containerWidth = canvasContainer.offsetWidth;
+        containerHeight = Math.min(canvasContainer.offsetHeight, 600);
+    }
 
     resizeCanvas(containerWidth, containerHeight);
+
+    if (nodes.length > 0) {
+        regenerateLevelPositions();
+    }
 }
 
 function draw() {
