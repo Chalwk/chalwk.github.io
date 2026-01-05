@@ -193,4 +193,58 @@ window.addEventListener('keydown', (e) => {
     }
 });
 
+const mobileJBtn = document.getElementById('mobileJBtn');
+const mobileABtn = document.getElementById('mobileABtn');
+
+mobileJBtn.addEventListener('click', () => {
+    fetchJoke();
+    mobileJBtn.style.transform = 'scale(0.95)';
+    setTimeout(() => {
+        mobileJBtn.style.transform = '';
+    }, 150);
+});
+
+mobileABtn.addEventListener('click', () => {
+    cycleApi();
+    fetchJoke();
+    mobileABtn.style.transform = 'scale(0.95)';
+    setTimeout(() => {
+        mobileABtn.style.transform = '';
+    }, 150);
+});
+
+function updateTipForMobile() {
+    if (window.innerWidth <= 768) {
+        const tipElement = document.querySelector('.extras-tip');
+        if (tipElement) {
+            tipElement.innerHTML = `
+                <i class="fas fa-mobile-alt"></i>
+                Quick Actions: Tap <i class="fas fa-sync-alt"></i>J for new joke,
+                <i class="fas fa-exchange-alt"></i>A to cycle API
+            `;
+        }
+    }
+}
+
+updateTipForMobile();
+window.addEventListener('resize', updateTipForMobile);
+
+function vibrateIfSupported() {
+    if ('vibrate' in navigator) {
+        navigator.vibrate(20);
+    }
+}
+
+newJokeBtn.addEventListener('click', () => {
+    vibrateIfSupported();
+});
+
+mobileJBtn.addEventListener('click', () => {
+    vibrateIfSupported();
+});
+
+mobileABtn.addEventListener('click', () => {
+    vibrateIfSupported();
+});
+
 fetchJoke();

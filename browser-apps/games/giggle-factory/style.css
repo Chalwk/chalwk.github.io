@@ -196,3 +196,72 @@ Giggle Factory - CSS
         font-size: 2rem !important;
     }
 }
+
+.mobile-actions {
+    display: none;
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 1000;
+}
+
+.mobile-action-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: #042033;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(125, 211, 252, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.mobile-action-btn i {
+    font-size: 1.2rem;
+    margin-bottom: 2px;
+}
+
+.mobile-action-btn span {
+    font-size: 0.9rem;
+    font-family: 'Source Code Pro', monospace;
+}
+
+@media (max-width: 768px) {
+    .mobile-actions {
+        display: flex;
+    }
+
+    @media (max-height: 700px) {
+        .mobile-actions {
+            bottom: 70px;
+        }
+    }
+}
+
+.mobile-action-btn:active {
+    transform: scale(0.95) !important;
+    box-shadow: 0 2px 8px rgba(125, 211, 252, 0.2) !important;
+}
+
+@media (max-width: 768px) {
+    .extras-tip {
+        font-size: 0.8rem;
+        flex-wrap: wrap;
+    }
+
+    .extras-tip .kbd {
+        display: none;
+    }
+
+    .extras-tip::before {
+        content: "Tap buttons on right for quick actions";
+        color: var(--accent);
+    }
+}
