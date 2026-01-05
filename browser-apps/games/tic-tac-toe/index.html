@@ -15,6 +15,7 @@ Tic-Tac-Toe - HTML
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
           rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
 </head>
 <body>
 
@@ -71,38 +72,42 @@ Tic-Tac-Toe - HTML
     <div class="container">
         <section class="panel">
             <div class="panel-head">
-                <h1>Ultimate Tic-Tac-Toe</h1>
+                <h1>Ultimate Tic-Tac-Toe <span class="p5-badge">p5.js</span></h1>
                 <p class="muted small">Win 3 small boards in a row to win the game. Next move is dictated by previous
                     move's position.</p>
             </div>
 
             <div class="game-instructions">
-                <h4><i class="fas fa-info-circle"></i> Rules:</h4>
+                <h4><i class="fas fa-gamepad"></i> Controls:</h4>
                 <div>
-                    <div><i class="fas fa-times"></i> <strong>Player X:</strong> Starts the game</div>
-                    <div><i class="fas fa-circle"></i> <strong>Player O:</strong> Second player</div>
-                    <div><i class="fas fa-arrow-right"></i> <strong>Next Board:</strong> Determined by opponent's last
-                        move position
-                    </div>
-                    <div><i class="fas fa-trophy"></i> <strong>Win Condition:</strong> Win 3 small boards in a row</div>
-                    <div><i class="fas fa-redo"></i> <strong>Reset:</strong> Start a new game</div>
+                    <div><i class="fas fa-mouse-pointer"></i> <strong>Click:</strong> Place your mark</div>
+                    <div><i class="fas fa-redo"></i> <strong>Spacebar:</strong> Reset game</div>
+                    <div><i class="fas fa-exchange-alt"></i> <strong>M key:</strong> Toggle game mode</div>
+                    <div><i class="fas fa-robot"></i> <strong>AI Mode:</strong> O plays automatically</div>
                 </div>
             </div>
 
             <div id="mode-selection">
                 <button class="btn btn-secondary" id="pvp">Player vs Player</button>
                 <button class="btn" id="pvai">Player vs AI</button>
+                <div class="difficulty-selector">
+                    <label for="ai-difficulty">AI Difficulty:</label>
+                    <select id="ai-difficulty">
+                        <option value="easy">Easy</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </div>
             </div>
 
             <div id="game-container">
-                <div id="game-board"></div>
-                <div id="winning-line"></div>
+                <div id="p5-canvas"></div>
             </div>
 
             <div class="game-stats">
                 <div>
                     <strong>Current Player:</strong>
-                    <span id="current-player">X</span>
+                    <span id="current-player" class="player-x">X</span>
                 </div>
                 <div>
                     <strong>Next Board:</strong>
@@ -112,9 +117,23 @@ Tic-Tac-Toe - HTML
                     <strong>Status:</strong>
                     <span id="status">Player X's turn</span>
                 </div>
+                <div class="scoreboard">
+                    <span class="score-x">X: <span id="score-x">0</span></span>
+                    <span class="score-tie">Ties: <span id="score-tie">0</span></span>
+                    <span class="score-o">O: <span id="score-o">0</span></span>
+                </div>
                 <button class="btn btn-secondary" id="reset">
                     <i class="fas fa-redo"></i> New Game
                 </button>
+            </div>
+
+            <div class="shortcuts">
+                <p class="muted small">
+                    <i class="fas fa-keyboard"></i> Shortcuts:
+                    <kbd>Space</kbd> = Reset |
+                    <kbd>M</kbd> = Toggle Mode |
+                    <kbd>1-9</kbd> = Quick Board Select
+                </p>
             </div>
         </section>
     </div>
@@ -132,6 +151,6 @@ Tic-Tac-Toe - HTML
 </footer>
 
 <script defer src="../../../nav.js"></script>
-<script src="script.js"></script>
+<script src="sketch.js"></script>
 </body>
 </html>
