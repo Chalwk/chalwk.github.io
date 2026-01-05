@@ -23,7 +23,7 @@ landscapes of the Coast and Southern Alps, offering an experience distinct from 
 
 ## License
 
-**© 2025-2026 Jericho Crosby (Chalwk). All rights reserved.**
+**© 2024-2026 Jericho Crosby (Chalwk). All rights reserved.**
 
 All content in this repository, including source code, images, and documentation, is proprietary. **You may not copy,
 redistribute, or use any assets without explicit prior written permission.**
