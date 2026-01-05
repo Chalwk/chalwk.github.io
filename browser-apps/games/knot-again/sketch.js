@@ -56,6 +56,18 @@ function setup() {
     canvas.style('border-radius', '8px');
     canvas.style('box-shadow', '0 8px 32px rgba(0, 0, 0, 0.4)');
 
+    canvas.elt.addEventListener('touchstart', function(e) {
+        if (e.target === this) {
+            e.preventDefault();
+        }
+    }, { passive: false });
+
+    canvas.elt.addEventListener('touchmove', function(e) {
+        if (e.target === this) {
+            e.preventDefault();
+        }
+    }, { passive: false });
+
     levelLabel = document.getElementById('levelLabel');
     edgeCountEl = document.getElementById('edgeCount');
     crossCountEl = document.getElementById('crossCount');
@@ -312,6 +324,18 @@ function mouseReleased() {
         moveCount++;
         checkWinCondition();
     }
+}
+
+function touchStarted() {
+    return mousePressed();
+}
+
+function touchMoved() {
+    return mouseDragged();
+}
+
+function touchEnded() {
+    return mouseReleased();
 }
 
 function checkWinCondition() {
