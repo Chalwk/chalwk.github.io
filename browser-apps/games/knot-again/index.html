@@ -15,7 +15,6 @@ Knot Again - HTML
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
           rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
 </head>
 <body>
 
@@ -72,7 +71,7 @@ Knot Again - HTML
     <div class="container">
         <section class="panel knot-panel">
             <div class="panel-head">
-                <h1 class="knot-title">Knot Again <span class="p5-badge">p5.js</span></h1>
+                <h1 class="knot-title">Knot Again</h1>
                 <p class="muted small knot-description">Untangle the ropes by dragging the dots. Clear all red crossings
                     to win!</p>
             </div>
@@ -95,99 +94,31 @@ Knot Again - HTML
                             <div class="stat-label">Crossings</div>
                             <div class="stat-value cross-value" id="crossCount">0</div>
                         </div>
-                        <div class="stat-item">
-                            <div class="stat-label">Best Score</div>
-                            <div class="stat-value" id="bestScore">0</div>
-                        </div>
-                    </div>
-
-                    <div class="knot-colors">
-                        <h5>Colors:</h5>
-                        <div class="color-legend">
-                            <div class="color-item">
-                                <div class="color-circle" style="background-color: #7ee7c7;"></div>
-                                <span>Solved Edges</span>
-                            </div>
-                            <div class="color-item">
-                                <div class="color-circle" style="background-color: #ff6b6b;"></div>
-                                <span>Crossings</span>
-                            </div>
-                            <div class="color-item">
-                                <div class="color-circle" style="background-color: #6ea8fe;"></div>
-                                <span>Nodes</span>
-                            </div>
-                        </div>
                     </div>
 
                     <div class="how-to-play">
-                        <h5><i class="fas fa-gamepad"></i> How to Play:</h5>
+                        <h5>How to Play:</h5>
                         <ul>
-                            <li>Drag the colored dots to untangle</li>
-                            <li>Clear all red crossings to solve</li>
-                            <li>Right-click to snap back to original</li>
-                            <li>Press R to reset, S to shuffle</li>
+                            <li>Drag the colored dots</li>
+                            <li>Clear all red crossings</li>
+                            <li>Solve the puzzle to win!</li>
                         </ul>
-                    </div>
-
-                    <div class="difficulty-control">
-                        <label for="complexity">Complexity:</label>
-                        <select id="complexity">
-                            <option value="easy">Easy</option>
-                            <option value="medium" selected>Medium</option>
-                            <option value="hard">Hard</option>
-                            <option value="expert">Expert</option>
-                        </select>
                     </div>
                 </div>
 
                 <div class="knot-game-area">
                     <div class="canvas-wrapper">
-                        <div id="p5-canvas"></div>
+                        <svg class="svg-canvas" id="svg" preserveAspectRatio="xMidYMid meet"
+                             viewBox="0 0 1000 700"></svg>
 
                         <div class="win-overlay hidden" id="winOverlay">
                             <div class="win-card">
-                                <div class="win-icon">
-                                    <i class="fas fa-trophy"></i>
-                                </div>
-                                <h2 class="win-title">Puzzle Solved!</h2>
-                                <p class="win-message">All crossings eliminated</p>
-                                <div class="win-stats">
-                                    <div class="win-stat">
-                                        <span>Level:</span>
-                                        <strong id="winLevel">1</strong>
-                                    </div>
-                                    <div class="win-stat">
-                                        <span>Time:</span>
-                                        <strong id="winTime">0s</strong>
-                                    </div>
-                                    <div class="win-stat">
-                                        <span>Moves:</span>
-                                        <strong id="winMoves">0</strong>
-                                    </div>
-                                </div>
+                                <h2 class="win-title">Nice! Puzzle solved.</h2>
+                                <p class="win-message">Ready for the next one?</p>
                                 <div class="win-actions">
-                                    <button class="btn btn-primary" id="winNext">
-                                        <i class="fas fa-forward"></i> Next Level
-                                    </button>
-                                    <button class="btn btn-secondary" id="winShuffle">
-                                        <i class="fas fa-random"></i> Play Again
-                                    </button>
+                                    <button class="btn btn-primary" id="winNext">Next Level</button>
+                                    <button class="btn btn-secondary" id="winShuffle">Shuffle</button>
                                 </div>
-                            </div>
-                        </div>
-
-                        <div class="game-hud">
-                            <div class="hud-item">
-                                <span class="hud-label">Crossings:</span>
-                                <span class="hud-value" id="hudCrossCount">0</span>
-                            </div>
-                            <div class="hud-item">
-                                <span class="hud-label">Moves:</span>
-                                <span class="hud-value" id="hudMoves">0</span>
-                            </div>
-                            <div class="hud-item">
-                                <span class="hud-label">Time:</span>
-                                <span class="hud-value" id="hudTime">0s</span>
                             </div>
                         </div>
                     </div>
@@ -202,15 +133,6 @@ Knot Again - HTML
                         <button class="btn btn-primary" id="nextBtn">
                             <i class="fas fa-forward"></i> Next Level
                         </button>
-                    </div>
-
-                    <div class="shortcuts">
-                        <p class="muted small">
-                            <i class="fas fa-keyboard"></i> Shortcuts:
-                            <kbd>R</kbd> = Reset |
-                            <kbd>S</kbd> = Shuffle |
-                            <kbd>N</kbd> = Next Level
-                        </p>
                     </div>
                 </div>
             </div>
@@ -233,6 +155,6 @@ Knot Again - HTML
 </footer>
 
 <script defer src="../../../nav.js"></script>
-<script src="sketch.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
