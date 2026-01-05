@@ -80,25 +80,6 @@ Knot Again - Stylesheet
     color: var(--error);
 }
 
-.how-to-play {
-    margin-top: 1.5rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--gray-light);
-}
-
-.how-to-play h5 {
-    color: var(--dark);
-    margin-bottom: 0.5rem;
-    font-size: 0.9rem;
-}
-
-.how-to-play ul {
-    font-size: 0.85rem;
-    color: var(--gray);
-    padding-left: 1rem;
-    margin: 0;
-}
-
 .knot-game-area {
     flex: 1;
     position: relative;
