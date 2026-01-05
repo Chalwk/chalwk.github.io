@@ -12,6 +12,8 @@
 - **Modding worlds** in *Minecraft*, *Halo*, *Roblox*, *Garry's Mod* and more
 - **Building community tools** like Discord bots, PWAs, and mobile apps
 
+---
+
 ### Gaming:
 
 I run **Coastal Peaks Air Service (CPAS)** - a Virtual Charter (VC) and specialty flight operator for Microsoft Flight
@@ -20,6 +22,8 @@ routes across New Zealand's South Island. Our flights cover Canterbury, Christch
 landscapes of the Coast and Southern Alps, offering an experience distinct from traditional virtual airlines.
 
 [![Visit the CPAS Website](https://img.shields.io/badge/Visit-CPAS%20Website-blue?style=for-the-badge&logo=github&logoColor=white)](https://chalwk.github.io/CPAS/)
+
+---
 
 ## License
 
