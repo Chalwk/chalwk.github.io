@@ -8,13 +8,7 @@ Random Password Generator - JavaScript
     const CONFIG = {
         similarChars: /[il1Lo0O]/g,
         symbols: `!@#$%^&*()-_=+[]{};:,<.>/?~`,
-        maxHistory: 200,
-        attackSpeeds: {
-            singleGpu: 1e9,
-            gpuFarm: 1e12,
-            nationState: 1e14,
-            quantumOps: 1e10
-        }
+        maxHistory: 200
     };
 
     const WORDS = [
@@ -41,19 +35,14 @@ Random Password Generator - JavaScript
     const patternInput = el('#pattern');
     const generateBtn = el('#generate');
     const copyBtn = el('#copy');
-    const favBtn = el('#fav');
-    const exportTxtBtn = el('#exportTxt');
-    const exportCsvBtn = el('#exportCsv');
-    const clearHistoryBtn = el('#clearHistory');
     const passwordOutput = el('#passwordOutput');
     const strengthBar = el('#strengthBar');
     const strengthLabelEl = el('#strengthLabel');
     const entropyEl = el('#entropy');
-    const bitsEl = el('#bits');
-    const guessesEl = el('#guesses');
-    const timeToCrackEl = el('#timeToCrack');
+    const zxcvbnScoreEl = el('#zxcvbnScore');
+    const guessesLog10El = el('#guessesLog10');
+    const crackTimeDisplayEl = el('#crackTimeDisplay');
     const warningsEl = el('#warnings');
-    const historyList = el('#historyList');
     const darkModeCheck = el('#darkMode');
 
     function buildPool(opts) {
@@ -77,11 +66,21 @@ Random Password Generator - JavaScript
         return arr[idx];
     }
 
-    function ensureAtLeastOne(charsPerClass, result) {
+    function ensureAtLeastOne(charsPerClass, result, targetLength) {
+        const replacements = [];
         for (const cls of charsPerClass) {
             const ch = pickRandom(cls);
-            const pos = Math.floor(Math.random() * (result.length + 1));
-            result.splice(pos, 0, ch);
+            const pos = Math.floor(Math.random() * result.length);
+            replacements.push({pos, ch});
+        }
+
+        replacements.forEach(({pos, ch}) => {
+            result[pos] = ch;
+        });
+
+        while (result.length > targetLength) {
+            const removePos = Math.floor(Math.random() * result.length);
+            result.splice(removePos, 1);
         }
     }
 
@@ -120,17 +119,22 @@ Random Password Generator - JavaScript
     function generatePassword(opts) {
         if (opts.pattern) return generateFromPattern(opts.pattern, opts);
         if (opts.passphrase) return generatePassphrase(opts.words, opts);
+
         const pool = buildPool(opts);
         if (pool.length === 0) return '';
+
         const result = [];
         for (let i = 0; i < opts.length; i++) result.push(pickRandom(pool));
+
         const classes = [];
         if (opts.upper) classes.push('ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''));
         if (opts.lower) classes.push('abcdefghijklmnopqrstuvwxyz'.split(''));
         if (opts.numbers) classes.push('0123456789'.split(''));
         if (opts.symbols) classes.push(CONFIG.symbols.split(''));
         if (opts.custom) classes.push(opts.custom.split(''));
-        if (classes.length > 0) ensureAtLeastOne(classes, result);
+
+        if (classes.length > 0) ensureAtLeastOne(classes, result, opts.length);
+
         return result.join('');
     }
 
@@ -157,78 +161,77 @@ Random Password Generator - JavaScript
         return password.length * log2(poolSize);
     }
 
-    function guessesFromEntropy(entropy) {
-        return Math.pow(2, entropy);
-    }
-
     function formatTime(seconds) {
-        if (!isFinite(seconds) || seconds > Number.MAX_SAFE_INTEGER) return 'practically infinite';
-        const years = seconds / 60 / 60 / 24 / 365;
-        if (years > 1) return `${years.toFixed(2)} years`;
-        const days = seconds / 60 / 60 / 24;
-        if (days > 1) return `${days.toFixed(2)} days`;
-        const hours = seconds / 60 / 60;
-        if (hours > 1) return `${hours.toFixed(2)} hours`;
-        const minutes = seconds / 60;
-        if (minutes > 1) return `${minutes.toFixed(2)} minutes`;
-        return `${seconds.toFixed(2)} seconds`;
-    }
+        if (!isFinite(seconds) || seconds > Number.MAX_SAFE_INTEGER) return 'centuries';
+        if (seconds < 1) return 'instantly';
 
-    function estimateCrackTimes(entropy) {
-        const guesses = guessesFromEntropy(entropy);
-        const speeds = CONFIG.attackSpeeds;
-        const single = guesses / speeds.singleGpu;
-        const farm = guesses / speeds.gpuFarm;
-        const nation = guesses / speeds.nationState;
-        const quantumGuesses = Math.pow(2, entropy / 2);
-        const quantum = quantumGuesses / speeds.quantumOps;
-        return { guesses, single, farm, nation, quantum };
-    }
+        const intervals = [
+            { label: 'century', seconds: 3153600000 },
+            { label: 'decade', seconds: 315360000 },
+            { label: 'year', seconds: 31536000 },
+            { label: 'month', seconds: 2592000 },
+            { label: 'week', seconds: 604800 },
+            { label: 'day', seconds: 86400 },
+            { label: 'hour', seconds: 3600 },
+            { label: 'minute', seconds: 60 },
+            { label: 'second', seconds: 1 }
+        ];
 
-    function getStrengthLabel(entropy) {
-        if (entropy < 28) return { label: 'Weak', score: 0 };
-        if (entropy < 36) return { label: 'Fair', score: 1 };
-        if (entropy < 60) return { label: 'Strong', score: 2 };
-        return { label: 'Very Strong', score: 3 };
-    }
-
-    function formatLargeNumber(n) {
-        if (!isFinite(n) || n > 1e18) return 'Very large';
-        return Math.round(n).toLocaleString();
-    }
-
-    function detectRepeatingSequence(s) {
-        const n = s.length;
-        for (let k = 1; k <= Math.floor(n / 2); k++) {
-            for (let i = 0; i <= n - 2 * k; i++) {
-                const a = s.substr(i, k);
-                const b = s.substr(i + k, k);
-                if (a === b && k >= 2) return a;
+        for (const interval of intervals) {
+            const count = Math.floor(seconds / interval.seconds);
+            if (count >= 1) {
+                return `${count} ${interval.label}${count !== 1 ? 's' : ''}`;
             }
         }
-        return null;
+        return `${seconds.toFixed(0)} seconds`;
     }
 
-    function countCharacterClasses(s) {
-        return {
-            upper: /[A-Z]/.test(s),
-            lower: /[a-z]/.test(s),
-            digits: /[0-9]/.test(s),
-            symbols: new RegExp('[' + escapeForRegExp(CONFIG.symbols) + ']').test(s)
-        };
+    function getStrengthLabel(score) {
+        const labels = ['Very Weak', 'Weak', 'Fair', 'Strong', 'Very Strong'];
+        const colors = ['#ef4444', '#f97316', '#eab308', '#22c55e', '#16a34a'];
+        return { label: labels[score] || '-', score, color: colors[score] || '#6b7280' };
     }
 
-    function escapeForRegExp(s) { return s.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&'); }
+    function analyzePasswordWithZxcvbn(password, opts) {
+        if (!password) return null;
 
-    function gatherWarnings(pw, opts, entropy) {
+        try {
+            const result = zxcvbn(password);
+            const entropy = calcEntropy(password, opts);
+
+            return {
+                score: result.score,
+                entropy: entropy,
+                guessesLog10: result.guesses_log10,
+                crackTimeSeconds: result.crack_times_seconds.offline_slow_hashing_1e4_per_second,
+                feedback: result.feedback,
+                warnings: result.feedback.warning || '',
+                suggestions: result.feedback.suggestions || []
+            };
+        } catch (e) {
+            console.error('zxcvbn analysis failed:', e);
+            const entropy = calcEntropy(password, opts);
+            return {
+                score: entropy > 60 ? 4 : entropy > 40 ? 3 : entropy > 28 ? 2 : entropy > 20 ? 1 : 0,
+                entropy: entropy,
+                guessesLog10: Math.log10(Math.pow(2, entropy)),
+                crackTimeSeconds: Math.pow(2, entropy) / 10000,
+                feedback: {},
+                warnings: '',
+                suggestions: []
+            };
+        }
+    }
+
+    function gatherWarnings(analysis, opts) {
         const w = [];
-        if ((!opts.passphrase) && pw.length < 12) w.push('Password shorter than recommended 12 characters.');
+        if (analysis.score <= 1) w.push('Password is weak. Consider increasing length or adding more character types.');
+        if (analysis.warnings) w.push(analysis.warnings);
+        if (analysis.suggestions && analysis.suggestions.length > 0) {
+            analysis.suggestions.forEach(suggestion => w.push(suggestion));
+        }
+        if ((!opts.passphrase) && opts.length < 12) w.push('Password shorter than recommended 12 characters.');
         if (opts.passphrase && opts.words < 4) w.push('Passphrase with fewer than 4 words may be weak.');
-        const repeat = detectRepeatingSequence(pw);
-        if (repeat) w.push('Detected repeated sequence: ' + repeat);
-        const classes = countCharacterClasses(pw);
-        if (!opts.passphrase && Object.values(classes).filter(Boolean).length < 2) w.push('Low character class diversity. Use multiple sets.');
-        if (entropy < 28) w.push('Low entropy. Consider increasing length or use more character sets.');
         return w;
     }
 
@@ -253,25 +256,32 @@ Random Password Generator - JavaScript
         passphraseWordsInput.disabled = !opts.passphrase;
     }
 
-    function updateStrengthDisplay(entropy) {
-        entropyEl.textContent = entropy.toFixed(2) + ' bits';
-        bitsEl.textContent = entropy.toFixed(2);
-        const est = estimateCrackTimes(entropy);
-        const lines = [];
-        lines.push(`Single GPU: ${formatTime(est.single)}`);
-        lines.push(`GPU farm: ${formatTime(est.farm)}`);
-        lines.push(`Nation state: ${formatTime(est.nation)}`);
-        lines.push(`Quantum (Grover-style): ${formatTime(est.quantum)}`);
-        timeToCrackEl.innerHTML = lines.join('<br>');
-        guessesEl.textContent = formatLargeNumber(est.guesses);
-        const strengthInfo = getStrengthLabel(entropy);
+    function updateStrengthDisplay(password, opts) {
+        const analysis = analyzePasswordWithZxcvbn(password, opts);
+        if (!analysis) return;
+
+        const strengthInfo = getStrengthLabel(analysis.score);
         strengthLabelEl.textContent = strengthInfo.label;
-        const pct = Math.min(100, Math.max(6, entropy / 80 * 100));
+        zxcvbnScoreEl.textContent = `${analysis.score}/4`;
+        zxcvbnScoreEl.style.color = strengthInfo.color;
+
+        const pct = (analysis.score + 1) * 20; // 0-4 score to 20-100%
         strengthBar.style.width = `${pct}%`;
-        if (entropy < 28) strengthBar.style.background = '#ef4444';
-        else if (entropy < 36) strengthBar.style.background = '#f59e0b';
-        else if (entropy < 60) strengthBar.style.background = '#10b981';
-        else strengthBar.style.background = 'linear-gradient(90deg, #10b981, #06b6d4)';
+        strengthBar.style.background = strengthInfo.color;
+
+        entropyEl.textContent = analysis.entropy.toFixed(1) + ' bits';
+        guessesLog10El.textContent = analysis.guessesLog10.toFixed(1);
+        crackTimeDisplayEl.textContent = formatTime(analysis.crackTimeSeconds);
+
+        const warnings = gatherWarnings(analysis, opts);
+        warningsEl.innerHTML = warnings.length > 0
+            ? warnings.map(w => `<div class="warning-item">⚠ ${w}</div>`).join('')
+            : '<div class="warning-item" style="color: var(--success);">✓ All security checks passed</div>';
+
+        if (analysis.score >= 3) {
+            passwordOutput.classList.add('celebrate');
+            setTimeout(() => passwordOutput.classList.remove('celebrate'), 1000);
+        }
     }
 
     function showNotification(message, type = 'info') {
@@ -297,137 +307,21 @@ Random Password Generator - JavaScript
         }, 3000);
     }
 
-    const STORAGE_KEY = "password-generator-history-v2";
-
-    function loadHistory() {
-        try {
-            const raw = localStorage.getItem(STORAGE_KEY);
-            return raw ? JSON.parse(raw) : [];
-        } catch (e) {
-            console.error("Failed to load history", e);
-            return [];
-        }
-    }
-
-    function saveHistory(arr) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(arr || []));
-        renderHistory();
-    }
-
-    function addToHistory(entry) {
-        const settings = loadSettings();
-        const arr = loadHistory();
-        arr.unshift(entry);
-        if (arr.length > (settings.maxHistory || CONFIG.maxHistory)) {
-            arr.splice((settings.maxHistory || CONFIG.maxHistory));
-        }
-        saveHistory(arr);
-    }
-
-    function renderHistory() {
-        const arr = loadHistory();
-        historyList.innerHTML = '';
-        if (!arr.length) {
-            historyList.innerHTML = `<div class="muted" style="padding: 2rem; text-align: center;">No password history yet.</div>`;
-            return;
-        }
-        arr.forEach((item, idx) => {
-            const itemEl = document.createElement('div');
-            itemEl.className = 'history-item';
-            itemEl.innerHTML = `
-                <div class="left">
-                    <div style="font-weight: 500; margin-bottom: 4px;">${new Date(item.date).toLocaleString()}</div>
-                    <div style="font-family: var(--font-mono); font-size: 0.85rem; word-break: break-all;">${escapeHtml(truncate(item.pw, 40))}</div>
-                    ${item.entropy ? `<div style="font-size: 0.75rem; color: var(--gray); margin-top: 4px;">${item.entropy.toFixed(2)} bits</div>` : ''}
-                </div>
-                <div class="right">
-                    <button class="btn small" data-action="use" data-idx="${idx}" title="Use this password">Use</button>
-                    <button class="btn small" data-action="copy" data-idx="${idx}" title="Copy to clipboard">Copy</button>
-                </div>
-            `;
-            historyList.appendChild(itemEl);
-        });
-        els('[data-action="use"]', historyList).forEach(btn => {
-            btn.addEventListener('click', () => {
-                const idx = Number(btn.dataset.idx);
-                const arr = loadHistory();
-                if (arr[idx]) {
-                    passwordOutput.value = arr[idx].pw;
-                    showNotification('Password loaded into output');
-                }
-            });
-        });
-        els('[data-action="copy"]', historyList).forEach(btn => {
-            btn.addEventListener('click', () => {
-                const idx = Number(btn.dataset.idx);
-                const arr = loadHistory();
-                if (arr[idx]) {
-                    navigator.clipboard.writeText(arr[idx].pw).then(() => {
-                        showNotification('Password copied to clipboard', 'success');
-                    });
-                }
-            });
-        });
-    }
-
-    function truncate(s, n) { return s.length > n ? s.slice(0, n - 2) + '..' : s; }
-
     function loadSettings() {
         try {
-            const raw = localStorage.getItem(`${STORAGE_KEY}-settings`);
+            const raw = localStorage.getItem('password-generator-settings');
             const parsed = raw ? JSON.parse(raw) : {};
             return {
-                maxHistory: parsed.maxHistory || CONFIG.maxHistory,
                 darkMode: parsed.darkMode || false
             };
         } catch (e) {
-            return {
-                maxHistory: CONFIG.maxHistory,
-                darkMode: false
-            };
+            return { darkMode: false };
         }
     }
 
     function saveSettings(obj) {
-        localStorage.setItem(`${STORAGE_KEY}-settings`, JSON.stringify(obj));
+        localStorage.setItem('password-generator-settings', JSON.stringify(obj));
     }
-
-    function exportTxt() {
-        const arr = loadHistory();
-        if (!arr.length) {
-            showNotification('No history to export', 'error');
-            return;
-        }
-        const text = arr.map(it => `${new Date(it.date).toISOString()},${it.pw}`).join('\n');
-        downloadBlob(text, `passwords-${new Date().toISOString().slice(0,10)}.txt`, 'text/plain');
-        showNotification('History exported as TXT', 'success');
-    }
-
-    function exportCsv() {
-        const arr = loadHistory();
-        if (!arr.length) {
-            showNotification('No history to export', 'error');
-            return;
-        }
-        const csv = ['date,password,entropy'];
-        arr.forEach(it => csv.push(`${new Date(it.date).toISOString()},"${escapeCsv(it.pw)}",${it.entropy || ''}`));
-        downloadBlob(csv.join('\n'), `passwords-${new Date().toISOString().slice(0,10)}.csv`, 'text/csv');
-        showNotification('History exported as CSV', 'success');
-    }
-
-    function downloadBlob(content, filename, type) {
-        const blob = new Blob([content], { type });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = filename;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        URL.revokeObjectURL(url);
-    }
-
-    function escapeCsv(s) { return String(s).replace(/"/g, '""'); }
 
     function wire() {
         lengthInput.addEventListener('input', updateUIFromOptions);
@@ -447,41 +341,32 @@ Random Password Generator - JavaScript
         generateBtn.addEventListener('click', () => {
             const opts = readOptionsFromUI();
             let pw = generatePassword(opts);
-            if (!pw) { showNotification('No character sets selected', 'error'); return; }
+            if (!pw) {
+                showNotification('No character sets selected', 'error');
+                return;
+            }
+
+            if (!opts.pattern && !opts.passphrase && pw.length !== opts.length) {
+                console.warn(`Password length mismatch: expected ${opts.length}, got ${pw.length}`);
+                pw = generatePassword(opts);
+            }
+
             passwordOutput.value = pw;
-            favBtn.dataset.pw = pw;
-            favBtn.innerHTML = '<i class="far fa-star"></i>';
-            const entropy = calcEntropy(pw, opts);
-            const warnings = gatherWarnings(pw, opts, entropy);
-            warningsEl.innerHTML = warnings.map(w => `⚠ ${w}`).join('<br>') || '<span style="color: var(--success);">✓ All security checks passed</span>';
-            updateStrengthDisplay(entropy);
-            if (entropy >= 60) { passwordOutput.classList.add('celebrate'); setTimeout(() => passwordOutput.classList.remove('celebrate'), 1000); }
-            addToHistory({ pw, entropy, date: Date.now() });
+            updateStrengthDisplay(pw, opts);
+            showNotification('New password generated', 'success');
         });
 
         copyBtn.addEventListener('click', () => {
             const pw = passwordOutput.value;
-            if (!pw) { showNotification('No password to copy', 'error'); return; }
-            navigator.clipboard.writeText(pw).then(() => { showNotification('Password copied to clipboard', 'success'); }).catch(() => { showNotification('Failed to copy to clipboard', 'error'); });
-        });
-
-        favBtn.addEventListener('click', () => {
-            const pw = favBtn.dataset.pw;
-            if (!pw) { showNotification('No password to favorite', 'error'); return; }
-            addToHistory({ pw, date: Date.now(), fav: true });
-            favBtn.innerHTML = '<i class="fas fa-star" style="color: #f59e0b;"></i>';
-            showNotification('Password added to favorites', 'success');
-        });
-
-        exportTxtBtn.addEventListener('click', exportTxt);
-        exportCsvBtn.addEventListener('click', exportCsv);
-
-        clearHistoryBtn.addEventListener('click', () => {
-            if (confirm('Clear all password history? This cannot be undone.')) {
-                localStorage.removeItem(STORAGE_KEY);
-                renderHistory();
-                showNotification('History cleared', 'success');
+            if (!pw) {
+                showNotification('No password to copy', 'error');
+                return;
             }
+            navigator.clipboard.writeText(pw).then(() => {
+                showNotification('Password copied to clipboard', 'success');
+            }).catch(() => {
+                showNotification('Failed to copy to clipboard', 'error');
+            });
         });
 
         darkModeCheck.addEventListener('change', (e) => {
@@ -494,7 +379,12 @@ Random Password Generator - JavaScript
         darkModeCheck.checked = settings.darkMode;
         if (settings.darkMode) document.body.classList.add('dark-mode');
         updateUIFromOptions();
-        renderHistory();
+
+        setTimeout(() => {
+            if (!passwordOutput.value) {
+                generateBtn.click();
+            }
+        }, 100);
     }
 
     const style = document.createElement('style');
@@ -506,6 +396,8 @@ Random Password Generator - JavaScript
         .dark-mode { background: var(--darker) !important; color: var(--light) !important; }
         .dark-mode .panel { background: rgba(30, 41, 59, 0.8) !important; border-color: rgba(100, 116, 139, 0.3) !important; }
         .dark-mode input, .dark-mode textarea, .dark-mode select { background: rgba(15, 23, 42, 0.6) !important; border-color: rgba(100, 116, 139, 0.4) !important; color: var(--light) !important; }
+        .warning-item { margin-bottom: 4px; padding: 4px 0; }
+        .warning-item:last-child { margin-bottom: 0; }
     `;
     document.head.appendChild(style);
 

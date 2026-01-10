@@ -17,6 +17,7 @@ Random Password Generator - HTML
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
           rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js"></script>
 </head>
 
 <body>
@@ -109,7 +110,7 @@ Random Password Generator - HTML
                                 <span>Numbers (123)</span>
                             </label>
                             <label class="checkbox">
-                                <input id="symbols" type="checkbox">
+                                <input checked id="symbols" type="checkbox">
                                 <span>Symbols (#$&)</span>
                             </label>
                         </div>
@@ -153,9 +154,6 @@ Random Password Generator - HTML
                         <button class="btn btn-secondary" id="copy" title="Copy password to clipboard">
                             <i class="fas fa-copy"></i> Copy
                         </button>
-                        <button class="btn btn-secondary" id="fav" title="Favorite this password">
-                            <i class="far fa-star"></i>
-                        </button>
                     </div>
                 </div>
             </section>
@@ -185,20 +183,20 @@ Random Password Generator - HTML
                         <h3>Security Analysis</h3>
                         <div class="stats-grid">
                             <div class="stat-item">
-                                <span class="stat-label">Entropy</span>
+                                <span class="stat-label">Strength Score</span>
+                                <span class="stat-value" id="zxcvbnScore">-</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Entropy (bits)</span>
                                 <span class="stat-value" id="entropy">-</span>
                             </div>
                             <div class="stat-item">
-                                <span class="stat-label">Bits of Security</span>
-                                <span class="stat-value" id="bits">-</span>
+                                <span class="stat-label">Guesses (log10)</span>
+                                <span class="stat-value" id="guessesLog10">-</span>
                             </div>
                             <div class="stat-item">
-                                <span class="stat-label">Possible Guesses</span>
-                                <span class="stat-value" id="guesses">-</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-label">Time to Crack</span>
-                                <span class="stat-value" id="timeToCrack">-</span>
+                                <span class="stat-label">Crack Time</span>
+                                <span class="stat-value" id="crackTimeDisplay">-</span>
                             </div>
                         </div>
                     </div>
@@ -207,41 +205,36 @@ Random Password Generator - HTML
                 </div>
             </section>
 
-            <section aria-labelledby="history-heading" class="panel panel-bottom" id="history-panel">
-                <div class="panel-head row-between">
-                    <div>
-                        <h2 id="history-heading">Password History</h2>
-                        <p class="muted small">Previously generated passwords are stored locally in your browser.</p>
-                    </div>
-                    <div aria-label="Export and import actions" class="export-actions" role="group">
-                        <button class="btn btn-secondary" id="exportTxt" title="Export history as text">
-                            <i class="fas fa-download"></i> Export TXT
-                        </button>
-                        <button class="btn btn-secondary" id="exportCsv" title="Export history as CSV">
-                            <i class="fas fa-file-csv"></i> Export CSV
-                        </button>
-                        <button class="btn btn-secondary" id="clearHistory" title="Clear all history">
-                            <i class="fas fa-trash"></i> Clear
-                        </button>
-                    </div>
+            <section aria-labelledby="guidance-heading" class="panel panel-bottom" id="guidance-panel">
+                <div class="panel-head">
+                    <h2 id="guidance-heading">Password Security Guidance</h2>
+                    <p class="muted small">Best practices and recommendations for secure passwords.</p>
                 </div>
 
-                <div aria-live="polite" class="history-list" id="historyList"></div>
-
-                <details aria-label="Password guidance" class="guidance">
-                    <summary>Password Guidance</summary>
-                    <div class="guidance-content">
-                        <ul>
-                            <li><strong>NIST recommendations</strong>: Use passwords with 12+ characters, avoid reused
-                                passwords, and prefer long passphrases for memorability.
-                            </li>
-                            <li>Use 16+ characters with multiple character sets for maximum security.</li>
-                            <li>Passphrases with 4+ random words provide high entropy and are easier to remember.</li>
-                            <li>Regularly update important passwords and use a password manager for better security.
-                            </li>
-                        </ul>
-                    </div>
-                </details>
+                <div class="guidance-content">
+                    <ul>
+                        <li><strong>NIST recommendations</strong>: Use passwords with 12+ characters, avoid reused
+                            passwords, and prefer long passphrases for memorability.
+                        </li>
+                        <li><strong>zxcvbn strength scoring</strong>: Scores range from 0 (very weak) to 4 (very
+                            strong). Aim for scores 3-4 for important accounts.
+                        </li>
+                        <li><strong>Character diversity</strong>: Use multiple character sets (upper, lower, numbers,
+                            symbols) to increase complexity.
+                        </li>
+                        <li><strong>Password length</strong>: Longer passwords are generally more secure than complex
+                            short ones. Consider using passphrases.
+                        </li>
+                        <li><strong>Uniqueness</strong>: Never reuse passwords across different websites or services.
+                        </li>
+                        <li><strong>Password managers</strong>: Use a reputable password manager to store
+                            unique passwords for all your accounts.
+                        </li>
+                        <li><strong>Two-factor authentication</strong>: Enable 2FA wherever possible for added security
+                            beyond passwords.
+                        </li>
+                    </ul>
+                </div>
             </section>
         </div>
     </div>
