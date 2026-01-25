@@ -166,7 +166,12 @@ Random Password Generator - HTML
 
                 <div class="password-output">
                     <div class="password-display">
-                        <input aria-label="Generated password" id="passwordOutput" readonly type="text"/>
+                        <div class="password-input-wrapper">
+                            <input aria-label="Generated password" id="passwordOutput" readonly type="text"/>
+                            <button class="btn-copy-inside" id="copyInside" title="Copy password to clipboard">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
                     </div>
 
                     <div class="strength-display">

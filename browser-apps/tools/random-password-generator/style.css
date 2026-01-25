@@ -188,9 +188,15 @@ Random Password Generator - Stylesheet
     position: relative;
 }
 
-.password-display input {
+.password-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-input-wrapper input {
     width: 100%;
-    padding: 1rem 1.25rem;
+    padding: 1rem 3.5rem 1rem 1.25rem;
     font-family: var(--font-mono);
     font-size: 1.1rem;
     letter-spacing: 0.5px;
@@ -198,12 +204,35 @@ Random Password Generator - Stylesheet
     border-radius: var(--radius);
     background: var(--surface-2);
     color: var(--dark);
-    text-align: center;
 }
 
-.password-display input:focus {
+.password-input-wrapper input:focus {
     outline: none;
     border-color: var(--primary);
+}
+
+.btn-copy-inside {
+    position: absolute;
+    right: 8px;
+    background: transparent;
+    border: none;
+    color: var(--gray);
+    cursor: pointer;
+    padding: 8px;
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.btn-copy-inside:hover {
+    background: var(--surface-2);
+    color: var(--primary);
+}
+
+.btn-copy-inside:active {
+    transform: scale(0.95);
 }
 
 .strength-display {
@@ -424,5 +453,14 @@ Random Password Generator - Stylesheet
 
     .checkbox-grid {
         grid-template-columns: 1fr;
+    }
+
+    .password-input-wrapper input {
+        padding: 0.75rem 3rem 0.75rem 0.75rem;
+        font-size: 1rem;
+    }
+
+    .btn-copy-inside {
+        padding: 6px;
     }
 }

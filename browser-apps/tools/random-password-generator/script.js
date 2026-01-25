@@ -35,6 +35,7 @@ Random Password Generator - JavaScript
     const patternInput = el('#pattern');
     const generateBtn = el('#generate');
     const copyBtn = el('#copy');
+    const copyInsideBtn = el('#copyInside');
     const passwordOutput = el('#passwordOutput');
     const strengthBar = el('#strengthBar');
     const strengthLabelEl = el('#strengthLabel');
@@ -307,6 +308,19 @@ Random Password Generator - JavaScript
         }, 3000);
     }
 
+    function copyPasswordToClipboard() {
+        const pw = passwordOutput.value;
+        if (!pw) {
+            showNotification('No password to copy', 'error');
+            return;
+        }
+        navigator.clipboard.writeText(pw).then(() => {
+            showNotification('Password copied to clipboard', 'success');
+        }).catch(() => {
+            showNotification('Failed to copy to clipboard', 'error');
+        });
+    }
+
     function loadSettings() {
         try {
             const raw = localStorage.getItem('password-generator-settings');
@@ -356,18 +370,8 @@ Random Password Generator - JavaScript
             showNotification('New password generated', 'success');
         });
 
-        copyBtn.addEventListener('click', () => {
-            const pw = passwordOutput.value;
-            if (!pw) {
-                showNotification('No password to copy', 'error');
-                return;
-            }
-            navigator.clipboard.writeText(pw).then(() => {
-                showNotification('Password copied to clipboard', 'success');
-            }).catch(() => {
-                showNotification('Failed to copy to clipboard', 'error');
-            });
-        });
+        copyBtn.addEventListener('click', copyPasswordToClipboard);
+        copyInsideBtn.addEventListener('click', copyPasswordToClipboard);
 
         darkModeCheck.addEventListener('change', (e) => {
             document.body.classList.toggle('dark-mode', e.target.checked);
@@ -379,12 +383,6 @@ Random Password Generator - JavaScript
         darkModeCheck.checked = settings.darkMode;
         if (settings.darkMode) document.body.classList.add('dark-mode');
         updateUIFromOptions();
-
-        setTimeout(() => {
-            if (!passwordOutput.value) {
-                generateBtn.click();
-            }
-        }, 100);
     }
 
     const style = document.createElement('style');
