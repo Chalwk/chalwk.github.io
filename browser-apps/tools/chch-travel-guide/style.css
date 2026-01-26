@@ -113,6 +113,7 @@ Christchurch Travel Guide - Stylesheet
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     background: white;
+    padding: 1.5rem;
 }
 
 .place-card:hover {
@@ -120,26 +121,16 @@ Christchurch Travel Guide - Stylesheet
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
-.place-image {
-    height: 180px;
-    background-color: var(--light);
-    background-size: cover;
-    background-position: center;
-}
-
-.place-content {
-    padding: 1.25rem;
-}
-
 .place-content h3 {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
     color: var(--primary);
+    font-size: 1.25rem;
 }
 
 .place-content p {
     color: #666;
     margin-bottom: 1rem;
-    font-size: 0.9rem;
+    line-height: 1.5;
 }
 
 .place-link {
