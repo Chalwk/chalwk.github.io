@@ -375,11 +375,6 @@ const categories = [
                 link: 'https://www.google.com/maps/search/?api=1&query=Riccarton+Sunday+Market+Christchurch'
             },
             {
-                name: 'Op Shops',
-                description: 'Second-hand stores throughout the city offering vintage finds and bargains.',
-                link: 'https://www.google.com/maps/search/?api=1&query=Op+Shops+Christchurch'
-            },
-            {
                 name: 'Ballantynes',
                 description: 'Historic department store with luxury brands and excellent service.',
                 link: 'https://www.google.com/maps/search/?api=1&query=Ballantynes+Christchurch'
@@ -388,6 +383,121 @@ const categories = [
                 name: 'Christchurch Arts Centre Market',
                 description: 'Weekend markets with local arts, crafts, and food in a historic setting.',
                 link: 'https://www.google.com/maps/search/?api=1&query=Arts+Centre+Market+Christchurch'
+            },
+            {
+                name: 'City Mission Op Shop (Barbadoes Street)',
+                description: 'Second-hand store at 250 Barbadoes Street, City Centre, Christchurch 8011.',
+                link: 'https://www.google.com/maps/search/?api=1&query=City+Mission+Op+Shop+250+Barbadoes+Street+Christchurch'
+            },
+            {
+                name: 'City Mission Op Shop (Buchan Street)',
+                description: 'Second-hand store at 63 Buchan Street, Sydenham, Christchurch 8023.',
+                link: 'https://www.google.com/maps/search/?api=1&query=City+Mission+Op+Shop+63+Buchan+Street+Christchurch'
+            },
+            {
+                name: 'Ezy Pawn',
+                description: '354 Ferry Road, Waltham, Christchurch 8011.',
+                link: 'https://www.google.com/maps/search/?api=1&query=Ezy+Pawn+354+Ferry+Road+Christchurch'
+            },
+            {
+                name: 'Flourish Op Shop',
+                description: '445 Colombo Street, Sydenham, Christchurch 8023.',
+                link: 'https://www.google.com/maps/search/?api=1&query=Flourish+Op+Shop+445+Colombo+Street+Christchurch'
+            },
+            {
+                name: 'Hato Hone St John Retail Store (Lincoln Road)',
+                description: '272 Lincoln Road, Addington, Christchurch 8024.',
+                link: 'https://www.google.com/maps/search/?api=1&query=Hato+Hone+St+John+Retail+Store+272+Lincoln+Road+Christchurch'
+            },
+            {
+                name: 'Hato Hone St John Retail Store (Colombo Street)',
+                description: '300 Colombo Street, Sydenham, Christchurch 8023.',
+                link: 'https://www.google.com/maps/search/?api=1&query=Hato+Hone+St+John+Retail+Store+300+Colombo+Street+Christchurch'
+            },
+            {
+                name: 'Opawa Community Church Op Shop',
+                description: '158 Opawa Road, Hillsborough, Christchurch 8022.',
+                link: 'https://www.google.com/maps/search/?api=1&query=Opawa+Community+Church+Op+Shop+158+Opawa+Road+Christchurch'
+            },
+            {
+                name: 'Red Cross Shop (Amyes Road)',
+                description: '1 Amyes Road, Hornby, Christchurch 8042.',
+                link: 'https://www.google.com/maps/search/?api=1&query=Red+Cross+Shop+1+Amyes+Road+Christchurch'
+            },
+            {
+                name: 'Red Cross Shop (Manchester Street)',
+                description: '334 Manchester Street, Christchurch Central City, Christchurch 8013.',
+                link: 'https://www.google.com/maps/search/?api=1&query=Red+Cross+Shop+334+Manchester+Street+Christchurch'
+            },
+            {
+                name: 'ReStore (Habitat for Humanity)',
+                description: '189 Waltham Road, Sydenham, Christchurch 8023.',
+                link: 'https://www.google.com/maps/search/?api=1&query=ReStore+189+Waltham+Road+Christchurch'
+            },
+            {
+                name: 'Salvation Army Store (Amyes Road)',
+                description: '1 Amyes Road, Hornby, Christchurch 8042.',
+                link: 'https://www.google.com/maps/search/?api=1&query=Salvation+Army+Store+1+Amyes+Road+Christchurch'
+            },
+            {
+                name: 'Salvation Army Store (Carlyle Street)',
+                description: '156 Carlyle Street, Sydenham, Christchurch 8023.',
+                link: 'https://www.google.com/maps/search/?api=1&query=Salvation+Army+Store+156+Carlyle+Street+Christchurch'
+            },
+            {
+                name: 'Salvation Army Store (Linwood Avenue)',
+                description: '177 Linwood Avenue, Linwood, Christchurch 8011.',
+                link: 'https://www.google.com/maps/search/?api=1&query=Salvation+Army+Store+177+Linwood+Avenue+Christchurch'
+            },
+            {
+                name: 'Salvation Army Store (Riccarton Road)',
+                description: '355B Riccarton Road, Church Corner, Christchurch 8041.',
+                link: 'https://www.google.com/maps/search/?api=1&query=Salvation+Army+Store+355B+Riccarton+Road+Christchurch'
+            },
+            {
+                name: 'Salvation Army Store (Lincoln Road)',
+                description: '359 Lincoln Road, Addington, Christchurch 8024.',
+                link: 'https://www.google.com/maps/search/?api=1&query=Salvation+Army+Store+359+Lincoln+Road+Christchurch'
+            },
+            {
+                name: 'Salvation Army Store (Ferry Road)',
+                description: '636 Ferry Road, Woolston, Christchurch 8023.',
+                link: 'https://www.google.com/maps/search/?api=1&query=Salvation+Army+Store+636+Ferry+Road+Christchurch'
+            },
+            {
+                name: 'Salvation Army Store (Halswell Jct Road)',
+                description: 'Cnr Halswell Jct Road & Columbia Avenue, Hornby South, Christchurch 8042.',
+                link: 'https://www.google.com/maps/search/?api=1&query=Salvation+Army+Store+Halswell+Jct+Road+Christchurch'
+            },
+            {
+                name: 'SPCA Op Shop (Amyes Road)',
+                description: '1 Amyes Road, Hornby, Christchurch 8042.',
+                link: 'https://www.google.com/maps/search/?api=1&query=SPCA+Op+Shop+1+Amyes+Road+Christchurch'
+            },
+            {
+                name: 'SPCA Op Shop (Colombo Street)',
+                description: '428 Colombo Street, Sydenham, Christchurch 8023.',
+                link: 'https://www.google.com/maps/search/?api=1&query=SPCA+Op+Shop+428+Colombo+Street+Christchurch'
+            },
+            {
+                name: 'SPCA Op Shop (Acheron Drive)',
+                description: '52 Acheron Drive, Riccarton, Christchurch 8041.',
+                link: 'https://www.google.com/maps/search/?api=1&query=SPCA+Op+Shop+52+Acheron+Drive+Christchurch'
+            },
+            {
+                name: 'The Pawnshop',
+                description: '77 Ferry Road, Christchurch Central City, Christchurch 8011.',
+                link: 'https://www.google.com/maps/search/?api=1&query=The+Pawnshop+77+Ferry+Road+Christchurch'
+            },
+            {
+                name: 'Toffs',
+                description: '7 Settlers Crescent, Ferrymead, Christchurch 8023.',
+                link: 'https://www.google.com/maps/search/?api=1&query=Toffs+7+Settlers+Crescent+Christchurch'
+            },
+            {
+                name: 'Vinnies',
+                description: '265 Stanmore Road, Richmond, Christchurch 8013.',
+                link: 'https://www.google.com/maps/search/?api=1&query=Vinnies+265+Stanmore+Road+Christchurch'
             }
         ]
     },
