@@ -1,0 +1,611 @@
+<!--
+Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
+
+Discord Private Message Bulk Deleter - Chrome Console Script
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Discord Private Message Bulk Deleter</title>
+
+    <link href="../../../core.css" rel="stylesheet"/>
+    <script src="../../../nav-menu.js"></script>
+
+    <style>
+        .chrome-script-container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .script-card {
+            background: var(--light);
+            border: 1px solid var(--gray-light);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .script-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .script-header h1 {
+            color: var(--darker);
+            margin-bottom: 0.5rem;
+        }
+
+        .script-description {
+            color: var(--gray);
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .script-code-container {
+            position: relative;
+            margin: 2rem 0;
+            background: var(--darker);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .script-code {
+            padding: 1.5rem;
+            font-family: 'Source Code Pro', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: #f8f8f2;
+            overflow-x: auto;
+            white-space: pre;
+            margin: 0;
+            counter-reset: line;
+        }
+
+        .script-code-line {
+            display: block;
+            padding: 2px 0;
+        }
+
+        .script-code-line:before {
+            counter-increment: line;
+            content: counter(line);
+            display: inline-block;
+            width: 40px;
+            margin-right: 20px;
+            text-align: right;
+            color: var(--gray);
+            user-select: none;
+            opacity: 0.6;
+        }
+
+        .config-copy-button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .config-copy-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .config-copy-button.success {
+            background: var(--success);
+        }
+
+        .config-copy-button.error {
+            background: var(--error);
+        }
+
+        .instructions {
+            background: var(--light);
+            border-left: 4px solid var(--accent);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0 var(--radius) var(--radius) 0;
+        }
+
+        .instructions h3 {
+            color: var(--darker);
+            margin-bottom: 1rem;
+        }
+
+        .instructions ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .instructions li {
+            margin-bottom: 0.75rem;
+            line-height: 1.6;
+        }
+
+        .warning {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--error);
+            border-left: 4px solid var(--error);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 var(--radius) var(--radius) 0;
+        }
+
+        .warning h4 {
+            color: var(--error);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .usage-note {
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid var(--accent);
+            border-left: 4px solid var(--accent);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 var(--radius) var(--radius) 0;
+        }
+
+        .usage-note h4 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .config-form {
+            background: var(--light);
+            border: 1px solid var(--gray-light);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--darker);
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--gray-light);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-group .hint {
+            font-size: 0.875rem;
+            color: var(--gray);
+            margin-top: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .chrome-script-container {
+                margin: 1rem auto;
+                padding: 0 0.5rem;
+            }
+
+            .script-card {
+                padding: 1.5rem;
+            }
+
+            .script-code {
+                font-size: 0.8rem;
+                padding: 1rem;
+            }
+
+            .script-code-line:before {
+                width: 30px;
+                margin-right: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .script-code {
+                font-size: 0.75rem;
+                padding: 0.75rem;
+            }
+
+            .config-copy-button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
+          rel="stylesheet">
+</head>
+<body>
+
+<header class="header"></header>
+
+<main>
+    <div class="chrome-script-container">
+        <div class="script-card">
+            <div class="script-header">
+                <h1>Discord Private Message Bulk Deleter</h1>
+                <p class="script-description">
+                    A Chrome console script that automatically deletes your private messages on Discord.
+                    This script runs directly in your browser's developer console and helps you clean up your message
+                    history.
+                </p>
+            </div>
+
+            <div class="warning">
+                <h4><i class="fas fa-exclamation-triangle"></i> Important Warning</h4>
+                <p>
+                    This script performs irreversible actions. Once you delete messages, they cannot be recovered.
+                    The script runs automatically and will delete ALL your messages in the conversation.
+                    Use with extreme caution. You are responsible for any violations of Discord's Terms of Service.
+                </p>
+            </div>
+
+            <div class="config-form">
+                <h3>Configuration Generator</h3>
+                <p>Fill in your details below, then copy the generated script:</p>
+
+                <div class="form-group">
+                    <label for="userId">Your User ID:</label>
+                    <input type="text" id="userId" placeholder="e.g., 123456789012345678">
+                    <div class="hint">
+                        Enable Developer Mode in Discord settings → Right-click your profile → Copy ID
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="deleteDelay">Delete Delay (milliseconds):</label>
+                    <input type="number" id="deleteDelay" value="2500" min="2000" max="10000">
+                    <div class="hint">Minimum 2000ms recommended to avoid rate limits (2.5 seconds)</div>
+                </div>
+
+                <button class="config-copy-button" id="generateBtn">
+                    <i class="fas fa-code"></i> Generate & Copy Script
+                </button>
+            </div>
+
+            <div class="script-code-container">
+                <pre class="script-code" id="scriptCode"><code></code></pre>
+            </div>
+
+            <div class="instructions">
+                <h3>How to Use This Script</h3>
+                <ol>
+                    <li><strong>Enable Developer Mode in Discord:</strong>
+                        <br>Settings → Advanced → Enable Developer Mode
+                    </li>
+                    <li><strong>Get Your User ID:</strong>
+                        <br>Right-click your profile → Copy ID (requires Developer Mode)
+                    </li>
+                    <li><strong>Navigate to Discord:</strong> Open the private message conversation you want to clean
+                        up.
+                    </li>
+                    <li><strong>Scroll to Top:</strong> Scroll to the oldest messages you want to delete.</li>
+                    <li><strong>Open Developer Console:</strong> Press <code>F12</code> or <code>Ctrl+Shift+I</code>
+                        (Windows/Linux) / <code>Cmd+Option+I</code> (Mac).
+                    </li>
+                    <li><strong>Switch to Console Tab:</strong> Click on the "Console" tab.</li>
+                    <li><strong>Configure & Run:</strong> Fill in the form above, click "Generate & Copy Script", paste
+                        into console, and press <code>Enter</code>.
+                    </li>
+                    <li><strong>Monitor Progress:</strong> Watch the console for progress messages. Keep the tab active.
+                    </li>
+                    <li><strong>Stop the Script:</strong> Press <code>F5</code> to refresh page or close the tab.</li>
+                </ol>
+            </div>
+
+            <div class="usage-note">
+                <h4><i class="fas fa-lightbulb"></i> Usage Notes & Tips</h4>
+                <ul>
+                    <li><strong>Slow is safe:</strong> Minimum 2000ms delay required to avoid Discord rate limits</li>
+                    <li><strong>User ID required:</strong> Must enable Developer Mode to get your User ID</li>
+                    <li><strong>Keep tab active:</strong> Script pauses if you switch tabs</li>
+                    <li><strong>Large histories:</strong> May take hours for thousands of messages</li>
+                    <li><strong>Interruptions:</strong> If stopped, just scroll and run script again</li>
+                    <li><strong>Checkpoint:</strong> Script auto-pauses every 15 deletions as safety measure</li>
+                    <li><strong>Only your messages:</strong> Script only deletes messages sent by your user ID</li>
+                </ul>
+            </div>
+
+            <div class="warning">
+                <h4><i class="fas fa-shield-alt"></i> Safety & Rate Limits</h4>
+                <ul>
+                    <li>Discord will rate limit aggressive deletion - 2000ms minimum delay enforced</li>
+                    <li>Using delays below 2000ms may trigger CAPTCHA or temporary blocks</li>
+                    <li>Deleting too many messages in short period may flag your account</li>
+                    <li>Recommended: Delete no more than 500-1000 messages per day</li>
+                    <li>Take breaks between large deletion sessions</li>
+                    <li>This script only deletes YOUR messages, not the other person's</li>
+                </ul>
+            </div>
+
+            <div class="instructions">
+                <h3>Troubleshooting</h3>
+                <p><strong>Script not finding messages?</strong></p>
+                <ul>
+                    <li>Make sure you're in the correct DM conversation</li>
+                    <li>Scroll to load more messages before running script</li>
+                    <li>Verify your User ID is correct</li>
+                    <li>Ensure Developer Mode is enabled in Discord settings</li>
+                </ul>
+
+                <p><strong>Script stopping early?</strong></p>
+                <ul>
+                    <li>Increase <code>maxAttempts</code> in configuration</li>
+                    <li>Manually scroll down and run script again</li>
+                    <li>Check console for error messages</li>
+                </ul>
+
+                <p><strong>Getting rate limited?</strong></p>
+                <ul>
+                    <li>Increase <code>deleteDelay</code> to 3000-5000ms</li>
+                    <li>Wait 1-2 hours before continuing</li>
+                    <li>Consider deleting in smaller batches (under 500 messages)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="footer-container">
+        <div class="social-icons">
+            <a aria-label="Discord" href="https://discord.com/channels/@me/707058110396760094" target="_blank">
+                <i class="fab fa-discord"></i>
+            </a>
+            <a aria-label="GitHub" href="https://github.com/Chalwk" target="_blank">
+                <i class="fab fa-github"></i>
+            </a>
+            <a aria-label="Email" href="mailto:chalwk.dev@gmail.com">
+                <i class="fas fa-envelope"></i>
+            </a>
+        </div>
+        <p class="footer-copyright"></p>
+    </div>
+</footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const generateBtn = document.getElementById('generateBtn');
+        const scriptCode = document.getElementById('scriptCode');
+        const userIdInput = document.getElementById('userId');
+        const deleteDelayInput = document.getElementById('deleteDelay');
+
+        function updateScript() {
+            const userId = userIdInput.value.trim();
+            let deleteDelay = parseInt(deleteDelayInput.value) || 2500;
+
+            if (deleteDelay < 2000) {
+                deleteDelay = 2000;
+                deleteDelayInput.value = deleteDelay;
+            }
+
+            let script = `const CONFIG = {
+    userId: "${userId}",
+    deleteDelay: ${deleteDelay},
+    scrollDelay: 1000,
+    maxAttempts: 50,
+    pauseAfter: 15,
+    pauseDuration: 10000
+};
+
+(async () => {
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    let deletedCount = 0;
+    let scrollAttempts = 0;
+
+    console.log("🔧 Starting Discord Message Deleter...");
+    console.log("⚙️ Configuration:", CONFIG);
+    console.log("⚠️  Keep this tab active and do not navigate away!");
+
+    if (!CONFIG.userId) {
+        console.error("❌ ERROR: You must set userId in CONFIG!");
+        return;
+    }
+
+    if (CONFIG.deleteDelay < 2000) {
+        console.error("❌ ERROR: deleteDelay must be at least 2000ms to avoid rate limits!");
+        return;
+    }
+
+    const messageContainerSelector = '[class*="messagesWrapper"]';
+    const messageSelector = '[class*="messageListItem"]';
+    const moreOptionsSelector = '[aria-label="More"]';
+    const deleteOptionSelector = '[id*="message-delete"]';
+    const confirmButtonSelector = '[class*="danger"]';
+
+    const isMyMessage = (messageElement) => {
+        const author = messageElement.querySelector('[class*="messageContent"]');
+        if (author && author.getAttribute('data-author-id') === CONFIG.userId) {
+            return true;
+        }
+        return false;
+    };
+
+    const deleteMessage = async (messageElement) => {
+        try {
+            const moreButton = messageElement.querySelector(moreOptionsSelector);
+            if (!moreButton) {
+                return false;
+            }
+
+            moreButton.click();
+            await sleep(500);
+
+            const deleteOption = document.querySelector(deleteOptionSelector);
+            if (!deleteOption) {
+                document.activeElement?.blur();
+                return false;
+            }
+
+            deleteOption.click();
+            await sleep(500);
+
+            const confirmButton = document.querySelector(confirmButtonSelector);
+            if (!confirmButton) {
+                return false;
+            }
+
+            confirmButton.click();
+            deletedCount++;
+
+            console.log(\`✅ Deleted message \${deletedCount}\`);
+            return true;
+
+        } catch (error) {
+            console.error("Error deleting message:", error);
+            return false;
+        }
+    };
+
+    const scrollToLoadMore = async () => {
+        const container = document.querySelector(messageContainerSelector);
+        if (!container) return false;
+
+        const oldScrollTop = container.scrollTop;
+        container.scrollTop = 0;
+
+        await sleep(CONFIG.scrollDelay);
+
+        return container.scrollTop !== oldScrollTop;
+    };
+
+    while (scrollAttempts < CONFIG.maxAttempts) {
+        const messages = document.querySelectorAll(messageSelector);
+        console.log(\`📄 Found \${messages.length} messages on page\`);
+
+        if (messages.length === 0) {
+            console.log("No messages found, scrolling...");
+            const scrolled = await scrollToLoadMore();
+            if (!scrolled) {
+                scrollAttempts++;
+                console.log(\`No new messages loaded (\${scrollAttempts}/\${CONFIG.maxAttempts})\`);
+            } else {
+                scrollAttempts = 0;
+            }
+            continue;
+        }
+
+        let deletedThisBatch = 0;
+
+        for (let i = messages.length - 1; i >= 0; i--) {
+            const message = messages[i];
+
+            if (!message.isConnected || message.offsetParent === null) continue;
+
+            const shouldDelete = isMyMessage(message);
+
+            if (shouldDelete) {
+                const success = await deleteMessage(message);
+                if (success) {
+                    deletedThisBatch++;
+
+                    if (deletedThisBatch > 0 && deletedThisBatch % CONFIG.pauseAfter === 0) {
+                        console.log(\`⏸️ Pausing for \${CONFIG.pauseDuration/1000}s after \${deletedThisBatch} deletions...\`);
+                        await sleep(CONFIG.pauseDuration);
+                    } else {
+                        await sleep(CONFIG.deleteDelay);
+                    }
+                }
+            }
+        }
+
+        if (deletedThisBatch === 0) {
+            scrollAttempts++;
+            console.log(\`No deletions this batch, scrolling... (\${scrollAttempts}/\${CONFIG.maxAttempts})\`);
+        } else {
+            scrollAttempts = 0;
+            console.log(\`Deleted \${deletedThisBatch} messages this batch\`);
+        }
+
+        await scrollToLoadMore();
+        await sleep(CONFIG.scrollDelay);
+    }
+
+    console.log(\`🎉 Finished! Deleted \${deletedCount} total messages.\`);
+    console.log("If there are still messages, run the script again or scroll manually and re-run.");
+})();`;
+
+    scriptCode.textContent = script;
+
+    const codeElement = document.querySelector('.script-code');
+    const lines = codeElement.textContent.split('\n');
+    codeElement.innerHTML = lines.map((line) => `<span class="script-code-line">${line}</span>`).join('\n');
+    }
+
+    userIdInput.addEventListener('input', updateScript);
+    deleteDelayInput.addEventListener('input', updateScript);
+    deleteDelayInput.addEventListener('change', function () {
+    if (this.value < 2000) this.value = 2000;
+    updateScript();
+    });
+
+    updateScript();
+
+    generateBtn.addEventListener('click', async function () {
+    const userId = userIdInput.value.trim();
+    if (!userId) {
+    alert("Please enter your User ID first!");
+    userIdInput.focus();
+    return;
+    }
+
+    const deleteDelay = parseInt(deleteDelayInput.value);
+    if (deleteDelay < 2000) {
+    alert("Delete delay must be at least 2000ms (2 seconds) to avoid rate limits!");
+    deleteDelayInput.focus();
+    return;
+    }
+
+    updateScript();
+
+    try {
+    await navigator.clipboard.writeText(scriptCode.textContent);
+
+    const originalText = generateBtn.innerHTML;
+    generateBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+    generateBtn.className = 'config-copy-button success';
+
+    setTimeout(() => {
+    generateBtn.innerHTML = originalText;
+    generateBtn.className = 'config-copy-button';
+    }, 2000);
+    } catch (err) {
+    console.error('Failed to copy text: ', err);
+    }
+    });
+    });
+</script>
+
+</body>
+</html>
