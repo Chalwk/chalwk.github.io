@@ -1,0 +1,479 @@
+<!--
+Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
+
+YouTube Liked Videos Remover - Chrome Console Script
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Liked Videos Remover</title>
+
+    <link href="../../../core.css" rel="stylesheet">
+
+    <style>
+        .chrome-script-container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .script-card {
+            background: var(--light);
+            border: 1px solid var(--gray-light);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .script-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .script-header h1 {
+            color: var(--darker);
+            margin-bottom: 0.5rem;
+        }
+
+        .script-description {
+            color: var(--gray);
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .script-code-container {
+            position: relative;
+            margin: 2rem 0;
+            background: var(--darker);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .script-code {
+            padding: 1.5rem;
+            font-family: 'Source Code Pro', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: #f8f8f2;
+            overflow-x: auto;
+            white-space: pre;
+            margin: 0;
+            counter-reset: line;
+        }
+
+        .script-code-line {
+            display: block;
+            padding: 2px 0;
+        }
+
+        .script-code-line:before {
+            counter-increment: line;
+            content: counter(line);
+            display: inline-block;
+            width: 40px;
+            margin-right: 20px;
+            text-align: right;
+            color: var(--gray);
+            user-select: none;
+            opacity: 0.6;
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .copy-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .copy-button.success {
+            background: var(--success);
+        }
+
+        .copy-button.error {
+            background: var(--error);
+        }
+
+        .instructions {
+            background: var(--light);
+            border-left: 4px solid var(--accent);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0 var(--radius) var(--radius) 0;
+        }
+
+        .instructions h3 {
+            color: var(--darker);
+            margin-bottom: 1rem;
+        }
+
+        .instructions ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .instructions li {
+            margin-bottom: 0.75rem;
+            line-height: 1.6;
+        }
+
+        .warning {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--error);
+            border-left: 4px solid var(--error);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 var(--radius) var(--radius) 0;
+        }
+
+        .warning h4 {
+            color: var(--error);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .usage-note {
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid var(--accent);
+            border-left: 4px solid var(--accent);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 var(--radius) var(--radius) 0;
+        }
+
+        .usage-note h4 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .chrome-script-container {
+                margin: 1rem auto;
+                padding: 0 0.5rem;
+            }
+
+            .script-card {
+                padding: 1.5rem;
+            }
+
+            .script-code {
+                font-size: 0.8rem;
+                padding: 1rem;
+            }
+
+            .script-code-line:before {
+                width: 30px;
+                margin-right: 15px;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .script-code {
+                font-size: 0.75rem;
+                padding: 0.75rem;
+            }
+
+            .copy-button {
+                position: relative;
+                top: 0;
+                right: 0;
+                margin-top: 1rem;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .script-code-container {
+                padding-bottom: 1rem;
+            }
+        }
+    </style>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
+          rel="stylesheet">
+</head>
+<body>
+<header class="header">
+    <div class="container">
+        <a class="logo" href="../../../index.html">
+            <i class="fas fa-code"></i> Jericho
+        </a>
+
+        <nav class="nav-desktop">
+            <ul class="nav-links">
+                <li><a href="../../../index.html#about">About</a></li>
+                <li><a href="../../apps_and_tools.html">Apps & Tools</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" href="#">
+                        Other Stuff <i class="fas fa-chevron-down"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://chalwk.github.io/CPAS/">CPAS</a></li>
+                        <li class="dropdown-submenu">
+                            <a class="submenu-toggle" href="#">
+                                Education <i class="fas fa-chevron-right"></i>
+                            </a>
+                            <ul class="submenu">
+                                <li><a href="../../../education/understanding-autism.html">Understanding Autism</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <nav class="nav-mobile">
+            <ul class="nav-mobile-links">
+                <li><a href="../../../index.html#about">About</a></li>
+                <li><a href="../../apps_and_tools.html">Apps & Tools</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" href="#">
+                        Other Stuff
+                        <i class="fas fa-chevron-down"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://chalwk.github.io/CPAS/">CPAS</a></li>
+                        <li class="dropdown-submenu">
+                            <a class="submenu-toggle" href="#">
+                                Education
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                            <ul class="submenu">
+                                <li><a href="../../../education/understanding-autism.html">Understanding Autism</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <div class="chrome-script-container">
+        <div class="script-card">
+            <div class="script-header">
+                <h1>YouTube Liked Videos Remover</h1>
+                <p class="script-description">
+                    A Chrome console script that automatically removes all videos from your YouTube "Liked Videos"
+                    playlist.
+                    This script runs directly in your browser's developer console and automates the process of cleaning
+                    up your liked videos.
+                </p>
+            </div>
+
+            <div class="warning">
+                <h4><i class="fas fa-exclamation-triangle"></i> Important Warning</h4>
+                <p>This script performs irreversible actions. Once you remove a liked video, you'll need to manually
+                    re-like it if you want it back.
+                    The script runs automatically and will remove ALL videos from your Liked Videos playlist. Use with
+                    caution.</p>
+            </div>
+
+            <div class="script-code-container">
+                <button class="copy-button" id="copyScriptBtn">
+                    <i class="far fa-copy"></i> Copy Script
+                </button>
+                <pre class="script-code" id="scriptCode"><code>(async () => {
+  const DELETE_INTERVAL_MS = 1000;
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+  while (true) {
+    const menus = document.querySelectorAll(
+      'ytd-playlist-video-renderer ytd-menu-renderer yt-icon-button'
+    );
+
+    if (menus.length === 0) {
+      window.scrollBy(0, 2000);
+      await sleep(1500);
+      continue;
+    }
+
+    for (const menu of menus) {
+      menu.click();
+      await sleep(400);
+
+      const remove = [...document.querySelectorAll('ytd-menu-service-item-renderer')]
+        .find(e => e.innerText.includes('Remove from Liked videos'));
+
+      if (remove) {
+        remove.click();
+        await sleep(DELETE_INTERVAL_MS);
+      }
+    }
+
+    window.scrollBy(0, 2000);
+    await sleep(1500);
+  }
+})();</code></pre>
+            </div>
+
+            <div class="instructions">
+                <h3>How to Use This Script</h3>
+                <ol>
+                    <li><strong>Navigate to YouTube:</strong> Go to <a href="https://www.youtube.com/playlist?list=LL"
+                                                                       target="_blank">your YouTube Liked Videos
+                        playlist</a> (you must be signed in).
+                    </li>
+                    <li><strong>Open Developer Console:</strong> Press <code>F12</code> or <code>Ctrl+Shift+I</code>
+                        (Windows/Linux) / <code>Cmd+Option+I</code> (Mac) to open Chrome Developer Tools.
+                    </li>
+                    <li><strong>Switch to Console Tab:</strong> Click on the "Console" tab in the Developer Tools panel.
+                    </li>
+                    <li><strong>Paste and Run:</strong> Copy the script above (click "Copy Script" button), paste it
+                        into the console, and press <code>Enter</code> to execute.
+                    </li>
+                    <li><strong>Monitor Progress:</strong> Watch the console for any errors and watch the browser as it
+                        automatically removes videos.
+                    </li>
+                    <li><strong>Stop the Script:</strong> To stop the script, either close the tab or press the stop
+                        button in the console (or refresh the page).
+                    </li>
+                </ol>
+            </div>
+
+            <div class="usage-note">
+                <h4><i class="fas fa-lightbulb"></i> Usage Notes</h4>
+                <ul>
+                    <li>Keep the YouTube tab active and visible while the script runs</li>
+                    <li>The script will automatically scroll and load more videos as needed</li>
+                    <li>Adjust <code>DELETE_INTERVAL_MS</code> if YouTube is rate-limiting you (increase the value)</li>
+                    <li>If the script stops working, YouTube may have updated their DOM structure - check back for
+                        script updates
+                    </li>
+                    <li>For large playlists, this may take a while - be patient!</li>
+                </ul>
+            </div>
+
+            <div class="instructions">
+                <h3>Configuration Tips</h3>
+                <p>You can modify these variables in the script:</p>
+                <ul>
+                    <li><code>DELETE_INTERVAL_MS</code> - Time between each removal (in milliseconds). Increase if you
+                        get rate-limited.
+                    </li>
+                    <li><code>sleep()</code> durations - Adjust the 400ms and 1500ms values if the script is too
+                        fast/slow for your connection.
+                    </li>
+                </ul>
+                <p><strong>Note:</strong> Making the script run too fast may cause YouTube to temporarily block actions
+                    or require CAPTCHA verification.</p>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="footer-container">
+        <div class="social-icons">
+            <a aria-label="Discord" href="https://discord.com/channels/@me/707058110396760094" target="_blank">
+                <i class="fab fa-discord"></i>
+            </a>
+            <a aria-label="GitHub" href="https://github.com/Chalwk" target="_blank">
+                <i class="fab fa-github"></i>
+            </a>
+            <a aria-label="Email" href="mailto:chalwk.dev@gmail.com">
+                <i class="fas fa-envelope"></i>
+            </a>
+        </div>
+        <p class="footer-copyright"></p>
+    </div>
+</footer>
+
+<script src="../../../nav.js" defer></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const copyButton = document.getElementById('copyScriptBtn');
+        const scriptCode = document.getElementById('scriptCode').textContent;
+
+        copyButton.addEventListener('click', async function() {
+            try {
+                await navigator.clipboard.writeText(scriptCode);
+
+                const originalText = copyButton.innerHTML;
+                const originalClass = copyButton.className;
+
+                copyButton.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                copyButton.className = 'copy-button success';
+
+                setTimeout(() => {
+                    copyButton.innerHTML = originalText;
+                    copyButton.className = originalClass;
+                }, 2000);
+
+            } catch (err) {
+                console.error('Failed to copy text: ', err);
+
+                const originalText = copyButton.innerHTML;
+                const originalClass = copyButton.className;
+
+                copyButton.innerHTML = '<i class="fas fa-times"></i> Failed to copy';
+                copyButton.className = 'copy-button error';
+
+                setTimeout(() => {
+                    copyButton.innerHTML = originalText;
+                    copyButton.className = originalClass;
+                }, 2000);
+
+                const textArea = document.createElement('textarea');
+                textArea.value = scriptCode;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    copyButton.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    copyButton.className = 'copy-button success';
+                    setTimeout(() => {
+                        copyButton.innerHTML = originalText;
+                        copyButton.className = originalClass;
+                    }, 2000);
+                } catch (fallbackErr) {
+                    console.error('Fallback copy failed: ', fallbackErr);
+                }
+                document.body.removeChild(textArea);
+            }
+        });
+
+        const codeElement = document.querySelector('.script-code');
+        const lines = codeElement.textContent.split('\n');
+        codeElement.innerHTML = lines.map((line, index) =>
+        `<span class="script-code-line">${line}</span>`
+        ).join('\n');
+    });
+</script>
+</body>
+</html>
