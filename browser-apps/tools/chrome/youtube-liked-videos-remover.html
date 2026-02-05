@@ -308,7 +308,7 @@ YouTube Liked Videos Remover - Chrome Console Script
                     <i class="far fa-copy"></i> Copy Script
                 </button>
                 <pre class="script-code" id="scriptCode"><code>(async () => {
-  const DELETE_INTERVAL_MS = 750; // Increased for better reliability
+  const DELETE_INTERVAL_MS = 750;
   const SCROLL_INTERVAL_MS = 2000;
   const MENU_CLICK_DELAY = 600;
   const MAX_ATTEMPTS = 10;
@@ -320,7 +320,6 @@ YouTube Liked Videos Remover - Chrome Console Script
   let consecutiveEmptyScrolls = 0;
 
   while (consecutiveEmptyScrolls < MAX_ATTEMPTS) {
-    // Query for menu buttons more specifically
     const menuButtons = document.querySelectorAll(
       'ytd-playlist-video-renderer #menu yt-icon-button, ytd-playlist-video-renderer ytd-menu-renderer yt-icon-button'
     );
@@ -331,7 +330,7 @@ YouTube Liked Videos Remover - Chrome Console Script
       // Store current scroll position
       const oldScrollTop = document.documentElement.scrollTop;
 
-      // Scroll more gently
+      // Scroll gently
       window.scrollBy({
         top: 1500,
         behavior: 'smooth'
