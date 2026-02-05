@@ -209,6 +209,13 @@ body.apps-tools-page {
     transform: translateX(5px);
 }
 
+@media (max-width: 1024px) {
+    .games-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 25px;
+    }
+}
+
 @media (max-width: 768px) {
     .apps-header {
         margin: 90px 0 40px;
@@ -219,7 +226,7 @@ body.apps-tools-page {
     }
 
     .games-grid {
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
         gap: 20px;
     }
 
@@ -242,6 +249,40 @@ body.apps-tools-page {
     }
 }
 
+@media (max-width: 768px) and (min-width: 481px) {
+    .games-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+    }
+
+    .game-card {
+        padding: 20px 15px;
+    }
+
+    .game-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+        margin-bottom: 15px;
+    }
+
+    .game-card h3 {
+        font-size: 1.2rem;
+        margin-bottom: 10px;
+    }
+
+    .game-card p {
+        font-size: 0.85rem;
+        margin-bottom: 20px;
+        line-height: 1.5;
+    }
+
+    .play-button {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+}
+
 @media (max-width: 480px) {
     .apps-header {
         margin: 80px 0 30px;
@@ -256,7 +297,35 @@ body.apps-tools-page {
     }
 
     .games-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+
+    .game-card {
+        padding: 20px 15px;
+    }
+
+    .game-icon {
+        width: 55px;
+        height: 55px;
+        font-size: 1.4rem;
+        margin-bottom: 12px;
+    }
+
+    .game-card h3 {
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+    }
+
+    .game-card p {
+        font-size: 0.8rem;
+        margin-bottom: 18px;
+        line-height: 1.4;
+    }
+
+    .play-button {
+        padding: 8px 16px;
+        font-size: 0.85rem;
     }
 
     .category-header h2 {
@@ -265,5 +334,12 @@ body.apps-tools-page {
 
     .category-header p {
         font-size: 1rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .games-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
     }
 }
