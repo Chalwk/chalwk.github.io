@@ -11,6 +11,7 @@ Understanding Autism Page
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Understanding Autism</title>
     <link href="../core.css" rel="stylesheet">
+    <script src="../nav-menu.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
           rel="stylesheet">
@@ -300,61 +301,7 @@ Understanding Autism Page
 </head>
 <body>
 
-<header class="header">
-    <div class="container">
-        <a class="logo" href="../index.html"> <i class="fas fa-code"></i> Jericho </a>
-
-        <nav class="nav-desktop">
-            <ul class="nav-links">
-                <li><a href="/index.html#about">About</a></li>
-                <li><a href="/browser-apps/apps_and_tools.html">Apps & Tools</a></li>
-                <li class="dropdown">
-                    <a class="dropdown-toggle" href="#">Other Stuff <i class="fas fa-chevron-down"></i></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="https://chalwk.github.io/CPAS/">CPAS</a></li>
-                        <li class="dropdown-submenu">
-                            <a class="submenu-toggle" href="#">Education <i class="fas fa-chevron-right"></i></a>
-                            <ul class="submenu">
-                                <li><a href="understanding-autism.html">Understanding Autism</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </nav>
-
-        <div class="hamburger">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-
-        <nav class="nav-mobile">
-            <ul class="nav-mobile-links">
-                <li><a href="../index.html#about">About</a></li>
-                <li><a href="../browser-apps/apps_and_tools.html">Apps & Tools</a></li>
-                <li class="dropdown">
-                    <a class="dropdown-toggle" href="#">
-                        Other Stuff
-                        <i class="fas fa-chevron-down"></i>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a href="https://chalwk.github.io/CPAS/">CPAS</a></li>
-                        <li class="dropdown-submenu">
-                            <a class="submenu-toggle" href="#">
-                                Education
-                                <i class="fas fa-chevron-right"></i>
-                            </a>
-                            <ul class="submenu">
-                                <li><a href="understanding-autism.html">Understanding Autism</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </nav>
-    </div>
-</header>
+<header class="header"></header>
 
 <main>
     <div class="hero-banner">
@@ -833,11 +780,8 @@ Understanding Autism Page
     </div>
 </footer>
 
-<div class="back-to-top" id="backToTop">
-    <i class="fas fa-arrow-up"></i>
-</div>
+<div class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></div>
 
-<script src="../nav.js"></script>
 <script>
     document.querySelectorAll('.page-nav-link').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
