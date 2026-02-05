@@ -308,36 +308,98 @@ YouTube Liked Videos Remover - Chrome Console Script
                     <i class="far fa-copy"></i> Copy Script
                 </button>
                 <pre class="script-code" id="scriptCode"><code>(async () => {
-  const DELETE_INTERVAL_MS = 1000;
+  const DELETE_INTERVAL_MS = 750; // Increased for better reliability
+  const SCROLL_INTERVAL_MS = 2000;
+  const MENU_CLICK_DELAY = 600;
+  const MAX_ATTEMPTS = 10;
+
   const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-  while (true) {
-    const menus = document.querySelectorAll(
-      'ytd-playlist-video-renderer ytd-menu-renderer yt-icon-button'
+  // Track processed items to avoid reprocessing
+  const processedItems = new Set();
+  let consecutiveEmptyScrolls = 0;
+
+  while (consecutiveEmptyScrolls < MAX_ATTEMPTS) {
+    // Query for menu buttons more specifically
+    const menuButtons = document.querySelectorAll(
+      'ytd-playlist-video-renderer #menu yt-icon-button, ytd-playlist-video-renderer ytd-menu-renderer yt-icon-button'
     );
 
-    if (menus.length === 0) {
-      window.scrollBy(0, 2000);
-      await sleep(1500);
+    if (menuButtons.length === 0) {
+      console.log('No more menu buttons found, scrolling...');
+
+      // Store current scroll position
+      const oldScrollTop = document.documentElement.scrollTop;
+
+      // Scroll more gently
+      window.scrollBy({
+        top: 1500,
+        behavior: 'smooth'
+      });
+
+      await sleep(SCROLL_INTERVAL_MS);
+
+      // Check if we actually scrolled
+      if (Math.abs(document.documentElement.scrollTop - oldScrollTop) < 100) {
+        consecutiveEmptyScrolls++;
+        console.log(`No movement detected (${consecutiveEmptyScrolls}/${MAX_ATTEMPTS})`);
+      } else {
+        consecutiveEmptyScrolls = 0;
+      }
       continue;
     }
 
-    for (const menu of menus) {
-      menu.click();
-      await sleep(400);
+    consecutiveEmptyScrolls = 0;
+    console.log(`Found ${menuButtons.length} menu buttons to process`);
 
-      const remove = [...document.querySelectorAll('ytd-menu-service-item-renderer')]
-        .find(e => e.innerText.includes('Remove from Liked videos'));
+    for (const menuButton of menuButtons) {
+      // Skip already processed items
+      const playlistItem = menuButton.closest('ytd-playlist-video-renderer');
+      if (!playlistItem || processedItems.has(playlistItem)) continue;
 
-      if (remove) {
-        remove.click();
-        await sleep(DELETE_INTERVAL_MS);
+      try {
+        // Click the menu button
+        menuButton.click();
+        await sleep(MENU_CLICK_DELAY);
+
+        // Look for remove option
+        const removeOptions = document.querySelectorAll('ytd-menu-service-item-renderer');
+        let removeFound = false;
+
+        for (const option of removeOptions) {
+          if (option.innerText.includes('Remove from Liked videos')) {
+            option.click();
+            processedItems.add(playlistItem);
+            console.log('Removed item from Liked videos');
+            removeFound = true;
+            await sleep(DELETE_INTERVAL_MS);
+            break;
+          }
+        }
+
+        if (!removeFound) {
+          // Close the menu if remove option not found
+          document.activeElement?.blur();
+          await sleep(300);
+        }
+
+      } catch (error) {
+        console.warn('Error processing menu:', error);
+        // Close any open menus
+        document.activeElement?.blur();
+        await sleep(500);
       }
     }
 
-    window.scrollBy(0, 2000);
-    await sleep(1500);
+    // Gentle scroll after processing batch
+    window.scrollBy({
+      top: 1000,
+      behavior: 'smooth'
+    });
+    await sleep(SCROLL_INTERVAL_MS);
   }
+
+  console.log('Script completed or reached maximum attempts');
 })();</code></pre>
             </div>
 
@@ -385,8 +447,12 @@ YouTube Liked Videos Remover - Chrome Console Script
                     <li><code>DELETE_INTERVAL_MS</code> - Time between each removal (in milliseconds). Increase if you
                         get rate-limited.
                     </li>
-                    <li><code>sleep()</code> durations - Adjust the 400ms and 1500ms values if the script is too
-                        fast/slow for your connection.
+                    <li><code>SCROLL_INTERVAL_MS</code> - Time to wait after scrolling before checking for more videos.
+                    </li>
+                    <li><code>MENU_CLICK_DELAY</code> - Delay after clicking menu button before looking for remove
+                        option.
+                    </li>
+                    <li><code>MAX_ATTEMPTS</code> - Maximum number of consecutive empty scrolls before script stops.
                     </li>
                 </ul>
                 <p><strong>Note:</strong> Making the script run too fast may cause YouTube to temporarily block actions
