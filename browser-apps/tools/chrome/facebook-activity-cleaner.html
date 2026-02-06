@@ -296,8 +296,8 @@ Facebook Activity Cleaner - Chrome Console Script
 
                 <div class="config-item">
                     <label for="intervalInput">Interval Between Deletes (ms):</label>
-                    <input type="number" id="intervalInput" value="2700" min="100" max="10000">
-                    <small>Time to wait between each delete operation. Default: 2700ms (2.7 seconds)</small>
+                    <input type="number" id="intervalInput" value="100" min="100" max="10000">
+                    <small>Time to wait between each delete operation. Default: 100ms</small>
                 </div>
 
                 <div class="config-item">
@@ -323,15 +323,14 @@ Facebook Activity Cleaner - Chrome Console Script
                     <i class="far fa-copy"></i> Copy Script
                 </button>
                 <pre class="script-code" id="scriptCode"><code id="scriptContent">(async function() {
-    // Configuration - Update these values as needed
     const CONFIG = {
-        INTERVAL_BETWEEN_DELETES: 2700,  // Time between each delete (ms)
-        MENU_WAIT_TIME: 100,            // Time to wait for menu to appear
-        CONFIRM_WAIT_TIME: 100,         // Time to wait for confirmation dialog
-        SCROLL_AMOUNT: 500,              // How much to scroll (pixels)
-        SCROLL_WAIT_TIME: 1000,          // Time to wait after scrolling
-        MAX_EMPTY_SCROLLS: 5,            // Stop after this many empty scrolls
-        PROCESS_BATCH_SIZE: 1            // Process items one at a time
+        INTERVAL_BETWEEN_DELETES: 100,
+        MENU_WAIT_TIME: 100,
+        CONFIRM_WAIT_TIME: 100,
+        SCROLL_AMOUNT: 500,
+        SCROLL_WAIT_TIME: 200,
+        MAX_EMPTY_SCROLLS: 5,
+        PROCESS_BATCH_SIZE: 1
     };
 
     const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -343,13 +342,11 @@ Facebook Activity Cleaner - Chrome Console Script
     let emptyScrollCount = 0;
     let shouldStop = false;
 
-    // Stop function that can be called from console
     window.stopScript = function() {
         shouldStop = true;
         console.log('⏹️  Script stop requested...');
     };
 
-    // Find three-dot buttons
     function findThreeDotButtons() {
         const selectors = [
             'div[aria-label="Actions for this activity"]',
@@ -372,12 +369,9 @@ Facebook Activity Cleaner - Chrome Console Script
                         buttons.push(el);
                     }
                 });
-            } catch (e) {
-                // Skip invalid selectors
-            }
+            } catch (e) {}
         }
 
-        // Remove duplicates
         const uniqueButtons = [];
         const seen = new Set();
         for (const btn of buttons) {
@@ -390,14 +384,14 @@ Facebook Activity Cleaner - Chrome Console Script
         return uniqueButtons;
     }
 
-    // Click delete option in menu
     async function clickDeleteOption() {
         const menuItems = document.querySelectorAll('div[role="menuitem"]');
 
         for (const item of menuItems) {
             const spans = item.querySelectorAll('span');
             for (const span of spans) {
-                if (span.textContent.trim() === 'Delete Your Activity' &&
+                const text = span.textContent.trim();
+                if ((text === 'Delete Your Activity' || text === 'Delete') &&
                     item.offsetParent !== null) {
                     item.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     await sleep(200);
@@ -407,10 +401,10 @@ Facebook Activity Cleaner - Chrome Console Script
             }
         }
 
-        // Alternative text search
         const allElements = document.querySelectorAll('*');
         for (const el of allElements) {
-            if (el.textContent.trim() === 'Delete Your Activity' &&
+            const text = el.textContent.trim();
+            if ((text === 'Delete Your Activity' || text === 'Delete') &&
                 el.offsetParent !== null &&
                 el.getBoundingClientRect().width > 0) {
                 let clickableEl = el;
@@ -427,16 +421,14 @@ Facebook Activity Cleaner - Chrome Console Script
         return false;
     }
 
-    // Click confirmation button
     async function clickConfirmButton() {
         await sleep(800);
 
-        // Strategy 1: Look for "Delete" buttons
         const allButtons = document.querySelectorAll('button, div[role="button"]');
         for (const btn of allButtons) {
             if (!btn.offsetParent) continue;
             const btnText = btn.textContent.trim().toLowerCase();
-            if (btnText === 'delete' && btn.offsetParent !== null) {
+            if ((btnText === 'delete' || btnText === 'confirm') && btn.offsetParent !== null) {
                 const rect = btn.getBoundingClientRect();
                 if (rect.width > 50 && rect.height > 30) {
                     btn.click();
@@ -445,7 +437,6 @@ Facebook Activity Cleaner - Chrome Console Script
             }
         }
 
-        // Strategy 2: Specific dialog buttons
         const primaryButtons = document.querySelectorAll('[data-testid="confirmationSheetConfirmButton"]');
         for (const btn of primaryButtons) {
             if (btn.offsetParent) {
@@ -454,7 +445,6 @@ Facebook Activity Cleaner - Chrome Console Script
             }
         }
 
-        // Strategy 3: Press Enter key as fallback
         document.activeElement?.blur();
         await sleep(100);
         const enterEvent = new KeyboardEvent('keydown', {
@@ -467,7 +457,6 @@ Facebook Activity Cleaner - Chrome Console Script
         });
         document.dispatchEvent(enterEvent);
 
-        // Click active element if it's a button
         if (document.activeElement && document.activeElement.getAttribute('role') === 'button') {
             document.activeElement.click();
             return true;
@@ -476,20 +465,17 @@ Facebook Activity Cleaner - Chrome Console Script
         return false;
     }
 
-    // Process a single activity item
     async function processActivityItem(button) {
         try {
             if (!button.isConnected) {
                 return false;
             }
 
-            // Click three-dot menu
             button.scrollIntoView({ behavior: 'smooth', block: 'center' });
             await sleep(500);
             button.click();
             await sleep(CONFIG.MENU_WAIT_TIME);
 
-            // Click delete option
             const deleteClicked = await clickDeleteOption();
             if (!deleteClicked) {
                 document.body.click();
@@ -497,16 +483,13 @@ Facebook Activity Cleaner - Chrome Console Script
                 return false;
             }
 
-            // Handle confirmation
             await clickConfirmButton();
 
             deletedCount++;
             console.log(`✅ Deleted ${deletedCount} item(s)`);
 
-            // Wait before next operation
             await sleep(CONFIG.INTERVAL_BETWEEN_DELETES);
 
-            // Clean up
             document.body.click();
             await sleep(300);
 
@@ -520,7 +503,6 @@ Facebook Activity Cleaner - Chrome Console Script
         }
     }
 
-    // Main loop
     console.log('🔄 Starting deletion process...');
     await sleep(1000);
 
@@ -570,7 +552,6 @@ Facebook Activity Cleaner - Chrome Console Script
             emptyScrollCount = 0;
         }
 
-        // Scroll to potentially load more
         window.scrollBy({ top: 200, behavior: 'smooth' });
         await sleep(1000);
     }
@@ -621,7 +602,7 @@ Facebook Activity Cleaner - Chrome Console Script
                     <li>The script automatically scrolls and loads more items as needed</li>
                     <li>It stops when it reaches the bottom of the page or after 5 empty scrolls</li>
                     <li>If Facebook changes their HTML, you might need to update the selectors</li>
-                    <li>For thousands of items, this will take time (e.g., 1000 items at 2700ms each = ~45 minutes)</li>
+                    <li>For thousands of items, this will take time (e.g., 1000 items at 100ms each = ~1.7 minutes)</li>
                 </ul>
             </div>
 
@@ -630,11 +611,11 @@ Facebook Activity Cleaner - Chrome Console Script
                 <p>You can modify these variables in the script:</p>
                 <ul>
                     <li><code>INTERVAL_BETWEEN_DELETES</code> - Time between each deletion (milliseconds). Default is
-                        2700ms (2.7 seconds).
+                        100ms.
                         <ul>
                             <li>Too fast may trigger Facebook's rate limiting</li>
                             <li>May cause temporary blocks or CAPTCHA verification</li>
-                            <li>2700ms is conservative for stability</li>
+                            <li>100ms is faster but may risk detection</li>
                         </ul>
                     </li>
                     <li><code>SCROLL_AMOUNT</code> - How much to scroll when no items are found (pixels)</li>
@@ -685,7 +666,7 @@ Facebook Activity Cleaner - Chrome Console Script
         let currentScriptCode = scriptContent.textContent;
 
         function updateScriptWithValues() {
-            const interval = parseInt(intervalInput.value) || 2700;
+            const interval = parseInt(intervalInput.value) || 100;
             const scrollAmount = parseInt(scrollAmountInput.value) || 500;
             const batchSize = parseInt(batchSizeInput.value) || 1;
 
