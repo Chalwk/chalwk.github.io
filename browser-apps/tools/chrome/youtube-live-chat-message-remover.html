@@ -1,0 +1,439 @@
+<!--
+Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
+
+YouTube Live Chat Messages Remover - Chrome Console Script
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>YouTube Live Chat Messages Remover</title>
+
+    <link href="../../../core.css" rel="stylesheet"/>
+    <script src="../../../nav-menu.js"></script>
+
+    <style>
+        .chrome-script-container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .script-card {
+            background: var(--light);
+            border: 1px solid var(--gray-light);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .script-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .script-header h1 {
+            color: var(--darker);
+            margin-bottom: 0.5rem;
+        }
+
+        .script-description {
+            color: var(--gray);
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .script-code-container {
+            position: relative;
+            margin: 2rem 0;
+            background: var(--darker);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .script-code {
+            padding: 1.5rem;
+            font-family: 'Source Code Pro', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: #f8f8f2;
+            overflow-x: auto;
+            white-space: pre;
+            margin: 0;
+            counter-reset: line;
+        }
+
+        .script-code-line {
+            display: block;
+            padding: 2px 0;
+        }
+
+        .script-code-line:before {
+            counter-increment: line;
+            content: counter(line);
+            display: inline-block;
+            width: 40px;
+            margin-right: 20px;
+            text-align: right;
+            color: var(--gray);
+            user-select: none;
+            opacity: 0.6;
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .copy-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .copy-button.success {
+            background: var(--success);
+        }
+
+        .copy-button.error {
+            background: var(--error);
+        }
+
+        .instructions {
+            background: var(--light);
+            border-left: 4px solid var(--accent);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0 var(--radius) var(--radius) 0;
+        }
+
+        .instructions h3 {
+            color: var(--darker);
+            margin-bottom: 1rem;
+        }
+
+        .instructions ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .instructions li {
+            margin-bottom: 0.75rem;
+            line-height: 1.6;
+        }
+
+        .warning {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--error);
+            border-left: 4px solid var(--error);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 var(--radius) var(--radius) 0;
+        }
+
+        .warning h4 {
+            color: var(--error);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .usage-note {
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid var(--accent);
+            border-left: 4px solid var(--accent);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 var(--radius) var(--radius) 0;
+        }
+
+        .usage-note h4 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .chrome-script-container {
+                margin: 1rem auto;
+                padding: 0 0.5rem;
+            }
+
+            .script-card {
+                padding: 1.5rem;
+            }
+
+            .script-code {
+                font-size: 0.8rem;
+                padding: 1rem;
+            }
+
+            .script-code-line:before {
+                width: 30px;
+                margin-right: 15px;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .script-code {
+                font-size: 0.75rem;
+                padding: 0.75rem;
+            }
+
+            .copy-button {
+                position: relative;
+                top: 0;
+                right: 0;
+                margin-top: 1rem;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .script-code-container {
+                padding-bottom: 1rem;
+            }
+        }
+    </style>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
+          rel="stylesheet">
+</head>
+<body>
+
+<header class="header"></header>
+
+<main>
+    <div class="chrome-script-container">
+        <div class="script-card">
+            <div class="script-header">
+                <h1>YouTube Live Chat Messages Remover</h1>
+                <p class="script-description">
+                    A Chrome console script that automatically deletes your YouTube Live Chat messages from "My
+                    Activity".
+                    This script runs directly in your browser's developer console and automates the process of cleaning
+                    up your live chat history.
+                </p>
+            </div>
+
+            <div class="warning">
+                <h4><i class="fas fa-exclamation-triangle"></i> Important Warning</h4>
+                <p>This script performs irreversible actions. Once you delete a live chat message, it cannot be
+                    recovered.
+                    The script runs automatically and will delete ALL live chat messages from your activity history.
+                    Use with caution.</p>
+            </div>
+
+            <div class="script-code-container">
+                <button class="copy-button" id="copyScriptBtn">
+                    <i class="far fa-copy"></i> Copy Script
+                </button>
+                <pre class="script-code" id="scriptCode"><code>(async () => {
+    const DELAY = 1000; // 200ms between deletions
+    let count = 0;
+
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+    console.log('Starting deletion... No confirmation needed!');
+
+    // First, scroll to top to ensure we start from beginning
+    window.scrollTo(0, 0);
+    await sleep(500);
+
+    while (true) {
+        // Find ALL delete buttons currently on page
+        const buttons = document.querySelectorAll('button[aria-label^="Delete activity item"]');
+
+        if (buttons.length === 0) {
+            // Scroll down and wait for more content
+            window.scrollBy(0, 1000);
+            await sleep(1000);
+
+            // Check if we're at bottom
+            const scrollPosition = window.scrollY + window.innerHeight;
+            const pageHeight = document.documentElement.scrollHeight;
+
+            if (scrollPosition >= pageHeight - 100) {
+                console.log(`🏁 Reached bottom! Deleted ${count} messages total.`);
+                break;
+            }
+            continue;
+        }
+
+        // Delete all visible buttons in sequence
+        for (const button of buttons) {
+            button.click();
+            count++;
+            console.log(`Deleted ${count}`);
+            await sleep(DELAY);
+        }
+
+        // Scroll a bit after each batch
+        window.scrollBy(0, 300);
+        await sleep(300);
+    }
+})();</code></pre>
+            </div>
+
+            <div class="instructions">
+                <h3>How to Use This Script</h3>
+                <ol>
+                    <li><strong>Navigate to YouTube Activity:</strong> Go to <a
+                            href="https://www.youtube.com/feed/history"
+                            target="_blank">YouTube History</a> (you must be signed in).
+                    </li>
+                    <li><strong>Select Live Chat:</strong> Click on "Live Chat" under "Manage all history" from the left
+                        sidebar.
+                    </li>
+                    <li><strong>Open Developer Console:</strong> Press <code>F12</code> or <code>Ctrl+Shift+I</code>
+                        (Windows/Linux) / <code>Cmd+Option+I</code> (Mac) to open Chrome Developer Tools.
+                    </li>
+                    <li><strong>Switch to Console Tab:</strong> Click on the "Console" tab in the Developer Tools panel.
+                    </li>
+                    <li><strong>Paste and Run:</strong> Copy the script above (click "Copy Script" button), paste it
+                        into the console, and press <code>Enter</code> to execute.
+                    </li>
+                    <li><strong>Monitor Progress:</strong> Watch the console for deletion counts and watch the browser
+                        as it
+                        automatically removes messages.
+                    </li>
+                    <li><strong>Stop the Script:</strong> To pause execution, press <code>Ctrl+Shift+P</code> in Chrome
+                        console.
+                        To stop completely, refresh the page.
+                    </li>
+                </ol>
+            </div>
+
+            <div class="usage-note">
+                <h4><i class="fas fa-lightbulb"></i> Usage Notes</h4>
+                <ul>
+                    <li>Keep the YouTube tab active and visible while the script runs</li>
+                    <li>The script automatically scrolls and loads more messages as needed</li>
+                    <li>It stops when it reaches the bottom of the page</li>
+                    <li>If Google changes their HTML, you might need to update the selector</li>
+                    <li>For thousands of messages, this will take time (e.g., 1000 messages at 200ms each = ~3.3
+                        minutes)
+                    </li>
+                </ul>
+            </div>
+
+            <div class="instructions">
+                <h3>Configuration Tips</h3>
+                <p>You can modify this variable in the script:</p>
+                <ul>
+                    <li><code>DELAY</code> - Time between each deletion (in milliseconds). Default is 1000ms (1 second).
+                        You can reduce this to 200ms for faster deletion, but be aware:
+                        <ul>
+                            <li>Too fast may trigger YouTube's rate limiting</li>
+                            <li>May cause the page to become unresponsive</li>
+                            <li>Default 1000ms is safer for stability</li>
+                        </ul>
+                    </li>
+                </ul>
+                <p><strong>Note:</strong> Making the script run too fast may cause YouTube to temporarily block actions
+                    or require CAPTCHA verification. The current delay is set conservatively to avoid issues.</p>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="footer-container">
+        <div class="social-icons">
+            <a aria-label="Discord" href="https://discord.com/channels/@me/707058110396760094" target="_blank">
+                <i class="fab fa-discord"></i>
+            </a>
+            <a aria-label="GitHub" href="https://github.com/Chalwk" target="_blank">
+                <i class="fab fa-github"></i>
+            </a>
+            <a aria-label="Email" href="mailto:chalwk.dev@gmail.com">
+                <i class="fas fa-envelope"></i>
+            </a>
+        </div>
+        <p class="footer-copyright"></p>
+    </div>
+</footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const copyButton = document.getElementById('copyScriptBtn');
+        const scriptCode = document.getElementById('scriptCode').textContent;
+
+        copyButton.addEventListener('click', async function() {
+            try {
+                await navigator.clipboard.writeText(scriptCode);
+
+                const originalText = copyButton.innerHTML;
+                const originalClass = copyButton.className;
+
+                copyButton.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                copyButton.className = 'copy-button success';
+
+                setTimeout(() => {
+                    copyButton.innerHTML = originalText;
+                    copyButton.className = originalClass;
+                }, 2000);
+
+            } catch (err) {
+                console.error('Failed to copy text: ', err);
+
+                const originalText = copyButton.innerHTML;
+                const originalClass = copyButton.className;
+
+                copyButton.innerHTML = '<i class="fas fa-times"></i> Failed to copy';
+                copyButton.className = 'copy-button error';
+
+                setTimeout(() => {
+                    copyButton.innerHTML = originalText;
+                    copyButton.className = originalClass;
+                }, 2000);
+
+                const textArea = document.createElement('textarea');
+                textArea.value = scriptCode;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    copyButton.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    copyButton.className = 'copy-button success';
+                    setTimeout(() => {
+                        copyButton.innerHTML = originalText;
+                        copyButton.className = originalClass;
+                    }, 2000);
+                } catch (fallbackErr) {
+                    console.error('Fallback copy failed: ', fallbackErr);
+                }
+                document.body.removeChild(textArea);
+            }
+        });
+
+        const codeElement = document.querySelector('.script-code');
+        const lines = codeElement.textContent.split('\n');
+        codeElement.innerHTML = lines.map((line, index) =>
+        `<span class="script-code-line">${line}</span>`
+        ).join('\n');
+    });
+</script>
+</body>
+</html>
