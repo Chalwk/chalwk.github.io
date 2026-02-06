@@ -1,9 +1,15 @@
+<!--
+Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
+
+YouTube Activity Cleaner - Chrome Console Script
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>YouTube Activity Cleaner (Comments, Posts, Live Chat)</title>
+    <title>YouTube Activity Cleaner</title>
 
     <link href="../../../core.css" rel="stylesheet"/>
     <script src="../../../nav-menu.js"></script>
@@ -37,6 +43,31 @@
             color: var(--gray);
             font-size: 1.1rem;
             line-height: 1.6;
+        }
+
+        .activity-selector {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: var(--light);
+            border: 1px solid var(--gray-light);
+            border-radius: var(--radius);
+        }
+
+        .activity-selector label {
+            display: block;
+            margin-bottom: 1rem;
+            font-weight: 500;
+            color: var(--darker);
+        }
+
+        .activity-selector select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--gray-light);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            background: white;
+            color: var(--darker);
         }
 
         .script-code-container {
@@ -183,10 +214,6 @@
                 width: 30px;
                 margin-right: 15px;
             }
-
-            .features {
-                grid-template-columns: 1fr;
-            }
         }
 
         @media (max-width: 480px) {
@@ -222,27 +249,35 @@
     <div class="chrome-script-container">
         <div class="script-card">
             <div class="script-header">
-                <h1>YouTube Activity Cleaner (Comments, Posts, Live Chat)</h1>
+                <h1>YouTube Activity Cleaner</h1>
                 <p class="script-description">
-                    A Chrome console script that automatically deletes your YouTube Comments, Posts, or Live Chat
-                    messages from "My Activity".
-                    This script runs directly in your browser's developer console and automates the process of cleaning
-                    up your YouTube activity history.
+                    A Chrome console script that automatically deletes your YouTube activity. Choose between cleaning
+                    Comments, Posts, Live Chat, or removing Liked Videos.
+                    This script runs directly in your browser's developer console and automates the cleanup process.
                 </p>
             </div>
 
             <div class="warning">
                 <h4><i class="fas fa-exclamation-triangle"></i> Important Warning</h4>
-                <p>This script performs irreversible actions. Once you delete an activity item, it cannot be recovered.
-                    The script runs automatically and will delete ALL items from your selected activity history.
-                    Use with caution.</p>
+                <p>This script performs irreversible actions. Once you delete an activity item or remove a liked video,
+                    it cannot be recovered.
+                    The script runs automatically and will delete ALL items from your selected activity history. Use
+                    with caution.</p>
+            </div>
+
+            <div class="activity-selector">
+                <label for="activityType">Select Activity Type to Clean:</label>
+                <select id="activityType">
+                    <option value="activity">Comments / Posts / Live Chat</option>
+                    <option value="liked">Liked Videos</option>
+                </select>
             </div>
 
             <div class="script-code-container">
                 <button class="copy-button" id="copyScriptBtn">
                     <i class="far fa-copy"></i> Copy Script
                 </button>
-                <pre class="script-code" id="scriptCode"><code>(async () => {
+                <pre class="script-code" id="scriptCode"><code id="activityCode">(async () => {
     const DELAY = 1000;
     let count = 0;
 
@@ -280,11 +315,93 @@
         window.scrollBy(0, 300);
         await sleep(300);
     }
+})();</code><code id="likedCode" style="display:none">(async () => {
+  const DELETE_INTERVAL_MS = 750;
+  const SCROLL_INTERVAL_MS = 2000;
+  const MENU_CLICK_DELAY = 600;
+  const MAX_ATTEMPTS = 10;
+
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+  const processedItems = new Set();
+  let consecutiveEmptyScrolls = 0;
+
+  while (consecutiveEmptyScrolls < MAX_ATTEMPTS) {
+    const menuButtons = document.querySelectorAll(
+      'ytd-playlist-video-renderer #menu yt-icon-button, ytd-playlist-video-renderer ytd-menu-renderer yt-icon-button'
+    );
+
+    if (menuButtons.length === 0) {
+      console.log('No more menu buttons found, scrolling...');
+
+      const oldScrollTop = document.documentElement.scrollTop;
+
+      window.scrollBy({
+        top: 1500,
+        behavior: 'smooth'
+      });
+
+      await sleep(SCROLL_INTERVAL_MS);
+
+      if (Math.abs(document.documentElement.scrollTop - oldScrollTop) < 100) {
+        consecutiveEmptyScrolls++;
+        console.log(`No movement detected (${consecutiveEmptyScrolls}/${MAX_ATTEMPTS})`);
+      } else {
+        consecutiveEmptyScrolls = 0;
+      }
+      continue;
+    }
+
+    consecutiveEmptyScrolls = 0;
+    console.log(`Found ${menuButtons.length} menu buttons to process`);
+
+    for (const menuButton of menuButtons) {
+      const playlistItem = menuButton.closest('ytd-playlist-video-renderer');
+      if (!playlistItem || processedItems.has(playlistItem)) continue;
+
+      try {
+        menuButton.click();
+        await sleep(MENU_CLICK_DELAY);
+
+        const removeOptions = document.querySelectorAll('ytd-menu-service-item-renderer');
+        let removeFound = false;
+
+        for (const option of removeOptions) {
+          if (option.innerText.includes('Remove from Liked videos')) {
+            option.click();
+            processedItems.add(playlistItem);
+            console.log('Removed item from Liked videos');
+            removeFound = true;
+            await sleep(DELETE_INTERVAL_MS);
+            break;
+          }
+        }
+
+        if (!removeFound) {
+          document.activeElement?.blur();
+          await sleep(300);
+        }
+
+      } catch (error) {
+        console.warn('Error processing menu:', error);
+        document.activeElement?.blur();
+        await sleep(500);
+      }
+    }
+
+    window.scrollBy({
+      top: 1000,
+      behavior: 'smooth'
+    });
+    await sleep(SCROLL_INTERVAL_MS);
+  }
+
+  console.log('Script completed or reached maximum attempts');
 })();</code></pre>
             </div>
 
-            <div class="instructions">
-                <h3>How to Use This Script</h3>
+            <div id="activityInstructions" class="instructions">
+                <h3>How to Use This Script (Comments/Posts/Live Chat)</h3>
                 <ol>
                     <li><strong>Navigate to YouTube Activity:</strong> Go to <a
                             href="https://www.youtube.com/feed/history" target="_blank">YouTube History</a> (you must be
@@ -310,8 +427,32 @@
                 </ol>
             </div>
 
-            <div class="usage-note">
-                <h4><i class="fas fa-lightbulb"></i> Usage Notes</h4>
+            <div id="likedInstructions" class="instructions" style="display:none">
+                <h3>How to Use This Script (Liked Videos)</h3>
+                <ol>
+                    <li><strong>Navigate to YouTube:</strong> Go to <a href="https://www.youtube.com/playlist?list=LL"
+                                                                       target="_blank">your YouTube Liked Videos
+                        playlist</a> (you must be signed in).
+                    </li>
+                    <li><strong>Open Developer Console:</strong> Press <code>F12</code> or <code>Ctrl+Shift+I</code>
+                        (Windows/Linux) / <code>Cmd+Option+I</code> (Mac) to open Chrome Developer Tools.
+                    </li>
+                    <li><strong>Switch to Console Tab:</strong> Click on the "Console" tab in the Developer Tools panel.
+                    </li>
+                    <li><strong>Paste and Run:</strong> Copy the script above (click "Copy Script" button), paste it
+                        into the console, and press <code>Enter</code> to execute.
+                    </li>
+                    <li><strong>Monitor Progress:</strong> Watch the console for any errors and watch the browser as it
+                        automatically removes videos.
+                    </li>
+                    <li><strong>Stop the Script:</strong> To stop the script, either close the tab or press the stop
+                        button in the console (or refresh the page).
+                    </li>
+                </ol>
+            </div>
+
+            <div id="activityUsage" class="usage-note">
+                <h4><i class="fas fa-lightbulb"></i> Usage Notes (Comments/Posts/Live Chat)</h4>
                 <ul>
                     <li>Keep the YouTube tab active and visible while the script runs</li>
                     <li>The script works on Comments, Posts, and Live Chat pages</li>
@@ -323,8 +464,21 @@
                 </ul>
             </div>
 
-            <div class="instructions">
-                <h3>Configuration Tips</h3>
+            <div id="likedUsage" class="usage-note" style="display:none">
+                <h4><i class="fas fa-lightbulb"></i> Usage Notes (Liked Videos)</h4>
+                <ul>
+                    <li>Keep the YouTube tab active and visible while the script runs</li>
+                    <li>The script will automatically scroll and load more videos as needed</li>
+                    <li>Adjust <code>DELETE_INTERVAL_MS</code> if YouTube is rate-limiting you (increase the value)</li>
+                    <li>If the script stops working, YouTube may have updated their DOM structure - check back for
+                        script updates
+                    </li>
+                    <li>For large playlists, this may take a while - be patient!</li>
+                </ul>
+            </div>
+
+            <div id="activityConfig" class="instructions">
+                <h3>Configuration Tips (Comments/Posts/Live Chat)</h3>
                 <p>You can modify this variable in the script:</p>
                 <ul>
                     <li><code>DELAY</code> - Time between each deletion (in milliseconds). Default is 1000ms (1 second).
@@ -338,6 +492,25 @@
                 </ul>
                 <p><strong>Note:</strong> Making the script run too fast may cause YouTube to temporarily block actions
                     or require CAPTCHA verification. The current delay is set conservatively to avoid issues.</p>
+            </div>
+
+            <div id="likedConfig" class="instructions" style="display:none">
+                <h3>Configuration Tips (Liked Videos)</h3>
+                <p>You can modify these variables in the script:</p>
+                <ul>
+                    <li><code>DELETE_INTERVAL_MS</code> - Time between each removal (in milliseconds). Increase if you
+                        get rate-limited.
+                    </li>
+                    <li><code>SCROLL_INTERVAL_MS</code> - Time to wait after scrolling before checking for more videos.
+                    </li>
+                    <li><code>MENU_CLICK_DELAY</code> - Delay after clicking menu button before looking for remove
+                        option.
+                    </li>
+                    <li><code>MAX_ATTEMPTS</code> - Maximum number of consecutive empty scrolls before script stops.
+                    </li>
+                </ul>
+                <p><strong>Note:</strong> Making the script run too fast may cause YouTube to temporarily block actions
+                    or require CAPTCHA verification.</p>
             </div>
         </div>
     </div>
@@ -362,12 +535,50 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        const activityType = document.getElementById('activityType');
+        const activityCode = document.getElementById('activityCode');
+        const likedCode = document.getElementById('likedCode');
+        const activityInstructions = document.getElementById('activityInstructions');
+        const likedInstructions = document.getElementById('likedInstructions');
+        const activityUsage = document.getElementById('activityUsage');
+        const likedUsage = document.getElementById('likedUsage');
+        const activityConfig = document.getElementById('activityConfig');
+        const likedConfig = document.getElementById('likedConfig');
         const copyButton = document.getElementById('copyScriptBtn');
-        const scriptCode = document.getElementById('scriptCode').textContent;
+
+        let currentScriptCode = activityCode.textContent;
+
+        function updateDisplay() {
+            const value = activityType.value;
+
+            if (value === 'activity') {
+                activityCode.style.display = 'block';
+                likedCode.style.display = 'none';
+                activityInstructions.style.display = 'block';
+                likedInstructions.style.display = 'none';
+                activityUsage.style.display = 'block';
+                likedUsage.style.display = 'none';
+                activityConfig.style.display = 'block';
+                likedConfig.style.display = 'none';
+                currentScriptCode = activityCode.textContent;
+            } else {
+                activityCode.style.display = 'none';
+                likedCode.style.display = 'block';
+                activityInstructions.style.display = 'none';
+                likedInstructions.style.display = 'block';
+                activityUsage.style.display = 'none';
+                likedUsage.style.display = 'block';
+                activityConfig.style.display = 'none';
+                likedConfig.style.display = 'block';
+                currentScriptCode = likedCode.textContent;
+            }
+        }
+
+        activityType.addEventListener('change', updateDisplay);
 
         copyButton.addEventListener('click', async function() {
             try {
-                await navigator.clipboard.writeText(scriptCode);
+                await navigator.clipboard.writeText(currentScriptCode);
 
                 const originalText = copyButton.innerHTML;
                 const originalClass = copyButton.className;
@@ -395,7 +606,7 @@
                 }, 2000);
 
                 const textArea = document.createElement('textarea');
-                textArea.value = scriptCode;
+                textArea.value = currentScriptCode;
                 document.body.appendChild(textArea);
                 textArea.select();
                 try {
