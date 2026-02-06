@@ -1,0 +1,774 @@
+<!--
+Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
+
+Facebook Activity Cleaner - Chrome Console Script
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Facebook Activity Cleaner</title>
+
+    <link href="../../../core.css" rel="stylesheet"/>
+    <script src="../../../nav-menu.js"></script>
+
+    <style>
+        .chrome-script-container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .script-card {
+            background: var(--light);
+            border: 1px solid var(--gray-light);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .script-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .script-header h1 {
+            color: var(--darker);
+            margin-bottom: 0.5rem;
+        }
+
+        .script-description {
+            color: var(--gray);
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .script-code-container {
+            position: relative;
+            margin: 2rem 0;
+            background: var(--darker);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .script-code {
+            padding: 1.5rem;
+            font-family: 'Source Code Pro', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: #f8f8f2;
+            overflow-x: auto;
+            white-space: pre;
+            margin: 0;
+            counter-reset: line;
+        }
+
+        .script-code-line {
+            display: block;
+            padding: 2px 0;
+        }
+
+        .script-code-line:before {
+            counter-increment: line;
+            content: counter(line);
+            display: inline-block;
+            width: 40px;
+            margin-right: 20px;
+            text-align: right;
+            color: var(--gray);
+            user-select: none;
+            opacity: 0.6;
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .copy-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .copy-button.success {
+            background: var(--success);
+        }
+
+        .copy-button.error {
+            background: var(--error);
+        }
+
+        .instructions {
+            background: var(--light);
+            border-left: 4px solid var(--accent);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0 var(--radius) var(--radius) 0;
+        }
+
+        .instructions h3 {
+            color: var(--darker);
+            margin-bottom: 1rem;
+        }
+
+        .instructions ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .instructions li {
+            margin-bottom: 0.75rem;
+            line-height: 1.6;
+        }
+
+        .warning {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--error);
+            border-left: 4px solid var(--error);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 var(--radius) var(--radius) 0;
+        }
+
+        .warning h4 {
+            color: var(--error);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .usage-note {
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid var(--accent);
+            border-left: 4px solid var(--accent);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 var(--radius) var(--radius) 0;
+        }
+
+        .usage-note h4 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .config-options {
+            background: var(--light);
+            border: 1px solid var(--gray-light);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .config-options h4 {
+            color: var(--darker);
+            margin-bottom: 1rem;
+        }
+
+        .config-item {
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .config-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .config-item label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--darker);
+        }
+
+        .config-item input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--gray-light);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            background: white;
+            color: var(--darker);
+        }
+
+        .config-item small {
+            display: block;
+            margin-top: 0.5rem;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .chrome-script-container {
+                margin: 1rem auto;
+                padding: 0 0.5rem;
+            }
+
+            .script-card {
+                padding: 1.5rem;
+            }
+
+            .script-code {
+                font-size: 0.8rem;
+                padding: 1rem;
+            }
+
+            .script-code-line:before {
+                width: 30px;
+                margin-right: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .script-code {
+                font-size: 0.75rem;
+                padding: 0.75rem;
+            }
+
+            .copy-button {
+                position: relative;
+                top: 0;
+                right: 0;
+                margin-top: 1rem;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .script-code-container {
+                padding-bottom: 1rem;
+            }
+        }
+    </style>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
+          rel="stylesheet">
+</head>
+<body>
+
+<header class="header"></header>
+
+<main>
+    <div class="chrome-script-container">
+        <div class="script-card">
+            <div class="script-header">
+                <h1>Facebook Activity Cleaner</h1>
+                <p class="script-description">
+                    A Chrome console script that automatically deletes your Facebook activity logs. Works with Group
+                    activity,
+                    Comments, Posts, and any activity that has the three-dot menu with a "Delete Your Activity" option.
+                    This script runs directly in your browser's developer console and automates the cleanup process.
+                </p>
+            </div>
+
+            <div class="warning">
+                <h4><i class="fas fa-exclamation-triangle"></i> Critical Warning</h4>
+                <p>This script performs irreversible actions. Once you delete an activity item, it cannot be recovered.
+                    The script will automatically delete ALL items from your activity history that match the three-dot
+                    menu pattern.
+                    Use with extreme caution and only on accounts you own.</p>
+            </div>
+
+            <div class="config-options">
+                <h4>Script Configuration</h4>
+                <p>Customize these values in the script below before running:</p>
+
+                <div class="config-item">
+                    <label for="intervalInput">Interval Between Deletes (ms):</label>
+                    <input type="number" id="intervalInput" value="2700" min="100" max="10000">
+                    <small>Time to wait between each delete operation. Default: 2700ms (2.7 seconds)</small>
+                </div>
+
+                <div class="config-item">
+                    <label for="scrollAmountInput">Scroll Amount (pixels):</label>
+                    <input type="number" id="scrollAmountInput" value="500" min="100" max="2000">
+                    <small>How much to scroll when no items are found. Default: 500px</small>
+                </div>
+
+                <div class="config-item">
+                    <label for="batchSizeInput">Process Batch Size:</label>
+                    <input type="number" id="batchSizeInput" value="1" min="1" max="10">
+                    <small>Number of items to process at once. Default: 1 (recommended for stability)</small>
+                </div>
+
+                <button class="copy-button" style="position: relative; top: 0; right: 0; margin-top: 1rem;"
+                        id="updateScriptBtn">
+                    <i class="fas fa-sync-alt"></i> Update Script with Values
+                </button>
+            </div>
+
+            <div class="script-code-container">
+                <button class="copy-button" id="copyScriptBtn">
+                    <i class="far fa-copy"></i> Copy Script
+                </button>
+                <pre class="script-code" id="scriptCode"><code id="scriptContent">(async function() {
+    // Configuration - Update these values as needed
+    const CONFIG = {
+        INTERVAL_BETWEEN_DELETES: 2700,  // Time between each delete (ms)
+        MENU_WAIT_TIME: 100,            // Time to wait for menu to appear
+        CONFIRM_WAIT_TIME: 100,         // Time to wait for confirmation dialog
+        SCROLL_AMOUNT: 500,              // How much to scroll (pixels)
+        SCROLL_WAIT_TIME: 1000,          // Time to wait after scrolling
+        MAX_EMPTY_SCROLLS: 5,            // Stop after this many empty scrolls
+        PROCESS_BATCH_SIZE: 1            // Process items one at a time
+    };
+
+    const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+    console.log('🚀 Starting Facebook Activity Log Cleaner...');
+    console.log('⚠️  Warning: This will permanently delete your activity. No undo!');
+
+    let deletedCount = 0;
+    let emptyScrollCount = 0;
+    let shouldStop = false;
+
+    // Stop function that can be called from console
+    window.stopScript = function() {
+        shouldStop = true;
+        console.log('⏹️  Script stop requested...');
+    };
+
+    // Find three-dot buttons
+    function findThreeDotButtons() {
+        const selectors = [
+            'div[aria-label="Actions for this activity"]',
+            'div[aria-label="More options"]',
+            'div[role="button"][tabindex="0"][aria-haspopup="menu"]',
+            'div[aria-haspopup="menu"]',
+            'i[data-visualcompletion="css-img"]',
+            'div[role="button"]:has(svg)',
+            'div[role="button"][tabindex="0"]:has(> i[data-visualcompletion="css-img"])'
+        ];
+
+        let buttons = [];
+        for (const selector of selectors) {
+            try {
+                const elements = document.querySelectorAll(selector);
+                elements.forEach(el => {
+                    if (el.offsetParent !== null &&
+                        el.getBoundingClientRect().width > 0 &&
+                        el.getBoundingClientRect().height > 0) {
+                        buttons.push(el);
+                    }
+                });
+            } catch (e) {
+                // Skip invalid selectors
+            }
+        }
+
+        // Remove duplicates
+        const uniqueButtons = [];
+        const seen = new Set();
+        for (const btn of buttons) {
+            if (!seen.has(btn) && btn.isConnected) {
+                seen.add(btn);
+                uniqueButtons.push(btn);
+            }
+        }
+
+        return uniqueButtons;
+    }
+
+    // Click delete option in menu
+    async function clickDeleteOption() {
+        const menuItems = document.querySelectorAll('div[role="menuitem"]');
+
+        for (const item of menuItems) {
+            const spans = item.querySelectorAll('span');
+            for (const span of spans) {
+                if (span.textContent.trim() === 'Delete Your Activity' &&
+                    item.offsetParent !== null) {
+                    item.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    await sleep(200);
+                    item.click();
+                    return true;
+                }
+            }
+        }
+
+        // Alternative text search
+        const allElements = document.querySelectorAll('*');
+        for (const el of allElements) {
+            if (el.textContent.trim() === 'Delete Your Activity' &&
+                el.offsetParent !== null &&
+                el.getBoundingClientRect().width > 0) {
+                let clickableEl = el;
+                while (clickableEl && !clickableEl.getAttribute('role')) {
+                    clickableEl = clickableEl.parentElement;
+                }
+                if (clickableEl && clickableEl.getAttribute('role') === 'menuitem') {
+                    clickableEl.click();
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    // Click confirmation button
+    async function clickConfirmButton() {
+        await sleep(800);
+
+        // Strategy 1: Look for "Delete" buttons
+        const allButtons = document.querySelectorAll('button, div[role="button"]');
+        for (const btn of allButtons) {
+            if (!btn.offsetParent) continue;
+            const btnText = btn.textContent.trim().toLowerCase();
+            if (btnText === 'delete' && btn.offsetParent !== null) {
+                const rect = btn.getBoundingClientRect();
+                if (rect.width > 50 && rect.height > 30) {
+                    btn.click();
+                    return true;
+                }
+            }
+        }
+
+        // Strategy 2: Specific dialog buttons
+        const primaryButtons = document.querySelectorAll('[data-testid="confirmationSheetConfirmButton"]');
+        for (const btn of primaryButtons) {
+            if (btn.offsetParent) {
+                btn.click();
+                return true;
+            }
+        }
+
+        // Strategy 3: Press Enter key as fallback
+        document.activeElement?.blur();
+        await sleep(100);
+        const enterEvent = new KeyboardEvent('keydown', {
+            key: 'Enter',
+            code: 'Enter',
+            keyCode: 13,
+            which: 13,
+            bubbles: true,
+            cancelable: true
+        });
+        document.dispatchEvent(enterEvent);
+
+        // Click active element if it's a button
+        if (document.activeElement && document.activeElement.getAttribute('role') === 'button') {
+            document.activeElement.click();
+            return true;
+        }
+
+        return false;
+    }
+
+    // Process a single activity item
+    async function processActivityItem(button) {
+        try {
+            if (!button.isConnected) {
+                return false;
+            }
+
+            // Click three-dot menu
+            button.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            await sleep(500);
+            button.click();
+            await sleep(CONFIG.MENU_WAIT_TIME);
+
+            // Click delete option
+            const deleteClicked = await clickDeleteOption();
+            if (!deleteClicked) {
+                document.body.click();
+                await sleep(500);
+                return false;
+            }
+
+            // Handle confirmation
+            await clickConfirmButton();
+
+            deletedCount++;
+            console.log(`✅ Deleted ${deletedCount} item(s)`);
+
+            // Wait before next operation
+            await sleep(CONFIG.INTERVAL_BETWEEN_DELETES);
+
+            // Clean up
+            document.body.click();
+            await sleep(300);
+
+            return true;
+
+        } catch (error) {
+            console.error('❌ Error processing item');
+            document.body.click();
+            await sleep(500);
+            return false;
+        }
+    }
+
+    // Main loop
+    console.log('🔄 Starting deletion process...');
+    await sleep(1000);
+
+    while (!shouldStop && emptyScrollCount < CONFIG.MAX_EMPTY_SCROLLS) {
+        const buttons = findThreeDotButtons();
+
+        if (buttons.length === 0) {
+            const oldScroll = window.scrollY;
+            window.scrollBy({
+                top: CONFIG.SCROLL_AMOUNT,
+                behavior: 'smooth'
+            });
+            await sleep(CONFIG.SCROLL_WAIT_TIME);
+
+            if (Math.abs(window.scrollY - oldScroll) < 100) {
+                emptyScrollCount++;
+                console.log(`📜 Scrolled ${emptyScrollCount} times without finding items`);
+
+                if (emptyScrollCount >= CONFIG.MAX_EMPTY_SCROLLS) {
+                    console.log('🏁 Reached end of activity log');
+                    break;
+                }
+            } else {
+                emptyScrollCount = 0;
+            }
+            continue;
+        }
+
+        console.log(`🔍 Found ${buttons.length} activity items`);
+
+        const batchSize = Math.min(CONFIG.PROCESS_BATCH_SIZE, buttons.length);
+        let processedCount = 0;
+
+        for (let i = 0; i < batchSize && !shouldStop; i++) {
+            const button = buttons[i];
+            if (await processActivityItem(button)) {
+                processedCount++;
+            }
+            if (i < batchSize - 1) {
+                await sleep(500);
+            }
+        }
+
+        if (processedCount === 0) {
+            emptyScrollCount++;
+        } else {
+            emptyScrollCount = 0;
+        }
+
+        // Scroll to potentially load more
+        window.scrollBy({ top: 200, behavior: 'smooth' });
+        await sleep(1000);
+    }
+
+    console.log(`\n🎉 Script finished!`);
+    console.log(`📊 Total deleted: ${deletedCount} items`);
+
+    if (shouldStop) {
+        console.log('⏹️  Script stopped by user');
+    } else if (emptyScrollCount >= CONFIG.MAX_EMPTY_SCROLLS) {
+        console.log('📜 No more items found');
+    }
+})();</code></pre>
+            </div>
+
+            <div class="instructions">
+                <h3>How to Use This Script</h3>
+                <ol>
+                    <li><strong>Navigate to Facebook Activity Log:</strong> Go to your <a
+                            href="https://www.facebook.com/your_activity" target="_blank">Facebook Activity Log</a> (you
+                        must be signed in).
+                    </li>
+                    <li><strong>Select Activity Type:</strong> Navigate to any activity section that has three-dot menus
+                        (e.g., Groups, Comments, Posts).
+                    </li>
+                    <li><strong>Open Developer Console:</strong> Press <code>F12</code> or <code>Ctrl+Shift+I</code>
+                        (Windows/Linux) / <code>Cmd+Option+I</code> (Mac) to open Developer Tools.
+                    </li>
+                    <li><strong>Switch to Console Tab:</strong> Click on the "Console" tab in the Developer Tools panel.
+                    </li>
+                    <li><strong>Paste and Run:</strong> Copy the script above, paste it into the console, and press
+                        <code>Enter</code> to execute.
+                    </li>
+                    <li><strong>Monitor Progress:</strong> Watch the console for deletion counts and watch the browser
+                        as it automatically removes items.
+                    </li>
+                    <li><strong>Stop the Script:</strong> To stop execution, type <code>stopScript()</code> in the
+                        console and press Enter.
+                    </li>
+                </ol>
+            </div>
+
+            <div class="usage-note">
+                <h4><i class="fas fa-lightbulb"></i> Usage Notes</h4>
+                <ul>
+                    <li>Keep the Facebook tab active and visible while the script runs</li>
+                    <li>Works on any Facebook activity log with three-dot menus and "Delete Your Activity" option</li>
+                    <li>The script automatically scrolls and loads more items as needed</li>
+                    <li>It stops when it reaches the bottom of the page or after 5 empty scrolls</li>
+                    <li>If Facebook changes their HTML, you might need to update the selectors</li>
+                    <li>For thousands of items, this will take time (e.g., 1000 items at 2700ms each = ~45 minutes)</li>
+                </ul>
+            </div>
+
+            <div class="instructions">
+                <h3>Configuration Tips</h3>
+                <p>You can modify these variables in the script:</p>
+                <ul>
+                    <li><code>INTERVAL_BETWEEN_DELETES</code> - Time between each deletion (milliseconds). Default is
+                        2700ms (2.7 seconds).
+                        <ul>
+                            <li>Too fast may trigger Facebook's rate limiting</li>
+                            <li>May cause temporary blocks or CAPTCHA verification</li>
+                            <li>2700ms is conservative for stability</li>
+                        </ul>
+                    </li>
+                    <li><code>SCROLL_AMOUNT</code> - How much to scroll when no items are found (pixels)</li>
+                    <li><code>PROCESS_BATCH_SIZE</code> - Number of items to process at once (1 recommended)</li>
+                    <li><code>MAX_EMPTY_SCROLLS</code> - Stop after this many scrolls without finding items</li>
+                </ul>
+                <p><strong>Note:</strong> Facebook may temporarily block actions if the script runs too fast. If this
+                    happens, increase the interval time.</p>
+            </div>
+
+            <div class="warning">
+                <h4><i class="fas fa-exclamation-circle"></i> Important</h4>
+                <p>This script is designed for educational purposes and personal use only. Only use it on your own
+                    Facebook account.
+                    Facebook may detect automated activity and temporarily restrict your account. Use responsibly and at
+                    your own risk.</p>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="footer-container">
+        <div class="social-icons">
+            <a aria-label="Discord" href="https://discord.com/channels/@me/707058110396760094" target="_blank">
+                <i class="fab fa-discord"></i>
+            </a>
+            <a aria-label="GitHub" href="https://github.com/Chalwk" target="_blank">
+                <i class="fab fa-github"></i>
+            </a>
+            <a aria-label="Email" href="mailto:chalwk.dev@gmail.com">
+                <i class="fas fa-envelope"></i>
+            </a>
+        </div>
+        <p class="footer-copyright"></p>
+    </div>
+</footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const copyButton = document.getElementById('copyScriptBtn');
+        const updateButton = document.getElementById('updateScriptBtn');
+        const scriptContent = document.getElementById('scriptContent');
+        const intervalInput = document.getElementById('intervalInput');
+        const scrollAmountInput = document.getElementById('scrollAmountInput');
+        const batchSizeInput = document.getElementById('batchSizeInput');
+
+        let currentScriptCode = scriptContent.textContent;
+
+        function updateScriptWithValues() {
+            const interval = parseInt(intervalInput.value) || 2700;
+            const scrollAmount = parseInt(scrollAmountInput.value) || 500;
+            const batchSize = parseInt(batchSizeInput.value) || 1;
+
+            let newScript = currentScriptCode;
+            newScript = newScript.replace(/INTERVAL_BETWEEN_DELETES:\s*\d+/, `INTERVAL_BETWEEN_DELETES: ${interval}`);
+            newScript = newScript.replace(/SCROLL_AMOUNT:\s*\d+/, `SCROLL_AMOUNT: ${scrollAmount}`);
+            newScript = newScript.replace(/PROCESS_BATCH_SIZE:\s*\d+/, `PROCESS_BATCH_SIZE: ${batchSize}`);
+
+            scriptContent.textContent = newScript;
+            currentScriptCode = newScript;
+
+            updateLineNumbers();
+
+            const originalText = updateButton.innerHTML;
+            updateButton.innerHTML = '<i class="fas fa-check"></i> Updated!';
+            updateButton.className = 'copy-button success';
+
+            setTimeout(() => {
+                updateButton.innerHTML = originalText;
+                updateButton.className = 'copy-button';
+            }, 2000);
+        }
+
+        function updateLineNumbers() {
+            const codeElement = document.querySelector('.script-code');
+            const lines = codeElement.textContent.split('\n');
+            codeElement.innerHTML = lines.map((line, index) =>
+            `<span class="script-code-line">${line}</span>`
+            ).join('\n');
+        }
+
+        updateButton.addEventListener('click', updateScriptWithValues);
+
+        copyButton.addEventListener('click', async function() {
+            try {
+                await navigator.clipboard.writeText(currentScriptCode);
+
+                const originalText = copyButton.innerHTML;
+                const originalClass = copyButton.className;
+
+                copyButton.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                copyButton.className = 'copy-button success';
+
+                setTimeout(() => {
+                    copyButton.innerHTML = originalText;
+                    copyButton.className = originalClass;
+                }, 2000);
+
+            } catch (err) {
+                console.error('Failed to copy text: ', err);
+
+                const originalText = copyButton.innerHTML;
+                const originalClass = copyButton.className;
+
+                copyButton.innerHTML = '<i class="fas fa-times"></i> Failed to copy';
+                copyButton.className = 'copy-button error';
+
+                setTimeout(() => {
+                    copyButton.innerHTML = originalText;
+                    copyButton.className = originalClass;
+                }, 2000);
+
+                const textArea = document.createElement('textarea');
+                textArea.value = currentScriptCode;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    copyButton.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    copyButton.className = 'copy-button success';
+                    setTimeout(() => {
+                        copyButton.innerHTML = originalText;
+                        copyButton.className = originalClass;
+                    }, 2000);
+                } catch (fallbackErr) {
+                    console.error('Fallback copy failed: ', fallbackErr);
+                }
+                document.body.removeChild(textArea);
+            }
+        });
+
+        updateLineNumbers();
+    });
+</script>
+</body>
+</html>
