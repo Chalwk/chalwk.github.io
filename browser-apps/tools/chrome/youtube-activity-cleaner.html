@@ -1,15 +1,9 @@
-<!--
-Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
-
-YouTube Live Chat Messages Remover - Chrome Console Script
--->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>YouTube Live Chat Messages Remover</title>
+    <title>YouTube Activity Cleaner (Comments, Posts, Live Chat)</title>
 
     <link href="../../../core.css" rel="stylesheet"/>
     <script src="../../../nav-menu.js"></script>
@@ -228,20 +222,19 @@ YouTube Live Chat Messages Remover - Chrome Console Script
     <div class="chrome-script-container">
         <div class="script-card">
             <div class="script-header">
-                <h1>YouTube Live Chat Messages Remover</h1>
+                <h1>YouTube Activity Cleaner (Comments, Posts, Live Chat)</h1>
                 <p class="script-description">
-                    A Chrome console script that automatically deletes your YouTube Live Chat messages from "My
-                    Activity".
+                    A Chrome console script that automatically deletes your YouTube Comments, Posts, or Live Chat
+                    messages from "My Activity".
                     This script runs directly in your browser's developer console and automates the process of cleaning
-                    up your live chat history.
+                    up your YouTube activity history.
                 </p>
             </div>
 
             <div class="warning">
                 <h4><i class="fas fa-exclamation-triangle"></i> Important Warning</h4>
-                <p>This script performs irreversible actions. Once you delete a live chat message, it cannot be
-                    recovered.
-                    The script runs automatically and will delete ALL live chat messages from your activity history.
+                <p>This script performs irreversible actions. Once you delete an activity item, it cannot be recovered.
+                    The script runs automatically and will delete ALL items from your selected activity history.
                     Use with caution.</p>
             </div>
 
@@ -250,38 +243,33 @@ YouTube Live Chat Messages Remover - Chrome Console Script
                     <i class="far fa-copy"></i> Copy Script
                 </button>
                 <pre class="script-code" id="scriptCode"><code>(async () => {
-    const DELAY = 1000; // 200ms between deletions
+    const DELAY = 1000;
     let count = 0;
 
     const sleep = ms => new Promise(r => setTimeout(r, ms));
 
     console.log('Starting deletion... No confirmation needed!');
 
-    // First, scroll to top to ensure we start from beginning
     window.scrollTo(0, 0);
     await sleep(500);
 
     while (true) {
-        // Find ALL delete buttons currently on page
         const buttons = document.querySelectorAll('button[aria-label^="Delete activity item"]');
 
         if (buttons.length === 0) {
-            // Scroll down and wait for more content
             window.scrollBy(0, 1000);
             await sleep(1000);
 
-            // Check if we're at bottom
             const scrollPosition = window.scrollY + window.innerHeight;
             const pageHeight = document.documentElement.scrollHeight;
 
             if (scrollPosition >= pageHeight - 100) {
-                console.log(`🏁 Reached bottom! Deleted ${count} messages total.`);
+                console.log(`🏁 Reached bottom! Deleted ${count} items total.`);
                 break;
             }
             continue;
         }
 
-        // Delete all visible buttons in sequence
         for (const button of buttons) {
             button.click();
             count++;
@@ -289,7 +277,6 @@ YouTube Live Chat Messages Remover - Chrome Console Script
             await sleep(DELAY);
         }
 
-        // Scroll a bit after each batch
         window.scrollBy(0, 300);
         await sleep(300);
     }
@@ -300,11 +287,11 @@ YouTube Live Chat Messages Remover - Chrome Console Script
                 <h3>How to Use This Script</h3>
                 <ol>
                     <li><strong>Navigate to YouTube Activity:</strong> Go to <a
-                            href="https://www.youtube.com/feed/history"
-                            target="_blank">YouTube History</a> (you must be signed in).
+                            href="https://www.youtube.com/feed/history" target="_blank">YouTube History</a> (you must be
+                        signed in).
                     </li>
-                    <li><strong>Select Live Chat:</strong> Click on "Live Chat" under "Manage all history" from the left
-                        sidebar.
+                    <li><strong>Select Activity Type:</strong> Under "Manage all history" in the left sidebar, click on
+                        "Comments", "Posts", or "Live Chat" depending on what you want to delete.
                     </li>
                     <li><strong>Open Developer Console:</strong> Press <code>F12</code> or <code>Ctrl+Shift+I</code>
                         (Windows/Linux) / <code>Cmd+Option+I</code> (Mac) to open Chrome Developer Tools.
@@ -315,12 +302,10 @@ YouTube Live Chat Messages Remover - Chrome Console Script
                         into the console, and press <code>Enter</code> to execute.
                     </li>
                     <li><strong>Monitor Progress:</strong> Watch the console for deletion counts and watch the browser
-                        as it
-                        automatically removes messages.
+                        as it automatically removes items.
                     </li>
                     <li><strong>Stop the Script:</strong> To pause execution, press <code>Ctrl+Shift+P</code> in Chrome
-                        console.
-                        To stop completely, refresh the page.
+                        console. To stop completely, refresh the page.
                     </li>
                 </ol>
             </div>
@@ -329,11 +314,11 @@ YouTube Live Chat Messages Remover - Chrome Console Script
                 <h4><i class="fas fa-lightbulb"></i> Usage Notes</h4>
                 <ul>
                     <li>Keep the YouTube tab active and visible while the script runs</li>
-                    <li>The script automatically scrolls and loads more messages as needed</li>
+                    <li>The script works on Comments, Posts, and Live Chat pages</li>
+                    <li>It automatically scrolls and loads more items as needed</li>
                     <li>It stops when it reaches the bottom of the page</li>
                     <li>If Google changes their HTML, you might need to update the selector</li>
-                    <li>For thousands of messages, this will take time (e.g., 1000 messages at 200ms each = ~3.3
-                        minutes)
+                    <li>For thousands of items, this will take time (e.g., 1000 items at 1000ms each = ~16.7 minutes)
                     </li>
                 </ul>
             </div>
