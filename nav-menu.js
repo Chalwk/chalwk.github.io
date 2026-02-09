@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         </button>
                         <ul class="submenu" role="menu">
                             <li role="none"><a href="${basePath}education/understanding-autism.html" role="menuitem">Understanding Autism</a></li>
+                            <li role="none"><a href="${basePath}education/github-pages-tutorial.html" role="menuitem">Creating a GitHub Pages Website</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -62,6 +63,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         </button>
                         <ul class="submenu">
                             <li><a href="${basePath}education/understanding-autism.html">Understanding Autism</a></li>
+                            <li><a href="${basePath}education/github-pages-tutorial.html">Creating a GitHub Pages Website</a></li>
                         </ul>
                     </li>
                 </ul>
