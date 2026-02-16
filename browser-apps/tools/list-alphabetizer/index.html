@@ -43,7 +43,8 @@ List Alphabetizer - HTML
                     </div>
                     <div class="option-row with-input" id="wordNumRow" style="display:none;">
                         <label>Word index (1‑based):</label>
-                        <label for="sortWordNum"></label><input id="sortWordNum" min="1" style="width:70px;" type="number"
+                        <label for="sortWordNum"></label><input id="sortWordNum" min="1" style="width:70px;"
+                                                                type="number"
                                                                 value="1">
                     </div>
                     <div class="option-row">
@@ -98,23 +99,11 @@ List Alphabetizer - HTML
                         <label><input name="caseOption" type="radio" value="title"> Title</label>
                         <label><input name="caseOption" type="radio" value="sentence"> Sentence</label>
                     </div>
-                    <div class="option-row with-input">
-                        <label><input id="numberResults" type="checkbox"> Number results</label>
-                        <span>separator</span>
-                        <label for="numberSeparator"></label><input id="numberSeparator" placeholder=". " type="text"
-                                                                    value=". ">
-                    </div>
+
                     <div class="option-row">
                         <label><input id="addCustomText" type="checkbox"> Add text</label>
                     </div>
-                    <div class="option-row with-input">
-                        <span>prefix:</span>
-                        <label for="customPrefix"></label><input id="customPrefix" placeholder="pre" type="text">
-                    </div>
-                    <div class="option-row with-input">
-                        <span>suffix:</span>
-                        <label for="customSuffix"></label><input id="customSuffix" placeholder="suf" type="text">
-                    </div>
+
                     <div class="option-row">
                         <label>Join items with:</label>
                     </div>
@@ -124,10 +113,35 @@ List Alphabetizer - HTML
                         <label><input name="outputSeparator" type="radio" value="tab"> Tab</label>
                         <label><input name="outputSeparator" type="radio" value="custom"> Custom</label>
                     </div>
-                    <div class="option-row with-input" id="outputCustomRow" style="display:none;">
-                        <span>Custom delimiter:</span>
-                        <label for="outputCustomDelimiter"></label><input id="outputCustomDelimiter" placeholder="e.g. ,"
-                                                                          type="text" value=",">
+                    <div class="option-row with-input" id="outputCustomRow" style="display:none; align-items: center;">
+                        <label style="display: inline-flex; align-items: center; gap: 0.2rem;">
+                            <span>Custom delimiter:</span>
+                            <input id="outputCustomDelimiter" placeholder="e.g. ," type="text" style="width: 80px;"
+                                   value=",">
+                        </label>
+                    </div>
+
+                    <div class="option-row with-input"
+                         style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+                        <label style="display: inline-flex; align-items: center; gap: 0.2rem;">
+                            <input id="numberResults" type="checkbox"> Number results
+                        </label>
+                        <label style="display: inline-flex; align-items: center; gap: 0.2rem;">
+                            <span>separator:</span>
+                            <input id="numberSeparator" placeholder=". " type="text" style="width: 80px;" value=". ">
+                        </label>
+                    </div>
+
+                    <div class="option-row with-input"
+                         style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+                        <label style="display: inline-flex; align-items: center; gap: 0.2rem;">
+                            <span>prefix:</span>
+                            <input id="customPrefix" placeholder="pre" type="text" style="width: 80px;">
+                        </label>
+                        <label style="display: inline-flex; align-items: center; gap: 0.2rem;">
+                            <span>suffix:</span>
+                            <input id="customSuffix" placeholder="suf" type="text" style="width: 80px;">
+                        </label>
                     </div>
                 </div>
 
@@ -141,10 +155,11 @@ List Alphabetizer - HTML
                         <label><input name="separator" type="radio" value="blankline"> Blank line</label>
                         <label><input name="separator" type="radio" value="custom"> Custom</label>
                     </div>
-                    <div class="option-row with-input" style="margin-top:10px;">
-                        <span>Custom delimiter:</span>
-                        <label for="customDelimiter"></label><input id="customDelimiter" placeholder="e.g. ;"
-                                                                    type="text" value=",">
+                    <div class="option-row with-input" style="align-items: center;">
+                        <label for="customDelimiter" style="display: inline-flex; align-items: center; gap: 0.2rem;">
+                            <span>Custom delimiter:</span>
+                            <input id="customDelimiter" placeholder="e.g. ;" type="text" value="," style="width:80px;">
+                        </label>
                     </div>
                 </div>
             </aside>
