@@ -32,7 +32,6 @@ List Alphabetizer - HTML
                     <h3><i class="fas fa-sliders"></i> Sorting Options</h3>
                 </div>
 
-                <!-- SORT MODE -->
                 <div class="option-section">
                     <h3><i class="fas fa-arrow-up-wide-short"></i> Sort mode</h3>
 
@@ -48,7 +47,7 @@ List Alphabetizer - HTML
 
                     <div class="option-row with-input" id="wordNumRow" style="display:none;">
                         <label>Word index (1-based):</label>
-                        <input id="sortWordNum" min="1" style="width:70px;" type="number" value="1">
+                        <label for="sortWordNum"></label><input id="sortWordNum" min="1" style="width:70px;" type="number" value="1">
                     </div>
 
                     <div class="option-row">
@@ -56,7 +55,6 @@ List Alphabetizer - HTML
                     </div>
                 </div>
 
-                <!-- CLEAN LIST -->
                 <div class="option-section">
                     <h3><i class="fas fa-broom"></i> Clean list</h3>
 
@@ -67,7 +65,7 @@ List Alphabetizer - HTML
                         <label><input id="removePunctuation" type="checkbox"> Remove punctuation</label>
                     </div>
 
-                    <div class="option-row" style="display:flex; gap:1rem; flex-wrap:wrap;">
+                    <div class="option-row" style="display:flex; gap:0.75rem; flex-wrap:wrap;">
                         <label><input id="removeFirstWord" type="checkbox"> Remove first word</label>
 
                         <label style="display:inline-flex; align-items:center; gap:0.4rem;">
@@ -78,16 +76,15 @@ List Alphabetizer - HTML
                     </div>
                 </div>
 
-                <!-- IGNORE WHEN SORTING -->
                 <div class="option-section">
                     <h3><i class="fas fa-eye-slash"></i> Ignore when sorting</h3>
 
                     <div class="option-row with-input">
                         <label><input id="ignoreFirstWords" type="checkbox"> Ignore first word(s)</label>
-                        <input id="ignoreWordsCount" min="1" type="number" value="1" style="width:60px;">
+                        <label for="ignoreWordsCount"></label><input id="ignoreWordsCount" min="1" type="number" value="1" style="width:60px;">
                     </div>
 
-                    <div class="option-row" style="display:flex; gap:1.5rem; flex-wrap:wrap;">
+                    <div class="option-row" style="display:flex; gap:0.75rem; flex-wrap:wrap;">
                         <label><input id="ignoreDefinite" type="checkbox"> Ignore definite (The)</label>
                         <label><input id="ignoreIndefinite" type="checkbox"> Ignore indefinite (A, An)</label>
                     </div>
@@ -101,7 +98,6 @@ List Alphabetizer - HTML
                     </div>
                 </div>
 
-                <!-- FORMAT OUTPUT -->
                 <div class="option-section">
                     <h3><i class="fas fa-paint-roller"></i> Format output</h3>
 
@@ -116,7 +112,6 @@ List Alphabetizer - HTML
                         </div>
                     </div>
 
-                    <!-- ADD TEXT FIXED ALIGNMENT -->
                     <div class="option-row">
                         <label><input id="addCustomText" type="checkbox"> Add text</label>
                     </div>
@@ -146,7 +141,8 @@ List Alphabetizer - HTML
 
                     <div class="option-row with-input" id="outputCustomRow" style="display:none;">
                         <label>Custom delimiter:</label>
-                        <input id="outputCustomDelimiter" placeholder="e.g. ," type="text" style="width:80px;" value=",">
+                        <label for="outputCustomDelimiter"></label><input id="outputCustomDelimiter" placeholder="e.g. ," type="text" style="width:80px;"
+                                                                          value=",">
                     </div>
 
                     <div class="option-row" style="display:flex; gap:1rem; flex-wrap:wrap;">
@@ -159,7 +155,6 @@ List Alphabetizer - HTML
                     </div>
                 </div>
 
-                <!-- SPLIT ITEMS -->
                 <div class="option-section">
                     <h3><i class="fas fa-code-branch"></i> Split items by</h3>
 
@@ -180,11 +175,11 @@ List Alphabetizer - HTML
 
             </aside>
 
-            <!-- TEXT AREA -->
             <section class="panel panel-custom textarea-group">
                 <div class="panel-head">
                     <h2><i class="fas fa-sort-alpha-down"></i> List Alphabetizer</h2>
-                    <p class="muted small">Sort, clean, and transform lists – by last name, ignore articles, strip HTML, and more.</p>
+                    <p class="muted small">Sort, clean, and transform lists – by last name, ignore articles, strip HTML,
+                        and more.</p>
                 </div>
 
                 <div class="textarea-box">
