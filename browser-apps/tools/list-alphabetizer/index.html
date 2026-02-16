@@ -32,8 +32,10 @@ List Alphabetizer - HTML
                     <h3><i class="fas fa-sliders"></i> Sorting Options</h3>
                 </div>
 
+                <!-- SORT MODE -->
                 <div class="option-section">
                     <h3><i class="fas fa-arrow-up-wide-short"></i> Sort mode</h3>
+
                     <div class="option-row">
                         <div class="radio-grid">
                             <label><input checked name="sortMode" type="radio" value="az"> A → Z</label>
@@ -43,51 +45,66 @@ List Alphabetizer - HTML
                             <label><input name="sortMode" type="radio" value="wordNum"> By word number</label>
                         </div>
                     </div>
+
                     <div class="option-row with-input" id="wordNumRow" style="display:none;">
-                        <label>Word index (1‑based):</label>
+                        <label>Word index (1-based):</label>
                         <input id="sortWordNum" min="1" style="width:70px;" type="number" value="1">
                     </div>
+
                     <div class="option-row">
                         <label><input id="reverseOrder" type="checkbox"> Reverse final order</label>
                     </div>
                 </div>
 
+                <!-- CLEAN LIST -->
                 <div class="option-section">
                     <h3><i class="fas fa-broom"></i> Clean list</h3>
+
                     <div class="checkbox-grid">
                         <label><input id="removeDuplicates" type="checkbox"> Remove duplicates</label>
                         <label><input id="stripHtml" type="checkbox"> Strip HTML tags</label>
                         <label><input id="normalizeSpaces" type="checkbox"> Normalize spaces</label>
                         <label><input id="removePunctuation" type="checkbox"> Remove punctuation</label>
                     </div>
-                    <div class="option-row" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+
+                    <div class="option-row" style="display:flex; gap:1rem; flex-wrap:wrap;">
                         <label><input id="removeFirstWord" type="checkbox"> Remove first word</label>
-                        <label style="display: inline-flex; align-items: center; gap: 0.2rem;">
-                            <input id="removeFirstChars" type="checkbox"> Remove first N chars
+
+                        <label style="display:inline-flex; align-items:center; gap:0.4rem;">
+                            <input id="removeFirstChars" type="checkbox">
+                            <span>Remove first N chars</span>
                             <input id="removeCharsCount" min="0" type="number" value="0" style="width:60px;">
                         </label>
                     </div>
                 </div>
 
+                <!-- IGNORE WHEN SORTING -->
                 <div class="option-section">
                     <h3><i class="fas fa-eye-slash"></i> Ignore when sorting</h3>
+
                     <div class="option-row with-input">
                         <label><input id="ignoreFirstWords" type="checkbox"> Ignore first word(s)</label>
                         <input id="ignoreWordsCount" min="1" type="number" value="1" style="width:60px;">
                     </div>
-                    <div class="grid-2" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.2rem 0.4rem; margin-bottom: 0.2rem;">
+
+                    <div class="option-row" style="display:flex; gap:1.5rem; flex-wrap:wrap;">
                         <label><input id="ignoreDefinite" type="checkbox"> Ignore definite (The)</label>
                         <label><input id="ignoreIndefinite" type="checkbox"> Ignore indefinite (A, An)</label>
                     </div>
-                    <div class="option-row" style="margin-top: 0.2rem;">
-                        <label style="display: inline-flex; align-items: center; gap: 0.2rem;">
-                            <input id="ignoreCase" type="checkbox"> Ignore case <span class="help-icon" data-tip="Treat 'Apple' and 'apple' as equal"> ⓘ</span>
+
+                    <div class="option-row">
+                        <label style="display:inline-flex; align-items:center; gap:0.4rem;">
+                            <input id="ignoreCase" type="checkbox">
+                            <span>Ignore case</span>
+                            <span class="help-icon" data-tip="Treat 'Apple' and 'apple' as equal"> ⓘ</span>
                         </label>
                     </div>
                 </div>
 
+                <!-- FORMAT OUTPUT -->
                 <div class="option-section">
                     <h3><i class="fas fa-paint-roller"></i> Format output</h3>
+
                     <div class="option-row">
                         <label>Case:</label>
                         <div class="radio-grid">
@@ -99,49 +116,53 @@ List Alphabetizer - HTML
                         </div>
                     </div>
 
-                    <div class="option-row" style="display: flex; flex-direction: column; gap: 0.5rem;">
-                        <label style="display: inline-flex; align-items: center; gap: 0.2rem;">
-                            <input id="addCustomText" type="checkbox"> Add text
-                        </label>
-                        <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
-                            <label style="display: inline-flex; align-items: center; gap: 0.2rem;">
-                                <span>prefix:</span>
-                                <input id="customPrefix" placeholder="pre" type="text" style="width: 70px;">
-                            </label>
-                            <label style="display: inline-flex; align-items: center; gap: 0.2rem;">
-                                <span>suffix:</span>
-                                <input id="customSuffix" placeholder="suf" type="text" style="width: 70px;">
-                            </label>
+                    <!-- ADD TEXT FIXED ALIGNMENT -->
+                    <div class="option-row">
+                        <label><input id="addCustomText" type="checkbox"> Add text</label>
+                    </div>
+
+                    <div class="option-row" style="display:flex; gap:2rem; flex-wrap:wrap;">
+                        <div style="display:flex; align-items:center; gap:0.5rem;">
+                            <label for="customPrefix">Prefix:</label>
+                            <input id="customPrefix" placeholder="pre" type="text" style="width:80px;">
+                        </div>
+
+                        <div style="display:flex; align-items:center; gap:0.5rem;">
+                            <label for="customSuffix">Suffix:</label>
+                            <input id="customSuffix" placeholder="suf" type="text" style="width:80px;">
                         </div>
                     </div>
 
                     <div class="option-row">
                         <label>Join items with:</label>
                     </div>
+
                     <div class="radio-grid" id="outputSeparatorGroup">
                         <label><input checked name="outputSeparator" type="radio" value="newline"> New line</label>
                         <label><input name="outputSeparator" type="radio" value="comma"> Comma</label>
                         <label><input name="outputSeparator" type="radio" value="tab"> Tab</label>
                         <label><input name="outputSeparator" type="radio" value="custom"> Custom</label>
                     </div>
+
                     <div class="option-row with-input" id="outputCustomRow" style="display:none;">
                         <label>Custom delimiter:</label>
-                        <input id="outputCustomDelimiter" placeholder="e.g. ," type="text" style="width: 80px;" value=",">
+                        <input id="outputCustomDelimiter" placeholder="e.g. ," type="text" style="width:80px;" value=",">
                     </div>
 
-                    <div class="option-row" style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
-                        <label style="display: inline-flex; align-items: center; gap: 0.2rem;">
-                            <input id="numberResults" type="checkbox"> Number results
-                        </label>
-                        <label style="display: inline-flex; align-items: center; gap: 0.2rem;">
-                            <span>separator:</span>
-                            <input id="numberSeparator" placeholder=". " type="text" style="width: 70px;" value=". ">
-                        </label>
+                    <div class="option-row" style="display:flex; gap:1rem; flex-wrap:wrap;">
+                        <label><input id="numberResults" type="checkbox"> Number results</label>
+
+                        <div style="display:flex; align-items:center; gap:0.5rem;">
+                            <label for="numberSeparator">Separator:</label>
+                            <input id="numberSeparator" placeholder=". " type="text" style="width:70px;" value=". ">
+                        </div>
                     </div>
                 </div>
 
+                <!-- SPLIT ITEMS -->
                 <div class="option-section">
                     <h3><i class="fas fa-code-branch"></i> Split items by</h3>
+
                     <div class="radio-grid">
                         <label><input checked name="separator" type="radio" value="auto"> Auto</label>
                         <label><input name="separator" type="radio" value="newline"> New line</label>
@@ -150,34 +171,45 @@ List Alphabetizer - HTML
                         <label><input name="separator" type="radio" value="blankline"> Blank line</label>
                         <label><input name="separator" type="radio" value="custom"> Custom</label>
                     </div>
-                    <div class="option-row with-input" style="margin-top: 0.3rem;">
+
+                    <div class="option-row with-input" style="margin-top:0.3rem;">
                         <label for="customDelimiter">Custom delimiter:</label>
                         <input id="customDelimiter" placeholder="e.g. ;" type="text" value="," style="width:80px;">
                     </div>
                 </div>
+
             </aside>
 
+            <!-- TEXT AREA -->
             <section class="panel panel-custom textarea-group">
                 <div class="panel-head">
                     <h2><i class="fas fa-sort-alpha-down"></i> List Alphabetizer</h2>
-                    <p class="muted small">Sort, clean, and transform lists – by last name, ignore articles, strip HTML,
-                        and more.</p>
+                    <p class="muted small">Sort, clean, and transform lists – by last name, ignore articles, strip HTML, and more.</p>
                 </div>
+
                 <div class="textarea-box">
-                    <label for="inputText"><i class="fas fa-paste" style="margin-right: 6px;"></i>Paste or type your
-                        list</label>
+                    <label for="inputText">
+                        <i class="fas fa-paste" style="margin-right:6px;"></i>
+                        Paste or type your list
+                    </label>
+
                     <textarea class="large-textarea" id="inputText"
                               placeholder="One item per line&#10;or use custom separators below"></textarea>
+
                     <div class="button-group">
-                        <button class="btn btn-primary" id="alphabetizeBtn"><i class="fas fa-sort-alpha-down"></i>
-                            Alphabetize
+                        <button class="btn btn-primary" id="alphabetizeBtn">
+                            <i class="fas fa-sort-alpha-down"></i> Alphabetize
                         </button>
-                        <button class="btn btn-secondary" id="scrambleBtn"><i class="fas fa-shuffle"></i> Scramble
+                        <button class="btn btn-secondary" id="scrambleBtn">
+                            <i class="fas fa-shuffle"></i> Scramble
                         </button>
-                        <button class="btn btn-secondary" id="copyBtn"><i class="fas fa-copy"></i> Copy</button>
+                        <button class="btn btn-secondary" id="copyBtn">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
                     </div>
                 </div>
             </section>
+
         </div>
     </div>
 </main>
@@ -185,10 +217,12 @@ List Alphabetizer - HTML
 <footer>
     <div class="footer-container">
         <div class="social-icons">
-            <a aria-label="Discord" href="https://discord.com/channels/@me/707058110396760094" target="_blank"><i
-                    class="fab fa-discord"></i></a>
-            <a aria-label="GitHub" href="https://github.com/Chalwk" target="_blank"> <i class="fab fa-github"></i></a>
-            <a aria-label="Email" href="mailto:chalwk.dev@gmail.com"><i class="fas fa-envelope"></i></a>
+            <a aria-label="Discord" href="https://discord.com/channels/@me/707058110396760094" target="_blank">
+                <i class="fab fa-discord"></i></a>
+            <a aria-label="GitHub" href="https://github.com/Chalwk" target="_blank">
+                <i class="fab fa-github"></i></a>
+            <a aria-label="Email" href="mailto:chalwk.dev@gmail.com">
+                <i class="fas fa-envelope"></i></a>
         </div>
         <p class="footer-copyright"></p>
     </div>
