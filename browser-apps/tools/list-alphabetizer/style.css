@@ -10,7 +10,7 @@ html {
 
 .app-grid {
     display: grid;
-    grid-template-columns: 260px 1fr;  /* corrected typo */
+    grid-template-columns: 280px 1fr;
     gap: 1rem;
     align-items: stretch;
 }
@@ -64,11 +64,11 @@ html {
 .options-panel {
     height: 100%;
     overflow-y: auto;
-    padding-bottom: 0.25rem;
+    padding: 0.5rem 0.75rem;
 }
 
 .option-section {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
     border-bottom: 1px dashed var(--gray-light);
     padding-bottom: 0.5rem;
 }
@@ -78,9 +78,9 @@ html {
 }
 
 .option-section h3 {
-    font-size: 0.95rem;
-    font-weight: 500;
-    margin-bottom: 0.2rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
     color: var(--primary);
     display: flex;
     align-items: center;
@@ -91,8 +91,8 @@ html {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0.4rem;
-    margin-bottom: 0.2rem;
+    gap: 0.5rem;
+    margin-bottom: 0.3rem;
 }
 
 .option-row label {
@@ -113,39 +113,48 @@ html {
 .with-input input[type="text"],
 .with-input input[type="number"] {
     width: 60px;
-    padding: 0.15rem 0.3rem;
+    padding: 0.2rem 0.3rem;
     border: 1px solid var(--gray-light);
     border-radius: var(--radius);
     font-family: var(--font-mono);
-    font-size: 0.85rem;
+    font-size: 0.8rem;
 }
 
 .with-input input[type="number"] {
     width: 50px;
 }
 
+.radio-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.2rem 0.5rem;
+    width: 100%;
+}
+
 .checkbox-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 0.1rem 0.4rem;
+    gap: 0.2rem 0.4rem;
     margin-bottom: 0.2rem;
 }
 
-.checkbox-grid label {
-    font-size: 0.85rem;
+.grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.2rem 0.4rem;
+    margin-bottom: 0.2rem;
 }
 
-.separator-radio-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem 0.8rem;
-    align-items: center;
-    font-size: 0.85rem;
+.checkbox-grid label,
+.grid-3 label,
+.radio-grid label {
+    font-size: 0.8rem;
+    white-space: nowrap;
 }
 
 .help-icon {
     color: var(--gray);
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     cursor: help;
     position: relative;
     border-bottom: 1px dotted var(--gray);
