@@ -6,23 +6,19 @@ List Alphabetizer - JavaScript
 
 (function() {
     const inputTextarea = document.getElementById('inputText');
-    const outputTextarea = document.getElementById('outputText');
     const alphabetizeBtn = document.getElementById('alphabetizeBtn');
+    const scrambleBtn = document.getElementById('scrambleBtn');
     const copyBtn = document.getElementById('copyBtn');
-    const downloadBtn = document.getElementById('downloadBtn');
-    const printBtn = document.getElementById('printBtn');
-    const saveUrlBtn = document.getElementById('saveUrlBtn');
 
     const sortModes = document.getElementsByName('sortMode');
+    const sortWordNum = document.getElementById('sortWordNum');
+    const wordNumRow = document.getElementById('wordNumRow');
+    const reverseOrderChk = document.getElementById('reverseOrder');
+
     const removeDuplicatesChk = document.getElementById('removeDuplicates');
     const stripHtmlChk = document.getElementById('stripHtml');
-
-    const toLowercaseChk = document.getElementById('toLowercase');
-    const capitalizeTitlesChk = document.getElementById('capitalizeTitles');
-    const numberResultsChk = document.getElementById('numberResults');
-    const numberSeparator = document.getElementById('numberSeparator');
-    const addCustomTextChk = document.getElementById('addCustomText');
-    const customPrefix = document.getElementById('customPrefix');
+    const normalizeSpacesChk = document.getElementById('normalizeSpaces');
+    const removePunctuationChk = document.getElementById('removePunctuation');
     const removeFirstWordChk = document.getElementById('removeFirstWord');
     const removeFirstCharsChk = document.getElementById('removeFirstChars');
     const removeCharsCount = document.getElementById('removeCharsCount');
@@ -33,13 +29,33 @@ List Alphabetizer - JavaScript
     const ignoreIndefiniteChk = document.getElementById('ignoreIndefinite');
     const ignoreCaseChk = document.getElementById('ignoreCase');
 
+    const caseRadios = document.getElementsByName('caseOption');
+    const numberResultsChk = document.getElementById('numberResults');
+    const numberSeparator = document.getElementById('numberSeparator');
+    const addCustomTextChk = document.getElementById('addCustomText');
+    const customPrefix = document.getElementById('customPrefix');
+    const customSuffix = document.getElementById('customSuffix');
+
     const sepRadios = document.getElementsByName('separator');
     const customDelimiter = document.getElementById('customDelimiter');
 
-    function getSelectedSortMode() {
-        for (let r of sortModes) if (r.checked) return r.value;
-        return 'az';
+    const outputSepRadios = document.getElementsByName('outputSeparator');
+    const outputCustomRow = document.getElementById('outputCustomRow');
+    const outputCustomDelimiter = document.getElementById('outputCustomDelimiter');
+
+    function showWordNumRow() {
+        const selected = Array.from(sortModes).find(r => r.checked)?.value;
+        wordNumRow.style.display = selected === 'wordNum' ? 'flex' : 'none';
     }
+    Array.from(sortModes).forEach(r => r.addEventListener('change', showWordNumRow));
+    showWordNumRow();
+
+    function showOutputCustomRow() {
+        const selected = Array.from(outputSepRadios).find(r => r.checked)?.value;
+        outputCustomRow.style.display = selected === 'custom' ? 'flex' : 'none';
+    }
+    Array.from(outputSepRadios).forEach(r => r.addEventListener('change', showOutputCustomRow));
+    showOutputCustomRow();
 
     function getSelectedSeparator() {
         for (let r of sepRadios) if (r.checked) return r.value;
@@ -48,6 +64,18 @@ List Alphabetizer - JavaScript
 
     function stripHtmlTags(str) {
         return str.replace(/<[^>]*>/g, '');
+    }
+
+    function normalizeSpaces(str) {
+        return str.replace(/\s+/g, ' ').trim();
+    }
+
+    function removePunctuation(str) {
+        return str.replace(/[^\w\s]/g, '');
+    }
+
+    function escapeRegex(string) {
+        return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     }
 
     function splitInput(text) {
@@ -59,7 +87,8 @@ List Alphabetizer - JavaScript
         else if (mode === 'blankline') raw = text.split(/\n\s*\n/).map(s => s.trim());
         else if (mode === 'custom') {
             const delim = customDelimiter.value || ',';
-            raw = text.split(delim).map(s => s.trim());
+            const escaped = escapeRegex(delim);
+            raw = text.split(new RegExp(escaped)).map(s => s.trim());
         } else {
             const newlines = (text.match(/\n/g) || []).length;
             const commas = (text.match(/,/g) || []).length;
@@ -73,32 +102,30 @@ List Alphabetizer - JavaScript
         return raw.filter(item => item.length > 0);
     }
 
-    function applyPreTransformations(items) {
-        return items.map(item => {
-            let str = item;
-            if (stripHtmlChk.checked) str = stripHtmlTags(str);
-            if (removeFirstWordChk.checked) {
-                let parts = str.trim().split(/\s+/);
-                if (parts.length > 1) str = parts.slice(1).join(' ');
-                else str = '';
-            }
-            if (removeFirstCharsChk.checked && removeCharsCount.value > 0) {
-                let n = parseInt(removeCharsCount.value) || 0;
-                str = str.substring(n);
-            }
-            return str.trim();
-        }).filter(s => s !== '');
+    function cleanItem(str) {
+        let s = str;
+        if (stripHtmlChk.checked) s = stripHtmlTags(s);
+        if (removeFirstWordChk.checked) {
+            let parts = s.trim().split(/\s+/);
+            s = parts.length > 1 ? parts.slice(1).join(' ') : '';
+        }
+        if (removeFirstCharsChk.checked && removeCharsCount.value > 0) {
+            let n = parseInt(removeCharsCount.value) || 0;
+            s = s.substring(n);
+        }
+        if (normalizeSpacesChk.checked) s = normalizeSpaces(s);
+        if (removePunctuationChk.checked) s = removePunctuation(s);
+        return s.trim();
     }
 
-    function getComparisonString(original) {
+    function getComparisonKey(original) {
         let str = original;
         if (ignoreCaseChk.checked) str = str.toLowerCase();
 
         if (ignoreFirstWordsChk.checked) {
             let n = parseInt(ignoreWordsCount.value) || 1;
             let parts = str.split(/\s+/);
-            if (parts.length > n) str = parts.slice(n).join(' ');
-            else str = '';
+            str = parts.length > n ? parts.slice(n).join(' ') : '';
         }
 
         if (ignoreDefiniteChk.checked || ignoreIndefiniteChk.checked) {
@@ -114,21 +141,54 @@ List Alphabetizer - JavaScript
         return str;
     }
 
-    function getLastName(entry) {
-        let parts = entry.trim().split(/\s+/);
-        return parts.length ? parts[parts.length-1] : '';
+    function getWordAt(str, pos, zeroBased = false) {
+        let parts = str.trim().split(/\s+/);
+        let idx = zeroBased ? pos : pos - 1;
+        return (idx >= 0 && idx < parts.length) ? parts[idx] : '';
+    }
+
+    function applyOutputFormatting(items) {
+        let outputLines = items.map(line => {
+            let out = line;
+
+            const caseOpt = document.querySelector('input[name="caseOption"]:checked')?.value || 'none';
+            if (caseOpt === 'lower') out = out.toLowerCase();
+            else if (caseOpt === 'upper') out = out.toUpperCase();
+            else if (caseOpt === 'title') {
+                out = out.replace(/\b\w/g, l => l.toUpperCase());
+            } else if (caseOpt === 'sentence') {
+                out = out.charAt(0).toUpperCase() + out.slice(1).toLowerCase();
+            }
+
+            return out;
+        });
+
+        if (addCustomTextChk.checked) {
+            const prefix = customPrefix.value || '';
+            const suffix = customSuffix.value || '';
+            outputLines = outputLines.map(line => prefix + line + suffix);
+        }
+
+        if (numberResultsChk.checked) {
+            const sep = numberSeparator.value || '. ';
+            outputLines = outputLines.map((line, i) => (i + 1) + sep + line);
+        }
+
+        return outputLines;
     }
 
     function processList() {
         let rawInput = inputTextarea.value;
         let items = splitInput(rawInput);
-        items = applyPreTransformations(items);
+
+        items = items.map(cleanItem).filter(s => s !== '');
 
         if (removeDuplicatesChk.checked) {
             items = [...new Set(items)];
         }
 
-        const sortMode = getSelectedSortMode();
+        const sortMode = document.querySelector('input[name="sortMode"]:checked')?.value || 'az';
+
         if (sortMode === 'random') {
             for (let i = items.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -136,76 +196,86 @@ List Alphabetizer - JavaScript
             }
         } else {
             items.sort((a, b) => {
-                let normA = a, normB = b;
+                let keyA, keyB;
+
                 if (sortMode === 'lastName') {
-                    normA = getLastName(a);
-                    normB = getLastName(b);
+                    keyA = getWordAt(a, -1, true);
+                    keyB = getWordAt(b, -1, true);
+                } else if (sortMode === 'wordNum') {
+                    const pos = parseInt(sortWordNum.value) || 1;
+                    keyA = getWordAt(a, pos, false);
+                    keyB = getWordAt(b, pos, false);
                 } else {
-                    normA = getComparisonString(a);
-                    normB = getComparisonString(b);
+                    keyA = getComparisonKey(a);
+                    keyB = getComparisonKey(b);
                 }
+
                 if (sortMode === 'za') {
-                    return normB.localeCompare(normA);
+                    return keyB.localeCompare(keyA);
                 } else {
-                    return normA.localeCompare(normB);
+                    return keyA.localeCompare(keyB);
                 }
             });
         }
 
-        let outputLines = items.map((line, idx) => {
-            let out = line;
-            if (toLowercaseChk.checked) out = out.toLowerCase();
-            if (capitalizeTitlesChk.checked) {
-                out = out.replace(/\b\w/g, l => l.toUpperCase());
-            }
-            return out;
-        });
+        let outputLines = applyOutputFormatting(items);
 
-        if (addCustomTextChk.checked && customPrefix.value.trim() !== '') {
-            outputLines = outputLines.map(line => customPrefix.value.trim() + line);
-        }
-        if (numberResultsChk.checked) {
-            const sep = numberSeparator.value || '. ';
-            outputLines = outputLines.map((line, i) => (i+1) + sep + line);
+        if (reverseOrderChk.checked) {
+            outputLines.reverse();
         }
 
-        outputTextarea.value = outputLines.join('\n');
+        const outputSep = document.querySelector('input[name="outputSeparator"]:checked')?.value || 'newline';
+        let joinStr = '\n';
+        if (outputSep === 'comma') joinStr = ', ';
+        else if (outputSep === 'tab') joinStr = '\t';
+        else if (outputSep === 'custom') joinStr = outputCustomDelimiter.value || ',';
+
+        inputTextarea.value = outputLines.join(joinStr);
+    }
+
+    function scrambleList() {
+        let rawInput = inputTextarea.value;
+        let items = splitInput(rawInput);
+
+        items = items.map(cleanItem).filter(s => s !== '');
+
+        if (removeDuplicatesChk.checked) {
+            items = [...new Set(items)];
+        }
+
+        for (let i = items.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [items[i], items[j]] = [items[j], items[i]];
+        }
+
+        let outputLines = applyOutputFormatting(items);
+
+        if (reverseOrderChk.checked) {
+            outputLines.reverse();
+        }
+
+        const outputSep = document.querySelector('input[name="outputSeparator"]:checked')?.value || 'newline';
+        let joinStr = '\n';
+        if (outputSep === 'comma') joinStr = ', ';
+        else if (outputSep === 'tab') joinStr = '\t';
+        else if (outputSep === 'custom') joinStr = outputCustomDelimiter.value || ',';
+
+        inputTextarea.value = outputLines.join(joinStr);
     }
 
     alphabetizeBtn.addEventListener('click', processList);
+    scrambleBtn.addEventListener('click', scrambleList);
 
-    copyBtn.addEventListener('click', () => {
-        outputTextarea.select();
-        document.execCommand('copy');
-        copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
-        setTimeout(() => copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy', 1500);
-    });
-
-    downloadBtn.addEventListener('click', () => {
-        const blob = new Blob([outputTextarea.value], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'alphabetized_list.txt';
-        a.click();
-        URL.revokeObjectURL(url);
-    });
-
-    printBtn.addEventListener('click', () => {
-        const win = window.open('', '', 'width=800,height=600');
-        win.document.write('<pre>' + outputTextarea.value + '</pre>');
-        win.print();
-        win.close();
-    });
-
-    saveUrlBtn.addEventListener('click', () => {
-        const params = new URLSearchParams();
-        params.set('input', inputTextarea.value);
-        window.location.hash = params.toString();
-        alert('Input saved to URL (hash fragment). Share this link.');
-    });
-
-    window.addEventListener('DOMContentLoaded', () => {
-        processList();
+    copyBtn.addEventListener('click', async () => {
+        try {
+            await navigator.clipboard.writeText(inputTextarea.value);
+            copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+            setTimeout(() => copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy', 1500);
+        } catch (err) {
+            inputTextarea.select();
+            document.execCommand('copy');
+            copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+            setTimeout(() => copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy', 1500);
+        }
     });
 })();

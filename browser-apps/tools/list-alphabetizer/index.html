@@ -8,10 +8,10 @@ List Alphabetizer - HTML
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>List · alphabetizer</title>
-    <meta name="description"
-          content="Sort, clean, and transform lists - by last name, ignore articles, strip HTML, and more.">
+    <meta content="Sort, clean, and transform lists - by last name, ignore articles, strip HTML, and more."
+          name="description">
     <link href="../../../core.css" rel="stylesheet"/>
     <script src="../../../nav-menu.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -35,118 +35,133 @@ List Alphabetizer - HTML
                 <div class="option-section">
                     <h3><i class="fas fa-arrow-up-wide-short"></i> Sort mode</h3>
                     <div class="option-row">
-                        <label><input type="radio" name="sortMode" value="az" checked> A → Z (standard)</label>
-                        <label><input type="radio" name="sortMode" value="za"> Z → A</label>
-                        <label><input type="radio" name="sortMode" value="lastName"> By last name</label>
-                        <label><input type="radio" name="sortMode" value="random"> Randomize</label>
+                        <label><input checked name="sortMode" type="radio" value="az"> A → Z</label>
+                        <label><input name="sortMode" type="radio" value="za"> Z → A</label>
+                        <label><input name="sortMode" type="radio" value="lastName"> By last name</label>
+                        <label><input name="sortMode" type="radio" value="random"> Randomize</label>
+                        <label><input name="sortMode" type="radio" value="wordNum"> By word number</label>
+                    </div>
+                    <div class="option-row with-input" id="wordNumRow" style="display:none;">
+                        <label>Word index (1‑based):</label>
+                        <label for="sortWordNum"></label><input id="sortWordNum" min="1" style="width:70px;" type="number"
+                                                                value="1">
                     </div>
                     <div class="option-row">
-                        <label><input type="checkbox" id="removeDuplicates"> Remove duplicate entries</label>
-                    </div>
-                    <div class="option-row">
-                        <label><input type="checkbox" id="stripHtml"> Strip HTML tags before processing</label>
+                        <label><input id="reverseOrder" type="checkbox"> Reverse final order</label>
                     </div>
                 </div>
 
                 <div class="option-section">
-                    <h3><i class="fas fa-pen"></i> Text transformation</h3>
-                    <div class="option-row">
-                        <label><input type="checkbox" id="toLowercase"> Convert all entries to lowercase</label>
+                    <h3><i class="fas fa-broom"></i> Clean list</h3>
+                    <div class="checkbox-grid">
+                        <label><input id="removeDuplicates" type="checkbox"> Remove duplicates</label>
+                        <label><input id="stripHtml" type="checkbox"> Strip HTML tags</label>
+                        <label><input id="normalizeSpaces" type="checkbox"> Normalize spaces</label>
+                        <label><input id="removePunctuation" type="checkbox"> Remove punctuation</label>
                     </div>
                     <div class="option-row">
-                        <label><input type="checkbox" id="capitalizeTitles"> Capitalize titles (each word)</label>
+                        <label><input id="removeFirstWord" type="checkbox"> Remove first word</label>
                     </div>
                     <div class="option-row with-input">
-                        <label><input type="checkbox" id="numberResults"> Number results</label>
-                        <span>with separator</span>
-                        <label for="numberSeparator"></label><input type="text" id="numberSeparator" value=". "
-                                                                    placeholder="e.g. '. '">
-                    </div>
-                    <div class="option-row with-input">
-                        <label><input type="checkbox" id="addCustomText"> Add custom text</label>
-                        <label for="customPrefix"></label><input type="text" id="customPrefix" placeholder="prefix">
-                    </div>
-                    <div class="option-row with-input">
-                        <label><input type="checkbox" id="removeFirstWord"> Remove first word (before sorting)</label>
-                    </div>
-                    <div class="option-row with-input">
-                        <label><input type="checkbox" id="removeFirstChars"> Remove first N chars (before
-                            sorting)</label>
-                        <label for="removeCharsCount"></label><input type="number" id="removeCharsCount" min="0"
-                                                                     value="0" style="width:60px;">
+                        <label><input id="removeFirstChars" type="checkbox"> Remove first N chars</label>
+                        <label for="removeCharsCount"></label><input id="removeCharsCount" min="0" style="width:60px;"
+                                                                     type="number" value="0">
                     </div>
                 </div>
 
                 <div class="option-section">
                     <h3><i class="fas fa-eye-slash"></i> Ignore when sorting</h3>
                     <div class="option-row with-input">
-                        <label><input type="checkbox" id="ignoreFirstWords"> Ignore first word(s)</label>
-                        <label for="ignoreWordsCount"></label><input type="number" id="ignoreWordsCount" min="1"
-                                                                     value="1" style="width:60px;">
+                        <label><input id="ignoreFirstWords" type="checkbox"> Ignore first word(s)</label>
+                        <label for="ignoreWordsCount"></label><input id="ignoreWordsCount" min="1" style="width:60px;"
+                                                                     type="number" value="1">
+                    </div>
+                    <div class="checkbox-grid">
+                        <label><input id="ignoreDefinite" type="checkbox"> Ignore definite (The)</label>
+                        <label><input id="ignoreIndefinite" type="checkbox"> Ignore indefinite (A, An)</label>
+                        <label><input id="ignoreCase" type="checkbox"> Ignore case <span class="help-icon"
+                                                                                         data-tip="Treat 'Apple' and 'apple' as equal"> ⓘ</span></label>
+                    </div>
+                </div>
+
+                <div class="option-section">
+                    <h3><i class="fas fa-paint-roller"></i> Format output</h3>
+                    <div class="option-row">
+                        <label>Case:</label>
+                        <label><input checked name="caseOption" type="radio" value="none"> Keep</label>
+                        <label><input name="caseOption" type="radio" value="lower"> lower</label>
+                        <label><input name="caseOption" type="radio" value="upper"> UPPER</label>
+                        <label><input name="caseOption" type="radio" value="title"> Title</label>
+                        <label><input name="caseOption" type="radio" value="sentence"> Sentence</label>
+                    </div>
+                    <div class="option-row with-input">
+                        <label><input id="numberResults" type="checkbox"> Number results</label>
+                        <span>separator</span>
+                        <label for="numberSeparator"></label><input id="numberSeparator" placeholder=". " type="text"
+                                                                    value=". ">
+                    </div>
+                    <div class="option-row with-input">
+                        <label><input id="addCustomText" type="checkbox"> Add text</label>
+                        <span>prefix:</span>
+                        <label for="customPrefix"></label><input id="customPrefix" placeholder="pre" type="text">
+                        <span>suffix:</span>
+                        <label for="customSuffix"></label><input id="customSuffix" placeholder="suf" type="text">
                     </div>
                     <div class="option-row">
-                        <label><input type="checkbox" id="ignoreDefinite"> Ignore definite articles (The)</label>
+                        <label>Join items with:</label>
                     </div>
-                    <div class="option-row">
-                        <label><input type="checkbox" id="ignoreIndefinite"> Ignore indefinite articles (A, An)</label>
+                    <div class="separator-radio-group" id="outputSeparatorGroup">
+                        <label><input checked name="outputSeparator" type="radio" value="newline"> New line</label>
+                        <label><input name="outputSeparator" type="radio" value="comma"> Comma</label>
+                        <label><input name="outputSeparator" type="radio" value="tab"> Tab</label>
+                        <label><input name="outputSeparator" type="radio" value="custom"> Custom</label>
                     </div>
-                    <div class="option-row">
-                        <label>
-                            <input type="checkbox" id="ignoreCase"> Ignore case
-                            <span class="help-icon" data-tip="Treat 'Apple' and 'apple' as equal"> ⓘ</span>
-                        </label>
+                    <div class="option-row with-input" id="outputCustomRow" style="display:none;">
+                        <span>Custom delimiter:</span>
+                        <label for="outputCustomDelimiter"></label><input id="outputCustomDelimiter" placeholder="e.g. ,"
+                                                                          type="text" value=",">
                     </div>
                 </div>
 
                 <div class="option-section">
                     <h3><i class="fas fa-code-branch"></i> Split items by</h3>
                     <div class="separator-radio-group">
-                        <label><input type="radio" name="separator" value="auto" checked> Auto‑detect</label>
-                        <label><input type="radio" name="separator" value="newline"> New line</label>
-                        <label><input type="radio" name="separator" value="comma"> Comma</label>
-                        <label><input type="radio" name="separator" value="tab"> Tab</label>
-                        <label><input type="radio" name="separator" value="blankline"> Blank line</label>
-                        <label><input type="radio" name="separator" value="custom"> Custom</label>
+                        <label><input checked name="separator" type="radio" value="auto"> Auto</label>
+                        <label><input name="separator" type="radio" value="newline"> New line</label>
+                        <label><input name="separator" type="radio" value="comma"> Comma</label>
+                        <label><input name="separator" type="radio" value="tab"> Tab</label>
+                        <label><input name="separator" type="radio" value="blankline"> Blank line</label>
+                        <label><input name="separator" type="radio" value="custom"> Custom</label>
                     </div>
                     <div class="option-row with-input" style="margin-top:10px;">
                         <span>Custom delimiter:</span>
-                        <label for="customDelimiter"></label><input type="text" id="customDelimiter"
-                                                                    placeholder="e.g. ; | or regex" value=",">
+                        <label for="customDelimiter"></label><input id="customDelimiter" placeholder="e.g. ;"
+                                                                    type="text" value=",">
                     </div>
                 </div>
-
             </aside>
 
             <section class="panel panel-custom textarea-group">
                 <div class="panel-head">
                     <h2><i class="fas fa-sort-alpha-down"></i> List Alphabetizer</h2>
-                    <p class="muted small">Sort, clean, and transform lists - by last name, ignore articles, strip HTML,
+                    <p class="muted small">Sort, clean, and transform lists – by last name, ignore articles, strip HTML,
                         and more.</p>
                 </div>
                 <div class="textarea-box">
                     <label for="inputText"><i class="fas fa-paste" style="margin-right: 6px;"></i>Paste or type your
                         list</label>
-                    <textarea id="inputText" class="large-textarea"
+                    <textarea class="large-textarea" id="inputText"
                               placeholder="One item per line&#10;or use custom separators below"></textarea>
-                </div>
-
-                <div class="textarea-box">
-                    <label for="outputText"><i class="fas fa-list"></i> Alphabetized result</label>
-                    <textarea id="outputText" class="large-textarea" placeholder="Sorted list will appear here..."
-                              readonly></textarea>
-                </div>
-
-                <div class="button-group">
-                    <button class="btn btn-primary" id="alphabetizeBtn"><i class="fas fa-sort-alpha-down"></i>
-                        Alphabetize
-                    </button>
-                    <button class="btn btn-secondary" id="copyBtn"><i class="fas fa-copy"></i> Copy</button>
-                    <button class="btn btn-secondary" id="downloadBtn"><i class="fas fa-download"></i> Download</button>
-                    <button class="btn btn-secondary" id="printBtn"><i class="fas fa-print"></i> Print</button>
-                    <button class="btn btn-secondary" id="saveUrlBtn"><i class="fas fa-link"></i> Save to URL</button>
+                    <div class="button-group">
+                        <button class="btn btn-primary" id="alphabetizeBtn"><i class="fas fa-sort-alpha-down"></i>
+                            Alphabetize
+                        </button>
+                        <button class="btn btn-secondary" id="scrambleBtn"><i class="fas fa-shuffle"></i> Scramble
+                        </button>
+                        <button class="btn btn-secondary" id="copyBtn"><i class="fas fa-copy"></i> Copy</button>
+                    </div>
                 </div>
             </section>
-
         </div>
     </div>
 </main>
@@ -164,6 +179,5 @@ List Alphabetizer - HTML
 </footer>
 
 <script src="script.js"></script>
-
 </body>
 </html>
