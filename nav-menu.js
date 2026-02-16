@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const menu = dropdown.querySelector('.dropdown-menu');
 
             toggle.addEventListener('click', function(e) {
-                if (window.innerWidth <= 768) return; // Only on desktop
+                if (window.innerWidth <= 768) return;
                 e.stopPropagation();
                 const isExpanded = this.getAttribute('aria-expanded') === 'true';
                 this.setAttribute('aria-expanded', !isExpanded);
@@ -104,6 +104,45 @@ document.addEventListener('DOMContentLoaded', function() {
                     dropdown.querySelector('.dropdown-menu').classList.remove('active');
                 });
             }
+        });
+
+        function adjustSubmenuPosition(submenu) {
+            if (window.innerWidth <= 768) return;
+            const parentLi = submenu.closest('.dropdown-submenu');
+            if (!parentLi) return;
+            const rect = submenu.getBoundingClientRect();
+            const viewportWidth = window.innerWidth;
+            if (rect.right > viewportWidth) {
+                parentLi.classList.add('right-align');
+            } else {
+                parentLi.classList.remove('right-align');
+            }
+        }
+
+        const desktopSubmenuItems = header.querySelectorAll('.nav-desktop .dropdown-submenu');
+        desktopSubmenuItems.forEach(item => {
+            const submenu = item.querySelector('.submenu');
+            if (submenu) {
+                item.addEventListener('mouseenter', () => adjustSubmenuPosition(submenu));
+                item.addEventListener('mouseleave', () => {
+                    item.classList.remove('right-align');
+                });
+            }
+        });
+
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                if (window.innerWidth > 768) {
+                    desktopSubmenuItems.forEach(item => {
+                        if (item.matches(':hover')) {
+                            const submenu = item.querySelector('.submenu');
+                            if (submenu) adjustSubmenuPosition(submenu);
+                        }
+                    });
+                }
+            }, 100);
         });
 
         const hamburger = header.querySelector('.hamburger');
