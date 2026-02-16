@@ -1,0 +1,138 @@
+/*
+Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
+
+List Alphabetizer - Stylesheet
+*/
+
+.app-grid {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+@media (max-width: 768px) {
+    .app-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.textarea-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+.textarea-box {
+    background: var(--light);
+    border-radius: var(--radius);
+    padding: 1rem;
+    border: 1px solid var(--gray-light);
+}
+.textarea-box label {
+    font-weight: 500;
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--dark);
+}
+.large-textarea {
+    width: 100%;
+    min-height: 220px;
+    padding: 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    border: 1px solid var(--gray-light);
+    border-radius: var(--radius);
+    resize: vertical;
+    background: white;
+    color: var(--dark);
+}
+.large-textarea:focus {
+    outline: 2px solid var(--primary);
+    border-color: transparent;
+}
+.options-panel {
+    max-height: 85vh;
+    overflow-y: auto;
+    position: sticky;
+    top: 1rem;
+}
+.option-section {
+    margin-bottom: 1rem;
+    border-bottom: 1px dashed var(--gray-light);
+    padding-bottom: 0.8rem;
+}
+.option-section:last-child {
+    border-bottom: 0;
+}
+.option-section h3 {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-bottom: 0.6rem;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+.option-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+.option-row label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    cursor: pointer;
+}
+.option-row .with-input {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+.with-input input[type="text"],
+.with-input input[type="number"] {
+    width: 90px;
+    padding: 0.3rem 0.5rem;
+    border: 1px solid var(--gray-light);
+    border-radius: var(--radius);
+    font-family: var(--font-mono);
+}
+.with-input input[type="number"] {
+    width: 70px;
+}
+.separator-radio-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem 1.5rem;
+    align-items: center;
+}
+.help-icon {
+    color: var(--gray);
+    font-size: 0.9rem;
+    cursor: help;
+    position: relative;
+    border-bottom: 1px dotted var(--gray);
+}
+.help-icon:hover:after {
+    content: attr(data-tip);
+    position: absolute;
+    background: var(--dark);
+    color: white;
+    padding: 0.4rem 0.8rem;
+    border-radius: var(--radius);
+    font-size: 0.8rem;
+    white-space: nowrap;
+    bottom: 150%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+}
+.button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin: 1.5rem 0 0.5rem;
+}

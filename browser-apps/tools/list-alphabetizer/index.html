@@ -1,0 +1,169 @@
+<!--
+Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
+
+List Alphabetizer - HTML
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List · alphabetizer</title>
+    <meta name="description"
+          content="Sort, clean, and transform lists - by last name, ignore articles, strip HTML, and more.">
+    <link href="../../../core.css" rel="stylesheet"/>
+    <script src="../../../nav-menu.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
+          rel="stylesheet">
+    <link href="style.css" rel="stylesheet"/>
+</head>
+<body>
+
+<header class="header"></header>
+
+<main>
+    <div class="container">
+        <div class="app-grid">
+
+            <aside class="panel panel-custom options-panel">
+                <div class="panel-head">
+                    <h3><i class="fas fa-sliders"></i> Sorting Options</h3>
+                </div>
+
+                <div class="option-section">
+                    <h3><i class="fas fa-arrow-up-wide-short"></i> Sort mode</h3>
+                    <div class="option-row">
+                        <label><input type="radio" name="sortMode" value="az" checked> A → Z (standard)</label>
+                        <label><input type="radio" name="sortMode" value="za"> Z → A</label>
+                        <label><input type="radio" name="sortMode" value="lastName"> By last name</label>
+                        <label><input type="radio" name="sortMode" value="random"> Randomize</label>
+                    </div>
+                    <div class="option-row">
+                        <label><input type="checkbox" id="removeDuplicates"> Remove duplicate entries</label>
+                    </div>
+                    <div class="option-row">
+                        <label><input type="checkbox" id="stripHtml"> Strip HTML tags before processing</label>
+                    </div>
+                </div>
+
+                <div class="option-section">
+                    <h3><i class="fas fa-pen"></i> Text transformation</h3>
+                    <div class="option-row">
+                        <label><input type="checkbox" id="toLowercase"> Convert all entries to lowercase</label>
+                    </div>
+                    <div class="option-row">
+                        <label><input type="checkbox" id="capitalizeTitles"> Capitalize titles (each word)</label>
+                    </div>
+                    <div class="option-row with-input">
+                        <label><input type="checkbox" id="numberResults"> Number results</label>
+                        <span>with separator</span>
+                        <label for="numberSeparator"></label><input type="text" id="numberSeparator" value=". "
+                                                                    placeholder="e.g. '. '">
+                    </div>
+                    <div class="option-row with-input">
+                        <label><input type="checkbox" id="addCustomText"> Add custom text</label>
+                        <label for="customPrefix"></label><input type="text" id="customPrefix" placeholder="prefix">
+                    </div>
+                    <div class="option-row with-input">
+                        <label><input type="checkbox" id="removeFirstWord"> Remove first word (before sorting)</label>
+                    </div>
+                    <div class="option-row with-input">
+                        <label><input type="checkbox" id="removeFirstChars"> Remove first N chars (before
+                            sorting)</label>
+                        <label for="removeCharsCount"></label><input type="number" id="removeCharsCount" min="0"
+                                                                     value="0" style="width:60px;">
+                    </div>
+                </div>
+
+                <div class="option-section">
+                    <h3><i class="fas fa-eye-slash"></i> Ignore when sorting</h3>
+                    <div class="option-row with-input">
+                        <label><input type="checkbox" id="ignoreFirstWords"> Ignore first word(s)</label>
+                        <label for="ignoreWordsCount"></label><input type="number" id="ignoreWordsCount" min="1"
+                                                                     value="1" style="width:60px;">
+                    </div>
+                    <div class="option-row">
+                        <label><input type="checkbox" id="ignoreDefinite"> Ignore definite articles (The)</label>
+                    </div>
+                    <div class="option-row">
+                        <label><input type="checkbox" id="ignoreIndefinite"> Ignore indefinite articles (A, An)</label>
+                    </div>
+                    <div class="option-row">
+                        <label>
+                            <input type="checkbox" id="ignoreCase"> Ignore case
+                            <span class="help-icon" data-tip="Treat 'Apple' and 'apple' as equal"> ⓘ</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="option-section">
+                    <h3><i class="fas fa-code-branch"></i> Split items by</h3>
+                    <div class="separator-radio-group">
+                        <label><input type="radio" name="separator" value="auto" checked> Auto‑detect</label>
+                        <label><input type="radio" name="separator" value="newline"> New line</label>
+                        <label><input type="radio" name="separator" value="comma"> Comma</label>
+                        <label><input type="radio" name="separator" value="tab"> Tab</label>
+                        <label><input type="radio" name="separator" value="blankline"> Blank line</label>
+                        <label><input type="radio" name="separator" value="custom"> Custom</label>
+                    </div>
+                    <div class="option-row with-input" style="margin-top:10px;">
+                        <span>Custom delimiter:</span>
+                        <label for="customDelimiter"></label><input type="text" id="customDelimiter"
+                                                                    placeholder="e.g. ; | or regex" value=",">
+                    </div>
+                </div>
+
+            </aside>
+
+            <section class="panel panel-custom textarea-group">
+                <div class="panel-head">
+                    <h2><i class="fas fa-sort-alpha-down"></i> List Alphabetizer</h2>
+                    <p class="muted small">Sort, clean, and transform lists - by last name, ignore articles, strip HTML,
+                        and more.</p>
+                </div>
+                <div class="textarea-box">
+                    <label for="inputText"><i class="fas fa-paste" style="margin-right: 6px;"></i>Paste or type your
+                        list</label>
+                    <textarea id="inputText" class="large-textarea"
+                              placeholder="One item per line&#10;or use custom separators below"></textarea>
+                </div>
+
+                <div class="textarea-box">
+                    <label for="outputText"><i class="fas fa-list"></i> Alphabetized result</label>
+                    <textarea id="outputText" class="large-textarea" placeholder="Sorted list will appear here..."
+                              readonly></textarea>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn btn-primary" id="alphabetizeBtn"><i class="fas fa-sort-alpha-down"></i>
+                        Alphabetize
+                    </button>
+                    <button class="btn btn-secondary" id="copyBtn"><i class="fas fa-copy"></i> Copy</button>
+                    <button class="btn btn-secondary" id="downloadBtn"><i class="fas fa-download"></i> Download</button>
+                    <button class="btn btn-secondary" id="printBtn"><i class="fas fa-print"></i> Print</button>
+                    <button class="btn btn-secondary" id="saveUrlBtn"><i class="fas fa-link"></i> Save to URL</button>
+                </div>
+            </section>
+
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="footer-container">
+        <div class="social-icons">
+            <a aria-label="Discord" href="https://discord.com/channels/@me/707058110396760094" target="_blank"><i
+                    class="fab fa-discord"></i></a>
+            <a aria-label="GitHub" href="https://github.com/Chalwk" target="_blank"> <i class="fab fa-github"></i></a>
+            <a aria-label="Email" href="mailto:chalwk.dev@gmail.com"><i class="fas fa-envelope"></i></a>
+        </div>
+        <p class="footer-copyright"></p>
+    </div>
+</footer>
+
+<script src="script.js"></script>
+
+</body>
+</html>
