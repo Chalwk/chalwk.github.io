@@ -34,53 +34,57 @@ Time & Date Calculator - HTML
                 </div>
 
                 <div class="date-calculator-layout">
-                    <div class="date-input-group">
-                        <label for="startDate" class="input-label">
-                            <span><i class="fas fa-play"></i> Start date</span>
-                        </label>
+                    <div class="left-column">
+                        <div class="date-input-group">
+                            <label for="startDate" class="input-label">
+                                <span><i class="fas fa-play"></i> Start date</span>
+                            </label>
 
-                        <div class="input-with-button">
-                            <input type="date" id="startDate" class="date-input">
-                            <button type="button" class="btn btn-secondary today-btn" data-target="start">
-                                <i class="fas fa-calendar-check"></i> Today
+                            <div class="input-with-button">
+                                <input type="date" id="startDate" class="date-input">
+                                <button type="button" class="btn btn-secondary today-btn" data-target="start">
+                                    <i class="fas fa-calendar-check"></i> Today
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="date-input-group">
+                            <label for="endDate" class="input-label">
+                                <span><i class="fas fa-stop"></i> End date</span>
+                            </label>
+
+                            <div class="input-with-button">
+                                <input type="date" id="endDate" class="date-input">
+                                <button type="button" class="btn btn-secondary today-btn" data-target="end">
+                                    <i class="fas fa-calendar-check"></i> Today
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="option-row">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="includeEndDate">
+                                <span>Include end date in calculation (add 1 day)</span>
+                            </label>
+                        </div>
+
+                        <div class="button-group">
+                            <button class="btn btn-primary" id="calculateBtn">
+                                <i class="fas fa-calculator"></i> Calculate
                             </button>
                         </div>
                     </div>
 
-                    <div class="date-input-group">
-                        <label for="endDate" class="input-label">
-                            <span><i class="fas fa-stop"></i> End date</span>
-                        </label>
-
-                        <div class="input-with-button">
-                            <input type="date" id="endDate" class="date-input">
-                            <button type="button" class="btn btn-secondary today-btn" data-target="end">
-                                <i class="fas fa-calendar-check"></i> Today
-                            </button>
+                    <div class="right-column">
+                        <div class="result-box" id="resultBox">
+                            <div class="result-line" id="resultLine1">From and including: [Start Date]</div>
+                            <div class="result-line" id="resultLine2">To, [including/excluding] [End Date]</div>
+                            <div class="result-line result-days" id="resultDays">Result: - days</div>
+                            <div class="result-line" id="resultDesc">Select dates to calculate the difference.</div>
+                            <div class="result-line" id="resultYmd">Or - years, - months, - days</div>
+                            <div class="result-line" id="resultMd">Or - months, - days</div>
+                            <div class="result-alt" id="resultAlt">Alternative time units will appear here.</div>
                         </div>
-                    </div>
-
-                    <div class="option-row">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="includeEndDate">
-                            <span>Include end date in calculation (add 1 day)</span>
-                        </label>
-                    </div>
-
-                    <div class="button-group">
-                        <button class="btn btn-primary" id="calculateBtn">
-                            <i class="fas fa-calculator"></i> Calculate
-                        </button>
-                    </div>
-
-                    <div class="result-box" id="resultBox">
-                        <div class="result-line" id="resultLine1">From and including: [Start Date]</div>
-                        <div class="result-line" id="resultLine2">To, [including/excluding] [End Date]</div>
-                        <div class="result-line result-days" id="resultDays">Result: - days</div>
-                        <div class="result-line" id="resultDesc">Select dates to calculate the difference.</div>
-                        <div class="result-line" id="resultYmd">Or - years, - months, - days</div>
-                        <div class="result-line" id="resultMd">Or - months, - days</div>
-                        <div class="result-alt" id="resultAlt">Alternative time units will appear here.</div>
                     </div>
                 </div>
             </section>
