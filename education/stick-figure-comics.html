@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Autism Stick Figure Comics · personal</title>
+    <title>Autism Stick Figure Comics</title>
     <link href="../core.css" rel="stylesheet">
     <script src="../nav-menu.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -37,16 +37,6 @@
             font-size: 2.8rem;
             margin-bottom: 0.5rem;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        .personal-note {
-            font-size: 1.1rem;
-            background: rgba(255,255,255,0.2);
-            padding: 0.8rem 1.5rem;
-            border-radius: 50px;
-            display: inline-block;
-            backdrop-filter: blur(4px);
-            margin-top: 1rem;
         }
 
         .page-container {
@@ -144,7 +134,6 @@
     <div class="hero-banner">
         <div class="hero-content">
             <h1 class="page-title">Autism Through Stick Figures</h1>
-            <p class="personal-note">Comics drawn with code - each one reflects my own experiences and moments living with autism.</p>
         </div>
     </div>
     <div class="page-container">
@@ -190,7 +179,7 @@
             {
                 id: 'sensory-overload',
                 title: '⚡ Sensory Overload',
-                caption: 'Everyday environments can feel overwhelming – lights buzz, noises blend into a painful roar. A quiet space helps.',
+                caption: 'Everyday environments can feel overwhelming - lights buzz, noises blend into a painful roar. A quiet space helps.',
                 bg: '#f0e9e0',
                 svg: function() {
                     return svgContent(`
@@ -218,7 +207,7 @@
             {
                 id: 'special-interest',
                 title: '🔍 Special Interest',
-                caption: 'A special interest brings intense joy and focus – like a whole universe inside one topic.',
+                caption: 'A special interest brings intense joy and focus - like a whole universe inside one topic.',
                 bg: '#e6f0e6',
                 svg: function() {
                     return svgContent(`
@@ -257,10 +246,10 @@
                     <line x1="210" y1="105" x2="235" y2="90" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
                     <line x1="210" y1="135" x2="185" y2="165" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
                     <line x1="210" y1="135" x2="235" y2="165" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
-                    <text x="40" y="48" font-family="${Style.fontFamily}" font-size="9">"It's raining</text>
-                    <text x="40" y="60" font-family="${Style.fontFamily}" font-size="9">cats and dogs!"</text>
-                    <text x="205" y="48" font-family="${Style.fontFamily}" font-size="9">"Where are</text>
-                    <text x="205" y="61" font-family="${Style.fontFamily}" font-size="9">the animals?"</text>
+                    <text x="40" y="48" font-family="${Style.fontFamily}" font-size="12">"It's raining</text>
+                    <text x="40" y="60" font-family="${Style.fontFamily}" font-size="12">cats and dogs!"</text>
+                    <text x="205" y="48" font-family="${Style.fontFamily}" font-size="12">"Where are</text>
+                    <text x="205" y="61" font-family="${Style.fontFamily}" font-size="12">the animals?"</text>
                 `, this.bg);
                 }
             },
@@ -327,8 +316,8 @@
                     <circle cx="210" cy="70" r="16" fill="#f0d0b0" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}" stroke-dasharray="3 2"/>
                     <line x1="210" y1="58" x2="210" y2="82" stroke="${Style.outline}" stroke-width="1.5" stroke-dasharray="2 2"/>
                     <path d="M140 90 Q150 100 160 90" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}" fill="none"/>
-                    <text x="40" y="40" font-family="${Style.fontFamily}" font-size="10" fill="#37474f">"I have to pretend</text>
-                    <text x="40" y="55" font-family="${Style.fontFamily}" font-size="10" fill="#37474f">all day..."</text>
+                    <text x="40" y="40" font-family="${Style.fontFamily}" font-size="12" fill="#37474f">"I have to pretend</text>
+                    <text x="40" y="55" font-family="${Style.fontFamily}" font-size="12" fill="#37474f">all day..."</text>
                 `, this.bg);
                 }
             }
