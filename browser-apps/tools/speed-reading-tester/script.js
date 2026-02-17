@@ -80,7 +80,28 @@ Speed Reading Tester - JavaScript
         }
     ];
 
-    const longRsvpText = "The old mansion stood on a hill overlooking the small town of Millbrook. For decades, locals whispered about the lights that flickered in its windows on stormy nights. No one dared to approach, until a young historian named Claire decided to uncover the truth. She borrowed the keys from the historical society and walked up the overgrown path on a crisp autumn morning. The door groaned as it opened, revealing a grand hall draped in dusty cobwebs. Claire's footsteps echoed on the marble floor. She found a library with books still on the shelves, a kitchen with rusty pots, and a bedroom with a four-poster bed. In the attic, she discovered a trunk filled with letters and photographs. They told the story of Eleanor, a woman who had lived there alone after her fiancé perished in the war. Eleanor had kept the lights burning every night hoping he would return. Claire felt a deep sadness but also admiration. She decided to write an article about Eleanor, ensuring her story would not be forgotten. The town eventually restored the mansion as a small museum, and Claire became its first curator. Visitors came from far away, and on some evenings, they swore they could still see a faint light in the attic window, as if Eleanor's spirit finally found peace.";
+    const rsvpStories = [
+        {
+            title: "The Old Mansion",
+            text: "The old mansion stood on a hill overlooking the small town of Millbrook. For decades, locals whispered about the lights that flickered in its windows on stormy nights. No one dared to approach, until a young historian named Claire decided to uncover the truth. She borrowed the keys from the historical society and walked up the overgrown path on a crisp autumn morning. The door groaned as it opened, revealing a grand hall draped in dusty cobwebs. Claire's footsteps echoed on the marble floor. She found a library with books still on the shelves, a kitchen with rusty pots, and a bedroom with a four-poster bed. In the attic, she discovered a trunk filled with letters and photographs. They told the story of Eleanor, a woman who had lived there alone after her fiancé perished in the war. Eleanor had kept the lights burning every night hoping he would return. Claire felt a deep sadness but also admiration. She decided to write an article about Eleanor, ensuring her story would not be forgotten. The town eventually restored the mansion as a small museum, and Claire became its first curator. Visitors came from far away, and on some evenings, they swore they could still see a faint light in the attic window, as if Eleanor's spirit finally found peace. The museum became a beloved landmark, and Claire often gave tours, sharing Eleanor's story with anyone who would listen. She felt a connection to the past and a responsibility to preserve it for future generations. Years later, when Claire retired, she donated all her notes and research to the town archive, ensuring that Eleanor's legacy would live on. The mansion, now a symbol of resilience and memory, continued to attract visitors from all over the world, each leaving with a piece of its hauntingly beautiful history."
+        },
+        {
+            title: "The Lost City of Z",
+            text: "Deep in the Amazon rainforest, legends spoke of a lost city of gold, known as El Dorado. For centuries, explorers and adventurers risked their lives to find it, but none succeeded. In the early 20th century, a British explorer named Percy Fawcett became obsessed with the idea. He made several expeditions into the jungle, each time returning with tales of strange creatures and hostile tribes. On his final journey in 1925, he vanished without a trace, along with his son and a friend. Many believed they were killed by natives or succumbed to disease. But others thought Fawcett had discovered the city and chosen to stay. Decades later, archaeologists using satellite imagery found evidence of ancient settlements deep in the rainforest, suggesting that Fawcett might have been right all along. The mystery of his disappearance remains unsolved, but his story inspired countless others to seek the truth. The jungle, vast and unforgiving, keeps its secrets well, and perhaps some mysteries are meant to remain hidden forever. The legend of the lost city continues to captivate the imagination, a testament to humanity's enduring quest for discovery and the unknown."
+        },
+        {
+            title: "The Voyage of the Dawn Treader",
+            text: "In the magical land of Narnia, King Caspian built a great ship called the Dawn Treader to sail east in search of seven lost lords. He was joined by Edmund and Lucy Pevensie, their cousin Eustace, and a talking mouse named Reepicheep. Their journey took them to mysterious islands, each with its own wonders and dangers. They encountered sea serpents, invisible warriors, and a dragon that turned out to be Eustace transformed by greed. They met a sorcerer's island where dreams came true, and a pool that turned everything to gold. Finally, they reached the edge of the world, where the sky met the sea. Reepicheep, true to his heart's desire, paddled his small coracle into the Utter East, never to return. The others sailed back to Narnia, forever changed by their adventures. The voyage taught them about courage, friendship, and the importance of seeking what lies beyond the horizon. It was a journey that would be told in Narnian tales for generations, a reminder that the greatest treasures are not gold or jewels, but the memories we create and the people we love."
+        },
+        {
+            title: "The Life of Leonardo da Vinci",
+            text: "Leonardo da Vinci was born in 1452 in the small town of Vinci, Italy. From an early age, he showed a keen interest in art, science, and nature. He apprenticed under the artist Verrocchio in Florence, where he honed his skills in painting and sculpture. His most famous works include the Mona Lisa and The Last Supper, but his genius extended far beyond art. He filled notebooks with anatomical drawings, engineering designs, and observations of the natural world. He envisioned flying machines, armored vehicles, and even a primitive form of the helicopter. Despite his many talents, Leonardo struggled to complete many of his projects, often leaving them unfinished. He spent his later years in France, under the patronage of King Francis I, where he continued to sketch and invent until his death in 1519. His legacy lives on not only in his art but in his insatiable curiosity and his belief that knowledge is the key to understanding the world. Leonardo da Vinci remains the quintessential Renaissance man, a symbol of human potential and the power of imagination."
+        },
+        {
+            title: "The History of the Silk Road",
+            text: "The Silk Road was not a single road but a network of trade routes connecting China to the Mediterranean. It flourished for over 1,500 years, from around 130 BCE to the 1450s CE. Merchants carried silk, spices, tea, and porcelain from the East, while gold, silver, glassware, and wool traveled from the West. But the Silk Road was more than a trade route; it was a conduit for ideas, religions, and cultures. Buddhism spread from India to China along these paths, and later, Islam and Christianity also found their way. Technologies such as papermaking, gunpowder, and the compass were transmitted across continents. The route was perilous, crossing deserts, mountains, and bandit-infested plains. Caravanserais provided shelter and rest for travelers. The Silk Road declined with the rise of maritime trade and the fall of the Mongol Empire, but its impact on world history is immeasurable. It fostered the exchange of knowledge and goods that shaped civilizations, and its legacy can still be seen today in the cultural connections between East and West."
+        }
+    ];
 
     const tabRSVP = document.getElementById('tabRSVP');
     const tabStory = document.getElementById('tabStory');
@@ -105,7 +126,14 @@ Speed Reading Tester - JavaScript
     const submitAnswersBtn = document.getElementById('submitAnswers');
     const comprehensionScore = document.getElementById('comprehensionScore');
 
-    let rsvpWords = longRsvpText.split(/\s+/);
+    const rsvpSelect = document.createElement('select');
+    rsvpSelect.id = 'rsvpStorySelect';
+    rsvpSelect.style.marginBottom = '10px';
+    rsvpSelect.style.width = '100%';
+    rsvpSelect.style.padding = '5px';
+    rsvpPanel.insertBefore(rsvpSelect, rsvpPanel.firstChild);
+
+    let rsvpWords = [];
     let currentIdx = 0;
     let currentWpm = 120;
     const BASE_WPM = 120;
@@ -122,7 +150,38 @@ Speed Reading Tester - JavaScript
     let storyWordsCount = 0;
     let storyCompleted = false;
 
-    totalWordsSpan.textContent = rsvpWords.length;
+    function populateRsvpSelect() {
+        rsvpSelect.innerHTML = '';
+        rsvpStories.forEach((story, index) => {
+            const option = document.createElement('option');
+            option.value = index;
+            option.textContent = story.title;
+            rsvpSelect.appendChild(option);
+        });
+    }
+
+    function loadRsvpStory(index) {
+        stopRSVP();
+        const story = rsvpStories[index];
+        rsvpWords = story.text.split(/\s+/);
+        currentIdx = 0;
+        currentWpm = BASE_WPM;
+        liveWpmSpan.textContent = currentWpm;
+        wordCountSpan.textContent = '0';
+        totalWordsSpan.textContent = rsvpWords.length;
+        if (rsvpWords.length) {
+            wordDisplaySpan.textContent = rsvpWords[0];
+        } else {
+            wordDisplaySpan.textContent = '⟵ no words';
+        }
+    }
+
+    populateRsvpSelect();
+    loadRsvpStory(0);
+
+    rsvpSelect.addEventListener('change', (e) => {
+        loadRsvpStory(parseInt(e.target.value));
+    });
 
     function stopRSVP() {
         if (rsvpInterval) {
