@@ -1,0 +1,105 @@
+/*
+Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
+
+Speed Reading Tester - Stylesheet
+*/
+
+.mode-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid var(--gray-light);
+    padding-bottom: 0.5rem;
+}
+.tab-btn {
+    background: none;
+    border: none;
+    padding: 0.5rem 1.2rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--gray);
+    cursor: pointer;
+    border-radius: var(--radius) var(--radius) 0 0;
+    transition: all 0.2s;
+}
+.tab-btn.active {
+    color: var(--primary);
+    background: var(--light);
+    border-bottom: 3px solid var(--primary);
+}
+.word-flash-area {
+    background: var(--light);
+    border: 2px dashed var(--gray-light);
+    border-radius: var(--radius-lg);
+    padding: 3rem 1rem;
+    text-align: center;
+    margin: 1.5rem 0;
+    font-size: 3.5rem;
+    font-weight: 500;
+    font-family: var(--font-mono);
+    min-height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--dark);
+    word-break: break-word;
+}
+.story-text {
+    background: white;
+    border: 1px solid var(--gray-light);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    max-height: 300px;
+    overflow-y: auto;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 1rem 0;
+    color: var(--dark);
+}
+.stats-row {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    align-items: center;
+    background: var(--light);
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius);
+    margin: 1rem 0;
+}
+.wpm-badge {
+    background: var(--primary);
+    color: white;
+    padding: 0.2rem 1rem;
+    border-radius: 2rem;
+    font-weight: 600;
+}
+.question-item {
+    background: var(--light);
+    padding: 1rem;
+    border-radius: var(--radius);
+    margin-bottom: 1rem;
+}
+.question-item p {
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+}
+.question-item label {
+    display: block;
+    margin: 0.25rem 0;
+    font-size: 0.95rem;
+}
+.hidden {
+    display: none !important;
+}
+.finish-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+.info-note {
+    background: var(--light);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius);
+    color: var(--gray);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}

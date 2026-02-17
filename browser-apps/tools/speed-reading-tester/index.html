@@ -1,0 +1,113 @@
+<!--
+Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
+
+Speed Reading Tester - HTML
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speed Reading Tester</title>
+    <meta name="description"
+          content="Two speed reading tests: RSVP word flash with increasing speed, and full stories with comprehension checks.">
+    <link href="../../../core.css" rel="stylesheet">
+    <script src="../../../nav-menu.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
+          rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+
+<header class="header"></header>
+
+<main>
+    <div class="container">
+        <div class="app-grid" style="grid-template-columns: 1fr;">
+            <section class="panel panel-custom">
+                <div class="panel-head">
+                    <h2><i class="fas fa-gauge-high"></i> Speed Reading Tester</h2>
+                    <p class="muted small">Two modes: word‑by‑word with increasing speed, or read a full story and check
+                        comprehension.</p>
+                </div>
+                <div class="mode-tabs">
+                    <button class="tab-btn active" id="tabRSVP"><i class="fas fa-bolt"></i> RSVP (word flash)</button>
+                    <button class="tab-btn" id="tabStory"><i class="fas fa-book-open"></i> Full story</button>
+                </div>
+                <div id="rsvpPanel">
+                    <div class="info-note">
+                        <i class="fas fa-eye"></i> A long text is preloaded. Press Begin to see words flash.
+                    </div>
+                    <div class="word-flash-area" id="wordDisplay">
+                        <span id="currentWord">⟵ press begin</span>
+                    </div>
+                    <div class="stats-row">
+                        <span><i class="fas fa-tachometer-alt"></i> WPM: <span id="liveWpm">120</span></span>
+                        <span><i class="fas fa-fast-forward"></i> speed inc. every word</span>
+                        <span><i class="fas fa-chart-simple"></i> word <span id="wordCount">0</span>/<span
+                                id="totalWords">0</span></span>
+                    </div>
+                    <div class="button-group">
+                        <button class="btn btn-primary" id="rsvpBegin"><i class="fas fa-play"></i> Begin</button>
+                        <button class="btn btn-secondary" id="rsvpStop" disabled><i class="fas fa-stop"></i> Stop
+                        </button>
+                        <button class="btn btn-secondary" id="rsvpReset"><i class="fas fa-rotate-left"></i> Reset
+                        </button>
+                    </div>
+                    <p class="muted small" style="margin-top:0.5rem"><i class="fas fa-info-circle"></i> Speed starts at
+                        120 WPM and increases by 2 WPM after each word. Max 800 WPM.</p>
+                </div>
+                <div id="storyPanel" class="hidden">
+                    <div class="option-row">
+                        <label for="storySelect">Choose a story:</label>
+                        <select id="storySelect" class="date-input" style="width:auto; min-width:200px;">
+                            <option value="0">The Lost Key</option>
+                            <option value="1">The Birthday Surprise</option>
+                            <option value="2">Mountain Hike</option>
+                        </select>
+                    </div>
+                    <div id="storyTextDisplay" class="story-text">Loading story...</div>
+                    <div class="stats-row">
+                        <span><i class="fas fa-clock"></i> Time: <span id="storyTimer">0.0</span> s</span>
+                        <span><i class="fas fa-file-lines"></i> Words: <span id="storyWordCount">0</span></span>
+                    </div>
+                    <div class="button-group">
+                        <button class="btn btn-primary" id="storyStart"><i class="fas fa-play"></i> Start reading
+                        </button>
+                        <button class="btn btn-secondary finish-btn" id="storyFinish" disabled><i
+                                class="fas fa-flag-checkered"></i> I'm done
+                        </button>
+                        <button class="btn btn-secondary" id="storyReset"><i class="fas fa-undo"></i> Reset</button>
+                    </div>
+                    <div id="comprehensionArea" class="hidden">
+                        <hr style="margin:1.5rem 0">
+                        <h3><i class="fas fa-question-circle"></i> Quick comprehension check</h3>
+                        <div id="questionsContainer"></div>
+                        <button class="btn btn-primary" id="submitAnswers"><i class="fas fa-check-double"></i> Submit
+                            answers
+                        </button>
+                        <div id="comprehensionScore" style="margin-top:1rem; font-weight:500;"></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="footer-container">
+        <div class="social-icons">
+            <a aria-label="Discord" href="https://discord.com/channels/@me/707058110396760094" target="_blank"><i
+                    class="fab fa-discord"></i></a>
+            <a aria-label="GitHub" href="https://github.com/Chalwk" target="_blank"><i class="fab fa-github"></i></a>
+            <a aria-label="Email" href="mailto:chalwk.dev@gmail.com"><i class="fas fa-envelope"></i></a>
+        </div>
+        <p class="footer-copyright"></p>
+    </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
