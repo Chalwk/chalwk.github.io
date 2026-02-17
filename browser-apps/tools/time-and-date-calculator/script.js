@@ -8,6 +8,11 @@ Time & Date Calculator - JavaScript
     const startDateInput = document.getElementById('startDate');
     const endDateInput = document.getElementById('endDate');
     const includeEndDateChk = document.getElementById('includeEndDate');
+    const includeTimeChk = document.getElementById('includeTime');
+    const startTimeInput = document.getElementById('startTime');
+    const endTimeInput = document.getElementById('endTime');
+    const startTimeGroup = document.getElementById('startTimeGroup');
+    const endTimeGroup = document.getElementById('endTimeGroup');
     const calculateBtn = document.getElementById('calculateBtn');
 
     const resultLine1 = document.getElementById('resultLine1');
@@ -18,15 +23,31 @@ Time & Date Calculator - JavaScript
     const resultMd = document.getElementById('resultMd');
     const resultAlt = document.getElementById('resultAlt');
 
-    function formatDateUTC(year, month, day) {
-        const date = new Date(Date.UTC(year, month - 1, day));
-        return date.toLocaleDateString('en-US', {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            timeZone: 'UTC'
-        });
+    includeTimeChk.addEventListener('change', function() {
+        const show = includeTimeChk.checked;
+        startTimeGroup.style.display = show ? 'flex' : 'none';
+        endTimeGroup.style.display = show ? 'flex' : 'none';
+    });
+
+    function formatDateTime(date, includeTime) {
+        if (!includeTime) {
+            return date.toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        } else {
+            return date.toLocaleString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true
+            });
+        }
     }
 
     function parseDateInput(value) {
@@ -46,6 +67,13 @@ Time & Date Calculator - JavaScript
         const month = String(d.getMonth() + 1).padStart(2, '0');
         const day = String(d.getDate()).padStart(2, '0');
         return `${year}-${month}-${day}`;
+    }
+
+    function getCurrentTimeString() {
+        const d = new Date();
+        const hours = String(d.getHours()).padStart(2, '0');
+        const minutes = String(d.getMinutes()).padStart(2, '0');
+        return `${hours}:${minutes}`;
     }
 
     function daysInMonth(year, month) {
@@ -74,13 +102,6 @@ Time & Date Calculator - JavaScript
         return { years, months, days };
     }
 
-    function daysBetween(start, end) {
-        const startUtc = Date.UTC(start.year, start.month - 1, start.day);
-        const endUtc = Date.UTC(end.year, end.month - 1, end.day);
-        const diffMs = endUtc - startUtc;
-        return Math.round(diffMs / (1000 * 60 * 60 * 24));
-    }
-
     function formatNumber(n) {
         return n.toLocaleString('en-US');
     }
@@ -89,6 +110,7 @@ Time & Date Calculator - JavaScript
         const startVal = startDateInput.value;
         const endVal = endDateInput.value;
         const includeEnd = includeEndDateChk.checked;
+        const includeTime = includeTimeChk.checked;
 
         if (!startVal || !endVal) {
             resultLine1.textContent = 'Please select both dates.';
@@ -101,25 +123,48 @@ Time & Date Calculator - JavaScript
             return;
         }
 
-        const start = parseDateInput(startVal);
-        const end = parseDateInput(endVal);
-        if (!start || !end) {
+        const startParts = parseDateInput(startVal);
+        const endParts = parseDateInput(endVal);
+        if (!startParts || !endParts) {
             resultLine1.textContent = 'Invalid date format.';
             return;
         }
 
-        const startTime = Date.UTC(start.year, start.month - 1, start.day);
-        const endTime = Date.UTC(end.year, end.month - 1, end.day);
-        if (startTime > endTime) {
-            resultLine1.textContent = 'Start date must be before or equal to end date.';
+        let startHour = 0, startMinute = 0;
+        let endHour = 0, endMinute = 0;
+
+        if (includeTime) {
+            if (startTimeInput.value) {
+                const [h, m] = startTimeInput.value.split(':');
+                startHour = parseInt(h, 10) || 0;
+                startMinute = parseInt(m, 10) || 0;
+            }
+            if (endTimeInput.value) {
+                const [h, m] = endTimeInput.value.split(':');
+                endHour = parseInt(h, 10) || 0;
+                endMinute = parseInt(m, 10) || 0;
+            }
+        }
+
+        const startDate = new Date(startParts.year, startParts.month - 1, startParts.day, startHour, startMinute, 0);
+        const endDate = new Date(endParts.year, endParts.month - 1, endParts.day, endHour, endMinute, 0);
+
+        let endEffective = endDate;
+        if (includeEnd) {
+            endEffective = new Date(endDate.getTime() + 86400000);
+        }
+
+        const diffMs = endEffective - startDate;
+        if (diffMs < 0) {
+            resultLine1.textContent = 'Start date/time must be before or equal to end date/time.';
             return;
         }
 
-        const totalDaysExclusive = daysBetween(start, end);
-        const totalDays = includeEnd ? totalDaysExclusive + 1 : totalDaysExclusive;
+        const totalDays = diffMs / 86400000;
+        const totalDaysFormatted = Number.isInteger(totalDays) ? totalDays.toString() : totalDays.toFixed(2);
 
-        const startFormatted = formatDateUTC(start.year, start.month, start.day);
-        const endFormatted = formatDateUTC(end.year, end.month, end.day);
+        const startFormatted = formatDateTime(startDate, includeTime && (startHour !== 0 || startMinute !== 0));
+        const endFormatted = formatDateTime(endDate, includeTime && (endHour !== 0 || endMinute !== 0));
 
         const includeText = includeEnd ? 'including' : 'excluding';
         const inclusiveLabel = includeEnd ? 'inclusive' : 'exclusive';
@@ -127,22 +172,23 @@ Time & Date Calculator - JavaScript
         resultLine1.textContent = `From (inclusive): ${startFormatted}`;
         resultLine2.textContent = `To (${inclusiveLabel}): ${endFormatted}`;
 
-        const daysFormatted = formatNumber(totalDays);
-        resultDays.textContent = `Total days in period: ${daysFormatted}`;
+        resultDays.textContent = `Total days in period: ${formatNumber(totalDaysFormatted)}`;
 
-        resultDesc.textContent = `The duration is ${daysFormatted} days (${includeText} the final day).`;
+        const durationText = includeTime ? 'exact duration' : 'days';
+        resultDesc.textContent = `The ${durationText} is ${formatNumber(totalDaysFormatted)} days (${includeText} the final day).`;
 
-        const ymd = getYmdDifference(start, end);
+        const ymd = getYmdDifference(startParts, endParts);
         resultYmd.textContent = `In years, months, days: ${ymd.years} years, ${ymd.months} months, ${ymd.days} days (${includeText} end date).`;
 
         const totalMonths = ymd.years * 12 + ymd.months;
         resultMd.textContent = `In months and days: ${totalMonths} months, ${ymd.days} days (${includeText} end date).`;
 
-        const seconds = totalDays * 24 * 3600;
-        const minutes = totalDays * 24 * 60;
-        const hours = totalDays * 24;
-        const weeks = Math.floor(totalDays / 7);
-        const remDays = totalDays % 7;
+        const seconds = diffMs / 1000;
+        const minutes = seconds / 60;
+        const hours = minutes / 60;
+        const weeks = totalDays / 7;
+        const wholeWeeks = Math.floor(weeks);
+        const remDays = (totalDays % 7).toFixed(2);
         const percent = (totalDays / 365 * 100).toFixed(2);
 
         resultAlt.innerHTML = `
@@ -150,8 +196,8 @@ Time & Date Calculator - JavaScript
             ${formatNumber(seconds)} seconds<br>
             ${formatNumber(minutes)} minutes<br>
             ${formatNumber(hours)} hours<br>
-            ${formatNumber(totalDays)} days<br>
-            ${formatNumber(weeks)} weeks and ${remDays} days<br>
+            ${formatNumber(totalDaysFormatted)} days<br>
+            ${formatNumber(wholeWeeks)} weeks and ${remDays} days<br>
             Percentage of a common year (365 days): ${percent}%
         `;
     }
@@ -161,11 +207,17 @@ Time & Date Calculator - JavaScript
     document.querySelectorAll('.today-btn').forEach(btn => {
         btn.addEventListener('click', e => {
             const target = e.currentTarget.dataset.target;
-            const today = getTodayString();
+            const todayDate = getTodayString();
             if (target === 'start') {
-                startDateInput.value = today;
+                startDateInput.value = todayDate;
+                if (includeTimeChk.checked) {
+                    startTimeInput.value = getCurrentTimeString();
+                }
             } else if (target === 'end') {
-                endDateInput.value = today;
+                endDateInput.value = todayDate;
+                if (includeTimeChk.checked) {
+                    endTimeInput.value = getCurrentTimeString();
+                }
             }
         });
     });

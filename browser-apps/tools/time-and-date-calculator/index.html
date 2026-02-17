@@ -46,6 +46,13 @@ Time & Date Calculator - HTML
                                     <i class="fas fa-calendar-check"></i> Today
                                 </button>
                             </div>
+
+                            <div class="time-input-group" id="startTimeGroup" style="display: none;">
+                                <label for="startTime" class="input-label" style="flex-direction: row; gap: 1rem;">
+                                    <span><i class="fas fa-clock"></i> Start time</span>
+                                </label>
+                                <input type="time" id="startTime" class="time-input" value="00:00">
+                            </div>
                         </div>
 
                         <div class="date-input-group">
@@ -59,12 +66,26 @@ Time & Date Calculator - HTML
                                     <i class="fas fa-calendar-check"></i> Today
                                 </button>
                             </div>
+
+                            <div class="time-input-group" id="endTimeGroup" style="display: none;">
+                                <label for="endTime" class="input-label" style="flex-direction: row; gap: 1rem;">
+                                    <span><i class="fas fa-clock"></i> End time</span>
+                                </label>
+                                <input type="time" id="endTime" class="time-input" value="00:00">
+                            </div>
                         </div>
 
                         <div class="option-row">
                             <label class="checkbox-label">
                                 <input type="checkbox" id="includeEndDate">
                                 <span>Include end date in calculation (add 1 day)</span>
+                            </label>
+                        </div>
+
+                        <div class="option-row">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="includeTime">
+                                <span>Include time (hours:minutes)</span>
                             </label>
                         </div>
 

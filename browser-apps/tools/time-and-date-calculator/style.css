@@ -117,6 +117,29 @@ Time & Date Calculator - Stylesheet
     line-height: 1.8;
 }
 
+.time-input-group {
+    margin-top: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.time-input {
+    padding: 0.5rem;
+    border: 1px solid var(--gray-light);
+    border-radius: var(--radius);
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    background: white;
+    color: var(--dark);
+}
+
+.time-input:focus {
+    outline: 2px solid var(--primary);
+    border-color: transparent;
+}
+
 @media (max-width: 700px) {
     .date-calculator-layout {
         grid-template-columns: 1fr;
