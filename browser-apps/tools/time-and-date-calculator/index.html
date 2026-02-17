@@ -1,0 +1,107 @@
+<!--
+Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
+
+Time & Date Calculator - HTML
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Time & Date · calculator</title>
+    <meta content="Calculate days between two dates, with or without end date, and see alternative time units."
+          name="description">
+    <link href="../../../core.css" rel="stylesheet"/>
+    <script src="../../../nav-menu.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
+          rel="stylesheet">
+    <link href="style.css" rel="stylesheet"/>
+</head>
+<body>
+
+<header class="header"></header>
+
+<main>
+    <div class="container">
+        <div class="app-grid app-margin-top">
+            <section class="panel panel-custom">
+                <div class="panel-head">
+                    <h2><i class="fas fa-calendar-alt"></i> Time & Date Calculator</h2>
+                    <p class="muted small">Calculate days between two dates - with or without the end date, and see the
+                        result in different time units.</p>
+                </div>
+
+                <div class="date-calculator-layout">
+                    <div class="date-input-group">
+                        <label for="startDate" class="input-label">
+                            <span><i class="fas fa-play"></i> Start date</span>
+                        </label>
+
+                        <div class="input-with-button">
+                            <input type="date" id="startDate" class="date-input">
+                            <button type="button" class="btn btn-secondary today-btn" data-target="start">
+                                <i class="fas fa-calendar-check"></i> Today
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="date-input-group">
+                        <label for="endDate" class="input-label">
+                            <span><i class="fas fa-stop"></i> End date</span>
+                        </label>
+
+                        <div class="input-with-button">
+                            <input type="date" id="endDate" class="date-input">
+                            <button type="button" class="btn btn-secondary today-btn" data-target="end">
+                                <i class="fas fa-calendar-check"></i> Today
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="option-row">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="includeEndDate">
+                            <span>Include end date in calculation (add 1 day)</span>
+                        </label>
+                    </div>
+
+                    <div class="button-group">
+                        <button class="btn btn-primary" id="calculateBtn">
+                            <i class="fas fa-calculator"></i> Calculate
+                        </button>
+                    </div>
+
+                    <div class="result-box" id="resultBox">
+                        <div class="result-line" id="resultLine1">From and including: [Start Date]</div>
+                        <div class="result-line" id="resultLine2">To, [including/excluding] [End Date]</div>
+                        <div class="result-line result-days" id="resultDays">Result: - days</div>
+                        <div class="result-line" id="resultDesc">Select dates to calculate the difference.</div>
+                        <div class="result-line" id="resultYmd">Or - years, - months, - days</div>
+                        <div class="result-line" id="resultMd">Or - months, - days</div>
+                        <div class="result-alt" id="resultAlt">Alternative time units will appear here.</div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="footer-container">
+        <div class="social-icons">
+            <a aria-label="Discord" href="https://discord.com/channels/@me/707058110396760094" target="_blank">
+                <i class="fab fa-discord"></i></a>
+            <a aria-label="GitHub" href="https://github.com/Chalwk" target="_blank">
+                <i class="fab fa-github"></i></a>
+            <a aria-label="Email" href="mailto:chalwk.dev@gmail.com">
+                <i class="fas fa-envelope"></i></a>
+        </div>
+        <p class="footer-copyright"></p>
+    </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
