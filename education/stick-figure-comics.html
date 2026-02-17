@@ -312,13 +312,60 @@
                     <line x1="150" y1="110" x2="180" y2="95" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
                     <line x1="150" y1="140" x2="120" y2="170" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
                     <line x1="150" y1="140" x2="180" y2="170" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
-                    <!-- mask circle with hard-coded fill and dash array -->
-                    <circle cx="210" cy="70" r="16" fill="#f0d0b0" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}" stroke-dasharray="3 2"/>
-                    <line x1="210" y1="58" x2="210" y2="82" stroke="${Style.outline}" stroke-width="1.5" stroke-dasharray="2 2"/>
+                    <!-- mask circle centered on face -->
+                    <circle cx="150" cy="80" r="16" fill="#f0d0b0" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}" stroke-dasharray="3 2"/>
+                    <line x1="150" y1="68" x2="150" y2="92" stroke="${Style.outline}" stroke-width="1.5" stroke-dasharray="2 2"/>
                     <path d="M140 90 Q150 100 160 90" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}" fill="none"/>
                     <text x="40" y="40" font-family="${Style.fontFamily}" font-size="12" fill="#37474f">"I have to pretend</text>
                     <text x="40" y="55" font-family="${Style.fontFamily}" font-size="12" fill="#37474f">all day..."</text>
                 `, this.bg);
+                }
+            },
+            {
+                id: 'same-foods-daily',
+                title: '🍽️ Same Foods Daily',
+                caption: 'Eating the same foods every day is comforting and predictable for me.',
+                bg: '#f5e9da',
+                svg: function() {
+                    let weeklyIcons = '';
+                    const days = ['M', 'T', 'W', 'T', 'F'];
+                    for (let i = 0; i < 5; i++) {
+                        let x = 195 + i * 20;
+                        let letter = days[i];
+                        weeklyIcons += `<text x="${x-3}" y="180" font-family="${Style.fontFamily}" font-size="8" fill="${Style.outline}">${letter}</text>\n`;
+                        weeklyIcons += `<circle cx="${x}" cy="190" r="5" fill="white" stroke="${Style.outline}" stroke-width="1.5"/>\n`;
+                    }
+                    return svgContent(`
+                        <!-- table -->
+                        <line x1="70" y1="155" x2="230" y2="155" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                        <line x1="120" y1="155" x2="120" y2="170" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                        <line x1="180" y1="155" x2="180" y2="170" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+
+                        <!-- plate on the table -->
+                        <circle cx="200" cy="140" r="15" fill="white" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                        <circle cx="200" cy="140" r="8" fill="#d2a679" stroke="${Style.outline}" stroke-width="1"/>
+                        <circle cx="196" cy="136" r="1.5" fill="white"/>
+                        <circle cx="204" cy="136" r="1.5" fill="white"/>
+                        <circle cx="200" cy="131" r="1.5" fill="white"/>
+
+                        <!-- stick figure -->
+                        <circle cx="150" cy="70" r="${Style.headRadius}" fill="${Style.skin}" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                        <circle cx="140" cy="65" r="4" fill="${Style.skin}" stroke="${Style.outline}" stroke-width="1.5"/>
+                        <circle cx="160" cy="65" r="4" fill="${Style.skin}" stroke="${Style.outline}" stroke-width="1.5"/>
+                        <path d="M140 80 Q150 88 160 80" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}" fill="none"/>
+                        <line x1="150" y1="88" x2="150" y2="140" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                        <line x1="150" y1="105" x2="120" y2="125" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                        <line x1="150" y1="105" x2="180" y2="125" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                        <line x1="150" y1="140" x2="120" y2="175" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                        <line x1="150" y1="140" x2="180" y2="175" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+
+                        <!-- weekly indicators -->
+                        ${weeklyIcons}
+
+                        <!-- speech -->
+                        <text x="40" y="40" font-family="${Style.fontFamily}" font-size="12" fill="${Style.outline}">Same foods,</text>
+                        <text x="40" y="55" font-family="${Style.fontFamily}" font-size="12" fill="${Style.outline}">every day 😊</text>
+                    `, this.bg);
                 }
             }
         ];
