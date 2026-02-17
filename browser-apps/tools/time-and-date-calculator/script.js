@@ -121,27 +121,22 @@ Time & Date Calculator - JavaScript
         const startFormatted = formatDateUTC(start.year, start.month, start.day);
         const endFormatted = formatDateUTC(end.year, end.month, end.day);
 
-        const includeText = includeEnd ? 'including' : 'but not including';
-        const includeTextShort = includeEnd ? 'including' : 'excluding';
-        const endLine = includeEnd
-            ? `To and including: ${endFormatted}`
-            : `To, but not including ${endFormatted}`;
+        const includeText = includeEnd ? 'including' : 'excluding';
+        const inclusiveLabel = includeEnd ? 'inclusive' : 'exclusive';
 
-        resultLine1.textContent = `From and including: ${startFormatted}`;
-        resultLine2.textContent = endLine;
+        resultLine1.textContent = `From (inclusive): ${startFormatted}`;
+        resultLine2.textContent = `To (${inclusiveLabel}): ${endFormatted}`;
 
         const daysFormatted = formatNumber(totalDays);
-        resultDays.textContent = `Result: ${daysFormatted} days`;
+        resultDays.textContent = `Total days in period: ${daysFormatted}`;
 
-        resultDesc.textContent = `It is ${daysFormatted} days from the start date to the end date, ${includeTextShort} the end date.`;
+        resultDesc.textContent = `The duration is ${daysFormatted} days (${includeText} the final day).`;
 
         const ymd = getYmdDifference(start, end);
-        const ymdTotalDays = daysBetween(start, end);
-        const ymdText = includeEnd ? 'including' : 'excluding';
-        resultYmd.textContent = `Or ${ymd.years} years, ${ymd.months} months, ${ymd.days} days ${ymdText} the end date.`;
+        resultYmd.textContent = `In years, months, days: ${ymd.years} years, ${ymd.months} months, ${ymd.days} days (${includeText} end date).`;
 
         const totalMonths = ymd.years * 12 + ymd.months;
-        resultMd.textContent = `Or ${totalMonths} months, ${ymd.days} days ${ymdText} the end date.`;
+        resultMd.textContent = `In months and days: ${totalMonths} months, ${ymd.days} days (${includeText} end date).`;
 
         const seconds = totalDays * 24 * 3600;
         const minutes = totalDays * 24 * 60;
@@ -151,13 +146,13 @@ Time & Date Calculator - JavaScript
         const percent = (totalDays / 365 * 100).toFixed(2);
 
         resultAlt.innerHTML = `
-            Alternative time units<br>
+            Other units:<br>
             ${formatNumber(seconds)} seconds<br>
             ${formatNumber(minutes)} minutes<br>
             ${formatNumber(hours)} hours<br>
             ${formatNumber(totalDays)} days<br>
             ${formatNumber(weeks)} weeks and ${remDays} days<br>
-            ${percent}% of a common year (365 days)
+            Percentage of a common year (365 days): ${percent}%
         `;
     }
 
