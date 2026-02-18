@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             Education <i class="fas fa-chevron-right" aria-hidden="true"></i>
                         </button>
                         <ul class="submenu" role="menu">
+                            <li role="none"><a href="${basePath}education/arachnology.html" role="menuitem">Local Aranid Research</a></li>
                             <li role="none"><a href="${basePath}education/stick-figure-comics.html" role="menuitem">Autism through Stick Figures</a></li>
                             <li role="none"><a href="${basePath}education/github-pages-tutorial.html" role="menuitem">Creating a GitHub Pages Website</a></li>
                             <li role="none"><a href="${basePath}education/understanding-autism.html" role="menuitem">Understanding Autism</a></li>
@@ -63,6 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             <i class="fas fa-chevron-right"></i>
                         </button>
                         <ul class="submenu">
+                            <li><a href="${basePath}education/arachnology.html">Local Aranid Research</a></li>
                             <li><a href="${basePath}education/stick-figure-comics.html">Autism through Stick Figures</a></li>
                             <li><a href="${basePath}education/github-pages-tutorial.html">Creating a GitHub Pages Website</a></li>
                             <li><a href="${basePath}education/understanding-autism.html">Understanding Autism</a></li>

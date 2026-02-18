@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Spider Care Diary · Arachnology</title>
+    <link href="../core.css" rel="stylesheet">
+    <script src="../nav-menu.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
+          rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <style>
+        .hero-spider {
+            padding: 8rem 0 4rem;
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-spider::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.05"><path fill="white" d="M20 20 L30 10 L40 20 L50 10 L60 20 L70 10 L80 20 L70 30 L80 40 L70 50 L80 60 L70 70 L60 60 L50 70 L40 60 L30 70 L20 60 L30 50 L20 40 L30 30 Z"/></svg>');
+            background-size: 120px;
+        }
+        .hero-spider .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        .hero-spider h1 {
+            color: white;
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+        .hero-spider .subtitle {
+            font-size: 1.2rem;
+            color: var(--gray-light);
+            margin-bottom: 2rem;
+        }
+
+        .stats-grid {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin: 2rem 0 0;
+        }
+        .stat-item {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: var(--radius-lg);
+            padding: 1.2rem 2rem;
+            min-width: 140px;
+            text-align: center;
+            transition: var(--transition);
+        }
+        .stat-item:hover {
+            transform: translateY(-4px);
+            background: rgba(255,255,255,0.15);
+        }
+        .stat-number {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: white;
+            line-height: 1.2;
+        }
+        .stat-label {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 2rem 0 1.5rem;
+            border-bottom: 2px solid var(--gray-light);
+            padding-bottom: 0.5rem;
+        }
+        .tab {
+            background: transparent;
+            border: none;
+            padding: 0.75rem 1.8rem;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--gray);
+            border-radius: var(--radius) var(--radius) 0 0;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+        .tab:hover {
+            color: var(--primary);
+            background: rgba(37,99,235,0.05);
+        }
+        .tab.active {
+            color: var(--primary);
+            background: transparent;
+        }
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -0.55rem;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 3px 3px 0 0;
+        }
+
+        .content-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+            transition: var(--transition);
+        }
+        .content-card:hover {
+            box-shadow: var(--shadow-lg);
+        }
+        .content-card h2 {
+            color: var(--darker);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--gray-light);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .content-card h2 i {
+            color: var(--primary);
+        }
+        .content-card h3 {
+            color: var(--dark);
+            margin: 1.5rem 0 1rem;
+            font-size: 1.3rem;
+        }
+
+        .species-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        .species-card {
+            background: var(--light);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            border-left: 4px solid var(--primary);
+            transition: var(--transition);
+        }
+        .species-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+        }
+        .species-name {
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: var(--darker);
+            margin-bottom: 0.5rem;
+        }
+        .endemic-tag {
+            background: var(--primary);
+            color: white;
+            font-size: 0.7rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 30px;
+            margin-left: 0.5rem;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .species-details p {
+            margin: 0.3rem 0;
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        .task-list {
+            list-style: none;
+            padding: 0;
+        }
+        .task-list li {
+            padding: 0.6rem 0 0.6rem 1.8rem;
+            position: relative;
+            border-bottom: 1px dashed var(--gray-light);
+        }
+        .task-list li:last-child {
+            border-bottom: none;
+        }
+        .task-list li::before {
+            content: "🕷️";
+            position: absolute;
+            left: 0;
+            top: 0.6rem;
+            font-size: 1rem;
+        }
+
+        .research-highlight {
+            background: linear-gradient(135deg, #f8fafc, #e9ecef);
+            border-radius: var(--radius);
+            padding: 1.8rem;
+            margin: 2rem 0;
+            border-left: 4px solid var(--secondary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .myth-fact-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+        }
+        .myth-fact-table th {
+            background: var(--primary);
+            color: white;
+            padding: 0.8rem 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+        .myth-fact-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--gray-light);
+            vertical-align: top;
+        }
+        .myth-label {
+            font-weight: 600;
+            color: #b91c1c;
+        }
+        .fact-label {
+            font-weight: 600;
+            color: #0d9488;
+        }
+
+        .species-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+        .species-table th {
+            background: var(--gray-light);
+            color: var(--darker);
+            padding: 0.75rem;
+            font-weight: 600;
+        }
+        .species-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        @media (max-width: 768px) {
+            .hero-spider h1 {
+                font-size: 2.2rem;
+            }
+            .stats-grid {
+                flex-direction: column;
+                align-items: center;
+            }
+            .stat-item {
+                width: 100%;
+                max-width: 280px;
+            }
+            .tabs {
+                justify-content: center;
+            }
+            .tab {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header class="header"></header>
+
+<main>
+    <section class="hero-spider">
+        <div class="container hero-content">
+            <h1>🕷️ Spider Care Diary</h1>
+            <p class="subtitle">A personal record of arachnid research, care, and observation</p>
+
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">500+</div>
+                    <div class="stat-label">spiders cared for</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">5</div>
+                    <div class="stat-label">years keeping</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">22</div>
+                    <div class="stat-label">egg sacs</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+
+        <div class="tabs">
+            <button class="tab active" data-tab="about">🕸️ About my passion</button>
+            <button class="tab" data-tab="collection">🔬 Critter collection</button>
+            <button class="tab" data-tab="journal">📓 Care diary & research</button>
+        </div>
+
+        <div class="tab-content active" id="about">
+            <div class="content-card">
+                <h2><i class="fas fa-spider"></i> My arachnid journey</h2>
+                <p>I'm an arachno‑hobbyist and I keep and breed spiders in bioactive enclosures made from
+                    repurposed Tupperware. They contain live plants and microfauna such as springtails, isopods and
+                    mealworms, which help maintain a naturalistic, self‑sustaining environment.
+                <p>I've loved spiders (and insects) for as long as I can remember, but I've been
+                    keeping them as pets for about 6 years.</p>
+                <p>At present, I care for spiders across a wide range of species: sheet web spiders, wolf spiders,
+                    jumping spiders, white tails, orb weavers, and my personal favourite, the vagrant prowling spider
+                    (<em>Uliodon albopunctatus</em>). I have occasionally participated in giving "spider talks",
+                    sometimes planned and sometimes impromptu.</p>
+
+                <div class="research-highlight">
+                    <h3><i class="fas fa-flask"></i> Research focus: aggression in spiders</h3>
+                    <p>For several years I have been researching aggression in spiders. My work was originally inspired
+                        by an academic paper by Raphael Jeanson (National Centre for Scientific Research), which
+                        discusses the onset of aggression in spiderlings after they disperse from the nest.</p>
+                    <p>The paper suggests that solitude breeds aggression – meaning it is a consequence of isolation
+                        rather than a cause. I agree with this idea, though there is still much that is not fully
+                        understood. My findings have revealed intriguing correlations and compelling evidence that
+                        extend beyond the paper's original scope.</p>
+                </div>
+
+                <h3>Handling protocol for <em>Uliodon albopunctatus</em></h3>
+                <p><em>Uliodon albopunctatus</em> are often flighty and fearful when I first open their enclosure or
+                    attempt to interact. To ensure the spider is comfortable with handling, I begin by gently nudging
+                    the abdomen with a soft‑bristled brush to test its temperament. If it remains calm or interacts with
+                    the brush without aggression (placing a leg on it or simply moving away), I may proceed with
+                    handling. However, if the spider adopts a threat posture, that is a clear sign to leave it be.</p>
+                <p>When handled, a spider might initially appear nervous as it walks across my hand, but it often
+                    settles after a short time. Once returned to its enclosure, it tends to remain calm for a few hours.
+                    However, after about 12 to 24 hours without further interaction, it will revert to its more cautious
+                    or flighty behaviour. This shift fascinates me, and understanding what drives this cycle is one of
+                    my ongoing research goals.</p>
+
+                <h3>Eva's legacy</h3>
+                <p>I also have a tattoo of my favourite spider, Eva. She was a <em>Uliodon albopunctatus</em>, a
+                    terrestrial vagrant prowling spider endemic to New Zealand. They are usually found in woodland
+                    areas, under logs, stones, and leaf litter, and they tend to avoid moist environments. Eva passed
+                    away a few years ago, but she left a lasting impression on me.</p>
+
+                <h3>🕸️ Spider Myths & Facts</h3>
+                <p>Over the years I've encountered many misconceptions about our eight‑legged neighbours. Here are some
+                    of the most common myths - especially those circulating in New Zealand, along with the scientific
+                    facts.</p>
+                <table class="myth-fact-table">
+                    <thead>
+                    <tr>
+                        <th>Myth</th>
+                        <th>Fact</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="myth-label">Daddy longlegs are the most venomous spiders in the world, but their
+                            fangs are too short to bite humans.
+                        </td>
+                        <td class="fact-label">This myth mixes up two different creatures. <strong>Harvestmen</strong>
+                            (often called daddy longlegs) are not spiders at all - they belong to the order Opiliones
+                            and have <em>no venom glands, fangs, or silk</em>. They are harmless scavengers. <strong>Cellar
+                                spiders</strong> (Pholcidae) are true spiders and do produce venom, but it is extremely
+                            mild and poses no danger to humans. They can bite, but the effect is negligible.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="myth-label">Harvestmen are spiders, just with longer legs.</td>
+                        <td class="fact-label">Harvestmen are arachnids, but they are in a different order (Opiliones)
+                            than true spiders (Araneae). They lack the narrow waist (pedicel) that separates the
+                            cephalothorax and abdomen in spiders, and they have a fused, oval body. They do not produce
+                            venom or silk, and they are scavengers or predators of tiny invertebrates. They are more
+                            closely related to mites and scorpions than to true spiders.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="myth-label">White tail spiders cause flesh-eating ulcers and extensive necrosis.</td>
+                        <td class="fact-label">This myth has been thoroughly investigated and debunked. White tail
+                            spiders (<em>Lampona cylindrata</em> and <em>L. murina</em>) are common in New Zealand and
+                            Australia. While their bite can cause local pain, redness, and swelling, there is <strong>no
+                                conclusive evidence</strong> that their venom directly causes necrotic lesions or
+                            serious medical conditions. Reported cases of ulceration or tissue breakdown are now
+                            understood to be most often the result of secondary bacterial infection, not the bite or
+                            venom itself. Most confirmed bites result in mild, short-lived symptoms. These spiders are
+                            shy and prefer to hide, biting only when provoked.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="myth-label">The katipo spider is deadly.</td>
+                        <td class="fact-label">The katipo (<em>Latrodectus katipo</em>) is New Zealand's only native
+                            venomous spider, related to the redback and black widow. Its venom is potent, but bites are
+                            extremely rare because the spider is not aggressive and its habitat is now limited.
+                            Antivenom is available, and no deaths have been recorded in over a century. Conservation
+                            efforts are important as katipo populations are declining due to habitat loss.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="myth-label">New Zealand tunnel web spiders are as dangerous as Australian
+                            funnel-webs.
+                        </td>
+                        <td class="fact-label">New Zealand has several tunnel web spiders (genus <em>Porrhothele</em>).
+                            These spiders are members of the primitive spider group (the mygalomorphs) and are therefore
+                            distantly related to tarantulas, but they are not closely related to the infamous Australian
+                            funnel-web spiders and are not considered dangerous to humans. Mygalomorphs have robust
+                            bodies, long lifespans, and downward-pointing (orthognathous) fangs, and many build
+                            silk-lined burrows or tunnel webs. A bite from a <em>Porrhothele</em> may be painful and
+                            cause local swelling, itching, or numbness, but the venom is not known to cause systemic
+                            life-threatening effects. As with other benign spider bites, the main risk for worsening
+                            tissue damage is secondary bacterial infection, so bites should be cleaned and monitored;
+                            medical attention is advised if signs of spreading redness, increasing pain, fever, or
+                            unusual symptoms develop.
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="tab-content" id="collection">
+            <div class="content-card">
+                <h2><i class="fas fa-paw"></i> Species overview</h2>
+                <div class="species-grid">
+                    <div class="species-card">
+                        <div class="species-name">Uliodon albopunctatus <span class="endemic-tag">Endemic</span></div>
+                        <div class="species-details">
+                            <p><strong>Common:</strong> Vagrant prowling spider</p>
+                            <p><strong>Feed:</strong> Medium‑large mealworms, crickets</p>
+                            <p><strong>Notes:</strong> Favourite species. Terrestrial hunter, under logs & leaf litter.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="species-card">
+                        <div class="species-name">Pirata lycoside</div>
+                        <div class="species-details">
+                            <p><strong>Common:</strong> Wolf spider</p>
+                            <p><strong>Feed:</strong> Flies</p>
+                        </div>
+                    </div>
+                    <div class="species-card">
+                        <div class="species-name">Tegenaria domestica</div>
+                        <div class="species-details">
+                            <p><strong>Common:</strong> Barn funnel weaver</p>
+                            <p><strong>Feed:</strong> Flies, small mealworms</p>
+                        </div>
+                    </div>
+                    <div class="species-card">
+                        <div class="species-name">Cambridgea foliata <span class="endemic-tag">Endemic</span></div>
+                        <div class="species-details">
+                            <p><strong>Common:</strong> Sheet web spider</p>
+                            <p><strong>Feed:</strong> Flies, small mealworms</p>
+                        </div>
+                    </div>
+                    <div class="species-card">
+                        <div class="species-name">Salticidae sp.</div>
+                        <div class="species-details">
+                            <p><strong>Common:</strong> Jumping spider</p>
+                            <p><strong>Feed:</strong> Small flies, fruit flies, micro crickets</p>
+                            <p><strong>Notes:</strong> Excellent vision, active hunters. Provide vertical spaces.</p>
+                        </div>
+                    </div>
+                    <div class="species-card">
+                        <div class="species-name">Lampona cylindrata / murina</div>
+                        <div class="species-details">
+                            <p><strong>Common:</strong> White‑tailed spider</p>
+                            <p><strong>Feed:</strong> Small insects, preys on other spiders</p>
+                        </div>
+                    </div>
+                    <div class="species-card">
+                        <div class="species-name">Araneidae sp.</div>
+                        <div class="species-details">
+                            <p><strong>Common:</strong> Orb weaver</p>
+                            <p><strong>Feed:</strong> Flying insects (flies, moths)</p>
+                            <p><strong>Notes:</strong> Builds classic spiral webs. Needs vertical space.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="journal">
+            <div class="content-card">
+                <h2><i class="fas fa-notebook"></i> Personal notes & observations</h2>
+
+                <h3>Uliodon albopunctatus habitat refinements</h3>
+                <ul class="task-list">
+                    <li><strong>Substrate tweak:</strong> Testing layered moisture gradient – damp sphagnum under cork
+                        bark (NE) + dry leaf litter (SW). They prefer hunting near dry zone. <em>Avoid uniform
+                            dampness!</em></li>
+                    <li><strong>Hide redesign:</strong> Stacked slate stones with 1cm gaps – better retreat mimicry.
+                        Added bark tunnels after Canyon wedged into crevices.
+                    </li>
+                    <li><strong>Light cycle adjustment:</strong> Reduced LED to 4h/day (10am‑2pm). UVB strip added
+                        Mondays/Wednesdays for plants. Nocturnal activity higher.
+                    </li>
+                </ul>
+
+                <h3>Feeding experiments</h3>
+                <ul class="task-list">
+                    <li><strong>Prey variety trial:</strong> Introducing local woodlice (<em>Porcellio scaber</em>) –
+                        Rocky ignored, Shrimp (M) hunted aggressively. <em>Note: gut‑load crickets with carrot 24h before
+                            feeding.</em></li>
+                    <li><strong>Feeding frequency:</strong> Juveniles 3x/week, adults 1x/week + biweekly calcium
+                        dusting. Reduced obesity in Vague (F).
+                    </li>
+                </ul>
+
+                <h3>Handling protocol updates</h3>
+                <ul class="task-list">
+                    <li><strong>Desensitisation routine:</strong>
+                        <ol style="margin-left:1.5rem; margin-top:0.5rem;">
+                            <li>Brush‑test abdomen with soft bristle brush</li>
+                            <li>If no threat posture, lift on palm with brush</li>
+                            <li>Max 5 min/day – short sessions reduce regression. Keo (F) now explores hand voluntarily
+                                after 3 weeks.
+                            </li>
+                        </ol>
+                    </li>
+                    <li><strong>Stress indicators:</strong> threat postures documented: legs raised = abort; pedipalps
+                        vibrating = curious (proceed).
+                    </li>
+                </ul>
+
+                <h3>Breeding insights</h3>
+                <ul class="task-list">
+                    <li><strong>Egg sac failures analysis:</strong> Suspect low humidity fluctuations caused 2022
+                        losses. Now:
+                        <ul style="margin-left:1.5rem;">
+                            <li>70% RH first week → 40% after silk hardening</li>
+                            <li>Isolation chamber with vermiculite base</li>
+                            <li><em>Sac darkening = 48h hatch window</em></li>
+                        </ul>
+                    </li>
+                    <li><strong>Gravid female care:</strong> Double protein pre‑laying, honey‑water soaked cotton
+                        post‑laying.
+                    </li>
+                </ul>
+
+                <h3>Bioactive system notes</h3>
+                <ul class="task-list">
+                    <li><strong>Microfauna balance:</strong> Reduced springtails – competing with slings? Added dwarf
+                        white isopods (<em>Trichorhina tomentosa</em>) for cleanup.
+                    </li>
+                    <li><strong>Plant casualties:</strong> Pilea murdered by Canyon. Replaced with hardy spider plant
+                        (<em>Chlorophytum</em>).
+                    </li>
+                </ul>
+
+                <div class="research-highlight">
+                    <h3><i class="fas fa-dna"></i> Research questions</h3>
+                    <p><strong>Aggression study:</strong> Grouped 10 slings vs isolated. Testing threat response to prey
+                        introduction & handling tolerance after 3 weeks. <em>Preliminary: grouped slings less
+                            defensive.</em></p>
+                    <p><strong>Desensitisation decay:</strong> Why 12‑24h reset? Testing pheromone markers (vanilla
+                        extract 1:3 water) on handling gloves. Early results: less skittish after scent exposure.</p>
+                </div>
+
+                <h3>Species‑specific adjustments</h3>
+                <table class="species-table">
+                    <thead>
+                    <tr>
+                        <th>Species</th>
+                        <th>Change</th>
+                        <th>Outcome</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Wolf spiders</td>
+                        <td>Shallow water dish added</td>
+                        <td>Rogue drinks nightly</td>
+                    </tr>
+                    <tr>
+                        <td>Sheet web spiders</td>
+                        <td>Vertical mesh panel</td>
+                        <td>Octavia built larger web</td>
+                    </tr>
+                    <tr>
+                        <td>Jumping spiders</td>
+                        <td>Added mirror "play" item</td>
+                        <td>Increased activity</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <h3>Ethical considerations</h3>
+                <ul class="task-list">
+                    <li>Sourcing leaf litter only from fallen branches (never live trees)</li>
+                    <li>Releasing 10% wild‑caught adults post‑breeding season</li>
+                    <li>Cross‑referencing DOC protected species list monthly</li>
+                </ul>
+
+                <h3>Tomorrow's tasks</h3>
+                <ul class="task-list">
+                    <li>Measure humidity gradients in new enclosures</li>
+                    <li>Introduce moths to Uliodon feeding trial</li>
+                    <li>Record handling response times for grouped slings</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="footer-container">
+        <div class="social-icons">
+            <a aria-label="Discord" href="https://discord.com/channels/@me/707058110396760094" target="_blank"><i
+                    class="fab fa-discord"></i></a>
+            <a aria-label="GitHub" href="https://github.com/Chalwk" target="_blank"><i class="fab fa-github"></i></a>
+            <a aria-label="Email" href="mailto:chalwk.dev@gmail.com"><i class="fas fa-envelope"></i></a>
+        </div>
+        <p class="footer-copyright"></p>
+    </div>
+</footer>
+
+<script>
+    (function() {
+        const tabs = document.querySelectorAll('.tab');
+        const contents = document.querySelectorAll('.tab-content');
+
+        function activateTab(tabId) {
+            contents.forEach(c => c.classList.remove('active'));
+            tabs.forEach(t => t.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            const activeTab = Array.from(tabs).find(t => t.dataset.tab === tabId);
+            if (activeTab) activeTab.classList.add('active');
+        }
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.dataset.tab;
+                if (tabId) activateTab(tabId);
+            });
+        });
+
+        if (tabs.length && !document.querySelector('.tab.active')) {
+            tabs[0].classList.add('active');
+        }
+    })();
+</script>
+
+</body>
+</html>
