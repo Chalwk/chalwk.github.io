@@ -295,6 +295,16 @@ Grocery List - Stylesheet
     color: white;
 }
 
+.grocery-controls .btn,
+.grocery-controls .dropdown-toggle {
+    padding: 0.75rem 1.5rem;
+    line-height: 1.5;
+    font-size: 1rem;
+    height: auto;
+    min-height: unset;
+    box-sizing: border-box;
+}
+
 @media (max-width: 768px) {
     .controls {
         flex-direction: column;
