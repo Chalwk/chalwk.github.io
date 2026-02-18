@@ -51,7 +51,12 @@ Time & Date Calculator - HTML
                                 <label for="startTime" class="input-label" style="flex-direction: row; gap: 1rem;">
                                     <span><i class="fas fa-clock"></i> Start time</span>
                                 </label>
-                                <input type="time" id="startTime" class="time-input" value="00:00">
+                                <div class="input-with-button">
+                                    <input type="time" id="startTime" class="time-input" value="00:00">
+                                    <button type="button" class="btn btn-secondary now-time-btn" data-target="startTime">
+                                        <i class="fas fa-clock"></i> Now
+                                    </button>
+                                </div>
                             </div>
                         </div>
 
@@ -71,7 +76,12 @@ Time & Date Calculator - HTML
                                 <label for="endTime" class="input-label" style="flex-direction: row; gap: 1rem;">
                                     <span><i class="fas fa-clock"></i> End time</span>
                                 </label>
-                                <input type="time" id="endTime" class="time-input" value="00:00">
+                                <div class="input-with-button">
+                                    <input type="time" id="endTime" class="time-input" value="00:00">
+                                    <button type="button" class="btn btn-secondary now-time-btn" data-target="endTime">
+                                        <i class="fas fa-clock"></i> Now
+                                    </button>
+                                </div>
                             </div>
                         </div>
 

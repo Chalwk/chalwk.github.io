@@ -222,5 +222,15 @@ Time & Date Calculator - JavaScript
         });
     });
 
+    document.querySelectorAll('.now-time-btn').forEach(btn => {
+        btn.addEventListener('click', e => {
+            const targetId = e.currentTarget.dataset.target; // 'startTime' or 'endTime'
+            const timeInput = document.getElementById(targetId);
+            if (timeInput) {
+                timeInput.value = getCurrentTimeString();
+            }
+        });
+    });
+
     window.addEventListener('load', updateResult);
 })();
