@@ -44,77 +44,8 @@
             margin-bottom: 2rem;
         }
 
-        .stats-grid {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-            margin: 2rem 0 0;
-        }
-        .stat-item {
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: var(--radius-lg);
-            padding: 1.2rem 2rem;
-            min-width: 140px;
-            text-align: center;
-            transition: var(--transition);
-        }
-        .stat-item:hover {
-            transform: translateY(-4px);
-            background: rgba(255,255,255,0.15);
-        }
-        .stat-number {
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: white;
-            line-height: 1.2;
-        }
-        .stat-label {
-            color: rgba(255,255,255,0.8);
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .tabs {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin: 2rem 0 1.5rem;
-            border-bottom: 2px solid var(--gray-light);
-            padding-bottom: 0.5rem;
-        }
-        .tab {
-            background: transparent;
-            border: none;
-            padding: 0.75rem 1.8rem;
-            font-size: 1rem;
-            font-weight: 500;
-            color: var(--gray);
-            border-radius: var(--radius) var(--radius) 0 0;
-            cursor: pointer;
-            transition: var(--transition);
-            position: relative;
-        }
-        .tab:hover {
-            color: var(--primary);
-            background: rgba(37,99,235,0.05);
-        }
-        .tab.active {
-            color: var(--primary);
-            background: transparent;
-        }
-        .tab.active::after {
-            content: '';
-            position: absolute;
-            bottom: -0.55rem;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: var(--primary);
-            border-radius: 3px 3px 0 0;
+        .tab-content {
+            display: block !important;
         }
 
         .content-card {
@@ -213,6 +144,14 @@
             border-left: 4px solid var(--secondary);
             box-shadow: var(--shadow-sm);
         }
+        .research-highlight ul {
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+        }
+        .research-highlight li {
+            margin-bottom: 0.25rem;
+        }
 
         .myth-fact-table {
             width: 100%;
@@ -260,21 +199,6 @@
             .hero-spider h1 {
                 font-size: 2.2rem;
             }
-            .stats-grid {
-                flex-direction: column;
-                align-items: center;
-            }
-            .stat-item {
-                width: 100%;
-                max-width: 280px;
-            }
-            .tabs {
-                justify-content: center;
-            }
-            .tab {
-                padding: 0.6rem 1.2rem;
-                font-size: 0.95rem;
-            }
         }
     </style>
 </head>
@@ -287,31 +211,10 @@
         <div class="container hero-content">
             <h1>🕷️ Spider Care Diary</h1>
             <p class="subtitle">A personal record of arachnid research, care, and observation</p>
-
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <div class="stat-number">500+</div>
-                    <div class="stat-label">spiders cared for</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">5</div>
-                    <div class="stat-label">years keeping</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">22</div>
-                    <div class="stat-label">egg sacs</div>
-                </div>
-            </div>
         </div>
     </section>
 
     <div class="container">
-
-        <div class="tabs">
-            <button class="tab active" data-tab="about">🕸️ About my passion</button>
-            <button class="tab" data-tab="collection">🔬 Critter collection</button>
-            <button class="tab" data-tab="journal">📓 Care diary & research</button>
-        </div>
 
         <div class="tab-content active" id="about">
             <div class="content-card">
@@ -331,7 +234,7 @@
                     <p>For several years I have been researching aggression in spiders. My work was originally inspired
                         by an academic paper by Raphael Jeanson (National Centre for Scientific Research), which
                         discusses the onset of aggression in spiderlings after they disperse from the nest.</p>
-                    <p>The paper suggests that solitude breeds aggression – meaning it is a consequence of isolation
+                    <p>The paper suggests that solitude breeds aggression - meaning it is a consequence of isolation
                         rather than a cause. I agree with this idea, though there is still much that is not fully
                         understood. My findings have revealed intriguing correlations and compelling evidence that
                         extend beyond the paper's original scope.</p>
@@ -469,7 +372,8 @@
                         <div class="species-details">
                             <p><strong>Common:</strong> Jumping spider</p>
                             <p><strong>Feed:</strong> Small flies, fruit flies, micro crickets</p>
-                            <p><strong>Notes:</strong> Excellent vision, active hunters. Provide vertical spaces.</p>
+                            <p><strong>Notes:</strong> Excellent vision, active hunters. Provide vertical spaces and
+                                small hides.</p>
                         </div>
                     </div>
                     <div class="species-card">
@@ -477,6 +381,8 @@
                         <div class="species-details">
                             <p><strong>Common:</strong> White‑tailed spider</p>
                             <p><strong>Feed:</strong> Small insects, preys on other spiders</p>
+                            <p><strong>Notes:</strong> Shy, nocturnal, often found in homes. Bite causes mild local
+                                effects only.</p>
                         </div>
                     </div>
                     <div class="species-card">
@@ -484,7 +390,8 @@
                         <div class="species-details">
                             <p><strong>Common:</strong> Orb weaver</p>
                             <p><strong>Feed:</strong> Flying insects (flies, moths)</p>
-                            <p><strong>Notes:</strong> Builds classic spiral webs. Needs vertical space.</p>
+                            <p><strong>Notes:</strong> Builds classic spiral webs. Needs vertical space and anchor
+                                points.</p>
                         </div>
                     </div>
                 </div>
@@ -497,10 +404,10 @@
 
                 <h3>Uliodon albopunctatus habitat refinements</h3>
                 <ul class="task-list">
-                    <li><strong>Substrate tweak:</strong> Testing layered moisture gradient – damp sphagnum under cork
+                    <li><strong>Substrate tweak:</strong> Testing layered moisture gradient - damp sphagnum under cork
                         bark (NE) + dry leaf litter (SW). They prefer hunting near dry zone. <em>Avoid uniform
                             dampness!</em></li>
-                    <li><strong>Hide redesign:</strong> Stacked slate stones with 1cm gaps – better retreat mimicry.
+                    <li><strong>Hide redesign:</strong> Stacked slate stones with 1cm gaps - better retreat mimicry.
                         Added bark tunnels after Canyon wedged into crevices.
                     </li>
                     <li><strong>Light cycle adjustment:</strong> Reduced LED to 4h/day (10am‑2pm). UVB strip added
@@ -510,8 +417,9 @@
 
                 <h3>Feeding experiments</h3>
                 <ul class="task-list">
-                    <li><strong>Prey variety trial:</strong> Introducing local woodlice (<em>Porcellio scaber</em>) –
-                        Rocky ignored, Shrimp (M) hunted aggressively. <em>Note: gut‑load crickets with carrot 24h before
+                    <li><strong>Prey variety trial:</strong> Introducing local woodlice (<em>Porcellio scaber</em>) -
+                        Rocky ignored, Shrimp (M) hunted aggressively. <em>Note: gut‑load crickets with carrot 24h
+                            before
                             feeding.</em></li>
                     <li><strong>Feeding frequency:</strong> Juveniles 3x/week, adults 1x/week + biweekly calcium
                         dusting. Reduced obesity in Vague (F).
@@ -524,7 +432,7 @@
                         <ol style="margin-left:1.5rem; margin-top:0.5rem;">
                             <li>Brush‑test abdomen with soft bristle brush</li>
                             <li>If no threat posture, lift on palm with brush</li>
-                            <li>Max 5 min/day – short sessions reduce regression. Keo (F) now explores hand voluntarily
+                            <li>Max 5 min/day - short sessions reduce regression. Keo (F) now explores hand voluntarily
                                 after 3 weeks.
                             </li>
                         </ol>
@@ -544,14 +452,15 @@
                             <li><em>Sac darkening = 48h hatch window</em></li>
                         </ul>
                     </li>
-                    <li><strong>Gravid female care:</strong> Double protein pre‑laying, honey‑water soaked cotton
+                    <li><strong>Gravid female care:</strong> Double protein pre‑laying (extra mealworms), honey‑water
+                        soaked cotton
                         post‑laying.
                     </li>
                 </ul>
 
                 <h3>Bioactive system notes</h3>
                 <ul class="task-list">
-                    <li><strong>Microfauna balance:</strong> Reduced springtails – competing with slings? Added dwarf
+                    <li><strong>Microfauna balance:</strong> Reduced springtails - competing with slings? Added dwarf
                         white isopods (<em>Trichorhina tomentosa</em>) for cleanup.
                     </li>
                     <li><strong>Plant casualties:</strong> Pilea murdered by Canyon. Replaced with hardy spider plant
@@ -561,11 +470,34 @@
 
                 <div class="research-highlight">
                     <h3><i class="fas fa-dna"></i> Research questions</h3>
-                    <p><strong>Aggression study:</strong> Grouped 10 slings vs isolated. Testing threat response to prey
-                        introduction & handling tolerance after 3 weeks. <em>Preliminary: grouped slings less
-                            defensive.</em></p>
+                    <p><strong>Aggression study:</strong> Grouped 10 slings vs isolated. Testing:</p>
+                    <ul>
+                        <li>Threat response to prey introduction</li>
+                        <li>Handling tolerance after 3 weeks</li>
+                    </ul>
+                    <p><em>Preliminary: grouped slings less defensive.</em></p>
+
                     <p><strong>Desensitisation decay:</strong> Why 12‑24h reset? Testing pheromone markers (vanilla
-                        extract 1:3 water) on handling gloves. Early results: less skittish after scent exposure.</p>
+                        extract 1:3 water) on handling gloves.</p>
+                    <ul>
+                        <li>Pheromone markers seem to help - slings less skittish after glove scent exposure.</li>
+                        <li>Specific formula is 1 part vanilla extract to 3 parts water, applied to handling gloves
+                            before interaction.
+                        </li>
+                        <li>The 12‑24hr regression implies ephemeral memory consolidation. Potential mechanisms:
+                            <ul>
+                                <li><strong>Olfactory imprinting:</strong> Need to test other pheromone-mimics (e.g.,
+                                    eugenol in cloves).
+                                </li>
+                                <li><strong>Tactile memory decay:</strong> Spiders may "reset" due to lacking long-term
+                                    associative neural pathways.
+                                </li>
+                                <li><strong>Actionable tweak:</strong> Gradually increase handling duration by 15
+                                    seconds/day to test memory retention limits.
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
                 </div>
 
                 <h3>Species‑specific adjustments</h3>
@@ -625,32 +557,6 @@
         <p class="footer-copyright"></p>
     </div>
 </footer>
-
-<script>
-    (function() {
-        const tabs = document.querySelectorAll('.tab');
-        const contents = document.querySelectorAll('.tab-content');
-
-        function activateTab(tabId) {
-            contents.forEach(c => c.classList.remove('active'));
-            tabs.forEach(t => t.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            const activeTab = Array.from(tabs).find(t => t.dataset.tab === tabId);
-            if (activeTab) activeTab.classList.add('active');
-        }
-
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                const tabId = tab.dataset.tab;
-                if (tabId) activateTab(tabId);
-            });
-        });
-
-        if (tabs.length && !document.querySelector('.tab.active')) {
-            tabs[0].classList.add('active');
-        }
-    })();
-</script>
 
 </body>
 </html>
