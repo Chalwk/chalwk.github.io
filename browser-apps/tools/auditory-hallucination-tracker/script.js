@@ -17,7 +17,6 @@ Voice Tracker - JavaScript
     const customCopingContainer = document.getElementById('customCopingContainer');
     const customCopingInput = document.getElementById('customCopingInput');
     const addBtn = document.getElementById('addEntryBtn');
-    const addAnotherBtn = document.getElementById('addAnotherBtn');
     const clearFormBtn = document.getElementById('clearFormBtn');
     const clearAllBtn = document.getElementById('clearAllBtn');
     const exportBtn = document.getElementById('exportBtn');
@@ -203,7 +202,7 @@ Voice Tracker - JavaScript
         }, 2000);
     }
 
-    function handleAddEntry(resetDateTime = true) {
+    function handleAddEntry() {
         if (!dateInput.value) {
             alert('Please select a date.');
             return;
@@ -247,12 +246,8 @@ Voice Tracker - JavaScript
             showToast('Entry added');
         }
 
-        if (resetDateTime) {
-            dateInput.value = getTodayDate();
-            timeInput.value = '';
-        } else {
-
-        }
+        dateInput.value = getTodayDate();
+        timeInput.value = '';
         durationInput.value = '';
         intensitySlider.value = 5;
         intensityDisplay.textContent = '5';
@@ -264,9 +259,7 @@ Voice Tracker - JavaScript
         customCopingInput.value = '';
     }
 
-    addBtn.addEventListener('click', () => handleAddEntry(true));
-    addAnotherBtn.addEventListener('click', () => handleAddEntry(false));
-
+    addBtn.addEventListener('click', handleAddEntry);
     clearAllBtn.addEventListener('click', clearAll);
 
     function renderAll() {
