@@ -27,10 +27,6 @@ Voice Tracker - JavaScript
     const avgSpan = document.getElementById('avgIntensity');
     const weekSpan = document.getElementById('thisWeek');
     const toast = document.getElementById('toast');
-    const footerCopyright = document.getElementById('footerCopyright');
-
-    const currentYear = new Date().getFullYear();
-    footerCopyright.textContent = `© ${currentYear} Jericho Crosby. All rights reserved.`;
 
     const STORAGE_KEY = 'voice_entries';
     let editingId = null;

@@ -1,0 +1,226 @@
+<!--
+Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
+
+Sleep Tracker - HTML
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sleep Tracker (mental health support)</title>
+    <link href="../../../core.css" rel="stylesheet"/>
+    <script src="../../../nav-menu.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
+          rel="stylesheet">
+    <link href="style.css" rel="stylesheet"/>
+</head>
+<body>
+
+<header class="header"></header>
+
+<main>
+    <div class="container">
+        <div class="app-grid app-margin-top">
+            <section class="panel panel-custom">
+                <div class="panel-head">
+                    <h2><i class="fas fa-moon"></i> Sleep Tracker (mental health support)</h2>
+                </div>
+
+                <div class="disclaimer">
+                    <i class="fas fa-shield-alt"></i>
+                    <span><strong>Privacy</strong> - This tool helps you track your sleep patterns as part of your mental health journey.
+                        Log each night, record difficulties, awakenings, mood, and routines. All data is stored <strong>locally on your device</strong>
+                        (in your browser’s local storage). Nothing is sent to any server. Your entries remain completely
+                        private to you.</span>
+                </div>
+
+                <div class="sleep-tracker-layout">
+                    <div class="left-column">
+                        <div class="input-group">
+                            <label class="input-label" for="logDate">
+                                <span><i class="fas fa-calendar-day"></i> date</span>
+                            </label>
+                            <div class="input-with-button">
+                                <input type="date" id="logDate" class="date-input" required>
+                                <button type="button" class="btn btn-secondary today-btn" id="todayDateBtn">
+                                    <i class="fas fa-calendar-check"></i> today
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="input-label" for="bedtime">
+                                <span><i class="fas fa-bed"></i> bedtime (attempted to sleep)</span>
+                            </label>
+                            <div class="input-with-button">
+                                <input type="time" id="bedtime" class="time-input">
+                                <button type="button" class="btn btn-secondary now-btn" id="nowBedtimeBtn">
+                                    <i class="fas fa-clock"></i> now
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="input-label" for="wakeTime">
+                                <span><i class="fas fa-sun"></i> wake time (final)</span>
+                            </label>
+                            <div class="input-with-button">
+                                <input type="time" id="wakeTime" class="time-input">
+                                <button type="button" class="btn btn-secondary now-btn" id="nowWakeTimeBtn">
+                                    <i class="fas fa-clock"></i> now
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="input-label" for="difficultyLevel">
+                                <span><i class="fas fa-exclamation-triangle"></i> difficulty falling asleep (1=easy, 10=very hard)</span>
+                            </label>
+                            <div class="intensity-wrapper">
+                                <input type="range" id="difficultyLevel" class="intensity-slider" min="1" max="10" value="5">
+                                <span class="intensity-value" id="difficultyDisplay">5</span>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label" for="difficultyReason">
+                                <span><i class="fas fa-question-circle"></i> why? (optional)</span>
+                                <input type="text" id="difficultyReason" class="text-input" placeholder="e.g. racing mind, pain...">
+                            </label>
+                        </div>
+
+                        <div class="input-group">
+                            <span class="input-label"><span><i class="fas fa-clock"></i> wake events (times you woke during the night)</span></span>
+                            <div id="wakeEventsContainer" class="wake-events-container"></div>
+                            <button type="button" class="btn btn-secondary" id="addWakeEventBtn">
+                                <i class="fas fa-plus"></i> add wake event
+                            </button>
+                        </div>
+
+                        <div class="input-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="racingThoughts"> <i class="fas fa-brain"></i> racing thoughts
+                            </label>
+                        </div>
+
+                        <div class="input-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="nightmares"> <i class="fas fa-dragon"></i> nightmares
+                            </label>
+                            <div id="traumaNightmareContainer" style="margin-left: 1.5rem; margin-top: 0.3rem; display: none;">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="traumaNightmare"> trauma-related nightmare
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="input-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="fearSleep"> <i class="fas fa-frown"></i> fear to go to sleep
+                            </label>
+                        </div>
+
+                        <div class="input-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="restlessness"> <i class="fas fa-running"></i> feeling hyperactive / restlessness
+                            </label>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="input-label" for="mood">
+                                <span><i class="fas fa-smile"></i> mood when waking up</span>
+                                <input type="text" id="mood" class="text-input" placeholder="e.g. refreshed, tired, anxious...">
+                            </label>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="input-label" for="preRoutine">
+                                <span><i class="fas fa-moon"></i> pre‑bedtime routine (what did you do before sleep?)</span>
+                                <textarea id="preRoutine" class="notes-textarea" rows="2" placeholder="e.g. read, screen time, meditation..."></textarea>
+                            </label>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="input-label" for="postRoutine">
+                                <span><i class="fas fa-sun"></i> wake‑up routine (what did you do after waking?)</span>
+                                <textarea id="postRoutine" class="notes-textarea" rows="2" placeholder="e.g. stretched, coffee, exercise..."></textarea>
+                            </label>
+                        </div>
+
+                        <div class="input-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="seasonalDepression"> <i class="fas fa-cloud-sun"></i> seasonal depression pattern
+                            </label>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="input-label" for="notes">
+                                <span><i class="fas fa-pen"></i> private notes</span>
+                                <textarea id="notes" class="notes-textarea" rows="2" placeholder="anything else..."></textarea>
+                            </label>
+                        </div>
+
+                        <div class="button-group">
+                            <button class="btn btn-primary" id="addEntryBtn"><i class="fas fa-plus-circle"></i> <span>log this night</span></button>
+                            <button class="btn btn-secondary" id="clearFormBtn"><i class="fas fa-undo-alt"></i> clear form</button>
+                            <button class="btn btn-danger" id="clearAllBtn"><i class="fas fa-trash-alt"></i> clear all data</button>
+                        </div>
+                        <div class="button-group" style="margin-top: 0.5rem;">
+                            <button class="btn btn-secondary" id="exportBtn"><i class="fas fa-download"></i> export data</button>
+                            <button class="btn btn-secondary" id="importBtn"><i class="fas fa-upload"></i> import data</button>
+                        </div>
+                        <input type="file" id="importFile" accept=".json,application/json" style="display: none;">
+                    </div>
+
+                    <div class="right-column">
+                        <div class="stats-card" id="statsCard">
+                            <div class="stat-item">
+                                <div class="stat-number" id="totalEntries">0</div>
+                                <div class="stat-label">total logs</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number" id="avgAwakenings">-</div>
+                                <div class="stat-label">avg awakenings</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number" id="avgDifficulty">-</div>
+                                <div class="stat-label">avg difficulty</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number" id="nightmareCount">0</div>
+                                <div class="stat-label">nights w/ nightmares</div>
+                            </div>
+                        </div>
+
+                        <h4 style="margin: 0 0 0.75rem 0; display: flex; gap:0.5rem;"><i class="fas fa-history"></i> recent nights</h4>
+                        <div class="entries-list" id="entriesList">
+                            <div class="empty-message">✨ no entries yet. use the form to start.</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="footer-container">
+        <div class="social-icons">
+            <a aria-label="Discord" href="https://discord.com/channels/@me/707058110396760094" target="_blank">
+                <i class="fab fa-discord"></i></a>
+            <a aria-label="GitHub" href="https://github.com/Chalwk" target="_blank">
+                <i class="fab fa-github"></i></a>
+            <a aria-label="Email" href="mailto:chalwk.dev@gmail.com">
+                <i class="fas fa-envelope"></i></a>
+        </div>
+        <p class="footer-copyright"></p>
+    </div>
+</footer>
+
+<div id="toast" class="toast">✓ Entry saved</div>
+
+<script src="script.js"></script>
+</body>
+</html>
