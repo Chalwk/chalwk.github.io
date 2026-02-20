@@ -183,7 +183,7 @@ Voice Tracker - Stylesheet
     background: var(--white);
     border: 1px solid var(--gray-light);
     border-radius: var(--radius);
-    padding: 1rem 2.5rem 1rem 1rem;
+    padding: 1rem 4rem 1rem 1rem;
     margin-bottom: 1rem;
     position: relative;
 }
@@ -194,6 +194,7 @@ Voice Tracker - Stylesheet
     align-items: center;
     margin-bottom: 0.5rem;
     font-family: var(--font-mono);
+    padding-right: 0.5rem;
 }
 
 .entry-date {
@@ -207,6 +208,10 @@ Voice Tracker - Stylesheet
     border-radius: 1rem;
     font-size: 0.8rem;
     font-weight: 500;
+    max-width: calc(100% - 1rem);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .entry-voice {
@@ -249,7 +254,7 @@ Voice Tracker - Stylesheet
 
 .edit-entry {
     top: 0.8rem;
-    right: 2.5rem;
+    right: 2.4rem;
 }
 
 .delete-entry:hover {
