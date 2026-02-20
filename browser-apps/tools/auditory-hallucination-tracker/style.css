@@ -60,7 +60,7 @@ Voice Tracker - Stylesheet
     flex-wrap: wrap;
 }
 
-.date-input, .time-input, .number-input, .voice-textarea, .notes-textarea {
+.date-input, .time-input, .number-input, .voice-textarea, .notes-textarea, .text-input {
     flex: 2;
     min-width: 180px;
     padding: 0.65rem 0.75rem;
@@ -73,7 +73,7 @@ Voice Tracker - Stylesheet
     transition: 0.15s;
 }
 
-.date-input:focus, .time-input:focus, .number-input:focus, .voice-textarea:focus, .notes-textarea:focus {
+.date-input:focus, .time-input:focus, .number-input:focus, .voice-textarea:focus, .notes-textarea:focus, .text-input:focus {
     outline: 2px solid var(--primary);
     border-color: transparent;
 }
@@ -226,10 +226,14 @@ Voice Tracker - Stylesheet
     flex-wrap: wrap;
 }
 
-.delete-entry {
+.entry-note-preview, .entry-note-full {
+    font-size: 0.8rem;
+    margin-top: 0.3rem;
+    color: var(--gray-dark);
+}
+
+.delete-entry, .edit-entry {
     position: absolute;
-    top: 0.8rem;
-    right: 0.8rem;
     background: none;
     border: none;
     color: #9ca3af;
@@ -238,8 +242,33 @@ Voice Tracker - Stylesheet
     padding: 0.2rem 0.5rem;
 }
 
+.delete-entry {
+    top: 0.8rem;
+    right: 0.8rem;
+}
+
+.edit-entry {
+    top: 0.8rem;
+    right: 2.5rem;
+}
+
 .delete-entry:hover {
     color: #b91c1c;
+}
+
+.edit-entry:hover {
+    color: var(--primary);
+}
+
+.show-more-btn {
+    background: none;
+    border: none;
+    color: var(--primary);
+    font-size: 0.75rem;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 0.5rem;
 }
 
 .empty-message {
@@ -253,6 +282,30 @@ hr {
     border: none;
     border-top: 1px dashed var(--gray-light);
     margin: 1rem 0;
+}
+
+.toast {
+    visibility: hidden;
+    min-width: 200px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 4px;
+    padding: 10px;
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s, visibility 0.3s;
+    font-size: 0.9rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.toast.show {
+    visibility: visible;
+    opacity: 1;
 }
 
 @media (max-width: 700px) {

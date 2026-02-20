@@ -97,7 +97,10 @@ Voice Tracker - HTML
                                        class="intensity-slider"
                                        min="1"
                                        max="10"
-                                       value="5">
+                                       value="5"
+                                       aria-valuemin="1"
+                                       aria-valuemax="10"
+                                       aria-valuenow="5">
                                 <span class="intensity-value" id="intensityDisplay">5</span>
                             </div>
                         </div>
@@ -123,6 +126,14 @@ Voice Tracker - HTML
                                     someone</label>
                                 <label class="coping-item"><input type="checkbox" value="grounding"> 🌱 grounding</label>
                                 <label class="coping-item"><input type="checkbox" value="rest"> 😴 rest</label>
+                                <label class="coping-item"><input type="checkbox" id="copingOther" value=""> ✏️
+                                    other</label>
+                            </div>
+                            <div id="customCopingContainer" style="margin-top: 0.5rem; display: none;">
+                                <label for="customCopingInput"></label><input type="text" id="customCopingInput"
+                                                                              class="text-input"
+                                                                              placeholder="describe your coping strategy"
+                                                                              style="width: 100%; padding: 0.5rem;">
                             </div>
                         </div>
 
@@ -135,16 +146,25 @@ Voice Tracker - HTML
                         </div>
 
                         <div class="button-group">
-                            <button class="btn btn-primary" id="addEntryBtn"><i class="fas fa-plus-circle"></i> log this
-                                episode
+                            <button class="btn btn-primary" id="addEntryBtn"><i class="fas fa-plus-circle"></i> <span>log this episode</span>
+                            </button>
+                            <button class="btn btn-secondary" id="addAnotherBtn"><i class="fas fa-plus-circle"></i> log
+                                & add another
                             </button>
                             <button class="btn btn-secondary" id="clearFormBtn"><i class="fas fa-undo-alt"></i> clear
                                 form
+                            </button>
+                        </div>
+                        <div class="button-group" style="margin-top: 0.5rem;">
+                            <button class="btn btn-secondary" id="exportBtn"><i class="fas fa-download"></i> export data
+                            </button>
+                            <button class="btn btn-secondary" id="importBtn"><i class="fas fa-upload"></i> import data
                             </button>
                             <button class="btn btn-danger" id="clearAllBtn"><i class="fas fa-trash-alt"></i> clear all
                                 data
                             </button>
                         </div>
+                        <input type="file" id="importFile" accept=".json,application/json" style="display: none;">
                     </div>
 
                     <div class="right-column">
@@ -183,9 +203,11 @@ Voice Tracker - HTML
             <a aria-label="GitHub" href="https://github.com/Chalwk" target="_blank"><i class="fab fa-github"></i></a>
             <a aria-label="Email" href="mailto:chalwk.dev@gmail.com"><i class="fas fa-envelope"></i></a>
         </div>
-        <p class="footer-copyright"></p>
+        <p class="footer-copyright" id="footerCopyright"></p>
     </div>
 </footer>
+
+<div id="toast" class="toast">✓ Entry saved</div>
 
 <script src="script.js"></script>
 </body>
