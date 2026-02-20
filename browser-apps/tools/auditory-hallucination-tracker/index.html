@@ -1,0 +1,192 @@
+<!--
+Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
+
+Voice Tracker - HTML
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auditory hallucination (schizophrenia support)</title>
+    <link href="../../../core.css" rel="stylesheet"/>
+    <script src="../../../nav-menu.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
+          rel="stylesheet">
+    <link href="style.css" rel="stylesheet"/>
+</head>
+<body>
+
+<header class="header"></header>
+
+<main>
+    <div class="container">
+        <div class="app-grid app-margin-top">
+            <section class="panel panel-custom">
+                <div class="panel-head">
+                    <h2><i class="fas fa-ear-listen"></i> Auditory hallucination Tracker (schizophrenia support)</h2>
+                </div>
+
+                <div class="disclaimer">
+                    <i class="fas fa-shield-alt"></i>
+                    <span><strong>Privacy</strong> - This tool helps you track auditory hallucinations (hearing voices)
+                        as part of your mental health journey. Log each episode, record what was said, rate intensity,
+                        note coping strategies, and add private notes. All data is stored <strong>locally on your device</strong>
+                        (in your browser’s local storage). Nothing is sent to any server. Your entries remain completely
+                        private to you.</span>
+                </div>
+
+                <div class="voice-tracker-layout">
+                    <div class="left-column">
+                        <div class="input-group">
+                            <label class="input-label" for="logDate">
+                                <span>
+                                    <i class="fas fa-calendar-day"></i>
+                                    date
+                                </span>
+                            </label>
+                            <div class="input-with-button">
+                                <input type="date"
+                                       id="logDate"
+                                       class="date-input"
+                                       required>
+                                <button type="button"
+                                        class="btn btn-secondary today-btn"
+                                        id="todayDateBtn">
+                                    <i class="fas fa-calendar-check"></i> today
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="input-label" for="logTime">
+                            <span>
+                                <i class="fas fa-clock"></i>
+                                time (optional)
+                            </span>
+                            </label>
+                            <div class="input-with-button">
+                                <input type="time" id="logTime" class="time-input">
+                                <button type="button"
+                                        class="btn btn-secondary now-btn"
+                                        id="nowTimeBtn">
+                                    <i class="fas fa-clock"></i> now
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="input-label">
+                                <span><i class="fas fa-hourglass-half"></i> duration (minutes, optional)</span>
+                                <input type="number" id="logDuration" class="number-input" min="0" step="1"
+                                       placeholder="e.g. 15">
+                            </label>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="input-label" for="logIntensity">
+                                <span><i class="fas fa-volume-up"></i>
+                                    intensity (1 = faint, 10 = overwhelming)
+                                </span>
+                            </label>
+                            <div class="intensity-wrapper">
+                                <input type="range"
+                                       id="logIntensity"
+                                       class="intensity-slider"
+                                       min="1"
+                                       max="10"
+                                       value="5">
+                                <span class="intensity-value" id="intensityDisplay">5</span>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="input-label">
+                                <span><i class="fas fa-comment-dots"></i> what did the voice(s) say? (optional)</span>
+                                <textarea id="logVoice" class="voice-textarea" rows="2"
+                                          placeholder="describe the content..."></textarea>
+                            </label>
+                        </div>
+
+                        <div class="input-group">
+                            <span class="input-label"><span><i
+                                    class="fas fa-hands"></i> coping strategies used</span></span>
+                            <div class="coping-group" id="copingCheckboxes">
+                                <label class="coping-item"><input type="checkbox" value="breathing"> 🫁 breathing</label>
+                                <label class="coping-item"><input type="checkbox" value="distraction"> 🎧
+                                    distraction</label>
+                                <label class="coping-item"><input type="checkbox" value="medication"> 💊
+                                    medication</label>
+                                <label class="coping-item"><input type="checkbox" value="talk"> 🗣️ talked to
+                                    someone</label>
+                                <label class="coping-item"><input type="checkbox" value="grounding"> 🌱 grounding</label>
+                                <label class="coping-item"><input type="checkbox" value="rest"> 😴 rest</label>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="input-label">
+                                <span><i class="fas fa-pen"></i> private notes</span>
+                                <textarea id="logNotes" class="notes-textarea" rows="2"
+                                          placeholder="anything else..."></textarea>
+                            </label>
+                        </div>
+
+                        <div class="button-group">
+                            <button class="btn btn-primary" id="addEntryBtn"><i class="fas fa-plus-circle"></i> log this
+                                episode
+                            </button>
+                            <button class="btn btn-secondary" id="clearFormBtn"><i class="fas fa-undo-alt"></i> clear
+                                form
+                            </button>
+                            <button class="btn btn-danger" id="clearAllBtn"><i class="fas fa-trash-alt"></i> clear all
+                                data
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="right-column">
+                        <div class="stats-card" id="statsCard">
+                            <div class="stat-item">
+                                <div class="stat-number" id="totalEntries">0</div>
+                                <div class="stat-label">total logs</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number" id="avgIntensity">-</div>
+                                <div class="stat-label">avg intensity</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number" id="thisWeek">0</div>
+                                <div class="stat-label">this week</div>
+                            </div>
+                        </div>
+
+                        <h4 style="margin: 0 0 0.75rem 0; display: flex; gap:0.5rem;"><i class="fas fa-history"></i>
+                            recent entries</h4>
+                        <div class="entries-list" id="entriesList">
+                            <div class="empty-message">✨ no entries yet. use the form to start.</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="footer-container">
+        <div class="social-icons">
+            <a aria-label="Discord" href="https://discord.com/channels/@me/707058110396760094" target="_blank"><i
+                    class="fab fa-discord"></i></a>
+            <a aria-label="GitHub" href="https://github.com/Chalwk" target="_blank"><i class="fab fa-github"></i></a>
+            <a aria-label="Email" href="mailto:chalwk.dev@gmail.com"><i class="fas fa-envelope"></i></a>
+        </div>
+        <p class="footer-copyright"></p>
+    </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
