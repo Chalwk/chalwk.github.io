@@ -641,6 +641,7 @@ Psychosis Tracker - JavaScript
         if (entry.moodEpisode) {
             const radio = document.querySelector(`input[name="moodEpisode"][value="${entry.moodEpisode}"]`);
             if (radio) radio.checked = true;
+        }
 
         if (entry.additionalSymptoms && entry.additionalSymptoms.length) {
             hadAdditionalSymptomsCheckbox.checked = true;
@@ -753,7 +754,7 @@ Psychosis Tracker - JavaScript
             startDate = new Date(today);
             startDate.setDate(today.getDate() - 29);
             startDate.setHours(0,0,0,0);
-        } else { // custom
+        } else {
             if (!summaryStartDate.value || !summaryEndDate.value) {
                 alert('Please select both start and end dates.');
                 return;
