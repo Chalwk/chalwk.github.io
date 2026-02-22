@@ -68,55 +68,58 @@ Psychosis Tracker - JavaScript
     const STORAGE_KEY = 'voice_entries';
     let editingId = null;
 
-    hadHallucinationsCheckbox.addEventListener('change', function(e) {
-        hallucinationFields.style.display = this.checked ? 'block' : 'none';
-        if (!this.checked) {
-            durationInput.value = '';
-            intensitySlider.value = 5;
-            intensityDisplay.textContent = '5';
-            voiceTextarea.value = '';
-            hallucinationCheckboxes.forEach(cb => cb.checked = false);
-            customHallucinationContainer.style.display = 'none';
-            customHallucinationInput.value = '';
-        }
-    });
+    function setupCollapsible(checkbox, fieldsContainer, iconId) {
+        const icon = document.getElementById(iconId);
+        const header = icon.closest('.collapse-header');
 
-    usedCopingCheckbox.addEventListener('change', function(e) {
-        copingFields.style.display = this.checked ? 'block' : 'none';
-        if (!this.checked) {
-            copingCheckboxes.forEach(cb => cb.checked = false);
-            customCopingContainer.style.display = 'none';
-            customCopingInput.value = '';
-        }
-    });
+        const toggle = () => {
+            checkbox.checked = !checkbox.checked;
+            checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+        };
 
-    hadAdditionalSymptomsCheckbox.addEventListener('change', function(e) {
-        additionalSymptomsFields.style.display = this.checked ? 'block' : 'none';
-        if (!this.checked) {
-            additionalSymptomsCheckboxes.forEach(cb => cb.checked = false);
-        }
-    });
+        header.addEventListener('click', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'LABEL') return;
+            toggle();
+        });
 
-    hadTriggerCheckbox.addEventListener('change', function(e) {
-        triggerFields.style.display = this.checked ? 'block' : 'none';
-        if (!this.checked) {
-            triggerInput.value = '';
-        }
-    });
+        checkbox.addEventListener('change', () => {
+            if (checkbox.checked) {
+                fieldsContainer.style.display = 'block';
+                icon.className = 'fas fa-chevron-down collapse-icon';
+            } else {
+                fieldsContainer.style.display = 'none';
+                icon.className = 'fas fa-chevron-right collapse-icon';
+                if (fieldsContainer === hallucinationFields) {
+                    durationInput.value = '';
+                    intensitySlider.value = 5;
+                    intensityDisplay.textContent = '5';
+                    voiceTextarea.value = '';
+                    hallucinationCheckboxes.forEach(cb => cb.checked = false);
+                    customHallucinationContainer.style.display = 'none';
+                    customHallucinationInput.value = '';
+                } else if (fieldsContainer === copingFields) {
+                    copingCheckboxes.forEach(cb => cb.checked = false);
+                    customCopingContainer.style.display = 'none';
+                    customCopingInput.value = '';
+                } else if (fieldsContainer === additionalSymptomsFields) {
+                    additionalSymptomsCheckboxes.forEach(cb => cb.checked = false);
+                } else if (fieldsContainer === triggerFields) {
+                    triggerInput.value = '';
+                } else if (fieldsContainer === medicationFields) {
+                    medicationRadios.forEach(r => r.checked = false);
+                } else if (fieldsContainer === sleepFields) {
+                    sleepHoursInput.value = '';
+                }
+            }
+        });
+    }
 
-    tookMedicationCheckbox.addEventListener('change', function(e) {
-        medicationFields.style.display = this.checked ? 'block' : 'none';
-        if (!this.checked) {
-            medicationRadios.forEach(r => r.checked = false);
-        }
-    });
-
-    trackSleepCheckbox.addEventListener('change', function(e) {
-        sleepFields.style.display = this.checked ? 'block' : 'none';
-        if (!this.checked) {
-            sleepHoursInput.value = '';
-        }
-    });
+    setupCollapsible(hadHallucinationsCheckbox, hallucinationFields, 'hallucinationsIcon');
+    setupCollapsible(usedCopingCheckbox, copingFields, 'copingIcon');
+    setupCollapsible(hadAdditionalSymptomsCheckbox, additionalSymptomsFields, 'additionalSymptomsIcon');
+    setupCollapsible(hadTriggerCheckbox, triggerFields, 'triggerIcon');
+    setupCollapsible(tookMedicationCheckbox, medicationFields, 'medicationIcon');
+    setupCollapsible(trackSleepCheckbox, sleepFields, 'sleepIcon');
 
     stressSlider.addEventListener('input', function() {
         stressDisplay.textContent = this.value;
@@ -201,17 +204,17 @@ Psychosis Tracker - JavaScript
         customCopingInput.value = '';
 
         hadHallucinationsCheckbox.checked = false;
-        hallucinationFields.style.display = 'none';
+        hadHallucinationsCheckbox.dispatchEvent(new Event('change'));
         usedCopingCheckbox.checked = false;
-        copingFields.style.display = 'none';
+        usedCopingCheckbox.dispatchEvent(new Event('change'));
         hadAdditionalSymptomsCheckbox.checked = false;
-        additionalSymptomsFields.style.display = 'none';
+        hadAdditionalSymptomsCheckbox.dispatchEvent(new Event('change'));
         hadTriggerCheckbox.checked = false;
-        triggerFields.style.display = 'none';
+        hadTriggerCheckbox.dispatchEvent(new Event('change'));
         tookMedicationCheckbox.checked = false;
-        medicationFields.style.display = 'none';
+        tookMedicationCheckbox.dispatchEvent(new Event('change'));
         trackSleepCheckbox.checked = false;
-        sleepFields.style.display = 'none';
+        trackSleepCheckbox.dispatchEvent(new Event('change'));
     }
 
     function updateAddButtonText() {
@@ -613,7 +616,7 @@ Psychosis Tracker - JavaScript
 
         if (entry.intensity != null || entry.hallucinationTypes || entry.voice || entry.duration != null) {
             hadHallucinationsCheckbox.checked = true;
-            hallucinationFields.style.display = 'block';
+            hadHallucinationsCheckbox.dispatchEvent(new Event('change')); // expand section
             durationInput.value = entry.duration || '';
             intensitySlider.value = entry.intensity || 5;
             intensityDisplay.textContent = intensitySlider.value;
@@ -645,7 +648,7 @@ Psychosis Tracker - JavaScript
 
         if (entry.additionalSymptoms && entry.additionalSymptoms.length) {
             hadAdditionalSymptomsCheckbox.checked = true;
-            additionalSymptomsFields.style.display = 'block';
+            hadAdditionalSymptomsCheckbox.dispatchEvent(new Event('change'));
             entry.additionalSymptoms.forEach(sym => {
                 additionalSymptomsCheckboxes.forEach(cb => {
                     if (cb.value === sym) cb.checked = true;
@@ -655,20 +658,20 @@ Psychosis Tracker - JavaScript
 
         if (entry.trigger) {
             hadTriggerCheckbox.checked = true;
-            triggerFields.style.display = 'block';
+            hadTriggerCheckbox.dispatchEvent(new Event('change'));
             triggerInput.value = entry.trigger;
         }
 
         if (entry.medication) {
             tookMedicationCheckbox.checked = true;
-            medicationFields.style.display = 'block';
+            tookMedicationCheckbox.dispatchEvent(new Event('change'));
             const radio = document.querySelector(`input[name="medication"][value="${entry.medication}"]`);
             if (radio) radio.checked = true;
         }
 
         if (entry.sleepHours != null) {
             trackSleepCheckbox.checked = true;
-            sleepFields.style.display = 'block';
+            trackSleepCheckbox.dispatchEvent(new Event('change'));
             sleepHoursInput.value = entry.sleepHours;
         }
 
@@ -677,7 +680,7 @@ Psychosis Tracker - JavaScript
 
         if (entry.coping && entry.coping.length) {
             usedCopingCheckbox.checked = true;
-            copingFields.style.display = 'block';
+            usedCopingCheckbox.dispatchEvent(new Event('change'));
             entry.coping.forEach(strategy => {
                 let matched = false;
                 copingCheckboxes.forEach(cb => {
