@@ -30,8 +30,8 @@ Sleep Tracker - HTML
                 </div>
 
                 <div class="disclaimer">
-                    <i class="fas fa-shield-alt"></i>
-                    <span><strong>Privacy</strong> – All data stays <strong>only on your device</strong> (browser storage). Nothing is sent to any server. Share reports with your care team if you wish.</span>
+                    <i class="fas fa-circle-info"></i>
+                    <span>This tool helps you monitor sleep patterns and their connection to mental health. All data stays <strong>only on your device</strong>. You can share reports with your care team if you wish.</span>
                 </div>
 
                 <div class="sleep-tracker-layout">
@@ -190,16 +190,28 @@ Sleep Tracker - HTML
                         <div class="input-group collapse-section">
                             <div class="collapse-header" data-target="additionalFields">
                                 <i class="fas fa-chevron-right collapse-icon" id="additionalIcon"></i>
-                                <span><i class="fas fa-cloud-sun"></i> Additional factors</span>
+                                <span><i class="fas fa-cloud-sun"></i> Lifestyle & environment</span>
                                 <label for="hadAdditional"></label><input type="checkbox" id="hadAdditional"
                                                                           style="display: none;">
                             </div>
                             <div id="additionalFields" class="collapse-content" style="display: none;">
                                 <div class="checkbox-group">
-                                    <label class="checkbox-label">
-                                        <input type="checkbox" id="seasonalDepression"> <i class="fas fa-cloud-sun"></i>
-                                        seasonal depression pattern
-                                    </label>
+                                    <label class="checkbox-label"><input type="checkbox" id="stress"> <i
+                                            class="fas fa-exclamation-triangle"></i> Stress (feeling stressed)</label>
+                                    <label class="checkbox-label"><input type="checkbox" id="caffeine"> <i
+                                            class="fas fa-coffee"></i> Caffeine after 2pm</label>
+                                    <label class="checkbox-label"><input type="checkbox" id="alcohol"> <i
+                                            class="fas fa-wine-bottle"></i> Alcohol in evening</label>
+                                    <label class="checkbox-label"><input type="checkbox" id="exercise"> <i
+                                            class="fas fa-dumbbell"></i> Exercise within 2h of bed</label>
+                                    <label class="checkbox-label"><input type="checkbox" id="screenTime"> <i
+                                            class="fas fa-tv"></i> Screen time before bed</label>
+                                    <label class="checkbox-label"><input type="checkbox" id="medication"> <i
+                                            class="fas fa-pills"></i> Medication (sleep-related)</label>
+                                    <label class="checkbox-label"><input type="checkbox" id="environment"> <i
+                                            class="fas fa-volume-up"></i> Environment (noise/temp)</label>
+                                    <label class="checkbox-label"><input type="checkbox" id="seasonalDepression"> <i
+                                            class="fas fa-cloud-sun"></i> Seasonal depression pattern</label>
                                 </div>
                             </div>
                         </div>

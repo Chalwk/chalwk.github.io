@@ -37,6 +37,14 @@ Sleep Tracker - JavaScript
     const nightmareCountSpan = document.getElementById('nightmareCount');
     const toast = document.getElementById('toast');
 
+    const stress = document.getElementById('stress');
+    const caffeine = document.getElementById('caffeine');
+    const alcohol = document.getElementById('alcohol');
+    const exercise = document.getElementById('exercise');
+    const screenTime = document.getElementById('screenTime');
+    const medication = document.getElementById('medication');
+    const environment = document.getElementById('environment');
+
     const summaryBtn = document.getElementById('summaryBtn');
     const summaryModal = document.getElementById('summaryModal');
     const closeModal = document.querySelector('.close-modal');
@@ -190,6 +198,13 @@ Sleep Tracker - JavaScript
         mood.value = '';
         preRoutine.value = '';
         postRoutine.value = '';
+        stress.checked = false;
+        caffeine.checked = false;
+        alcohol.checked = false;
+        exercise.checked = false;
+        screenTime.checked = false;
+        medication.checked = false;
+        environment.checked = false;
         seasonalDepression.checked = false;
         notes.value = '';
 
@@ -331,6 +346,13 @@ Sleep Tracker - JavaScript
             mood: mood.value.trim() || null,
             preRoutine: preRoutine.value.trim() || null,
             postRoutine: postRoutine.value.trim() || null,
+            stress: stress.checked,
+            caffeine: caffeine.checked,
+            alcohol: alcohol.checked,
+            exercise: exercise.checked,
+            screenTime: screenTime.checked,
+            medication: medication.checked,
+            environment: environment.checked,
             seasonalDepression: seasonalDepression.checked,
             notes: notes.value.trim() || null,
             timestamp: new Date().toISOString()
@@ -376,6 +398,13 @@ Sleep Tracker - JavaScript
         mood.value = entry.mood || '';
         preRoutine.value = entry.preRoutine || '';
         postRoutine.value = entry.postRoutine || '';
+        stress.checked = entry.stress || false;
+        caffeine.checked = entry.caffeine || false;
+        alcohol.checked = entry.alcohol || false;
+        exercise.checked = entry.exercise || false;
+        screenTime.checked = entry.screenTime || false;
+        medication.checked = entry.medication || false;
+        environment.checked = entry.environment || false;
         seasonalDepression.checked = entry.seasonalDepression || false;
         notes.value = entry.notes || '';
 
@@ -395,7 +424,7 @@ Sleep Tracker - JavaScript
             const cb = document.getElementById('hadMorning');
             if (!cb.checked) cb.checked = true; cb.dispatchEvent(new Event('change'));
         }
-        if (entry.seasonalDepression) {
+        if (entry.stress || entry.caffeine || entry.alcohol || entry.exercise || entry.screenTime || entry.medication || entry.environment || entry.seasonalDepression) {
             const cb = document.getElementById('hadAdditional');
             if (!cb.checked) cb.checked = true; cb.dispatchEvent(new Event('change'));
         }
@@ -596,7 +625,18 @@ Sleep Tracker - JavaScript
             if (entry.racingThoughts) summary += `, Racing thoughts`;
             if (entry.restlessness) summary += `, Restlessness`;
             if (entry.mood) summary += `, Mood: ${entry.mood}`;
-            if (entry.seasonalDepression) summary += `, Seasonal pattern`;
+
+            let factors = [];
+            if (entry.stress) factors.push('Stress');
+            if (entry.caffeine) factors.push('Caffeine');
+            if (entry.alcohol) factors.push('Alcohol');
+            if (entry.exercise) factors.push('Exercise');
+            if (entry.screenTime) factors.push('Screen time');
+            if (entry.medication) factors.push('Medication');
+            if (entry.environment) factors.push('Environment');
+            if (entry.seasonalDepression) factors.push('Seasonal pattern');
+            if (factors.length) summary += `, Factors: ${factors.join(', ')}`;
+
             summary += `\n    Pre-routine: "${entry.preRoutine || 'none'}"`;
             summary += `\n    Post-routine: "${entry.postRoutine || 'none'}"`;
             if (entry.notes) summary += `\n    Notes: ${entry.notes}`;
