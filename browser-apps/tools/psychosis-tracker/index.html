@@ -79,62 +79,73 @@ Psychosis Tracker - HTML
 
                         <div class="input-group">
                             <label class="input-label">
-                                <span><i class="fas fa-hourglass-half"></i> duration (minutes, optional)</span>
-                                <input type="number" id="logDuration" class="number-input" min="0" step="1"
-                                       placeholder="e.g. 15">
+                                <span><i class="fas fa-brain"></i> Experienced hallucinations?</span>
+                                <input type="checkbox" id="hadHallucinations">
                             </label>
                         </div>
 
-                        <div class="input-group">
-                            <label class="input-label" for="logIntensity">
-                                <span><i class="fas fa-volume-up"></i>
-                                    hallucination intensity (1 = faint, 10 = overwhelming)
-                                </span>
-                            </label>
-                            <div class="intensity-wrapper">
-                                <input type="range"
-                                       id="logIntensity"
-                                       class="intensity-slider"
-                                       min="1"
-                                       max="10"
-                                       value="5"
-                                       aria-valuemin="1"
-                                       aria-valuemax="10"
-                                       aria-valuenow="5">
-                                <span class="intensity-value" id="intensityDisplay">5</span>
+                        <div id="hallucinationFields" style="display: none;">
+                            <div class="input-group">
+                                <label class="input-label">
+                                    <span><i class="fas fa-hourglass-half"></i> duration (minutes, optional)</span>
+                                    <input type="number" id="logDuration" class="number-input" min="0" step="1"
+                                           placeholder="e.g. 15">
+                                </label>
                             </div>
-                        </div>
 
-                        <div class="input-group">
-                            <span class="input-label"><span><i
-                                    class="fas fa-eye"></i> hallucination type(s)</span></span>
-                            <div class="coping-group" id="hallucinationTypeCheckboxes">
-                                <label class="coping-item"><input type="checkbox" name="hallucinationType"
-                                                                  value="auditory"> 👂 auditory</label>
-                                <label class="coping-item"><input type="checkbox" name="hallucinationType"
-                                                                  value="visual"> 👁️ visual</label>
-                                <label class="coping-item"><input type="checkbox" name="hallucinationType"
-                                                                  value="olfactory"> 👃 olfactory</label>
-                                <label class="coping-item"><input type="checkbox" name="hallucinationType"
-                                                                  value="tactile"> ✋ tactile</label>
-                                <label class="coping-item"><input type="checkbox" id="hallucinationOther" value=""> ✏️
-                                    other</label>
+                            <div class="input-group">
+                                <label class="input-label" for="logIntensity">
+                                    <span><i class="fas fa-volume-up"></i>
+                                        hallucination intensity (1 = faint, 10 = overwhelming)
+                                    </span>
+                                </label>
+                                <div class="intensity-wrapper">
+                                    <input type="range"
+                                           id="logIntensity"
+                                           class="intensity-slider"
+                                           min="1"
+                                           max="10"
+                                           value="5"
+                                           aria-valuemin="1"
+                                           aria-valuemax="10"
+                                           aria-valuenow="5">
+                                    <span class="intensity-value" id="intensityDisplay">5</span>
+                                </div>
                             </div>
-                            <div id="customHallucinationContainer" style="margin-top: 0.5rem; display: none;">
-                                <label for="customHallucinationInput"></label><input type="text"
-                                                                                     id="customHallucinationInput"
-                                                                                     class="text-input"
-                                                                                     placeholder="describe other type"
-                                                                                     style="width: 100%; padding: 0.5rem;">
-                            </div>
-                        </div>
 
-                        <div class="input-group">
-                            <label class="input-label">
-                                <span><i class="fas fa-comment-dots"></i> description of hallucination (optional)</span>
-                                <textarea id="logVoice" class="voice-textarea" rows="2"
-                                          placeholder="describe what you experienced..."></textarea>
-                            </label>
+                            <div class="input-group">
+                                <span class="input-label"><span><i
+                                        class="fas fa-eye"></i> hallucination type(s)</span></span>
+                                <div class="coping-group" id="hallucinationTypeCheckboxes">
+                                    <label class="coping-item"><input type="checkbox" name="hallucinationType"
+                                                                      value="auditory"> 👂 auditory</label>
+                                    <label class="coping-item"><input type="checkbox" name="hallucinationType"
+                                                                      value="visual"> 👁️ visual</label>
+                                    <label class="coping-item"><input type="checkbox" name="hallucinationType"
+                                                                      value="olfactory"> 👃 olfactory</label>
+                                    <label class="coping-item"><input type="checkbox" name="hallucinationType"
+                                                                      value="tactile"> ✋ tactile</label>
+                                    <label class="coping-item"><input type="checkbox" id="hallucinationOther" value="">
+                                        ✏️
+                                        other</label>
+                                </div>
+                                <div id="customHallucinationContainer" style="margin-top: 0.5rem; display: none;">
+                                    <label for="customHallucinationInput"></label><input type="text"
+                                                                                         id="customHallucinationInput"
+                                                                                         class="text-input"
+                                                                                         placeholder="describe other type"
+                                                                                         style="width: 100%; padding: 0.5rem;">
+                                </div>
+                            </div>
+
+                            <div class="input-group">
+                                <label class="input-label">
+                                    <span><i
+                                            class="fas fa-comment-dots"></i> description of hallucination (optional)</span>
+                                    <textarea id="logVoice" class="voice-textarea" rows="2"
+                                              placeholder="describe what you experienced..."></textarea>
+                                </label>
+                            </div>
                         </div>
 
                         <div class="input-group">
@@ -149,67 +160,113 @@ Psychosis Tracker - HTML
                         </div>
 
                         <div class="input-group">
-                            <span class="input-label"><span><i
-                                    class="fas fa-brain"></i> additional symptoms</span></span>
-                            <div class="coping-group" id="additionalSymptomsCheckboxes">
-                                <label class="coping-item"><input type="checkbox" name="additionalSymptom"
-                                                                  value="paranoia"> 🕵️ paranoia</label>
-                                <label class="coping-item"><input type="checkbox" name="additionalSymptom"
-                                                                  value="delusions"> 🔮 delusions</label>
-                                <label class="coping-item"><input type="checkbox" name="additionalSymptom"
-                                                                  value="disorganized"> 🧩 disorganized thinking</label>
-                                <label class="coping-item"><input type="checkbox" name="additionalSymptom"
-                                                                  value="anxiety"> 😰 anxiety</label>
-                            </div>
+                            <label class="input-label">
+                                <span><i class="fas fa-brain"></i> Experienced additional symptoms?</span>
+                                <input type="checkbox" id="hadAdditionalSymptoms">
+                            </label>
                         </div>
-
-                        <div class="input-group">
-                            <span class="input-label"><span><i
-                                    class="fas fa-hands"></i> coping strategies used</span></span>
-                            <div class="coping-group" id="copingCheckboxes">
-                                <label class="coping-item"><input type="checkbox" value="breathing"> 😤 breathing</label>
-                                <label class="coping-item"><input type="checkbox" value="distraction"> 🎧
-                                    distraction</label>
-                                <label class="coping-item"><input type="checkbox" value="medication"> 💊
-                                    medication</label>
-                                <label class="coping-item"><input type="checkbox" value="talk"> 🗣️ talked to
-                                    someone</label>
-                                <label class="coping-item"><input type="checkbox" value="grounding"> 🌱 grounding</label>
-                                <label class="coping-item"><input type="checkbox" value="rest"> 😴 rest</label>
-                                <label class="coping-item"><input type="checkbox" id="copingOther" value=""> ✏️
-                                    other</label>
-                            </div>
-                            <div id="customCopingContainer" style="margin-top: 0.5rem; display: none;">
-                                <label for="customCopingInput"></label><input type="text" id="customCopingInput"
-                                                                              class="text-input"
-                                                                              placeholder="describe your coping strategy"
-                                                                              style="width: 100%; padding: 0.5rem;">
+                        <div id="additionalSymptomsFields" style="display: none;">
+                            <div class="input-group">
+                                <span class="input-label"><span><i
+                                        class="fas fa-brain"></i> additional symptoms</span></span>
+                                <div class="coping-group" id="additionalSymptomsCheckboxes">
+                                    <label class="coping-item"><input type="checkbox" name="additionalSymptom"
+                                                                      value="paranoia"> 🕵️ paranoia</label>
+                                    <label class="coping-item"><input type="checkbox" name="additionalSymptom"
+                                                                      value="delusions"> 🔮 delusions</label>
+                                    <label class="coping-item"><input type="checkbox" name="additionalSymptom"
+                                                                      value="disorganized"> 🧩 disorganized
+                                        thinking</label>
+                                    <label class="coping-item"><input type="checkbox" name="additionalSymptom"
+                                                                      value="anxiety"> 😰 anxiety</label>
+                                </div>
                             </div>
                         </div>
 
                         <div class="input-group">
                             <label class="input-label">
-                                <span><i class="fas fa-exclamation-triangle"></i> potential trigger (optional)</span>
-                                <input type="text" id="triggerInput" class="text-input"
-                                       placeholder="e.g., stress, lack of sleep">
+                                <span><i class="fas fa-hands"></i> Used coping strategies?</span>
+                                <input type="checkbox" id="usedCoping">
                             </label>
                         </div>
-
-                        <div class="input-group">
-                            <span class="input-label"><span><i class="fas fa-pills"></i> medication taken</span></span>
-                            <div style="display: flex; gap: 1rem; margin-top: 0.3rem;">
-                                <label><input type="radio" name="medication" value="yes"> yes</label>
-                                <label><input type="radio" name="medication" value="no"> no</label>
-                                <label><input type="radio" name="medication" value="partial"> partial</label>
+                        <div id="copingFields" style="display: none;">
+                            <div class="input-group">
+                                <span class="input-label"><span><i
+                                        class="fas fa-hands"></i> coping strategies used</span></span>
+                                <div class="coping-group" id="copingCheckboxes">
+                                    <label class="coping-item"><input type="checkbox" value="breathing"> 😤
+                                        breathing</label>
+                                    <label class="coping-item"><input type="checkbox" value="distraction"> 🎧
+                                        distraction</label>
+                                    <label class="coping-item"><input type="checkbox" value="medication"> 💊
+                                        medication</label>
+                                    <label class="coping-item"><input type="checkbox" value="talk"> 🗣️ talked to
+                                        someone</label>
+                                    <label class="coping-item"><input type="checkbox" value="grounding"> 🌱
+                                        grounding</label>
+                                    <label class="coping-item"><input type="checkbox" value="rest"> 😴 rest</label>
+                                    <label class="coping-item"><input type="checkbox" id="copingOther" value=""> ✏️
+                                        other</label>
+                                </div>
+                                <div id="customCopingContainer" style="margin-top: 0.5rem; display: none;">
+                                    <label for="customCopingInput"></label><input type="text" id="customCopingInput"
+                                                                                  class="text-input"
+                                                                                  placeholder="describe your coping strategy"
+                                                                                  style="width: 100%; padding: 0.5rem;">
+                                </div>
                             </div>
                         </div>
 
                         <div class="input-group">
                             <label class="input-label">
-                                <span><i class="fas fa-bed"></i> hours slept (optional)</span>
-                                <input type="number" id="sleepHours" class="number-input" min="0" max="24" step="0.5"
-                                       placeholder="e.g. 7.5">
+                                <span><i class="fas fa-exclamation-triangle"></i> Had a trigger?</span>
+                                <input type="checkbox" id="hadTrigger">
                             </label>
+                        </div>
+                        <div id="triggerFields" style="display: none;">
+                            <div class="input-group">
+                                <label class="input-label">
+                                    <span><i
+                                            class="fas fa-exclamation-triangle"></i> potential trigger (optional)</span>
+                                    <input type="text" id="triggerInput" class="text-input"
+                                           placeholder="e.g., stress, lack of sleep">
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="input-label">
+                                <span><i class="fas fa-pills"></i> Took medication?</span>
+                                <input type="checkbox" id="tookMedication">
+                            </label>
+                        </div>
+                        <div id="medicationFields" style="display: none;">
+                            <div class="input-group">
+                                <span class="input-label"><span><i
+                                        class="fas fa-pills"></i> medication taken</span></span>
+                                <div style="display: flex; gap: 1rem; margin-top: 0.3rem;">
+                                    <label><input type="radio" name="medication" value="yes"> yes</label>
+                                    <label><input type="radio" name="medication" value="no"> no</label>
+                                    <label><input type="radio" name="medication" value="partial"> partial</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="input-label">
+                                <span><i class="fas fa-bed"></i> Track sleep?</span>
+                                <input type="checkbox" id="trackSleep">
+                            </label>
+                        </div>
+                        <div id="sleepFields" style="display: none;">
+                            <div class="input-group">
+                                <label class="input-label">
+                                    <span><i class="fas fa-bed"></i> hours slept (optional)</span>
+                                    <input type="number" id="sleepHours" class="number-input" min="0" max="24"
+                                           step="0.5"
+                                           placeholder="e.g. 7.5">
+                                </label>
+                            </div>
                         </div>
 
                         <div class="input-group">
