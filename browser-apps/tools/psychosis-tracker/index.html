@@ -145,21 +145,10 @@ Psychosis Tracker - HTML
                             </div>
                         </div>
 
-                        <div class="input-group">
-                            <span class="input-label"><span><i class="fas fa-face-smile"></i> mood episode</span></span>
-                            <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 0.3rem;">
-                                <label><input type="radio" name="moodEpisode" value="manic"> manic</label>
-                                <label><input type="radio" name="moodEpisode" value="hypomanic"> hypomanic</label>
-                                <label><input type="radio" name="moodEpisode" value="depressed"> depressed</label>
-                                <label><input type="radio" name="moodEpisode" value="mixed"> mixed</label>
-                                <label><input type="radio" name="moodEpisode" value="stable"> stable</label>
-                            </div>
-                        </div>
-
                         <div class="input-group collapse-section">
                             <div class="collapse-header" data-target="additionalSymptomsFields">
                                 <i class="fas fa-chevron-right collapse-icon" id="additionalSymptomsIcon"></i>
-                                <span><i class="fas fa-brain"></i> Additional symptoms</span>
+                                <span><i class="fas fa-brain"></i> Other symptoms & experiences</span>
                                 <label for="hadAdditionalSymptoms"></label><input type="checkbox"
                                                                                   id="hadAdditionalSymptoms"
                                                                                   style="display: none;">
@@ -167,17 +156,31 @@ Psychosis Tracker - HTML
                             <div id="additionalSymptomsFields" class="collapse-content" style="display: none;">
                                 <div class="input-group">
                                     <span class="input-label"><span><i
-                                            class="fas fa-brain"></i> additional symptoms</span></span>
-                                    <div class="coping-group" id="additionalSymptomsCheckboxes">
+                                            class="fas fa-brain"></i> select all that apply</span></span>
+                                    <div class="symptom-grid" id="additionalSymptomsCheckboxes">
                                         <label class="coping-item"><input type="checkbox" name="additionalSymptom"
                                                                           value="paranoia"> 🕵️ paranoia</label>
                                         <label class="coping-item"><input type="checkbox" name="additionalSymptom"
                                                                           value="delusions"> 🔮 delusions</label>
                                         <label class="coping-item"><input type="checkbox" name="additionalSymptom"
-                                                                          value="disorganized"> 🧩 disorganized
-                                            thinking</label>
+                                                                          value="disorganized"> 🧩 disorganized thinking</label>
+                                        <label class="coping-item"><input type="checkbox" name="additionalSymptom"
+                                                                          value="irritability"> 😠 irritability</label>
+                                        <label class="coping-item"><input type="checkbox" name="additionalSymptom"
+                                                                          value="racing_thoughts"> 🏃 racing
+                                            thoughts</label>
+                                        <label class="coping-item"><input type="checkbox" name="additionalSymptom"
+                                                                          value="anhedonia"> 😞 anhedonia (loss of
+                                            interest)</label>
                                         <label class="coping-item"><input type="checkbox" name="additionalSymptom"
                                                                           value="anxiety"> 😰 anxiety</label>
+                                        <label class="coping-item"><input type="checkbox" name="additionalSymptom"
+                                                                          value="social_withdrawal"> 🚶 social withdrawal</label>
+                                        <label class="coping-item"><input type="checkbox" name="additionalSymptom"
+                                                                          value="fatigue"> 😴 fatigue</label>
+                                        <label class="coping-item"><input type="checkbox" name="additionalSymptom"
+                                                                          value="poor_concentration"> 🎯 poor
+                                            concentration</label>
                                     </div>
                                 </div>
                             </div>
@@ -273,6 +276,17 @@ Psychosis Tracker - HTML
                                                placeholder="e.g. 7.5">
                                     </label>
                                 </div>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <span class="input-label"><span><i class="fas fa-face-smile"></i> mood episode</span></span>
+                            <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 0.3rem;">
+                                <label><input type="radio" name="moodEpisode" value="manic"> manic</label>
+                                <label><input type="radio" name="moodEpisode" value="hypomanic"> hypomanic</label>
+                                <label><input type="radio" name="moodEpisode" value="depressed"> depressed</label>
+                                <label><input type="radio" name="moodEpisode" value="mixed"> mixed</label>
+                                <label><input type="radio" name="moodEpisode" value="stable"> stable</label>
                             </div>
                         </div>
 

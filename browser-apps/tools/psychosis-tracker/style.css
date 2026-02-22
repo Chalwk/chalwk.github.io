@@ -20,6 +20,13 @@ Psychosis Tracker - Stylesheet
     font-size: 0.9rem;
 }
 
+.symptom-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
 .disclaimer i {
     font-size: 1.3rem;
     color: #2196F3;
