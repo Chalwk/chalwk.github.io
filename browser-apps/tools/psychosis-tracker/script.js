@@ -1,7 +1,7 @@
 /*
 Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
 
-Voice Tracker - JavaScript
+Psychosis Tracker - JavaScript
 */
 
 (function() {
@@ -12,6 +12,7 @@ Voice Tracker - JavaScript
     const intensityDisplay = document.getElementById('intensityDisplay');
     const voiceTextarea = document.getElementById('logVoice');
     const notesTextarea = document.getElementById('logNotes');
+    const moodRadios = document.querySelectorAll('input[name="mood"]');
     const copingCheckboxes = document.querySelectorAll('#copingCheckboxes input[type=checkbox]');
     const copingOtherCheckbox = document.getElementById('copingOther');
     const customCopingContainer = document.getElementById('customCopingContainer');
@@ -27,6 +28,17 @@ Voice Tracker - JavaScript
     const avgSpan = document.getElementById('avgIntensity');
     const weekSpan = document.getElementById('thisWeek');
     const toast = document.getElementById('toast');
+
+    const summaryBtn = document.getElementById('summaryBtn');
+    const summaryModal = document.getElementById('summaryModal');
+    const closeModal = document.querySelector('.close-modal');
+    const rangeRadios = document.querySelectorAll('input[name="summaryRange"]');
+    const customRangeDiv = document.getElementById('customRangeInputs');
+    const summaryStartDate = document.getElementById('summaryStartDate');
+    const summaryEndDate = document.getElementById('summaryEndDate');
+    const generateSummaryBtn = document.getElementById('generateSummaryBtn');
+    const summaryOutput = document.getElementById('summaryOutput');
+    const copySummaryBtn = document.getElementById('copySummaryBtn');
 
     const STORAGE_KEY = 'voice_entries';
     let editingId = null;
@@ -83,6 +95,8 @@ Voice Tracker - JavaScript
         intensitySlider.setAttribute('aria-valuenow', '5');
         voiceTextarea.value = '';
         notesTextarea.value = '';
+        // reset mood radios
+        moodRadios.forEach(r => r.checked = false);
         copingCheckboxes.forEach(cb => cb.checked = false);
         customCopingContainer.style.display = 'none';
         customCopingInput.value = '';
@@ -220,12 +234,16 @@ Voice Tracker - JavaScript
             selectedCoping.push(customCopingInput.value.trim());
         }
 
+        const checkedMood = document.querySelector('input[name="mood"]:checked');
+        const mood = checkedMood ? checkedMood.value : null;
+
         const entryData = {
             id: editingId || Date.now() + '-' + Math.random().toString(36).substr(2, 6),
             date: dateInput.value,
             time: timeInput.value || null,
             duration: durationInput.value ? parseInt(durationInput.value, 10) : null,
             intensity: parseInt(intensitySlider.value, 10),
+            mood: mood,                       // new field
             voice: voiceTextarea.value.trim() || null,
             coping: selectedCoping,
             notes: notesTextarea.value.trim() || null,
@@ -242,6 +260,7 @@ Voice Tracker - JavaScript
             showToast('Entry added');
         }
 
+        // reset form after add/update
         dateInput.value = getTodayDate();
         timeInput.value = '';
         durationInput.value = '';
@@ -250,6 +269,7 @@ Voice Tracker - JavaScript
         intensitySlider.setAttribute('aria-valuenow', '5');
         voiceTextarea.value = '';
         notesTextarea.value = '';
+        moodRadios.forEach(r => r.checked = false);
         copingCheckboxes.forEach(cb => cb.checked = false);
         customCopingContainer.style.display = 'none';
         customCopingInput.value = '';
@@ -396,6 +416,13 @@ Voice Tracker - JavaScript
         voiceTextarea.value = entry.voice || '';
         notesTextarea.value = entry.notes || '';
 
+        moodRadios.forEach(r => r.checked = false);
+        if (entry.mood === 'high') {
+            document.querySelector('input[name="mood"][value="high"]').checked = true;
+        } else if (entry.mood === 'low') {
+            document.querySelector('input[name="mood"][value="low"]').checked = true;
+        }
+
         copingCheckboxes.forEach(cb => cb.checked = false);
         customCopingContainer.style.display = 'none';
         customCopingInput.value = '';
@@ -420,6 +447,119 @@ Voice Tracker - JavaScript
         editingId = entry.id;
         updateAddButtonText();
     }
+
+    function setDefaultCustomDates() {
+        const today = new Date();
+        const sevenDaysAgo = new Date(today);
+        sevenDaysAgo.setDate(today.getDate() - 7);
+        summaryStartDate.value = sevenDaysAgo.toISOString().split('T')[0];
+        summaryEndDate.value = today.toISOString().split('T')[0];
+    }
+
+    summaryBtn.addEventListener('click', () => {
+        summaryModal.style.display = 'flex';
+        document.querySelector('input[name="summaryRange"][value="week"]').checked = true;
+        customRangeDiv.style.display = 'none';
+        summaryOutput.textContent = '';
+        copySummaryBtn.disabled = true;
+        setDefaultCustomDates();
+    });
+
+    closeModal.addEventListener('click', () => {
+        summaryModal.style.display = 'none';
+    });
+
+    window.addEventListener('click', (e) => {
+        if (e.target === summaryModal) {
+            summaryModal.style.display = 'none';
+        }
+    });
+
+    rangeRadios.forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            if (e.target.value === 'custom') {
+                customRangeDiv.style.display = 'block';
+                setDefaultCustomDates();
+            } else {
+                customRangeDiv.style.display = 'none';
+            }
+        });
+    });
+
+    generateSummaryBtn.addEventListener('click', () => {
+        const selectedRange = document.querySelector('input[name="summaryRange"]:checked').value;
+        let startDate, endDate;
+        const today = new Date();
+        today.setHours(0,0,0,0);
+
+        if (selectedRange === 'week') {
+            endDate = new Date(today);
+            endDate.setHours(23,59,59,999);
+            startDate = new Date(today);
+            startDate.setDate(today.getDate() - 6);
+            startDate.setHours(0,0,0,0);
+        } else if (selectedRange === 'month') {
+            endDate = new Date(today);
+            endDate.setHours(23,59,59,999);
+            startDate = new Date(today);
+            startDate.setDate(today.getDate() - 29);
+            startDate.setHours(0,0,0,0);
+        } else { // custom
+            if (!summaryStartDate.value || !summaryEndDate.value) {
+                alert('Please select both start and end dates.');
+                return;
+            }
+            startDate = new Date(summaryStartDate.value + 'T00:00:00');
+            endDate = new Date(summaryEndDate.value + 'T23:59:59.999');
+        }
+
+        const summaryText = buildSummary(startDate, endDate);
+        summaryOutput.textContent = summaryText;
+        copySummaryBtn.disabled = (summaryText === 'No entries in this period.');
+    });
+
+    function buildSummary(start, end) {
+        const entries = loadEntries();
+        const filtered = entries.filter(e => {
+            if (!e.date) return false;
+            const entryDate = new Date(e.date + 'T00:00:00');
+            return entryDate >= start && entryDate <= end;
+        }).sort((a,b) => a.date.localeCompare(b.date) || (a.time || '').localeCompare(b.time || ''));
+
+        if (filtered.length === 0) return 'No entries in this period.';
+
+        let summary = '';
+        let currentDate = '';
+        filtered.forEach(entry => {
+            const entryDateStr = entry.date;
+            if (entryDateStr !== currentDate) {
+                if (currentDate) summary += '\n';
+                const d = new Date(entryDateStr + 'T12:00:00');
+                summary += d.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) + ':\n';
+                currentDate = entryDateStr;
+            }
+            summary += `  - ${entry.time ? entry.time : 'time not recorded'}: `;
+            summary += `Intensity ${entry.intensity}/10`;
+            if (entry.duration) summary += `, duration ${entry.duration} min`;
+            if (entry.mood) summary += `, mood ${entry.mood}`;
+            summary += `\n    Voice: "${entry.voice ? entry.voice : 'no description'}"`;
+            if (entry.coping && entry.coping.length) summary += `\n    Coping: ${entry.coping.join(', ')}`;
+            if (entry.notes) summary += `\n    Notes: ${entry.notes}`;
+            summary += '\n';
+        });
+        return summary;
+    }
+
+    copySummaryBtn.addEventListener('click', () => {
+        const text = summaryOutput.textContent;
+        if (text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('Summary copied');
+            }).catch(() => {
+                alert('Could not copy text.');
+            });
+        }
+    });
 
     renderAll();
 })();
