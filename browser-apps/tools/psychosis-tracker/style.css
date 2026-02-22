@@ -231,6 +231,17 @@ Psychosis Tracker - Stylesheet
     flex-wrap: wrap;
 }
 
+.entry-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    font-size: 0.8rem;
+    color: #4b5563;
+    margin-top: 0.3rem;
+    border-top: 1px dashed var(--gray-light);
+    padding-top: 0.3rem;
+}
+
 .entry-note-preview, .entry-note-full {
     font-size: 0.8rem;
     margin-top: 0.3rem;

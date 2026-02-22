@@ -12,7 +12,19 @@ Psychosis Tracker - JavaScript
     const intensityDisplay = document.getElementById('intensityDisplay');
     const voiceTextarea = document.getElementById('logVoice');
     const notesTextarea = document.getElementById('logNotes');
-    const moodRadios = document.querySelectorAll('input[name="mood"]');
+
+    const hallucinationCheckboxes = document.querySelectorAll('#hallucinationTypeCheckboxes input[type=checkbox]');
+    const hallucinationOtherCheckbox = document.getElementById('hallucinationOther');
+    const customHallucinationContainer = document.getElementById('customHallucinationContainer');
+    const customHallucinationInput = document.getElementById('customHallucinationInput');
+    const moodEpisodeRadios = document.querySelectorAll('input[name="moodEpisode"]');
+    const additionalSymptomsCheckboxes = document.querySelectorAll('#additionalSymptomsCheckboxes input[type=checkbox]');
+    const triggerInput = document.getElementById('triggerInput');
+    const medicationRadios = document.querySelectorAll('input[name="medication"]');
+    const sleepHoursInput = document.getElementById('sleepHours');
+    const stressSlider = document.getElementById('stressLevel');
+    const stressDisplay = document.getElementById('stressDisplay');
+
     const copingCheckboxes = document.querySelectorAll('#copingCheckboxes input[type=checkbox]');
     const copingOtherCheckbox = document.getElementById('copingOther');
     const customCopingContainer = document.getElementById('customCopingContainer');
@@ -43,6 +55,15 @@ Psychosis Tracker - JavaScript
     const STORAGE_KEY = 'voice_entries';
     let editingId = null;
 
+    stressSlider.addEventListener('input', function() {
+        stressDisplay.textContent = this.value;
+    });
+
+    intensitySlider.addEventListener('input', function() {
+        intensityDisplay.textContent = this.value;
+        this.setAttribute('aria-valuenow', this.value);
+    });
+
     function getTodayDate() {
         const d = new Date();
         const year = d.getFullYear();
@@ -57,11 +78,6 @@ Psychosis Tracker - JavaScript
     }
 
     dateInput.value = getTodayDate();
-
-    intensitySlider.addEventListener('input', function() {
-        intensityDisplay.textContent = this.value;
-        this.setAttribute('aria-valuenow', this.value);
-    });
 
     document.getElementById('todayDateBtn').addEventListener('click', () => {
         dateInput.value = getTodayDate();
@@ -80,6 +96,16 @@ Psychosis Tracker - JavaScript
         }
     });
 
+    hallucinationOtherCheckbox.addEventListener('change', function(e) {
+        if (this.checked) {
+            customHallucinationContainer.style.display = 'block';
+            customHallucinationInput.focus();
+        } else {
+            customHallucinationContainer.style.display = 'none';
+            customHallucinationInput.value = '';
+        }
+    });
+
     clearFormBtn.addEventListener('click', function() {
         resetForm();
         editingId = null;
@@ -95,8 +121,18 @@ Psychosis Tracker - JavaScript
         intensitySlider.setAttribute('aria-valuenow', '5');
         voiceTextarea.value = '';
         notesTextarea.value = '';
-        // reset mood radios
-        moodRadios.forEach(r => r.checked = false);
+
+        hallucinationCheckboxes.forEach(cb => cb.checked = false);
+        customHallucinationContainer.style.display = 'none';
+        customHallucinationInput.value = '';
+        moodEpisodeRadios.forEach(r => r.checked = false);
+        additionalSymptomsCheckboxes.forEach(cb => cb.checked = false);
+        triggerInput.value = '';
+        medicationRadios.forEach(r => r.checked = false);
+        sleepHoursInput.value = '';
+        stressSlider.value = 5;
+        stressDisplay.textContent = '5';
+
         copingCheckboxes.forEach(cb => cb.checked = false);
         customCopingContainer.style.display = 'none';
         customCopingInput.value = '';
@@ -226,6 +262,45 @@ Psychosis Tracker - JavaScript
             }
         }
 
+        const hallucinationTypes = [];
+        hallucinationCheckboxes.forEach(cb => {
+            if (cb.checked && cb.value) hallucinationTypes.push(cb.value);
+        });
+        if (hallucinationOtherCheckbox.checked && customHallucinationInput.value.trim() !== '') {
+            hallucinationTypes.push(customHallucinationInput.value.trim());
+        }
+
+        let moodEpisode = null;
+        for (let r of moodEpisodeRadios) {
+            if (r.checked) {
+                moodEpisode = r.value;
+                break;
+            }
+        }
+
+        const additionalSymptoms = [];
+        additionalSymptomsCheckboxes.forEach(cb => {
+            if (cb.checked) additionalSymptoms.push(cb.value);
+        });
+
+        const trigger = triggerInput.value.trim() || null;
+
+        let medication = null;
+        for (let r of medicationRadios) {
+            if (r.checked) {
+                medication = r.value;
+                break;
+            }
+        }
+
+        let sleepHours = null;
+        if (sleepHoursInput.value) {
+            const val = parseFloat(sleepHoursInput.value);
+            if (!isNaN(val) && val >= 0 && val <= 24) sleepHours = val;
+            else alert('Please enter a valid number of hours (0-24).');
+        }
+
+        const stressLevel = parseInt(stressSlider.value, 10);
         const selectedCoping = [];
         copingCheckboxes.forEach(cb => {
             if (cb.checked && cb.value) selectedCoping.push(cb.value);
@@ -234,16 +309,19 @@ Psychosis Tracker - JavaScript
             selectedCoping.push(customCopingInput.value.trim());
         }
 
-        const checkedMood = document.querySelector('input[name="mood"]:checked');
-        const mood = checkedMood ? checkedMood.value : null;
-
         const entryData = {
             id: editingId || Date.now() + '-' + Math.random().toString(36).substr(2, 6),
             date: dateInput.value,
             time: timeInput.value || null,
             duration: durationInput.value ? parseInt(durationInput.value, 10) : null,
             intensity: parseInt(intensitySlider.value, 10),
-            mood: mood,                       // new field
+            hallucinationTypes: hallucinationTypes.length ? hallucinationTypes : null,
+            moodEpisode: moodEpisode,
+            additionalSymptoms: additionalSymptoms.length ? additionalSymptoms : null,
+            trigger: trigger,
+            medication: medication,
+            sleepHours: sleepHours,
+            stressLevel: stressLevel,
             voice: voiceTextarea.value.trim() || null,
             coping: selectedCoping,
             notes: notesTextarea.value.trim() || null,
@@ -260,23 +338,18 @@ Psychosis Tracker - JavaScript
             showToast('Entry added');
         }
 
-        // reset form after add/update
-        dateInput.value = getTodayDate();
-        timeInput.value = '';
-        durationInput.value = '';
-        intensitySlider.value = 5;
-        intensityDisplay.textContent = '5';
-        intensitySlider.setAttribute('aria-valuenow', '5');
-        voiceTextarea.value = '';
-        notesTextarea.value = '';
-        moodRadios.forEach(r => r.checked = false);
-        copingCheckboxes.forEach(cb => cb.checked = false);
-        customCopingContainer.style.display = 'none';
-        customCopingInput.value = '';
+        resetForm();
     }
 
     addBtn.addEventListener('click', handleAddEntry);
     clearAllBtn.addEventListener('click', clearAll);
+
+    function formatDateLocal(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
 
     function renderAll() {
         const entries = loadEntries();
@@ -318,6 +391,15 @@ Psychosis Tracker - JavaScript
             const intensity = entry.intensity || 5;
             const voiceSnippet = entry.voice ? `“${entry.voice.substring(0, 60)}${entry.voice.length > 60 ? '…' : ''}”` : '(no description)';
             const fullVoice = entry.voice || '';
+
+            const hallTypes = entry.hallucinationTypes ? entry.hallucinationTypes.join(', ') : '';
+            const moodEp = entry.moodEpisode ? ` · mood: ${entry.moodEpisode}` : '';
+            const symptoms = entry.additionalSymptoms ? ` · symptoms: ${entry.additionalSymptoms.join(', ')}` : '';
+            const trigger = entry.trigger ? ` · trigger: ${entry.trigger}` : '';
+            const med = entry.medication ? ` · meds: ${entry.medication}` : '';
+            const sleep = entry.sleepHours ? ` · sleep: ${entry.sleepHours}h` : '';
+            const stress = entry.stressLevel ? ` · stress: ${entry.stressLevel}/10` : '';
+
             const copingList = entry.coping && entry.coping.length ? entry.coping.join(', ') : 'none recorded';
             const notes = entry.notes ? `<div class="entry-note-preview"><i class="fas fa-pencil-alt"></i> ${entry.notes.substring(0, 50)}${entry.notes.length > 50 ? '…' : ''}</div>` : '';
             const fullNotes = entry.notes || '';
@@ -340,6 +422,10 @@ Psychosis Tracker - JavaScript
                     <div class="entry-meta">
                         <span><i class="fas fa-hands"></i> ${copingList}</span>
                         ${durationStr}
+                    </div>
+                    <div class="entry-details" style="font-size:0.8rem; color:#4b5563; margin-top:0.3rem;">
+                        ${hallTypes ? '<span><i class="fas fa-eye"></i> ' + hallTypes + '</span>' : ''}
+                        ${moodEp} ${symptoms} ${trigger} ${med} ${sleep} ${stress}
                     </div>
                     <div class="entry-notes" id="notes-${entry.id}">
                         ${notes}
@@ -416,17 +502,57 @@ Psychosis Tracker - JavaScript
         voiceTextarea.value = entry.voice || '';
         notesTextarea.value = entry.notes || '';
 
-        moodRadios.forEach(r => r.checked = false);
-        if (entry.mood === 'high') {
-            document.querySelector('input[name="mood"][value="high"]').checked = true;
-        } else if (entry.mood === 'low') {
-            document.querySelector('input[name="mood"][value="low"]').checked = true;
+        hallucinationCheckboxes.forEach(cb => cb.checked = false);
+        customHallucinationContainer.style.display = 'none';
+        customHallucinationInput.value = '';
+        if (entry.hallucinationTypes && entry.hallucinationTypes.length) {
+            entry.hallucinationTypes.forEach(type => {
+                let matched = false;
+                hallucinationCheckboxes.forEach(cb => {
+                    if (cb.value === type) {
+                        cb.checked = true;
+                        matched = true;
+                    }
+                });
+                if (!matched) {
+                    hallucinationOtherCheckbox.checked = true;
+                    customHallucinationContainer.style.display = 'block';
+                    customHallucinationInput.value = type;
+                }
+            });
         }
+
+        moodEpisodeRadios.forEach(r => r.checked = false);
+        if (entry.moodEpisode) {
+            const radio = document.querySelector(`input[name="moodEpisode"][value="${entry.moodEpisode}"]`);
+            if (radio) radio.checked = true;
+        }
+
+        additionalSymptomsCheckboxes.forEach(cb => cb.checked = false);
+        if (entry.additionalSymptoms && entry.additionalSymptoms.length) {
+            entry.additionalSymptoms.forEach(sym => {
+                additionalSymptomsCheckboxes.forEach(cb => {
+                    if (cb.value === sym) cb.checked = true;
+                });
+            });
+        }
+
+        triggerInput.value = entry.trigger || '';
+
+        medicationRadios.forEach(r => r.checked = false);
+        if (entry.medication) {
+            const radio = document.querySelector(`input[name="medication"][value="${entry.medication}"]`);
+            if (radio) radio.checked = true;
+        }
+
+        sleepHoursInput.value = entry.sleepHours !== null && entry.sleepHours !== undefined ? entry.sleepHours : '';
+
+        stressSlider.value = entry.stressLevel !== undefined ? entry.stressLevel : 5;
+        stressDisplay.textContent = stressSlider.value;
 
         copingCheckboxes.forEach(cb => cb.checked = false);
         customCopingContainer.style.display = 'none';
         customCopingInput.value = '';
-
         if (entry.coping && entry.coping.length) {
             entry.coping.forEach(strategy => {
                 let matched = false;
@@ -452,8 +578,8 @@ Psychosis Tracker - JavaScript
         const today = new Date();
         const sevenDaysAgo = new Date(today);
         sevenDaysAgo.setDate(today.getDate() - 7);
-        summaryStartDate.value = sevenDaysAgo.toISOString().split('T')[0];
-        summaryEndDate.value = today.toISOString().split('T')[0];
+        summaryStartDate.value = formatDateLocal(sevenDaysAgo);
+        summaryEndDate.value = formatDateLocal(today);
     }
 
     summaryBtn.addEventListener('click', () => {
@@ -519,11 +645,13 @@ Psychosis Tracker - JavaScript
     });
 
     function buildSummary(start, end) {
+        const startStr = formatDateLocal(start);
+        const endStr = formatDateLocal(end);
+
         const entries = loadEntries();
         const filtered = entries.filter(e => {
             if (!e.date) return false;
-            const entryDate = new Date(e.date + 'T00:00:00');
-            return entryDate >= start && entryDate <= end;
+            return e.date >= startStr && e.date <= endStr;
         }).sort((a,b) => a.date.localeCompare(b.date) || (a.time || '').localeCompare(b.time || ''));
 
         if (filtered.length === 0) return 'No entries in this period.';
@@ -541,7 +669,15 @@ Psychosis Tracker - JavaScript
             summary += `  - ${entry.time ? entry.time : 'time not recorded'}: `;
             summary += `Intensity ${entry.intensity}/10`;
             if (entry.duration) summary += `, duration ${entry.duration} min`;
-            if (entry.mood) summary += `, mood ${entry.mood}`;
+
+            if (entry.hallucinationTypes && entry.hallucinationTypes.length) summary += `, types: ${entry.hallucinationTypes.join(', ')}`;
+            if (entry.moodEpisode) summary += `, mood episode: ${entry.moodEpisode}`;
+            if (entry.additionalSymptoms && entry.additionalSymptoms.length) summary += `, symptoms: ${entry.additionalSymptoms.join(', ')}`;
+            if (entry.trigger) summary += `, trigger: ${entry.trigger}`;
+            if (entry.medication) summary += `, medication: ${entry.medication}`;
+            if (entry.sleepHours) summary += `, sleep: ${entry.sleepHours}h`;
+            if (entry.stressLevel) summary += `, stress: ${entry.stressLevel}/10`;
+
             summary += `\n    Voice: "${entry.voice ? entry.voice : 'no description'}"`;
             if (entry.coping && entry.coping.length) summary += `\n    Coping: ${entry.coping.join(', ')}`;
             if (entry.notes) summary += `\n    Notes: ${entry.notes}`;
