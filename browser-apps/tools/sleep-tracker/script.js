@@ -5,7 +5,6 @@ Sleep Tracker - JavaScript
 */
 
 (function() {
-    // DOM elements
     const dateInput = document.getElementById('logDate');
     const bedtimeInput = document.getElementById('bedtime');
     const wakeTimeInput = document.getElementById('wakeTime');
@@ -38,6 +37,25 @@ Sleep Tracker - JavaScript
     const nightmareCountSpan = document.getElementById('nightmareCount');
     const toast = document.getElementById('toast');
 
+    const summaryBtn = document.getElementById('summaryBtn');
+    const summaryModal = document.getElementById('summaryModal');
+    const closeModal = document.querySelector('.close-modal');
+    const rangeRadios = document.querySelectorAll('input[name="summaryRange"]');
+    const customRangeDiv = document.getElementById('customRangeInputs');
+    const summaryStartDate = document.getElementById('summaryStartDate');
+    const summaryEndDate = document.getElementById('summaryEndDate');
+    const generateSummaryBtn = document.getElementById('generateSummaryBtn');
+    const summaryOutput = document.getElementById('summaryOutput');
+    const copySummaryBtn = document.getElementById('copySummaryBtn');
+
+    const collapsibles = [
+        { checkbox: document.getElementById('hadDifficulty'), content: document.getElementById('difficultyFields'), icon: 'difficultyIcon' },
+        { checkbox: document.getElementById('hadWakeEvents'), content: document.getElementById('wakeEventsFields'), icon: 'wakeEventsIcon' },
+        { checkbox: document.getElementById('hadSymptoms'), content: document.getElementById('symptomsFields'), icon: 'symptomsIcon' },
+        { checkbox: document.getElementById('hadMorning'), content: document.getElementById('morningFields'), icon: 'morningIcon' },
+        { checkbox: document.getElementById('hadAdditional'), content: document.getElementById('additionalFields'), icon: 'additionalIcon' }
+    ];
+
     const STORAGE_KEY = 'sleep_entries';
     let editingId = null;
 
@@ -53,6 +71,40 @@ Sleep Tracker - JavaScript
         const d = new Date();
         return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
     }
+
+    function formatDateLocal(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+    function setupCollapsible(checkbox, content, iconId) {
+        const icon = document.getElementById(iconId);
+        const header = icon.closest('.collapse-header');
+
+        const toggle = () => {
+            checkbox.checked = !checkbox.checked;
+            checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+        };
+
+        header.addEventListener('click', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'LABEL' || e.target.closest('button')) return;
+            toggle();
+        });
+
+        checkbox.addEventListener('change', () => {
+            if (checkbox.checked) {
+                content.style.display = 'block';
+                icon.className = 'fas fa-chevron-down collapse-icon';
+            } else {
+                content.style.display = 'none';
+                icon.className = 'fas fa-chevron-right collapse-icon';
+            }
+        });
+    }
+
+    collapsibles.forEach(c => setupCollapsible(c.checkbox, c.content, c.icon));
 
     dateInput.value = getTodayDate();
 
@@ -107,7 +159,7 @@ Sleep Tracker - JavaScript
         rows.forEach(row => {
             const time = row.querySelector('.time-input').value;
             const ease = row.querySelector('.ease-select').value;
-            if (time) {  // only include if time is entered
+            if (time) {
                 events.push({ time, ease });
             }
         });
@@ -140,6 +192,13 @@ Sleep Tracker - JavaScript
         postRoutine.value = '';
         seasonalDepression.checked = false;
         notes.value = '';
+
+        collapsibles.forEach(c => {
+            if (c.checkbox.checked) {
+                c.checkbox.checked = false;
+                c.checkbox.dispatchEvent(new Event('change'));
+            }
+        });
     }
 
     function updateAddButtonText() {
@@ -299,6 +358,8 @@ Sleep Tracker - JavaScript
     clearAllBtn.addEventListener('click', clearAll);
 
     function populateFormForEdit(entry) {
+        resetForm();
+
         dateInput.value = entry.date || getTodayDate();
         bedtimeInput.value = entry.bedtime || '';
         wakeTimeInput.value = entry.wakeTime || '';
@@ -317,6 +378,27 @@ Sleep Tracker - JavaScript
         postRoutine.value = entry.postRoutine || '';
         seasonalDepression.checked = entry.seasonalDepression || false;
         notes.value = entry.notes || '';
+
+        if (entry.difficultyLevel || entry.difficultyReason) {
+            const cb = document.getElementById('hadDifficulty');
+            if (!cb.checked) cb.checked = true; cb.dispatchEvent(new Event('change'));
+        }
+        if (entry.awakenings && entry.awakenings.length) {
+            const cb = document.getElementById('hadWakeEvents');
+            if (!cb.checked) cb.checked = true; cb.dispatchEvent(new Event('change'));
+        }
+        if (entry.racingThoughts || entry.nightmares || entry.fearSleep || entry.restlessness) {
+            const cb = document.getElementById('hadSymptoms');
+            if (!cb.checked) cb.checked = true; cb.dispatchEvent(new Event('change'));
+        }
+        if (entry.mood || entry.preRoutine || entry.postRoutine) {
+            const cb = document.getElementById('hadMorning');
+            if (!cb.checked) cb.checked = true; cb.dispatchEvent(new Event('change'));
+        }
+        if (entry.seasonalDepression) {
+            const cb = document.getElementById('hadAdditional');
+            if (!cb.checked) cb.checked = true; cb.dispatchEvent(new Event('change'));
+        }
 
         editingId = entry.id;
         updateAddButtonText();
@@ -413,6 +495,126 @@ Sleep Tracker - JavaScript
             });
         });
     }
+
+    function setDefaultCustomDates() {
+        const today = new Date();
+        const sevenDaysAgo = new Date(today);
+        sevenDaysAgo.setDate(today.getDate() - 7);
+        summaryStartDate.value = formatDateLocal(sevenDaysAgo);
+        summaryEndDate.value = formatDateLocal(today);
+    }
+
+    summaryBtn.addEventListener('click', () => {
+        summaryModal.style.display = 'flex';
+        document.querySelector('input[name="summaryRange"][value="week"]').checked = true;
+        customRangeDiv.style.display = 'none';
+        summaryOutput.textContent = '';
+        copySummaryBtn.disabled = true;
+        setDefaultCustomDates();
+    });
+
+    closeModal.addEventListener('click', () => {
+        summaryModal.style.display = 'none';
+    });
+
+    window.addEventListener('click', (e) => {
+        if (e.target === summaryModal) {
+            summaryModal.style.display = 'none';
+        }
+    });
+
+    rangeRadios.forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            if (e.target.value === 'custom') {
+                customRangeDiv.style.display = 'block';
+                setDefaultCustomDates();
+            } else {
+                customRangeDiv.style.display = 'none';
+            }
+        });
+    });
+
+    generateSummaryBtn.addEventListener('click', () => {
+        const selectedRange = document.querySelector('input[name="summaryRange"]:checked').value;
+        let startDate, endDate;
+        const today = new Date();
+        today.setHours(0,0,0,0);
+
+        if (selectedRange === 'week') {
+            endDate = new Date(today);
+            endDate.setHours(23,59,59,999);
+            startDate = new Date(today);
+            startDate.setDate(today.getDate() - 6);
+            startDate.setHours(0,0,0,0);
+        } else if (selectedRange === 'month') {
+            endDate = new Date(today);
+            endDate.setHours(23,59,59,999);
+            startDate = new Date(today);
+            startDate.setDate(today.getDate() - 29);
+            startDate.setHours(0,0,0,0);
+        } else {
+            if (!summaryStartDate.value || !summaryEndDate.value) {
+                alert('Please select both start and end dates.');
+                return;
+            }
+            startDate = new Date(summaryStartDate.value + 'T00:00:00');
+            endDate = new Date(summaryEndDate.value + 'T23:59:59.999');
+        }
+
+        const summaryText = buildSleepSummary(startDate, endDate);
+        summaryOutput.textContent = summaryText;
+        copySummaryBtn.disabled = (summaryText === 'No entries in this period.');
+    });
+
+    function buildSleepSummary(start, end) {
+        const startStr = formatDateLocal(start);
+        const endStr = formatDateLocal(end);
+
+        const entries = loadEntries();
+        const filtered = entries.filter(e => {
+            if (!e.date) return false;
+            return e.date >= startStr && e.date <= endStr;
+        }).sort((a,b) => a.date.localeCompare(b.date) || (a.bedtime || '').localeCompare(b.bedtime || ''));
+
+        if (filtered.length === 0) return 'No entries in this period.';
+
+        let summary = '';
+        let currentDate = '';
+        filtered.forEach(entry => {
+            const entryDateStr = entry.date;
+            if (entryDateStr !== currentDate) {
+                if (currentDate) summary += '\n';
+                const d = new Date(entryDateStr + 'T12:00:00');
+                summary += d.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) + ':\n';
+                currentDate = entryDateStr;
+            }
+            summary += `  - Bedtime: ${entry.bedtime || '--:--'}, Wake: ${entry.wakeTime || '--:--'}, Difficulty: ${entry.difficultyLevel}/10`;
+            if (entry.difficultyReason) summary += ` (${entry.difficultyReason})`;
+            summary += `, Awakenings: ${entry.awakenings ? entry.awakenings.length : 0}`;
+            if (entry.nightmares) summary += `, Nightmare${entry.traumaNightmare ? ' (trauma)' : ''}`;
+            if (entry.fearSleep) summary += `, Fear to sleep`;
+            if (entry.racingThoughts) summary += `, Racing thoughts`;
+            if (entry.restlessness) summary += `, Restlessness`;
+            if (entry.mood) summary += `, Mood: ${entry.mood}`;
+            if (entry.seasonalDepression) summary += `, Seasonal pattern`;
+            summary += `\n    Pre-routine: "${entry.preRoutine || 'none'}"`;
+            summary += `\n    Post-routine: "${entry.postRoutine || 'none'}"`;
+            if (entry.notes) summary += `\n    Notes: ${entry.notes}`;
+            summary += '\n';
+        });
+        return summary;
+    }
+
+    copySummaryBtn.addEventListener('click', () => {
+        const text = summaryOutput.textContent;
+        if (text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('Summary copied');
+            }).catch(() => {
+                alert('Could not copy text.');
+            });
+        }
+    });
 
     renderAll();
 })();
