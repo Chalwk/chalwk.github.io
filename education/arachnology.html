@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Spider Care Diary · Arachnology</title>
+    <title>Arachnology</title>
     <link href="../core.css" rel="stylesheet">
     <script src="../nav-menu.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
@@ -79,14 +79,14 @@
 
         .species-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1.2rem;
             margin-top: 1.5rem;
         }
         .species-card {
             background: var(--light);
             border-radius: var(--radius);
-            padding: 1.5rem;
+            padding: 1rem;
             border-left: 4px solid var(--primary);
             transition: var(--transition);
         }
@@ -96,9 +96,9 @@
         }
         .species-name {
             font-weight: 600;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: var(--darker);
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.3rem;
         }
         .endemic-tag {
             background: var(--primary);
@@ -111,9 +111,66 @@
             vertical-align: middle;
         }
         .species-details p {
-            margin: 0.3rem 0;
+            margin: 0.2rem 0;
             color: var(--gray);
-            font-size: 0.95rem;
+            font-size: 0.85rem;
+        }
+
+        .favourites-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .favourite-card {
+            background: var(--light);
+            border-radius: var(--radius-lg);
+            padding: 1.8rem;
+            border: 1px solid var(--gray-light);
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+        .favourite-card:hover {
+            box-shadow: var(--shadow);
+        }
+        .favourite-card h3 {
+            color: var(--darker);
+            margin-top: 0;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 0.5rem;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .favourite-card h4 {
+            color: var(--dark);
+            margin: 1.2rem 0 0.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        .favourite-card p {
+            margin: 0.5rem 0;
+            line-height: 1.6;
+        }
+        .favourite-card ul {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+        }
+        .favourite-card li {
+            margin-bottom: 0.25rem;
+        }
+        .endemic-badge {
+            background: var(--primary);
+            color: white;
+            font-size: 0.8rem;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            display: inline-block;
+            margin-left: 0.5rem;
+            vertical-align: middle;
         }
 
         .task-list {
@@ -221,7 +278,7 @@
                 <h2><i class="fas fa-spider"></i> My arachnid journey</h2>
                 <p>I'm an arachno‑hobbyist and I keep and breed spiders in bioactive enclosures made from
                     repurposed Tupperware. They contain live plants and microfauna such as springtails, isopods and
-                    mealworms, which help maintain a naturalistic, self‑sustaining environment.
+                    mealworms, which help maintain a naturalistic, self‑sustaining environment.</p>
                 <p>I've loved spiders (and insects) for as long as I can remember, but I've been
                     keeping them as pets for about 6 years.</p>
                 <p>At present, I care for spiders across a wide range of species: sheet web spiders, wolf spiders,
@@ -331,11 +388,11 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="myth-label">
-                            If you squish a white-tailed spider, it releases a scent that attracts more.
+                        <td class="myth-label">If you squish a white-tailed spider, it releases a scent that attracts
+                            more.
                         </td>
-                        <td class="fact-label">
-                            There is <strong>no scientific evidence</strong> that crushing a white-tailed spider
+                        <td class="fact-label">There is <strong>no scientific evidence</strong> that crushing a
+                            white-tailed spider
                             (genus <em>Lampona</em>) releases an alarm pheromone that attracts others.
                             White-tails are solitary, wandering hunters that do not live in colonies and do not
                             coordinate through alarm signalling like ants or bees.
@@ -346,11 +403,11 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="myth-label">
-                            Collect daddy longlegs and release them in your house to control white-tails.
+                        <td class="myth-label">Collect daddy longlegs and release them in your house to control
+                            white-tails.
                         </td>
-                        <td class="fact-label">
-                            This advice oversimplifies predator ecology. The "daddy longlegs" people usually mean are
+                        <td class="fact-label">This advice oversimplifies predator ecology. The "daddy longlegs" people
+                            usually mean are
                             cellar spiders (<em>Pholcus phalangioides</em>). They can eat other spiders, but white-tails
                             also prey on spiders, including web builders.
                             <br><br>
@@ -460,6 +517,7 @@
             </div>
         </div>
 
+        <!-- JOURNAL TAB (personal notes remain, but presented as observations) -->
         <div class="tab-content" id="journal">
             <div class="content-card">
                 <h2><i class="fas fa-notebook"></i> Personal notes & observations</h2>
@@ -481,8 +539,7 @@
                 <ul class="task-list">
                     <li><strong>Prey variety trial:</strong> Introducing local woodlice (<em>Porcellio scaber</em>) -
                         Rocky ignored, Shrimp (M) hunted aggressively. <em>Note: gut‑load crickets with carrot 24h
-                            before
-                            feeding.</em></li>
+                            before feeding.</em></li>
                     <li><strong>Feeding frequency:</strong> Juveniles 3x/week, adults 1x/week + biweekly calcium
                         dusting. Reduced obesity in Vague (F).
                     </li>
@@ -515,8 +572,7 @@
                         </ul>
                     </li>
                     <li><strong>Gravid female care:</strong> Double protein pre‑laying (extra mealworms), honey‑water
-                        soaked cotton
-                        post‑laying.
+                        soaked cotton post‑laying.
                     </li>
                 </ul>
 
@@ -606,67 +662,89 @@
             </div>
         </div>
 
-        <div class="tab-content" id="tunnelweb-research">
+        <div class="tab-content" id="favourites">
             <div class="content-card">
-                <h2><i class="fas fa-map-marked-alt"></i> NZ Black Tunnel Web Spider: Habitat</h2>
-                <p>The Black Tunnel Web Spider (<em>Porrhothele antipodiana</em>) is one of New Zealand's most iconic
-                    and studied endemic spiders. Here's a summary of where they can be found and how to observe them in
-                    the wild.</p>
+                <h2><i class="fas fa-heart"></i> My favourite spiders</h2>
+                <p>Details of my favourite species, combined with personal observations and scientific summaries.</p>
 
-                <div class="research-highlight">
-                    <h3>Distribution Map</h3>
-                    <p><strong>North Island:</strong> Widespread, but notably absent from the Northland region. Commonly
-                        found south of Hawke's Bay.</p>
-                    <p><strong>South Island:</strong> Broadly distributed throughout lowland regions, except for the
-                        alpine zones and Fiordland. Well documented in Canterbury and Otago, including Dunedin, Banks
-                        Peninsula, and the surrounding lowlands.</p>
-                    <p><strong>Other Locations:</strong> Also found on the Chatham Islands, likely due to recent
-                        human-mediated introduction.</p>
+                <div class="favourites-grid">
+                    <div class="favourite-card">
+                        <h3>Uliodon albopunctatus <span class="endemic-badge">Endemic</span></h3>
+                        <p><strong>Common name:</strong> Vagrant prowling spider <strong>Family:</strong> Zoropsidae
+                            (false wolf spiders)</p>
+
+                        <h4>Description</h4>
+                        <p>Medium to large spider, body length up to 20 mm. Cephalothorax reddish‑brown, abdomen greyish
+                            with distinctive white or cream spots arranged in rows. Legs robust and spiny, adapted for
+                            active hunting.</p>
+
+                        <h4>Habitat & distribution</h4>
+                        <p>Endemic to New Zealand, widespread in both North and South Islands (more common in the
+                            North). Found in native forests, under logs, stones, and leaf litter; also in gardens and
+                            scrublands. Prefers moist but not waterlogged environments.</p>
+
+                        <h4>Behaviour & diet</h4>
+                        <p>Nocturnal hunter that does not build a capture web, instead actively prowls at night. During
+                            the day it hides in a silken retreat under debris. Diet consists of insects and other
+                            arthropods. Fast and agile when pursuing prey.</p>
+
+                        <h4>Reproduction</h4>
+                        <p>Females produce an egg sac and guard it until spiderlings hatch. Young disperse and lead
+                            solitary lives.</p>
+
+                        <h4>Venom & human interaction</h4>
+                        <p>Not considered dangerous to humans. A bite may cause mild local pain and swelling, but no
+                            systemic effects are known. They are generally shy and will flee unless provoked.</p>
+
+                        <h4>Personal note</h4>
+                        <p>My favourite spider, I keep several and have observed their intriguing shift from flighty to
+                            calm after brief handling. Eva, a special individual, inspired a tattoo and much of my
+                            research interest.</p>
+                    </div>
+
+                    <div class="favourite-card">
+                        <h3>Porrhothele antipodiana <span class="endemic-badge">Endemic</span></h3>
+                        <p><strong>Common name:</strong> Black tunnel web spider <strong>Family:</strong>
+                            Porrhothelidae (mygalomorphs)</p>
+
+                        <h4>Description</h4>
+                        <p>One of New Zealand's heaviest spiders, females can be quite large with robust bodies and
+                            downward‑pointing fangs (orthognathous). Colour ranges from dark brown to black, with a
+                            glossy carapace.</p>
+
+                        <h4>Habitat & distribution</h4>
+                        <p><strong>North Island:</strong> Widespread, but notably absent from Northland; common south of
+                            Hawke's Bay. <strong>South Island:</strong> Broadly distributed in lowland regions (except
+                            alpine zones and Fiordland); well documented in Canterbury, Otago, Banks Peninsula. Also
+                            present on Chatham Islands (likely human‑mediated).</p>
+                        <p>Prefers native bush, forests, gardens, and urban structures. Constructs permanent silk‑lined
+                            tunnel webs under old logs, rocks, leaf litter, and inside tree trunks. Adaptable to rock
+                            piles, retaining walls, and suburban debris.</p>
+
+                        <h4>Behaviour & diet</h4>
+                        <p>Nocturnal - emerges from its tunnel to hunt. Preys on insects, snails, and other arthropods,
+                            acting as a natural pest controller. Not aggressive toward humans; will rear up in threat if
+                            provoked but bites are rare and not medically significant.</p>
+
+                        <h4>Interesting facts</h4>
+                        <ul>
+                            <li><strong>Long‑lived:</strong> Can live over 10 years in captivity.</li>
+                            <li><strong>Shelob's inspiration:</strong> The design of Shelob in Peter Jackson's <em>The
+                                Lord of the Rings: The Return of the King</em> was inspired by this species.
+                            </li>
+                            <li><strong>Gardener's ally:</strong> Helps control garden snails and insects.</li>
+                        </ul>
+
+                        <h4>Observation tips</h4>
+                        <p>Look for silk‑lined tunnel openings (2–3 cm wide) under logs or along garden edges. Use a
+                            torch at dusk to spot them emerging. In Christchurch, try the Botanic Gardens woodland, Port
+                            Hills reserves, or suburban gardens with log piles.</p>
+
+                        <h4>Personal note</h4>
+                        <p>My second favourite spider. I admire their prehistoric build and the silken tunnels they
+                            construct. The connection to Tolkien's Shelob adds a touch of legend.</p>
+                    </div>
                 </div>
-
-                <h3>Preferred Habitats</h3>
-                <ul class="task-list">
-                    <li><strong>Native Bush & Forests:</strong> Naturally found under old logs, rocks, leaf litter, and
-                        inside tree trunks where they construct permanent silk-lined tunnel-shaped webs.
-                    </li>
-                    <li><strong>Gardens & Urban Structures:</strong> These spiders are adaptable and may occupy urban or
-                        suburban areas if suitable shelter is present. Look for rock piles, logs, garden debris,
-                        retaining wall crevices, or small patches of native bush. In Christchurch, likely spots include
-                        woodland areas in the Botanic Gardens, Port Hills reserves, and other suburban bush fragments.
-                    </li>
-                    <li><strong>Sand Dunes:</strong> Occasionally recorded in coastal sand dune ecosystems where
-                        sheltered microhabitats exist.
-                    </li>
-                </ul>
-
-                <h3>Observation Tips</h3>
-                <ul class="task-list">
-                    <li><strong>Look for silk-lined tunnels:</strong> The best way to identify a tunnel-web spider is by
-                        spotting its silk-lined burrow opening, usually 2–3 cm wide, partially hidden under debris or
-                        along garden edges.
-                    </li>
-                    <li><strong>Nocturnal activity:</strong> Primarily active at night. Using a torch around dusk or
-                        later may reveal spiders emerging from their tunnels.
-                    </li>
-                    <li><strong>Minimal disturbance:</strong> Observe without lifting logs or rocks if possible to avoid
-                        stressing the spider.
-                    </li>
-                    <li><strong>Local Christchurch hotspots:</strong> Woodland sections of the Botanic Gardens, Port
-                        Hills, and suburban gardens with logs or rock piles are promising areas to look.
-                    </li>
-                </ul>
-
-                <h3>Interesting Facts</h3>
-                <ul class="task-list">
-                    <li><strong>Heavyweight:</strong> Females are among New Zealand's heaviest spiders.</li>
-                    <li><strong>Long-lived:</strong> Some individuals can live over 10 years in captivity.</li>
-                    <li><strong>Shelob's Inspiration:</strong> Inspired the design of Shelob in Peter Jackson's <em>The
-                        Lord of the Rings: The Return of the King</em>.
-                    </li>
-                    <li><strong>Gardener's Ally:</strong> Preys on garden snails and insects, helping control local
-                        invertebrate populations.
-                    </li>
-                </ul>
             </div>
         </div>
     </div>
