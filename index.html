@@ -53,6 +53,7 @@
             position: relative;
             overflow: hidden;
         }
+
         .hero::before {
             content: '';
             position: absolute;
@@ -64,6 +65,7 @@
             repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 2px, transparent 2px, transparent 8px);
             pointer-events: none;
         }
+
         .hero h1 {
             font-size: 3.5rem;
             text-shadow: 2px 2px 6px rgba(0,0,0,0.25);
@@ -71,6 +73,7 @@
             position: relative;
             margin-bottom: 1rem;
         }
+
         .hero h1::after {
             content: '';
             position: absolute;
@@ -81,6 +84,7 @@
             background: linear-gradient(90deg, #ff0000, #ff8800, #ffff00, #00ff00, #0088ff, #8800ff);
             border-radius: 2px;
         }
+
         .hero-subtitle {
             font-size: 1.1rem;
             margin-bottom: 2rem;
@@ -90,13 +94,21 @@
 
         .floating-icons i {
             position: absolute;
-            color: rgba(255,255,255,0.2);
+            color: rgba(255, 255, 255, 0.2);
             font-size: 2rem;
             animation: float 6s ease-in-out infinite;
         }
+
+        .floating-icons i:nth-child(1) { top: 10%; left: 15%; }
+        .floating-icons i:nth-child(2) { top: 25%; left: 75%; }
+        .floating-icons i:nth-child(3) { top: 50%; left: 20%; }
+        .floating-icons i:nth-child(4) { top: 60%; left: 60%; }
+        .floating-icons i:nth-child(5) { top: 35%; left: 45%; }
+        .floating-icons i:nth-child(6) { top: 15%; left: 50%; }
+
         @keyframes float {
-            0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(5deg); }
+            0%   { transform: translateY(0px) rotate(0deg); }
+            50%  { transform: translateY(-20px) rotate(5deg); }
             100% { transform: translateY(0px) rotate(0deg); }
         }
 
@@ -113,10 +125,12 @@
             box-shadow: var(--shadow-sm);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
+
         .about-panel:hover {
             transform: translateY(-3px);
             box-shadow: var(--shadow-lg);
         }
+
         .about-text p {
             margin-bottom: 1.5rem;
             line-height: 1.75;
@@ -125,11 +139,13 @@
             text-align: justify;
             text-align-last: left;
         }
+
         .about-text a {
             color: var(--secondary);
             text-decoration: underline;
             transition: color 0.2s;
         }
+
         .about-text a:hover { color: var(--primary); }
 
         .about-image img {
@@ -141,6 +157,7 @@
             box-shadow: var(--shadow);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
+
         .about-image img:hover {
             transform: scale(1.05);
             box-shadow: var(--shadow-lg);
@@ -154,6 +171,7 @@
             margin-bottom: 0;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
+
         .about-card:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow-lg);
@@ -163,6 +181,7 @@
             display: flex;
             gap: 2rem;
         }
+
         .about-column {
             flex: 1;
         }
@@ -174,6 +193,7 @@
             font-weight: 600;
             color: var(--dark);
         }
+
         .column-heading::after {
             content: '';
             position: absolute;
@@ -190,6 +210,7 @@
             flex-direction: column;
             gap: 1.5rem;
         }
+
         .focus-item {
             display: flex;
             align-items: flex-start;
@@ -200,15 +221,18 @@
             border-left: 5px solid var(--secondary);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
+
         .focus-item:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow-sm);
         }
+
         .focus-item i {
             color: var(--secondary);
             font-size: 1.4rem;
             margin-top: 0.2rem;
         }
+
         .focus-item strong { color: var(--primary); }
         .focus-item a { color: var(--secondary); text-decoration: underline; }
         .focus-item a:hover { color: var(--primary); }
@@ -222,6 +246,7 @@
             font-weight: 500;
             transition: background 0.2s, transform 0.2s;
         }
+
         .btn i { margin-right: 0.5rem; }
         .btn:hover { background: var(--secondary); transform: translateY(-1px); }
 
@@ -230,6 +255,7 @@
             .about-image img { width: 200px; height: auto; }
             .about-columns { flex-direction: column; gap: 1.5rem; }
         }
+
         @media (max-width: 480px) {
             .hero h1 { font-size: 2rem; }
             .hero-subtitle { font-size: 1rem; padding: 0 1rem; }
