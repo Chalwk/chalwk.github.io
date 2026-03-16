@@ -476,7 +476,7 @@ Sleep Tracker - JavaScript
                     <button class="edit-entry" aria-label="Edit entry" title="edit entry"><i class="fas fa-pencil-alt"></i></button>
                     <div class="entry-header">
                         <span class="entry-date"><i class="far fa-calendar-alt"></i> ${formattedDate}</span>
-                        <span class="entry-badge">${bedtime} – ${wakeTime}</span>
+                        <span class="entry-badge">${bedtime} - ${wakeTime}</span>
                     </div>
                     <div class="entry-details">
                         <p><i class="fas fa-exclamation-triangle"></i> Difficulty: ${entry.difficultyLevel}/10</p>

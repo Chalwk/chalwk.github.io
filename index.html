@@ -22,6 +22,15 @@ Main Page
             --primary: #8b5cf6;
             --secondary: #ec4899;
             --accent: #fbbf24;
+            --shadow: 0 10px 30px rgba(0,0,0,0.1);
+            --shadow-sm: 0 2px 5px rgba(0,0,0,0.05);
+            --shadow-lg: 0 20px 40px rgba(0,0,0,0.15);
+            --radius-lg: 1rem;
+            --radius: 0.5rem;
+            --dark: #1a1a2e;
+            --gray: #6c757d;
+            --gray-light: #e9ecef;
+            --transition: 0.3s;
         }
 
         .section-title {
@@ -29,7 +38,6 @@ Main Page
             margin-bottom: 1rem;
             position: relative;
         }
-
         .section-title::after {
             content: '';
             position: absolute;
@@ -50,7 +58,6 @@ Main Page
             position: relative;
             overflow: hidden;
         }
-
         .hero::before {
             content: '';
             position: absolute;
@@ -64,12 +71,10 @@ Main Page
             repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 2px, transparent 2px, transparent 8px);
             pointer-events: none;
         }
-
         .hero-content {
             position: relative;
             z-index: 2;
         }
-
         .hero h1 {
             font-size: 3.5rem;
             color: white;
@@ -78,7 +83,6 @@ Main Page
             display: inline-block;
             position: relative;
         }
-
         .hero h1::after {
             content: '';
             position: absolute;
@@ -89,7 +93,6 @@ Main Page
             background: linear-gradient(90deg, #ff0000, #ff8800, #ffff00, #00ff00, #0088ff, #8800ff);
             border-radius: 2px;
         }
-
         .hero-subtitle {
             font-size: 1.25rem;
             margin-bottom: 2rem;
@@ -106,47 +109,66 @@ Main Page
             pointer-events: none;
             z-index: 1;
         }
-
         .floating-icons i {
             position: absolute;
             color: rgba(255,255,255,0.2);
             font-size: 2rem;
             animation: float 6s ease-in-out infinite;
         }
-
         .floating-icons i:nth-child(1) { top: 15%; left: 10%; animation-delay: 0s; }
         .floating-icons i:nth-child(2) { top: 70%; left: 85%; animation-delay: 1s; }
         .floating-icons i:nth-child(3) { top: 40%; left: 20%; animation-delay: 2s; }
         .floating-icons i:nth-child(4) { top: 80%; left: 15%; animation-delay: 0.5s; }
         .floating-icons i:nth-child(5) { top: 20%; left: 80%; animation-delay: 1.5s; }
         .floating-icons i:nth-child(6) { top: 60%; left: 40%; animation-delay: 2.5s; }
-
         @keyframes float {
             0% { transform: translateY(0px) rotate(0deg); }
             50% { transform: translateY(-20px) rotate(5deg); }
             100% { transform: translateY(0px) rotate(0deg); }
         }
 
-        .intro {
+        .about-panel {
+            display: flex;
+            gap: 2rem;
+            align-items: flex-start;
+            margin-bottom: 2rem;
             background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
             border-radius: var(--radius-lg);
             padding: 2rem;
-            margin-bottom: 2rem;
             border-left: 4px solid transparent;
             border-image: linear-gradient(180deg, var(--primary), var(--secondary), var(--accent)) 1;
             box-shadow: var(--shadow-sm);
         }
-
-        .intro p {
+        .about-text {
+            flex: 1;
+        }
+        .about-text p {
             margin-bottom: 1.5rem;
             line-height: 1.7;
             color: var(--dark);
             font-size: 1.1rem;
         }
-
-        .intro strong {
+        .about-text strong {
             color: var(--primary);
             font-weight: 600;
+        }
+        .about-text a {
+            color: var(--secondary);
+            text-decoration: underline;
+        }
+        .about-text a:hover {
+            color: var(--primary);
+        }
+        .about-image {
+            flex: 0 0 auto;
+        }
+        .about-image img {
+            width: 200px;
+            height: auto;
+            border-radius: 0;
+            object-fit: cover;
+            border: 0;
+            box-shadow: none;
         }
 
         .about-card {
@@ -154,32 +176,7 @@ Main Page
             border-radius: var(--radius-lg);
             padding: 2rem;
             box-shadow: var(--shadow);
-            margin-bottom: 2rem;
-        }
-
-        .section-divider {
-            display: flex;
-            align-items: center;
-            text-align: center;
-            margin: 1rem 0;
-            color: var(--gray);
-        }
-
-        .section-divider::before,
-        .section-divider::after {
-            content: '';
-            flex: 1;
-            border-bottom: 2px solid var(--gray-light);
-        }
-
-        .section-divider span {
-            padding: 0 1rem;
-            font-weight: 600;
-            font-size: 1.2rem;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            margin-bottom: 0;
         }
 
         .current-focus {
@@ -187,7 +184,6 @@ Main Page
             flex-direction: column;
             gap: 1.5rem;
         }
-
         .focus-item {
             display: flex;
             align-items: flex-start;
@@ -198,42 +194,93 @@ Main Page
             border-left: 4px solid var(--secondary);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-
         .focus-item:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow);
         }
-
         .focus-item i {
             color: var(--secondary);
             font-size: 1.2rem;
             margin-top: 0.2rem;
         }
-
         .focus-item strong {
             color: var(--primary);
         }
-
         .focus-item a {
             color: var(--secondary);
             text-decoration: underline;
         }
-
         .focus-item a:hover {
             color: var(--primary);
+        }
+
+        .tools-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2.5rem;
+            margin-top: 0;
+        }
+        .tool-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+            color: var(--dark);
+            transition: transform 0.2s;
+        }
+        .tool-item i {
+            font-size: 2.8rem;
+            color: var(--primary);
+            transition: transform 0.3s ease, color 0.2s;
+        }
+        .tool-item:hover i {
+            transform: translateY(-6px);
+            color: var(--secondary);
+        }
+        .tool-item span {
+            font-weight: 500;
+            background: rgba(139, 92, 246, 0.1);
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            font-size: 0.85rem;
+        }
+
+        .about-columns {
+            display: flex;
+            gap: 2rem;
+        }
+        .about-column {
+            flex: 1;
+        }
+        .column-heading {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            color: var(--dark);
+            font-weight: 600;
+        }
+        .column-heading::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 2px;
         }
 
         #projects {
             padding-top: 1rem;
             padding-bottom: 5rem;
         }
-
         .projects-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: 2rem;
         }
-
         .project-card {
             background: white;
             border-radius: var(--radius-lg);
@@ -243,13 +290,13 @@ Main Page
             display: flex;
             flex-direction: column;
             height: 100%;
+            opacity: 0;
+            transform: translateY(10px);
         }
-
         .project-card:hover {
             transform: translateY(-5px);
             box-shadow: var(--shadow-lg);
         }
-
         .project-icon {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
@@ -257,21 +304,18 @@ Main Page
             text-align: center;
             font-size: 2rem;
         }
-
         .project-content {
             padding: 1.5rem;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
         }
-
         .project-tags {
             display: flex;
             flex-wrap: wrap;
             gap: 0.5rem;
             margin-bottom: 1rem;
         }
-
         .project-tag {
             background: var(--gray-light);
             color: var(--dark);
@@ -280,34 +324,30 @@ Main Page
             font-size: 0.875rem;
             font-weight: 500;
         }
-
         .project-title {
             margin-bottom: 1rem;
         }
-
         .project-description {
             margin-bottom: 1rem;
             flex-grow: 1;
         }
-
         .project-highlights {
             list-style: none;
             margin-bottom: 1.5rem;
+            padding-left: 0;
         }
-
         .project-highlights li {
-            padding: 0.25rem 0;
             position: relative;
             padding-left: 1.5rem;
+            padding-top: 0.25rem;
+            padding-bottom: 0.25rem;
         }
-
         .project-highlights li::before {
             content: '▸';
             position: absolute;
             left: 0;
             color: var(--primary);
         }
-
         .project-actions {
             display: flex;
             gap: 0.75rem;
@@ -319,17 +359,14 @@ Main Page
             justify-content: center;
             margin-bottom: 2rem;
         }
-
         .more-projects-button {
             grid-column: 1 / -1;
             display: flex;
             justify-content: center;
         }
-
         #projects-wrapper {
             display: none;
         }
-
         #projects-wrapper.show {
             display: block;
         }
@@ -338,21 +375,34 @@ Main Page
             .hero {
                 padding: 8rem 0 3rem;
             }
-
             .hero h1 {
                 font-size: 2.5rem;
             }
-
             .projects-grid {
                 grid-template-columns: 1fr;
             }
-
             .focus-item {
                 padding: 0.8rem;
             }
-
             .floating-icons i {
                 font-size: 1.5rem;
+            }
+            .tools-grid {
+                gap: 1.5rem;
+            }
+            .tool-item i {
+                font-size: 2.2rem;
+            }
+            .about-panel {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            .about-image img {
+                width: 150px;
+            }
+            .about-columns {
+                flex-direction: column;
             }
         }
 
@@ -360,17 +410,17 @@ Main Page
             .hero h1 {
                 font-size: 2rem;
             }
-
             .project-actions {
                 flex-direction: column;
             }
-
             .about-card {
                 padding: 1.5rem;
             }
-
             .floating-icons i {
                 font-size: 1.2rem;
+            }
+            .tool-item i {
+                font-size: 2rem;
             }
         }
     </style>
@@ -400,64 +450,77 @@ Main Page
 
 <section class="section" id="about">
     <div class="container">
-        <h2 class="section-title">About Me</h2>
-
-        <div class="intro">
-            <p>Hey! I'm Jericho, an <strong>independent developer</strong>. I build tools, mods, bots, and utilities.
-                Sometimes I live-code projects from scratch on <a href="https://www.twitch.tv/chalwk" target="_blank">Twitch</a>
-                – break things, fix things, document it. I love tackling weird programming shenanigans, and I'm also a
-                gamer, spending most of my time in <strong>Microsoft Flight Simulator</strong>, with the occasional
-                detour into Halo, Minecraft, and survival-horror games.
-            </p>
-
-            <p>My goal is simple: create fun, useful, or just plain interesting stuff for people to enjoy or learn
-                from.</p>
-
-            <p><em>"There's nothing quite like being able to say at the end of the day, I made this. This is my world."
-                – me</em></p>
+        <div class="about-panel">
+            <div class="about-text">
+                <p>Hey! I'm Jericho, an <strong>independent developer</strong>. I build tools, mods, bots, and
+                    utilities. Sometimes I live-code projects from scratch on <a href="https://www.twitch.tv/chalwk"
+                                                                                 target="_blank">Twitch</a> - break
+                    things, fix things, document it. I love tackling weird programming shenanigans, and I'm also a
+                    gamer, spending most of my time in <strong>Microsoft Flight Simulator</strong>, with the occasional
+                    detour into Halo, Minecraft, and survival-horror games.
+                </p>
+                <p>My goal is simple: create fun, useful, or just plain interesting stuff for people to enjoy or learn
+                    from.</p>
+                <p><em>"There's nothing quite like being able to say at the end of the day, I made this. This is my
+                    world." - me</em></p>
+            </div>
+            <div class="about-image">
+                <img src="images/avatar.jpg" alt="Jericho Crosby" class="profile-img">
+            </div>
         </div>
 
         <div class="about-card">
-            <div class="section-divider">
-                <span>What I'm up to</span>
-            </div>
-
-            <div class="current-focus">
-                <div class="focus-item">
-                    <i class="fas fa-gamepad"></i>
-                    <div>
-                        <strong>Building games</strong> with <strong>LÖVE</strong>, <strong>Solar2D</strong> and
-                        <strong>LibGDX</strong>
+            <div class="about-columns">
+                <div class="about-column">
+                    <h3 class="column-heading">What I'm up to</h3>
+                    <div class="current-focus">
+                        <div class="focus-item">
+                            <i class="fas fa-gamepad"></i>
+                            <div>
+                                <strong>Building games</strong> with <strong>LÖVE</strong>, <strong>Solar2D</strong> and
+                                <strong>LibGDX</strong>
+                            </div>
+                        </div>
+                        <div class="focus-item">
+                            <i class="fas fa-cogs"></i>
+                            <div>
+                                <strong>Modding worlds</strong> in <em>Minecraft</em>, <em>Halo</em>, <em>Roblox</em>,
+                                and <em>Garry's Mod</em>
+                            </div>
+                        </div>
+                        <div class="focus-item">
+                            <i class="fas fa-tools"></i>
+                            <div>
+                                <strong>Building community tools</strong> like Discord bots, PWAs, and mobile apps
+                            </div>
+                        </div>
+                        <div class="focus-item">
+                            <i class="fas fa-helicopter"></i>
+                            <div>
+                                <strong>Running <a href="https://chalwk.github.io/CPAS/" target="_blank">Coastal Peaks
+                                    Air Service (CPAS)</a></strong>
+                                - a Virtual Charter (VC) and specialty flight operator for Microsoft Flight Simulator.
+                                We operate general aviation aircraft and helicopters for tours, charters, and HEMS
+                                missions,
+                                flying realistic routes across New Zealand's South Island. Our flights cover Canterbury,
+                                Christchurch, Banks Peninsula, and the dramatic landscapes of the West Coast and
+                                Southern Alps,
+                                offering an experience distinct from traditional virtual airlines.
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-                <div class="focus-item">
-                    <i class="fas fa-cogs"></i>
-                    <div>
-                        <strong>Modding worlds</strong> in <em>Minecraft</em>, <em>Halo</em>, <em>Roblox</em>, and <em>Garry's
-                        Mod</em>
+                <div class="about-column" id="tools">
+                    <h3 class="column-heading">Tools I Use</h3>
+                    <div class="tools-grid">
+                        <div class="tool-item"><i class="fas fa-code"></i><span>IntelliJ IDEA</span></div>
+                        <div class="tool-item"><i class="fas fa-laptop-code"></i><span>VS Code</span></div>
+                        <div class="tool-item"><i class="fab fa-git-alt"></i><span>Git</span></div>
+                        <div class="tool-item"><i class="fab fa-docker"></i><span>Docker</span></div>
+                        <div class="tool-item"><i class="fab fa-github"></i><span>GitHub</span></div>
+                        <div class="tool-item"><i class="fas fa-terminal"></i><span>Bash</span></div>
                     </div>
                 </div>
-
-                <div class="focus-item">
-                    <i class="fas fa-tools"></i>
-                    <div>
-                        <strong>Building community tools</strong> like Discord bots, PWAs, and mobile apps
-                    </div>
-                </div>
-
-                <div class="focus-item">
-                    <i class="fas fa-helicopter"></i>
-                    <div>
-                        <strong>Running <a href="https://chalwk.github.io/CPAS/" target="_blank">Coastal Peaks Air
-                            Service (CPAS)</a></strong> – a Virtual Charter (VC) and specialty flight operator for
-                        Microsoft Flight Simulator. We operate general aviation aircraft and helicopters for tours,
-                        charters, and HEMS missions, flying realistic routes across New Zealand's South Island. Our
-                        flights cover Canterbury, Christchurch, Banks Peninsula, and the dramatic landscapes of the West
-                        Coast and Southern Alps, offering an experience distinct from traditional virtual airlines.
-                    </div>
-                </div>
-
             </div>
         </div>
     </div>
@@ -471,7 +534,6 @@ Main Page
         </div>
         <div id="projects-wrapper">
             <div class="projects-grid">
-
                 <div class="project-card featured-project">
                     <div class="project-icon">
                         <i class="fas fa-helicopter"></i>
@@ -483,21 +545,17 @@ Main Page
                             <span class="project-tag">Virtual Charter</span>
                             <span class="project-tag">New Zealand</span>
                         </div>
-
                         <h3 class="project-title">Coastal Peaks Air Service (CPAS)</h3>
-
                         <p class="project-description">
                             A realism-focused <strong>Virtual Charter and specialty flight operator</strong> for
                             <strong>Microsoft Flight Simulator</strong>, flying immersive GA and helicopter missions
                             across New Zealand's South Island.
                         </p>
-
                         <ul class="project-highlights">
                             <li>Charter, scenic, and HEMS-style missions</li>
                             <li>Real-world routes across Canterbury, the West Coast, and the Southern Alps</li>
                             <li>Custom tooling, documentation, and operational structure</li>
                         </ul>
-
                         <div class="project-actions">
                             <a class="btn btn-primary" href="https://chalwk.github.io/CPAS/" target="_blank">
                                 Visit CPAS Website
@@ -505,7 +563,6 @@ Main Page
                         </div>
                     </div>
                 </div>
-
                 <div class="project-card">
                     <div class="project-icon">
                         <i class="fas fa-server"></i>
@@ -532,7 +589,6 @@ Main Page
                         </div>
                     </div>
                 </div>
-
                 <div class="project-card">
                     <div class="project-icon">
                         <i class="fab fa-discord"></i>
@@ -557,7 +613,6 @@ Main Page
                         </div>
                     </div>
                 </div>
-
                 <div class="more-projects-button" style="margin-top: 30px;">
                     <a class="btn" href="https://github.com/Chalwk?tab=repositories" target="_blank">
                         <i class="fab fa-github"></i> See More Projects on GitHub
@@ -588,12 +643,7 @@ Main Page
         if (toggleBtn && projectsWrapper) {
             toggleBtn.addEventListener("click", () => {
                 projectsWrapper.classList.toggle("show");
-
-                if (projectsWrapper.classList.contains("show")) {
-                    toggleBtn.textContent = "Hide Projects";
-                } else {
-                    toggleBtn.textContent = "Show Projects";
-                }
+                toggleBtn.textContent = projectsWrapper.classList.contains("show") ? "Hide Projects" : "Show Projects";
             });
         }
 
