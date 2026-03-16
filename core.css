@@ -5,10 +5,10 @@ core.css (script shared between pages)
 */
 
 :root {
-    --primary: #8b5cf6;
-    --primary-dark: #7c3aed;
-    --secondary: #ec4899;
-    --accent: #fbbf24;
+    --primary: #1e88e5;
+    --primary-dark: #1565c0;
+    --secondary: #42a5f5;
+    --accent: #0d47a1;
     --dark: #1e293b;
     --darker: #0f172a;
     --light: #f8fafc;
@@ -52,11 +52,10 @@ body {
     color: var(--dark);
     background-color: var(--light);
     overflow-x: hidden;
-    /* Subtle rainbow-ish radial gradient background */
     background-image:
-    radial-gradient(circle at 10% 20%, rgba(139, 92, 246, 0.03) 0%, transparent 30%),
-    radial-gradient(circle at 90% 70%, rgba(236, 72, 153, 0.03) 0%, transparent 30%),
-    radial-gradient(circle at 30% 80%, rgba(251, 191, 36, 0.03) 0%, transparent 30%),
+    radial-gradient(circle at 10% 20%, rgba(30, 136, 229, 0.03) 0%, transparent 30%),
+    radial-gradient(circle at 90% 70%, rgba(66, 165, 245, 0.03) 0%, transparent 30%),
+    radial-gradient(circle at 30% 80%, rgba(13, 71, 161, 0.03) 0%, transparent 30%),
     repeating-linear-gradient(45deg, rgba(0,0,0,0.01) 0px, rgba(0,0,0,0.01) 2px, transparent 2px, transparent 8px);
 }
 
@@ -338,7 +337,7 @@ a:hover {
 
 .dropdown-menu a:hover,
 .dropdown-menu a:focus {
-    background: linear-gradient(90deg, rgba(139, 92, 246, 0.1), transparent);
+    background: linear-gradient(90deg, rgba(30, 136, 229, 0.1), transparent);
     color: var(--primary);
     padding-left: 2rem;
 }
@@ -369,7 +368,7 @@ a:hover {
 
 .submenu-toggle:hover,
 .submenu-toggle:focus {
-    background: linear-gradient(90deg, rgba(139, 92, 246, 0.1), transparent);
+    background: linear-gradient(90deg, rgba(30, 136, 229, 0.1), transparent);
     color: var(--primary);
     outline: none;
 }
@@ -504,7 +503,7 @@ a:hover {
 .nav-mobile-links > li > a:focus,
 .nav-mobile-links > li > .dropdown-toggle:hover,
 .nav-mobile-links > li > .dropdown-toggle:focus {
-    background: rgba(139, 92, 246, 0.1);
+    background: rgba(30, 136, 229, 0.1);
     color: var(--primary);
     transform: translateX(5px);
     border-color: var(--primary);
@@ -558,7 +557,7 @@ a:hover {
 .nav-mobile .dropdown-menu a:focus,
 .nav-mobile .dropdown-menu .submenu-toggle:hover,
 .nav-mobile .dropdown-menu .submenu-toggle:focus {
-    background: rgba(139, 92, 246, 0.1);
+    background: rgba(30, 136, 229, 0.1);
     color: var(--primary);
     transform: none;
 }
