@@ -5,10 +5,10 @@ core.css (script shared between pages)
 */
 
 :root {
-    --primary: #8b5cf6;        /* vibrant purple */
+    --primary: #8b5cf6;
     --primary-dark: #7c3aed;
-    --secondary: #ec4899;       /* pink */
-    --accent: #fbbf24;          /* amber */
+    --secondary: #ec4899;
+    --accent: #fbbf24;
     --dark: #1e293b;
     --darker: #0f172a;
     --light: #f8fafc;
