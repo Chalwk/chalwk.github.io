@@ -341,8 +341,25 @@ document.addEventListener('DOMContentLoaded', function() {
         this.blur();
     });
 
+    if (!document.querySelector('footer')) {
+        const footer = document.createElement('footer');
+        footer.innerHTML = `
+            <div class="footer-container">
+                <div class="social-icons">
+                    <a aria-label="Discord" href="https://discord.com/channels/@me/707058110396760094" target="_blank"><i class="fab fa-discord"></i></a>
+                    <a aria-label="GitHub" href="https://github.com/Chalwk" target="_blank"> <i class="fab fa-github"></i></a>
+                    <a aria-label="Email" href="mailto:chalwk.dev@gmail.com"><i class="fas fa-envelope"></i></a>
+                </div>
+                <p class="footer-copyright"></p>
+            </div>
+        `;
+        document.body.appendChild(footer);
+    }
+
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Tab' && document.body.classList.contains('menu-open')) {
+            const navMobile = document.querySelector('.nav-mobile');
+            if (!navMobile) return;
             const focusableElements = navMobile.querySelectorAll('a, button, [tabindex]:not([tabindex="-1"])');
             const firstElement = focusableElements[0];
             const lastElement = focusableElements[focusableElements.length - 1];

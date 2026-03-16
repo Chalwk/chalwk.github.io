@@ -202,29 +202,6 @@ Understanding Autism Page
             transform: translateY(-3px);
         }
 
-        .back-to-top {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            background: var(--primary);
-            color: white;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
-            z-index: 99;
-        }
-
-        .back-to-top:hover {
-            background: var(--accent);
-            transform: translateY(-3px);
-        }
-
         .nz-flag {
             display: inline-block;
             width: 20px;
@@ -768,20 +745,6 @@ Understanding Autism Page
     </div>
 </main>
 
-<footer>
-    <div class="footer-container">
-        <div class="social-icons">
-            <a aria-label="Discord" href="https://discord.com/channels/@me/707058110396760094" target="_blank"><i
-                    class="fab fa-discord"></i></a>
-            <a aria-label="GitHub" href="https://github.com/Chalwk" target="_blank"> <i class="fab fa-github"></i></a>
-            <a aria-label="Email" href="mailto:chalwk.dev@gmail.com"><i class="fas fa-envelope"></i></a>
-        </div>
-        <p class="footer-copyright"></p>
-    </div>
-</footer>
-
-<div class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></div>
-
 <script>
     document.querySelectorAll('.page-nav-link').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
@@ -797,23 +760,6 @@ Understanding Autism Page
                     behavior: 'smooth'
                 });
             }
-        });
-    });
-
-    const backToTopBtn = document.getElementById('backToTop');
-
-    window.addEventListener('scroll', () => {
-        if (window.pageYOffset > 300) {
-            backToTopBtn.style.display = 'flex';
-        } else {
-            backToTopBtn.style.display = 'none';
-        }
-    });
-
-    backToTopBtn.addEventListener('click', () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
         });
     });
 
