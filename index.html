@@ -227,40 +227,6 @@ Main Page
             line-height: 1.4;
             color: var(--dark);
         }
-
-        .tools-grid {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 2.5rem;
-            margin-top: 0;
-        }
-        .tool-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.95rem;
-            color: var(--dark);
-            transition: transform 0.2s;
-        }
-        .tool-item i {
-            font-size: 2.8rem;
-            color: var(--primary);
-            transition: transform 0.3s ease, color 0.2s;
-        }
-        .tool-item:hover i {
-            transform: translateY(-6px);
-            color: var(--secondary);
-        }
-        .tool-item span {
-            font-weight: 500;
-            background: rgba(139, 92, 246, 0.1);
-            padding: 0.2rem 0.8rem;
-            border-radius: 30px;
-            font-size: 0.85rem;
-        }
-
         .about-columns {
             display: flex;
             gap: 2rem;
@@ -299,12 +265,6 @@ Main Page
             .floating-icons i {
                 font-size: 1.5rem;
             }
-            .tools-grid {
-                gap: 1.5rem;
-            }
-            .tool-item i {
-                font-size: 2.2rem;
-            }
             .about-panel {
                 flex-direction: column;
                 align-items: center;
@@ -331,16 +291,6 @@ Main Page
             }
             .floating-icons i {
                 font-size: 1.2rem;
-            }
-            .tool-item i {
-                font-size: 2rem;
-            }
-            .tool-item span {
-                font-size: 0.75rem;
-                padding: 0.2rem 0.5rem;
-            }
-            .tools-grid {
-                gap: 1rem;
             }
             .focus-item {
                 padding: 0.7rem;
@@ -379,15 +329,6 @@ Main Page
             .column-heading {
                 font-size: 1.3rem;
             }
-            .tool-item i {
-                font-size: 1.8rem;
-            }
-            .tool-item span {
-                font-size: 0.7rem;
-            }
-            .tools-grid {
-                gap: 0.75rem;
-            }
             .floating-icons i {
                 font-size: 1rem;
             }
@@ -401,13 +342,6 @@ Main Page
         .social-icons a,
         .btn,
         .focus-item a,
-        .tool-item {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 44px;
-            min-width: 44px;
-        }
         .social-icons a {
             text-decoration: none;
             color: inherit;
@@ -427,7 +361,10 @@ Main Page
         .btn:hover {
             background: var(--secondary);
         }
-
+        .btn-left {
+            margin-top: 1.5rem;
+            display: inline-block;
+        }
         body {
             overflow-x: hidden;
             width: 100%;
@@ -443,9 +380,6 @@ Main Page
         img {
             max-width: 100%;
             height: auto;
-        }
-        .tools-grid {
-            justify-content: center;
         }
         .social-icons {
             display: flex;
@@ -550,23 +484,8 @@ Main Page
                     </div>
                 </div>
                 <div class="about-column" id="tools">
-                    <h3 class="column-heading">Core Tools & Projects</h3>
-
-                    <div style="margin-bottom: 2rem;">
-                        <h4 style="font-size: 1.2rem; margin-bottom: 1rem; color: var(--primary);">🔧 Primary Tools</h4>
-                        <div class="tools-grid" style="justify-content: flex-start; gap: 1.5rem;">
-                            <div class="tool-item"><i class="fas fa-code"></i><span>IntelliJ</span></div>
-                            <div class="tool-item"><i class="fab fa-java"></i><span>Java</span></div>
-                            <div class="tool-item"><i class="fas fa-moon"></i><span>Lua</span></div>
-                            <div class="tool-item"><i class="fab fa-js"></i><span>JavaScript</span></div>
-                            <div class="tool-item"><i class="fab fa-html5"></i><span>HTML/CSS</span></div>
-                            <div class="tool-item"><i class="fab fa-git-alt"></i><span>Git</span></div>
-                        </div>
-                    </div>
-
+                    <h3 class="column-heading">Featured Projects</h3>
                     <div>
-                        <h4 style="font-size: 1.2rem; margin-bottom: 1rem; color: var(--secondary);">✨ Featured
-                            Projects</h4>
                         <div class="current-focus" style="gap: 1rem;">
                             <div class="focus-item" style="padding: 0.8rem;">
                                 <i class="fas fa-helicopter"></i>
@@ -593,7 +512,7 @@ Main Page
                                 </div>
                             </div>
                         </div>
-                        <div style="text-align: center; margin-top: 1.5rem;">
+                        <div class="btn-left">
                             <a class="btn" href="https://github.com/Chalwk?tab=repositories" target="_blank">
                                 <i class="fab fa-github"></i> See More Projects on GitHub
                             </a>
