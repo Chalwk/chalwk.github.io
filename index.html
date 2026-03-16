@@ -138,6 +138,8 @@
             font-size: 1.1rem;
             text-align: justify;
             text-align-last: left;
+            word-wrap: break-word;
+            hyphens: auto;
         }
 
         .about-text a {
@@ -250,18 +252,26 @@
         .btn i { margin-right: 0.5rem; }
         .btn:hover { background: var(--secondary); transform: translateY(-1px); }
 
-        @media (max-width: 768px) {
+        @media (max-width: 1024px) {
             .about-panel { flex-direction: column; text-align: center; }
+            .about-image img { width: 300px; height: auto; }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .hero-subtitle { font-size: 1rem; padding: 0 1rem; }
+            .about-card { padding: 2rem; }
+            .focus-item { padding: 0.7rem; gap: 0.8rem; }
+            .focus-item i { font-size: 1.2rem; }
+            .about-text p { text-align: left; text-align-last: auto; }
             .about-image img { width: 200px; height: auto; }
             .about-columns { flex-direction: column; gap: 1.5rem; }
         }
 
         @media (max-width: 480px) {
             .hero h1 { font-size: 2rem; }
-            .hero-subtitle { font-size: 1rem; padding: 0 1rem; }
-            .about-card { padding: 2rem; }
-            .focus-item { padding: 0.7rem; gap: 0.8rem; }
-            .focus-item i { font-size: 1.2rem; }
+            .hero-subtitle { font-size: 0.95rem; }
+            .about-card { padding: 1.5rem; }
         }
     </style>
 </head>
