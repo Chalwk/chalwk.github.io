@@ -1,3 +1,9 @@
+/*
+Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
+
+nav-menu.js
+*/
+
 document.addEventListener('DOMContentLoaded', function() {
     const header = document.querySelector('header.header');
     const pathSegments = window.location.pathname.split('/');
@@ -38,6 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     </li>
                 </ul>
             </li>
+            <li><a class="donate-btn" href="https://www.paypal.com/ncp/payment/XUPTKDU6LKM3G" target="_blank" rel="noopener"><i class="fas fa-heart"></i> Support Me</a></li>
         </ul>
     </nav>
 
@@ -72,11 +79,38 @@ document.addEventListener('DOMContentLoaded', function() {
                     </li>
                 </ul>
             </li>
+            <li><a class="donate-btn" href="https://www.paypal.com/ncp/payment/XUPTKDU6LKM3G" target="_blank" rel="noopener"><i class="fas fa-heart"></i> Support Me</a></li>
         </ul>
     </nav>
 </div>`;
 
         header.innerHTML = headerHTML;
+
+        const donateStyle = document.createElement('style');
+        donateStyle.textContent = `
+            .nav-links .donate-btn, .nav-mobile-links .donate-btn {
+                background: var(--primary);
+                color: white !important;
+                padding: 0.5rem 1rem !important;
+                border-radius: var(--radius);
+                transition: var(--transition);
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+            .nav-links .donate-btn:hover, .nav-mobile-links .donate-btn:hover {
+                background: var(--primary-dark);
+                transform: translateY(-2px);
+                box-shadow: var(--shadow);
+            }
+            .nav-links .donate-btn i, .nav-mobile-links .donate-btn i {
+                color: inherit;
+            }
+            .nav-links .donate-btn::after {
+                display: none;
+            }
+        `;
+        document.head.appendChild(donateStyle);
 
         const desktopDropdowns = header.querySelectorAll('.nav-desktop .dropdown');
         desktopDropdowns.forEach(dropdown => {
