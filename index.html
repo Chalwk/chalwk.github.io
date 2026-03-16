@@ -19,19 +19,10 @@ Main Page
 
     <style>
         :root {
-            --primary: #4e9af1;
-            --secondary: #f16c4e;
-            --accent: #f1c94e;
-            --dark: #1a1a1a;
-            --darker: #111111;
-            --gray: #6c757d;
-            --gray-light: #dee2e6;
-            --radius: 0.5rem;
-            --radius-lg: 1rem;
-            --shadow: 0 2px 6px rgba(0,0,0,0.15);
-            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
-            --shadow-lg: 0 8px 20px rgba(0,0,0,0.2);
-            --transition: all 0.3s ease;
+        /* These variables now live in core.css, but we keep the page-specific overrides minimal */
+            --primary: #8b5cf6;
+            --secondary: #ec4899;
+            --accent: #fbbf24;
         }
 
         .section-title {
@@ -52,15 +43,17 @@ Main Page
             border-radius: 2px;
         }
 
+        /* ===== HERO SECTION – full of colour and personality ===== */
         .hero {
             padding: 10rem 0 5rem;
-            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+            background: linear-gradient(135deg, #8b5cf6, #ec4899, #fbbf24);
             color: white;
             text-align: center;
             position: relative;
             overflow: hidden;
         }
 
+        /* Overlay pattern for texture */
         .hero::before {
             content: '';
             position: absolute;
@@ -68,25 +61,172 @@ Main Page
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" opacity="0.05"><polygon fill="white" points="0,1000 1000,0 1000,1000"/></svg>');
-            background-size: cover;
+            background-image:
+            radial-gradient(circle at 20% 30%, rgba(255,255,255,0.15) 0%, transparent 20%),
+            radial-gradient(circle at 80% 70%, rgba(255,255,255,0.15) 0%, transparent 20%),
+            repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 2px, transparent 2px, transparent 8px);
+            pointer-events: none;
         }
 
         .hero-content {
             position: relative;
-            z-index: 1;
+            z-index: 2;
         }
 
         .hero h1 {
             font-size: 3.5rem;
             color: white;
             margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            display: inline-block;
+            position: relative;
+        }
+
+        /* Rainbow underline for the name */
+        .hero h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 10%;
+            width: 80%;
+            height: 4px;
+            background: linear-gradient(90deg, #ff0000, #ff8800, #ffff00, #00ff00, #0088ff, #8800ff);
+            border-radius: 2px;
         }
 
         .hero-subtitle {
             font-size: 1.25rem;
             margin-bottom: 2rem;
-            color: var(--gray-light);
+            color: rgba(255,255,255,0.9);
+            font-weight: 400;
+        }
+
+        /* Floating icons – pure fun */
+        .floating-icons {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .floating-icons i {
+            position: absolute;
+            color: rgba(255,255,255,0.2);
+            font-size: 2rem;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-icons i:nth-child(1) { top: 15%; left: 10%; animation-delay: 0s; }
+        .floating-icons i:nth-child(2) { top: 70%; left: 85%; animation-delay: 1s; }
+        .floating-icons i:nth-child(3) { top: 40%; left: 20%; animation-delay: 2s; }
+        .floating-icons i:nth-child(4) { top: 80%; left: 15%; animation-delay: 0.5s; }
+        .floating-icons i:nth-child(5) { top: 20%; left: 80%; animation-delay: 1.5s; }
+        .floating-icons i:nth-child(6) { top: 60%; left: 40%; animation-delay: 2.5s; }
+
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        /* ===== Intro box with gradient border ===== */
+        .intro {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-left: 4px solid transparent;
+            border-image: linear-gradient(180deg, var(--primary), var(--secondary), var(--accent)) 1;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .intro p {
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+            color: var(--dark);
+            font-size: 1.1rem;
+        }
+
+        .intro strong {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .about-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .section-divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 1rem 0;
+            color: var(--gray);
+        }
+
+        .section-divider::before,
+        .section-divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 2px solid var(--gray-light);
+        }
+
+        .section-divider span {
+            padding: 0 1rem;
+            font-weight: 600;
+            font-size: 1.2rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .current-focus {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .focus-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: var(--radius);
+            border-left: 4px solid var(--secondary);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .focus-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .focus-item i {
+            color: var(--secondary);
+            font-size: 1.2rem;
+            margin-top: 0.2rem;
+        }
+
+        .focus-item strong {
+            color: var(--primary);
+        }
+
+        .focus-item a {
+            color: var(--secondary);
+            text-decoration: underline;
+        }
+
+        .focus-item a:hover {
+            color: var(--primary);
         }
 
         #projects {
@@ -200,98 +340,6 @@ Main Page
             display: block;
         }
 
-        .intro {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border-radius: var(--radius-lg);
-            padding: 2rem;
-            margin-bottom: 2rem;
-            border-left: 4px solid var(--primary);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .intro p {
-            margin-bottom: 1.5rem;
-            line-height: 1.7;
-            color: var(--dark);
-            font-size: 1.1rem;
-        }
-
-        .intro strong {
-            color: var(--primary);
-            font-weight: 600;
-        }
-
-        .about-card {
-            background: white;
-            border-radius: var(--radius-lg);
-            padding: 2rem;
-            box-shadow: var(--shadow);
-            margin-bottom: 2rem;
-        }
-
-        .section-divider {
-            display: flex;
-            align-items: center;
-            text-align: center;
-            margin: 1rem 0;
-            color: var(--gray);
-        }
-
-        .section-divider::before,
-        .section-divider::after {
-            content: '';
-            flex: 1;
-            border-bottom: 2px solid var(--gray-light);
-        }
-
-        .section-divider span {
-            padding: 0 1rem;
-            font-weight: 600;
-            font-size: 1.2rem;
-            color: var(--secondary);
-        }
-
-        .current-focus {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .focus-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 1rem;
-            padding: 1rem;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border-radius: var(--radius);
-            border-left: 4px solid var(--secondary);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .focus-item:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow);
-        }
-
-        .focus-item i {
-            color: var(--secondary);
-            font-size: 1.2rem;
-            margin-top: 0.2rem;
-        }
-
-        .focus-item strong {
-            color: var(--primary);
-        }
-
-        .focus-item a {
-            color: var(--secondary);
-            text-decoration: underline;
-        }
-
-        .focus-item a:hover {
-            color: var(--primary);
-        }
-
         @media (max-width: 768px) {
             .hero {
                 padding: 8rem 0 3rem;
@@ -308,6 +356,10 @@ Main Page
             .focus-item {
                 padding: 0.8rem;
             }
+
+            .floating-icons i {
+                font-size: 1.5rem;
+            }
         }
 
         @media (max-width: 480px) {
@@ -322,6 +374,10 @@ Main Page
             .about-card {
                 padding: 1.5rem;
             }
+
+            .floating-icons i {
+                font-size: 1.2rem;
+            }
         }
     </style>
 </head>
@@ -334,9 +390,18 @@ Main Page
         <div class="hero-content">
             <div class="hero-text">
                 <h1>Jericho Crosby <span class="highlight">(Chalwk)</span></h1>
-                <p class="hero-subtitle">Autistic Developer · Gamer · Advocate</p>
+                <p class="hero-subtitle">♾️ Autistic Developer · Gamer · Advocate ♾️</p>
             </div>
         </div>
+    </div>
+    <!-- Floating decorative icons -->
+    <div class="floating-icons">
+        <i class="fas fa-brain"></i>
+        <i class="fas fa-helicopter"></i>
+        <i class="fas fa-gamepad"></i>
+        <i class="fas fa-code"></i>
+        <i class="fas fa-puzzle-piece"></i>
+        <i class="fas fa-infinity"></i>
     </div>
 </section>
 
@@ -347,7 +412,7 @@ Main Page
         <div class="intro">
             <p>Hey! I'm Jericho, an <strong>independent developer</strong>. I build tools, mods, bots, and utilities.
                 Sometimes I live-code projects from scratch on <a href="https://www.twitch.tv/chalwk" target="_blank">Twitch</a>
-                - break things, fix things, document it. I love tackling weird programming shenanigans, and I'm also a
+                – break things, fix things, document it. I love tackling weird programming shenanigans, and I'm also a
                 gamer, spending most of my time in <strong>Microsoft Flight Simulator</strong>, with the occasional
                 detour into Halo, Minecraft, and survival-horror games.
             </p>
@@ -356,7 +421,7 @@ Main Page
                 from.</p>
 
             <p><em>"There's nothing quite like being able to say at the end of the day, I made this. This is my world."
-                - me</em></p>
+                – me</em></p>
         </div>
 
         <div class="about-card">
@@ -392,7 +457,7 @@ Main Page
                     <i class="fas fa-helicopter"></i>
                     <div>
                         <strong>Running <a href="https://chalwk.github.io/CPAS/" target="_blank">Coastal Peaks Air
-                            Service (CPAS)</a></strong> - a Virtual Charter (VC) and specialty flight operator for
+                            Service (CPAS)</a></strong> – a Virtual Charter (VC) and specialty flight operator for
                         Microsoft Flight Simulator. We operate general aviation aircraft and helicopters for tours,
                         charters, and HEMS missions, flying realistic routes across New Zealand's South Island. Our
                         flights cover Canterbury, Christchurch, Banks Peninsula, and the dramatic landscapes of the West
