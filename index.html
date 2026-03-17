@@ -1,10 +1,10 @@
+<!DOCTYPE html>
 <!--
 Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
 
 main page
 -->
 
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -29,7 +29,11 @@ main page
             --dark: #1a1a2e;
             --gray: #6c757d;
             --gray-light: #f5f5f5;
+            --light: #f8f9fa;
+            --border: #dee2e6;
             --transition: 0.3s;
+            --text-light: #6c757d;
+            --success: #28a745;
         }
         body {
             overflow-x: hidden;
@@ -238,40 +242,59 @@ main page
         }
         .btn-left { margin-top: 0.1rem; }
 
-        .languages-tags {
-            margin-top: 2rem;
+        .skills-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin: 2rem 0;
         }
-        .languages-tags-title {
-            font-size: 1.3rem;
-            margin-bottom: 1rem;
-            color: var(--dark);
-            font-weight: 500;
+        .skill-category h3 {
+            margin-bottom: 0.75rem;
+            color: var(--secondary);
+            font-size: 1rem;
+            font-weight: 600;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 0.3rem;
         }
-        .languages-tags-list {
+        .skill-list {
             display: flex;
             flex-wrap: wrap;
             gap: 0.5rem;
-            margin-top: 1rem;
         }
         .tag {
+            background-color: var(--light);
+            padding: 0.3rem 0.7rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            transition: var(--transition);
+            border: 1px solid var(--border);
             display: inline-block;
-            padding: 0.4rem 1rem;
-            background: #e9ecef;
-            border-radius: 20px;
-            font-size: 0.9rem;
             color: var(--dark);
             font-weight: 400;
             line-height: 1.4;
             white-space: nowrap;
+            cursor: default;
+        }
+        .tag:hover {
+            background-color: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+            border-color: var(--primary);
         }
         .tag.primary {
-            background: var(--primary);
+            background-color: var(--primary);
             color: white;
+            border-color: var(--primary);
+        }
+        .tag.primary:hover {
+            background-color: var(--secondary);
         }
 
-        @media (max-width: 1024px) {
-            .about-panel { flex-direction: column; text-align: center; }
-            .about-image img { width: 220px; height: auto; }
+        @media (max-width: 992px) {
+            .skills-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
         @media (max-width: 768px) {
             .hero h1 { font-size: 2.5rem; }
@@ -280,6 +303,9 @@ main page
             .focus-item { padding: 0.7rem; gap: 0.6rem; }
             .about-columns { flex-direction: column; gap: 1.5rem; }
             .services-grid { grid-template-columns: 1fr; }
+            .skills-container {
+                grid-template-columns: 1fr;
+            }
         }
         @media (max-width: 480px) {
             .hero h1 { font-size: 2rem; }
@@ -411,36 +437,121 @@ main page
                 </li>
             </ul>
 
-            <div class="languages-tags">
-                <h4 class="languages-tags-title">Languages & Tools</h4>
-                <div class="languages-tags-list">
-                    <span class="tag primary">Java</span>
-                    <span class="tag primary">Lua</span>
-                    <span class="tag primary">JavaScript</span>
-                    <span class="tag primary">HTML5</span>
-                    <span class="tag primary">CSS</span>
-                    <span class="tag">JavaFX / Swing / FXML</span>
-                    <span class="tag">C++</span>
-                    <span class="tag">PHP</span>
-                    <span class="tag">SQL (MySQL, SQLite)</span>
-                    <span class="tag">JSON / XML / YAML / CSV</span>
-                    <span class="tag">Love2D</span>
-                    <span class="tag">Solar2D</span>
-                    <span class="tag">LibGDX</span>
-                    <span class="tag">JDA</span>
-                    <span class="tag">Discordia</span>
-                    <span class="tag">Spigot / Paper (Minecraft)</span>
-                    <span class="tag">SAPP / Phasor (Halo)</span>
-                    <span class="tag">Git / GitHub</span>
-                    <span class="tag">Docker</span>
-                    <span class="tag">Linux / Bash</span>
-                    <span class="tag">Gradle / Maven</span>
-                    <span class="tag">Android Studio</span>
-                    <span class="tag">Unity</span>
-                    <span class="tag">Unreal Engine</span>
-                    <span class="tag">Cheat Engine</span>
-                    <span class="tag">OBS Studio</span>
-                    <span class="tag">GIMP</span>
+            <h3 class="column-heading" style="margin-top:2rem;">Key Skills</h3>
+            <div class="skills-container">
+
+                <div class="skill-category">
+                    <h3>Programming Languages</h3>
+                    <div class="skill-list">
+                        <span class="tag primary">Lua</span>
+                        <span class="tag primary">Java</span>
+                        <span class="tag">JavaScript</span>
+                        <span class="tag">C++</span>
+                        <span class="tag">PHP</span>
+                        <span class="tag">HTML/CSS</span>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h3>Desktop Dev & GUI</h3>
+                    <div class="skill-list">
+                        <span class="tag">JavaFX</span>
+                        <span class="tag">Java Swing</span>
+                        <span class="tag">FXML</span>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h3>Web & Data Technologies</h3>
+                    <div class="skill-list">
+                        <span class="tag">JSON</span>
+                        <span class="tag">XML</span>
+                        <span class="tag">YAML</span>
+                        <span class="tag">CSV</span>
+                        <span class="tag">SQL</span>
+                        <span class="tag">MySQL</span>
+                        <span class="tag">SQLite</span>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h3>Game Development & Tools</h3>
+                    <div class="skill-list">
+                        <span class="tag">Love2D</span>
+                        <span class="tag">Solar2D</span>
+                        <span class="tag">Unity</span>
+                        <span class="tag">Unreal Engine</span>
+                        <span class="tag">JDA</span>
+                        <span class="tag">Luvit</span>
+                        <span class="tag">Cheat Engine</span>
+                        <span class="tag">LibGDX</span>
+                        <span class="tag">Spigot/Paper</span>
+                        <span class="tag">SAPP/Phasor</span>
+                        <span class="tag">Discordia</span>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h3>Dev Tools & Environments</h3>
+                    <div class="skill-list">
+                        <span class="tag">Git</span>
+                        <span class="tag">GitHub</span>
+                        <span class="tag">Linux</span>
+                        <span class="tag">Bash</span>
+                        <span class="tag">IntelliJ IDEA</span>
+                        <span class="tag">VS Code</span>
+                        <span class="tag">Atom</span>
+                        <span class="tag">Android Studio</span>
+                        <span class="tag">Sublime Text</span>
+                        <span class="tag">Notepad++</span>
+                        <span class="tag">Docker</span>
+                        <span class="tag">Gradle</span>
+                        <span class="tag">Maven</span>
+                        <span class="tag">LuaRocks</span>
+                        <span class="tag">SLF4J</span>
+                        <span class="tag">Log4j</span>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h3>Networking & Remote Access</h3>
+                    <div class="skill-list">
+                        <span class="tag">SSH</span>
+                        <span class="tag">BitVise</span>
+                        <span class="tag">FileZilla</span>
+                        <span class="tag">TightVNC</span>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h3>Automation & AI/ML</h3>
+                    <div class="skill-list">
+                        <span class="tag">Automated testing</span>
+                        <span class="tag">AI/ML integration</span>
+                        <span class="tag">Scripting for game mods</span>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h3>Other Tools & Software</h3>
+                    <div class="skill-list">
+                        <span class="tag">Microsoft Office Suite</span>
+                        <span class="tag">OBS Studio</span>
+                        <span class="tag">GIMP</span>
+                        <span class="tag">7zip</span>
+                        <span class="tag">WinRAR</span>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h3>Professional & Soft Skills</h3>
+                    <div class="skill-list">
+                        <span class="tag">Remote project management</span>
+                        <span class="tag">Practical problem-solving</span>
+                        <span class="tag">Hands-on troubleshooting</span>
+                        <span class="tag">Volunteer coordination</span>
+                        <span class="tag">Informal tech support</span>
+                    </div>
                 </div>
             </div>
 
