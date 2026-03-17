@@ -309,6 +309,12 @@ main page
             .about-text p {
                 text-align: left;
             }
+            /* Allow skill tags to wrap on mobile */
+            .tag {
+                white-space: normal;
+                word-break: break-word;
+                hyphens: auto;          /* optional, helps break long combined names */
+            }
         }
         @media (max-width: 480px) {
             .hero h1 { font-size: 2rem; }
