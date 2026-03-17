@@ -238,6 +238,37 @@ main page
         }
         .btn-left { margin-top: 0.1rem; }
 
+        .languages-tags {
+            margin-top: 2rem;
+        }
+        .languages-tags-title {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+            font-weight: 500;
+        }
+        .languages-tags-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        .tag {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            background: #e9ecef;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--dark);
+            font-weight: 400;
+            line-height: 1.4;
+            white-space: nowrap;
+        }
+        .tag.primary {
+            background: var(--primary);
+            color: white;
+        }
+
         @media (max-width: 1024px) {
             .about-panel { flex-direction: column; text-align: center; }
             .about-image img { width: 220px; height: auto; }
@@ -280,11 +311,13 @@ main page
     <div class="container">
 
         <div class="about-panel">
-            <div class="about-text"><p>I'm Jericho, an <strong>independent developer</strong> with over a decade of
-                experience building, breaking, and fixing code - from low-level scripting to full-stack prototypes.
-                Comfortable across Windows, headless environments, CLI, and Linux servers. I develop tools, mods, bots,
-                and web/mobile apps, sometimes live-coding from scratch on <a href="https://www.twitch.tv/chalwk"
-                                                                          target="_blank">Twitch</a>.</p>
+            <div class="about-text">
+                <p>I'm Jericho, a <strong>self-taught independent developer</strong> with over a decade of
+                    experience building, breaking, and fixing code - from low-level scripting to full-stack prototypes.
+                    Comfortable across Windows, headless environments, CLI, and Linux servers. I develop tools, mods,
+                    bots,
+                    and web/mobile apps, sometimes live-coding from scratch on <a href="https://www.twitch.tv/chalwk"
+                                                                                  target="_blank">Twitch</a>.</p>
                 <p>Goal: create fun, useful, and interesting things for people to enjoy or learn from.</p>
                 <p><em>"There's nothing quite like being able to say at the end of the day, I made this. This is my
                     world."</em></p>
@@ -377,8 +410,43 @@ main page
                     gamemodes, and server enhancements for SAPP and legacy Phasor.
                 </li>
             </ul>
-            <p class="contact-text">📬 Get in touch: <a href="mailto:chalwk.dev@gmail.com"
-                                                       style="color: var(--primary); font-weight: 500; text-decoration: underline;">chalwk.dev@gmail.com</a>
+
+            <div class="languages-tags">
+                <h4 class="languages-tags-title">Programming Languages & Tools</h4>
+                <div class="languages-tags-list">
+                    <span class="tag primary">Java</span>
+                    <span class="tag primary">JavaScript</span>
+                    <span class="tag primary">Lua</span>
+                    <span class="tag primary">HTML5</span>
+                    <span class="tag primary">CSS</span>
+                    <span class="tag">JavaFX / Swing / FXML</span>
+                    <span class="tag">C++</span>
+                    <span class="tag">PHP</span>
+                    <span class="tag">SQL (MySQL, SQLite)</span>
+                    <span class="tag">JSON / XML / YAML / CSV</span>
+                    <span class="tag">Love2D</span>
+                    <span class="tag">Solar2D</span>
+                    <span class="tag">LibGDX</span>
+                    <span class="tag">JDA</span>
+                    <span class="tag">Discordia</span>
+                    <span class="tag">Spigot / Paper (Minecraft)</span>
+                    <span class="tag">SAPP / Phasor (Halo)</span>
+                    <span class="tag">Git / GitHub</span>
+                    <span class="tag">Docker</span>
+                    <span class="tag">Linux / Bash</span>
+                    <span class="tag">Gradle / Maven</span>
+                    <span class="tag">Android Studio</span>
+                    <span class="tag">Unity</span>
+                    <span class="tag">Unreal Engine</span>
+                    <span class="tag">Cheat Engine</span>
+                    <span class="tag">OBS Studio</span>
+                    <span class="tag">GIMP</span>
+                </div>
+            </div>
+
+            <p class="contact-text">📬 Get in touch:
+                <a href="mailto:chalwk.dev@gmail.com"
+                   style="color: var(--primary); font-weight: 500; text-decoration: underline;">chalwk.dev@gmail.com</a>
             </p>
         </div>
     </div>
