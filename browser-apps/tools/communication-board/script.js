@@ -27,7 +27,6 @@ Communication Board - JavaScript
     const importFile = document.getElementById('importFile');
     const toast = document.getElementById('toast');
     const boardWrap = document.getElementById('boardWrap');
-    const installBtn = document.getElementById('installBtn');
     const globalSearch = document.getElementById('globalSearch');
 
     const manageCategoriesBtn = document.getElementById('manageCategoriesBtn');
@@ -61,12 +60,6 @@ Communication Board - JavaScript
         theme: 'auto',
         volume: 0.6
     };
-
-    let deferredPrompt;
-    let isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-    let isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
-    window.navigator.standalone ||
-    document.referrer.includes('android-app://');
 
     const LS = {
         symbolsKey: 'cb.symbols',
@@ -626,41 +619,6 @@ Communication Board - JavaScript
         }
     }
 
-    function showInstallPrompt() {
-        if (deferredPrompt) {
-            deferredPrompt.prompt();
-            deferredPrompt.userChoice.then((choiceResult) => {
-                if (choiceResult.outcome === 'accepted') {
-                    console.log('User accepted the install prompt');
-                    showToast('App installed successfully!');
-                } else {
-                    console.log('User dismissed the install prompt');
-                }
-                deferredPrompt = null;
-                updateInstallButton();
-            });
-        } else if (isIOS) {
-            showToast('Tap the share button and "Add to Home Screen" to install');
-        }
-    }
-
-    function updateInstallButton() {
-        if (!installBtn) return;
-
-        if (isStandalone) {
-            installBtn.style.display = 'none';
-            return;
-        }
-
-        if (deferredPrompt || isIOS) {
-            installBtn.style.display = 'flex';
-            installBtn.style.alignItems = 'center';
-            installBtn.style.gap = '0.5rem';
-        } else {
-            installBtn.style.display = 'none';
-        }
-    }
-
     function previewSpeak(symbol) {
         const text = symbol.text;
         if (!text || !('speechSynthesis' in window)) return;
@@ -1205,10 +1163,6 @@ Communication Board - JavaScript
 
     settingsToggle.addEventListener('click', toggleSettingsMenu);
 
-    if (installBtn) {
-        installBtn.addEventListener('click', showInstallPrompt);
-    }
-
     if (globalSearch) {
         globalSearch.addEventListener('input', renderBoard);
     }
@@ -1246,21 +1200,6 @@ Communication Board - JavaScript
         }
     });
 
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        updateInstallButton();
-        console.log('Before install prompt event fired');
-    });
-
-    window.addEventListener('appinstalled', () => {
-        deferredPrompt = null;
-        isStandalone = true;
-        updateInstallButton();
-        console.log('App was installed');
-        showToast('App installed successfully!');
-    });
-
     function init() {
         loadSettings();
         loadSymbols();
@@ -1269,12 +1208,7 @@ Communication Board - JavaScript
         renderBoard();
         updatePhraseDisplay();
 
-        if (isStandalone) {
-            console.log('App is running in standalone mode');
-        }
-
         applyGridSetting();
-        updateInstallButton();
 
         function loadVoices() {
             const voices = speechSynthesis.getVoices();
