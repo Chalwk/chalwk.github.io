@@ -232,6 +232,29 @@ My Pokémon TCG collection
             color: var(--accent);
         }
 
+        .holo-indicator {
+            font-weight: 600;
+            color: #d4af37;
+            text-shadow: 0 0 4px #fbbf24, 0 0 2px #f59e0b;
+            margin-left: 4px;
+            font-size: 0.9em;
+            display: inline-block;
+            letter-spacing: 0.5px;
+        }
+
+        .pokemon-name .holo-indicator {
+            background: none;
+            color: #d4af37;
+            border-radius: 0;
+            padding: 0;
+            font-size: 0.9em;
+            font-weight: 600;
+            text-shadow: 0 0 4px #fbbf24, 0 0 2px #f59e0b;
+            display: inline-block;
+            letter-spacing: 0.5px;
+            margin-left: 4px;
+        }
+
         .item-name {
             font-weight: 600;
             font-size: 0.95rem;
@@ -437,6 +460,10 @@ My Pokémon TCG collection
 
 <script>
     (function() {
+        function parseHolo(parts, index) {
+            return parts.length > index && parts[index].toLowerCase() === 'true';
+        }
+
         window.openLightbox = function(src) {
             document.getElementById('modalImage').src = src;
             document.getElementById('imageModal').style.display = 'flex';
@@ -474,12 +501,18 @@ My Pokémon TCG collection
             const imgSrc = getImagePath(item.name);
             const escapedImgSrc = imgSrc.replace(/'/g, "\\'");
             const dataName = item.name.replace(/"/g, '&quot;');
+
+            let holoTag = '';
+            if (item.holo) {
+                holoTag = `<span class="holo-indicator">H</span>`;
+            }
+
             return `
                 <div class="item-card" data-name="${dataName.toLowerCase()}">
                     <span class="qty-badge">×${item.count}</span>
                     <img class="card-thumb" src="${imgSrc}" alt="${item.name}" onclick="openLightbox('${escapedImgSrc}')" loading="lazy">
                     <div class="item-name">
-                        ${item.name}
+                        ${item.name} ${holoTag}
                     </div>
                 </div>
             `;
@@ -503,13 +536,14 @@ My Pokémon TCG collection
                     card.setAttribute('data-name', p.name.toLowerCase());
                     const imgSrc = getImagePath(p.name);
                     const escapedImgSrc = imgSrc.replace(/'/g, "\\'");
+                    const holoTag = p.holo ? '<span class="holo-indicator">H</span>' : '';
                     card.innerHTML = `
                         <span class="qty-badge">×${p.count}</span>
                         <img class="card-thumb" src="${imgSrc}" alt="${p.name}" onclick="openLightbox('${escapedImgSrc}')" loading="lazy">
-                        <div class="pokemon-name">${p.name}</div>
+                        <div class="pokemon-name">${p.name}${holoTag}</div>
                         <div class="pokemon-details">
                             <span><i class="fas fa-arrow-up"></i> ${p.stage}</span>
-                            <span><span class="hp-value">${p.hp} HP</span></span>
+                            <span class="hp-value">${p.hp} HP</span>
                         </div>
                     `;
                     grid.appendChild(card);
@@ -543,33 +577,52 @@ My Pokémon TCG collection
                 switch(category) {
                     case 'ENERGY':
                         if (parts.length >= 3) {
-                            energies.push({ name: parts[1], count: parseInt(parts[2], 10) });
+                            energies.push({
+                                name: parts[1],
+                                count: parseInt(parts[2], 10),
+                                holo: parseHolo(parts, 3)
+                            });
                         }
                         break;
                     case 'SUPPORTER':
                         if (parts.length >= 3) {
-                            supporters.push({ name: parts[1], count: parseInt(parts[2], 10) });
+                            supporters.push({
+                                name: parts[1],
+                                count: parseInt(parts[2], 10),
+                                holo: parseHolo(parts, 3)
+                            });
                         }
                         break;
                     case 'ITEM':
                         if (parts.length >= 3) {
-                            items.push({ name: parts[1], count: parseInt(parts[2], 10) });
+                            items.push({
+                                name: parts[1],
+                                count: parseInt(parts[2], 10),
+                                holo: parseHolo(parts, 3)
+                            });
                         }
                         break;
                     case 'TOOL':
                         if (parts.length >= 3) {
-                            tools.push({ name: parts[1], count: parseInt(parts[2], 10) });
+                            tools.push({
+                                name: parts[1],
+                                count: parseInt(parts[2], 10),
+                                holo: parseHolo(parts, 3)
+                            });
                         }
                         break;
                     case 'POKEMON':
                         if (parts.length >= 6) {
                             const [_, name, stage, hp, count, type] = parts;
+                            const holo = parseHolo(parts, 6);
+
                             if (!pokemonByType[type]) pokemonByType[type] = [];
                             pokemonByType[type].push({
                                 name,
                                 stage,
                                 hp: parseInt(hp, 10),
-                                count: parseInt(count, 10)
+                                count: parseInt(count, 10),
+                                holo
                             });
                         }
                         break;
