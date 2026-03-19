@@ -58,15 +58,15 @@ Dark;🌙;#9c27b0;Sensory Needs
 Weighted blanket;🛏️;#9c27b0;Sensory Needs
 Stim;🌀;#9c27b0;Sensory Needs
 Fidget;🔄;#9c27b0;Sensory Needs
-Hug;🫂;#9c27b0;Sensory Needs
+Hug;🤗;#9c27b0;Sensory Needs
 No touch;✋;#9c27b0;Sensory Needs
 Different clothes;👕;#9c27b0;Sensory Needs
-Soft;🪶;#9c27b0;Sensory Needs
+Soft;☁️;#9c27b0;Sensory Needs
 Loud;🔊;#9c27b0;Sensory Needs
 Bright;💡;#9c27b0;Sensory Needs
 Pressure;⏬;#9c27b0;Sensory Needs
 Me;🙂;#00bcd4;People & Pronouns
-You;🫵;#00bcd4;People & Pronouns
+You;👤;#00bcd4;People & Pronouns
 Friend;🧑‍🤝‍🧑;#00bcd4;People & Pronouns
 Family;👨‍👩‍👦;#00bcd4;People & Pronouns
 Teacher;👩‍🏫;#00bcd4;People & Pronouns
