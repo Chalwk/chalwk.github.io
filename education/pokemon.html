@@ -1,9 +1,3 @@
-<!--
-Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
-
-Pokemon Collection
--->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -45,6 +39,49 @@ Pokemon Collection
         .page-title i {
             color: var(--primary);
             font-size: 2rem;
+        }
+
+        .search-wrapper {
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            background: white;
+            border-radius: 60px;
+            padding: 0.3rem 0.3rem 0.3rem 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--gray-light);
+            max-width: 500px;
+        }
+        .search-wrapper i {
+            color: var(--gray);
+            font-size: 1.2rem;
+        }
+        #searchInput {
+            flex: 1;
+            border: none;
+            padding: 0.8rem 0.5rem;
+            font-size: 1rem;
+            background: transparent;
+            outline: none;
+        }
+        #clearSearch {
+            background: var(--gray-light);
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+            margin-right: 0.3rem;
+        }
+        #clearSearch:hover {
+            background: var(--gray);
+            color: white;
         }
 
         .section-card {
@@ -284,6 +321,19 @@ Pokemon Collection
             background: #f0f0f0;
         }
 
+        .no-results-message {
+            text-align: center;
+            padding: 3rem;
+            color: var(--gray);
+            font-size: 1.2rem;
+            display: none;
+        }
+        .no-results-message i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--gray-light);
+        }
+
         @media (max-width: 600px) {
             .card-grid {
                 grid-template-columns: repeat(2, 1fr);
@@ -304,6 +354,19 @@ Pokemon Collection
         <h1 class="page-title">
             <i class="fas fa-dragon"></i> My Pokémon TCG collection
         </h1>
+
+        <div class="search-wrapper">
+            <i class="fas fa-search"></i>
+            <label for="searchInput"></label><input type="text" id="searchInput"
+                                                    placeholder="Search cards (e.g. 'char', 'pika', 'energy')"
+                                                    autocomplete="off">
+            <button id="clearSearch" title="Clear"><i class="fas fa-times"></i></button>
+        </div>
+
+        <div id="noResultsMessage" class="no-results-message">
+            <i class="fas fa-search"></i>
+            <p>No cards match your search.</p>
+        </div>
 
         <section class="section-card" id="energies">
             <h2 class="section-heading"><i class="fas fa-bolt"></i> Energies</h2>
@@ -506,8 +569,9 @@ Pokemon Collection
         function createItemCard(item) {
             const imgSrc = getImagePath(item.name);
             const foilBadge = item.foil ? '<span class="foil-badge"><i class="fas fa-star"></i> FOIL</span>' : '';
+            const dataName = item.name.replace(/"/g, '&quot;');
             return `
-                <div class="item-card">
+                <div class="item-card" data-name="${dataName.toLowerCase()}">
                     <img class="card-thumb" src="${imgSrc}" alt="${item.name}" onclick="openLightbox('${imgSrc}')" loading="lazy">
                     <div class="item-name">
                         ${item.name}
@@ -535,6 +599,7 @@ Pokemon Collection
             mons.forEach(p => {
                 const card = document.createElement('div');
                 card.className = `pokemon-card type-${typeLower}`;
+                card.setAttribute('data-name', p.name.toLowerCase());
                 const imgSrc = getImagePath(p.name);
                 const foilStar = p.foil ? '<span class="foil-star" title="Holo foil"><i class="fas fa-star"></i></span>' : '';
                 card.innerHTML = `
@@ -557,6 +622,43 @@ Pokemon Collection
             sectionDiv.appendChild(grid);
             typeSections.appendChild(sectionDiv);
         }
+
+        const searchInput = document.getElementById('searchInput');
+        const clearBtn = document.getElementById('clearSearch');
+        const noResultsDiv = document.getElementById('noResultsMessage');
+
+        function getAllCards() {
+            return [...document.querySelectorAll('.item-card, .pokemon-card')];
+        }
+
+        function filterCards() {
+            const term = searchInput.value.trim().toLowerCase();
+            const cards = getAllCards();
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const cardName = card.getAttribute('data-name') || '';
+                if (term === '' || cardName.includes(term)) {
+                    card.style.display = 'flex';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            if (term !== '' && visibleCount === 0) {
+                noResultsDiv.style.display = 'block';
+            } else {
+                noResultsDiv.style.display = 'none';
+            }
+        }
+
+        searchInput.addEventListener('input', filterCards);
+
+        clearBtn.addEventListener('click', function() {
+            searchInput.value = '';
+            filterCards();
+            searchInput.focus();
+        });
     })();
 </script>
 
