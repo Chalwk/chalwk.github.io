@@ -90,87 +90,72 @@ Pokemon Collection
             color: var(--secondary);
         }
 
-        .energy-grid, .trainer-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            align-items: center;
-        }
-
-        .energy-chip, .trainer-chip {
-            background: linear-gradient(145deg, #f0f4fa, #ffffff);
-            border: 1px solid var(--gray-light);
-            border-radius: 40px;
-            padding: 0.5rem 1.2rem;
-            font-weight: 500;
-            box-shadow: var(--shadow-sm);
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 1rem;
-        }
-        .energy-chip i, .trainer-chip i {
-            color: var(--primary);
-        }
-        .foil-badge {
-            background: linear-gradient(135deg, #d4af37, #f5e18b);
-            color: #1e1e1e;
-            font-size: 0.7rem;
-            font-weight: 600;
-            padding: 0.2rem 0.6rem;
-            border-radius: 30px;
-            margin-left: 0.5rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .pokemon-grid {
+        .card-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
             gap: 1rem;
             margin-top: 1rem;
         }
 
-        .pokemon-card {
+        .item-card, .pokemon-card {
             background: var(--card-bg);
             border-radius: var(--radius);
-            padding: 0.8rem 1rem;
-            border-left: 5px solid;
+            padding: 0.8rem;
             box-shadow: var(--shadow-sm);
             transition: all 0.2s;
             display: flex;
             flex-direction: column;
-            border-image: none;
-            font-size: 0.95rem;
+            border: 1px solid var(--gray-light);
+            position: relative;
         }
-        .pokemon-card:hover {
+        .item-card:hover, .pokemon-card:hover {
             transform: translateY(-3px);
             box-shadow: var(--shadow);
         }
 
+        .card-thumb {
+            width: 100%;
+            aspect-ratio: 1/1;
+            object-fit: contain;
+            background: #f5f5f5;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            border: 1px solid #eee;
+            transition: opacity 0.1s;
+        }
+        .card-thumb:hover {
+            opacity: 0.9;
+        }
+
+        .pokemon-card {
+            border-left: 5px solid transparent;
+        }
+
         .pokemon-name {
             font-weight: 700;
-            font-size: 1.1rem;
+            font-size: 1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin: 0.2rem 0;
         }
         .pokemon-name span {
             background: var(--primary);
             color: white;
             border-radius: 30px;
             padding: 0.2rem 0.6rem;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             font-weight: 500;
         }
 
         .pokemon-details {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.8rem;
-            margin: 0.3rem 0;
+            gap: 0.5rem;
+            margin: 0.2rem 0;
             color: var(--gray);
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
         .pokemon-details i {
             width: 1rem;
@@ -208,12 +193,35 @@ Pokemon Collection
             padding: 0.1rem 0.5rem;
             font-size: 0.7rem;
             margin-left: 0.3rem;
+            align-self: flex-end;
         }
 
         .foil-star {
             color: #fbbf24;
             margin-left: 0.3rem;
             font-size: 0.8rem;
+        }
+
+        .foil-badge {
+            background: linear-gradient(135deg, #d4af37, #f5e18b);
+            color: #1e1e1e;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.2rem 0.6rem;
+            border-radius: 30px;
+            margin-left: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: inline-block;
+        }
+
+        .item-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 0.2rem 0;
         }
 
         .type-psychic { border-left-color: var(--type-psychic); }
@@ -227,13 +235,62 @@ Pokemon Collection
         .type-grass { border-left-color: var(--type-grass); }
         .type-water { border-left-color: var(--type-water); }
 
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            background: white;
+            padding: 1rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        .modal-content img {
+            width: 100%;
+            height: auto;
+            max-height: 70vh;
+            object-fit: contain;
+            display: block;
+        }
+        .close-modal {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            font-weight: bold;
+        }
+        .close-modal:hover {
+            background: #f0f0f0;
+        }
+
         @media (max-width: 600px) {
-            .pokemon-grid {
-                grid-template-columns: 1fr 1fr;
+            .card-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
         @media (max-width: 420px) {
-            .pokemon-grid {
+            .card-grid {
                 grid-template-columns: 1fr;
             }
         }
@@ -250,20 +307,20 @@ Pokemon Collection
 
         <section class="section-card" id="energies">
             <h2 class="section-heading"><i class="fas fa-bolt"></i> Energies</h2>
-            <div class="energy-grid" id="energy-container"></div>
+            <div class="card-grid" id="energy-container"></div>
         </section>
 
         <section class="section-card" id="trainers">
             <h2 class="section-heading"><i class="fas fa-user-graduate"></i> Trainers</h2>
 
             <div class="subsection-title"><i class="fas fa-users"></i> Supporters</div>
-            <div class="trainer-grid" id="supporters-container"></div>
+            <div class="card-grid" id="supporters-container"></div>
 
             <div class="subsection-title"><i class="fas fa-box"></i> Items</div>
-            <div class="trainer-grid" id="items-container"></div>
+            <div class="card-grid" id="items-container"></div>
 
             <div class="subsection-title"><i class="fas fa-screwdriver-wrench"></i> Pokémon Tools</div>
-            <div class="trainer-grid" id="tools-container"></div>
+            <div class="card-grid" id="tools-container"></div>
         </section>
 
         <section class="section-card" id="pokemon">
@@ -273,8 +330,23 @@ Pokemon Collection
     </div>
 </main>
 
+<div id="imageModal" class="modal" onclick="if(event.target === this) closeModal()">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeModal()">&times;</span>
+        <img id="modalImage" src="" alt="Pokémon card">
+    </div>
+</div>
+
 <script>
     (function() {
+        window.openLightbox = function(src) {
+            document.getElementById('modalImage').src = src;
+            document.getElementById('imageModal').style.display = 'flex';
+        };
+        window.closeModal = function() {
+            document.getElementById('imageModal').style.display = 'none';
+        };
+
         const energies = [
             { name: "Fusion Strike Energy", count: 1, foil: true },
             { name: "Fire Energy", count: 10 },
@@ -424,26 +496,29 @@ Pokemon Collection
             ]
         };
 
-        function renderChip(item) {
-            return `<div class="trainer-chip">
-                <i class="fas fa-tag"></i> ${item.name} <strong>×${item.count}</strong>
-                ${item.foil ? '<span class="foil-badge"><i class="fas fa-star"></i> FOIL</span>' : ''}
-            </div>`;
+        function getImagePath(name) {
+            return `../images/pokemon/${encodeURIComponent(name)}.png`;
         }
 
-        function renderEnergyChip(item) {
-            return `<div class="energy-chip">
-                <i class="fas fa-bolt"></i> ${item.name} <strong>×${item.count}</strong>
-                ${item.foil ? '<span class="foil-badge"><i class="fas fa-star"></i> FOIL</span>' : ''}
-            </div>`;
+        function createItemCard(item) {
+            const imgSrc = getImagePath(item.name);
+            const foilBadge = item.foil ? '<span class="foil-badge"><i class="fas fa-star"></i> FOIL</span>' : '';
+            return `
+                <div class="item-card">
+                    <img class="card-thumb" src="${imgSrc}" alt="${item.name}" onclick="openLightbox('${imgSrc}')" loading="lazy">
+                    <div class="item-name">
+                        ${item.name}
+                        <span class="qty-badge">×${item.count}</span>
+                    </div>
+                    ${foilBadge ? `<div style="margin-top: 0.2rem;">${foilBadge}</div>` : ''}
+                </div>
+            `;
         }
 
-        const energyContainer = document.getElementById('energy-container');
-        energies.forEach(e => energyContainer.innerHTML += renderEnergyChip(e));
-
-        document.getElementById('supporters-container').innerHTML = supporters.map(renderChip).join('');
-        document.getElementById('items-container').innerHTML = items.map(renderChip).join('');
-        document.getElementById('tools-container').innerHTML = tools.map(renderChip).join('');
+        document.getElementById('energy-container').innerHTML = energies.map(createItemCard).join('');
+        document.getElementById('supporters-container').innerHTML = supporters.map(createItemCard).join('');
+        document.getElementById('items-container').innerHTML = items.map(createItemCard).join('');
+        document.getElementById('tools-container').innerHTML = tools.map(createItemCard).join('');
 
         const typeSections = document.getElementById('pokemon-type-sections');
         for (let [type, mons] of Object.entries(pokemonByType)) {
@@ -452,13 +527,15 @@ Pokemon Collection
             sectionDiv.classList.add('pokemon-type-block');
             sectionDiv.innerHTML = `<h3 class="subsection-title"><i class="fas fa-${typeLower === 'dragon' ? 'dragon' : 'paw'}"></i> ${type}</h3>`;
             const grid = document.createElement('div');
-            grid.className = 'pokemon-grid';
+            grid.className = 'card-grid';
 
             mons.forEach(p => {
                 const card = document.createElement('div');
                 card.className = `pokemon-card type-${typeLower}`;
+                const imgSrc = getImagePath(p.name);
                 const foilStar = p.foil ? '<span class="foil-star" title="Holo foil"><i class="fas fa-star"></i></span>' : '';
                 card.innerHTML = `
+                    <img class="card-thumb" src="${imgSrc}" alt="${p.name}" onclick="openLightbox('${imgSrc}')" loading="lazy">
                     <div class="pokemon-name">
                         ${p.name} ${foilStar}
                         <span class="type-badge">${type}</span>
