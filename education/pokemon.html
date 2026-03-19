@@ -1,9 +1,3 @@
-<!--
-Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
-
-My Pokemon Collection
--->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -92,6 +86,58 @@ My Pokemon Collection
         #clearSearch:hover {
             background: var(--gray);
             color: white;
+        }
+
+        .set-legend-section {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 1.5rem 1.8rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--gray-light);
+        }
+        .set-legend-section h3 {
+            margin-top: 0;
+            margin-bottom: 1.2rem;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: var(--dark);
+            border-bottom: 2px solid var(--gray-light);
+            padding-bottom: 0.4rem;
+        }
+        .set-legend-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem 1.2rem;
+            align-items: center;
+        }
+        .set-legend-item {
+            display: inline-flex;
+            align-items: center;
+            background: var(--light);
+            border-radius: 40px;
+            padding: 0.2rem 0.2rem 0.2rem 0.2rem;
+            border: 1px solid var(--gray-light);
+            box-shadow: var(--shadow-sm);
+        }
+        .set-legend-item .set-abbr {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+            padding: 0.3rem 0.8rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            letter-spacing: 0.3px;
+            margin-right: 0.5rem;
+            box-shadow: inset 0 -1px 0 rgba(0,0,0,0.1);
+        }
+        .set-legend-item span:last-child {
+            font-size: 0.9rem;
+            color: var(--dark);
+            padding-right: 0.8rem;
+            font-weight: 400;
         }
 
         .section-card {
@@ -241,33 +287,6 @@ My Pokemon Collection
             margin: 0.2rem 0;
         }
 
-        .card-set {
-            font-size: 0.65rem;
-            color: var(--gray);
-            margin-top: 0.2rem;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-            flex-wrap: wrap;
-            word-break: break-word;
-        }
-
-        .card-set i {
-            color: var(--primary);
-            width: 0.9rem;
-            font-size: 0.7rem;
-        }
-
-        .set-abbr {
-            font-weight: 600;
-            color: var(--primary-dark);
-            background: rgba(0,0,0,0.05);
-            padding: 0.1rem 0.3rem;
-            border-radius: 4px;
-            margin-right: 0.3rem;
-            display: inline-block;
-        }
-
         .qty-badge {
             background: var(--primary-dark);
             color: white;
@@ -287,25 +306,6 @@ My Pokemon Collection
             pointer-events: none;
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
             margin: 0;
-        }
-
-        .foil-star {
-            color: #fbbf24;
-            margin-left: 0.3rem;
-            font-size: 0.8rem;
-        }
-
-        .foil-badge {
-            background: linear-gradient(135deg, #d4af37, #f5e18b);
-            color: #1e1e1e;
-            font-size: 0.7rem;
-            font-weight: 600;
-            padding: 0.2rem 0.6rem;
-            border-radius: 30px;
-            margin-left: 0.5rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            display: inline-block;
         }
 
         .type-psychic { border-left-color: var(--type-psychic); }
@@ -438,6 +438,35 @@ My Pokemon Collection
             <button id="clearSearch" title="Clear"><i class="fas fa-times"></i></button>
         </div>
 
+        <div class="set-legend-section">
+            <h3><i class="fas fa-tags"></i> Set abbreviations</h3>
+            <div class="set-legend-grid">
+                <div class="set-legend-item"><span class="set-abbr">BLW</span><span>Black & White</span></div>
+                <div class="set-legend-item"><span class="set-abbr">DF</span><span>Dragon Frontiers</span></div>
+                <div class="set-legend-item"><span class="set-abbr">DP</span><span>Diamond & Pearl</span></div>
+                <div class="set-legend-item"><span class="set-abbr">DP</span><span>White (Diamond & Pearl)</span></div>
+                <div class="set-legend-item"><span class="set-abbr">DRM</span><span>Dragon Majesty</span></div>
+                <div class="set-legend-item"><span class="set-abbr">EVS</span><span>Evolving Skies</span></div>
+                <div class="set-legend-item"><span class="set-abbr">EXD</span><span>EX: Deoxys</span></div>
+                <div class="set-legend-item"><span class="set-abbr">FO</span><span>Fossil</span></div>
+                <div class="set-legend-item"><span class="set-abbr">JTG</span><span>Journey Together</span></div>
+                <div class="set-legend-item"><span class="set-abbr">LOR</span><span>Lost Origin</span></div>
+                <div class="set-legend-item"><span class="set-abbr">MEG</span><span>MEG</span></div>
+                <div class="set-legend-item"><span class="set-abbr">MEW</span><span>Mew promo</span></div>
+                <div class="set-legend-item"><span class="set-abbr">OBF</span><span>Obsidian Frontiers</span></div>
+                <div class="set-legend-item"><span class="set-abbr">PAL</span><span>Paldea Evolved</span></div>
+                <div class="set-legend-item"><span class="set-abbr">PAR</span><span>Paradox Rift</span></div>
+                <div class="set-legend-item"><span class="set-abbr">PFL</span><span>Paldea Friends League</span></div>
+                <div class="set-legend-item"><span class="set-abbr">PRE</span><span>Prismatic Evolutions</span></div>
+                <div class="set-legend-item"><span class="set-abbr">SSP</span><span>Sword & Shield promo</span></div>
+                <div class="set-legend-item"><span class="set-abbr">SVE</span><span>Scarlet & Violet</span></div>
+                <div class="set-legend-item"><span class="set-abbr">SVI</span><span>Scarlet & Violet</span></div>
+                <div class="set-legend-item"><span class="set-abbr">TEF</span><span>Telefang promo</span></div>
+                <div class="set-legend-item"><span class="set-abbr">TEF</span><span>Temporal Forces</span></div>
+                <div class="set-legend-item"><span class="set-abbr">TUM</span><span>Team Up Mini</span></div>
+            </div>
+        </div>
+
         <div id="noResultsMessage" class="no-results-message">
             <i class="fas fa-search"></i>
             <p>No cards match your search.</p>
@@ -486,34 +515,34 @@ My Pokemon Collection
         };
 
         const energies = [
-            { name: "Fusion Strike Energy", count: 1, foil: true, set: "Evolving Skies", setabbr: "EVS" },
-            { name: "Fire Energy", count: 10, set: "Scarlet & Violet", setabbr: "SVI" },
-            { name: "Lightning Energy", count: 10, set: "Scarlet & Violet", setabbr: "SVI" }
+            { name: "Fusion Strike Energy", count: 1 },
+            { name: "Fire Energy", count: 10 },
+            { name: "Lightning Energy", count: 10 }
         ];
 
         const supporters = [
-            { name: "Explorer's Guidance", count: 1, foil: true, set: "Temporal Forces", setabbr: "TEF" },
-            { name: "Friends in Galar", count: 1, set: "Evolving Skies", setabbr: "EVS" },
-            { name: "Clavell", count: 2, set: "Paldea Evolved", setabbr: "PAL" },
-            { name: "Jacq", count: 3, set: "Scarlet & Violet", setabbr: "SVI" },
-            { name: "Youngster", count: 2, set: "Scarlet & Violet", setabbr: "SVI" },
-            { name: "Nemona", count: 4, set: "Scarlet & Violet", setabbr: "SVI" }
+            { name: "Explorer's Guidance", count: 1 },
+            { name: "Friends in Galar", count: 1 },
+            { name: "Clavell", count: 2 },
+            { name: "Jacq", count: 3 },
+            { name: "Youngster", count: 2 },
+            { name: "Nemona", count: 4 }
         ];
 
         const items = [
-            { name: "Potion", count: 2, set: "Scarlet & Violet", setabbr: "SVI" },
-            { name: "Switch", count: 2, set: "Scarlet & Violet", setabbr: "SVI" },
-            { name: "Great Ball", count: 4, set: "Paldea Evolved", setabbr: "PAL" },
-            { name: "Techno Radar", count: 1, foil: true, set: "Paradox Rift", setabbr: "PAR" },
-            { name: "Unidentified Fossil", count: 1, set: "Fossil", setabbr: "FO" },
-            { name: "Super Rod", count: 1, foil: true, set: "Paldea Evolved", setabbr: "PAL" },
-            { name: "Energy Loto", count: 1, set: "Fossil", setabbr: "FO" },
-            { name: "Rusted Shield", count: 1, set: "Diamond & Pearl", setabbr: "DP" }
+            { name: "Potion", count: 2 },
+            { name: "Switch", count: 2 },
+            { name: "Great Ball", count: 4 },
+            { name: "Techno Radar", count: 1 },
+            { name: "Unidentified Fossil", count: 1 },
+            { name: "Super Rod", count: 1 },
+            { name: "Energy Loto", count: 1 },
+            { name: "Rusted Shield", count: 1 }
         ];
 
         const tools = [
-            { name: "Future Booster Energy Capsule", count: 1, set: "Telefang promo", setabbr: "TEF" },
-            { name: "Technical Machine - Evolution", count: 1, set: "Paradox Rift", setabbr: "PAR" }
+            { name: "Future Booster Energy Capsule", count: 1 },
+            { name: "Technical Machine - Evolution", count: 1 }
         ];
 
         function getImagePath(name) {
@@ -523,7 +552,6 @@ My Pokemon Collection
         function createItemCard(item) {
             const imgSrc = getImagePath(item.name);
             const escapedImgSrc = imgSrc.replace(/'/g, "\\'");
-            const foilBadge = item.foil ? '<span class="foil-badge"><i class="fas fa-star"></i> FOIL</span>' : '';
             const dataName = item.name.replace(/"/g, '&quot;');
             return `
                 <div class="item-card" data-name="${dataName.toLowerCase()}">
@@ -532,10 +560,7 @@ My Pokemon Collection
                     <div class="item-name">
                         ${item.name}
                     </div>
-                    ${foilBadge ? `<div style="margin-top: 0.2rem;">${foilBadge}</div>` : ''}
-                    <div class="card-set">
-                        <span class="set-abbr">${item.setabbr}</span> ${item.set}
-                    </div>
+                    <!-- set info removed -->
                 </div>
             `;
         }
@@ -562,7 +587,6 @@ My Pokemon Collection
                     card.className = `pokemon-card type-${typeLower}`;
                     card.setAttribute('data-name', p.name.toLowerCase());
                     const imgSrc = getImagePath(p.name);
-                    // Escape single quotes in the image path
                     const escapedImgSrc = imgSrc.replace(/'/g, "\\'");
                     card.innerHTML = `
                         <span class="qty-badge">×${p.count}</span>
@@ -572,9 +596,7 @@ My Pokemon Collection
                             <span><i class="fas fa-arrow-up"></i> ${p.stage}</span>
                             <span><span class="hp-value">${p.hp} HP</span></span>
                         </div>
-                        <div class="card-set">
-                            <span class="set-abbr">${p.setabbr}</span> ${p.set}
-                        </div>
+                        <!-- set info removed -->
                     `;
                     grid.appendChild(card);
                 });
@@ -596,16 +618,16 @@ My Pokemon Collection
 
             lines.forEach(line => {
                 const parts = line.split(';').map(s => s.trim());
-                if (parts.length < 7) return;
-                const [name, stage, hp, count, setabbr, set, type] = parts;
+                if (parts.length < 5) return;
+                const [name, stage, hp, count, type] = parts;
+
                 if (!pokemonByType[type]) pokemonByType[type] = [];
+
                 pokemonByType[type].push({
                     name,
                     stage,
                     hp: parseInt(hp, 10),
-                    count: parseInt(count, 10),
-                    setabbr,
-                    set
+                    count: parseInt(count, 10)
                 });
             });
 
