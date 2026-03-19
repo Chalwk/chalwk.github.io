@@ -899,15 +899,15 @@ Communication Board - JavaScript
         board.classList.remove('fixed-grid');
         switch (settings.gridSize) {
             case '3x4':
-                board.style.gridTemplateColumns = 'repeat(3, 1fr)';
+                board.style.gridTemplateColumns = 'repeat(3, minmax(0, 1fr))';
                 board.classList.add('fixed-grid');
                 break;
             case '4x6':
-                board.style.gridTemplateColumns = 'repeat(4, 1fr)';
+                board.style.gridTemplateColumns = 'repeat(4, minmax(0, 1fr))';
                 board.classList.add('fixed-grid');
                 break;
             case '6x8':
-                board.style.gridTemplateColumns = 'repeat(6, 1fr)';
+                board.style.gridTemplateColumns = 'repeat(6, minmax(0, 1fr))';
                 board.classList.add('fixed-grid');
                 break;
             default:

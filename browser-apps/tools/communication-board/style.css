@@ -287,6 +287,7 @@ Communication Board - Stylesheet
     height: 100%;
     max-height: 120px;
     padding: 0.75rem 0.5rem;
+    min-width: 0;
 }
 
 .communication-board.fixed-grid .symbol img {
