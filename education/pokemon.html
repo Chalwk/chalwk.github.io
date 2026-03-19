@@ -215,14 +215,6 @@
             color: var(--accent);
         }
 
-        .type-badge {
-            font-size: 0.7rem;
-            background: rgba(0,0,0,0.05);
-            padding: 0.2rem 0.6rem;
-            border-radius: 20px;
-            text-transform: uppercase;
-        }
-
         .qty-badge {
             background: var(--primary-dark);
             color: white;
@@ -513,13 +505,10 @@
                     const imgSrc = getImagePath(p.name);
                     card.innerHTML = `
                         <img class="card-thumb" src="${imgSrc}" alt="${p.name}" onclick="openLightbox('${imgSrc}')" loading="lazy">
-                        <div class="pokemon-name">
-                            ${p.name}
-                            <span class="type-badge">${type}</span>
-                        </div>
+                        <div class="pokemon-name">${p.name}</div>
                         <div class="pokemon-details">
                             <span><i class="fas fa-arrow-up"></i> ${p.stage}</span>
-                            <span><i class="fas fa-heart"></i> <span class="hp-value">${p.hp} HP</span></span>
+                            <span><span class="hp-value">${p.hp} HP</span></span>
                         </div>
                         <div class="card-set">
                             <span class="set-abbr">${p.setabbr}</span> ${p.set}
