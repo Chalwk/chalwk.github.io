@@ -10,24 +10,13 @@ Communication Board - HTML
     <meta charset="utf-8"/>
     <meta content="width=device-width,initial-scale=1" name="viewport"/>
     <title>Communication Board</title>
-    <meta content="Communication board for AAC (Augmentative and Alternative Communication)" name="description"/>
     <link href="../../../core.css" rel="stylesheet"/>
     <script src="../../../nav-menu.js"></script>
     <link href="style.css" rel="stylesheet"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
           rel="stylesheet">
-
-    <meta content="#4a86e8" name="theme-color">
-    <meta content="yes" name="apple-mobile-web-app-capable">
-    <meta content="default" name="apple-mobile-web-app-status-bar-style">
-    <meta content="CommBoard" name="apple-mobile-web-app-title">
-
-    <meta content="yes" name="mobile-web-app-capable">
-    <meta content="CommBoard" name="application-name">
-    <meta content="telephone=no" name="format-detection">
 </head>
-
 <body>
 
 <header class="header"></header>
@@ -81,10 +70,6 @@ Communication Board - HTML
                             </div>
                         </div>
                     </div>
-
-                    <button class="btn btn-secondary install-btn" id="installBtn" title="Install App">
-                        <i class="fas fa-download"></i> Install
-                    </button>
                 </div>
             </div>
 
@@ -257,88 +242,5 @@ Communication Board - HTML
 
 <div aria-atomic="true" aria-live="assertive" class="toast" id="toast"></div>
 <script src="script.js"></script>
-
-<script>
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-            navigator.serviceWorker.register('sw.js')
-                .then(function(registration) {
-                console.log('ServiceWorker registration successful with scope: ', registration.scope);
-            })
-                .catch(function(error) {
-                console.log('ServiceWorker registration failed: ', error);
-            });
-        });
-    }
-
-    let deferredPrompt;
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        console.log('App can be installed');
-        updateInstallButton();
-    });
-
-    function installApp() {
-        if (deferredPrompt) {
-            deferredPrompt.prompt();
-            deferredPrompt.userChoice.then((choiceResult) => {
-                if (choiceResult.outcome === 'accepted') {
-                    console.log('User accepted the install prompt');
-                    showToast('App installed successfully!');
-                } else {
-                    console.log('User dismissed the install prompt');
-                }
-                deferredPrompt = null;
-                updateInstallButton();
-            });
-        }
-    }
-
-    function updateInstallButton() {
-        const installBtn = document.getElementById('installBtn');
-        if (!installBtn) return;
-
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        const isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
-        window.navigator.standalone ||
-        document.referrer.includes('android-app://');
-
-        if (isStandalone) {
-            installBtn.style.display = 'none';
-        } else if (deferredPrompt || isIOS) {
-            installBtn.style.display = 'flex';
-            installBtn.style.alignItems = 'center';
-            installBtn.style.gap = '0.5rem';
-        } else {
-            installBtn.style.display = 'none';
-        }
-    }
-
-    window.addEventListener('appinstalled', () => {
-        deferredPrompt = null;
-        updateInstallButton();
-        console.log('App was installed');
-        showToast('App installed successfully!');
-    });
-
-    window.addEventListener('load', updateInstallButton);
-
-    function showToast(msg, timeout = 2200) {
-        const toast = document.getElementById('toast');
-        if (!toast || !msg) return;
-
-        toast.textContent = msg;
-        toast.style.opacity = '1';
-        toast.style.visibility = 'visible';
-
-        setTimeout(() => {
-            toast.style.opacity = '0';
-            setTimeout(() => {
-                toast.style.visibility = 'hidden';
-            }, 300);
-        }, timeout);
-    }
-</script>
 </body>
 </html>
