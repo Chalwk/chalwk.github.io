@@ -77,7 +77,6 @@ document.addEventListener('DOMContentLoaded', function() {
                             <li><a href="${basePath}education/stick-figure-comics.html">Autism through Stick Figures</a></li>
                             <li><a href="${basePath}education/github-pages-tutorial.html">Creating a GitHub Pages Website</a></li>
                             <li><a href="${basePath}education/arachnology.html">Local Aranid Research</a></li>
-                            <li><a href="${basePath}education/pokemon.html">My Pokémon TCG collection</a></li>
                         </ul>
                     </li>
                 </ul>
