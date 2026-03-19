@@ -1,3 +1,9 @@
+<!--
+Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
+
+My Pokémon TCG collection
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -431,13 +437,33 @@
 
 <script>
     (function() {
+        let inPopstate = false;
+
         window.openLightbox = function(src) {
             document.getElementById('modalImage').src = src;
             document.getElementById('imageModal').style.display = 'flex';
+            history.pushState({ modal: true }, '');
         };
+
         window.closeModal = function() {
-            document.getElementById('imageModal').style.display = 'none';
+            const modal = document.getElementById('imageModal');
+            if (modal.style.display !== 'flex') return;
+            modal.style.display = 'none';
+            if (!inPopstate) {
+                inPopstate = true;
+                history.back();
+                inPopstate = false;
+            }
         };
+
+        window.addEventListener('popstate', function() {
+            const modal = document.getElementById('imageModal');
+            if (modal.style.display === 'flex' && !inPopstate) {
+                inPopstate = true;
+                closeModal();
+                inPopstate = false;
+            }
+        });
 
         function getImagePath(name) {
             return `../images/pokemon/${encodeURI(name)}.jpg`;
