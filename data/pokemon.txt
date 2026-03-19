@@ -1,96 +1,115 @@
-Abra;Basic;50;1;Psychic
-Arcanine;Stage 1;140;1;Fire
-Boltund;Stage 1;130;1;Electric
-Brambleghast;Stage 1;100;1;Psychic
-Bulbasaur;Basic;80;1;Grass
-Centiskorch;Stage 1;140;1;Fire
-Charmander 1;Basic;60;1;Fire
-Charmander 2;Basic;80;2;Fire
-Charmeleon;Stage 1;90;2;Fire
-Charizard EX;Stage 2;330;1;Fire
-Darmanitan 1;Stage 1;140;1;Fire
-Darmanitan 2;Stage 1;150;1;Fire
-Dedenne;Basic;70;1;Psychic
-Drowzee;Basic;80;1;Psychic
-Electabuzz;Basic;80;1;Electric
-Escavalier;Stage 1;130;1;Metal
-Espathra;Stage 1;120;1;Psychic
-Flabebe;Basic;40;1;Psychic
-Garbodor;Stage 1;140;1;Darkness
-Gastly;Basic;50;1;Psychic
-Girafarig;Basic;100;1;Colorless
-Greavard;Basic;80;1;Psychic
-Grimer;Basic;80;1;Darkness
-Grimmsnarl;Stage 2;170;1;Psychic
-Growlithe;Basic;90;1;Fire
-Haunter 1;Stage 1;70;1;Psychic
-Haunter 2;Stage 1;80;1;Psychic
-Heracross;Basic;120;1;Grass
-Honchkrow 1;Stage 1;130;2;Darkness
-Honchkrow 2;Stage 2;130;2;Darkness
-Houndoom;Stage 1;120;2;Fire
-Houndour;Basic;70;2;Fire
-Jynx;Basic;100;2;Psychic
-Kangaskhan;Basic;120;1;Colorless
-Kilowattrel;Stage 1;120;2;Electric
-Lanturn;Stage 1;120;1;Electric
-Liepard;Stage 1;100;2;Darkness
-Lumineon;Stage 1;90;1;Water
-Magikarp;Basic;30;1;Water
-Magmar;Basic;90;1;Fire
-Magnezone;Stage 2;160;1;Electric
-Mamoswine;Stage 2;180;1;Water
-Milotic;Stage 1;130;1;Water
-Miraidon;Basic;120;1;Electric
-Moltres;Basic;120;1;Fire
-Mr. Mime;Basic;80;1;Water
-Nacli;Basic;60;1;Rock
-Naclstack;Stage 1;110;1;Rock
-Numel;Basic;80;1;Fire
-Pawmi;Basic;60;3;Electric
-Pawmo;Stage 1;80;2;Electric
-Pawmot;Stage 2;140;1;Electric
-Pikachu;Basic;190;1;Electric
-Polteageist;Stage 1;70;1;Psychic
-Poltchageist;Basic;30;1;Grass
-Ponyta;Basic;60;1;Fire
-Rapidash;Stage 1;100;1;Fire
-Rayquaza EX;Basic;180;1;Dragon
-Relicanth;Basic;90;1;Water
-Reshiram;Basic;130;1;Fire
-Sandslash;Stage 1;120;1;Rock
-Scream Tail;Basic;90;1;Psychic
-Sealeo;Stage 1;110;1;Water
-Sharpedo 1;Stage 1;100;1;Darkness
-Sharpedo 2;Stage 1;120;1;Water
-Shellder;Basic;70;1;Water
-Shelmet;Basic;60;1;Grass
-Shiftry;Stage 2;160;1;Grass
-Shroomish;Basic;50;1;Grass
-Shroodle;Basic;60;1;Darkness
-Slowbro;Stage 1;120;2;Water
-Slowking;Stage 1;130;1;Water
-Slowpoke;Basic;70;1;Water
-Smeargle;Basic;70;1;Colorless
-Sneasel;Basic;70;1;Water
-Spinarak;Basic;60;1;Grass
-Steelix;Stage 1;180;1;Metal
-Stoutland;Stage 2;160;1;Colorless
-Sudowoodo;Basic;110;1;Rock
-Suicune;Basic;120;2;Water
-Thievul 1;Stage 1;100;2;Darkness
-Thievul 2;Stage 1;120;1;Darkness
-Thwackey;Stage 1;90;1;Grass
-Torkoal;Basic;130;2;Fire
-Totodile;Basic;70;1;Water
-Toxapex;Stage 1;120;1;Darkness
-Toxicroak;Stage 1;120;1;Darkness
-Toxtricity;Stage 1;130;1;Electric
-Tropius;Basic;110;1;Grass
-Unfezant;Stage 2;140;1;Colorless
-Volcarona;Stage 1;140;1;Fire
-Wattrel;Basic;60;2;Electric
-Wigglytuff;Stage 1;120;1;Colorless
-Wimpod;Basic;70;3;Water
-Woobat;Basic;60;1;Psychic
-Zorua;Basic;60;1;Psychic
+ENERGY;Fusion Strike Energy;1
+ENERGY;Fire Energy;10
+ENERGY;Lightning Energy;10
+SUPPORTER;Explorer's Guidance;1
+SUPPORTER;Friends in Galar;1
+SUPPORTER;Clavell;2
+SUPPORTER;Jacq;3
+SUPPORTER;Youngster;2
+SUPPORTER;Nemona;4
+ITEM;Potion;2
+ITEM;Switch;2
+ITEM;Great Ball;4
+ITEM;Techno Radar;1
+ITEM;Unidentified Fossil;1
+ITEM;Super Rod;1
+ITEM;Energy Loto;1
+ITEM;Rusted Shield;1
+TOOL;Future Booster Energy Capsule;1
+TOOL;Technical Machine - Evolution;1
+POKEMON;Abra;Basic;50;1;Psychic
+POKEMON;Arcanine;Stage 1;140;1;Fire
+POKEMON;Boltund;Stage 1;130;1;Electric
+POKEMON;Brambleghast;Stage 1;100;1;Psychic
+POKEMON;Bulbasaur;Basic;80;1;Grass
+POKEMON;Centiskorch;Stage 1;140;1;Fire
+POKEMON;Charmander 1;Basic;60;1;Fire
+POKEMON;Charmander 2;Basic;80;2;Fire
+POKEMON;Charmeleon;Stage 1;90;2;Fire
+POKEMON;Charizard EX;Stage 2;330;1;Fire
+POKEMON;Darmanitan 1;Stage 1;140;1;Fire
+POKEMON;Darmanitan 2;Stage 1;150;1;Fire
+POKEMON;Dedenne;Basic;70;1;Psychic
+POKEMON;Drowzee;Basic;80;1;Psychic
+POKEMON;Electabuzz;Basic;80;1;Electric
+POKEMON;Escavalier;Stage 1;130;1;Metal
+POKEMON;Espathra;Stage 1;120;1;Psychic
+POKEMON;Flabebe;Basic;40;1;Psychic
+POKEMON;Garbodor;Stage 1;140;1;Darkness
+POKEMON;Gastly;Basic;50;1;Psychic
+POKEMON;Girafarig;Basic;100;1;Colorless
+POKEMON;Greavard;Basic;80;1;Psychic
+POKEMON;Grimer;Basic;80;1;Darkness
+POKEMON;Grimmsnarl;Stage 2;170;1;Psychic
+POKEMON;Growlithe;Basic;90;1;Fire
+POKEMON;Haunter 1;Stage 1;70;1;Psychic
+POKEMON;Haunter 2;Stage 1;80;1;Psychic
+POKEMON;Heracross;Basic;120;1;Grass
+POKEMON;Honchkrow 1;Stage 1;130;2;Darkness
+POKEMON;Honchkrow 2;Stage 2;130;2;Darkness
+POKEMON;Houndoom;Stage 1;120;2;Fire
+POKEMON;Houndour;Basic;70;2;Fire
+POKEMON;Jynx;Basic;100;2;Psychic
+POKEMON;Kangaskhan;Basic;120;1;Colorless
+POKEMON;Kilowattrel;Stage 1;120;2;Electric
+POKEMON;Lanturn;Stage 1;120;1;Electric
+POKEMON;Liepard;Stage 1;100;2;Darkness
+POKEMON;Lumineon;Stage 1;90;1;Water
+POKEMON;Magikarp;Basic;30;1;Water
+POKEMON;Magmar;Basic;90;1;Fire
+POKEMON;Magnezone;Stage 2;160;1;Electric
+POKEMON;Mamoswine;Stage 2;180;1;Water
+POKEMON;Milotic;Stage 1;130;1;Water
+POKEMON;Miraidon;Basic;120;1;Electric
+POKEMON;Moltres;Basic;120;1;Fire
+POKEMON;Mr. Mime;Basic;80;1;Water
+POKEMON;Nacli;Basic;60;1;Rock
+POKEMON;Naclstack;Stage 1;110;1;Rock
+POKEMON;Numel;Basic;80;1;Fire
+POKEMON;Pawmi;Basic;60;3;Electric
+POKEMON;Pawmo;Stage 1;80;2;Electric
+POKEMON;Pawmot;Stage 2;140;1;Electric
+POKEMON;Pikachu;Basic;190;1;Electric
+POKEMON;Polteageist;Stage 1;70;1;Psychic
+POKEMON;Poltchageist;Basic;30;1;Grass
+POKEMON;Ponyta;Basic;60;1;Fire
+POKEMON;Rapidash;Stage 1;100;1;Fire
+POKEMON;Rayquaza EX;Basic;180;1;Dragon
+POKEMON;Relicanth;Basic;90;1;Water
+POKEMON;Reshiram;Basic;130;1;Fire
+POKEMON;Sandslash;Stage 1;120;1;Rock
+POKEMON;Scream Tail;Basic;90;1;Psychic
+POKEMON;Sealeo;Stage 1;110;1;Water
+POKEMON;Sharpedo 1;Stage 1;100;1;Darkness
+POKEMON;Sharpedo 2;Stage 1;120;1;Water
+POKEMON;Shellder;Basic;70;1;Water
+POKEMON;Shelmet;Basic;60;1;Grass
+POKEMON;Shiftry;Stage 2;160;1;Grass
+POKEMON;Shroomish;Basic;50;1;Grass
+POKEMON;Shroodle;Basic;60;1;Darkness
+POKEMON;Slowbro;Stage 1;120;2;Water
+POKEMON;Slowking;Stage 1;130;1;Water
+POKEMON;Slowpoke;Basic;70;1;Water
+POKEMON;Smeargle;Basic;70;1;Colorless
+POKEMON;Sneasel;Basic;70;1;Water
+POKEMON;Spinarak;Basic;60;1;Grass
+POKEMON;Steelix;Stage 1;180;1;Metal
+POKEMON;Stoutland;Stage 2;160;1;Colorless
+POKEMON;Sudowoodo;Basic;110;1;Rock
+POKEMON;Suicune;Basic;120;2;Water
+POKEMON;Thievul 1;Stage 1;100;2;Darkness
+POKEMON;Thievul 2;Stage 1;120;1;Darkness
+POKEMON;Thwackey;Stage 1;90;1;Grass
+POKEMON;Torkoal;Basic;130;2;Fire
+POKEMON;Totodile;Basic;70;1;Water
+POKEMON;Toxapex;Stage 1;120;1;Darkness
+POKEMON;Toxicroak;Stage 1;120;1;Darkness
+POKEMON;Toxtricity;Stage 1;130;1;Electric
+POKEMON;Tropius;Basic;110;1;Grass
+POKEMON;Unfezant;Stage 2;140;1;Colorless
+POKEMON;Volcarona;Stage 1;140;1;Fire
+POKEMON;Wattrel;Basic;60;2;Electric
+POKEMON;Wigglytuff;Stage 1;120;1;Colorless
+POKEMON;Wimpod;Basic;70;3;Water
+POKEMON;Woobat;Basic;60;1;Psychic
+POKEMON;Zorua;Basic;60;1;Psychic

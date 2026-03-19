@@ -1,3 +1,9 @@
+<!--
+Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
+
+My Pokemon Collection
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -514,37 +520,6 @@
             document.getElementById('imageModal').style.display = 'none';
         };
 
-        const energies = [
-            { name: "Fusion Strike Energy", count: 1 },
-            { name: "Fire Energy", count: 10 },
-            { name: "Lightning Energy", count: 10 }
-        ];
-
-        const supporters = [
-            { name: "Explorer's Guidance", count: 1 },
-            { name: "Friends in Galar", count: 1 },
-            { name: "Clavell", count: 2 },
-            { name: "Jacq", count: 3 },
-            { name: "Youngster", count: 2 },
-            { name: "Nemona", count: 4 }
-        ];
-
-        const items = [
-            { name: "Potion", count: 2 },
-            { name: "Switch", count: 2 },
-            { name: "Great Ball", count: 4 },
-            { name: "Techno Radar", count: 1 },
-            { name: "Unidentified Fossil", count: 1 },
-            { name: "Super Rod", count: 1 },
-            { name: "Energy Loto", count: 1 },
-            { name: "Rusted Shield", count: 1 }
-        ];
-
-        const tools = [
-            { name: "Future Booster Energy Capsule", count: 1 },
-            { name: "Technical Machine - Evolution", count: 1 }
-        ];
-
         function getImagePath(name) {
             return `../images/pokemon/${encodeURI(name)}.jpg`;
         }
@@ -560,15 +535,9 @@
                     <div class="item-name">
                         ${item.name}
                     </div>
-                    <!-- set info removed -->
                 </div>
             `;
         }
-
-        document.getElementById('energy-container').innerHTML = energies.map(createItemCard).join('');
-        document.getElementById('supporters-container').innerHTML = supporters.map(createItemCard).join('');
-        document.getElementById('items-container').innerHTML = items.map(createItemCard).join('');
-        document.getElementById('tools-container').innerHTML = tools.map(createItemCard).join('');
 
         const typeSections = document.getElementById('pokemon-type-sections');
 
@@ -596,7 +565,6 @@
                             <span><i class="fas fa-arrow-up"></i> ${p.stage}</span>
                             <span><span class="hp-value">${p.hp} HP</span></span>
                         </div>
-                        <!-- set info removed -->
                     `;
                     grid.appendChild(card);
                 });
@@ -609,33 +577,74 @@
 
         fetch('../data/pokemon.txt')
             .then(response => {
-            if (!response.ok) throw new Error('Failed to load pokemon.txt');
+            if (!response.ok) throw new Error('Failed to load cards data');
             return response.text();
         })
             .then(data => {
             const lines = data.split('\n').filter(line => line.trim() !== '');
+
+            const energies = [];
+            const supporters = [];
+            const items = [];
+            const tools = [];
             const pokemonByType = {};
 
             lines.forEach(line => {
                 const parts = line.split(';').map(s => s.trim());
-                if (parts.length < 5) return;
-                const [name, stage, hp, count, type] = parts;
+                if (parts.length < 2) return;
+                const category = parts[0];
 
-                if (!pokemonByType[type]) pokemonByType[type] = [];
-
-                pokemonByType[type].push({
-                    name,
-                    stage,
-                    hp: parseInt(hp, 10),
-                    count: parseInt(count, 10)
-                });
+                switch(category) {
+                    case 'ENERGY':
+                        if (parts.length >= 3) {
+                            energies.push({ name: parts[1], count: parseInt(parts[2], 10) });
+                        }
+                        break;
+                    case 'SUPPORTER':
+                        if (parts.length >= 3) {
+                            supporters.push({ name: parts[1], count: parseInt(parts[2], 10) });
+                        }
+                        break;
+                    case 'ITEM':
+                        if (parts.length >= 3) {
+                            items.push({ name: parts[1], count: parseInt(parts[2], 10) });
+                        }
+                        break;
+                    case 'TOOL':
+                        if (parts.length >= 3) {
+                            tools.push({ name: parts[1], count: parseInt(parts[2], 10) });
+                        }
+                        break;
+                    case 'POKEMON':
+                        if (parts.length >= 6) {
+                            const [_, name, stage, hp, count, type] = parts;
+                            if (!pokemonByType[type]) pokemonByType[type] = [];
+                            pokemonByType[type].push({
+                                name,
+                                stage,
+                                hp: parseInt(hp, 10),
+                                count: parseInt(count, 10)
+                            });
+                        }
+                        break;
+                    default:
+                        console.warn('Unknown category:', category);
+                }
             });
 
+            document.getElementById('energy-container').innerHTML = energies.map(createItemCard).join('');
+            document.getElementById('supporters-container').innerHTML = supporters.map(createItemCard).join('');
+            document.getElementById('items-container').innerHTML = items.map(createItemCard).join('');
+            document.getElementById('tools-container').innerHTML = tools.map(createItemCard).join('');
             renderPokemonByType(pokemonByType);
         })
             .catch(error => {
-            console.error('Error loading Pokémon:', error);
-            typeSections.innerHTML = '<p style="color: red; padding: 1rem;">Failed to load Pokémon data.</p>';
+            console.error('Error loading cards:', error);
+            document.getElementById('energy-container').innerHTML = '<p style="color: red;">Failed to load energies.</p>';
+            document.getElementById('supporters-container').innerHTML = '<p style="color: red;">Failed to load supporters.</p>';
+            document.getElementById('items-container').innerHTML = '<p style="color: red;">Failed to load items.</p>';
+            document.getElementById('tools-container').innerHTML = '<p style="color: red;">Failed to load tools.</p>';
+            typeSections.innerHTML = '<p style="color: red;">Failed to load Pokémon data.</p>';
         });
 
         const searchInput = document.getElementById('searchInput');
