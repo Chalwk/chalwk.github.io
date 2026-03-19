@@ -281,6 +281,16 @@ Communication Board - Stylesheet
     padding: 0.75rem;
 }
 
+.communication-board.grid-3x4 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.communication-board.grid-4x6 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.communication-board.grid-6x8 {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
 .symbol {
     display: flex;
     flex-direction: column;
@@ -681,6 +691,22 @@ body.clicked-outside .settings-dropdown.active .settings-menu {
         padding: 0.5rem;
     }
 
+    .communication-board.grid-6x8 {
+        grid-template-columns: repeat(6, minmax(70px, 1fr));
+    }
+
+    .communication-board.grid-6x8.fixed-grid .symbol {
+        padding: 0.15rem;
+    }
+
+    .communication-board.grid-6x8.fixed-grid .symbol-emoji {
+        font-size: clamp(1rem, 5vw, 1.5rem);
+    }
+
+    .communication-board.grid-6x8.fixed-grid .symbol span:last-child {
+        font-size: clamp(0.5rem, 1.8vw, 0.7rem);
+    }
+
     .category-item {
         flex-direction: column;
         align-items: stretch;
@@ -710,6 +736,18 @@ body.clicked-outside .settings-dropdown.active .settings-menu {
 @media (max-width: 480px) {
     .communication-board {
         grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    }
+
+    .communication-board.grid-6x8 {
+        grid-template-columns: repeat(6, minmax(60px, 1fr));
+    }
+
+    .communication-board.grid-6x8.fixed-grid .symbol-emoji {
+        font-size: clamp(0.9rem, 4vw, 1.3rem);
+    }
+
+    .communication-board.grid-6x8.fixed-grid .symbol span:last-child {
+        font-size: clamp(0.45rem, 1.5vw, 0.6rem);
     }
 
     .phrase-bar {

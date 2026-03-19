@@ -896,22 +896,14 @@ Communication Board - JavaScript
     function applyGridSetting() {
         const board = document.getElementById('communicationBoard');
         if (!board) return;
-        board.classList.remove('fixed-grid');
-        switch (settings.gridSize) {
-            case '3x4':
-                board.style.gridTemplateColumns = 'repeat(3, minmax(0, 1fr))';
-                board.classList.add('fixed-grid');
-                break;
-            case '4x6':
-                board.style.gridTemplateColumns = 'repeat(4, minmax(0, 1fr))';
-                board.classList.add('fixed-grid');
-                break;
-            case '6x8':
-                board.style.gridTemplateColumns = 'repeat(6, minmax(0, 1fr))';
-                board.classList.add('fixed-grid');
-                break;
-            default:
-                board.style.gridTemplateColumns = 'repeat(auto-fill, minmax(120px, 1fr))';
+        board.classList.remove('grid-3x4', 'grid-4x6', 'grid-6x8');
+        if (settings.gridSize === 'auto') {
+            board.classList.remove('fixed-grid');
+            board.style.gridTemplateColumns = '';
+        } else {
+            board.classList.add('fixed-grid');
+            board.classList.add(`grid-${settings.gridSize}`);
+            board.style.gridTemplateColumns = '';
         }
     }
 
