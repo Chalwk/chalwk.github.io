@@ -1,0 +1,484 @@
+<!--
+Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
+
+Pokemon Collection
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>My Pokémon TCG collection</title>
+    <link href="../core.css" rel="stylesheet">
+    <script src="../nav-menu.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
+          rel="stylesheet">
+    <style>
+        :root {
+            --card-bg: #fefefe;
+            --type-psychic: #f95587;
+            --type-darkness: #5a5465;
+            --type-electric: #f7d02c;
+            --type-dragon: #6f35fc;
+            --type-rock: #b6a136;
+            --type-colorless: #a8a77a;
+            --type-fire: #ee8130;
+            --type-metal: #b7b7ce;
+            --type-grass: #7ac74c;
+            --type-water: #6390f0;
+            --type-fighting: #c22e28;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            margin: 2rem 0 1rem;
+            color: var(--darker);
+            border-left: 6px solid var(--primary);
+            padding-left: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .page-title i {
+            color: var(--primary);
+            font-size: 2rem;
+        }
+
+        .section-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 1.8rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--gray-light);
+            transition: var(--transition);
+        }
+
+        .section-card:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
+        .section-heading {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            border-bottom: 2px solid var(--gray-light);
+            padding-bottom: 0.6rem;
+        }
+
+        .section-heading i {
+            color: var(--primary);
+            font-size: 1.6rem;
+        }
+
+        .subsection-title {
+            font-size: 1.4rem;
+            font-weight: 500;
+            margin: 1.8rem 0 1rem;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .subsection-title i {
+            color: var(--secondary);
+        }
+
+        .energy-grid, .trainer-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .energy-chip, .trainer-chip {
+            background: linear-gradient(145deg, #f0f4fa, #ffffff);
+            border: 1px solid var(--gray-light);
+            border-radius: 40px;
+            padding: 0.5rem 1.2rem;
+            font-weight: 500;
+            box-shadow: var(--shadow-sm);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+        }
+        .energy-chip i, .trainer-chip i {
+            color: var(--primary);
+        }
+        .foil-badge {
+            background: linear-gradient(135deg, #d4af37, #f5e18b);
+            color: #1e1e1e;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.2rem 0.6rem;
+            border-radius: 30px;
+            margin-left: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .pokemon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .pokemon-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 0.8rem 1rem;
+            border-left: 5px solid;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            border-image: none;
+            font-size: 0.95rem;
+        }
+        .pokemon-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+        }
+
+        .pokemon-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .pokemon-name span {
+            background: var(--primary);
+            color: white;
+            border-radius: 30px;
+            padding: 0.2rem 0.6rem;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        .pokemon-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin: 0.3rem 0;
+            color: var(--gray);
+            font-size: 0.85rem;
+        }
+        .pokemon-details i {
+            width: 1rem;
+            color: var(--primary);
+        }
+
+        .pokemon-stage {
+            background: var(--light);
+            padding: 0.2rem 0.6rem;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: var(--dark);
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+
+        .hp-value {
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .type-badge {
+            font-size: 0.7rem;
+            background: rgba(0,0,0,0.05);
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            text-transform: uppercase;
+        }
+
+        .qty-badge {
+            background: var(--primary-dark);
+            color: white;
+            border-radius: 30px;
+            padding: 0.1rem 0.5rem;
+            font-size: 0.7rem;
+            margin-left: 0.3rem;
+        }
+
+        .foil-star {
+            color: #fbbf24;
+            margin-left: 0.3rem;
+            font-size: 0.8rem;
+        }
+
+        .type-psychic { border-left-color: var(--type-psychic); }
+        .type-darkness { border-left-color: var(--type-darkness); }
+        .type-electric { border-left-color: var(--type-electric); }
+        .type-dragon { border-left-color: var(--type-dragon); }
+        .type-rock { border-left-color: var(--type-rock); }
+        .type-colorless { border-left-color: var(--type-colorless); }
+        .type-fire { border-left-color: var(--type-fire); }
+        .type-metal { border-left-color: var(--type-metal); }
+        .type-grass { border-left-color: var(--type-grass); }
+        .type-water { border-left-color: var(--type-water); }
+
+        @media (max-width: 600px) {
+            .pokemon-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        @media (max-width: 420px) {
+            .pokemon-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<header class="header"></header>
+
+<main>
+    <div class="container">
+        <h1 class="page-title">
+            <i class="fas fa-dragon"></i> My Pokémon TCG collection
+        </h1>
+
+        <section class="section-card" id="energies">
+            <h2 class="section-heading"><i class="fas fa-bolt"></i> Energies</h2>
+            <div class="energy-grid" id="energy-container"></div>
+        </section>
+
+        <section class="section-card" id="trainers">
+            <h2 class="section-heading"><i class="fas fa-user-graduate"></i> Trainers</h2>
+
+            <div class="subsection-title"><i class="fas fa-users"></i> Supporters</div>
+            <div class="trainer-grid" id="supporters-container"></div>
+
+            <div class="subsection-title"><i class="fas fa-box"></i> Items</div>
+            <div class="trainer-grid" id="items-container"></div>
+
+            <div class="subsection-title"><i class="fas fa-screwdriver-wrench"></i> Pokémon Tools</div>
+            <div class="trainer-grid" id="tools-container"></div>
+        </section>
+
+        <section class="section-card" id="pokemon">
+            <h2 class="section-heading"><i class="fas fa-paw"></i> Pokémon roster</h2>
+            <div id="pokemon-type-sections"></div>
+        </section>
+    </div>
+</main>
+
+<script>
+    (function() {
+        const energies = [
+            { name: "Fusion Strike Energy", count: 1, foil: true },
+            { name: "Fire Energy", count: 10 },
+            { name: "Lightning Energy", count: 10 }
+        ];
+
+        const supporters = [
+            { name: "Explorer's Guidance", count: 1, foil: true },
+            { name: "Friends in Galar", count: 1 },
+            { name: "Clavell", count: 2 },
+            { name: "Jacq", count: 3 },
+            { name: "Youngster", count: 2 },
+            { name: "Nemona", count: 4 }
+        ];
+
+        const items = [
+            { name: "Potion", count: 2 },
+            { name: "Switch", count: 2 },
+            { name: "Great Ball", count: 4 },
+            { name: "Techno Radar", count: 1, foil: true },
+            { name: "Unidentified Fossil", count: 1 },
+            { name: "Super Rod", count: 1, foil: true },
+            { name: "Energy Loto", count: 1 },
+            { name: "Rusted Shield", count: 1 }
+        ];
+
+        const tools = [
+            { name: "Future Booster Energy Capsule", count: 1 },
+            { name: "Technical Machine: Evolution", count: 1 }
+        ];
+
+        const pokemonByType = {
+            Psychic: [
+                { name: "Polteageist", stage: "Stage 1", hp: 70, count: 1 },
+                { name: "Grimmsnarl", stage: "Stage 2", hp: 170, count: 1 },
+                { name: "Greavard", stage: "Basic", hp: 80, count: 1 },
+                { name: "Drowzee", stage: "Basic", hp: 80, count: 1 },
+                { name: "Gastly", stage: "Basic", hp: 50, count: 1 },
+                { name: "Woobat", stage: "Basic", hp: 60, count: 1 },
+                { name: "Haunter", stage: "Stage 1", hp: 80, count: 1 },
+                { name: "Haunter", stage: "Stage 1", hp: 70, count: 1 },
+                { name: "Scream Tail", stage: "Basic", hp: 90, count: 1 },
+                { name: "Brambleghast", stage: "Stage 1", hp: 100, count: 1 },
+                { name: "Abra", stage: "Basic", hp: 50, count: 1 },
+                { name: "Espathra", stage: "Stage 1", hp: 120, count: 1 },
+                { name: "Dedenne", stage: "Basic", hp: 70, count: 1 },
+                { name: "Zorua", stage: "Basic", hp: 60, count: 1 },
+                { name: "Flabébé", stage: "Basic", hp: 40, count: 1 },
+                { name: "Jynx", stage: "Basic", hp: 100, count: 2 }
+            ],
+            Darkness: [
+                { name: "Thievul", stage: "Stage 1", hp: 100, count: 2 },
+                { name: "Thievul", stage: "Stage 1", hp: 120, count: 1 },
+                { name: "Honchkrow", stage: "Stage 1", hp: 130, count: 2 },
+                { name: "Liepard", stage: "Stage 1", hp: 100, count: 2 },
+                { name: "Toxapex", stage: "Stage 1", hp: 120, count: 1 },
+                { name: "Sharpedo", stage: "Stage 1", hp: 100, count: 1 },
+                { name: "Garbodor", stage: "Stage 1", hp: 140, count: 1 },
+                { name: "Grimer", stage: "Basic", hp: 80, count: 1 },
+                { name: "Toxicroak", stage: "Stage 1", hp: 120, count: 1 },
+                { name: "Shroodle", stage: "Basic", hp: 60, count: 1 }
+            ],
+            Electric: [
+                { name: "Pikachu", stage: "Basic", hp: 190, count: 1, foil: true },
+                { name: "Kilowattrel", stage: "Stage 1", hp: 120, count: 2 },
+                { name: "Wattrel", stage: "Basic", hp: 60, count: 2 },
+                { name: "Pawmot", stage: "Stage 2", hp: 140, count: 1 },
+                { name: "Pawmi", stage: "Basic", hp: 60, count: 3 },
+                { name: "Pawmo", stage: "Stage 1", hp: 80, count: 2 },
+                { name: "Lanturn", stage: "Stage 1", hp: 120, count: 1 },
+                { name: "Electabuzz", stage: "Basic", hp: 80, count: 1 },
+                { name: "Boltund", stage: "Stage 1", hp: 130, count: 1 },
+                { name: "Toxtricity", stage: "Stage 1", hp: 130, count: 1 },
+                { name: "Magnezone", stage: "Stage 2", hp: 160, count: 1 },
+                { name: "Miraidon", stage: "Basic", hp: 120, count: 1 }
+            ],
+            Dragon: [
+                { name: "Rayquaza EX", stage: "Basic", hp: 180, count: 1, foil: true }
+            ],
+            Rock: [
+                { name: "Nacli", stage: "Basic", hp: 60, count: 1 },
+                { name: "Sudowoodo", stage: "Basic", hp: 110, count: 1 },
+                { name: "Naclstack", stage: "Stage 1", hp: 110, count: 1 },
+                { name: "Sandslash", stage: "Stage 1", hp: 120, count: 1 }
+            ],
+            Colorless: [
+                { name: "Wigglytuff", stage: "Stage 1", hp: 120, count: 1 },
+                { name: "Girafarig", stage: "Basic", hp: 100, count: 1 },
+                { name: "Kangaskhan", stage: "Basic", hp: 120, count: 1 },
+                { name: "Unfezant", stage: "Stage 2", hp: 140, count: 1 },
+                { name: "Smeargle", stage: "Basic", hp: 70, count: 1 },
+                { name: "Stoutland", stage: "Stage 2", hp: 160, count: 1 }
+            ],
+            Fire: [
+                { name: "Darmanitan", stage: "Stage 1", hp: 140, count: 1, foil: true },
+                { name: "Darmanitan", stage: "Stage 1", hp: 150, count: 1 },
+                { name: "Volcarona", stage: "Stage 1", hp: 140, count: 1 },
+                { name: "Arcanine", stage: "Stage 1", hp: 140, count: 1 },
+                { name: "Reshiram", stage: "Basic", hp: 130, count: 1 },
+                { name: "Charmander", stage: "Basic", hp: 80, count: 1 },
+                { name: "Charmander", stage: "Basic", hp: 60, count: 2 },
+                { name: "Growlithe", stage: "Basic", hp: 90, count: 1 },
+                { name: "Moltres", stage: "Basic", hp: 120, count: 1, foil: true },
+                { name: "Rapidash", stage: "Stage 1", hp: 100, count: 1 },
+                { name: "Ponyta", stage: "Basic", hp: 60, count: 1 },
+                { name: "Charmeleon", stage: "Stage 1", hp: 90, count: 2 },
+                { name: "Charizard EX", stage: "Stage 2", hp: 330, count: 1, foil: true },
+                { name: "Torkoal", stage: "Basic", hp: 130, count: 2 },
+                { name: "Houndoom", stage: "Stage 1", hp: 120, count: 2 },
+                { name: "Houndour", stage: "Basic", hp: 70, count: 2 },
+                { name: "Numel", stage: "Basic", hp: 80, count: 1 },
+                { name: "Centiskorch", stage: "Stage 1", hp: 140, count: 1 },
+                { name: "Magmar", stage: "Basic", hp: 90, count: 1 }
+            ],
+            Metal: [
+                { name: "Escavalier", stage: "Stage 1", hp: 130, count: 1 },
+                { name: "Steelix", stage: "Stage 1", hp: 180, count: 1 }
+            ],
+            Grass: [
+                { name: "Shelmet", stage: "Basic", hp: 60, count: 1 },
+                { name: "Bulbasaur", stage: "Basic", hp: 80, count: 1 },
+                { name: "Poltchageist", stage: "Basic", hp: 30, count: 1 },
+                { name: "Shiftry", stage: "Stage 2", hp: 160, count: 1 },
+                { name: "Heracross", stage: "Basic", hp: 120, count: 1 },
+                { name: "Tropius", stage: "Basic", hp: 110, count: 1 },
+                { name: "Spinarak", stage: "Basic", hp: 60, count: 1 },
+                { name: "Shroomish", stage: "Basic", hp: 50, count: 1 },
+                { name: "Thwackey", stage: "Stage 1", hp: 90, count: 1 }
+            ],
+            Water: [
+                { name: "Suicune", stage: "Basic", hp: 120, count: 2 },
+                { name: "Milotic", stage: "Stage 1", hp: 130, count: 1 },
+                { name: "Mamoswine", stage: "Stage 2", hp: 180, count: 1 },
+                { name: "Sharpedo", stage: "Stage 1", hp: 120, count: 1 },
+                { name: "Slowpoke", stage: "Basic", hp: 70, count: 1 },
+                { name: "Slowking", stage: "Stage 1", hp: 130, count: 1 },
+                { name: "Slowbro", stage: "Stage 1", hp: 120, count: 2 },
+                { name: "Shellder", stage: "Basic", hp: 70, count: 1 },
+                { name: "Wimpod", stage: "Basic", hp: 70, count: 3 },
+                { name: "Magikarp", stage: "Basic", hp: 30, count: 1 },
+                { name: "Sealeo", stage: "Stage 1", hp: 110, count: 1 },
+                { name: "Sneasel", stage: "Basic", hp: 70, count: 1 },
+                { name: "Lumineon", stage: "Stage 1", hp: 90, count: 1 },
+                { name: "Mr. Mime", stage: "Basic", hp: 80, count: 1 },
+                { name: "Totodile", stage: "Basic", hp: 70, count: 1 },
+                { name: "Relicanth", stage: "Basic", hp: 90, count: 1 }
+            ]
+        };
+
+        function renderChip(item) {
+            return `<div class="trainer-chip">
+                <i class="fas fa-tag"></i> ${item.name} <strong>×${item.count}</strong>
+                ${item.foil ? '<span class="foil-badge"><i class="fas fa-star"></i> FOIL</span>' : ''}
+            </div>`;
+        }
+
+        function renderEnergyChip(item) {
+            return `<div class="energy-chip">
+                <i class="fas fa-bolt"></i> ${item.name} <strong>×${item.count}</strong>
+                ${item.foil ? '<span class="foil-badge"><i class="fas fa-star"></i> FOIL</span>' : ''}
+            </div>`;
+        }
+
+        const energyContainer = document.getElementById('energy-container');
+        energies.forEach(e => energyContainer.innerHTML += renderEnergyChip(e));
+
+        document.getElementById('supporters-container').innerHTML = supporters.map(renderChip).join('');
+        document.getElementById('items-container').innerHTML = items.map(renderChip).join('');
+        document.getElementById('tools-container').innerHTML = tools.map(renderChip).join('');
+
+        const typeSections = document.getElementById('pokemon-type-sections');
+        for (let [type, mons] of Object.entries(pokemonByType)) {
+            const typeLower = type.toLowerCase();
+            const sectionDiv = document.createElement('div');
+            sectionDiv.classList.add('pokemon-type-block');
+            sectionDiv.innerHTML = `<h3 class="subsection-title"><i class="fas fa-${typeLower === 'dragon' ? 'dragon' : 'paw'}"></i> ${type}</h3>`;
+            const grid = document.createElement('div');
+            grid.className = 'pokemon-grid';
+
+            mons.forEach(p => {
+                const card = document.createElement('div');
+                card.className = `pokemon-card type-${typeLower}`;
+                const foilStar = p.foil ? '<span class="foil-star" title="Holo foil"><i class="fas fa-star"></i></span>' : '';
+                card.innerHTML = `
+                    <div class="pokemon-name">
+                        ${p.name} ${foilStar}
+                        <span class="type-badge">${type}</span>
+                    </div>
+                    <div class="pokemon-details">
+                        <span><i class="fas fa-arrow-up"></i> ${p.stage}</span>
+                        <span><i class="fas fa-heart"></i> <span class="hp-value">${p.hp} HP</span></span>
+                    </div>
+                    <div style="margin-top: 0.3rem; display: flex; justify-content: flex-end;">
+                        <span class="qty-badge">×${p.count}</span>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+
+            sectionDiv.appendChild(grid);
+            typeSections.appendChild(sectionDiv);
+        }
+    })();
+</script>
+
+</body>
+</html>
