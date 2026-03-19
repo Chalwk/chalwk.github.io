@@ -410,7 +410,7 @@ My Pokémon TCG collection
         <div class="search-wrapper">
             <i class="fas fa-search"></i>
             <label for="searchInput"></label><input type="text" id="searchInput"
-                                                    placeholder="Search cards (e.g. 'char', 'pika', 'energy')"
+                                                    placeholder="Search cards (e.g. 'char', 'holo', 'stage 2', 'hp 100')"
                                                     autocomplete="off">
             <button id="clearSearch" title="Clear"><i class="fas fa-times"></i></button>
         </div>
@@ -508,7 +508,7 @@ My Pokémon TCG collection
             }
 
             return `
-                <div class="item-card" data-name="${dataName.toLowerCase()}">
+                <div class="item-card" data-name="${dataName.toLowerCase()}" data-holo="${item.holo ? 'true' : 'false'}">
                     <span class="qty-badge">×${item.count}</span>
                     <img class="card-thumb" src="${imgSrc}" alt="${item.name}" onclick="openLightbox('${escapedImgSrc}')" loading="lazy">
                     <div class="item-name">
@@ -534,6 +534,9 @@ My Pokémon TCG collection
                     const card = document.createElement('div');
                     card.className = `pokemon-card type-${typeLower}`;
                     card.setAttribute('data-name', p.name.toLowerCase());
+                    card.setAttribute('data-stage', p.stage.toLowerCase());
+                    card.setAttribute('data-hp', p.hp);
+                    card.setAttribute('data-holo', p.holo ? 'true' : 'false');
                     const imgSrc = getImagePath(p.name);
                     const escapedImgSrc = imgSrc.replace(/'/g, "\\'");
                     const holoTag = p.holo ? '<span class="holo-indicator">H</span>' : '';
@@ -702,11 +705,73 @@ My Pokémon TCG collection
         function filterCards() {
             const term = searchInput.value.trim().toLowerCase();
             const cards = getAllCards();
+
+            const tokens = term.split(/\s+/).filter(t => t.length > 0);
+            let conditions = {
+                holo: null,
+                stage: null,
+                hp: null,
+                nameTokens: []
+            };
+
+            for (let i = 0; i < tokens.length; i++) {
+                const token = tokens[i];
+                if (token === 'holo') {
+                    conditions.holo = true;
+                } else if (token === 'stage' && i + 1 < tokens.length) {
+                    conditions.stage = tokens[i + 1].toLowerCase();
+                    i++;
+                } else if (token === 'hp' && i + 1 < tokens.length) {
+                    const hpVal = parseInt(tokens[i + 1], 10);
+                    if (!isNaN(hpVal)) conditions.hp = hpVal;
+                    i++;
+                } else if (token.startsWith('stage:')) {
+                    conditions.stage = token.substring(6).toLowerCase();
+                } else if (token.startsWith('hp:')) {
+                    const hpVal = parseInt(token.substring(3), 10);
+                    if (!isNaN(hpVal)) conditions.hp = hpVal;
+                } else {
+                    conditions.nameTokens.push(token);
+                }
+            }
+
             let visibleCount = 0;
 
             cards.forEach(card => {
-                const cardName = card.getAttribute('data-name') || '';
-                if (term === '' || cardName.includes(term)) {
+                let match = true;
+
+                if (conditions.holo !== null) {
+                    const isHolo = card.dataset.holo === 'true';
+                    if (isHolo !== conditions.holo) {
+                        match = false;
+                    }
+                }
+
+                if (match && conditions.stage !== null) {
+                    const cardStage = card.dataset.stage;
+                    if (!cardStage || !cardStage.includes(conditions.stage)) {
+                        match = false;
+                    }
+                }
+
+                if (match && conditions.hp !== null) {
+                    const cardHp = parseInt(card.dataset.hp, 10);
+                    if (isNaN(cardHp) || cardHp !== conditions.hp) {
+                        match = false;
+                    }
+                }
+
+                if (match && conditions.nameTokens.length > 0) {
+                    const cardName = card.dataset.name || '';
+                    for (let nameToken of conditions.nameTokens) {
+                        if (!cardName.includes(nameToken)) {
+                            match = false;
+                            break;
+                        }
+                    }
+                }
+
+                if (match) {
                     card.style.display = 'flex';
                     visibleCount++;
                 } else {
