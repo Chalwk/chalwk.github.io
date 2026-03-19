@@ -261,6 +261,23 @@
             margin: 0.2rem 0;
         }
 
+        .card-set {
+            font-size: 0.65rem;
+            color: var(--gray);
+            margin-top: 0.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .card-set i {
+            color: var(--primary);
+            width: 0.9rem;
+            font-size: 0.7rem;
+        }
+
         .type-psychic { border-left-color: var(--type-psychic); }
         .type-darkness { border-left-color: var(--type-darkness); }
         .type-electric { border-left-color: var(--type-electric); }
@@ -411,154 +428,154 @@
         };
 
         const energies = [
-            { name: "Fusion Strike Energy", count: 1, foil: true },
-            { name: "Fire Energy", count: 10 },
-            { name: "Lightning Energy", count: 10 }
+            { name: "Fusion Strike Energy", count: 1, foil: true, set: "Fusion Strike" },
+            { name: "Fire Energy", count: 10, set: "(unknown)" },
+            { name: "Lightning Energy", count: 10, set: "(unknown)" }
         ];
 
         const supporters = [
-            { name: "Explorer's Guidance", count: 1, foil: true },
-            { name: "Friends in Galar", count: 1 },
-            { name: "Clavell", count: 2 },
-            { name: "Jacq", count: 3 },
-            { name: "Youngster", count: 2 },
-            { name: "Nemona", count: 4 }
+            { name: "Explorer's Guidance", count: 1, foil: true, set: "Temporal Forces" },
+            { name: "Friends in Galar", count: 1, set: "Brilliant Stars" },
+            { name: "Clavell", count: 2, set: "Paldea Evolved" },
+            { name: "Jacq", count: 3, set: "Scarlet & Violet" },
+            { name: "Youngster", count: 2, set: "Scarlet & Violet" },
+            { name: "Nemona", count: 4, set: "Scarlet & Violet" }
         ];
 
         const items = [
-            { name: "Potion", count: 2 },
-            { name: "Switch", count: 2 },
-            { name: "Great Ball", count: 4 },
-            { name: "Techno Radar", count: 1, foil: true },
-            { name: "Unidentified Fossil", count: 1 },
-            { name: "Super Rod", count: 1, foil: true },
-            { name: "Energy Loto", count: 1 },
-            { name: "Rusted Shield", count: 1 }
+            { name: "Potion", count: 2, set: "(unknown)" },
+            { name: "Switch", count: 2, set: "(unknown)" },
+            { name: "Great Ball", count: 4, set: "(unknown)" },
+            { name: "Techno Radar", count: 1, foil: true, set: "(unknown)" },
+            { name: "Unidentified Fossil", count: 1, set: "(unknown)" },
+            { name: "Super Rod", count: 1, foil: true, set: "Paldea Evolved" },
+            { name: "Energy Loto", count: 1, set: "(unknown)" },
+            { name: "Rusted Shield", count: 1, set: "(unknown)" }
         ];
 
         const tools = [
-            { name: "Future Booster Energy Capsule", count: 1 },
-            { name: "Technical Machine - Evolution", count: 1 }
+            { name: "Future Booster Energy Capsule", count: 1, set: "Paradox Rift" },
+            { name: "Technical Machine - Evolution", count: 1, set: "Scarlet & Violet" }
         ];
 
         const pokemonByType = {
             Psychic: [
-                { name: "Polteageist", stage: "Stage 1", hp: 70, count: 1 },
-                { name: "Grimmsnarl", stage: "Stage 2", hp: 170, count: 1 },
-                { name: "Greavard", stage: "Basic", hp: 80, count: 1 },
-                { name: "Drowzee", stage: "Basic", hp: 80, count: 1 },
-                { name: "Gastly", stage: "Basic", hp: 50, count: 1 },
-                { name: "Woobat", stage: "Basic", hp: 60, count: 1 },
-                { name: "Haunter 1", stage: "Stage 1", hp: 70, count: 1 },
-                { name: "Haunter 2", stage: "Stage 1", hp: 80, count: 1 },
-                { name: "Scream Tail", stage: "Basic", hp: 90, count: 1 },
-                { name: "Brambleghast", stage: "Stage 1", hp: 100, count: 1 },
-                { name: "Abra", stage: "Basic", hp: 50, count: 1 },
-                { name: "Espathra", stage: "Stage 1", hp: 120, count: 1 },
-                { name: "Dedenne", stage: "Basic", hp: 70, count: 1 },
-                { name: "Zorua", stage: "Basic", hp: 60, count: 1 },
-                { name: "Flabebe", stage: "Basic", hp: 40, count: 1 },
-                { name: "Jynx", stage: "Basic", hp: 100, count: 2 }
+                { name: "Polteageist", stage: "Stage 1", hp: 70, count: 1, set: "(unknown)" },
+                { name: "Grimmsnarl", stage: "Stage 2", hp: 170, count: 1, set: "(unknown)" },
+                { name: "Greavard", stage: "Basic", hp: 80, count: 1, set: "Scarlet & Violet" },
+                { name: "Drowzee", stage: "Basic", hp: 80, count: 1, set: "(unknown)" },
+                { name: "Gastly", stage: "Basic", hp: 50, count: 1, set: "(unknown)" },
+                { name: "Woobat", stage: "Basic", hp: 60, count: 1, set: "(unknown)" },
+                { name: "Haunter 1", stage: "Stage 1", hp: 70, count: 1, set: "(unknown)" },
+                { name: "Haunter 2", stage: "Stage 1", hp: 80, count: 1, set: "(unknown)" },
+                { name: "Scream Tail", stage: "Basic", hp: 90, count: 1, set: "Scarlet & Violet" },
+                { name: "Brambleghast", stage: "Stage 1", hp: 100, count: 1, set: "Scarlet & Violet" },
+                { name: "Abra", stage: "Basic", hp: 50, count: 1, set: "(unknown)" },
+                { name: "Espathra", stage: "Stage 1", hp: 120, count: 1, set: "Scarlet & Violet" },
+                { name: "Dedenne", stage: "Basic", hp: 70, count: 1, set: "(unknown)" },
+                { name: "Zorua", stage: "Basic", hp: 60, count: 1, set: "(unknown)" },
+                { name: "Flabebe", stage: "Basic", hp: 40, count: 1, set: "(unknown)" },
+                { name: "Jynx", stage: "Basic", hp: 100, count: 2, set: "(unknown)" }
             ],
             Darkness: [
-                { name: "Thievul 1", stage: "Stage 1", hp: 100, count: 2 },
-                { name: "Thievul 2", stage: "Stage 1", hp: 120, count: 1 },
-                { name: "Honchkrow 1", stage: "Stage 1", hp: 130, count: 2 },
-                { name: "Honchkrow 2", stage: "Stage 2", hp: 130, count: 2 },
-                { name: "Liepard", stage: "Stage 1", hp: 100, count: 2 },
-                { name: "Toxapex", stage: "Stage 1", hp: 120, count: 1 },
-                { name: "Sharpedo 1", stage: "Stage 1", hp: 100, count: 1 },
-                { name: "Sharpedo 2", stage: "Stage 1", hp: 120, count: 1 },
-                { name: "Garbodor", stage: "Stage 1", hp: 140, count: 1 },
-                { name: "Grimer", stage: "Basic", hp: 80, count: 1 },
-                { name: "Toxicroak", stage: "Stage 1", hp: 120, count: 1 },
-                { name: "Shroodle", stage: "Basic", hp: 60, count: 1 }
+                { name: "Thievul 1", stage: "Stage 1", hp: 100, count: 2, set: "(unknown)" },
+                { name: "Thievul 2", stage: "Stage 1", hp: 120, count: 1, set: "(unknown)" },
+                { name: "Honchkrow 1", stage: "Stage 1", hp: 130, count: 2, set: "(unknown)" },
+                { name: "Honchkrow 2", stage: "Stage 2", hp: 130, count: 2, set: "(unknown)" },
+                { name: "Liepard", stage: "Stage 1", hp: 100, count: 2, set: "(unknown)" },
+                { name: "Toxapex", stage: "Stage 1", hp: 120, count: 1, set: "(unknown)" },
+                { name: "Sharpedo 1", stage: "Stage 1", hp: 100, count: 1, set: "(unknown)" },
+                { name: "Sharpedo 2", stage: "Stage 1", hp: 120, count: 1, set: "(unknown)" },
+                { name: "Garbodor", stage: "Stage 1", hp: 140, count: 1, set: "(unknown)" },
+                { name: "Grimer", stage: "Basic", hp: 80, count: 1, set: "(unknown)" },
+                { name: "Toxicroak", stage: "Stage 1", hp: 120, count: 1, set: "(unknown)" },
+                { name: "Shroodle", stage: "Basic", hp: 60, count: 1, set: "Scarlet & Violet" }
             ],
             Electric: [
-                { name: "Pikachu", stage: "Basic", hp: 190, count: 1, foil: true },
-                { name: "Kilowattrel", stage: "Stage 1", hp: 120, count: 2 },
-                { name: "Wattrel", stage: "Basic", hp: 60, count: 2 },
-                { name: "Pawmot", stage: "Stage 2", hp: 140, count: 1 },
-                { name: "Pawmi", stage: "Basic", hp: 60, count: 3 },
-                { name: "Pawmo", stage: "Stage 1", hp: 80, count: 2 },
-                { name: "Lanturn", stage: "Stage 1", hp: 120, count: 1 },
-                { name: "Electabuzz", stage: "Basic", hp: 80, count: 1 },
-                { name: "Boltund", stage: "Stage 1", hp: 130, count: 1 },
-                { name: "Toxtricity", stage: "Stage 1", hp: 130, count: 1 },
-                { name: "Magnezone", stage: "Stage 2", hp: 160, count: 1 },
-                { name: "Miraidon", stage: "Basic", hp: 120, count: 1 }
+                { name: "Pikachu", stage: "Basic", hp: 190, count: 1, foil: true, set: "(unknown)" },
+                { name: "Kilowattrel", stage: "Stage 1", hp: 120, count: 2, set: "Scarlet & Violet" },
+                { name: "Wattrel", stage: "Basic", hp: 60, count: 2, set: "Scarlet & Violet" },
+                { name: "Pawmot", stage: "Stage 2", hp: 140, count: 1, set: "Scarlet & Violet" },
+                { name: "Pawmi", stage: "Basic", hp: 60, count: 3, set: "Scarlet & Violet" },
+                { name: "Pawmo", stage: "Stage 1", hp: 80, count: 2, set: "Scarlet & Violet" },
+                { name: "Lanturn", stage: "Stage 1", hp: 120, count: 1, set: "(unknown)" },
+                { name: "Electabuzz", stage: "Basic", hp: 80, count: 1, set: "(unknown)" },
+                { name: "Boltund", stage: "Stage 1", hp: 130, count: 1, set: "(unknown)" },
+                { name: "Toxtricity", stage: "Stage 1", hp: 130, count: 1, set: "(unknown)" },
+                { name: "Magnezone", stage: "Stage 2", hp: 160, count: 1, set: "(unknown)" },
+                { name: "Miraidon", stage: "Basic", hp: 120, count: 1, set: "Scarlet & Violet" }
             ],
             Dragon: [
-                { name: "Rayquaza EX", stage: "Basic", hp: 180, count: 1, foil: true }
+                { name: "Rayquaza EX", stage: "Basic", hp: 180, count: 1, foil: true, set: "(unknown)" }
             ],
             Rock: [
-                { name: "Nacli", stage: "Basic", hp: 60, count: 1 },
-                { name: "Sudowoodo", stage: "Basic", hp: 110, count: 1 },
-                { name: "Naclstack", stage: "Stage 1", hp: 110, count: 1 },
-                { name: "Sandslash", stage: "Stage 1", hp: 120, count: 1 }
+                { name: "Nacli", stage: "Basic", hp: 60, count: 1, set: "Scarlet & Violet" },
+                { name: "Sudowoodo", stage: "Basic", hp: 110, count: 1, set: "(unknown)" },
+                { name: "Naclstack", stage: "Stage 1", hp: 110, count: 1, set: "Scarlet & Violet" },
+                { name: "Sandslash", stage: "Stage 1", hp: 120, count: 1, set: "(unknown)" }
             ],
             Colorless: [
-                { name: "Wigglytuff", stage: "Stage 1", hp: 120, count: 1 },
-                { name: "Girafarig", stage: "Basic", hp: 100, count: 1 },
-                { name: "Kangaskhan", stage: "Basic", hp: 120, count: 1 },
-                { name: "Unfezant", stage: "Stage 2", hp: 140, count: 1 },
-                { name: "Smeargle", stage: "Basic", hp: 70, count: 1 },
-                { name: "Stoutland", stage: "Stage 2", hp: 160, count: 1 }
+                { name: "Wigglytuff", stage: "Stage 1", hp: 120, count: 1, set: "(unknown)" },
+                { name: "Girafarig", stage: "Basic", hp: 100, count: 1, set: "(unknown)" },
+                { name: "Kangaskhan", stage: "Basic", hp: 120, count: 1, set: "(unknown)" },
+                { name: "Unfezant", stage: "Stage 2", hp: 140, count: 1, set: "(unknown)" },
+                { name: "Smeargle", stage: "Basic", hp: 70, count: 1, set: "(unknown)" },
+                { name: "Stoutland", stage: "Stage 2", hp: 160, count: 1, set: "(unknown)" }
             ],
             Fire: [
-                { name: "Darmanitan 1", stage: "Stage 1", hp: 140, count: 1, foil: true },
-                { name: "Darmanitan 2", stage: "Stage 1", hp: 150, count: 1 },
-                { name: "Volcarona", stage: "Stage 1", hp: 140, count: 1 },
-                { name: "Arcanine", stage: "Stage 1", hp: 140, count: 1 },
-                { name: "Reshiram", stage: "Basic", hp: 130, count: 1 },
-                { name: "Charmander 1", stage: "Basic", hp: 60, count: 1 },
-                { name: "Charmander 2", stage: "Basic", hp: 80, count: 2 },
-                { name: "Growlithe", stage: "Basic", hp: 90, count: 1 },
-                { name: "Moltres", stage: "Basic", hp: 120, count: 1, foil: true },
-                { name: "Rapidash", stage: "Stage 1", hp: 100, count: 1 },
-                { name: "Ponyta", stage: "Basic", hp: 60, count: 1 },
-                { name: "Charmeleon", stage: "Stage 1", hp: 90, count: 2 },
-                { name: "Charizard EX", stage: "Stage 2", hp: 330, count: 1, foil: true },
-                { name: "Torkoal", stage: "Basic", hp: 130, count: 2 },
-                { name: "Houndoom", stage: "Stage 1", hp: 120, count: 2 },
-                { name: "Houndour", stage: "Basic", hp: 70, count: 2 },
-                { name: "Numel", stage: "Basic", hp: 80, count: 1 },
-                { name: "Centiskorch", stage: "Stage 1", hp: 140, count: 1 },
-                { name: "Magmar", stage: "Basic", hp: 90, count: 1 }
+                { name: "Darmanitan 1", stage: "Stage 1", hp: 140, count: 1, foil: true, set: "(unknown)" },
+                { name: "Darmanitan 2", stage: "Stage 1", hp: 150, count: 1, set: "(unknown)" },
+                { name: "Volcarona", stage: "Stage 1", hp: 140, count: 1, set: "(unknown)" },
+                { name: "Arcanine", stage: "Stage 1", hp: 140, count: 1, set: "(unknown)" },
+                { name: "Reshiram", stage: "Basic", hp: 130, count: 1, set: "(unknown)" },
+                { name: "Charmander 1", stage: "Basic", hp: 60, count: 1, set: "(unknown)" },
+                { name: "Charmander 2", stage: "Basic", hp: 80, count: 2, set: "(unknown)" },
+                { name: "Growlithe", stage: "Basic", hp: 90, count: 1, set: "(unknown)" },
+                { name: "Moltres", stage: "Basic", hp: 120, count: 1, foil: true, set: "(unknown)" },
+                { name: "Rapidash", stage: "Stage 1", hp: 100, count: 1, set: "(unknown)" },
+                { name: "Ponyta", stage: "Basic", hp: 60, count: 1, set: "(unknown)" },
+                { name: "Charmeleon", stage: "Stage 1", hp: 90, count: 2, set: "(unknown)" },
+                { name: "Charizard EX", stage: "Stage 2", hp: 330, count: 1, foil: true, set: "(unknown)" },
+                { name: "Torkoal", stage: "Basic", hp: 130, count: 2, set: "(unknown)" },
+                { name: "Houndoom", stage: "Stage 1", hp: 120, count: 2, set: "(unknown)" },
+                { name: "Houndour", stage: "Basic", hp: 70, count: 2, set: "(unknown)" },
+                { name: "Numel", stage: "Basic", hp: 80, count: 1, set: "(unknown)" },
+                { name: "Centiskorch", stage: "Stage 1", hp: 140, count: 1, set: "(unknown)" },
+                { name: "Magmar", stage: "Basic", hp: 90, count: 1, set: "(unknown)" }
             ],
             Metal: [
-                { name: "Escavalier", stage: "Stage 1", hp: 130, count: 1 },
-                { name: "Steelix", stage: "Stage 1", hp: 180, count: 1 }
+                { name: "Escavalier", stage: "Stage 1", hp: 130, count: 1, set: "(unknown)" },
+                { name: "Steelix", stage: "Stage 1", hp: 180, count: 1, set: "(unknown)" }
             ],
             Grass: [
-                { name: "Shelmet", stage: "Basic", hp: 60, count: 1 },
-                { name: "Bulbasaur", stage: "Basic", hp: 80, count: 1 },
-                { name: "Poltchageist", stage: "Basic", hp: 30, count: 1 },
-                { name: "Shiftry", stage: "Stage 2", hp: 160, count: 1 },
-                { name: "Heracross", stage: "Basic", hp: 120, count: 1 },
-                { name: "Tropius", stage: "Basic", hp: 110, count: 1 },
-                { name: "Spinarak", stage: "Basic", hp: 60, count: 1 },
-                { name: "Shroomish", stage: "Basic", hp: 50, count: 1 },
-                { name: "Thwackey", stage: "Stage 1", hp: 90, count: 1 }
+                { name: "Shelmet", stage: "Basic", hp: 60, count: 1, set: "(unknown)" },
+                { name: "Bulbasaur", stage: "Basic", hp: 80, count: 1, set: "(unknown)" },
+                { name: "Poltchageist", stage: "Basic", hp: 30, count: 1, set: "Scarlet & Violet" },
+                { name: "Shiftry", stage: "Stage 2", hp: 160, count: 1, set: "(unknown)" },
+                { name: "Heracross", stage: "Basic", hp: 120, count: 1, set: "(unknown)" },
+                { name: "Tropius", stage: "Basic", hp: 110, count: 1, set: "(unknown)" },
+                { name: "Spinarak", stage: "Basic", hp: 60, count: 1, set: "(unknown)" },
+                { name: "Shroomish", stage: "Basic", hp: 50, count: 1, set: "(unknown)" },
+                { name: "Thwackey", stage: "Stage 1", hp: 90, count: 1, set: "(unknown)" }
             ],
             Water: [
-                { name: "Suicune", stage: "Basic", hp: 120, count: 2 },
-                { name: "Milotic", stage: "Stage 1", hp: 130, count: 1 },
-                { name: "Mamoswine", stage: "Stage 2", hp: 180, count: 1 },
-                { name: "Sharpedo 1", stage: "Stage 1", hp: 100, count: 1 },
-                { name: "Sharpedo 2", stage: "Stage 1", hp: 120, count: 1 },
-                { name: "Slowpoke", stage: "Basic", hp: 70, count: 1 },
-                { name: "Slowking", stage: "Stage 1", hp: 130, count: 1 },
-                { name: "Slowbro", stage: "Stage 1", hp: 120, count: 2 },
-                { name: "Shellder", stage: "Basic", hp: 70, count: 1 },
-                { name: "Wimpod", stage: "Basic", hp: 70, count: 3 },
-                { name: "Magikarp", stage: "Basic", hp: 30, count: 1 },
-                { name: "Sealeo", stage: "Stage 1", hp: 110, count: 1 },
-                { name: "Sneasel", stage: "Basic", hp: 70, count: 1 },
-                { name: "Lumineon", stage: "Stage 1", hp: 90, count: 1 },
-                { name: "Mr. Mime", stage: "Basic", hp: 80, count: 1 },
-                { name: "Totodile", stage: "Basic", hp: 70, count: 1 },
-                { name: "Relicanth", stage: "Basic", hp: 90, count: 1 }
+                { name: "Suicune", stage: "Basic", hp: 120, count: 2, set: "(unknown)" },
+                { name: "Milotic", stage: "Stage 1", hp: 130, count: 1, set: "(unknown)" },
+                { name: "Mamoswine", stage: "Stage 2", hp: 180, count: 1, set: "(unknown)" },
+                { name: "Sharpedo 1", stage: "Stage 1", hp: 100, count: 1, set: "(unknown)" },
+                { name: "Sharpedo 2", stage: "Stage 1", hp: 120, count: 1, set: "(unknown)" },
+                { name: "Slowpoke", stage: "Basic", hp: 70, count: 1, set: "(unknown)" },
+                { name: "Slowking", stage: "Stage 1", hp: 130, count: 1, set: "(unknown)" },
+                { name: "Slowbro", stage: "Stage 1", hp: 120, count: 2, set: "(unknown)" },
+                { name: "Shellder", stage: "Basic", hp: 70, count: 1, set: "(unknown)" },
+                { name: "Wimpod", stage: "Basic", hp: 70, count: 3, set: "(unknown)" },
+                { name: "Magikarp", stage: "Basic", hp: 30, count: 1, set: "(unknown)" },
+                { name: "Sealeo", stage: "Stage 1", hp: 110, count: 1, set: "(unknown)" },
+                { name: "Sneasel", stage: "Basic", hp: 70, count: 1, set: "(unknown)" },
+                { name: "Lumineon", stage: "Stage 1", hp: 90, count: 1, set: "(unknown)" },
+                { name: "Mr. Mime", stage: "Basic", hp: 80, count: 1, set: "(unknown)" },
+                { name: "Totodile", stage: "Basic", hp: 70, count: 1, set: "(unknown)" },
+                { name: "Relicanth", stage: "Basic", hp: 90, count: 1, set: "(unknown)" }
             ]
         };
 
@@ -578,6 +595,9 @@
                         <span class="qty-badge">×${item.count}</span>
                     </div>
                     ${foilBadge ? `<div style="margin-top: 0.2rem;">${foilBadge}</div>` : ''}
+                    <div class="card-set">
+                        <i class="fas fa-folder-open"></i> ${item.set}
+                    </div>
                 </div>
             `;
         }
@@ -611,6 +631,9 @@
                     <div class="pokemon-details">
                         <span><i class="fas fa-arrow-up"></i> ${p.stage}</span>
                         <span><i class="fas fa-heart"></i> <span class="hp-value">${p.hp} HP</span></span>
+                    </div>
+                    <div class="card-set">
+                        <i class="fas fa-folder-open"></i> ${p.set}
                     </div>
                     <div style="margin-top: 0.3rem; display: flex; justify-content: flex-end;">
                         <span class="qty-badge">×${p.count}</span>
