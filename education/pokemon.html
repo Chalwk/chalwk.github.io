@@ -375,7 +375,7 @@ Pokemon Collection
 
         const tools = [
             { name: "Future Booster Energy Capsule", count: 1 },
-            { name: "Technical Machine: Evolution", count: 1 }
+            { name: "Technical Machine - Evolution", count: 1 }
         ];
 
         const pokemonByType = {
@@ -386,24 +386,26 @@ Pokemon Collection
                 { name: "Drowzee", stage: "Basic", hp: 80, count: 1 },
                 { name: "Gastly", stage: "Basic", hp: 50, count: 1 },
                 { name: "Woobat", stage: "Basic", hp: 60, count: 1 },
-                { name: "Haunter", stage: "Stage 1", hp: 80, count: 1 },
-                { name: "Haunter", stage: "Stage 1", hp: 70, count: 1 },
+                { name: "Haunter 1", stage: "Stage 1", hp: 70, count: 1 },
+                { name: "Haunter 2", stage: "Stage 1", hp: 80, count: 1 },
                 { name: "Scream Tail", stage: "Basic", hp: 90, count: 1 },
                 { name: "Brambleghast", stage: "Stage 1", hp: 100, count: 1 },
                 { name: "Abra", stage: "Basic", hp: 50, count: 1 },
                 { name: "Espathra", stage: "Stage 1", hp: 120, count: 1 },
                 { name: "Dedenne", stage: "Basic", hp: 70, count: 1 },
                 { name: "Zorua", stage: "Basic", hp: 60, count: 1 },
-                { name: "Flabébé", stage: "Basic", hp: 40, count: 1 },
+                { name: "Flabebe", stage: "Basic", hp: 40, count: 1 },
                 { name: "Jynx", stage: "Basic", hp: 100, count: 2 }
             ],
             Darkness: [
-                { name: "Thievul", stage: "Stage 1", hp: 100, count: 2 },
-                { name: "Thievul", stage: "Stage 1", hp: 120, count: 1 },
-                { name: "Honchkrow", stage: "Stage 1", hp: 130, count: 2 },
+                { name: "Thievul 1", stage: "Stage 1", hp: 100, count: 2 },
+                { name: "Thievul 2", stage: "Stage 1", hp: 120, count: 1 },
+                { name: "Honchkrow 1", stage: "Stage 1", hp: 130, count: 2 },
+                { name: "Honchkrow 2", stage: "Stage 2", hp: 130, count: 2 },
                 { name: "Liepard", stage: "Stage 1", hp: 100, count: 2 },
                 { name: "Toxapex", stage: "Stage 1", hp: 120, count: 1 },
-                { name: "Sharpedo", stage: "Stage 1", hp: 100, count: 1 },
+                { name: "Sharpedo 1", stage: "Stage 1", hp: 70, count: 1 },
+                { name: "Sharpedo 2", stage: "Stage 1", hp: 100, count: 1 },
                 { name: "Garbodor", stage: "Stage 1", hp: 140, count: 1 },
                 { name: "Grimer", stage: "Basic", hp: 80, count: 1 },
                 { name: "Toxicroak", stage: "Stage 1", hp: 120, count: 1 },
@@ -441,13 +443,13 @@ Pokemon Collection
                 { name: "Stoutland", stage: "Stage 2", hp: 160, count: 1 }
             ],
             Fire: [
-                { name: "Darmanitan", stage: "Stage 1", hp: 140, count: 1, foil: true },
-                { name: "Darmanitan", stage: "Stage 1", hp: 150, count: 1 },
+                { name: "Darmanitan 1", stage: "Stage 1", hp: 140, count: 1, foil: true },
+                { name: "Darmanitan 2", stage: "Stage 1", hp: 150, count: 1 },
                 { name: "Volcarona", stage: "Stage 1", hp: 140, count: 1 },
                 { name: "Arcanine", stage: "Stage 1", hp: 140, count: 1 },
                 { name: "Reshiram", stage: "Basic", hp: 130, count: 1 },
-                { name: "Charmander", stage: "Basic", hp: 80, count: 1 },
-                { name: "Charmander", stage: "Basic", hp: 60, count: 2 },
+                { name: "Charmander 1", stage: "Basic", hp: 60, count: 1 },
+                { name: "Charmander 2", stage: "Basic", hp: 80, count: 2 },
                 { name: "Growlithe", stage: "Basic", hp: 90, count: 1 },
                 { name: "Moltres", stage: "Basic", hp: 120, count: 1, foil: true },
                 { name: "Rapidash", stage: "Stage 1", hp: 100, count: 1 },
@@ -480,7 +482,8 @@ Pokemon Collection
                 { name: "Suicune", stage: "Basic", hp: 120, count: 2 },
                 { name: "Milotic", stage: "Stage 1", hp: 130, count: 1 },
                 { name: "Mamoswine", stage: "Stage 2", hp: 180, count: 1 },
-                { name: "Sharpedo", stage: "Stage 1", hp: 120, count: 1 },
+                { name: "Sharpedo 1", stage: "Stage 1", hp: 120, count: 1 },
+                { name: "Sharpedo 2", stage: "Stage 1", hp: 120, count: 1 },
                 { name: "Slowpoke", stage: "Basic", hp: 70, count: 1 },
                 { name: "Slowking", stage: "Stage 1", hp: 130, count: 1 },
                 { name: "Slowbro", stage: "Stage 1", hp: 120, count: 2 },
@@ -497,7 +500,7 @@ Pokemon Collection
         };
 
         function getImagePath(name) {
-            return `../images/pokemon/${encodeURIComponent(name)}.png`;
+            return `../images/pokemon/${encodeURIComponent(name)}.jpg`;
         }
 
         function createItemCard(item) {
