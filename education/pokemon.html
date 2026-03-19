@@ -437,31 +437,32 @@ My Pokémon TCG collection
 
 <script>
     (function() {
-        let inPopstate = false;
-
         window.openLightbox = function(src) {
             document.getElementById('modalImage').src = src;
             document.getElementById('imageModal').style.display = 'flex';
             history.pushState({ modal: true }, '');
         };
-
-        window.closeModal = function() {
+        window.closeModal = function(skipHistoryBack) {
             const modal = document.getElementById('imageModal');
-            if (modal.style.display !== 'flex') return;
-            modal.style.display = 'none';
-            if (!inPopstate) {
-                inPopstate = true;
-                history.back();
-                inPopstate = false;
+            if (modal.style.display === 'flex') {
+                modal.style.display = 'none';
+                if (!skipHistoryBack) {
+                    history.back();
+                }
             }
         };
 
         window.addEventListener('popstate', function() {
             const modal = document.getElementById('imageModal');
-            if (modal.style.display === 'flex' && !inPopstate) {
-                inPopstate = true;
-                closeModal();
-                inPopstate = false;
+            if (modal.style.display === 'flex') {
+                window.closeModal(true);
+            }
+        });
+
+        document.addEventListener('keydown', function(e) {
+            const modal = document.getElementById('imageModal');
+            if (e.key === 'Escape' && modal.style.display === 'flex') {
+                window.closeModal();
             }
         });
 
