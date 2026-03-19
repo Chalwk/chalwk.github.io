@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 </button>
                 <ul class="dropdown-menu" role="menu">
                     <li role="none"><a href="https://chalwk.github.io/CPAS/" role="menuitem">CPAS</a></li>
+                    <li role="none"><a href="${basePath}education/pokemon.html" role="menuitem">My Pokémon TCG collection</a></li>
                     <li class="dropdown-submenu" role="none">
                         <button class="submenu-toggle" aria-expanded="false">
                             Education <i class="fas fa-chevron-right" aria-hidden="true"></i>
@@ -40,7 +41,6 @@ document.addEventListener('DOMContentLoaded', function() {
                             <li role="none"><a href="${basePath}education/stick-figure-comics.html" role="menuitem">Autism through Stick Figures</a></li>
                             <li role="none"><a href="${basePath}education/github-pages-tutorial.html" role="menuitem">Creating a GitHub Pages Website</a></li>
                             <li role="none"><a href="${basePath}education/arachnology.html" role="menuitem">Local Aranid Research</a></li>
-                            <li role="none"><a href="${basePath}education/pokemon.html" role="menuitem">My Pokémon TCG collection</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -66,6 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 </button>
                 <ul class="dropdown-menu">
                     <li><a href="https://chalwk.github.io/CPAS/">CPAS</a></li>
+                    <li><a href="${basePath}education/pokemon.html">My Pokémon TCG collection</a></li>
                     <li class="dropdown-submenu">
                         <button class="submenu-toggle">
                             Education
