@@ -581,7 +581,7 @@
             cards.forEach(card => {
                 const cardName = card.getAttribute('data-name') || '';
                 if (term === '' || cardName.includes(term)) {
-                    card.style.display = 'flex';
+                    card.style.display = '';
                     visibleCount++;
                 } else {
                     card.style.display = 'none';
