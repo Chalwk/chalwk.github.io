@@ -1,32 +1,24 @@
-ENERGY;Fusion Strike Energy;1
 ENERGY;Fire Energy;10
+ENERGY;Fusion Strike Energy;1
 ENERGY;Lightning Energy;10
-SUPPORTER;Explorer's Guidance;1
-SUPPORTER;Friends in Galar;1
-SUPPORTER;Clavell;2
-SUPPORTER;Jacq;3
-SUPPORTER;Youngster;2
-SUPPORTER;Nemona;4
-ITEM;Potion;2
-ITEM;Switch;2
+ITEM;Energy Loto;1
 ITEM;Great Ball;4
+ITEM;Potion;2
+ITEM;Rusted Shield;1
+ITEM;Super Rod;1
+ITEM;Switch;2
 ITEM;Techno Radar;1
 ITEM;Unidentified Fossil;1
-ITEM;Super Rod;1
-ITEM;Energy Loto;1
-ITEM;Rusted Shield;1
-TOOL;Future Booster Energy Capsule;1
-TOOL;Technical Machine - Evolution;1
 POKEMON;Abra;Basic;50;1;Psychic
 POKEMON;Arcanine;Stage 1;140;1;Fire
 POKEMON;Boltund;Stage 1;130;1;Electric
 POKEMON;Brambleghast;Stage 1;100;1;Psychic
 POKEMON;Bulbasaur;Basic;80;1;Grass
 POKEMON;Centiskorch;Stage 1;140;1;Fire
+POKEMON;Charizard EX;Stage 2;330;1;Fire
 POKEMON;Charmander 1;Basic;60;1;Fire
 POKEMON;Charmander 2;Basic;80;2;Fire
 POKEMON;Charmeleon;Stage 1;90;2;Fire
-POKEMON;Charizard EX;Stage 2;330;1;Fire
 POKEMON;Darmanitan 1;Stage 1;140;1;Fire
 POKEMON;Darmanitan 2;Stage 1;150;1;Fire
 POKEMON;Dedenne;Basic;70;1;Psychic
@@ -70,8 +62,8 @@ POKEMON;Pawmi;Basic;60;3;Electric
 POKEMON;Pawmo;Stage 1;80;2;Electric
 POKEMON;Pawmot;Stage 2;140;1;Electric
 POKEMON;Pikachu;Basic;190;1;Electric
-POKEMON;Polteageist;Stage 1;70;1;Psychic
 POKEMON;Poltchageist;Basic;30;1;Grass
+POKEMON;Polteageist;Stage 1;70;1;Psychic
 POKEMON;Ponyta;Basic;60;1;Fire
 POKEMON;Rapidash;Stage 1;100;1;Fire
 POKEMON;Rayquaza EX;Basic;180;1;Dragon
@@ -85,8 +77,8 @@ POKEMON;Sharpedo 2;Stage 1;120;1;Water
 POKEMON;Shellder;Basic;70;1;Water
 POKEMON;Shelmet;Basic;60;1;Grass
 POKEMON;Shiftry;Stage 2;160;1;Grass
-POKEMON;Shroomish;Basic;50;1;Grass
 POKEMON;Shroodle;Basic;60;1;Darkness
+POKEMON;Shroomish;Basic;50;1;Grass
 POKEMON;Slowbro;Stage 1;120;2;Water
 POKEMON;Slowking;Stage 1;130;1;Water
 POKEMON;Slowpoke;Basic;70;1;Water
@@ -113,3 +105,11 @@ POKEMON;Wigglytuff;Stage 1;120;1;Colorless
 POKEMON;Wimpod;Basic;70;3;Water
 POKEMON;Woobat;Basic;60;1;Psychic
 POKEMON;Zorua;Basic;60;1;Psychic
+SUPPORTER;Clavell;2
+SUPPORTER;Explorer's Guidance;1
+SUPPORTER;Friends in Galar;1
+SUPPORTER;Jacq;3
+SUPPORTER;Nemona;4
+SUPPORTER;Youngster;2
+TOOL;Future Booster Energy Capsule;1
+TOOL;Technical Machine - Evolution;1
