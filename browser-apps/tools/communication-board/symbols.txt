@@ -1,0 +1,160 @@
+Hello;😊;#4a86e8;Basic Communication
+Goodbye;👋;#4a86e8;Basic Communication
+Yes;👍;#4a86e8;Basic Communication
+No;👎;#4a86e8;Basic Communication
+Please;✨;#4a86e8;Basic Communication
+Thank you;🙏;#4a86e8;Basic Communication
+Sorry;🙇;#4a86e8;Basic Communication
+Okay;👌;#4a86e8;Basic Communication
+Excuse me;🗣️;#4a86e8;Basic Communication
+Maybe;💭;#4a86e8;Basic Communication
+I understand;💡;#4a86e8;Basic Communication
+I don't understand;❓;#4a86e8;Basic Communication
+Love;❤️;#4a86e8;Basic Communication
+Good morning;🌅;#4a86e8;Basic Communication
+Good night;🌙;#4a86e8;Basic Communication
+Welcome;👐;#4a86e8;Basic Communication
+Help;🆘;#ea4335;Needs & Wants
+I want;👉;#ea4335;Needs & Wants
+I need;👐;#ea4335;Needs & Wants
+Stop;✋;#ea4335;Needs & Wants
+More;➕;#ea4335;Needs & Wants
+Finished;✔️;#ea4335;Needs & Wants
+Pain;🤕;#ea4335;Needs & Wants
+Tired;😴;#ea4335;Needs & Wants
+Break;⏸️;#ea4335;Needs & Wants
+I don't want;🙅;#ea4335;Needs & Wants
+I don't know;🤷;#ea4335;Needs & Wants
+Space;🚶;#ea4335;Needs & Wants
+Alone;🚪;#ea4335;Needs & Wants
+Too much;🔥;#ea4335;Needs & Wants
+Too loud;📢;#ea4335;Needs & Wants
+Too bright;💡;#ea4335;Needs & Wants
+Hungry;🍽️;#ea4335;Needs & Wants
+Thirsty;💧;#ea4335;Needs & Wants
+Cold;🥶;#ea4335;Needs & Wants
+Hot;🥵;#ea4335;Needs & Wants
+Happy;😄;#fbbc04;Feelings & Emotions
+Sad;😢;#fbbc04;Feelings & Emotions
+Angry;😡;#fbbc04;Feelings & Emotions
+Scared;😨;#fbbc04;Feelings & Emotions
+Excited;🤩;#fbbc04;Feelings & Emotions
+Calm;😌;#fbbc04;Feelings & Emotions
+Sick;🤢;#fbbc04;Feelings & Emotions
+Surprised;😲;#fbbc04;Feelings & Emotions
+Lonely;🥺;#fbbc04;Feelings & Emotions
+Overwhelmed;🌊;#fbbc04;Feelings & Emotions
+Anxious;😰;#fbbc04;Feelings & Emotions
+Frustrated;😤;#fbbc04;Feelings & Emotions
+Confused;😕;#fbbc04;Feelings & Emotions
+Proud;😊;#fbbc04;Feelings & Emotions
+Loved;💝;#fbbc04;Feelings & Emotions
+Brave;🦁;#fbbc04;Feelings & Emotions
+Bored;🥱;#fbbc04;Feelings & Emotions
+Curious;🤔;#fbbc04;Feelings & Emotions
+Headphones;🎧;#9c27b0;Sensory Needs
+Quiet;🔇;#9c27b0;Sensory Needs
+Dark;🌙;#9c27b0;Sensory Needs
+Weighted blanket;🛏️;#9c27b0;Sensory Needs
+Stim;🌀;#9c27b0;Sensory Needs
+Fidget;🔄;#9c27b0;Sensory Needs
+Hug;🫂;#9c27b0;Sensory Needs
+No touch;✋;#9c27b0;Sensory Needs
+Different clothes;👕;#9c27b0;Sensory Needs
+Soft;🪶;#9c27b0;Sensory Needs
+Loud;🔊;#9c27b0;Sensory Needs
+Bright;💡;#9c27b0;Sensory Needs
+Pressure;⏬;#9c27b0;Sensory Needs
+Me;🙂;#00bcd4;People & Pronouns
+You;🫵;#00bcd4;People & Pronouns
+Friend;🧑‍🤝‍🧑;#00bcd4;People & Pronouns
+Family;👨‍👩‍👦;#00bcd4;People & Pronouns
+Teacher;👩‍🏫;#00bcd4;People & Pronouns
+Mum;👩;#00bcd4;People & Pronouns
+Dad;👨;#00bcd4;People & Pronouns
+Doctor;👨‍⚕️;#00bcd4;People & Pronouns
+Therapist;🧠;#00bcd4;People & Pronouns
+Support worker;👥;#00bcd4;People & Pronouns
+They;👥;#00bcd4;People & Pronouns
+He;👨;#00bcd4;People & Pronouns
+She;👩;#00bcd4;People & Pronouns
+We;👥;#00bcd4;People & Pronouns
+Eat;🍽️;#9c27b0;Common Actions
+Drink;🥤;#9c27b0;Common Actions
+Play;🎮;#9c27b0;Common Actions
+Go;🏃;#9c27b0;Common Actions
+Come;👣;#9c27b0;Common Actions
+Look;👀;#9c27b0;Common Actions
+Listen;👂;#9c27b0;Common Actions
+Wait;⏳;#9c27b0;Common Actions
+Talk;💬;#9c27b0;Common Actions
+Sleep;🛌;#9c27b0;Common Actions
+Read;📖;#9c27b0;Common Actions
+Write;✍️;#9c27b0;Common Actions
+Watch;📺;#9c27b0;Common Actions
+Breathe;🌬️;#9c27b0;Common Actions
+Rest;😴;#9c27b0;Common Actions
+Run;🏃;#9c27b0;Common Actions
+Jump;🦘;#9c27b0;Common Actions
+Sit;🪑;#9c27b0;Common Actions
+Stand;🧍;#9c27b0;Common Actions
+Home;🏠;#34a853;Places
+School;🏫;#34a853;Places
+Bathroom;🚽;#34a853;Places
+Outside;🌳;#34a853;Places
+Shop;🛒;#34a853;Places
+Car;🚗;#34a853;Places
+Park;🌲;#34a853;Places
+Work;💼;#34a853;Places
+Quiet room;🚪;#34a853;Places
+Bedroom;🛏️;#34a853;Places
+Hospital;🏥;#34a853;Places
+Restaurant;🍽️;#34a853;Places
+What?;❓;#9b59b6;Questions
+Where?;🗺️;#9b59b6;Questions
+When?;🕒;#9b59b6;Questions
+Why?;🤔;#9b59b6;Questions
+How?;🛠️;#9b59b6;Questions
+Who?;👤;#9b59b6;Questions
+How long?;⏱️;#9b59b6;Questions
+What next?;➡️;#9b59b6;Questions
+How are you?;🙂;#9b59b6;Questions
+What is that?;❓;#9b59b6;Questions
+Now;⏰;#ff9800;Time & Schedule
+Later;⏲️;#ff9800;Time & Schedule
+Today;📅;#ff9800;Time & Schedule
+Tomorrow;➡️;#ff9800;Time & Schedule
+Yesterday;⬅️;#ff9800;Time & Schedule
+Soon;🔜;#ff9800;Time & Schedule
+First/Then;1️⃣/2️⃣;#ff9800;Time & Schedule
+Change;🔄;#ff9800;Time & Schedule
+Morning;🌅;#ff9800;Time & Schedule
+Afternoon;🌞;#ff9800;Time & Schedule
+Evening;🌆;#ff9800;Time & Schedule
+Night;🌙;#ff9800;Time & Schedule
+Water;💧;#e74c3c;Food & Drink
+Juice;🧃;#e74c3c;Food & Drink
+Snack;🍎;#e74c3c;Food & Drink
+Lunch;🥪;#e74c3c;Food & Drink
+Dinner;🍽️;#e74c3c;Food & Drink
+Safe food;⭐;#e74c3c;Food & Drink
+Texture;👆;#e74c3c;Food & Drink
+Breakfast;🍳;#e74c3c;Food & Drink
+Fruit;🍎;#e74c3c;Food & Drink
+Vegetable;🥦;#e74c3c;Food & Drink
+Game;🎲;#2ecc71;Activities & Play
+Music;🎵;#2ecc71;Activities & Play
+Draw;🎨;#2ecc71;Activities & Play
+Walk;🚶;#2ecc71;Activities & Play
+Special interest;❤️;#2ecc71;Activities & Play
+Routine;📋;#2ecc71;Activities & Play
+Swim;🏊;#2ecc71;Activities & Play
+Dance;💃;#2ecc71;Activities & Play
+Sing;🎤;#2ecc71;Activities & Play
+Headache;🤕;#8e44ad;Body & Health
+Stomach ache;🤢;#8e44ad;Body & Health
+Medicine;💊;#8e44ad;Body & Health
+Meltdown;🌪️;#8e44ad;Body & Health
+Shutdown;🔄;#8e44ad;Body & Health
+Allergy;🤧;#8e44ad;Body & Health
+Temperature;🌡️;#8e44ad;Body & Health
