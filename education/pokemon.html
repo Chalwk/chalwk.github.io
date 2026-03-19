@@ -517,17 +517,18 @@ My Pokemon Collection
         ];
 
         function getImagePath(name) {
-            return `../images/pokemon/${encodeURIComponent(name)}.jpg`;
+            return `../images/pokemon/${encodeURI(name)}.jpg`;
         }
 
         function createItemCard(item) {
             const imgSrc = getImagePath(item.name);
+            const escapedImgSrc = imgSrc.replace(/'/g, "\\'");
             const foilBadge = item.foil ? '<span class="foil-badge"><i class="fas fa-star"></i> FOIL</span>' : '';
             const dataName = item.name.replace(/"/g, '&quot;');
             return `
                 <div class="item-card" data-name="${dataName.toLowerCase()}">
                     <span class="qty-badge">×${item.count}</span>
-                    <img class="card-thumb" src="${imgSrc}" alt="${item.name}" onclick="openLightbox('${imgSrc}')" loading="lazy">
+                    <img class="card-thumb" src="${imgSrc}" alt="${item.name}" onclick="openLightbox('${escapedImgSrc}')" loading="lazy">
                     <div class="item-name">
                         ${item.name}
                     </div>
@@ -561,9 +562,11 @@ My Pokemon Collection
                     card.className = `pokemon-card type-${typeLower}`;
                     card.setAttribute('data-name', p.name.toLowerCase());
                     const imgSrc = getImagePath(p.name);
+                    // Escape single quotes in the image path
+                    const escapedImgSrc = imgSrc.replace(/'/g, "\\'");
                     card.innerHTML = `
                         <span class="qty-badge">×${p.count}</span>
-                        <img class="card-thumb" src="${imgSrc}" alt="${p.name}" onclick="openLightbox('${imgSrc}')" loading="lazy">
+                        <img class="card-thumb" src="${imgSrc}" alt="${p.name}" onclick="openLightbox('${escapedImgSrc}')" loading="lazy">
                         <div class="pokemon-name">${p.name}</div>
                         <div class="pokemon-details">
                             <span><i class="fas fa-arrow-up"></i> ${p.stage}</span>
