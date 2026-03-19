@@ -4,7 +4,6 @@ ENERGY;Lightning Energy;10
 ITEM;Energy Loto;1
 ITEM;Great Ball;4
 ITEM;Potion;2
-ITEM;Rusted Shield;1
 ITEM;Super Rod;1;true
 ITEM;Switch;2
 ITEM;Techno Radar;1;true
@@ -112,4 +111,5 @@ SUPPORTER;Jacq;3
 SUPPORTER;Nemona;4
 SUPPORTER;Youngster;2
 TOOL;Future Booster Energy Capsule;1
+TOOL;Rusted Shield;1
 TOOL;Technical Machine - Evolution;1
