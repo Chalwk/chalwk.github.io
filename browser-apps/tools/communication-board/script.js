@@ -514,7 +514,7 @@ Communication Board - JavaScript
             if (isImageSource(symbol.image)) {
                 node.innerHTML = `<img src="${symbol.image}" alt="${symbol.text}"><span>${symbol.text}</span>`;
             } else {
-                node.innerHTML = `<span style="font-size:2rem">${symbol.image}</span><span>${symbol.text}</span>`;
+                node.innerHTML = `<span class="symbol-emoji">${symbol.image}</span><span>${symbol.text}</span>`;
             }
 
             node.addEventListener('click', () => {
