@@ -225,6 +225,17 @@
             align-self: flex-end;
         }
 
+        .item-card > .qty-badge,
+        .pokemon-card > .qty-badge {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            z-index: 2;
+            pointer-events: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            margin: 0;
+        }
+
         .foil-star {
             color: #fbbf24;
             margin-left: 0.3rem;
@@ -260,9 +271,8 @@
             display: flex;
             align-items: center;
             gap: 0.3rem;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            flex-wrap: wrap;
+            word-break: break-word;
         }
         .card-set i {
             color: var(--primary);
@@ -276,6 +286,7 @@
             padding: 0.1rem 0.3rem;
             border-radius: 4px;
             margin-right: 0.3rem;
+            display: inline-block;
         }
 
         .type-psychic { border-left-color: var(--type-psychic); }
@@ -468,10 +479,10 @@
             const dataName = item.name.replace(/"/g, '&quot;');
             return `
                 <div class="item-card" data-name="${dataName.toLowerCase()}">
+                    <span class="qty-badge">×${item.count}</span>
                     <img class="card-thumb" src="${imgSrc}" alt="${item.name}" onclick="openLightbox('${imgSrc}')" loading="lazy">
                     <div class="item-name">
                         ${item.name}
-                        <span class="qty-badge">×${item.count}</span>
                     </div>
                     ${foilBadge ? `<div style="margin-top: 0.2rem;">${foilBadge}</div>` : ''}
                     <div class="card-set">
@@ -504,6 +515,7 @@
                     card.setAttribute('data-name', p.name.toLowerCase());
                     const imgSrc = getImagePath(p.name);
                     card.innerHTML = `
+                        <span class="qty-badge">×${p.count}</span>
                         <img class="card-thumb" src="${imgSrc}" alt="${p.name}" onclick="openLightbox('${imgSrc}')" loading="lazy">
                         <div class="pokemon-name">${p.name}</div>
                         <div class="pokemon-details">
@@ -512,9 +524,6 @@
                         </div>
                         <div class="card-set">
                             <span class="set-abbr">${p.setabbr}</span> ${p.set}
-                        </div>
-                        <div style="margin-top: 0.3rem; display: flex; justify-content: flex-end;">
-                            <span class="qty-badge">×${p.count}</span>
                         </div>
                     `;
                     grid.appendChild(card);
