@@ -277,6 +277,14 @@
             width: 0.9rem;
             font-size: 0.7rem;
         }
+        .set-abbr {
+            font-weight: 600;
+            color: var(--primary-dark);
+            background: rgba(0,0,0,0.05);
+            padding: 0.1rem 0.3rem;
+            border-radius: 4px;
+            margin-right: 0.3rem;
+        }
 
         .type-psychic { border-left-color: var(--type-psychic); }
         .type-darkness { border-left-color: var(--type-darkness); }
@@ -428,154 +436,35 @@
         };
 
         const energies = [
-            { name: "Fusion Strike Energy", count: 1, foil: true, set: "Evolving Skies" },
-            { name: "Fire Energy", count: 10, set: "Scarlet & Violet" },
-            { name: "Lightning Energy", count: 10, set: "Scarlet & Violet" }
+            { name: "Fusion Strike Energy", count: 1, foil: true, set: "Evolving Skies", setabbr: "EVS" },
+            { name: "Fire Energy", count: 10, set: "Scarlet & Violet", setabbr: "SVI" },
+            { name: "Lightning Energy", count: 10, set: "Scarlet & Violet", setabbr: "SVI" }
         ];
 
         const supporters = [
-            { name: "Explorer's Guidance", count: 1, foil: true, set: "Temporal Forces" },
-            { name: "Friends in Galar", count: 1, set: "Evolving Skies" },
-            { name: "Clavell", count: 2, set: "Paldea Evolved" },
-            { name: "Jacq", count: 3, set: "Scarlet & Violet" },
-            { name: "Youngster", count: 2, set: "Scarlet & Violet" },
-            { name: "Nemona", count: 4, set: "Scarlet & Violet" }
+            { name: "Explorer's Guidance", count: 1, foil: true, set: "Temporal Forces", setabbr: "TEF" },
+            { name: "Friends in Galar", count: 1, set: "Evolving Skies", setabbr: "EVS" },
+            { name: "Clavell", count: 2, set: "Paldea Evolved", setabbr: "PAL" },
+            { name: "Jacq", count: 3, set: "Scarlet & Violet", setabbr: "SVI" },
+            { name: "Youngster", count: 2, set: "Scarlet & Violet", setabbr: "SVI" },
+            { name: "Nemona", count: 4, set: "Scarlet & Violet", setabbr: "SVI" }
         ];
 
         const items = [
-            { name: "Potion", count: 2, set: "Scarlet & Violet" },
-            { name: "Switch", count: 2, set: "Scarlet & Violet" },
-            { name: "Great Ball", count: 4, set: "Paldea Evolved" },
-            { name: "Techno Radar", count: 1, foil: true, set: "Paradox Rift" },
-            { name: "Unidentified Fossil", count: 1, set: "Fossil" },
-            { name: "Super Rod", count: 1, foil: true, set: "Paldea Evolved" },
-            { name: "Energy Loto", count: 1, set: "Fossil" },
-            { name: "Rusted Shield", count: 1, set: "Diamond & Pearl" }
+            { name: "Potion", count: 2, set: "Scarlet & Violet", setabbr: "SVI" },
+            { name: "Switch", count: 2, set: "Scarlet & Violet", setabbr: "SVI" },
+            { name: "Great Ball", count: 4, set: "Paldea Evolved", setabbr: "PAL" },
+            { name: "Techno Radar", count: 1, foil: true, set: "Paradox Rift", setabbr: "PAR" },
+            { name: "Unidentified Fossil", count: 1, set: "Fossil", setabbr: "FO" },
+            { name: "Super Rod", count: 1, foil: true, set: "Paldea Evolved", setabbr: "PAL" },
+            { name: "Energy Loto", count: 1, set: "Fossil", setabbr: "FO" },
+            { name: "Rusted Shield", count: 1, set: "Diamond & Pearl", setabbr: "DP" }
         ];
 
         const tools = [
-            { name: "Future Booster Energy Capsule", count: 1, set: "Telefang promo" },
-            { name: "Technical Machine - Evolution", count: 1, set: "Paradox Rift" }
+            { name: "Future Booster Energy Capsule", count: 1, set: "Telefang promo", setabbr: "TEF" },
+            { name: "Technical Machine - Evolution", count: 1, set: "Paradox Rift", setabbr: "PAR" }
         ];
-
-        const pokemonByType = {
-            Psychic: [
-                { name: "Polteageist", stage: "Stage 1", hp: 70, count: 1, set: "Obsidian Frontiers" },
-                { name: "Grimmsnarl", stage: "Stage 2", hp: 170, count: 1, set: "Jungle" },
-                { name: "Greavard", stage: "Basic", hp: 80, count: 1, set: "MEG" },
-                { name: "Drowzee", stage: "Basic", hp: 80, count: 1, set: "Dragon Majesty" },
-                { name: "Gastly", stage: "Basic", hp: 50, count: 1, set: "Mew promo" },
-                { name: "Woobat", stage: "Basic", hp: 60, count: 1, set: "White (Diamond & Pearl)" },
-                { name: "Haunter 1", stage: "Stage 1", hp: 70, count: 1, set: "Fossil" },
-                { name: "Haunter 2", stage: "Stage 1", hp: 80, count: 1, set: "Mew promo" },
-                { name: "Scream Tail", stage: "Basic", hp: 90, count: 1, set: "Prerelease" },
-                { name: "Brambleghast", stage: "Stage 1", hp: 100, count: 1, set: "Paldea Friends League" },
-                { name: "Abra", stage: "Basic", hp: 50, count: 1, set: "MEG" },
-                { name: "Espathra", stage: "Stage 1", hp: 120, count: 1, set: "Paradox Rift" },
-                { name: "Dedenne", stage: "Basic", hp: 70, count: 1, set: "Evolving Skies" },
-                { name: "Zorua", stage: "Basic", hp: 60, count: 1, set: "Fossil" },
-                { name: "Flabebe", stage: "Basic", hp: 40, count: 1, set: "Evolving Skies" },
-                { name: "Jynx", stage: "Basic", hp: 100, count: 2, set: "Fossil" }
-            ],
-            Darkness: [
-                { name: "Thievul 1", stage: "Stage 1", hp: 100, count: 2, set: "Evolving Skies" },
-                { name: "Thievul 2", stage: "Stage 1", hp: 120, count: 1, set: "MEG" },
-                { name: "Honchkrow 1", stage: "Stage 1", hp: 130, count: 2, set: "Evolving Skies" },
-                { name: "Honchkrow 2", stage: "Stage 2", hp: 130, count: 2, set: "Paldea Friends League" },
-                { name: "Liepard", stage: "Stage 1", hp: 100, count: 2, set: "Dragon Majesty / Fossil" },
-                { name: "Toxapex", stage: "Stage 1", hp: 120, count: 1, set: "Fossil" },
-                { name: "Sharpedo 1", stage: "Stage 1", hp: 100, count: 1, set: "Evolving Skies" },
-                { name: "Garbodor", stage: "Stage 1", hp: 140, count: 1, set: "White (Diamond & Pearl)" },
-                { name: "Grimer", stage: "Basic", hp: 80, count: 1, set: "Fossil" },
-                { name: "Toxicroak", stage: "Stage 1", hp: 120, count: 1, set: "Fossil" },
-                { name: "Shroodle", stage: "Basic", hp: 60, count: 1, set: "Paldea Friends League" }
-            ],
-            Electric: [
-                { name: "Pikachu", stage: "Basic", hp: 190, count: 1, foil: true, set: "Paldea Evolved" },
-                { name: "Kilowattrel", stage: "Stage 1", hp: 120, count: 2, set: "Paldea Evolved" },
-                { name: "Wattrel", stage: "Basic", hp: 60, count: 2, set: "Scarlet & Violet" },
-                { name: "Pawmot", stage: "Stage 2", hp: 140, count: 1, set: "Paldea Evolved" },
-                { name: "Pawmi", stage: "Basic", hp: 60, count: 3, set: "Scarlet & Violet / Paldea Friends League" },
-                { name: "Pawmo", stage: "Stage 1", hp: 80, count: 2, set: "Paldea Evolved" },
-                { name: "Lanturn", stage: "Stage 1", hp: 120, count: 1, set: "Evolving Skies" },
-                { name: "Electabuzz", stage: "Basic", hp: 80, count: 1, set: "Evolving Skies)" },
-                { name: "Boltund", stage: "Stage 1", hp: 130, count: 1, set: "Paldea Friends League" },
-                { name: "Toxtricity", stage: "Stage 1", hp: 130, count: 1, set: "Scarlet & Violet" },
-                { name: "Magnezone", stage: "Stage 2", hp: 160, count: 1, set: "MEG" },
-                { name: "Miraidon", stage: "Basic", hp: 120, count: 1, set: "Scarlet & Violet" }
-            ],
-            Dragon: [
-                { name: "Rayquaza EX", stage: "Basic", hp: 180, count: 1, foil: true, set: "EX: Deoxys" }
-            ],
-            Rock: [
-                { name: "Nacli", stage: "Basic", hp: 60, count: 1, set: "Paradox Rift" },
-                { name: "Sudowoodo", stage: "Basic", hp: 110, count: 1, set: "Fossil" },
-                { name: "Naclstack", stage: "Stage 1", hp: 110, count: 1, set: "MEG" },
-                { name: "Sandslash", stage: "Stage 1", hp: 120, count: 1, set: "MEG" }
-            ],
-            Colorless: [
-                { name: "Wigglytuff", stage: "Stage 1", hp: 120, count: 1, set: "Paldea Friends League" },
-                { name: "Girafarig", stage: "Basic", hp: 100, count: 1, set: "Paldea Evolved" },
-                { name: "Kangaskhan", stage: "Basic", hp: 120, count: 1, set: "Dragon Majesty" },
-                { name: "Unfezant", stage: "Stage 2", hp: 140, count: 1, set: "Fossil" },
-                { name: "Smeargle", stage: "Basic", hp: 70, count: 1, set: "Evolving Skies" },
-                { name: "Stoutland", stage: "Stage 2", hp: 160, count: 1, set: "Evolving Skies" }
-            ],
-            Fire: [
-                { name: "Darmanitan 1", stage: "Stage 1", hp: 140, count: 1, foil: true, set: "Jungle" },
-                { name: "Darmanitan 2", stage: "Stage 1", hp: 150, count: 1, set: "Paldea Friends League" },
-                { name: "Volcarona", stage: "Stage 1", hp: 140, count: 1, set: "Sword & Shield promo" },
-                { name: "Arcanine", stage: "Stage 1", hp: 140, count: 1, set: "Dragon Majesty" },
-                { name: "Reshiram", stage: "Basic", hp: 130, count: 1, set: "Scarlet & Violet" },
-                { name: "Charmander 1", stage: "Basic", hp: 60, count: 1, set: "Obsidian Frontiers" },
-                { name: "Charmander 2", stage: "Basic", hp: 80, count: 2, set: "Paldea Friends League" },
-                { name: "Growlithe", stage: "Basic", hp: 90, count: 1, set: "Scarlet & Violet" },
-                { name: "Moltres", stage: "Basic", hp: 120, count: 1, foil: true, set: "Paldea Friends League" },
-                { name: "Rapidash", stage: "Stage 1", hp: 100, count: 1, set: "Fossil" },
-                { name: "Ponyta", stage: "Basic", hp: 60, count: 1, set: "Fossil" },
-                { name: "Charmeleon", stage: "Stage 1", hp: 90, count: 2, set: "Obsidian Frontiers" },
-                { name: "Charizard EX", stage: "Stage 2", hp: 330, count: 1, foil: true, set: "Mew promo" },
-                { name: "Torkoal", stage: "Basic", hp: 130, count: 2, set: "Scarlet & Violet" },
-                { name: "Houndoom", stage: "Stage 1", hp: 120, count: 2, set: "Scarlet & Violet" },
-                { name: "Houndour", stage: "Basic", hp: 70, count: 2, set: "Scarlet & Violet" },
-                { name: "Numel", stage: "Basic", hp: 80, count: 1, set: "Fossil" },
-                { name: "Centiskorch", stage: "Stage 1", hp: 140, count: 1, set: "Telefang promo" },
-                { name: "Magmar", stage: "Basic", hp: 90, count: 1, set: "Fossil" }
-            ],
-            Metal: [
-                { name: "Escavalier", stage: "Stage 1", hp: 130, count: 1, set: "Black & White" },
-                { name: "Steelix", stage: "Stage 1", hp: 180, count: 1, set: "Fossil" }
-            ],
-            Grass: [
-                { name: "Shelmet", stage: "Basic", hp: 60, count: 1, set: "White (Diamond & Pearl)" },
-                { name: "Bulbasaur", stage: "Basic", hp: 80, count: 1, set: "MEG" },
-                { name: "Poltchageist", stage: "Basic", hp: 30, count: 1, set: "Team Up Mini" },
-                { name: "Shiftry", stage: "Stage 2", hp: 160, count: 1, set: "MEG" },
-                { name: "Heracross", stage: "Basic", hp: 120, count: 1, set: "Scarlet & Violet" },
-                { name: "Tropius", stage: "Basic", hp: 110, count: 1, set: "Paldea Friends League" },
-                { name: "Spinarak", stage: "Basic", hp: 60, count: 1, set: "Fossil" },
-                { name: "Shroomish", stage: "Basic", hp: 50, count: 1, set: "Fossil" },
-                { name: "Thwackey", stage: "Stage 1", hp: 90, count: 1, set: "Dragon Frontiers" }
-            ],
-            Water: [
-                { name: "Suicune", stage: "Basic", hp: 120, count: 2, set: "Prerelease" },
-                { name: "Milotic", stage: "Stage 1", hp: 130, count: 1, set: "Dragon Majesty" },
-                { name: "Mamoswine", stage: "Stage 2", hp: 180, count: 1, set: "Paldea Friends League" },
-                { name: "Sharpedo 2", stage: "Stage 1", hp: 120, count: 1, set: "Telefang promo" },
-                { name: "Slowpoke", stage: "Basic", hp: 70, count: 1, set: "Prerelease" },
-                { name: "Slowking", stage: "Stage 1", hp: 130, count: 1, set: "Prerelease" },
-                { name: "Slowbro", stage: "Stage 1", hp: 120, count: 2, set: "Fossil" },
-                { name: "Shellder", stage: "Basic", hp: 70, count: 1, set: "Evolving Skies" },
-                { name: "Wimpod", stage: "Basic", hp: 70, count: 3, set: "Fossil" },
-                { name: "Magikarp", stage: "Basic", hp: 30, count: 1, set: "Fossil" },
-                { name: "Sealeo", stage: "Stage 1", hp: 110, count: 1, set: "Evolving Skies" },
-                { name: "Sneasel", stage: "Basic", hp: 70, count: 1, set: "Evolving Skies" },
-                { name: "Lumineon", stage: "Stage 1", hp: 90, count: 1, set: "Fossil" },
-                { name: "Mr. Mime", stage: "Basic", hp: 80, count: 1, set: "Evolving Skies" },
-                { name: "Totodile", stage: "Basic", hp: 70, count: 1, set: "Evolving Skies" },
-                { name: "Relicanth", stage: "Basic", hp: 90, count: 1, set: "Fossil" }
-            ]
-        };
 
         function getImagePath(name) {
             return `../images/pokemon/${encodeURIComponent(name)}.jpg`;
@@ -594,7 +483,7 @@
                     </div>
                     ${foilBadge ? `<div style="margin-top: 0.2rem;">${foilBadge}</div>` : ''}
                     <div class="card-set">
-                        <i class="fas fa-folder-open"></i> ${item.set}
+                        <span class="set-abbr">${item.setabbr}</span> ${item.set}
                     </div>
                 </div>
             `;
@@ -606,43 +495,78 @@
         document.getElementById('tools-container').innerHTML = tools.map(createItemCard).join('');
 
         const typeSections = document.getElementById('pokemon-type-sections');
-        for (let [type, mons] of Object.entries(pokemonByType)) {
-            const typeLower = type.toLowerCase();
-            const sectionDiv = document.createElement('div');
-            sectionDiv.classList.add('pokemon-type-block');
-            sectionDiv.innerHTML = `<h3 class="subsection-title"><i class="fas fa-${typeLower === 'dragon' ? 'dragon' : 'paw'}"></i> ${type}</h3>`;
-            const grid = document.createElement('div');
-            grid.className = 'card-grid';
 
-            mons.forEach(p => {
-                const card = document.createElement('div');
-                card.className = `pokemon-card type-${typeLower}`;
-                card.setAttribute('data-name', p.name.toLowerCase());
-                const imgSrc = getImagePath(p.name);
-                const foilStar = p.foil ? '<span class="foil-star" title="Holo foil"><i class="fas fa-star"></i></span>' : '';
-                card.innerHTML = `
-                    <img class="card-thumb" src="${imgSrc}" alt="${p.name}" onclick="openLightbox('${imgSrc}')" loading="lazy">
-                    <div class="pokemon-name">
-                        ${p.name} ${foilStar}
-                        <span class="type-badge">${type}</span>
-                    </div>
-                    <div class="pokemon-details">
-                        <span><i class="fas fa-arrow-up"></i> ${p.stage}</span>
-                        <span><i class="fas fa-heart"></i> <span class="hp-value">${p.hp} HP</span></span>
-                    </div>
-                    <div class="card-set">
-                        <i class="fas fa-folder-open"></i> ${p.set}
-                    </div>
-                    <div style="margin-top: 0.3rem; display: flex; justify-content: flex-end;">
-                        <span class="qty-badge">×${p.count}</span>
-                    </div>
-                `;
-                grid.appendChild(card);
+        function renderPokemonByType(pokemonByType) {
+            typeSections.innerHTML = '';
+            for (let [type, mons] of Object.entries(pokemonByType)) {
+                const typeLower = type.toLowerCase();
+                const sectionDiv = document.createElement('div');
+                sectionDiv.classList.add('pokemon-type-block');
+                sectionDiv.innerHTML = `<h3 class="subsection-title"><i class="fas fa-${typeLower === 'dragon' ? 'dragon' : 'paw'}"></i> ${type}</h3>`;
+                const grid = document.createElement('div');
+                grid.className = 'card-grid';
+
+                mons.forEach(p => {
+                    const card = document.createElement('div');
+                    card.className = `pokemon-card type-${typeLower}`;
+                    card.setAttribute('data-name', p.name.toLowerCase());
+                    const imgSrc = getImagePath(p.name);
+                    card.innerHTML = `
+                        <img class="card-thumb" src="${imgSrc}" alt="${p.name}" onclick="openLightbox('${imgSrc}')" loading="lazy">
+                        <div class="pokemon-name">
+                            ${p.name}
+                            <span class="type-badge">${type}</span>
+                        </div>
+                        <div class="pokemon-details">
+                            <span><i class="fas fa-arrow-up"></i> ${p.stage}</span>
+                            <span><i class="fas fa-heart"></i> <span class="hp-value">${p.hp} HP</span></span>
+                        </div>
+                        <div class="card-set">
+                            <span class="set-abbr">${p.setabbr}</span> ${p.set}
+                        </div>
+                        <div style="margin-top: 0.3rem; display: flex; justify-content: flex-end;">
+                            <span class="qty-badge">×${p.count}</span>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+
+                sectionDiv.appendChild(grid);
+                typeSections.appendChild(sectionDiv);
+            }
+            filterCards();
+        }
+
+        fetch('../data/pokemon.txt')
+            .then(response => {
+            if (!response.ok) throw new Error('Failed to load pokemon.txt');
+            return response.text();
+        })
+            .then(data => {
+            const lines = data.split('\n').filter(line => line.trim() !== '');
+            const pokemonByType = {};
+
+            lines.forEach(line => {
+                const parts = line.split(';').map(s => s.trim());
+                if (parts.length < 7) return;
+                const [name, stage, hp, count, setabbr, set, type] = parts;
+                if (!pokemonByType[type]) pokemonByType[type] = [];
+                pokemonByType[type].push({
+                    name,
+                    stage,
+                    hp: parseInt(hp, 10),
+                    count: parseInt(count, 10),
+                    setabbr,
+                    set
+                });
             });
 
-            sectionDiv.appendChild(grid);
-            typeSections.appendChild(sectionDiv);
-        }
+            renderPokemonByType(pokemonByType);
+        })
+            .catch(error => {
+            console.error('Error loading Pokémon:', error);
+            typeSections.innerHTML = '<p style="color: red; padding: 1rem;">Failed to load Pokémon data.</p>';
+        });
 
         const searchInput = document.getElementById('searchInput');
         const clearBtn = document.getElementById('clearSearch');

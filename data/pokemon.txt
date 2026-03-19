@@ -1,0 +1,96 @@
+Abra;Basic;50;1;MEG;MEG;Psychic
+Arcanine;Stage 1;140;1;DRM;Dragon Majesty;Fire
+Boltund;Stage 1;130;1;PFL;Paldea Friends League;Electric
+Brambleghast;Stage 1;100;1;PFL;Paldea Friends League;Psychic
+Bulbasaur;Basic;80;1;MEG;MEG;Grass
+Centiskorch;Stage 1;140;1;TEF;Telefang promo;Fire
+Charmander 1;Basic;60;1;OBF;Obsidian Frontiers;Fire
+Charmander 2;Basic;80;2;PFL;Paldea Friends League;Fire
+Charmeleon;Stage 1;90;2;OBF;Obsidian Frontiers;Fire
+Charizard EX;Stage 2;330;1;MPR;Mew promo;Fire
+Darmanitan 1;Stage 1;140;1;JU;Jungle;Fire
+Darmanitan 2;Stage 1;150;1;PFL;Paldea Friends League;Fire
+Dedenne;Basic;70;1;EVS;Evolving Skies;Psychic
+Drowzee;Basic;80;1;DRM;Dragon Majesty;Psychic
+Electabuzz;Basic;80;1;EVS;Evolving Skies;Electric
+Escavalier;Stage 1;130;1;BLW;Black & White;Metal
+Espathra;Stage 1;120;1;PAR;Paradox Rift;Psychic
+Flabebe;Basic;40;1;EVS;Evolving Skies;Psychic
+Garbodor;Stage 1;140;1;DP;White (Diamond & Pearl);Darkness
+Gastly;Basic;50;1;MPR;Mew promo;Psychic
+Girafarig;Basic;100;1;PAL;Paldea Evolved;Colorless
+Greavard;Basic;80;1;MEG;MEG;Psychic
+Grimer;Basic;80;1;FO;Fossil;Darkness
+Grimmsnarl;Stage 2;170;1;JU;Jungle;Psychic
+Growlithe;Basic;90;1;SVI;Scarlet & Violet;Fire
+Haunter 1;Stage 1;70;1;FO;Fossil;Psychic
+Haunter 2;Stage 1;80;1;MPR;Mew promo;Psychic
+Heracross;Basic;120;1;SVI;Scarlet & Violet;Grass
+Honchkrow 1;Stage 1;130;2;EVS;Evolving Skies;Darkness
+Honchkrow 2;Stage 2;130;2;PFL;Paldea Friends League;Darkness
+Houndoom;Stage 1;120;2;SVI;Scarlet & Violet;Fire
+Houndour;Basic;70;2;SVI;Scarlet & Violet;Fire
+Jynx;Basic;100;2;FO;Fossil;Psychic
+Kangaskhan;Basic;120;1;DRM;Dragon Majesty;Colorless
+Kilowattrel;Stage 1;120;2;PAL;Paldea Evolved;Electric
+Lanturn;Stage 1;120;1;EVS;Evolving Skies;Electric
+Liepard;Stage 1;100;2;DRM;Dragon Majesty;Darkness
+Lumineon;Stage 1;90;1;FO;Fossil;Water
+Magikarp;Basic;30;1;FO;Fossil;Water
+Magmar;Basic;90;1;FO;Fossil;Fire
+Magnezone;Stage 2;160;1;MEG;MEG;Electric
+Mamoswine;Stage 2;180;1;PFL;Paldea Friends League;Water
+Milotic;Stage 1;130;1;DRM;Dragon Majesty;Water
+Miraidon;Basic;120;1;SVI;Scarlet & Violet;Electric
+Moltres;Basic;120;1;PFL;Paldea Friends League;Fire
+Mr. Mime;Basic;80;1;EVS;Evolving Skies;Water
+Nacli;Basic;60;1;PAR;Paradox Rift;Rock
+Naclstack;Stage 1;110;1;MEG;MEG;Rock
+Numel;Basic;80;1;FO;Fossil;Fire
+Pawmi;Basic;60;3;SVI;Scarlet & Violet;Electric
+Pawmo;Stage 1;80;2;PAL;Paldea Evolved;Electric
+Pawmot;Stage 2;140;1;PAL;Paldea Evolved;Electric
+Pikachu;Basic;190;1;PAL;Paldea Evolved;Electric
+Polteageist;Stage 1;70;1;OBF;Obsidian Frontiers;Psychic
+Poltchageist;Basic;30;1;TUM;Team Up Mini;Grass
+Ponyta;Basic;60;1;FO;Fossil;Fire
+Rapidash;Stage 1;100;1;FO;Fossil;Fire
+Rayquaza EX;Basic;180;1;EXD;EX: Deoxys;Dragon
+Relicanth;Basic;90;1;FO;Fossil;Water
+Reshiram;Basic;130;1;SVI;Scarlet & Violet;Fire
+Sandslash;Stage 1;120;1;MEG;MEG;Rock
+Scream Tail;Basic;90;1;PR;Prerelease;Psychic
+Sealeo;Stage 1;110;1;EVS;Evolving Skies;Water
+Sharpedo 1;Stage 1;100;1;EVS;Evolving Skies;Darkness
+Sharpedo 2;Stage 1;120;1;TEF;Telefang promo;Water
+Shellder;Basic;70;1;EVS;Evolving Skies;Water
+Shelmet;Basic;60;1;DP;White (Diamond & Pearl);Grass
+Shiftry;Stage 2;160;1;MEG;MEG;Grass
+Shroomish;Basic;50;1;FO;Fossil;Grass
+Shroodle;Basic;60;1;PFL;Paldea Friends League;Darkness
+Slowbro;Stage 1;120;2;FO;Fossil;Water
+Slowking;Stage 1;130;1;PR;Prerelease;Water
+Slowpoke;Basic;70;1;PR;Prerelease;Water
+Smeargle;Basic;70;1;EVS;Evolving Skies;Colorless
+Sneasel;Basic;70;1;EVS;Evolving Skies;Water
+Spinarak;Basic;60;1;FO;Fossil;Grass
+Steelix;Stage 1;180;1;FO;Fossil;Metal
+Stoutland;Stage 2;160;1;EVS;Evolving Skies;Colorless
+Sudowoodo;Basic;110;1;FO;Fossil;Rock
+Suicune;Basic;120;2;PR;Prerelease;Water
+Thievul 1;Stage 1;100;2;EVS;Evolving Skies;Darkness
+Thievul 2;Stage 1;120;1;MEG;MEG;Darkness
+Thwackey;Stage 1;90;1;DF;Dragon Frontiers;Grass
+Torkoal;Basic;130;2;SVI;Scarlet & Violet;Fire
+Totodile;Basic;70;1;EVS;Evolving Skies;Water
+Toxapex;Stage 1;120;1;FO;Fossil;Darkness
+Toxicroak;Stage 1;120;1;FO;Fossil;Darkness
+Toxtricity;Stage 1;130;1;SVI;Scarlet & Violet;Electric
+Tropius;Basic;110;1;PFL;Paldea Friends League;Grass
+Unfezant;Stage 2;140;1;FO;Fossil;Colorless
+Volcarona;Stage 1;140;1;SSP;Sword & Shield promo;Fire
+Wattrel;Basic;60;2;SVI;Scarlet & Violet;Electric
+Wigglytuff;Stage 1;120;1;PFL;Paldea Friends League;Colorless
+Wimpod;Basic;70;3;FO;Fossil;Water
+Woobat;Basic;60;1;DP;White (Diamond & Pearl);Psychic
+Zorua;Basic;60;1;FO;Fossil;Psychic
