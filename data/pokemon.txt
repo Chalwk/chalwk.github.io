@@ -37,7 +37,7 @@ POKEMON;Haunter 1;Stage 1;70;1;Psychic;false;Evolves from Gastly; Attack Cursed 
 POKEMON;Haunter 2;Stage 1;80;1;Psychic;false;Evolves from Gastly; Ability Spirit Return: when evolved, may put a Supporter from opponent's discard into their hand; Attack Mumble: 30 damage.
 POKEMON;Heracross;Basic;120;1;Grass;false;Attacks: Superpowered Throw: 10+ damage, +30 per ★ in opponent's Active Retreat Cost; Horn Attack: 90 damage.
 POKEMON;Honchkrow 1;Stage 1;130;2;Darkness;false;Evolves from Murkrow; Ability Insomnia: can't be Asleep; Attack Voltage Dive: damage unspecified, +80 if opponent's Active has Special Energy.
-POKEMON;Honchkrow 2;Stage 2;130;2;Darkness;false;Evolves from Murkrow; Attacks: Wind of Darkness: 30 damage; Sniping Feathers: 120 damage to 1 opponent's Pokémon, discard 2 Energy from this Pokémon (no Weak/Resist for Benched).
+POKEMON;Honchkrow 2;Stage 1;130;2;Darkness;false;Evolves from Murkrow; Attacks: Wind of Darkness: 30 damage; Sniping Feathers: 120 damage to 1 opponent's Pokémon, discard 2 Energy from this Pokémon (no Weak/Resist for Benched).
 POKEMON;Houndoom;Stage 1;120;2;Fire;false;Evolves from Houndour; Attacks: Sharp Fang: 30 damage; Fire Blast: 150 damage, discard an Energy from this Pokémon.
 POKEMON;Houndour;Basic;70;2;Fire;false;Attacks: Bite: 10 damage; Flare: 30 damage.
 POKEMON;Jynx;Basic;100;2;Psychic;false;Attacks: Alluring Dance: switch opponent's Benched with Active, new Active Confused; Super Psy Bolt: 80 damage.
