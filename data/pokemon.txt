@@ -61,18 +61,18 @@ POKEMON;Pawmi;Basic;60;3;Electric;false;https://www.pokemon.com/us/pokemon-tcg/p
 POKEMON;Pawmo;Stage 1;80;2;Electric;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv02/75/
 POKEMON;Pawmot;Stage 2;140;1;Electric;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv02/76/
 POKEMON;Pikachu;Basic;190;1;Electric;true;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv02/63/
-POKEMON;Poltchageist;Basic;30;1;Grass;false;
-POKEMON;Polteageist;Stage 1;70;1;Psychic;false;
-POKEMON;Ponyta;Basic;60;1;Fire;false;
-POKEMON;Rapidash;Stage 1;100;1;Fire;false;
-POKEMON;Rayquaza EX;Basic;180;1;Dragon;true;
-POKEMON;Relicanth;Basic;90;1;Water;false;
-POKEMON;Reshiram;Basic;130;1;Fire;false;
-POKEMON;Sandslash;Stage 1;120;1;Rock;false;
-POKEMON;Scream Tail;Basic;90;1;Psychic;false;
-POKEMON;Sealeo;Stage 1;110;1;Water;false;
-POKEMON;Sharpedo 1;Stage 1;100;1;Darkness;false;
-POKEMON;Sharpedo 2;Stage 1;120;1;Water;false;
+POKEMON;Poltchageist;Basic;30;1;Grass;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv06/20/
+POKEMON;Polteageist;Stage 1;70;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv03/98/
+POKEMON;Ponyta;Basic;60;1;Fire;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh10/21/
+POKEMON;Rapidash;Stage 1;100;1;Fire;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh10/22/
+POKEMON;Rayquaza EX;Basic;180;1;Dragon;true;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/xy6/60/
+POKEMON;Relicanth;Basic;90;1;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh12/44/
+POKEMON;Reshiram;Basic;130;1;Fire;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv07/22/
+POKEMON;Sandslash;Stage 1;120;1;Rock;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me01/69/
+POKEMON;Scream Tail;Basic;90;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv8pt5/42/
+POKEMON;Sealeo;Stage 1;110;1;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh6/38/
+POKEMON;Sharpedo 1;Stage 1;100;1;Darkness;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh8/163/
+POKEMON;Sharpedo 2;Stage 1;120;1;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv05/43/
 POKEMON;Shellder;Basic;70;1;Water;false;
 POKEMON;Shelmet;Basic;60;1;Grass;false;
 POKEMON;Shiftry;Stage 2;160;1;Grass;false;
