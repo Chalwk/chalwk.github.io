@@ -1,115 +1,115 @@
-ENERGY;Fire Energy;10
-ENERGY;Fusion Strike Energy;1
-ENERGY;Lightning Energy;10
-ITEM;Energy Loto;1
-ITEM;Great Ball;4
-ITEM;Potion;2
-ITEM;Super Rod;1;true
-ITEM;Switch;2
-ITEM;Techno Radar;1;true
-ITEM;Unidentified Fossil;1
-POKEMON;Abra;Basic;50;1;Psychic
-POKEMON;Arcanine;Stage 1;140;1;Fire
-POKEMON;Boltund;Stage 1;130;1;Electric
-POKEMON;Brambleghast;Stage 1;100;1;Psychic
-POKEMON;Bulbasaur;Basic;80;1;Grass
-POKEMON;Centiskorch;Stage 1;140;1;Fire
-POKEMON;Charizard EX;Stage 2;330;1;Fire;true
-POKEMON;Charmander 1;Basic;60;1;Fire
-POKEMON;Charmander 2;Basic;80;2;Fire
-POKEMON;Charmeleon;Stage 1;90;2;Fire
-POKEMON;Darmanitan 1;Stage 1;140;1;Fire;true
-POKEMON;Darmanitan 2;Stage 1;150;1;Fire
-POKEMON;Dedenne;Basic;70;1;Psychic
-POKEMON;Drowzee;Basic;80;1;Psychic
-POKEMON;Electabuzz;Basic;80;1;Electric
-POKEMON;Escavalier;Stage 1;130;1;Metal
-POKEMON;Espathra;Stage 1;120;1;Psychic
-POKEMON;Flabebe;Basic;40;1;Psychic
-POKEMON;Garbodor;Stage 1;140;1;Darkness
-POKEMON;Gastly;Basic;50;1;Psychic
-POKEMON;Girafarig;Basic;100;1;Colorless
-POKEMON;Greavard;Basic;80;1;Psychic
-POKEMON;Grimer;Basic;80;1;Darkness
-POKEMON;Grimmsnarl;Stage 2;170;1;Psychic
-POKEMON;Growlithe;Basic;90;1;Fire
-POKEMON;Haunter 1;Stage 1;70;1;Psychic
-POKEMON;Haunter 2;Stage 1;80;1;Psychic
-POKEMON;Heracross;Basic;120;1;Grass
-POKEMON;Honchkrow 1;Stage 1;130;2;Darkness
-POKEMON;Honchkrow 2;Stage 2;130;2;Darkness
-POKEMON;Houndoom;Stage 1;120;2;Fire
-POKEMON;Houndour;Basic;70;2;Fire
-POKEMON;Jynx;Basic;100;2;Psychic
-POKEMON;Kangaskhan;Basic;120;1;Colorless
-POKEMON;Kilowattrel;Stage 1;120;2;Electric
-POKEMON;Lanturn;Stage 1;120;1;Electric
-POKEMON;Liepard;Stage 1;100;2;Darkness
-POKEMON;Lumineon;Stage 1;90;1;Water
-POKEMON;Magikarp;Basic;30;1;Water
-POKEMON;Magmar;Basic;90;1;Fire
-POKEMON;Magnezone;Stage 2;160;1;Electric
-POKEMON;Mamoswine;Stage 2;180;1;Water
-POKEMON;Milotic;Stage 1;130;1;Water
-POKEMON;Miraidon;Basic;120;1;Electric
-POKEMON;Moltres;Basic;120;1;Fire;true
-POKEMON;Mr. Mime;Basic;80;1;Water
-POKEMON;Nacli;Basic;60;1;Rock
-POKEMON;Naclstack;Stage 1;110;1;Rock
-POKEMON;Numel;Basic;80;1;Fire
-POKEMON;Pawmi;Basic;60;3;Electric
-POKEMON;Pawmo;Stage 1;80;2;Electric
-POKEMON;Pawmot;Stage 2;140;1;Electric
-POKEMON;Pikachu;Basic;190;1;Electric;true
-POKEMON;Poltchageist;Basic;30;1;Grass
-POKEMON;Polteageist;Stage 1;70;1;Psychic
-POKEMON;Ponyta;Basic;60;1;Fire
-POKEMON;Rapidash;Stage 1;100;1;Fire
-POKEMON;Rayquaza EX;Basic;180;1;Dragon;true
-POKEMON;Relicanth;Basic;90;1;Water
-POKEMON;Reshiram;Basic;130;1;Fire
-POKEMON;Sandslash;Stage 1;120;1;Rock
-POKEMON;Scream Tail;Basic;90;1;Psychic
-POKEMON;Sealeo;Stage 1;110;1;Water
-POKEMON;Sharpedo 1;Stage 1;100;1;Darkness
-POKEMON;Sharpedo 2;Stage 1;120;1;Water
-POKEMON;Shellder;Basic;70;1;Water
-POKEMON;Shelmet;Basic;60;1;Grass
-POKEMON;Shiftry;Stage 2;160;1;Grass
-POKEMON;Shroodle;Basic;60;1;Darkness
-POKEMON;Shroomish;Basic;50;1;Grass
-POKEMON;Slowbro;Stage 1;120;2;Water
-POKEMON;Slowking;Stage 1;130;1;Water
-POKEMON;Slowpoke;Basic;70;1;Water
-POKEMON;Smeargle;Basic;70;1;Colorless
-POKEMON;Sneasel;Basic;70;1;Water
-POKEMON;Spinarak;Basic;60;1;Grass
-POKEMON;Steelix;Stage 1;180;1;Metal
-POKEMON;Stoutland;Stage 2;160;1;Colorless
-POKEMON;Sudowoodo;Basic;110;1;Rock
-POKEMON;Suicune;Basic;120;2;Water
-POKEMON;Thievul 1;Stage 1;100;2;Darkness
-POKEMON;Thievul 2;Stage 1;120;1;Darkness
-POKEMON;Thwackey;Stage 1;90;1;Grass
-POKEMON;Torkoal;Basic;130;2;Fire
-POKEMON;Totodile;Basic;70;1;Water
-POKEMON;Toxapex;Stage 1;120;1;Darkness
-POKEMON;Toxicroak;Stage 1;120;1;Darkness
-POKEMON;Toxtricity;Stage 1;130;1;Electric
-POKEMON;Tropius;Basic;110;1;Grass
-POKEMON;Unfezant;Stage 2;140;1;Colorless
-POKEMON;Volcarona;Stage 1;140;1;Fire
-POKEMON;Wattrel;Basic;60;2;Electric
-POKEMON;Wigglytuff;Stage 1;120;1;Colorless
-POKEMON;Wimpod;Basic;70;3;Water
-POKEMON;Woobat;Basic;60;1;Psychic
-POKEMON;Zorua;Basic;60;1;Psychic
-SUPPORTER;Clavell;2
-SUPPORTER;Explorer's Guidance;1;true
-SUPPORTER;Friends in Galar;1
-SUPPORTER;Jacq;3
-SUPPORTER;Nemona;4
-SUPPORTER;Youngster;2
-TOOL;Future Booster Energy Capsule;1
-TOOL;Rusted Shield;1
-TOOL;Technical Machine - Evolution;1
+ENERGY;Fire Energy;10;false;Basic Energy.
+ENERGY;Fusion Strike Energy;1;false;Attaches only to Fusion Strike Pokémon; provides 1 of any type of Energy, prevents opponent Pokémon Abilities from affecting the attached Pokémon; discard if attached elsewhere.
+ENERGY;Lightning Energy;10;false;Basic Energy.
+ITEM;Energy Loto;1;false;Look at top 7, reveal an Energy card and put into hand, shuffle rest.
+ITEM;Great Ball;4;false;Look at top 7, reveal a Pokémon and put into hand, shuffle rest.
+ITEM;Potion;2;false;Heal 30 damage from 1 Pokémon.
+ITEM;Super Rod;1;true;Shuffle up to 3 Pokémon/Basic Energy from discard into deck.
+ITEM;Switch;2;false;Switch Active with 1 Benched.
+ITEM;Techno Radar;1;true;Discard another card, search deck for up to 2 Future Pokémon, put into hand.
+ITEM;Unidentified Fossil;1;false;Plays as 60-HP Basic ★ Pokémon, can be discarded anytime, cannot retreat.
+POKEMON;Abra;Basic;50;1;Psychic;false;Attack Teleportation Attack: 10 damage, switches with a Benched Pokémon.
+POKEMON;Arcanine;Stage 1;140;1;Fire;false;Evolves from Growlithe; Attacks: Flare: 50 damage; Punishing Fang: 100+ damage, +100 if opponent's Active is a Pokémon.
+POKEMON;Boltund;Stage 1;130;1;Electric;false;Evolves from Yamper; Attack Electric Run: 70+ damage, +70 on heads coin flip.
+POKEMON;Brambleghast;Stage 1;100;1;Psychic;false;Evolves from Bramblin; Ability Prison Panic: when evolved, Confuse opponent's Active; Attack Psychic Sphere: 80 damage.
+POKEMON;Bulbasaur;Basic;80;1;Grass;false;Attack Bind Down: 10 damage, opponent's Active can't retreat next turn.
+POKEMON;Centiskorch;Stage 1;140;1;Fire;false;Evolves from Sizzlipede; Attacks: Single: opponent's Active Burned; Charring Breath: if opponent's Active not Burned, does nothing.
+POKEMON;Charizard EX;Stage 2;330;1;Fire;true;Evolves from Charmeleon; Attacks: Brave Wing: damage unspecified, +100 if this Pokémon has damage counters; Explosive Vortex: damage unspecified, discard 3 Energy from this Pokémon; Rule: when Knocked Out, opponent takes 2 Prize cards.
+POKEMON;Charmander 1;Basic;60;1;Fire;false;Attack Heat Tackle: 30 damage, this Pokémon does 10 damage to itself.
+POKEMON;Charmander 2;Basic;80;2;Fire;false;Ability Agile: if no Energy attached, no Retreat Cost; Attack Live Coal: 20 damage.
+POKEMON;Charmeleon;Stage 1;90;2;Fire;false;Evolves from Charmander; Attack Heat Tackle: 70 damage, this Pokémon does 20 damage to itself.
+POKEMON;Darmanitan 1;Stage 1;140;1;Fire;true;Evolves from N's Darumaka; Attacks: Back Draft: 30x damage, x = number of Basic Energy in opponent's discard; Flamebody Cannon: 90x damage, discard all Energy from this Pokémon, also does 90 damage to 1 Benched (no Weak/Resist).
+POKEMON;Darmanitan 2;Stage 1;150;1;Fire;false;Evolves from Darumaka; Attack Blaze Ball: 40+ damage, +40 per ☉ Energy attached.
+POKEMON;Dedenne;Basic;70;1;Psychic;false;Attack Dede-Flash: 20+ damage, +60 if opponent has exactly 1 Prize left, and Confuse opponent's Active.
+POKEMON;Drowzee;Basic;80;1;Psychic;false;Attack Hypnotic Ray: 10 damage, opponent's Active Asleep.
+POKEMON;Electabuzz;Basic;80;1;Electric;false;Attack Haymaker: 30 damage, can't use Haymaker next turn.
+POKEMON;Escavalier;Stage 1;130;1;Metal;false;Evolves from Karrablast; Attack Wild Lances: 90 damage, this Pokémon does 30 damage to itself.
+POKEMON;Espathra;Stage 1;120;1;Psychic;false;Evolves from Flittle; Ability Stance: when evolved, may prevent all damage/effects from opponent's attacks until end of opponent's next turn; Attack Glittering Eyes: 70+ damage, +70 if Tulip in discard.
+POKEMON;Flabebe;Basic;40;1;Psychic;false;Attack Hypnotic Gaze: opponent's Active Asleep.
+POKEMON;Garbodor;Stage 1;140;1;Darkness;false;Evolves from Trubbish; Attacks: Suffocating Gas: 40 damage; Gunk Shot: 120 damage, opponent's Active Poisoned.
+POKEMON;Gastly;Basic;50;1;Psychic;false;Attack Suffocating Gas: 20 damage.
+POKEMON;Girafarig;Basic;100;1;Colorless;false;Attacks: Psy Bolt: 30 damage, flip heads: Paralyze; Headbang: 70 damage.
+POKEMON;Greavard;Basic;80;1;Psychic;false;Attacks: Stampede: 10 damage; Take Down: 40 damage, this Pokémon does 10 damage to itself.
+POKEMON;Grimer;Basic;80;1;Darkness;false;Attack Poison Gas: opponent's Active Poisoned.
+POKEMON;Grimmsnarl;Stage 2;170;1;Psychic;false;Evolves from Morgrem; Attacks: Shadowy Knot: 50x damage, x = Retreat Cost of opponent's Active (★); Mega Punch: 120 damage.
+POKEMON;Growlithe;Basic;90;1;Fire;false;Attacks: Stoke: search deck for up to 2 Basic ☉ Energy, attach to this Pokémon; Fire Claws: 70 damage.
+POKEMON;Haunter 1;Stage 1;70;1;Psychic;false;Evolves from Gastly; Attack Cursed Drop: put 3 damage counters on opponent's Pokémon any way.
+POKEMON;Haunter 2;Stage 1;80;1;Psychic;false;Evolves from Gastly; Ability Spirit Return: when evolved, may put a Supporter from opponent's discard into their hand; Attack Mumble: 30 damage.
+POKEMON;Heracross;Basic;120;1;Grass;false;Attacks: Superpowered Throw: 10+ damage, +30 per ★ in opponent's Active Retreat Cost; Horn Attack: 90 damage.
+POKEMON;Honchkrow 1;Stage 1;130;2;Darkness;false;Evolves from Murkrow; Ability Insomnia: can't be Asleep; Attack Voltage Dive: damage unspecified, +80 if opponent's Active has Special Energy.
+POKEMON;Honchkrow 2;Stage 2;130;2;Darkness;false;Evolves from Murkrow; Attacks: Wind of Darkness: 30 damage; Sniping Feathers: 120 damage to 1 opponent's Pokémon, discard 2 Energy from this Pokémon (no Weak/Resist for Benched).
+POKEMON;Houndoom;Stage 1;120;2;Fire;false;Evolves from Houndour; Attacks: Sharp Fang: 30 damage; Fire Blast: 150 damage, discard an Energy from this Pokémon.
+POKEMON;Houndour;Basic;70;2;Fire;false;Attacks: Bite: 10 damage; Flare: 30 damage.
+POKEMON;Jynx;Basic;100;2;Psychic;false;Attacks: Alluring Dance: switch opponent's Benched with Active, new Active Confused; Super Psy Bolt: 80 damage.
+POKEMON;Kangaskhan;Basic;120;1;Colorless;false;Attacks: Gentle Slap: 50 damage; Dizzy Punch: 90x damage, flip 2 coins, x = heads.
+POKEMON;Kilowattrel;Stage 1;120;2;Electric;false;Evolves from Wattrel; Attacks: Peck: 20 damage; Jet Wing: 150 damage, can't attack next turn.
+POKEMON;Lanturn;Stage 1;120;1;Electric;false;Evolves from Chinchou; Attacks: Blinding Beam: 40 damage, during opponent's next turn, if Defending tries to attack, flip coin tails prevents; Electro Ball: 120 damage.
+POKEMON;Liepard;Stage 1;100;2;Darkness;false;Evolves from Purrloin; Attacks: Fury Swipes: 40x damage, flip 3 coins, x = heads; Claw Slash: 110 damage.
+POKEMON;Lumineon;Stage 1;90;1;Water;false;Evolves from Finneon; Attacks: Swim Freely: flip heads, prevent all damage/effects to this Pokémon during opponent's next turn; Waterfall: 120 damage.
+POKEMON;Magikarp;Basic;30;1;Water;false;Attacks: Lively Grouping: search deck for any number of Magikarp, put into hand; Raging Fin: damage unspecified, +30 per Magikarp and Gyarados in discard.
+POKEMON;Magmar;Basic;90;1;Fire;false;Attacks: Low Kick: 20 damage; Fiery Punch: 70 damage.
+POKEMON;Magnezone;Stage 2;160;1;Electric;false;Evolves from Magneton; Attacks: Upper Spark: 50+ damage, +120 if evolved from Magneton this turn; Flashing Bolt: 160 damage, can't use Flashing Bolt next turn.
+POKEMON;Mamoswine;Stage 2;180;1;Water;false;Evolves from Piloswine; Attacks: Wreck: damage unspecified, +120 if Stadium in play, then discard Stadium; Blizzard Edge: damage unspecified, discard 2 Energy from this Pokémon.
+POKEMON;Milotic;Stage 1;130;1;Water;false;Evolves from Cynthia's Feebas; Attack Aqua Split: 60 damage, also 30 damage to 2 Benched (no Weak/Resist).
+POKEMON;Miraidon;Basic;120;1;Electric;false;Attacks: Sharp Fang: 30 damage; Lightning Laser: 90 damage, also 30 damage to 1 Benched (no Weak/Resist).
+POKEMON;Moltres;Basic;120;1;Fire;true;Attack Fighting Wings: damage unspecified, +90 if opponent's Active is Pokémon ex.
+POKEMON;Mr. Mime;Basic;80;1;Water;false;Attacks: Pound: 10 damage; Find It: search deck for an Item card, put into hand.
+POKEMON;Nacli;Basic;60;1;Rock;false;Attacks: Rock Throw: 10 damage; Stone Edge: 20+ damage, flip heads +20.
+POKEMON;Naclstack;Stage 1;110;1;Rock;false;Evolves from Nacli; Attack Rock Hurl: 50 damage, ignores Resistance.
+POKEMON;Numel;Basic;80;1;Fire;false;Attacks: Tackle: 20 damage; Stomp: 50+ damage, flip heads +50.
+POKEMON;Pawmi;Basic;60;3;Electric;false;Attacks: Growl: opponent's Defending attacks do 30 less next turn; Tiny Charge: 10 damage.
+POKEMON;Pawmo;Stage 1;80;2;Electric;false;Evolves from Pawmi; Attacks: Static Shock: 20 damage; Electrobullet: 50 damage, also 30 damage to 1 Benched (no Weak/Resist).
+POKEMON;Pawmot;Stage 2;140;1;Electric;false;Evolves from Pawmo; Attacks: Mach Bolt: 40 damage; Electric Fist: 100 damage, also 60 damage to 1 Benched (no Weak/Resist).
+POKEMON;Pikachu;Basic;190;1;Electric;true;Attacks: Pika Punch: 30 damage; Dynamic Bolt: 220 damage, flip tails discard all Energy from this Pokémon; Rule: when Knocked Out, opponent takes 2 Prize cards (Pokémon ex).
+POKEMON;Poltchageist;Basic;30;1;Grass;false;Ability Storehouse Hideaway: while on Bench, prevents all damage/effects from opponent's attacks; Attack Hook: 10 damage.
+POKEMON;Polteageist;Stage 1;70;1;Psychic;false;Evolves from Sinistea; Attacks: Antique Collecting: put up to 2 Item or Tool cards from discard into hand; Pour Tea: put 5 damage counters on opponent's Active.
+POKEMON;Ponyta;Basic;60;1;Fire;false;Attack Flame Tail: 20 damage.
+POKEMON;Rapidash;Stage 1;100;1;Fire;false;Evolves from Ponyta; Attacks: Combustion: 30 damage; Ring of Fire: 50 damage, opponent's Active Burned and can't retreat next turn.
+POKEMON;Rayquaza EX;Basic;180;1;Dragon;true;Attacks: Dragon Claw: 30 damage; Dragon Strike: 130 damage, flip tails can't use Dragon Strike next turn; Rule: when Knocked Out, opponent takes 2 Prize cards.
+POKEMON;Relicanth;Basic;90;1;Water;false;Attacks: Fossil Finding: shuffle up to 4 Fossil cards from discard into deck; Water Pulse: damage unspecified, opponent's Active Asleep.
+POKEMON;Reshiram;Basic;130;1;Fire;false;Attack Heat Blast: 90 damage.
+POKEMON;Sandslash;Stage 1;120;1;Rock;false;Evolves from Sandshrew; Attacks: Sand Attack: 50 damage, during opponent's next turn, if Defending tries to attack, flip tails prevents; Mud Shot: 100 damage.
+POKEMON;Scream Tail;Basic;90;1;Psychic;false;Ancient; Attacks: Slap: 30 damage; Roaring Scream: damage unspecified, 20 damage to 1 opponent's Pokémon per damage counter on this Pokémon (no Weak/Resist for Benched).
+POKEMON;Sealeo;Stage 1;110;1;Water;false;Evolves from Spheal; Attacks: Ram: 30 damage; Aurora Beam: 70 damage.
+POKEMON;Sharpedo 1;Stage 1;100;1;Darkness;false;Evolves from Carvanha; Attack Sharp Fang: 70 damage.
+POKEMON;Sharpedo 2;Stage 1;120;1;Water;false;Evolves from Carvanha; Attacks: Chew Off: 50 damage, flip 3 coins, each heads discards random card from opponent's hand; Jet Headbutt: 100 damage.
+POKEMON;Shellder;Basic;70;1;Water;false;Attacks: Tongue Slap: 10 damage; Wave Splash: 20 damage.
+POKEMON;Shelmet;Basic;60;1;Grass;false;Ability Stimulated Evolution: if Karrablast in play, can evolve on first turn or turn played; Attack Headbutt Bounce: 10 damage.
+POKEMON;Shiftry;Stage 2;160;1;Grass;false;Evolves from Nuzleaf; Attacks: Reversing Gust: flip heads, shuffle 1 opponent's Pokémon and attached into deck; Perplex: opponent's Active Confused.
+POKEMON;Shroodle;Basic;60;1;Darkness;false;Attack Spit Poison: opponent's Active Poisoned.
+POKEMON;Shroomish;Basic;50;1;Grass;false;Attack Headbutt: 20 damage.
+POKEMON;Slowbro;Stage 1;120;2;Water;false;Evolves from Slowpoke; Attacks: Tumbling Tackle: 20 damage, both Active Asleep; Twilight Inspiration: if opponent has exactly 1 Prize left, take 2 Prize cards.
+POKEMON;Slowking;Stage 1;130;1;Water;false;Evolves from Slowpoke; Attack Wash the Slate Clean: 70 damage, may put 2 Energy from opponent's Active into their hand.
+POKEMON;Slowpoke;Basic;70;1;Water;false;Attacks: Water Gun: 10 damage; Tail Whap: 30 damage.
+POKEMON;Smeargle;Basic;70;1;Colorless;false;Attacks: Sketching Trash: put up to 2 Fusion Strike Trainer cards from discard into hand; Tail Whap: 80 damage.
+POKEMON;Sneasel;Basic;70;1;Water;false;Attack Cut Down: flip heads, discard an Energy from opponent's Active.
+POKEMON;Spinarak;Basic;60;1;Grass;false;Attack Poison Sting: 10 damage, flip heads Poison opponent's Active.
+POKEMON;Steelix;Stage 1;180;1;Metal;false;Evolves from Onix; Attacks: Body Slam: 70 damage, flip heads Paralyze; Iron Buster: 170 damage, can't attack next turn.
+POKEMON;Stoutland;Stage 2;160;1;Colorless;false;Evolves from Herdier; Ability Intimidating Fang: while Active, opponent's Active attacks do 30 less; Attack Knock Away: damage unspecified, flip heads +100.
+POKEMON;Sudowoodo;Basic;110;1;Rock;false;Ability Vamoose: if damaged, no Retreat Cost; Attack Double-Edge: 90 damage, this Pokémon does 30 damage to itself.
+POKEMON;Suicune;Basic;120;2;Water;false;Attacks: Overrun: 30 damage, also 30 damage to 1 Benched (no Weak/Resist); Aurora Beam: 100 damage.
+POKEMON;Thievul 1;Stage 1;100;2;Darkness;false;Evolves from Nickit; Ability Fumbling Hands: when evolved, each player shuffles hand to bottom of deck, then both draw 4 cards if any were placed; Attack Tail Smack: 60 damage.
+POKEMON;Thievul 2;Stage 1;120;1;Darkness;false;Evolves from Nickit; Attacks: Greedy Hunt: 20 damage, draw until 6 cards in hand; Pitch-Black Fangs: 60 damage.
+POKEMON;Thwackey;Stage 1;90;1;Grass;false;Evolves from Grookey; Ability Lay of the Land: if Stadium in play, no Retreat Cost; Attack Branch Poke: 20 damage.
+POKEMON;Torkoal;Basic;130;2;Fire;false;Attacks: Stampede: 30 damage; Concentrated Fire: 80x damage, flip coin per ☉ Energy, x = heads.
+POKEMON;Totodile;Basic;70;1;Water;false;Attack Rain Splash: 20 damage.
+POKEMON;Toxapex;Stage 1;120;1;Darkness;false;Evolves from Mareanie; Attacks: Venoshock: 10+ damage, +120 if opponent's Active Poisoned; Spike Shot: 90 damage.
+POKEMON;Toxicroak;Stage 1;120;1;Darkness;false;Evolves from Croagunk; Attacks: Pierce: 30 damage; Diving Uppercut: 120 damage, this Pokémon takes 50 more damage from attacks next turn.
+POKEMON;Toxtricity;Stage 1;130;1;Electric;false;Evolves from Toxel; Attacks: Yank Away: choose 2 random cards from opponent's hand, they reveal and shuffle into deck; Thunder: damage unspecified, this Pokémon does 20 damage to itself.
+POKEMON;Tropius;Basic;110;1;Grass;false;Attacks: Leaf Drain: 20 damage, heal 20 from this Pokémon; Tropic Breeze: 130 damage, move all Energy from this Pokémon to 1 Benched.
+POKEMON;Unfezant;Stage 2;140;1;Colorless;false;Evolves from Tranquill; Attacks: Gust: 30 damage; Hurricane Wing: 70x damage, flip 4 coins, x = heads.
+POKEMON;Volcarona;Stage 1;140;1;Fire;false;Evolves from Larvesta; Attacks: Leech Life: 30 damage, heal equal to damage done; Turbulent Wings: 150 damage, this Pokémon does 50 damage to itself.
+POKEMON;Wattrel;Basic;60;2;Electric;false;Attack Static Shock: 20 damage.
+POKEMON;Wigglytuff;Stage 1;120;1;Colorless;false;Evolves from Jigglypuff; Attacks: Round: 40x damage, x = number of your Pokémon with Round; Seismic Toss: 100 damage.
+POKEMON;Wimpod;Basic;70;3;Water;false;Ability Punk Out: if opponent has any Pokémon V, no Retreat Cost; Attack Gnaw: 10 damage.
+POKEMON;Woobat;Basic;60;1;Psychic;false;HP and attacks not specified.
+POKEMON;Zorua;Basic;60;1;Psychic;false;Attacks: Collect: draw a card; Mumble: 10 damage.
+SUPPORTER;Clavell;2;false;Search deck for up to 3 Basic Pokémon with 120 HP or less, put into hand.
+SUPPORTER;Explorer's Guidance;1;true;Look at top 6, put 2 into hand, discard rest.
+SUPPORTER;Friends in Galar;1;false;Draw 3 cards.
+SUPPORTER;Jacq;3;false;Search deck for up to 2 Evolution Pokémon, put into hand.
+SUPPORTER;Nemona;4;false;Draw 3 cards.
+SUPPORTER;Youngster;2;false;Shuffle hand into deck, draw 5 cards.
+TOOL;Future Booster Energy Capsule;1;false;Attached Future Pokémon has no Retreat Cost, attacks do +20 damage to Active.
+TOOL;Rusted Shield;1;false;Attach to Zamazenta V (only), gives +70 HP.
+TOOL;Technical Machine - Evolution;1;false;Attached Pokémon can use "Evolution" attack (requires Energy), then discard; Evolution: choose up to 2 Benched, search deck for their evolutions and put onto them.

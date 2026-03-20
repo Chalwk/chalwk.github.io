@@ -363,6 +363,21 @@ My Pokémon TCG collection
             color: var(--gray-light);
         }
 
+        .card-description {
+            font-size: 0.75rem;
+            color: #555;
+            margin-top: 0.4rem;
+            line-height: 1.2;
+            max-height: 3.6rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            border-top: 1px dashed #eee;
+            padding-top: 0.3rem;
+        }
+
         @media (max-width: 640px) {
             .card-grid {
                 grid-template-columns: repeat(2, 1fr) !important;
@@ -514,6 +529,7 @@ My Pokémon TCG collection
                     <div class="item-name">
                         ${item.name} ${holoTag}
                     </div>
+                    <div class="card-description">${item.description}</div>
                 </div>
             `;
         }
@@ -548,6 +564,7 @@ My Pokémon TCG collection
                             <span><i class="fas fa-arrow-up"></i> ${p.stage}</span>
                             <span class="hp-value">${p.hp} HP</span>
                         </div>
+                        <div class="card-description">${p.description}</div>
                     `;
                     grid.appendChild(card);
                 });
@@ -578,57 +595,53 @@ My Pokémon TCG collection
                 const category = parts[0];
 
                 switch(category) {
-                    case 'ENERGY':
-                        if (parts.length >= 3) {
-                            energies.push({
-                                name: parts[1],
-                                count: parseInt(parts[2], 10),
-                                holo: parseHolo(parts, 3)
-                            });
-                        }
+                    case 'ENERGY': {
+                        const name = parts[1];
+                        const count = parseInt(parts[2], 10);
+                        const holo = parts[3] ? parts[3].toLowerCase() === 'true' : false;
+                        const description = parts.slice(4).join(';');
+                        energies.push({ name, count, holo, description });
                         break;
-                    case 'SUPPORTER':
-                        if (parts.length >= 3) {
-                            supporters.push({
-                                name: parts[1],
-                                count: parseInt(parts[2], 10),
-                                holo: parseHolo(parts, 3)
-                            });
-                        }
+                    }
+                    case 'SUPPORTER': {
+                        const name = parts[1];
+                        const count = parseInt(parts[2], 10);
+                        const holo = parts[3] ? parts[3].toLowerCase() === 'true' : false;
+                        const description = parts.slice(4).join(';');
+                        supporters.push({ name, count, holo, description });
                         break;
-                    case 'ITEM':
-                        if (parts.length >= 3) {
-                            items.push({
-                                name: parts[1],
-                                count: parseInt(parts[2], 10),
-                                holo: parseHolo(parts, 3)
-                            });
-                        }
+                    }
+                    case 'ITEM': {
+                        const name = parts[1];
+                        const count = parseInt(parts[2], 10);
+                        const holo = parts[3] ? parts[3].toLowerCase() === 'true' : false;
+                        const description = parts.slice(4).join(';');
+                        items.push({ name, count, holo, description });
                         break;
-                    case 'TOOL':
-                        if (parts.length >= 3) {
-                            tools.push({
-                                name: parts[1],
-                                count: parseInt(parts[2], 10),
-                                holo: parseHolo(parts, 3)
-                            });
-                        }
+                    }
+                    case 'TOOL': {
+                        const name = parts[1];
+                        const count = parseInt(parts[2], 10);
+                        const holo = parts[3] ? parts[3].toLowerCase() === 'true' : false;
+                        const description = parts.slice(4).join(';');
+                        tools.push({ name, count, holo, description });
                         break;
-                    case 'POKEMON':
-                        if (parts.length >= 6) {
-                            const [_, name, stage, hp, count, type] = parts;
-                            const holo = parseHolo(parts, 6);
+                    }
+                    case 'POKEMON': {
+                        const name = parts[1];
+                        const stage = parts[2];
+                        const hp = parseInt(parts[3], 10);
+                        const count = parseInt(parts[4], 10);
+                        const type = parts[5];
+                        const holo = parts[6] ? parts[6].toLowerCase() === 'true' : false;
+                        const description = parts.slice(7).join(';');
 
-                            if (!pokemonByType[type]) pokemonByType[type] = [];
-                            pokemonByType[type].push({
-                                name,
-                                stage,
-                                hp: parseInt(hp, 10),
-                                count: parseInt(count, 10),
-                                holo
-                            });
-                        }
+                        if (!pokemonByType[type]) pokemonByType[type] = [];
+                        pokemonByType[type].push({
+                            name, stage, hp, count, holo, description
+                        });
                         break;
+                    }
                     default:
                         console.warn('Unknown category:', category);
                 }
