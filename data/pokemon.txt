@@ -11,17 +11,17 @@ ITEM;Unidentified Fossil;1;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-
 POKEMON;Abra;Basic;50;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me01/54/
 POKEMON;Arcanine;Stage 1;140;1;Fire;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv10/28/
 POKEMON;Boltund;Stage 1;130;1;Electric;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me02/31/
-POKEMON;Brambleghast;Stage 1;100;1;Psychic;false;
-POKEMON;Bulbasaur;Basic;80;1;Grass;false;
-POKEMON;Centiskorch;Stage 1;140;1;Fire;false;
+POKEMON;Brambleghast;Stage 1;100;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me02/47/
+POKEMON;Bulbasaur;Basic;80;1;Grass;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me01/1/
+POKEMON;Centiskorch;Stage 1;140;1;Fire;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv05/37/
 POKEMON;Charizard EX;Stage 2;330;1;Fire;true;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv3pt5/6/
-POKEMON;Charmander 1;Basic;60;1;Fire;false;
-POKEMON;Charmander 2;Basic;80;2;Fire;false;
-POKEMON;Charmeleon;Stage 1;90;2;Fire;false;
-POKEMON;Darmanitan 1;Stage 1;140;1;Fire;true;
-POKEMON;Darmanitan 2;Stage 1;150;1;Fire;false;
-POKEMON;Dedenne;Basic;70;1;Psychic;false;
-POKEMON;Drowzee;Basic;80;1;Psychic;false;
+POKEMON;Charmander 1;Basic;60;1;Fire;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv03/26/
+POKEMON;Charmander 2;Basic;80;2;Fire;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me02/11/
+POKEMON;Charmeleon;Stage 1;90;2;Fire;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv03/27/
+POKEMON;Darmanitan 1;Stage 1;140;1;Fire;true;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv09/27/
+POKEMON;Darmanitan 2;Stage 1;150;1;Fire;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me02/16/
+POKEMON;Dedenne;Basic;70;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh9/67/
+POKEMON;Drowzee;Basic;80;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv10/79/
 POKEMON;Electabuzz;Basic;80;1;Electric;false;
 POKEMON;Escavalier;Stage 1;130;1;Metal;false;
 POKEMON;Espathra;Stage 1;120;1;Psychic;false;
