@@ -368,14 +368,14 @@ My Pokémon TCG collection
             color: #555;
             margin-top: 0.4rem;
             line-height: 1.2;
-            max-height: 3.6rem;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
             border-top: 1px dashed #eee;
             padding-top: 0.3rem;
+            max-height: none;
+            overflow: visible;
+            text-overflow: clip;
+            display: block;
+            -webkit-line-clamp: unset;
+            -webkit-box-orient: unset;
         }
 
         @media (max-width: 640px) {
