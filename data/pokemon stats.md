@@ -7,13 +7,13 @@
 - Bulbasaur, HP 80; Attack Bind Down: 10 damage, opponent's Active can't retreat next turn.
 - Centiskorch, HP 140, evolves from Sizzlipede; Attacks: Single: opponent's Active Burned; Charring Breath: if opponent's Active not Burned, does nothing.
 - Charizard EX, HP 330, evolves from Charmeleon; Attacks: Brave Wing: damage unspecified, +100 if this Pokémon has damage counters; Explosive Vortex: damage unspecified, discard 3 Energy from this Pokémon; Rule: when Knocked Out, opponent takes 2 Prize cards.
-- Charmander, HP 60; Attack Heat Tackle: 30 damage, this Pokémon does 10 damage to itself.
-- Charmander, HP 80; Ability Agile: if no Energy attached, no Retreat Cost; Attack Live Coal: 20 damage.
+- Charmander (1), HP 60; Attack Heat Tackle: 30 damage, this Pokémon does 10 damage to itself.
+- Charmander (2), HP 80; Ability Agile: if no Energy attached, no Retreat Cost; Attack Live Coal: 20 damage.
 - Charmeleon, HP 90, evolves from Charmander; Attack Heat Tackle: 70 damage, this Pokémon does 20 damage to itself.
-- N's Darmanitan, HP 140, evolves from N's Darumaka; Attacks: Back Draft: 30x damage, x = number of Basic Energy in opponent's discard; Flamebody Cannon: 90x damage, discard all Energy from this Pokémon, also does 90 damage to 1 Benched (no Weak/Resist).
-- Darmanitan, HP 150, evolves from Darumaka; Attack Blaze Ball: 40+ damage, +40 per ☉ Energy attached.
+- Darmanitan (1), HP 140, evolves from N's Darumaka; Attacks: Back Draft: 30x damage, x = number of Basic Energy in opponent's discard; Flamebody Cannon: 90x damage, discard all Energy from this Pokémon, also does 90 damage to 1 Benched (no Weak/Resist).
+- Darmanitan (2), HP 150, evolves from Darumaka; Attack Blaze Ball: 40+ damage, +40 per ☉ Energy attached.
 - Dedenne, HP 70; Attack Dede-Flash: 20+ damage, +60 if opponent has exactly 1 Prize left, and Confuse opponent's Active.
-- Team Rocket's Drowzee, HP 80; Attack Hypnotic Ray: 10 damage, opponent's Active Asleep.
+- Drowzee, HP 80; Attack Hypnotic Ray: 10 damage, opponent's Active Asleep.
 - Electabuzz, HP 80; Attack Haymaker: 30 damage, can't use Haymaker next turn.
 - Escavalier, HP 130, evolves from Karrablast; Attack Wild Lances: 90 damage, this Pokémon does 30 damage to itself.
 - Espathra, HP 120, evolves from Flittle; Ability Stance: when evolved, may prevent all damage/effects from opponent's attacks until end of opponent's next turn; Attack Glittering Eyes: 70+ damage, +70 if Tulip in discard.
@@ -42,10 +42,10 @@
 - Magmar, HP 90; Attacks: Low Kick: 20 damage; Fiery Punch: 70 damage.
 - Magnezone, HP 160, evolves from Magneton; Attacks: Upper Spark: 50+ damage, +120 if evolved from Magneton this turn; Flashing Bolt: 160 damage, can't use Flashing Bolt next turn.
 - Mamoswine, HP 180, evolves from Piloswine; Attacks: Wreck: damage unspecified, +120 if Stadium in play, then discard Stadium; Blizzard Edge: damage unspecified, discard 2 Energy from this Pokémon.
-- Mythic Milotic, HP 130, evolves from Cynthia's Feebas; Attack Aqua Split: 60 damage, also 30 damage to 2 Benched (no Weak/Resist).
+- Milotic, HP 130, evolves from Cynthia's Feebas; Attack Aqua Split: 60 damage, also 30 damage to 2 Benched (no Weak/Resist).
 - Miraidon, HP 120; Attacks: Sharp Fang: 30 damage; Lightning Laser: 90 damage, also 30 damage to 1 Benched (no Weak/Resist).
 - Moltres, HP 120; Attack Fighting Wings: damage unspecified, +90 if opponent's Active is Pokémon ex.
-- Galarian Mr. Mime, HP 80; Attacks: Pound: 10 damage; Find It: search deck for an Item card, put into hand.
+- Mr. Mime, HP 80; Attacks: Pound: 10 damage; Find It: search deck for an Item card, put into hand.
 - Nacli, HP 60; Attacks: Rock Throw: 10 damage; Stone Edge: 20+ damage, flip heads +20.
 - Naclstack, HP 110, evolves from Nacli; Attack Rock Hurl: 50 damage, ignores Resistance.
 - Numel, HP 80; Attacks: Tackle: 20 damage; Stomp: 50+ damage, flip heads +50.
@@ -94,8 +94,8 @@
 - Wattrel, HP 60; Attack Static Shock: 20 damage.
 - Wigglytuff, HP 120, evolves from Jigglypuff; Attacks: Round: 40x damage, x = number of your Pokémon with Round; Seismic Toss: 100 damage.
 - Wimpod, HP 70; Ability Punk Out: if opponent has any Pokémon V, no Retreat Cost; Attack Gnaw: 10 damage.
-- Woobat: HP and attacks not specified.
-- Hisuian Zorua, HP 60; Attacks: Collect: draw a card; Mumble: 10 damage.
+- Woobat, HP and attacks not specified.
+- Zorua, HP 60; Attacks: Collect: draw a card; Mumble: 10 damage.
 
 ## ITEM
 
