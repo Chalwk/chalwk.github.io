@@ -73,43 +73,43 @@ POKEMON;Scream Tail;Basic;90;1;Psychic;false;https://www.pokemon.com/us/pokemon-
 POKEMON;Sealeo;Stage 1;110;1;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh6/38/
 POKEMON;Sharpedo 1;Stage 1;100;1;Darkness;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh8/163/
 POKEMON;Sharpedo 2;Stage 1;120;1;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv05/43/
-POKEMON;Shellder;Basic;70;1;Water;false;
-POKEMON;Shelmet;Basic;60;1;Grass;false;
-POKEMON;Shiftry;Stage 2;160;1;Grass;false;
-POKEMON;Shroodle;Basic;60;1;Darkness;false;
-POKEMON;Shroomish;Basic;50;1;Grass;false;
-POKEMON;Slowbro;Stage 1;120;2;Water;false;
-POKEMON;Slowking;Stage 1;130;1;Water;false;
-POKEMON;Slowpoke;Basic;70;1;Water;false;
-POKEMON;Smeargle;Basic;70;1;Colorless;false;
-POKEMON;Sneasel;Basic;70;1;Water;false;
-POKEMON;Spinarak;Basic;60;1;Grass;false;
-POKEMON;Steelix;Stage 1;180;1;Metal;false;
-POKEMON;Stoutland;Stage 2;160;1;Colorless;false;
-POKEMON;Sudowoodo;Basic;110;1;Rock;false;
-POKEMON;Suicune;Basic;120;2;Water;false;
-POKEMON;Thievul 1;Stage 1;100;2;Darkness;false;
-POKEMON;Thievul 2;Stage 1;120;1;Darkness;false;
-POKEMON;Thwackey;Stage 1;90;1;Grass;false;
-POKEMON;Torkoal;Basic;130;2;Fire;false;
-POKEMON;Totodile;Basic;70;1;Water;false;
-POKEMON;Toxapex;Stage 1;120;1;Darkness;false;
-POKEMON;Toxicroak;Stage 1;120;1;Darkness;false;
-POKEMON;Toxtricity;Stage 1;130;1;Electric;false;
-POKEMON;Tropius;Basic;110;1;Grass;false;
-POKEMON;Unfezant;Stage 2;140;1;Colorless;false;
-POKEMON;Volcarona;Stage 1;140;1;Fire;false;
-POKEMON;Wattrel;Basic;60;2;Electric;false;
-POKEMON;Wigglytuff;Stage 1;120;1;Colorless;false;
-POKEMON;Wimpod;Basic;70;3;Water;false;
-POKEMON;Woobat;Basic;60;1;Psychic;false;
-POKEMON;Zorua;Basic;60;1;Psychic;false;
-SUPPORTER;Clavell;2;false;
-SUPPORTER;Explorer's Guidance;1;true;
-SUPPORTER;Friends in Galar;1;false;
-SUPPORTER;Jacq;3;false;
-SUPPORTER;Nemona;4;false;
-SUPPORTER;Youngster;2;false;
-TOOL;Future Booster Energy Capsule;1;false;
-TOOL;Rusted Shield;1;false;
-TOOL;Technical Machine - Evolution;1;false;
+POKEMON;Shellder;Basic;70;1;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh8/50/
+POKEMON;Shelmet;Basic;60;1;Grass;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/rsv10pt5/8/
+POKEMON;Shiftry;Stage 2;160;1;Grass;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me01/15/
+POKEMON;Shroodle;Basic;60;1;Darkness;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv02/145/
+POKEMON;Shroomish;Basic;50;1;Grass;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh9/3/
+POKEMON;Slowbro;Stage 1;120;2;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/pgo/20/
+POKEMON;Slowking;Stage 1;130;1;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv8pt5/19/
+POKEMON;Slowpoke;Basic;70;1;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv8pt5/18/
+POKEMON;Smeargle;Basic;70;1;Colorless;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh8/209/
+POKEMON;Sneasel;Basic;70;1;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh6/30/
+POKEMON;Spinarak;Basic;60;1;Grass;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/pgo/6/
+POKEMON;Steelix;Stage 1;180;1;Metal;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/pgo/44/
+POKEMON;Stoutland;Stage 2;160;1;Colorless;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh7/135/
+POKEMON;Sudowoodo;Basic;110;1;Rock;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh10/74/
+POKEMON;Suicune;Basic;120;2;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv8pt5/24/
+POKEMON;Thievul 1;Stage 1;100;2;Darkness;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh7/105/
+POKEMON;Thievul 2;Stage 1;120;1;Darkness;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me01/90/
+POKEMON;Thwackey;Stage 1;90;1;Grass;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh45/12/
+POKEMON;Torkoal;Basic;130;2;Fire;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv01/35/
+POKEMON;Totodile;Basic;70;1;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh8/55/
+POKEMON;Toxapex;Stage 1;120;1;Darkness;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh12/115/
+POKEMON;Toxicroak;Stage 1;120;1;Darkness;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh12/110/
+POKEMON;Toxtricity;Stage 1;130;1;Electric;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv01/72/
+POKEMON;Tropius;Basic;110;1;Grass;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv02/7/
+POKEMON;Unfezant;Stage 2;140;1;Colorless;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/pgo/63/
+POKEMON;Volcarona;Stage 1;140;1;Fire;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv08/25/
+POKEMON;Wattrel;Basic;60;2;Electric;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv01/78/
+POKEMON;Wigglytuff;Stage 1;120;1;Colorless;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me02/77/
+POKEMON;Wimpod;Basic;70;3;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/pgo/25/
+POKEMON;Woobat;Basic;60;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/rsv10pt5/36/
+POKEMON;Zorua;Basic;60;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh11/75/
+SUPPORTER;Clavell;2;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv02/177/
+SUPPORTER;Explorer's Guidance;1;true;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv05/147/
+SUPPORTER;Friends in Galar;1;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh9/140/
+SUPPORTER;Jacq;3;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv01/175/
+SUPPORTER;Nemona;4;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv01/180/
+SUPPORTER;Youngster;2;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv01/198/
+TOOL;Future Booster Energy Capsule;1;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv05/149/
+TOOL;Rusted Shield;1;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh45/61/
+TOOL;Technical Machine - Evolution;1;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv04/178/
