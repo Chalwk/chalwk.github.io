@@ -31,7 +31,7 @@ POKEMON;Gastly;Basic;50;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/p
 POKEMON;Girafarig;Basic;100;1;Colorless;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv02/154/;Common
 POKEMON;Greavard;Basic;80;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me01/65/;Common
 POKEMON;Grimer;Basic;80;1;Darkness;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh9/84/;Common
-POKEMON;Grimmsnarl;Stage 2;170;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv09/73/
+POKEMON;Grimmsnarl;Stage 2;170;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv09/73/;Uncommon
 POKEMON;Growlithe;Basic;90;1;Fire;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv01/31/;Uncommon
 POKEMON;Haunter 1;Stage 1;70;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh11/65/;Uncommon
 POKEMON;Haunter 2;Stage 1;80;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv3pt5/93/;Uncommon
@@ -42,68 +42,68 @@ POKEMON;Houndoom;Stage 1;120;2;Fire;false;https://www.pokemon.com/us/pokemon-tcg
 POKEMON;Houndour;Basic;70;2;Fire;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv01/33/;Common
 POKEMON;Jynx;Basic;100;2;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh11/68/;Common
 POKEMON;Kangaskhan;Basic;120;1;Colorless;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv10/151/;Common
-POKEMON;Kilowattrel;Stage 1;120;2;Electric;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv02/82/
-POKEMON;Lanturn;Stage 1;120;1;Electric;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh7/53/
-POKEMON;Liepard;Stage 1;100;2;Darkness;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh12pt5/78/
-POKEMON;Lumineon;Stage 1;90;1;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh11/41/
-POKEMON;Magikarp;Basic;30;1;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/pgo/21/
-POKEMON;Magmar;Basic;90;1;Fire;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh9/19/
-POKEMON;Magnezone;Stage 2;160;1;Electric;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me01/47/
-POKEMON;Mamoswine;Stage 2;180;1;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me02/25/
-POKEMON;Milotic;Stage 1;130;1;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv10/53/
-POKEMON;Miraidon;Basic;120;1;Electric;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv01/80/
-POKEMON;Moltres;Basic;120;1;Fire;true;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me02/14/
-POKEMON;Mr. Mime;Basic;80;1;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh12pt5/30/
-POKEMON;Nacli;Basic;60;1;Rock;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv04/101/
-POKEMON;Naclstack;Stage 1;110;1;Rock;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me01/83/
-POKEMON;Numel;Basic;80;1;Fire;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/pgo/13/
-POKEMON;Pawmi;Basic;60;3;Electric;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me02/32/
-POKEMON;Pawmo;Stage 1;80;2;Electric;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv02/75/
-POKEMON;Pawmot;Stage 2;140;1;Electric;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv02/76/
-POKEMON;Pikachu;Basic;190;1;Electric;true;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv02/63/
-POKEMON;Poltchageist;Basic;30;1;Grass;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv06/20/
-POKEMON;Polteageist;Stage 1;70;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv03/98/
-POKEMON;Ponyta;Basic;60;1;Fire;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh10/21/
-POKEMON;Rapidash;Stage 1;100;1;Fire;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh10/22/
-POKEMON;Rayquaza EX;Basic;180;1;Dragon;true;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/xy6/60/
-POKEMON;Relicanth;Basic;90;1;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh12/44/
-POKEMON;Reshiram;Basic;130;1;Fire;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv07/22/
-POKEMON;Sandslash;Stage 1;120;1;Rock;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me01/69/
-POKEMON;Scream Tail;Basic;90;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv8pt5/42/
-POKEMON;Sealeo;Stage 1;110;1;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh6/38/
-POKEMON;Sharpedo 1;Stage 1;100;1;Darkness;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh8/163/
-POKEMON;Sharpedo 2;Stage 1;120;1;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv05/43/
-POKEMON;Shellder;Basic;70;1;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh8/50/
-POKEMON;Shelmet;Basic;60;1;Grass;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/rsv10pt5/8/
-POKEMON;Shiftry;Stage 2;160;1;Grass;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me01/15/
-POKEMON;Shroodle;Basic;60;1;Darkness;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv02/145/
-POKEMON;Shroomish;Basic;50;1;Grass;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh9/3/
-POKEMON;Slowbro;Stage 1;120;2;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/pgo/20/
-POKEMON;Slowking;Stage 1;130;1;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv8pt5/19/
-POKEMON;Slowpoke;Basic;70;1;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv8pt5/18/
-POKEMON;Smeargle;Basic;70;1;Colorless;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh8/209/
-POKEMON;Sneasel;Basic;70;1;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh6/30/
-POKEMON;Spinarak;Basic;60;1;Grass;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/pgo/6/
-POKEMON;Steelix;Stage 1;180;1;Metal;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/pgo/44/
-POKEMON;Stoutland;Stage 2;160;1;Colorless;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh7/135/
-POKEMON;Sudowoodo;Basic;110;1;Rock;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh10/74/
-POKEMON;Suicune;Basic;120;2;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv8pt5/24/
-POKEMON;Thievul 1;Stage 1;100;2;Darkness;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh7/105/
-POKEMON;Thievul 2;Stage 1;120;1;Darkness;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me01/90/
-POKEMON;Thwackey;Stage 1;90;1;Grass;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh45/12/
-POKEMON;Torkoal;Basic;130;2;Fire;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv01/35/
-POKEMON;Totodile;Basic;70;1;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh8/55/
-POKEMON;Toxapex;Stage 1;120;1;Darkness;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh12/115/
-POKEMON;Toxicroak;Stage 1;120;1;Darkness;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh12/110/
-POKEMON;Toxtricity;Stage 1;130;1;Electric;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv01/72/
-POKEMON;Tropius;Basic;110;1;Grass;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv02/7/
-POKEMON;Unfezant;Stage 2;140;1;Colorless;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/pgo/63/
-POKEMON;Volcarona;Stage 1;140;1;Fire;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv08/25/
-POKEMON;Wattrel;Basic;60;2;Electric;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv01/78/
-POKEMON;Wigglytuff;Stage 1;120;1;Colorless;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me02/77/
-POKEMON;Wimpod;Basic;70;3;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/pgo/25/
-POKEMON;Woobat;Basic;60;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/rsv10pt5/36/
-POKEMON;Zorua;Basic;60;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh11/75/
+POKEMON;Kilowattrel;Stage 1;120;2;Electric;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv02/82/;Uncommon
+POKEMON;Lanturn;Stage 1;120;1;Electric;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh7/53/;Uncommon
+POKEMON;Liepard;Stage 1;100;2;Darkness;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh12pt5/78/;Rare
+POKEMON;Lumineon;Stage 1;90;1;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh11/41/;Uncommon
+POKEMON;Magikarp;Basic;30;1;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/pgo/21/;Common
+POKEMON;Magmar;Basic;90;1;Fire;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh9/19/;Common
+POKEMON;Magnezone;Stage 2;160;1;Electric;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me01/47/;Uncommon
+POKEMON;Mamoswine;Stage 2;180;1;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me02/25/;Uncommon
+POKEMON;Milotic;Stage 1;130;1;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv10/53/;Uncommon
+POKEMON;Miraidon;Basic;120;1;Electric;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv01/80/;Rare
+POKEMON;Moltres;Basic;120;1;Fire;true;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me02/14/;Rare
+POKEMON;Mr. Mime;Basic;80;1;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh12pt5/30/;Common
+POKEMON;Nacli;Basic;60;1;Rock;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv04/101/;Common
+POKEMON;Naclstack;Stage 1;110;1;Rock;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me01/83/;Common
+POKEMON;Numel;Basic;80;1;Fire;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/pgo/13/Common
+POKEMON;Pawmi;Basic;60;3;Electric;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me02/32/;Common
+POKEMON;Pawmo;Stage 1;80;2;Electric;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv02/75/;Uncommon
+POKEMON;Pawmot;Stage 2;140;1;Electric;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv02/76/;Rare
+POKEMON;Pikachu;Basic;190;1;Electric;true;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv02/63/;Double Rare
+POKEMON;Poltchageist;Basic;30;1;Grass;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv06/20/;Common
+POKEMON;Polteageist;Stage 1;70;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv03/98/;Uncommon
+POKEMON;Ponyta;Basic;60;1;Fire;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh10/21/;Common
+POKEMON;Rapidash;Stage 1;100;1;Fire;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh10/22/;Rare
+POKEMON;Rayquaza EX;Basic;180;1;Dragon;true;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/xy6/60/;Rare
+POKEMON;Relicanth;Basic;90;1;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh12/44/;Common
+POKEMON;Reshiram;Basic;130;1;Fire;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv07/22/;Uncommon
+POKEMON;Sandslash;Stage 1;120;1;Rock;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me01/69/;Common
+POKEMON;Scream Tail;Basic;90;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv8pt5/42/;Uncommon
+POKEMON;Sealeo;Stage 1;110;1;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh6/38/;Uncommon
+POKEMON;Sharpedo 1;Stage 1;100;1;Darkness;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh8/163/;Uncommon
+POKEMON;Sharpedo 2;Stage 1;120;1;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv05/43/;Uncommon
+POKEMON;Shellder;Basic;70;1;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh8/50/;Common
+POKEMON;Shelmet;Basic;60;1;Grass;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/rsv10pt5/8/;Common
+POKEMON;Shiftry;Stage 2;160;1;Grass;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me01/15/;Uncommon
+POKEMON;Shroodle;Basic;60;1;Darkness;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv02/145/;Common
+POKEMON;Shroomish;Basic;50;1;Grass;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh9/3/;Common
+POKEMON;Slowbro;Stage 1;120;2;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/pgo/20/;Uncommon
+POKEMON;Slowking;Stage 1;130;1;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv8pt5/19/;Uncommon
+POKEMON;Slowpoke;Basic;70;1;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv8pt5/18/;Common
+POKEMON;Smeargle;Basic;70;1;Colorless;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh8/209/;Common
+POKEMON;Sneasel;Basic;70;1;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh6/30/;Common
+POKEMON;Spinarak;Basic;60;1;Grass;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/pgo/6/;Common
+POKEMON;Steelix;Stage 1;180;1;Metal;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/pgo/44/;Uncommon
+POKEMON;Stoutland;Stage 2;160;1;Colorless;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh7/135/;Rare
+POKEMON;Sudowoodo;Basic;110;1;Rock;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh10/74/;Common
+POKEMON;Suicune;Basic;120;2;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv8pt5/24/;Uncommon
+POKEMON;Thievul 1;Stage 1;100;2;Darkness;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh7/105/;Rare
+POKEMON;Thievul 2;Stage 1;120;1;Darkness;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me01/90/;Common
+POKEMON;Thwackey;Stage 1;90;1;Grass;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh45/12/;Uncommon
+POKEMON;Torkoal;Basic;130;2;Fire;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv01/35/;Uncommon
+POKEMON;Totodile;Basic;70;1;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh8/55/;Common
+POKEMON;Toxapex;Stage 1;120;1;Darkness;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh12/115/;Uncommon
+POKEMON;Toxicroak;Stage 1;120;1;Darkness;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh12/110/;Uncommon
+POKEMON;Toxtricity;Stage 1;130;1;Electric;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv01/72/;Uncommon
+POKEMON;Tropius;Basic;110;1;Grass;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv02/7/;Common
+POKEMON;Unfezant;Stage 2;140;1;Colorless;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/pgo/63/;Uncommon
+POKEMON;Volcarona;Stage 1;140;1;Fire;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv08/25/;Common
+POKEMON;Wattrel;Basic;60;2;Electric;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv01/78/;Common
+POKEMON;Wigglytuff;Stage 1;120;1;Colorless;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me02/77/;Uncommon
+POKEMON;Wimpod;Basic;70;3;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/pgo/25/;Common
+POKEMON;Woobat;Basic;60;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/rsv10pt5/36/;Common
+POKEMON;Zorua;Basic;60;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh11/75/;Common
 SUPPORTER;Clavell;2;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv02/177/;Common
 SUPPORTER;Explorer's Guidance;1;true;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv05/147/;Uncommon
 SUPPORTER;Friends in Galar;1;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh9/140/;Uncommon
