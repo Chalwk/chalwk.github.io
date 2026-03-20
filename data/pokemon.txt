@@ -22,10 +22,10 @@ POKEMON;Darmanitan 1;Stage 1;140;1;Fire;true;https://www.pokemon.com/us/pokemon-
 POKEMON;Darmanitan 2;Stage 1;150;1;Fire;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me02/16/
 POKEMON;Dedenne;Basic;70;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh9/67/
 POKEMON;Drowzee;Basic;80;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv10/79/
-POKEMON;Electabuzz;Basic;80;1;Electric;false;
-POKEMON;Escavalier;Stage 1;130;1;Metal;false;
-POKEMON;Espathra;Stage 1;120;1;Psychic;false;
-POKEMON;Flabebe;Basic;40;1;Psychic;false;
+POKEMON;Electabuzz;Basic;80;1;Electric;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh5/44/
+POKEMON;Escavalier;Stage 1;130;1;Metal;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/zsv10pt5/60/
+POKEMON;Espathra;Stage 1;120;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv04/81/
+POKEMON;Flabebe;Basic;40;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh7/71/
 POKEMON;Garbodor;Stage 1;140;1;Darkness;false;
 POKEMON;Gastly;Basic;50;1;Psychic;false;
 POKEMON;Girafarig;Basic;100;1;Colorless;false;
