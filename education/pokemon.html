@@ -387,6 +387,50 @@ My Pokémon TCG collection
             color: var(--gray-light);
         }
 
+        .rarity-badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            margin-left: 0.5rem;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+        }
+
+        .rarity-common { background-color: #6c757d; }
+        .rarity-uncommon { background-color: #28a745; }
+        .rarity-rare { background-color: #007bff; }
+        .rarity-double-rare { background-color: #17a2b8; }
+        .rarity-ultra-rare { background-color: #6f42c1; }
+        .rarity-illustration-rare { background-color: #e83e8c; }
+        .rarity-special-illustration-rare { background-color: #ffc107; color: #212529; }
+        .rarity-hyper-rare { background-color: #fd7e14; }
+        .rarity-shiny-rare { background-color: #20c997; }
+        .rarity-shiny-ultra-rare { background-color: #1e7e6c; }
+        .rarity-ace-spec-rare { background-color: #dc3545; }
+        .rarity-promo {
+            background-color: #000;
+            color: #ffd700;
+            font-weight: bold;
+            position: relative;
+            padding-left: 1.4rem;
+        }
+        .rarity-promo::before {
+            content: "★";
+            position: absolute;
+            left: 0.4rem;
+            top: 0.2rem;
+            font-size: 0.8rem;
+            color: #ffd700;
+        }
+
+        .rarity-unknown {
+            background-color: #adb5bd;
+        }
+
         @media (max-width: 640px) {
             .card-grid {
                 grid-template-columns: repeat(2, 1fr) !important;
@@ -400,14 +444,35 @@ My Pokémon TCG collection
             .card-thumb {
                 aspect-ratio: 4 / 5;
             }
+
+            .rarity-badge {
+                font-size: 0.6rem;
+                padding: 0.1rem 0.4rem;
+                margin-left: 0.3rem;
+            }
+            .rarity-promo {
+                padding-left: 1.2rem;
+            }
+            .rarity-promo::before {
+                left: 0.2rem;
+                top: 0.1rem;
+                font-size: 0.7rem;
+            }
         }
 
         @media (max-width: 400px) {
             .pokemon-name, .item-name {
                 font-size: 0.85rem;
+                flex-wrap: wrap;
+                gap: 0.3rem;
             }
             .pokemon-details {
                 font-size: 0.7rem;
+            }
+            .rarity-badge {
+                font-size: 0.55rem;
+                padding: 0.1rem 0.3rem;
+                margin-left: 0.2rem;
             }
         }
 
@@ -521,6 +586,31 @@ My Pokémon TCG collection
             return `../images/pokemon/${encodeURI(name)}.jpg`;
         }
 
+        function normalizeRarity(rarity) {
+            if (!rarity) return '';
+            const r = rarity.toLowerCase().trim();
+            if (r === 'common') return 'common';
+            if (r === 'uncommon') return 'uncommon';
+            if (r === 'rare') return 'rare';
+            if (r === 'double rare') return 'double-rare';
+            if (r === 'ultra rare') return 'ultra-rare';
+            if (r === 'illustration rare') return 'illustration-rare';
+            if (r === 'special illustration rare') return 'special-illustration-rare';
+            if (r === 'hyper rare') return 'hyper-rare';
+            if (r === 'shiny rare') return 'shiny-rare';
+            if (r === 'shiny ultra rare') return 'shiny-ultra-rare';
+            if (r === 'ace spec rare') return 'ace-spec-rare';
+            if (r === 'promo') return 'promo';
+            return 'unknown';
+        }
+
+        function getRarityBadge(rarity) {
+            if (!rarity) return '';
+            const normalized = normalizeRarity(rarity);
+            const displayText = rarity;
+            return `<span class="rarity-badge rarity-${normalized}">${displayText}</span>`;
+        }
+
         function createItemCard(item) {
             const imgSrc = getImagePath(item.name);
             const escapedImgSrc = imgSrc.replace(/'/g, "\\'");
@@ -536,13 +626,15 @@ My Pokémon TCG collection
                 linkIcon = `<a href="${item.url}" target="_blank" rel="noopener" class="card-link-icon" title="View on Pokémon Database"><i class="fas fa-external-link-alt"></i></a>`;
             }
 
+            const rarityBadge = getRarityBadge(item.rarity);
+
             return `
-                <div class="item-card" data-name="${dataName.toLowerCase()}" data-holo="${item.holo ? 'true' : 'false'}">
+                <div class="item-card" data-name="${dataName.toLowerCase()}" data-holo="${item.holo ? 'true' : 'false'}" data-rarity="${item.rarity ? item.rarity.toLowerCase() : ''}">
                     <span class="qty-badge">×${item.count}</span>
                     ${linkIcon}
                     <img class="card-thumb" src="${imgSrc}" alt="${item.name}" onclick="openLightbox('${escapedImgSrc}')" loading="lazy">
                     <div class="item-name">
-                        ${item.name} ${holoTag}
+                        ${item.name} ${holoTag} ${rarityBadge}
                     </div>
                 </div>
             `;
@@ -567,15 +659,19 @@ My Pokémon TCG collection
                     card.setAttribute('data-stage', p.stage.toLowerCase());
                     card.setAttribute('data-hp', p.hp);
                     card.setAttribute('data-holo', p.holo ? 'true' : 'false');
+                    card.setAttribute('data-rarity', p.rarity ? p.rarity.toLowerCase() : '');
                     const imgSrc = getImagePath(p.name);
                     const escapedImgSrc = imgSrc.replace(/'/g, "\\'");
                     const holoTag = p.holo ? '<span class="holo-indicator">H</span>' : '';
                     const linkIcon = p.url ? `<a href="${p.url}" target="_blank" rel="noopener" class="card-link-icon" title="View on Pokémon Database"><i class="fas fa-external-link-alt"></i></a>` : '';
+                    const rarityBadge = getRarityBadge(p.rarity);
                     card.innerHTML = `
                         <span class="qty-badge">×${p.count}</span>
                         ${linkIcon}
                         <img class="card-thumb" src="${imgSrc}" alt="${p.name}" onclick="openLightbox('${escapedImgSrc}')" loading="lazy">
-                        <div class="pokemon-name">${p.name}${holoTag}</div>
+                        <div class="pokemon-name">
+                            ${p.name}${holoTag} ${rarityBadge}
+                        </div>
                         <div class="pokemon-details">
                             <span><i class="fas fa-arrow-up"></i> ${p.stage}</span>
                             <span class="hp-value">${p.hp} HP</span>
@@ -615,7 +711,9 @@ My Pokémon TCG collection
                         const count = parseInt(parts[2], 10);
                         const holo = parts[3] ? parts[3].toLowerCase() === 'true' : false;
                         const url = parts.length > 4 ? parts[4] : '';
-                        energies.push({ name, count, holo, url });
+                        let rarity = '';
+                        if (parts.length > 5) rarity = parts[5];
+                        energies.push({ name, count, holo, url, rarity });
                         break;
                     }
                     case 'SUPPORTER': {
@@ -623,7 +721,9 @@ My Pokémon TCG collection
                         const count = parseInt(parts[2], 10);
                         const holo = parts[3] ? parts[3].toLowerCase() === 'true' : false;
                         const url = parts.length > 4 ? parts[4] : '';
-                        supporters.push({ name, count, holo, url });
+                        let rarity = '';
+                        if (parts.length > 5) rarity = parts[5];
+                        supporters.push({ name, count, holo, url, rarity });
                         break;
                     }
                     case 'ITEM': {
@@ -631,7 +731,9 @@ My Pokémon TCG collection
                         const count = parseInt(parts[2], 10);
                         const holo = parts[3] ? parts[3].toLowerCase() === 'true' : false;
                         const url = parts.length > 4 ? parts[4] : '';
-                        items.push({ name, count, holo, url });
+                        let rarity = '';
+                        if (parts.length > 5) rarity = parts[5];
+                        items.push({ name, count, holo, url, rarity });
                         break;
                     }
                     case 'TOOL': {
@@ -639,7 +741,9 @@ My Pokémon TCG collection
                         const count = parseInt(parts[2], 10);
                         const holo = parts[3] ? parts[3].toLowerCase() === 'true' : false;
                         const url = parts.length > 4 ? parts[4] : '';
-                        tools.push({ name, count, holo, url });
+                        let rarity = '';
+                        if (parts.length > 5) rarity = parts[5];
+                        tools.push({ name, count, holo, url, rarity });
                         break;
                     }
                     case 'POKEMON': {
@@ -650,10 +754,12 @@ My Pokémon TCG collection
                         const type = parts[5];
                         const holo = parts[6] ? parts[6].toLowerCase() === 'true' : false;
                         const url = parts.length > 7 ? parts[7] : '';
+                        let rarity = '';
+                        if (parts.length > 8) rarity = parts[8];
 
                         if (!pokemonByType[type]) pokemonByType[type] = [];
                         pokemonByType[type].push({
-                            name, stage, hp, count, holo, url
+                            name, stage, hp, count, holo, url, rarity
                         });
                         break;
                     }
@@ -739,6 +845,7 @@ My Pokémon TCG collection
                 holo: null,
                 stage: null,
                 hp: null,
+                rarity: null,
                 nameTokens: []
             };
 
@@ -753,11 +860,16 @@ My Pokémon TCG collection
                     const hpVal = parseInt(tokens[i + 1], 10);
                     if (!isNaN(hpVal)) conditions.hp = hpVal;
                     i++;
+                } else if (token === 'rarity' && i + 1 < tokens.length) {
+                    conditions.rarity = tokens[i + 1].toLowerCase();
+                    i++;
                 } else if (token.startsWith('stage:')) {
                     conditions.stage = token.substring(6).toLowerCase();
                 } else if (token.startsWith('hp:')) {
                     const hpVal = parseInt(token.substring(3), 10);
                     if (!isNaN(hpVal)) conditions.hp = hpVal;
+                } else if (token.startsWith('rarity:')) {
+                    conditions.rarity = token.substring(7).toLowerCase();
                 } else {
                     conditions.nameTokens.push(token);
                 }
@@ -785,6 +897,13 @@ My Pokémon TCG collection
                 if (match && conditions.hp !== null) {
                     const cardHp = parseInt(card.dataset.hp, 10);
                     if (isNaN(cardHp) || cardHp !== conditions.hp) {
+                        match = false;
+                    }
+                }
+
+                if (match && conditions.rarity !== null) {
+                    const cardRarity = card.dataset.rarity || '';
+                    if (cardRarity !== conditions.rarity) {
                         match = false;
                     }
                 }

@@ -1,13 +1,13 @@
-ENERGY;Fire Energy;10;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sve/2/
-ENERGY;Fusion Strike Energy;1;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh8/244/
-ENERGY;Lightning Energy;10;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sve/4/
-ITEM;Energy Loto;1;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh10/140/
-ITEM;Great Ball;4;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv02/183/
-ITEM;Potion;2;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv01/188/
-ITEM;Super Rod;1;true;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv02/188/
-ITEM;Switch;2;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv01/194/
-ITEM;Techno Radar;1;true;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv04/180/
-ITEM;Unidentified Fossil;1;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh12/165/
+ENERGY;Fire Energy;10;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sve/2/;Common
+ENERGY;Fusion Strike Energy;1;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh8/244/;Uncommon
+ENERGY;Lightning Energy;10;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sve/4/;Common
+ITEM;Energy Loto;1;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh10/140/;Uncommon
+ITEM;Great Ball;4;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv02/183/;Common
+ITEM;Potion;2;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv01/188/;Common
+ITEM;Super Rod;1;true;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv02/188/;Common
+ITEM;Switch;2;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv01/194/;Common
+ITEM;Techno Radar;1;true;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv04/180/;Uncommon
+ITEM;Unidentified Fossil;1;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh12/165/;Uncommon
 POKEMON;Abra;Basic;50;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me01/54/
 POKEMON;Arcanine;Stage 1;140;1;Fire;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv10/28/
 POKEMON;Boltund;Stage 1;130;1;Electric;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me02/31/
@@ -104,12 +104,12 @@ POKEMON;Wigglytuff;Stage 1;120;1;Colorless;false;https://www.pokemon.com/us/poke
 POKEMON;Wimpod;Basic;70;3;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/pgo/25/
 POKEMON;Woobat;Basic;60;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/rsv10pt5/36/
 POKEMON;Zorua;Basic;60;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh11/75/
-SUPPORTER;Clavell;2;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv02/177/
-SUPPORTER;Explorer's Guidance;1;true;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv05/147/
-SUPPORTER;Friends in Galar;1;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh9/140/
-SUPPORTER;Jacq;3;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv01/175/
-SUPPORTER;Nemona;4;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv01/180/
-SUPPORTER;Youngster;2;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv01/198/
-TOOL;Future Booster Energy Capsule;1;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv05/149/
-TOOL;Rusted Shield;1;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh45/61/
-TOOL;Technical Machine - Evolution;1;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv04/178/
+SUPPORTER;Clavell;2;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv02/177/;Common
+SUPPORTER;Explorer's Guidance;1;true;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv05/147/;Uncommon
+SUPPORTER;Friends in Galar;1;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh9/140/;Uncommon
+SUPPORTER;Jacq;3;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv01/175/;Uncommon
+SUPPORTER;Nemona;4;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv01/180/;Common
+SUPPORTER;Youngster;2;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv01/198/;Uncommon
+TOOL;Future Booster Energy Capsule;1;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv05/149/;Uncommon
+TOOL;Rusted Shield;1;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh45/61/;Uncommon
+TOOL;Technical Machine - Evolution;1;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv04/178/;Uncommon
