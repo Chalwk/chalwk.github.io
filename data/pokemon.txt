@@ -24,24 +24,24 @@ POKEMON;Dedenne;Basic;70;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/
 POKEMON;Drowzee;Basic;80;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv10/79/;Common
 POKEMON;Electabuzz;Basic;80;1;Electric;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh5/44/;Common
 POKEMON;Escavalier;Stage 1;130;1;Metal;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/zsv10pt5/60/;Uncommon
-POKEMON;Espathra;Stage 1;120;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv04/81/
-POKEMON;Flabebe;Basic;40;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh7/71/
-POKEMON;Garbodor;Stage 1;140;1;Darkness;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/rsv10pt5/60/
-POKEMON;Gastly;Basic;50;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv3pt5/92/
-POKEMON;Girafarig;Basic;100;1;Colorless;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv02/154/
-POKEMON;Greavard;Basic;80;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me01/65/
-POKEMON;Grimer;Basic;80;1;Darkness;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh9/84/
+POKEMON;Espathra;Stage 1;120;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv04/81/;Rare
+POKEMON;Flabebe;Basic;40;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh7/71/;Common
+POKEMON;Garbodor;Stage 1;140;1;Darkness;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/rsv10pt5/60/;Uncommon
+POKEMON;Gastly;Basic;50;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv3pt5/92/;Common
+POKEMON;Girafarig;Basic;100;1;Colorless;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv02/154/;Common
+POKEMON;Greavard;Basic;80;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me01/65/;Common
+POKEMON;Grimer;Basic;80;1;Darkness;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh9/84/;Common
 POKEMON;Grimmsnarl;Stage 2;170;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv09/73/
-POKEMON;Growlithe;Basic;90;1;Fire;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv01/31/
-POKEMON;Haunter 1;Stage 1;70;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh11/65/
-POKEMON;Haunter 2;Stage 1;80;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv3pt5/93/
-POKEMON;Heracross;Basic;120;1;Grass;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv01/2/
-POKEMON;Honchkrow 1;Stage 1;130;2;Darkness;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh5/94/
-POKEMON;Honchkrow 2;Stage 1;130;2;Darkness;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me02/58/
-POKEMON;Houndoom;Stage 1;120;2;Fire;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv01/34/
-POKEMON;Houndour;Basic;70;2;Fire;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv01/33/
-POKEMON;Jynx;Basic;100;2;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh11/68/
-POKEMON;Kangaskhan;Basic;120;1;Colorless;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv10/151/
+POKEMON;Growlithe;Basic;90;1;Fire;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv01/31/;Uncommon
+POKEMON;Haunter 1;Stage 1;70;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh11/65/;Uncommon
+POKEMON;Haunter 2;Stage 1;80;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv3pt5/93/;Uncommon
+POKEMON;Heracross;Basic;120;1;Grass;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv01/2/;Uncommon
+POKEMON;Honchkrow 1;Stage 1;130;2;Darkness;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh5/94/;Uncommon
+POKEMON;Honchkrow 2;Stage 1;130;2;Darkness;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me02/58/;Uncommon
+POKEMON;Houndoom;Stage 1;120;2;Fire;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv01/34/;Common
+POKEMON;Houndour;Basic;70;2;Fire;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv01/33/;Common
+POKEMON;Jynx;Basic;100;2;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh11/68/;Common
+POKEMON;Kangaskhan;Basic;120;1;Colorless;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv10/151/;Common
 POKEMON;Kilowattrel;Stage 1;120;2;Electric;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv02/82/
 POKEMON;Lanturn;Stage 1;120;1;Electric;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh7/53/
 POKEMON;Liepard;Stage 1;100;2;Darkness;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh12pt5/78/
