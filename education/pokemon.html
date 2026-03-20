@@ -495,7 +495,7 @@
         <div class="search-wrapper">
             <i class="fas fa-search"></i>
             <label for="searchInput"></label><input type="text" id="searchInput"
-                                                    placeholder="Search cards (e.g. 'charizard', 'holo', 'stage 2', 'hp 120', 'rarity:rare')"
+                                                    placeholder="Search cards (e.g. 'charizard', 'holo', 'stage 2', 'hp 120', 'rarity ultra rare')"
                                                     autocomplete="off">
             <button id="clearSearch" title="Clear"><i class="fas fa-times"></i></button>
         </div>
@@ -848,29 +848,56 @@
                 nameTokens: []
             };
 
-            for (let i = 0; i < tokens.length; i++) {
+            const keywords = new Set(['holo', 'stage', 'hp', 'rarity']);
+
+            let i = 0;
+            while (i < tokens.length) {
                 const token = tokens[i];
+
                 if (token === 'holo') {
                     conditions.holo = true;
-                } else if (token === 'stage' && i + 1 < tokens.length) {
-                    conditions.stage = tokens[i + 1].toLowerCase();
                     i++;
-                } else if (token === 'hp' && i + 1 < tokens.length) {
-                    const hpVal = parseInt(tokens[i + 1], 10);
-                    if (!isNaN(hpVal)) conditions.hp = hpVal;
+                }
+                else if (token === 'stage' || token === 'hp' || token === 'rarity') {
+                    const keyword = token;
                     i++;
-                } else if (token === 'rarity' && i + 1 < tokens.length) {
-                    conditions.rarity = tokens[i + 1].toLowerCase();
-                    i++;
-                } else if (token.startsWith('stage:')) {
+                    let valueParts = [];
+                    while (i < tokens.length && !keywords.has(tokens[i]) && !tokens[i].includes(':')) {
+                        valueParts.push(tokens[i]);
+                        i++;
+                    }
+                    const valueStr = valueParts.join(' ');
+
+                    if (keyword === 'stage') {
+                        conditions.stage = valueStr.toLowerCase();
+                    } else if (keyword === 'hp') {
+                        const hpVal = parseInt(valueStr, 10);
+                        if (!isNaN(hpVal)) conditions.hp = hpVal;
+                    } else if (keyword === 'rarity') {
+                        conditions.rarity = valueStr.toLowerCase();
+                    }
+                }
+                else if (token.startsWith('stage:')) {
                     conditions.stage = token.substring(6).toLowerCase();
-                } else if (token.startsWith('hp:')) {
+                    i++;
+                }
+                else if (token.startsWith('hp:')) {
                     const hpVal = parseInt(token.substring(3), 10);
                     if (!isNaN(hpVal)) conditions.hp = hpVal;
-                } else if (token.startsWith('rarity:')) {
-                    conditions.rarity = token.substring(7).toLowerCase();
-                } else {
+                    i++;
+                }
+                else if (token.startsWith('rarity:')) {
+                    let rarityValue = token.substring(7).toLowerCase();
+                    i++;
+                    while (i < tokens.length && !keywords.has(tokens[i]) && !tokens[i].includes(':')) {
+                        rarityValue += ' ' + tokens[i].toLowerCase();
+                        i++;
+                    }
+                    conditions.rarity = rarityValue;
+                }
+                else {
                     conditions.nameTokens.push(token);
+                    i++;
                 }
             }
 
@@ -881,30 +908,22 @@
 
                 if (conditions.holo !== null) {
                     const isHolo = card.dataset.holo === 'true';
-                    if (isHolo !== conditions.holo) {
-                        match = false;
-                    }
+                    if (isHolo !== conditions.holo) match = false;
                 }
 
                 if (match && conditions.stage !== null) {
                     const cardStage = card.dataset.stage;
-                    if (!cardStage || !cardStage.includes(conditions.stage)) {
-                        match = false;
-                    }
+                    if (!cardStage || !cardStage.includes(conditions.stage)) match = false;
                 }
 
                 if (match && conditions.hp !== null) {
                     const cardHp = parseInt(card.dataset.hp, 10);
-                    if (isNaN(cardHp) || cardHp !== conditions.hp) {
-                        match = false;
-                    }
+                    if (isNaN(cardHp) || cardHp !== conditions.hp) match = false;
                 }
 
                 if (match && conditions.rarity !== null) {
                     const cardRarity = card.dataset.rarity || '';
-                    if (!cardRarity.includes(conditions.rarity)) {
-                        match = false;
-                    }
+                    if (!cardRarity.includes(conditions.rarity)) match = false;
                 }
 
                 if (match && conditions.nameTokens.length > 0) {
