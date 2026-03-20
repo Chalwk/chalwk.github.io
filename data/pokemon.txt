@@ -56,7 +56,7 @@ POKEMON;Moltres;Basic;120;1;Fire;true;https://www.pokemon.com/us/pokemon-tcg/pok
 POKEMON;Mr. Mime;Basic;80;1;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh12pt5/30/;Common
 POKEMON;Nacli;Basic;60;1;Rock;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv04/101/;Common
 POKEMON;Naclstack;Stage 1;110;1;Rock;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me01/83/;Common
-POKEMON;Numel;Basic;80;1;Fire;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/pgo/13/Common
+POKEMON;Numel;Basic;80;1;Fire;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/pgo/13/;Common
 POKEMON;Pawmi;Basic;60;3;Electric;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me02/32/;Common
 POKEMON;Pawmo;Stage 1;80;2;Electric;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv02/75/;Uncommon
 POKEMON;Pawmot;Stage 2;140;1;Electric;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv02/76/;Rare
