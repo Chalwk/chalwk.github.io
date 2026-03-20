@@ -49,18 +49,18 @@ POKEMON;Lumineon;Stage 1;90;1;Water;false;https://www.pokemon.com/us/pokemon-tcg
 POKEMON;Magikarp;Basic;30;1;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/pgo/21/
 POKEMON;Magmar;Basic;90;1;Fire;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh9/19/
 POKEMON;Magnezone;Stage 2;160;1;Electric;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me01/47/
-POKEMON;Mamoswine;Stage 2;180;1;Water;false;
-POKEMON;Milotic;Stage 1;130;1;Water;false;
-POKEMON;Miraidon;Basic;120;1;Electric;false;
-POKEMON;Moltres;Basic;120;1;Fire;true;
-POKEMON;Mr. Mime;Basic;80;1;Water;false;
-POKEMON;Nacli;Basic;60;1;Rock;false;
-POKEMON;Naclstack;Stage 1;110;1;Rock;false;
-POKEMON;Numel;Basic;80;1;Fire;false;
-POKEMON;Pawmi;Basic;60;3;Electric;false;
-POKEMON;Pawmo;Stage 1;80;2;Electric;false;
-POKEMON;Pawmot;Stage 2;140;1;Electric;false;
-POKEMON;Pikachu;Basic;190;1;Electric;true;
+POKEMON;Mamoswine;Stage 2;180;1;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me02/25/
+POKEMON;Milotic;Stage 1;130;1;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv10/53/
+POKEMON;Miraidon;Basic;120;1;Electric;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv01/80/
+POKEMON;Moltres;Basic;120;1;Fire;true;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me02/14/
+POKEMON;Mr. Mime;Basic;80;1;Water;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh12pt5/30/
+POKEMON;Nacli;Basic;60;1;Rock;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv04/101/
+POKEMON;Naclstack;Stage 1;110;1;Rock;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me01/83/
+POKEMON;Numel;Basic;80;1;Fire;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/pgo/13/
+POKEMON;Pawmi;Basic;60;3;Electric;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me02/32/
+POKEMON;Pawmo;Stage 1;80;2;Electric;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv02/75/
+POKEMON;Pawmot;Stage 2;140;1;Electric;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv02/76/
+POKEMON;Pikachu;Basic;190;1;Electric;true;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv02/63/
 POKEMON;Poltchageist;Basic;30;1;Grass;false;
 POKEMON;Polteageist;Stage 1;70;1;Psychic;false;
 POKEMON;Ponyta;Basic;60;1;Fire;false;
