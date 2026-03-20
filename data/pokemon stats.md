@@ -1,129 +1,129 @@
 ## POKEMON
 
-- Abra, HP 50, has one attack: Teleportation Attack, 10 damage, switches with a Benched Pokémon.
-- Arcanine, HP 140, evolves from Growlithe, has Flare (50 damage) and Punishing Fang (100+ damage, +100 if opponent's Active is a 🐸 Pokémon).
-- Boltund, HP 130, evolves from Yamper, has Electric Run (70+ damage, +70 on heads coin flip).
-- Brambleghast, HP 100, evolves from Bramblin, has Ability Prison Panic (when evolved, Confuse opponent's Active) and attack Psychic Sphere (80 damage).
-- Bulbasaur, HP 80, has one attack: Bind Down, which does 10 damage with no energy cost specified and has the special effect: During your opponent's next turn, the Defending Pokémon can't retreat.
-- Centiskorch, HP 140, evolves from Sizzlipede, has two attacks: Single, which does no damage with no energy cost specified and has the special effect: Your opponent's Active Pokémon is now Burned, and Charring Breath, which does no specified damage with no energy cost specified and has the special effect: If your opponent's Active Pokémon isn't Burned, this attack does nothing.
-- Charizard EX, HP 330, evolves from Charmeleon, has two attacks: Brave Wing, which does no specified damage with no energy cost specified and has the special effect: If this Pokémon has any damage counters on it, this attack does 100 more damage, and Explosive Vortex, which does no specified damage with no energy cost specified and has the special effect: Discard 3 Energy from this Pokémon, and has the Pokémon EX rule: When your Pokémon is Knocked Out, your opponent takes 2 Prize cards.
-- Charmander, HP 60, has one attack: Heat Tackle, which does 30 damage with no energy cost specified and has the special effect: This Pokémon also does 10 damage to itself.
-- Charmander, HP 80, has one Ability, Agile, with the effect: If this Pokémon has no Energy attached, it has no Retreat Cost, and one attack, Live Coal, which does 20 damage with no energy cost specified.
-- Charmeleon, HP 90, evolves from Charmander, has one attack: Heat Tackle, which does 70 damage with no energy cost specified and has the special effect: This Pokémon also does 20 damage to itself.
-- N's Darmanitan, HP 140, evolves from N's Darumaka, has two attacks: Back Draft, which does 30x damage with no energy cost specified and has the special effect: This attack does 30 damage for each Basic Energy card in your opponent's discard pile, and Flamebody Cannon, which does 90x damage with no energy cost specified and has the special effect: Discard all Energy from this Pokémon, and this attack also does 90 damage to 1 of your opponent's Benched Pokémon (don't apply Weakness and Resistance for Benched Pokémon).
-- Darmanitan, HP 150, evolves from Darumaka, has one attack: Blaze Ball, which does 40+ damage with no energy cost specified and has the special effect: This attack does 40 more damage for each ☉ Energy attached to this Pokémon.
-- Dedenne, HP 70, has one attack: Dede-Flash, which does 20+ damage with no energy cost specified and has the special effect: If your opponent has exactly 1 Prize card remaining, this attack does 60 more damage, and your opponent's Active Pokémon is now Confused.
-- Team Rocket's Drowzee, HP 80, has one attack: Hypnotic Ray, which does 10 damage with no energy cost specified and has the special effect: Your opponent's Active Pokémon is now Asleep.
-- Electabuzz, HP 80, has one attack: Haymaker, which does 30 damage with no energy cost specified and has the special effect: During your next turn, this Pokémon can't use Haymaker.
-- Escavalier, HP 130, evolves from Karrablast, has one attack: Wild Lances, which does 90 damage with no energy cost specified and has the special effect: This Pokémon also does 30 damage to itself.
-- Espathra, HP 120, evolves from Flittle, has one Ability, Stance, with the effect: When you play this Pokémon from your hand to evolve 1 of your Pokémon during your turn, you may prevent all damage from and effects of attacks from your opponent's Pokémon done to this Pokémon until the end of your opponent's next turn, and one attack, Glittering Eyes, which does 70+ damage with no energy cost specified and has the special effect: If Tulip is in your discard pile, this attack does 70 more damage.
-- Flabébé, HP 40, has one attack: Hypnotic Gaze, which does no damage with no energy cost specified and has the special effect: Your opponent's Active Pokémon is now Asleep.
-- Garbodor, HP 140, evolves from Trubbish, has two attacks: Suffocating Gas, which does 40 damage with no energy cost specified, and Gunk Shot, which does 120 damage with no energy cost specified and has the special effect: Your opponent's Active Pokémon is now Poisoned.
-- Gastly, HP 50, has one attack: Suffocating Gas, which does 20 damage with no energy cost specified.
-- Girafarig, HP 100, has two attacks: Psy Bolt, which does 30 damage with no energy cost specified and has the special effect: Flip a coin, if heads, your opponent's Active Pokémon is now Paralyzed, and Headbang, which does 70 damage with no energy cost specified.
-- Greavard, HP 80, has two attacks: Stampede, which does 10 damage with no energy cost specified, and Take Down, which does 40 damage with no energy cost specified and has the special effect: This Pokémon also does 10 damage to itself.
-- Grimer, HP 80, has one attack: Poison Gas, which does no damage with no energy cost specified and has the special effect: Your opponent's Active Pokémon is now Poisoned.
-- Grimmsnarl, HP 170, evolves from Morgrem, has two attacks: Shadowy Knot, which does 50x damage with no energy cost specified and has the special effect: This attack does 50 damage for each ★ in your opponent's Active Pokémon's Retreat Cost, and Mega Punch, which does 120 damage with no energy cost specified.
-- Growlithe, HP 90, has two attacks: Stoke, which does no damage with no energy cost specified and has the special effect: Search your deck for up to 2 Basic ☉ Energy cards and attach them to this Pokémon, then shuffle your deck, and Fire Claws, which does 70 damage with no energy cost specified.
-- Haunter (1), HP 70, evolves from Gastly, has one attack: Cursed Drop, which does no damage with no energy cost specified and has the special effect: Put 3 damage counters on your opponent's Pokémon in any way you like.
-- Haunter (2), HP 80, evolves from Gastly, has one Ability, Spirit Return, with the effect: When you play this Pokémon from your hand to evolve 1 of your Pokémon during your turn, you may put a Supporter card from your opponent's discard pile into their hand, and one attack, Mumble, which does 30 damage with no energy cost specified.
-- Heracross, HP 120, has two attacks: Superpowered Throw, which does 10+ damage with no energy cost specified and has the special effect: This attack does 30 more damage for each ★ in your opponent's Active Pokémon's Retreat Cost, and Horn Attack, which does 90 damage with no energy cost specified.
-- Honchkrow (1), HP 130, evolves from Murkrow, has one Ability, Insomnia, with the effect: This Pokémon can't be Asleep, and one attack, Voltage Dive, which does no specified damage with no energy cost specified and has the special effect: If your opponent's Active Pokémon has any Special Energy attached, this attack does 80 more damage.
-- Honchkrow (2), HP 130, evolves from Murkrow, has two attacks: Wind of Darkness, which does 30 damage with no energy cost specified, and Sniping Feathers, which does 120 damage to 1 of your opponent's Pokémon with no energy cost specified and has the special effect: Discard 2 Energy from this Pokémon (don't apply Weakness and Resistance for Benched Pokémon).
-- Houndoom, HP 120, evolves from Houndour, has two attacks: Sharp Fang, which does 30 damage with no energy cost specified, and Fire Blast, which does 150 damage with no energy cost specified and has the special effect: Discard an Energy from this Pokémon.
-- Houndour, HP 70, has two attacks: Bite, which does 10 damage with no energy cost specified, and Flare, which does 30 damage with no energy cost specified.
-- Jynx, HP 100, has two attacks: Alluring Dance, which does no damage with no energy cost specified and has the special effect: Switch 1 of your opponent's Benched Pokémon with their Active Pokémon, and the new Active Pokémon is now Confused, and Super Psy Bolt, which does 80 damage with no energy cost specified.
-- Kangaskhan, HP 120, has two attacks: Gentle Slap, which does 50 damage with no energy cost specified, and Dizzy Punch, which does 90x damage with no energy cost specified and has the special effect: Flip 2 coins, this attack does 90 damage for each heads.
-- Kilowattrel, HP 120, evolves from Wattrel, has two attacks: Peck, which does 20 damage with no energy cost specified, and Jet Wing, which does 150 damage with no energy cost specified and has the special effect: During your next turn, this Pokémon can't attack.
-- Lanturn, HP 120, evolves from Chinchou, has two attacks: Blinding Beam, which does 40 damage with no energy cost specified and has the special effect: During your opponent's next turn, if the Defending Pokémon tries to attack, your opponent flips a coin, if tails, that attack doesn't happen, and Electro Ball, which does 120 damage with no energy cost specified.
-- Liepard, HP 100, evolves from Purrloin, has two attacks: Fury Swipes, which does 40x damage with no energy cost specified and has the special effect: Flip 3 coins, this attack does 40 damage for each heads, and Claw Slash, which does 110 damage with no energy cost specified.
-- Lumineon, HP 90, evolves from Finneon, has two attacks: Swim Freely, which does no damage with no energy cost specified and has the special effect: Flip a coin, if heads, during your opponent's next turn, prevent all damage from and effects of attacks done to this Pokémon, and Waterfall, which does 120 damage with no energy cost specified.
-- Magikarp, HP 30, has two attacks: Lively Grouping, which does no damage with no energy cost specified and has the special effect: Search your deck for any number of Magikarp, reveal them, and put them into your hand, then shuffle your deck, and Raging Fin, which does no specified damage with no energy cost specified and has the special effect: This attack does 30 more damage for each Magikarp and Gyarados in your discard pile.
-- Magmar, HP 90, has two attacks: Low Kick, which does 20 damage with no energy cost specified, and Fiery Punch, which does 70 damage with no energy cost specified.
-- Magnezone, HP 160, evolves from Magneton, has two attacks: Upper Spark, which does 50+ damage with no energy cost specified and has the special effect: If this Pokémon evolved from Magneton during this turn, this attack does 120 more damage, and Flashing Bolt, which does 160 damage with no energy cost specified and has the special effect: During your next turn, this Pokémon can't use Flashing Bolt.
-- Mamoswine, HP 180, evolves from Piloswine, has two attacks: Wreck, which does no specified damage with no energy cost specified and has the special effect: If a Stadium is in play, this attack does 120 more damage, then discard that Stadium, and Blizzard Edge, which does no specified damage with no energy cost specified and has the special effect: Discard 2 Energy from this Pokémon.
-- Mythic Milotic, HP 130, evolves from Cynthia's Feebas, has one attack: Aqua Split, which does 60 damage with no energy cost specified and has the special effect: This attack also does 30 damage to 2 of your opponent's Benched Pokémon (don't apply Weakness and Resistance for Benched Pokémon).
-- Miraidon, HP 120, has two attacks: Sharp Fang, which does 30 damage with no energy cost specified, and Lightning Laser, which does 90 damage with no energy cost specified and has the special effect: This attack also does 30 damage to 1 of your opponent's Benched Pokémon (don't apply Weakness and Resistance for Benched Pokémon).
-- Moltres, HP 120, has one attack: Fighting Wings, which does no specified damage with no energy cost specified and has the special effect: If your opponent's Active Pokémon is a Pokémon ex, this attack does 90 more damage.
-- Galarian Mr. Mime, HP 80, has two attacks: Pound, which does 10 damage with no energy cost specified, and Find It, which does no damage with no energy cost specified and has the special effect: Search your deck for an Item card, reveal it, and put it into your hand, then shuffle your deck.
-- Nacli, HP 60, has two attacks: Rock Throw, which does 10 damage with no energy cost specified, and Stone Edge, which does 20+ damage with no energy cost specified and has the special effect: Flip a coin, if heads, this attack does 20 more damage.
-- Naclstack, HP 110, evolves from Nacli, has one attack: Rock Hurl, which does 50 damage with no energy cost specified and has the special effect: This attack's damage isn't affected by Resistance.
-- Numel, HP 80, has two attacks: Tackle, which does 20 damage with no energy cost specified, and Stomp, which does 50+ damage with no energy cost specified and has the special effect: Flip a coin, if heads, this attack does 50 more damage.
-- Pawmi, HP 60, has two attacks: Growl, which does no damage with no energy cost specified and has the special effect: During your opponent's next turn, attacks used by the Defending Pokémon do 30 less damage (before applying Weakness and Resistance), and Tiny Charge, which does 10 damage with no energy cost specified.
-- Pawmo, HP 80, evolves from Pawmi, has two attacks: Static Shock, which does 20 damage with no energy cost specified, and Electrobullet, which does 50 damage with no energy cost specified and has the special effect: This attack also does 30 damage to 1 of your opponent's Benched Pokémon (don't apply Weakness and Resistance for Benched Pokémon).
-- Pawmot, HP 140, evolves from Pawmo, has two attacks: Mach Bolt, which does 40 damage with no energy cost specified, and Electric Fist, which does 100 damage with no energy cost specified and has the special effect: This attack also does 60 damage to 1 of your opponent's Benched Pokémon (don't apply Weakness and Resistance for Benched Pokémon).
-- Pikachu, HP 1904, has two attacks: Pika Punch, which does 30 damage with no energy cost specified, and Dynamic Bolt, which does 220 damage with no energy cost specified and has the special effect: Flip a coin, if tails, discard all Energy from this Pokémon, and has the Pokémon ex rule: When your Pokémon ex is Knocked Out, your opponent takes 2 Prize cards.
-- Poltchageist, HP 30, has one Ability, Storehouse Hideaway, with the effect: As long as this Pokémon is on your Bench, prevent all damage from and effects of attacks from your opponent's Pokémon done to this Pokémon, and one attack, Hook, which does 10 damage with no energy cost specified.
-- Polteageist, HP 70, evolves from Sinistea, has two attacks: Antique Collecting, which does no damage with no energy cost specified and has the special effect: Put up to 2 in any combination of Item cards and Pokémon Tool cards from your discard pile into your hand, and Pour Tea, which does no damage with no energy cost specified and has the special effect: Put 5 damage counters on your opponent's Active Pokémon.
-- Ponyta, HP 60, has one attack: Flame Tail, which does 20 damage with no energy cost specified.
-- Rapidash, HP 100, evolves from Ponyta, has two attacks: Combustion, which does 30 damage with no energy cost specified, and Ring of Fire, which does 50 damage with no energy cost specified and has the special effect: Your opponent's Active Pokémon is now Burned, and during your opponent's next turn, that Pokémon can't retreat.
-- Rayquaza EX, HP 180, has two attacks: Dragon Claw, which does 30 damage with no energy cost specified, and Dragon Strike, which does 130 damage with no energy cost specified and has the special effect: Flip a coin, if tails, this Pokémon can't use Dragon Strike during your next turn, and has the Pokémon-EX rule: When a Pokémon-EX is Knocked Out, your opponent takes 2 Prize cards.
-- Relicanth, HP 90, has two attacks: Fossil Finding, which does no damage with no energy cost specified and has the special effect: Shuffle up to 4 in any combination of Unidentified Fossil and Rare Fossil cards from your discard pile into your deck, and Water Pulse, which does no specified damage with no energy cost specified and has the special effect: Your opponent's Active Pokémon is now Asleep.
-- Reshiram, HP 130, has one attack: Heat Blast, which does 90 damage with no energy cost specified.
-- Sandslash, HP 120, evolves from Sandshrew, has two attacks: Sand Attack, which does 50 damage with no energy cost specified and has the special effect: During your opponent's next turn, if the Defending Pokémon tries to use an attack, your opponent flips a coin, if tails, that attack doesn't happen, and Mud Shot, which does 100 damage with no energy cost specified.
-- Scream Tail, HP 90, has the Ancient trait, has two attacks: Slap, which does 30 damage with no energy cost specified, and Roaring Scream, which does no specified damage with no energy cost specified and has the special effect: This attack does 20 damage to 1 of your opponent's Pokémon for each damage counter on this Pokémon (don't apply Weakness and Resistance for Benched Pokémon).
-- Sealeo, HP 110, evolves from Spheal, has two attacks: Ram, which does 30 damage with no energy cost specified, and Aurora Beam, which does 70 damage with no energy cost specified.
-- Sharpedo (1), HP 100, evolves from Carvanha, has one attack: Sharp Fang, which does 70 damage with no energy cost specified.
-- Sharpedo (2), HP 120, evolves from Carvanha, has two attacks: Chew Off, which does 50 damage with no energy cost specified and has the special effect: Flip 3 coins, for each heads, discard a random card from your opponent's hand, and Jet Headbutt, which does 100 damage with no energy cost specified.
-- Shellder, HP 70, has two attacks: Tongue Slap, which does 10 damage with no energy cost specified, and Wave Splash, which does 20 damage with no energy cost specified.
-- Shelmet, HP 60, has one Ability, Stimulated Evolution, with the effect: If you have Karrablast in play, this Pokémon can evolve during your first turn or the turn you play it, and one attack, Headbutt Bounce, which does 10 damage with no energy cost specified.
-- Shiftry, HP 160, evolves from Nuzleaf, has two attacks: Reversing Gust, which does no damage with no energy cost specified and has the special effect: Flip a coin, if heads, choose 1 of your opponent's Pokémon and shuffle that Pokémon and all attached cards into their deck, and Perplex, which does no damage with no energy cost specified and has the special effect: Your opponent's Active Pokémon is now Confused.
-- Shroodle, HP 60, has one attack: Spit Poison, which does no damage with no energy cost specified and has the special effect: Your opponent's Active Pokémon is now Poisoned.
-- Shroomish, HP 50, has one attack: Headbutt, which does 20 damage with no energy cost specified.
-- Slowbro, HP 120, evolves from Slowpoke, has two attacks: Tumbling Tackle, which does 20 damage with no energy cost specified and has the special effect: Both Active Pokémon are now Asleep, and Twilight Inspiration, which does no damage with no energy cost specified and has the special effect: You can use this attack only if your opponent has exactly 1 Prize card remaining, take 2 Prize cards.
-- Slowking, HP 130, evolves from Slowpoke, has one attack: Wash the Slate Clean, which does 70 damage with no energy cost specified and has the special effect: You may put 2 Energy attached to your opponent's Active Pokémon into their hand.
-- Slowpoke, HP 70, has two attacks: Water Gun, which does 10 damage with no energy cost specified, and Tail Whap, which does 30 damage with no energy cost specified.
-- Smeargle, HP 70, has one attack: Sketching Trash, which does no damage with no energy cost specified and has the special effect: Put up to 2 Fusion Strike Trainer cards from your discard pile into your hand, and Tail Whap, which does 80 damage with no energy cost specified.
-- Sneasel, HP 70, has one attack: Cut Down, which does no damage with no energy cost specified and has the special effect: Flip a coin, if heads, discard an Energy from your opponent's Active Pokémon.
-- Spinarak, HP 60, has one attack: Poison Sting, which does 10 damage with no energy cost specified and has the special effect: Flip a coin, if heads, your opponent's Active Pokémon is now Poisoned.
-- Steelix, HP 180, evolves from Onix, has two attacks: Body Slam, which does 70 damage with no energy cost specified and has the special effect: Flip a coin, if heads, your opponent's Active Pokémon is now Paralyzed, and Iron Buster, which does 170 damage with no energy cost specified and has the special effect: During your next turn, this Pokémon can't attack.
-- Stoutland, HP 160, evolves from Herdier, has one Ability, Intimidating Fang, with the effect: As long as this Pokémon is in the Active Spot, your opponent's Active Pokémon's attacks do 30 less damage (before applying Weakness and Resistance), and one attack, Knock Away, which does no specified damage with no energy cost specified and has the special effect: Flip a coin, if heads, this attack does 100 more damage.
-- Sudowoodo, HP 110, has one Ability, Vamoose, with the effect: If this Pokémon has any damage counters on it, it has no Retreat Cost, and one attack, Double-Edge, which does 90 damage with no energy cost specified and has the special effect: This Pokémon also does 30 damage to itself.
-- Suicune, HP 120, has two attacks: Overrun, which does 30 damage with no energy cost specified and has the special effect: This attack also does 30 damage to 1 of your opponent's Benched Pokémon (don't apply Weakness and Resistance for Benched Pokémon), and Aurora Beam, which does 100 damage with no energy cost specified.
-- Thievul (1), HP 100, evolves from Nickit, has one Ability, Fumbling Hands, with the effect: When you play this Pokémon from your hand to evolve 1 of your Pokémon during your turn, you may have each player shuffle their hand and put it on the bottom of their deck; if either player put any cards on the bottom in this way, each player draws 4 cards, and one attack, Tail Smack, which does 60 damage with no energy cost specified.
-- Thievul (2), HP 120, evolves from Nickit, has two attacks: Greedy Hunt, which does 20 damage with no energy cost specified and has the special effect: You may draw cards until you have 6 cards in your hand, and Pitch-Black Fangs, which does 60 damage with no energy cost specified.
-- Thwackey, HP 90, evolves from Grookey, has one Ability, Lay of the Land, with the effect: If you have a Stadium in play, this Pokémon has no Retreat Cost, and one attack, Branch Poke, which does 20 damage with no energy cost specified.
-- Torkoal, HP 130, has two attacks: Stampede, which does 30 damage with no energy cost specified, and Concentrated Fire, which does 80x damage with no energy cost specified and has the special effect: Flip a coin for each ☉ Energy attached to this Pokémon, this attack does 80 damage for each heads.
-- Totodile, HP 70, has one attack: Rain Splash, which does 20 damage with no energy cost specified.
-- Toxapex, HP 120, evolves from Mareanie, has two attacks: Venoshock, which does 10+ damage with no energy cost specified and has the special effect: If your opponent's Active Pokémon is Poisoned, this attack does 120 more damage, and Spike Shot, which does 90 damage with no energy cost specified.
-- Toxicroak, HP 120, evolves from Croagunk, has two attacks: Pierce, which does 30 damage with no energy cost specified, and Diving Uppercut, which does 120 damage with no energy cost specified and has the special effect: During your opponent's next turn, this Pokémon takes 50 more damage from attacks (after applying Weakness and Resistance).
-- Toxtricity, HP 130, evolves from Toxel, has two attacks: Yank Away, which does no damage with no energy cost specified and has the special effect: Choose 2 random cards from your opponent's hand, your opponent reveals those cards and shuffles them into their deck, and Thunder, which does no specified damage with no energy cost specified and has the special effect: This Pokémon also does 20 damage to itself.
-- Tropius, HP 110, has two attacks: Leaf Drain, which does 20 damage with no energy cost specified and has the special effect: Heal 20 damage from this Pokémon, and Tropic Breeze, which does 130 damage with no energy cost specified and has the special effect: Move all Energy from this Pokémon to 1 of your Benched Pokémon.
-- Unfezant, HP 140, evolves from Tranquill, has two attacks: Gust, which does 30 damage with no energy cost specified, and Hurricane Wing, which does 70x damage with no energy cost specified and has the special effect: Flip 4 coins, this attack does 70 damage for each heads.
-- Volcarona, HP 140, evolves from Larvesta, has two attacks: Leech Life, which does 30 damage with no energy cost specified and has the special effect: Heal from this Pokémon the same amount of damage you did to your opponent's Active Pokémon, and Turbulent Wings, which does 150 damage with no energy cost specified and has the special effect: This Pokémon also does 50 damage to itself.
-- Wattrel, HP 60, has one attack: Static Shock, which does 20 damage with no energy cost specified.
-- Wigglytuff, HP 120, evolves from Jigglypuff, has two attacks: Round, which does 40x damage with no energy cost specified and has the special effect: This attack does 40 damage for each of your Pokémon in play that has the Round attack, and Seismic Toss, which does 100 damage with no energy cost specified.
-- Wimpod, HP 70, has one Ability, Punk Out, with the effect: If your opponent has any Pokémon V in play, this Pokémon has no Retreat Cost, and one attack, Gnaw, which does 10 damage with no energy cost specified.
-- Woobat, HP and attacks not specified in the provided text.
-- Hisuian Zorua, HP 60, has two attacks: Collect, which does no damage with no energy cost specified and has the special effect: Draw a card, and Mumble, which does 10 damage with no energy cost specified.
+- Abra, HP 50; Attack Teleportation Attack: 10 damage, switches with a Benched Pokémon.
+- Arcanine, HP 140, evolves from Growlithe; Attacks: Flare: 50 damage; Punishing Fang: 100+ damage, +100 if opponent's Active is a Pokémon.
+- Boltund, HP 130, evolves from Yamper; Attack Electric Run: 70+ damage, +70 on heads coin flip.
+- Brambleghast, HP 100, evolves from Bramblin; Ability Prison Panic: when evolved, Confuse opponent's Active; Attack Psychic Sphere: 80 damage.
+- Bulbasaur, HP 80; Attack Bind Down: 10 damage, opponent's Active can't retreat next turn.
+- Centiskorch, HP 140, evolves from Sizzlipede; Attacks: Single: opponent's Active Burned; Charring Breath: if opponent's Active not Burned, does nothing.
+- Charizard EX, HP 330, evolves from Charmeleon; Attacks: Brave Wing: damage unspecified, +100 if this Pokémon has damage counters; Explosive Vortex: damage unspecified, discard 3 Energy from this Pokémon; Rule: when Knocked Out, opponent takes 2 Prize cards.
+- Charmander, HP 60; Attack Heat Tackle: 30 damage, this Pokémon does 10 damage to itself.
+- Charmander, HP 80; Ability Agile: if no Energy attached, no Retreat Cost; Attack Live Coal: 20 damage.
+- Charmeleon, HP 90, evolves from Charmander; Attack Heat Tackle: 70 damage, this Pokémon does 20 damage to itself.
+- N's Darmanitan, HP 140, evolves from N's Darumaka; Attacks: Back Draft: 30x damage, x = number of Basic Energy in opponent's discard; Flamebody Cannon: 90x damage, discard all Energy from this Pokémon, also does 90 damage to 1 Benched (no Weak/Resist).
+- Darmanitan, HP 150, evolves from Darumaka; Attack Blaze Ball: 40+ damage, +40 per ☉ Energy attached.
+- Dedenne, HP 70; Attack Dede-Flash: 20+ damage, +60 if opponent has exactly 1 Prize left, and Confuse opponent's Active.
+- Team Rocket's Drowzee, HP 80; Attack Hypnotic Ray: 10 damage, opponent's Active Asleep.
+- Electabuzz, HP 80; Attack Haymaker: 30 damage, can't use Haymaker next turn.
+- Escavalier, HP 130, evolves from Karrablast; Attack Wild Lances: 90 damage, this Pokémon does 30 damage to itself.
+- Espathra, HP 120, evolves from Flittle; Ability Stance: when evolved, may prevent all damage/effects from opponent's attacks until end of opponent's next turn; Attack Glittering Eyes: 70+ damage, +70 if Tulip in discard.
+- Flabébé, HP 40; Attack Hypnotic Gaze: opponent's Active Asleep.
+- Garbodor, HP 140, evolves from Trubbish; Attacks: Suffocating Gas: 40 damage; Gunk Shot: 120 damage, opponent's Active Poisoned.
+- Gastly, HP 50; Attack Suffocating Gas: 20 damage.
+- Girafarig, HP 100; Attacks: Psy Bolt: 30 damage, flip heads: Paralyze; Headbang: 70 damage.
+- Greavard, HP 80; Attacks: Stampede: 10 damage; Take Down: 40 damage, this Pokémon does 10 damage to itself.
+- Grimer, HP 80; Attack Poison Gas: opponent's Active Poisoned.
+- Grimmsnarl, HP 170, evolves from Morgrem; Attacks: Shadowy Knot: 50x damage, x = Retreat Cost of opponent's Active (★); Mega Punch: 120 damage.
+- Growlithe, HP 90; Attacks: Stoke: search deck for up to 2 Basic ☉ Energy, attach to this Pokémon; Fire Claws: 70 damage.
+- Haunter (1), HP 70, evolves from Gastly; Attack Cursed Drop: put 3 damage counters on opponent's Pokémon any way.
+- Haunter (2), HP 80, evolves from Gastly; Ability Spirit Return: when evolved, may put a Supporter from opponent's discard into their hand; Attack Mumble: 30 damage.
+- Heracross, HP 120; Attacks: Superpowered Throw: 10+ damage, +30 per ★ in opponent's Active Retreat Cost; Horn Attack: 90 damage.
+- Honchkrow (1), HP 130, evolves from Murkrow; Ability Insomnia: can't be Asleep; Attack Voltage Dive: damage unspecified, +80 if opponent's Active has Special Energy.
+- Honchkrow (2), HP 130, evolves from Murkrow; Attacks: Wind of Darkness: 30 damage; Sniping Feathers: 120 damage to 1 opponent's Pokémon, discard 2 Energy from this Pokémon (no Weak/Resist for Benched).
+- Houndoom, HP 120, evolves from Houndour; Attacks: Sharp Fang: 30 damage; Fire Blast: 150 damage, discard an Energy from this Pokémon.
+- Houndour, HP 70; Attacks: Bite: 10 damage; Flare: 30 damage.
+- Jynx, HP 100; Attacks: Alluring Dance: switch opponent's Benched with Active, new Active Confused; Super Psy Bolt: 80 damage.
+- Kangaskhan, HP 120; Attacks: Gentle Slap: 50 damage; Dizzy Punch: 90x damage, flip 2 coins, x = heads.
+- Kilowattrel, HP 120, evolves from Wattrel; Attacks: Peck: 20 damage; Jet Wing: 150 damage, can't attack next turn.
+- Lanturn, HP 120, evolves from Chinchou; Attacks: Blinding Beam: 40 damage, during opponent's next turn, if Defending tries to attack, flip coin tails prevents; Electro Ball: 120 damage.
+- Liepard, HP 100, evolves from Purrloin; Attacks: Fury Swipes: 40x damage, flip 3 coins, x = heads; Claw Slash: 110 damage.
+- Lumineon, HP 90, evolves from Finneon; Attacks: Swim Freely: flip heads, prevent all damage/effects to this Pokémon during opponent's next turn; Waterfall: 120 damage.
+- Magikarp, HP 30; Attacks: Lively Grouping: search deck for any number of Magikarp, put into hand; Raging Fin: damage unspecified, +30 per Magikarp and Gyarados in discard.
+- Magmar, HP 90; Attacks: Low Kick: 20 damage; Fiery Punch: 70 damage.
+- Magnezone, HP 160, evolves from Magneton; Attacks: Upper Spark: 50+ damage, +120 if evolved from Magneton this turn; Flashing Bolt: 160 damage, can't use Flashing Bolt next turn.
+- Mamoswine, HP 180, evolves from Piloswine; Attacks: Wreck: damage unspecified, +120 if Stadium in play, then discard Stadium; Blizzard Edge: damage unspecified, discard 2 Energy from this Pokémon.
+- Mythic Milotic, HP 130, evolves from Cynthia's Feebas; Attack Aqua Split: 60 damage, also 30 damage to 2 Benched (no Weak/Resist).
+- Miraidon, HP 120; Attacks: Sharp Fang: 30 damage; Lightning Laser: 90 damage, also 30 damage to 1 Benched (no Weak/Resist).
+- Moltres, HP 120; Attack Fighting Wings: damage unspecified, +90 if opponent's Active is Pokémon ex.
+- Galarian Mr. Mime, HP 80; Attacks: Pound: 10 damage; Find It: search deck for an Item card, put into hand.
+- Nacli, HP 60; Attacks: Rock Throw: 10 damage; Stone Edge: 20+ damage, flip heads +20.
+- Naclstack, HP 110, evolves from Nacli; Attack Rock Hurl: 50 damage, ignores Resistance.
+- Numel, HP 80; Attacks: Tackle: 20 damage; Stomp: 50+ damage, flip heads +50.
+- Pawmi, HP 60; Attacks: Growl: opponent's Defending attacks do 30 less next turn; Tiny Charge: 10 damage.
+- Pawmo, HP 80, evolves from Pawmi; Attacks: Static Shock: 20 damage; Electrobullet: 50 damage, also 30 damage to 1 Benched (no Weak/Resist).
+- Pawmot, HP 140, evolves from Pawmo; Attacks: Mach Bolt: 40 damage; Electric Fist: 100 damage, also 60 damage to 1 Benched (no Weak/Resist).
+- Pikachu, HP 1904; Attacks: Pika Punch: 30 damage; Dynamic Bolt: 220 damage, flip tails discard all Energy from this Pokémon; Rule: when Knocked Out, opponent takes 2 Prize cards (Pokémon ex).
+- Poltchageist, HP 30; Ability Storehouse Hideaway: while on Bench, prevents all damage/effects from opponent's attacks; Attack Hook: 10 damage.
+- Polteageist, HP 70, evolves from Sinistea; Attacks: Antique Collecting: put up to 2 Item or Tool cards from discard into hand; Pour Tea: put 5 damage counters on opponent's Active.
+- Ponyta, HP 60; Attack Flame Tail: 20 damage.
+- Rapidash, HP 100, evolves from Ponyta; Attacks: Combustion: 30 damage; Ring of Fire: 50 damage, opponent's Active Burned and can't retreat next turn.
+- Rayquaza EX, HP 180; Attacks: Dragon Claw: 30 damage; Dragon Strike: 130 damage, flip tails can't use Dragon Strike next turn; Rule: when Knocked Out, opponent takes 2 Prize cards.
+- Relicanth, HP 90; Attacks: Fossil Finding: shuffle up to 4 Fossil cards from discard into deck; Water Pulse: damage unspecified, opponent's Active Asleep.
+- Reshiram, HP 130; Attack Heat Blast: 90 damage.
+- Sandslash, HP 120, evolves from Sandshrew; Attacks: Sand Attack: 50 damage, during opponent's next turn, if Defending tries to attack, flip tails prevents; Mud Shot: 100 damage.
+- Scream Tail, HP 90, Ancient; Attacks: Slap: 30 damage; Roaring Scream: damage unspecified, 20 damage to 1 opponent's Pokémon per damage counter on this Pokémon (no Weak/Resist for Benched).
+- Sealeo, HP 110, evolves from Spheal; Attacks: Ram: 30 damage; Aurora Beam: 70 damage.
+- Sharpedo (1), HP 100, evolves from Carvanha; Attack Sharp Fang: 70 damage.
+- Sharpedo (2), HP 120, evolves from Carvanha; Attacks: Chew Off: 50 damage, flip 3 coins, each heads discards random card from opponent's hand; Jet Headbutt: 100 damage.
+- Shellder, HP 70; Attacks: Tongue Slap: 10 damage; Wave Splash: 20 damage.
+- Shelmet, HP 60; Ability Stimulated Evolution: if Karrablast in play, can evolve on first turn or turn played; Attack Headbutt Bounce: 10 damage.
+- Shiftry, HP 160, evolves from Nuzleaf; Attacks: Reversing Gust: flip heads, shuffle 1 opponent's Pokémon and attached into deck; Perplex: opponent's Active Confused.
+- Shroodle, HP 60; Attack Spit Poison: opponent's Active Poisoned.
+- Shroomish, HP 50; Attack Headbutt: 20 damage.
+- Slowbro, HP 120, evolves from Slowpoke; Attacks: Tumbling Tackle: 20 damage, both Active Asleep; Twilight Inspiration: if opponent has exactly 1 Prize left, take 2 Prize cards.
+- Slowking, HP 130, evolves from Slowpoke; Attack Wash the Slate Clean: 70 damage, may put 2 Energy from opponent's Active into their hand.
+- Slowpoke, HP 70; Attacks: Water Gun: 10 damage; Tail Whap: 30 damage.
+- Smeargle, HP 70; Attacks: Sketching Trash: put up to 2 Fusion Strike Trainer cards from discard into hand; Tail Whap: 80 damage.
+- Sneasel, HP 70; Attack Cut Down: flip heads, discard an Energy from opponent's Active.
+- Spinarak, HP 60; Attack Poison Sting: 10 damage, flip heads Poison opponent's Active.
+- Steelix, HP 180, evolves from Onix; Attacks: Body Slam: 70 damage, flip heads Paralyze; Iron Buster: 170 damage, can't attack next turn.
+- Stoutland, HP 160, evolves from Herdier; Ability Intimidating Fang: while Active, opponent's Active attacks do 30 less; Attack Knock Away: damage unspecified, flip heads +100.
+- Sudowoodo, HP 110; Ability Vamoose: if damaged, no Retreat Cost; Attack Double-Edge: 90 damage, this Pokémon does 30 damage to itself.
+- Suicune, HP 120; Attacks: Overrun: 30 damage, also 30 damage to 1 Benched (no Weak/Resist); Aurora Beam: 100 damage.
+- Thievul (1), HP 100, evolves from Nickit; Ability Fumbling Hands: when evolved, each player shuffles hand to bottom of deck, then both draw 4 cards if any were placed; Attack Tail Smack: 60 damage.
+- Thievul (2), HP 120, evolves from Nickit; Attacks: Greedy Hunt: 20 damage, draw until 6 cards in hand; Pitch-Black Fangs: 60 damage.
+- Thwackey, HP 90, evolves from Grookey; Ability Lay of the Land: if Stadium in play, no Retreat Cost; Attack Branch Poke: 20 damage.
+- Torkoal, HP 130; Attacks: Stampede: 30 damage; Concentrated Fire: 80x damage, flip coin per ☉ Energy, x = heads.
+- Totodile, HP 70; Attack Rain Splash: 20 damage.
+- Toxapex, HP 120, evolves from Mareanie; Attacks: Venoshock: 10+ damage, +120 if opponent's Active Poisoned; Spike Shot: 90 damage.
+- Toxicroak, HP 120, evolves from Croagunk; Attacks: Pierce: 30 damage; Diving Uppercut: 120 damage, this Pokémon takes 50 more damage from attacks next turn.
+- Toxtricity, HP 130, evolves from Toxel; Attacks: Yank Away: choose 2 random cards from opponent's hand, they reveal and shuffle into deck; Thunder: damage unspecified, this Pokémon does 20 damage to itself.
+- Tropius, HP 110; Attacks: Leaf Drain: 20 damage, heal 20 from this Pokémon; Tropic Breeze: 130 damage, move all Energy from this Pokémon to 1 Benched.
+- Unfezant, HP 140, evolves from Tranquill; Attacks: Gust: 30 damage; Hurricane Wing: 70x damage, flip 4 coins, x = heads.
+- Volcarona, HP 140, evolves from Larvesta; Attacks: Leech Life: 30 damage, heal equal to damage done; Turbulent Wings: 150 damage, this Pokémon does 50 damage to itself.
+- Wattrel, HP 60; Attack Static Shock: 20 damage.
+- Wigglytuff, HP 120, evolves from Jigglypuff; Attacks: Round: 40x damage, x = number of your Pokémon with Round; Seismic Toss: 100 damage.
+- Wimpod, HP 70; Ability Punk Out: if opponent has any Pokémon V, no Retreat Cost; Attack Gnaw: 10 damage.
+- Woobat: HP and attacks not specified.
+- Hisuian Zorua, HP 60; Attacks: Collect: draw a card; Mumble: 10 damage.
 
 ## ITEM
 
-- Energy Loto, a Trainer Item card, has the effect: Look at the top 7 cards of your deck, you may reveal an Energy card you find there and put it into your hand, shuffle the other cards back into your deck, and you may play any number of Item cards during your turn.
-- Great Ball, an Item card, has the effect: Look at the top 7 cards of your deck, you may reveal a Pokémon you find there and put it into your hand, then shuffle the other cards back into your deck, and you may play any number of Item cards during your turn.
-- Potion, an Item card, has the effect: Heal 30 damage from 1 of your Pokémon, and you may play any number of Item cards during your turn.
-- Super Rod, an Item card, has the effect: Shuffle up to 3 in any combination of Pokémon and Basic Energy cards from your discard pile into your deck, and you may play any number of Item cards during your turn.
-- Switch, an Item card, has the effect: Switch your Active Pokémon with 1 of your Benched Pokémon, and you may play any number of Item cards during your turn.
-- Techno Radar, an Item card, has the effect: You can use this card only if you discard another card from your hand, search your deck for up to 2 Future Pokémon, reveal them, and put them into your hand, then shuffle your deck, and you may play any number of Item cards during your turn.
-- Unidentified Fossil, a Trainer Item card, is played as if it were a 60-HP Basic ★ Pokémon, at any time during your turn you may discard it from play, it cannot retreat, and you may play any number of Item cards during your turn.
+- Energy Loto: look at top 7, reveal an Energy card and put into hand, shuffle rest.
+- Great Ball: look at top 7, reveal a Pokémon and put into hand, shuffle rest.
+- Potion: heal 30 damage from 1 Pokémon.
+- Super Rod: shuffle up to 3 Pokémon/Basic Energy from discard into deck.
+- Switch: switch Active with 1 Benched.
+- Techno Radar: discard another card, search deck for up to 2 Future Pokémon, put into hand.
+- Unidentified Fossil: plays as 60-HP Basic ★ Pokémon, can be discarded anytime, cannot retreat.
 
 ## ENERGY
 
-- Fire Energy, a Basic Energy card, provides Energy.
-- Lightning Energy, a Basic Energy card, provides Energy.
-- Fusion Strike Energy, a Special Energy card, has the effect: This card can only be attached to a Fusion Strike Pokémon, if attached to anything else discard this card, as long as it is attached it provides every type of Energy but only 1 Energy at a time, and prevent all effects of your opponent's Pokémon's Abilities done to the Pokémon this card is attached to.
+- Fire Energy: Basic Energy.
+- Lightning Energy: Basic Energy.
+- Fusion Strike Energy: attaches only to Fusion Strike Pokémon; provides 1 of any type of Energy, prevents opponent Pokémon Abilities from affecting the attached Pokémon; discard if attached elsewhere.
 
 ## SUPPORTER
 
-- Clavell, a Supporter card, has the effect: Search your deck for up to 3 Basic Pokémon with 120 HP or less, reveal them, and put them into your hand, then shuffle your deck, and you may play only 1 Supporter card during your turn.
-- Explorer's Guidance, a Supporter card with the Ancient trait, has the effect: Look at the top 6 cards of your deck and put 2 of them into your hand, discard the other cards, and you may play only 1 Supporter card during your turn.
-- Friends in Galar, a Supporter card, has the effect: Draw 3 cards, and you may play only 1 Supporter card during your turn.
-- Jacq, a Supporter card, has the effect: Search your deck for up to 2 Evolution Pokémon, reveal them, and put them into your hand, then shuffle your deck, and you may play only 1 Supporter card during your turn.
-- Nemona, a Supporter card, has the effect: Draw 3 cards, and you may play only 1 Supporter card during your turn.
-- Youngster, a Supporter card, has the effect: Shuffle your hand into your deck, then draw 5 cards, and you may play only 1 Supporter card during your turn.
+- Clavell: search deck for up to 3 Basic Pokémon with 120 HP or less, put into hand.
+- Explorer's Guidance (Ancient): look at top 6, put 2 into hand, discard rest.
+- Friends in Galar: draw 3 cards.
+- Jacq: search deck for up to 2 Evolution Pokémon, put into hand.
+- Nemona: draw 3 cards.
+- Youngster: shuffle hand into deck, draw 5 cards.
 
 ## TOOL
 
-- Future Booster Energy Capsule, a Pokémon Tool card with the Future trait, has the effect: The Future Pokémon this card is attached to has no Retreat Cost, and its attacks do 20 more damage to the opponent's Active Pokémon (before applying Weakness and Resistance), and you may attach any number of Pokémon Tools during your turn but only one to each Pokémon.
-- Rusted Shield, a Trainer Item and Pokémon Tool card, has the effect: Attach to a Pokémon that doesn't already have a Tool attached, the Zamazenta V this card is attached to gets +70 HP, and you may play any number of Item cards during your turn.
-- Technical Machine: Evolution, a Pokémon Tool card, has the effect: The Pokémon this card is attached to can use the Evolution attack (you still need necessary Energy), if attached discard it at end of turn, the Evolution attack allows you to choose up to 2 of your Benched Pokémon and search your deck for a card that evolves from each and put it onto that Pokémon to evolve it, then shuffle your deck, and you may attach any number of Pokémon Tools during your turn but only one to each Pokémon.
+- Future Booster Energy Capsule (Future): attached Future Pokémon has no Retreat Cost, attacks do +20 damage to Active.
+- Rusted Shield: attach to Zamazenta V (only), gives +70 HP.
+- Technical Machine: Evolution: attached Pokémon can use "Evolution" attack (requires Energy), then discard; Evolution: choose up to 2 Benched, search deck for their evolutions and put onto them.
