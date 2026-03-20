@@ -26,19 +26,19 @@ POKEMON;Electabuzz;Basic;80;1;Electric;false;https://www.pokemon.com/us/pokemon-
 POKEMON;Escavalier;Stage 1;130;1;Metal;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/zsv10pt5/60/
 POKEMON;Espathra;Stage 1;120;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv04/81/
 POKEMON;Flabebe;Basic;40;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh7/71/
-POKEMON;Garbodor;Stage 1;140;1;Darkness;false;
-POKEMON;Gastly;Basic;50;1;Psychic;false;
-POKEMON;Girafarig;Basic;100;1;Colorless;false;
-POKEMON;Greavard;Basic;80;1;Psychic;false;
-POKEMON;Grimer;Basic;80;1;Darkness;false;
-POKEMON;Grimmsnarl;Stage 2;170;1;Psychic;false;
-POKEMON;Growlithe;Basic;90;1;Fire;false;
-POKEMON;Haunter 1;Stage 1;70;1;Psychic;false;
-POKEMON;Haunter 2;Stage 1;80;1;Psychic;false;
-POKEMON;Heracross;Basic;120;1;Grass;false;
-POKEMON;Honchkrow 1;Stage 1;130;2;Darkness;false;
-POKEMON;Honchkrow 2;Stage 1;130;2;Darkness;false;
-POKEMON;Houndoom;Stage 1;120;2;Fire;false;
+POKEMON;Garbodor;Stage 1;140;1;Darkness;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/rsv10pt5/60/
+POKEMON;Gastly;Basic;50;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv3pt5/92/
+POKEMON;Girafarig;Basic;100;1;Colorless;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv02/154/
+POKEMON;Greavard;Basic;80;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me01/65/
+POKEMON;Grimer;Basic;80;1;Darkness;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh9/84/
+POKEMON;Grimmsnarl;Stage 2;170;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv09/73/
+POKEMON;Growlithe;Basic;90;1;Fire;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv01/31/
+POKEMON;Haunter 1;Stage 1;70;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh11/65/
+POKEMON;Haunter 2;Stage 1;80;1;Psychic;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv3pt5/93/
+POKEMON;Heracross;Basic;120;1;Grass;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv01/2/
+POKEMON;Honchkrow 1;Stage 1;130;2;Darkness;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh5/94/
+POKEMON;Honchkrow 2;Stage 1;130;2;Darkness;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me02/58/
+POKEMON;Houndoom;Stage 1;120;2;Fire;false;https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv01/34/
 POKEMON;Houndour;Basic;70;2;Fire;false;
 POKEMON;Jynx;Basic;100;2;Psychic;false;
 POKEMON;Kangaskhan;Basic;120;1;Colorless;false;
