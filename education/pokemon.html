@@ -529,7 +529,7 @@ My Pokémon TCG collection
                     <div class="item-name">
                         ${item.name} ${holoTag}
                     </div>
-                    <div class="card-description">${item.description}</div>
+                    <div class="card-description">${item.description.replace(/\\n/g, '<br>')}</div>
                 </div>
             `;
         }
@@ -564,7 +564,7 @@ My Pokémon TCG collection
                             <span><i class="fas fa-arrow-up"></i> ${p.stage}</span>
                             <span class="hp-value">${p.hp} HP</span>
                         </div>
-                        <div class="card-description">${p.description}</div>
+                        <div class="card-description">${p.description.replace(/\\n/g, '<br>')}</div>
                     `;
                     grid.appendChild(card);
                 });
