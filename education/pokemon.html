@@ -545,8 +545,12 @@
 
 <script>
     (function() {
-        function parseHolo(parts, index) {
-            return parts.length > index && parts[index].toLowerCase() === 'true';
+
+        const BASE_URL = "https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/";
+
+        function buildUrl(parts, index) {
+            const shortUrl = parts.length > index ? parts[index].trim() : '';
+            return shortUrl ? BASE_URL + shortUrl.replace(/\/?$/, '/') : '';
         }
 
         window.openLightbox = function(src) {
@@ -554,13 +558,12 @@
             document.getElementById('imageModal').style.display = 'flex';
             history.pushState({ modal: true }, '');
         };
+
         window.closeModal = function(skipHistoryBack) {
             const modal = document.getElementById('imageModal');
             if (modal.style.display === 'flex') {
                 modal.style.display = 'none';
-                if (!skipHistoryBack) {
-                    history.back();
-                }
+                if (!skipHistoryBack) history.back();
             }
         };
 
@@ -572,69 +575,57 @@
         });
 
         document.addEventListener('keydown', function(e) {
-            const modal = document.getElementById('imageModal');
-            if (e.key === 'Escape' && modal.style.display === 'flex') {
-                window.closeModal();
-            }
+            if (e.key === 'Escape') window.closeModal();
         });
 
         function getImagePath(name) {
-            return `../images/pokemon/${encodeURI(name)}.jpg`;
+            return `../images/pokemon/${encodeURIComponent(name)}.jpg`;
         }
 
         function normalizeRarity(rarity) {
             if (!rarity) return '';
-            const r = rarity.toLowerCase().trim();
-            if (r === 'common') return 'common';
-            if (r === 'uncommon') return 'uncommon';
-            if (r === 'rare') return 'rare';
-            if (r === 'double rare') return 'double-rare';
-            if (r === 'ultra rare') return 'ultra-rare';
-            if (r === 'illustration rare') return 'illustration-rare';
-            if (r === 'special illustration rare') return 'special-illustration-rare';
-            if (r === 'hyper rare') return 'hyper-rare';
-            if (r === 'shiny rare') return 'shiny-rare';
-            if (r === 'shiny ultra rare') return 'shiny-ultra-rare';
-            if (r === 'ace spec rare') return 'ace-spec-rare';
-            if (r === 'promo') return 'promo';
-            return 'unknown';
+            const map = {
+                'common': 'common',
+                'uncommon': 'uncommon',
+                'rare': 'rare',
+                'double rare': 'double-rare',
+                'ultra rare': 'ultra-rare',
+                'illustration rare': 'illustration-rare',
+                'special illustration rare': 'special-illustration-rare',
+                'hyper rare': 'hyper-rare',
+                'shiny rare': 'shiny-rare',
+                'shiny ultra rare': 'shiny-ultra-rare',
+                'ace spec rare': 'ace-spec-rare',
+                'promo': 'promo'
+            };
+            return map[rarity.toLowerCase().trim()] || 'unknown';
         }
 
         function getRarityBadge(rarity) {
             if (!rarity) return '';
             const normalized = normalizeRarity(rarity);
-            const displayText = rarity;
-            return `<span class="rarity-badge rarity-${normalized}">${displayText}</span>`;
+            return `<span class="rarity-badge rarity-${normalized}">${rarity}</span>`;
         }
 
         function createItemCard(item) {
             const imgSrc = getImagePath(item.name);
             const escapedImgSrc = imgSrc.replace(/'/g, "\\'");
             const dataName = item.name.replace(/"/g, '&quot;');
-
-            let holoTag = '';
-            if (item.holo) {
-                holoTag = `<span class="holo-indicator">H</span>`;
-            }
-
-            let linkIcon = '';
-            if (item.url) {
-                linkIcon = `<a href="${item.url}" target="_blank" rel="noopener" class="card-link-icon" title="View on Pokémon Database"><i class="fas fa-external-link-alt"></i></a>`;
-            }
-
+            const holoTag = item.holo ? `<span class="holo-indicator">H</span>` : '';
+            const linkIcon = item.url ? `<a href="${item.url}" target="_blank" rel="noopener" class="card-link-icon" title="View on Pokémon Database"><i class="fas fa-external-link-alt"></i></a>` : '';
             const rarityBadgeHtml = getRarityBadge(item.rarity);
 
             return `
-                <div class="item-card" data-name="${dataName.toLowerCase()}" data-holo="${item.holo ? 'true' : 'false'}" data-rarity="${item.rarity ? item.rarity.toLowerCase() : ''}">
-                    <span class="qty-badge">×${item.count}</span>
-                    ${linkIcon}
-                    <img class="card-thumb" src="${imgSrc}" alt="${item.name}" onclick="openLightbox('${escapedImgSrc}')" loading="lazy">
-                    <div class="item-name">
-                        ${item.name} ${holoTag}
-                    </div>
-                    ${rarityBadgeHtml ? `<div class="item-rarity">${rarityBadgeHtml}</div>` : ''}
+            <div class="item-card" data-name="${dataName.toLowerCase()}" data-holo="${item.holo ? 'true' : 'false'}" data-rarity="${item.rarity ? item.rarity.toLowerCase() : ''}">
+                <span class="qty-badge">×${item.count}</span>
+                ${linkIcon}
+                <img class="card-thumb" src="${imgSrc}" alt="${item.name}" onclick="openLightbox('${escapedImgSrc}')" loading="lazy">
+                <div class="item-name">
+                    ${item.name} ${holoTag}
                 </div>
-            `;
+                ${rarityBadgeHtml ? `<div class="item-rarity">${rarityBadgeHtml}</div>` : ''}
+            </div>
+        `;
         }
 
         const typeSections = document.getElementById('pokemon-type-sections');
@@ -664,18 +655,18 @@
                     const rarityBadgeHtml = getRarityBadge(p.rarity);
 
                     card.innerHTML = `
-                        <span class="qty-badge">×${p.count}</span>
-                        ${linkIcon}
-                        <img class="card-thumb" src="${imgSrc}" alt="${p.name}" onclick="openLightbox('${escapedImgSrc}')" loading="lazy">
-                        <div class="pokemon-name">
-                            ${p.name}${holoTag}
-                        </div>
-                        <div class="pokemon-details">
-                            <span><i class="fas fa-arrow-up"></i> ${p.stage}</span>
-                            <span class="hp-value">${p.hp} HP</span>
-                            ${rarityBadgeHtml}
-                        </div>
-                    `;
+                    <span class="qty-badge">×${p.count}</span>
+                    ${linkIcon}
+                    <img class="card-thumb" src="${imgSrc}" alt="${p.name}" onclick="openLightbox('${escapedImgSrc}')" loading="lazy">
+                    <div class="pokemon-name">
+                        ${p.name}${holoTag}
+                    </div>
+                    <div class="pokemon-details">
+                        <span><i class="fas fa-arrow-up"></i> ${p.stage}</span>
+                        <span class="hp-value">${p.hp} HP</span>
+                        ${rarityBadgeHtml}
+                    </div>
+                `;
                     grid.appendChild(card);
                 });
 
@@ -692,12 +683,7 @@
         })
             .then(data => {
             const lines = data.split('\n').filter(line => line.trim() !== '');
-
-            const energies = [];
-            const supporters = [];
-            const items = [];
-            const tools = [];
-            const pokemonByType = {};
+            const energies = [], supporters = [], items = [], tools = [], pokemonByType = {};
 
             lines.forEach(line => {
                 const parts = line.split(';').map(s => s.trim());
@@ -706,60 +692,50 @@
 
                 switch(category) {
                     case 'ENERGY': {
-                        const name = parts[1];
-                        const count = parseInt(parts[2], 10);
-                        const holo = parts[3] ? parts[3].toLowerCase() === 'true' : false;
-                        const url = parts.length > 4 ? parts[4] : '';
-                        let rarity = '';
-                        if (parts.length > 5) rarity = parts[5];
+                        const [ , name, countStr, holoStr ] = parts;
+                        const count = parseInt(countStr, 10);
+                        const holo = holoStr?.toLowerCase() === 'true';
+                        const url = buildUrl(parts, 4);
+                        const rarity = parts[5] || '';
                         energies.push({ name, count, holo, url, rarity });
                         break;
                     }
                     case 'SUPPORTER': {
-                        const name = parts[1];
-                        const count = parseInt(parts[2], 10);
-                        const holo = parts[3] ? parts[3].toLowerCase() === 'true' : false;
-                        const url = parts.length > 4 ? parts[4] : '';
-                        let rarity = '';
-                        if (parts.length > 5) rarity = parts[5];
+                        const [ , name, countStr, holoStr ] = parts;
+                        const count = parseInt(countStr, 10);
+                        const holo = holoStr?.toLowerCase() === 'true';
+                        const url = buildUrl(parts, 4);
+                        const rarity = parts[5] || '';
                         supporters.push({ name, count, holo, url, rarity });
                         break;
                     }
                     case 'ITEM': {
-                        const name = parts[1];
-                        const count = parseInt(parts[2], 10);
-                        const holo = parts[3] ? parts[3].toLowerCase() === 'true' : false;
-                        const url = parts.length > 4 ? parts[4] : '';
-                        let rarity = '';
-                        if (parts.length > 5) rarity = parts[5];
+                        const [ , name, countStr, holoStr ] = parts;
+                        const count = parseInt(countStr, 10);
+                        const holo = holoStr?.toLowerCase() === 'true';
+                        const url = buildUrl(parts, 4);
+                        const rarity = parts[5] || '';
                         items.push({ name, count, holo, url, rarity });
                         break;
                     }
                     case 'TOOL': {
-                        const name = parts[1];
-                        const count = parseInt(parts[2], 10);
-                        const holo = parts[3] ? parts[3].toLowerCase() === 'true' : false;
-                        const url = parts.length > 4 ? parts[4] : '';
-                        let rarity = '';
-                        if (parts.length > 5) rarity = parts[5];
+                        const [ , name, countStr, holoStr ] = parts;
+                        const count = parseInt(countStr, 10);
+                        const holo = holoStr?.toLowerCase() === 'true';
+                        const url = buildUrl(parts, 4);
+                        const rarity = parts[5] || '';
                         tools.push({ name, count, holo, url, rarity });
                         break;
                     }
                     case 'POKEMON': {
-                        const name = parts[1];
-                        const stage = parts[2];
-                        const hp = parseInt(parts[3], 10);
-                        const count = parseInt(parts[4], 10);
-                        const type = parts[5];
-                        const holo = parts[6] ? parts[6].toLowerCase() === 'true' : false;
-                        const url = parts.length > 7 ? parts[7] : '';
-                        let rarity = '';
-                        if (parts.length > 8) rarity = parts[8];
-
+                        const [ , name, stage, hpStr, countStr, type, holoStr ] = parts;
+                        const hp = parseInt(hpStr, 10);
+                        const count = parseInt(countStr, 10);
+                        const holo = holoStr?.toLowerCase() === 'true';
+                        const url = buildUrl(parts, 7);
+                        const rarity = parts[8] || '';
                         if (!pokemonByType[type]) pokemonByType[type] = [];
-                        pokemonByType[type].push({
-                            name, stage, hp, count, holo, url, rarity
-                        });
+                        pokemonByType[type].push({ name, stage, hp, count, holo, url, rarity });
                         break;
                     }
                     default:
@@ -812,9 +788,7 @@
             });
 
             const trainersSection = document.getElementById('trainers');
-            if (trainersSection) {
-                trainersSection.style.display = anyTrainerVisible ? 'block' : 'none';
-            }
+            if (trainersSection) trainersSection.style.display = anyTrainerVisible ? 'block' : 'none';
 
             const typeBlocks = document.querySelectorAll('.pokemon-type-block');
             let anyPokemonVisible = false;
@@ -826,9 +800,7 @@
             });
 
             const pokemonSection = document.getElementById('pokemon');
-            if (pokemonSection) {
-                pokemonSection.style.display = anyPokemonVisible ? 'block' : 'none';
-            }
+            if (pokemonSection) pokemonSection.style.display = anyPokemonVisible ? 'block' : 'none';
 
             const allCards = getAllCards();
             const totalVisible = allCards.filter(card => card.style.display !== 'none').length;
@@ -840,115 +812,54 @@
             const cards = getAllCards();
 
             const tokens = term.split(/\s+/).filter(t => t.length > 0);
-            let conditions = {
-                holo: null,
-                stage: null,
-                hp: null,
-                rarity: null,
-                nameTokens: []
-            };
-
+            let conditions = { holo: null, stage: null, hp: null, rarity: null, nameTokens: [] };
             const keywords = new Set(['holo', 'stage', 'hp', 'rarity']);
 
             let i = 0;
             while (i < tokens.length) {
                 const token = tokens[i];
-
                 if (token === 'holo') {
                     conditions.holo = true;
                     i++;
-                }
-                else if (token === 'stage' || token === 'hp' || token === 'rarity') {
+                } else if (token === 'stage' || token === 'hp' || token === 'rarity') {
                     const keyword = token;
                     i++;
                     let valueParts = [];
-                    while (i < tokens.length && !keywords.has(tokens[i]) && !tokens[i].includes(':')) {
-                        valueParts.push(tokens[i]);
-                        i++;
-                    }
+                    while (i < tokens.length && !keywords.has(tokens[i]) && !tokens[i].includes(':')) valueParts.push(tokens[i++]);
                     const valueStr = valueParts.join(' ');
-
-                    if (keyword === 'stage') {
-                        conditions.stage = valueStr.toLowerCase();
-                    } else if (keyword === 'hp') {
-                        const hpVal = parseInt(valueStr, 10);
-                        if (!isNaN(hpVal)) conditions.hp = hpVal;
-                    } else if (keyword === 'rarity') {
-                        conditions.rarity = valueStr.toLowerCase();
-                    }
-                }
-                else if (token.startsWith('stage:')) {
-                    conditions.stage = token.substring(6).toLowerCase();
-                    i++;
-                }
-                else if (token.startsWith('hp:')) {
-                    const hpVal = parseInt(token.substring(3), 10);
-                    if (!isNaN(hpVal)) conditions.hp = hpVal;
-                    i++;
-                }
+                    if (keyword === 'stage') conditions.stage = valueStr.toLowerCase();
+                    else if (keyword === 'hp') { const hpVal = parseInt(valueStr, 10); if (!isNaN(hpVal)) conditions.hp = hpVal; }
+                    else conditions.rarity = valueStr.toLowerCase();
+                } else if (token.startsWith('stage:')) { conditions.stage = token.substring(6).toLowerCase(); i++; }
+                else if (token.startsWith('hp:')) { const hpVal = parseInt(token.substring(3), 10); if (!isNaN(hpVal)) conditions.hp = hpVal; i++; }
                 else if (token.startsWith('rarity:')) {
                     let rarityValue = token.substring(7).toLowerCase();
                     i++;
-                    while (i < tokens.length && !keywords.has(tokens[i]) && !tokens[i].includes(':')) {
-                        rarityValue += ' ' + tokens[i].toLowerCase();
-                        i++;
-                    }
+                    while (i < tokens.length && !keywords.has(tokens[i]) && !tokens[i].includes(':')) rarityValue += ' ' + tokens[i++].toLowerCase();
                     conditions.rarity = rarityValue;
-                }
-                else {
+                } else {
                     conditions.nameTokens.push(token);
                     i++;
                 }
             }
 
-            let visibleCount = 0;
-
             cards.forEach(card => {
                 let match = true;
-
-                if (conditions.holo !== null) {
-                    const isHolo = card.dataset.holo === 'true';
-                    if (isHolo !== conditions.holo) match = false;
-                }
-
-                if (match && conditions.stage !== null) {
-                    const cardStage = card.dataset.stage;
-                    if (!cardStage || !cardStage.includes(conditions.stage)) match = false;
-                }
-
-                if (match && conditions.hp !== null) {
-                    const cardHp = parseInt(card.dataset.hp, 10);
-                    if (isNaN(cardHp) || cardHp !== conditions.hp) match = false;
-                }
-
-                if (match && conditions.rarity !== null) {
-                    const cardRarity = card.dataset.rarity || '';
-                    if (!cardRarity.includes(conditions.rarity)) match = false;
-                }
-
+                if (conditions.holo !== null && card.dataset.holo !== 'true') match = false;
+                if (match && conditions.stage !== null && !(card.dataset.stage || '').includes(conditions.stage)) match = false;
+                if (match && conditions.hp !== null && parseInt(card.dataset.hp, 10) !== conditions.hp) match = false;
+                if (match && conditions.rarity !== null && !(card.dataset.rarity || '').includes(conditions.rarity)) match = false;
                 if (match && conditions.nameTokens.length > 0) {
                     const cardName = card.dataset.name || '';
-                    for (let nameToken of conditions.nameTokens) {
-                        if (!cardName.includes(nameToken)) {
-                            match = false;
-                            break;
-                        }
-                    }
+                    for (let nameToken of conditions.nameTokens) { if (!cardName.includes(nameToken)) { match = false; break; } }
                 }
-
-                if (match) {
-                    card.style.display = 'flex';
-                    visibleCount++;
-                } else {
-                    card.style.display = 'none';
-                }
+                card.style.display = match ? 'flex' : 'none';
             });
 
             updateSectionVisibility();
         }
 
         searchInput.addEventListener('input', filterCards);
-
         clearBtn.addEventListener('click', function() {
             searchInput.value = '';
             filterCards();
