@@ -1,3 +1,9 @@
+<!--
+Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
+
+My Pokémon TCG collection page
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -544,241 +550,144 @@
 </div>
 
 <script>
-    (function() {
-
+    (function(){
         const BASE_URL = "https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/";
+        const IMAGE_BASE = "../images/pokemon/";
+        const RARITY_MAP = new Map([
+            ['common','common'],['uncommon','uncommon'],['rare','rare'],
+            ['double rare','double-rare'],['ultra rare','ultra-rare'],['illustration rare','illustration-rare'],
+            ['special illustration rare','special-illustration-rare'],['hyper rare','hyper-rare'],
+            ['shiny rare','shiny-rare'],['shiny ultra rare','shiny-ultra-rare'],['ace spec rare','ace-spec-rare'],
+            ['promo','promo']
+        ]);
 
-        function buildUrl(parts, index) {
+        const energyContainer = document.getElementById('energy-container');
+        const supportersContainer = document.getElementById('supporters-container');
+        const itemsContainer = document.getElementById('items-container');
+        const toolsContainer = document.getElementById('tools-container');
+        const pokemonTypeContainer = document.getElementById('pokemon-type-sections');
+        const searchInput = document.getElementById('searchInput');
+        const clearBtn = document.getElementById('clearSearch');
+        const noResultsDiv = document.getElementById('noResultsMessage');
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImage');
+
+        let allCards = [];
+        let energySection, trainersSection, pokemonSection;
+        let trainerSubsections = [];
+        let pokemonTypeBlocks = [];
+
+        const getImagePath = (name) => `${IMAGE_BASE}${encodeURIComponent(name)}.jpg`;
+        const buildUrl = (parts, index) => {
             const shortUrl = parts.length > index ? parts[index].trim() : '';
             return shortUrl ? BASE_URL + shortUrl.replace(/\/?$/, '/') : '';
-        }
-
-        window.openLightbox = function(src) {
-            document.getElementById('modalImage').src = src;
-            document.getElementById('imageModal').style.display = 'flex';
-            history.pushState({ modal: true }, '');
         };
 
-        window.closeModal = function(skipHistoryBack) {
-            const modal = document.getElementById('imageModal');
+        const normalizeRarity = (rarity) => {
+            if (!rarity) return '';
+            const key = rarity.toLowerCase().trim();
+            return RARITY_MAP.get(key) || 'unknown';
+        };
+
+        const getRarityBadge = (rarity) => {
+            if (!rarity) return '';
+            const normalized = normalizeRarity(rarity);
+            return `<span class="rarity-badge rarity-${normalized}">${escapeHtml(rarity)}</span>`;
+        };
+
+        const escapeHtml = (str) => {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+                return c;
+            });
+        };
+
+        const createCardHTML = (card, isPokemon = false, stage = '', hp = '') => {
+            const imgSrc = getImagePath(card.name);
+            const escapedImgSrc = imgSrc.replace(/'/g, "\\'");
+            const holoTag = card.holo ? '<span class="holo-indicator">H</span>' : '';
+            const linkIcon = card.url ? `<a href="${card.url}" target="_blank" rel="noopener" class="card-link-icon" title="View on Pokémon Database"><i class="fas fa-external-link-alt"></i></a>` : '';
+            const rarityBadgeHtml = getRarityBadge(card.rarity);
+            const qtyBadge = `<span class="qty-badge">×${card.count}</span>`;
+
+            let detailsHtml = '';
+            if (isPokemon) {
+                detailsHtml = `
+                    <div class="pokemon-details">
+                        <span><i class="fas fa-arrow-up"></i> ${escapeHtml(stage)}</span>
+                        <span class="hp-value">${hp} HP</span>
+                        ${rarityBadgeHtml}
+                    </div>
+                `;
+            } else {
+                detailsHtml = rarityBadgeHtml ? `<div class="item-rarity">${rarityBadgeHtml}</div>` : '';
+            }
+
+            const nameTag = isPokemon ? 'pokemon-name' : 'item-name';
+
+            return `
+                <div class="${isPokemon ? 'pokemon-card' : 'item-card'}" data-name="${escapeHtml(card.name.toLowerCase())}" data-holo="${card.holo}" data-rarity="${card.rarity ? card.rarity.toLowerCase() : ''}" ${isPokemon ? `data-stage="${stage.toLowerCase()}" data-hp="${hp}"` : ''}>
+                    ${qtyBadge}
+                    ${linkIcon}
+                    <img class="card-thumb" src="${imgSrc}" alt="${escapeHtml(card.name)}" onclick="openLightbox('${escapedImgSrc}')" loading="lazy">
+                    <div class="${nameTag}">
+                        ${escapeHtml(card.name)} ${holoTag}
+                    </div>
+                    ${detailsHtml}
+                </div>
+            `;
+        };
+
+        window.openLightbox = (src) => {
+            modalImg.src = src;
+            modal.style.display = 'flex';
+            history.pushState({ modal: true }, '');
+        };
+        window.closeModal = (skipHistoryBack = false) => {
             if (modal.style.display === 'flex') {
                 modal.style.display = 'none';
                 if (!skipHistoryBack) history.back();
             }
         };
+        window.addEventListener('popstate', () => { if (modal.style.display === 'flex') window.closeModal(true); });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') window.closeModal(); });
 
-        window.addEventListener('popstate', function() {
-            const modal = document.getElementById('imageModal');
-            if (modal.style.display === 'flex') {
-                window.closeModal(true);
-            }
-        });
+        const renderItems = (container, items) => {
+            container.innerHTML = items.map(item => createCardHTML(item, false)).join('');
+        };
 
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') window.closeModal();
-        });
-
-        function getImagePath(name) {
-            return `../images/pokemon/${encodeURIComponent(name)}.jpg`;
-        }
-
-        function normalizeRarity(rarity) {
-            if (!rarity) return '';
-            const map = {
-                'common': 'common',
-                'uncommon': 'uncommon',
-                'rare': 'rare',
-                'double rare': 'double-rare',
-                'ultra rare': 'ultra-rare',
-                'illustration rare': 'illustration-rare',
-                'special illustration rare': 'special-illustration-rare',
-                'hyper rare': 'hyper-rare',
-                'shiny rare': 'shiny-rare',
-                'shiny ultra rare': 'shiny-ultra-rare',
-                'ace spec rare': 'ace-spec-rare',
-                'promo': 'promo'
-            };
-            return map[rarity.toLowerCase().trim()] || 'unknown';
-        }
-
-        function getRarityBadge(rarity) {
-            if (!rarity) return '';
-            const normalized = normalizeRarity(rarity);
-            return `<span class="rarity-badge rarity-${normalized}">${rarity}</span>`;
-        }
-
-        function createItemCard(item) {
-            const imgSrc = getImagePath(item.name);
-            const escapedImgSrc = imgSrc.replace(/'/g, "\\'");
-            const dataName = item.name.replace(/"/g, '&quot;');
-            const holoTag = item.holo ? `<span class="holo-indicator">H</span>` : '';
-            const linkIcon = item.url ? `<a href="${item.url}" target="_blank" rel="noopener" class="card-link-icon" title="View on Pokémon Database"><i class="fas fa-external-link-alt"></i></a>` : '';
-            const rarityBadgeHtml = getRarityBadge(item.rarity);
-
-            return `
-            <div class="item-card" data-name="${dataName.toLowerCase()}" data-holo="${item.holo ? 'true' : 'false'}" data-rarity="${item.rarity ? item.rarity.toLowerCase() : ''}">
-                <span class="qty-badge">×${item.count}</span>
-                ${linkIcon}
-                <img class="card-thumb" src="${imgSrc}" alt="${item.name}" onclick="openLightbox('${escapedImgSrc}')" loading="lazy">
-                <div class="item-name">
-                    ${item.name} ${holoTag}
-                </div>
-                ${rarityBadgeHtml ? `<div class="item-rarity">${rarityBadgeHtml}</div>` : ''}
-            </div>
-        `;
-        }
-
-        const typeSections = document.getElementById('pokemon-type-sections');
-
-        function renderPokemonByType(pokemonByType) {
-            typeSections.innerHTML = '';
-            for (let [type, mons] of Object.entries(pokemonByType)) {
+        const renderPokemon = (pokemonByType) => {
+            pokemonTypeContainer.innerHTML = '';
+            const fragment = document.createDocumentFragment();
+            for (const [type, mons] of Object.entries(pokemonByType)) {
                 const typeLower = type.toLowerCase();
                 const sectionDiv = document.createElement('div');
                 sectionDiv.classList.add('pokemon-type-block');
-                sectionDiv.innerHTML = `<h3 class="subsection-title"><i class="fas fa-${typeLower === 'dragon' ? 'dragon' : 'paw'}"></i> ${type}</h3>`;
+                sectionDiv.innerHTML = `<h3 class="subsection-title"><i class="fas fa-${typeLower === 'dragon' ? 'dragon' : 'paw'}"></i> ${escapeHtml(type)}</h3>`;
                 const grid = document.createElement('div');
                 grid.className = 'card-grid';
-
                 mons.forEach(p => {
-                    const card = document.createElement('div');
-                    card.className = `pokemon-card type-${typeLower}`;
-                    card.setAttribute('data-name', p.name.toLowerCase());
-                    card.setAttribute('data-stage', p.stage.toLowerCase());
-                    card.setAttribute('data-hp', p.hp);
-                    card.setAttribute('data-holo', p.holo ? 'true' : 'false');
-                    card.setAttribute('data-rarity', p.rarity ? p.rarity.toLowerCase() : '');
-                    const imgSrc = getImagePath(p.name);
-                    const escapedImgSrc = imgSrc.replace(/'/g, "\\'");
-                    const holoTag = p.holo ? '<span class="holo-indicator">H</span>' : '';
-                    const linkIcon = p.url ? `<a href="${p.url}" target="_blank" rel="noopener" class="card-link-icon" title="View on Pokémon Database"><i class="fas fa-external-link-alt"></i></a>` : '';
-                    const rarityBadgeHtml = getRarityBadge(p.rarity);
-
-                    card.innerHTML = `
-                    <span class="qty-badge">×${p.count}</span>
-                    ${linkIcon}
-                    <img class="card-thumb" src="${imgSrc}" alt="${p.name}" onclick="openLightbox('${escapedImgSrc}')" loading="lazy">
-                    <div class="pokemon-name">
-                        ${p.name}${holoTag}
-                    </div>
-                    <div class="pokemon-details">
-                        <span><i class="fas fa-arrow-up"></i> ${p.stage}</span>
-                        <span class="hp-value">${p.hp} HP</span>
-                        ${rarityBadgeHtml}
-                    </div>
-                `;
-                    grid.appendChild(card);
+                    const cardHTML = createCardHTML(p, true, p.stage, p.hp);
+                    grid.insertAdjacentHTML('beforeend', cardHTML);
                 });
-
                 sectionDiv.appendChild(grid);
-                typeSections.appendChild(sectionDiv);
+                fragment.appendChild(sectionDiv);
             }
-            filterCards();
-        }
+            pokemonTypeContainer.appendChild(fragment);
+        };
 
-        fetch('../data/pokemon.txt')
-            .then(response => {
-            if (!response.ok) throw new Error('Failed to load cards data');
-            return response.text();
-        })
-            .then(data => {
-            const lines = data.split('\n').filter(line => line.trim() !== '');
-            const energies = [], supporters = [], items = [], tools = [], pokemonByType = {};
+        const updateSectionVisibility = () => {
+            const countVisibleInGrid = (grid) => grid ? Array.from(grid.children).filter(card => card.style.display !== 'none').length : 0;
 
-            lines.forEach(line => {
-                const parts = line.split(';').map(s => s.trim());
-                if (parts.length < 2) return;
-                const category = parts[0];
-
-                switch(category) {
-                    case 'ENERGY': {
-                        const [ , name, countStr, holoStr ] = parts;
-                        const count = parseInt(countStr, 10);
-                        const holo = holoStr?.toLowerCase() === 'true';
-                        const url = buildUrl(parts, 4);
-                        const rarity = parts[5] || '';
-                        energies.push({ name, count, holo, url, rarity });
-                        break;
-                    }
-                    case 'SUPPORTER': {
-                        const [ , name, countStr, holoStr ] = parts;
-                        const count = parseInt(countStr, 10);
-                        const holo = holoStr?.toLowerCase() === 'true';
-                        const url = buildUrl(parts, 4);
-                        const rarity = parts[5] || '';
-                        supporters.push({ name, count, holo, url, rarity });
-                        break;
-                    }
-                    case 'ITEM': {
-                        const [ , name, countStr, holoStr ] = parts;
-                        const count = parseInt(countStr, 10);
-                        const holo = holoStr?.toLowerCase() === 'true';
-                        const url = buildUrl(parts, 4);
-                        const rarity = parts[5] || '';
-                        items.push({ name, count, holo, url, rarity });
-                        break;
-                    }
-                    case 'TOOL': {
-                        const [ , name, countStr, holoStr ] = parts;
-                        const count = parseInt(countStr, 10);
-                        const holo = holoStr?.toLowerCase() === 'true';
-                        const url = buildUrl(parts, 4);
-                        const rarity = parts[5] || '';
-                        tools.push({ name, count, holo, url, rarity });
-                        break;
-                    }
-                    case 'POKEMON': {
-                        const [ , name, stage, hpStr, countStr, type, holoStr ] = parts;
-                        const hp = parseInt(hpStr, 10);
-                        const count = parseInt(countStr, 10);
-                        const holo = holoStr?.toLowerCase() === 'true';
-                        const url = buildUrl(parts, 7);
-                        const rarity = parts[8] || '';
-                        if (!pokemonByType[type]) pokemonByType[type] = [];
-                        pokemonByType[type].push({ name, stage, hp, count, holo, url, rarity });
-                        break;
-                    }
-                    default:
-                        console.warn('Unknown category:', category);
-                }
-            });
-
-            document.getElementById('energy-container').innerHTML = energies.map(createItemCard).join('');
-            document.getElementById('supporters-container').innerHTML = supporters.map(createItemCard).join('');
-            document.getElementById('items-container').innerHTML = items.map(createItemCard).join('');
-            document.getElementById('tools-container').innerHTML = tools.map(createItemCard).join('');
-            renderPokemonByType(pokemonByType);
-        })
-            .catch(error => {
-            console.error('Error loading cards:', error);
-            document.getElementById('energy-container').innerHTML = '<p style="color: red;">Failed to load energies.</p>';
-            document.getElementById('supporters-container').innerHTML = '<p style="color: red;">Failed to load supporters.</p>';
-            document.getElementById('items-container').innerHTML = '<p style="color: red;">Failed to load items.</p>';
-            document.getElementById('tools-container').innerHTML = '<p style="color: red;">Failed to load tools.</p>';
-            typeSections.innerHTML = '<p style="color: red;">Failed to load Pokémon data.</p>';
-        });
-
-        const searchInput = document.getElementById('searchInput');
-        const clearBtn = document.getElementById('clearSearch');
-        const noResultsDiv = document.getElementById('noResultsMessage');
-
-        function getAllCards() {
-            return [...document.querySelectorAll('.item-card, .pokemon-card')];
-        }
-
-        function updateSectionVisibility() {
-            function countVisibleInGrid(grid) {
-                if (!grid) return 0;
-                return Array.from(grid.children).filter(card => card.style.display !== 'none').length;
+            if (energySection && energyContainer) {
+                energySection.style.display = countVisibleInGrid(energyContainer) > 0 ? 'block' : 'none';
             }
 
-            const energySection = document.getElementById('energies');
-            const energyGrid = document.getElementById('energy-container');
-            if (energySection && energyGrid) {
-                energySection.style.display = countVisibleInGrid(energyGrid) > 0 ? 'block' : 'none';
-            }
-
-            const trainerSubsections = document.querySelectorAll('.trainer-subsection');
             let anyTrainerVisible = false;
             trainerSubsections.forEach(sub => {
                 const grid = sub.querySelector('.card-grid');
@@ -786,35 +695,25 @@
                 sub.style.display = visibleCount > 0 ? 'block' : 'none';
                 if (visibleCount > 0) anyTrainerVisible = true;
             });
-
-            const trainersSection = document.getElementById('trainers');
             if (trainersSection) trainersSection.style.display = anyTrainerVisible ? 'block' : 'none';
 
-            const typeBlocks = document.querySelectorAll('.pokemon-type-block');
             let anyPokemonVisible = false;
-            typeBlocks.forEach(block => {
+            pokemonTypeBlocks.forEach(block => {
                 const grid = block.querySelector('.card-grid');
                 const visibleCount = countVisibleInGrid(grid);
                 block.style.display = visibleCount > 0 ? 'block' : 'none';
                 if (visibleCount > 0) anyPokemonVisible = true;
             });
-
-            const pokemonSection = document.getElementById('pokemon');
             if (pokemonSection) pokemonSection.style.display = anyPokemonVisible ? 'block' : 'none';
 
-            const allCards = getAllCards();
             const totalVisible = allCards.filter(card => card.style.display !== 'none').length;
             noResultsDiv.style.display = totalVisible === 0 ? 'block' : 'none';
-        }
+        };
 
-        function filterCards() {
-            const term = searchInput.value.trim().toLowerCase();
-            const cards = getAllCards();
-
-            const tokens = term.split(/\s+/).filter(t => t.length > 0);
-            let conditions = { holo: null, stage: null, hp: null, rarity: null, nameTokens: [] };
+        const parseSearchTokens = (term) => {
+            const tokens = term.toLowerCase().split(/\s+/).filter(t => t);
+            const conditions = { holo: null, stage: null, hp: null, rarity: null, nameTokens: [] };
             const keywords = new Set(['holo', 'stage', 'hp', 'rarity']);
-
             let i = 0;
             while (i < tokens.length) {
                 const token = tokens[i];
@@ -827,46 +726,140 @@
                     let valueParts = [];
                     while (i < tokens.length && !keywords.has(tokens[i]) && !tokens[i].includes(':')) valueParts.push(tokens[i++]);
                     const valueStr = valueParts.join(' ');
-                    if (keyword === 'stage') conditions.stage = valueStr.toLowerCase();
+                    if (keyword === 'stage') conditions.stage = valueStr;
                     else if (keyword === 'hp') { const hpVal = parseInt(valueStr, 10); if (!isNaN(hpVal)) conditions.hp = hpVal; }
-                    else conditions.rarity = valueStr.toLowerCase();
-                } else if (token.startsWith('stage:')) { conditions.stage = token.substring(6).toLowerCase(); i++; }
-                else if (token.startsWith('hp:')) { const hpVal = parseInt(token.substring(3), 10); if (!isNaN(hpVal)) conditions.hp = hpVal; i++; }
-                else if (token.startsWith('rarity:')) {
-                    let rarityValue = token.substring(7).toLowerCase();
+                    else if (keyword === 'rarity') conditions.rarity = valueStr;
+                } else if (token.startsWith('stage:')) {
+                    conditions.stage = token.substring(6);
                     i++;
-                    while (i < tokens.length && !keywords.has(tokens[i]) && !tokens[i].includes(':')) rarityValue += ' ' + tokens[i++].toLowerCase();
+                } else if (token.startsWith('hp:')) {
+                    const hpVal = parseInt(token.substring(3), 10);
+                    if (!isNaN(hpVal)) conditions.hp = hpVal;
+                    i++;
+                } else if (token.startsWith('rarity:')) {
+                    let rarityValue = token.substring(7);
+                    i++;
+                    while (i < tokens.length && !keywords.has(tokens[i]) && !tokens[i].includes(':')) rarityValue += ' ' + tokens[i++];
                     conditions.rarity = rarityValue;
                 } else {
                     conditions.nameTokens.push(token);
                     i++;
                 }
             }
+            return conditions;
+        };
 
-            cards.forEach(card => {
-                let match = true;
-                if (conditions.holo !== null && card.dataset.holo !== 'true') match = false;
-                if (match && conditions.stage !== null && !(card.dataset.stage || '').includes(conditions.stage)) match = false;
-                if (match && conditions.hp !== null && parseInt(card.dataset.hp, 10) !== conditions.hp) match = false;
-                if (match && conditions.rarity !== null && !(card.dataset.rarity || '').includes(conditions.rarity)) match = false;
-                if (match && conditions.nameTokens.length > 0) {
-                    const cardName = card.dataset.name || '';
-                    for (let nameToken of conditions.nameTokens) { if (!cardName.includes(nameToken)) { match = false; break; } }
+        const matchesCard = (card, conditions) => {
+            if (conditions.holo !== null && card.dataset.holo !== 'true') return false;
+            if (conditions.stage !== null && !(card.dataset.stage || '').includes(conditions.stage)) return false;
+            if (conditions.hp !== null && parseInt(card.dataset.hp, 10) !== conditions.hp) return false;
+            if (conditions.rarity !== null && !(card.dataset.rarity || '').includes(conditions.rarity)) return false;
+            if (conditions.nameTokens.length) {
+                const cardName = card.dataset.name || '';
+                for (let token of conditions.nameTokens) {
+                    if (!cardName.includes(token)) return false;
                 }
-                card.style.display = match ? 'flex' : 'none';
-            });
+            }
+            return true;
+        };
 
-            updateSectionVisibility();
-        }
+        let filterDebounceTimer = null;
+        const filterCards = () => {
+            if (filterDebounceTimer) clearTimeout(filterDebounceTimer);
+            filterDebounceTimer = setTimeout(() => {
+                const term = searchInput.value.trim();
+                const conditions = term ? parseSearchTokens(term) : { holo: null, stage: null, hp: null, rarity: null, nameTokens: [] };
+                for (let card of allCards) {
+                    card.style.display = matchesCard(card, conditions) ? 'flex' : 'none';
+                }
+                updateSectionVisibility();
+                filterDebounceTimer = null;
+            }, 16);
+        };
 
-        searchInput.addEventListener('input', filterCards);
-        clearBtn.addEventListener('click', function() {
-            searchInput.value = '';
-            filterCards();
-            searchInput.focus();
-        });
+        const loadData = async () => {
+            try {
+                const response = await fetch('../data/pokemon.txt');
+                if (!response.ok) throw new Error('Failed to load cards data');
+                const text = await response.text();
+                const lines = text.split('\n').filter(line => line.trim() !== '');
+
+                const energies = [], supporters = [], items = [], tools = [], pokemonByType = {};
+
+                for (const line of lines) {
+                    const parts = line.split(';').map(s => s.trim());
+                    if (parts.length < 2) continue;
+                    const category = parts[0];
+
+                    switch(category) {
+                        case 'ENERGY': {
+                            const [ , name, countStr, holoStr ] = parts;
+                            energies.push({ name, count: parseInt(countStr,10), holo: holoStr?.toLowerCase() === 'true', url: buildUrl(parts,4), rarity: parts[5] || '' });
+                            break;
+                        }
+                        case 'SUPPORTER': {
+                            const [ , name, countStr, holoStr ] = parts;
+                            supporters.push({ name, count: parseInt(countStr,10), holo: holoStr?.toLowerCase() === 'true', url: buildUrl(parts,4), rarity: parts[5] || '' });
+                            break;
+                        }
+                        case 'ITEM': {
+                            const [ , name, countStr, holoStr ] = parts;
+                            items.push({ name, count: parseInt(countStr,10), holo: holoStr?.toLowerCase() === 'true', url: buildUrl(parts,4), rarity: parts[5] || '' });
+                            break;
+                        }
+                        case 'TOOL': {
+                            const [ , name, countStr, holoStr ] = parts;
+                            tools.push({ name, count: parseInt(countStr,10), holo: holoStr?.toLowerCase() === 'true', url: buildUrl(parts,4), rarity: parts[5] || '' });
+                            break;
+                        }
+                        case 'POKEMON': {
+                            const [ , name, stage, hpStr, countStr, type, holoStr ] = parts;
+                            const hp = parseInt(hpStr,10);
+                            if (!pokemonByType[type]) pokemonByType[type] = [];
+                            pokemonByType[type].push({ name, stage, hp, count: parseInt(countStr,10), holo: holoStr?.toLowerCase() === 'true', url: buildUrl(parts,7), rarity: parts[8] || '' });
+                            break;
+                        }
+                        default: break;
+                    }
+                }
+
+                renderItems(energyContainer, energies);
+                renderItems(supportersContainer, supporters);
+                renderItems(itemsContainer, items);
+                renderItems(toolsContainer, tools);
+                renderPokemon(pokemonByType);
+
+                energySection = document.getElementById('energies');
+                trainersSection = document.getElementById('trainers');
+                pokemonSection = document.getElementById('pokemon');
+                trainerSubsections = Array.from(document.querySelectorAll('.trainer-subsection'));
+                pokemonTypeBlocks = Array.from(document.querySelectorAll('.pokemon-type-block'));
+
+                const itemCards = Array.from(document.querySelectorAll('.item-card'));
+                const pokemonCards = Array.from(document.querySelectorAll('.pokemon-card'));
+                allCards = [...itemCards, ...pokemonCards];
+
+                updateSectionVisibility();
+
+                searchInput.addEventListener('input', filterCards);
+                clearBtn.addEventListener('click', () => {
+                    searchInput.value = '';
+                    filterCards();
+                    searchInput.focus();
+                });
+            } catch (error) {
+                console.error('Error loading cards:', error);
+                const errorMsg = '<p style="color: red;">Failed to load cards data.</p>';
+                energyContainer.innerHTML = errorMsg;
+                supportersContainer.innerHTML = errorMsg;
+                itemsContainer.innerHTML = errorMsg;
+                toolsContainer.innerHTML = errorMsg;
+                pokemonTypeContainer.innerHTML = errorMsg;
+            }
+        };
+
+        loadData();
     })();
 </script>
-
 </body>
 </html>
