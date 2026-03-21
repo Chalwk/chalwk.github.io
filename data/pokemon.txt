@@ -1,13 +1,14 @@
+ENERGY;Boomerang Energy;1;false;sv06/166/;Uncommon
+ENERGY;Darkness Energy;2;false;sve/7/;Common
+ENERGY;Fighting Energy;5;false;mee/6/;Common
 ENERGY;Fire Energy;18;false;sve/2/;Common
 ENERGY;Fusion Strike Energy;1;false;swsh8/244/;Uncommon
 ENERGY;Grass Energy;21;false;mee/1/;Common
 ENERGY;Lightning Energy;29;false;sve/4/;Common
-ENERGY;Water Energy;27;false;sve2/11/;Common
-ENERGY;Boomerang Energy;1;false;sv06/166/;Uncommon
-ENERGY;Darkness Energy;2;false;sve/7/;Common
-ENERGY;Fighting Energy;5;false;mee/6/;Common
+ENERGY;Metal Energy;10;false;mee/8/;Common
 ENERGY;Psychic Energy;1;true;sve3/21/;Common
 ENERGY;Psychic Energy;4;false;sve/5/;Common
+ENERGY;Water Energy;27;false;sve2/11/;Common
 ITEM;Energy Loto;1;false;swsh10/140/;Uncommon
 ITEM;Great Ball;4;false;sv02/183/;Common
 ITEM;Potion;2;false;sv01/188/;Common
@@ -17,12 +18,16 @@ ITEM;Switch;2;false;sv01/194/;Common
 ITEM;Techno Radar;1;true;sv04/180/;Uncommon
 ITEM;Unidentified Fossil;1;false;swsh12/165/;Uncommon
 POKEMON;Abra;Basic;50;1;Psychic;false;me01/54/;Common
+POKEMON;Aipom;Basic;70;1;Colorless;false;me02/78/;Common
+POKEMON;Alcremie;Stage 1;90;2;Psychic;false;me02/44/;Uncommon
 POKEMON;Arcanine;Stage 1;140;1;Fire;false;sv10/28/;Uncommon
 POKEMON;Boltund;Stage 1;130;1;Electric;false;me02/31/;Common
 POKEMON;Brambleghast;Stage 1;100;1;Psychic;false;me02/47/;Uncommon
 POKEMON;Braviary;Stage 1;130;1;Colorless;false;me2pt5/174/;Uncommon
 POKEMON;Bulbasaur;Basic;80;1;Grass;false;me01/1/;Common
 POKEMON;Centiskorch;Stage 1;140;1;Fire;false;sv05/37/;Uncommon
+POKEMON;Ceruledge;Stage 1;140;1;Fire;false;me02/20/;Uncommon
+POKEMON;Charcadet;Basic;70;1;Fire;false;me02/19/;Common
 POKEMON;Charizard EX;Stage 2;330;1;Fire;true;sv3pt5/6/;Double Rare
 POKEMON;Charmander 1;Basic;60;1;Fire;false;sv03/26/;Common
 POKEMON;Charmander 2;Basic;80;2;Fire;false;me02/11/;Common
@@ -41,6 +46,7 @@ POKEMON;Garbodor;Stage 1;140;1;Darkness;false;rsv10pt5/60/;Uncommon
 POKEMON;Gastly 1;Basic;50;1;Psychic;false;sv3pt5/92/;Common
 POKEMON;Gastly 2;Basic;70;1;Darkness;false;me2pt5/123/;Common
 POKEMON;Gible;Basic;70;1;Fighting;false;me2pt5/109/;Common
+POKEMON;Gimmighoul;Basic;70;1;Psychic;false;me01/67/;Common
 POKEMON;Girafarig;Basic;100;1;Colorless;false;sv02/154/;Common
 POKEMON;Greavard;Basic;80;1;Psychic;false;me01/65/;Common
 POKEMON;Grimer;Basic;80;1;Darkness;false;swsh9/84/;Common
@@ -60,9 +66,11 @@ POKEMON;Kangaskhan;Basic;120;1;Colorless;false;sv10/151/;Common
 POKEMON;Kilowattrel;Stage 1;120;2;Electric;false;sv02/82/;Uncommon
 POKEMON;Lanturn;Stage 1;120;1;Electric;false;swsh7/53/;Uncommon
 POKEMON;Liepard;Stage 1;100;2;Darkness;false;swsh12pt5/78/;Rare
+POKEMON;Ludicolo;Stage 2;160;1;Grass;false;me02/7/;Uncommon
 POKEMON;Lumineon;Stage 1;90;1;Water;false;swsh11/41/;Uncommon
 POKEMON;Magikarp;Basic;30;1;Water;false;pgo/21/;Common
 POKEMON;Magmar;Basic;90;1;Fire;false;swsh9/19/;Common
+POKEMON;Magneton;Stage 1;90;1;Electric;false;me01/46/;Common
 POKEMON;Magnezone;Stage 2;160;1;Electric;false;me01/47/;Uncommon
 POKEMON;Mamoswine;Stage 2;180;1;Water;false;me02/25/;Uncommon
 POKEMON;Meowth;Basic;70;1;Colorless;false;me2pt5/161/;Common
@@ -73,6 +81,7 @@ POKEMON;Mr. Mime;Basic;80;1;Water;false;swsh12pt5/30/;Common
 POKEMON;Murkrow;Basic;80;1;Darkness;false;me2pt5/126/;Common
 POKEMON;Nacli;Basic;60;1;Rock;false;sv04/101/;Common
 POKEMON;Naclstack;Stage 1;110;1;Rock;false;me01/83/;Common
+POKEMON;Ninetales;Stage 1;120;1;Fire;false;me01/20/;Uncommon
 POKEMON;Numel;Basic;80;1;Fire;false;pgo/13/;Common
 POKEMON;Pawmi;Basic;60;3;Electric;false;me02/32/;Common
 POKEMON;Pawmo;Stage 1;80;2;Electric;false;sv02/75/;Uncommon
@@ -83,32 +92,43 @@ POKEMON;Poltchageist;Basic;30;1;Grass;false;sv06/20/;Common
 POKEMON;Polteageist;Stage 1;70;1;Psychic;false;sv03/98/;Uncommon
 POKEMON;Ponyta;Basic;60;1;Fire;false;swsh10/21/;Common
 POKEMON;Poochyena;Basic;70;1;Darkness;false;me2pt5/128/;Common
+POKEMON;Prinplup;Stage 1;100;1;Water;false;me02/28/;Common
 POKEMON;Rapidash;Stage 1;100;1;Fire;false;swsh10/22/;Rare
 POKEMON;Rayquaza EX;Basic;180;1;Dragon;true;xy6/60/;Rare
 POKEMON;Relicanth;Basic;90;1;Water;false;swsh12/44/;Common
 POKEMON;Reshiram;Basic;130;1;Fire;false;sv07/22/;Uncommon
+POKEMON;Sableye;Basic;80;1;Darkness;false;me02/59/;Common
 POKEMON;Salandit;Basic;70;1;Fire;false;me2pt5/34/;Common
 POKEMON;Salazzle;Stage 1;120;1;Fire;false;me2pt5/35/;Uncommon
+POKEMON;Sandshrew;Basic;70;1;Fighting;false;me01/68/;Common
 POKEMON;Sandslash;Stage 1;120;1;Rock;false;me01/69/;Common
 POKEMON;Scream Tail;Basic;90;1;Psychic;false;sv8pt5/42/;Uncommon
 POKEMON;Sealeo;Stage 1;110;1;Water;false;swsh6/38/;Uncommon
 POKEMON;Sharpedo 1;Stage 1;100;1;Darkness;false;swsh8/163/;Uncommon
 POKEMON;Sharpedo 2;Stage 1;120;1;Water;false;sv05/43/;Uncommon
+POKEMON;Shedinja;Stage 1;60;1;Psychic;false;me01/61/;Uncommon
 POKEMON;Shellder;Basic;70;1;Water;false;swsh8/50/;Common
 POKEMON;Shelmet;Basic;60;1;Grass;false;rsv10pt5/8/;Common
-POKEMON;Shiftry;Stage 2;160;1;Grass;false;me01/15/;Uncommon
+POKEMON;Shiftry;Stage 2;160;2;Grass;false;me01/15/;Uncommon
 POKEMON;Shroodle;Basic;60;1;Darkness;false;sv02/145/;Common
 POKEMON;Shroomish;Basic;50;1;Grass;false;swsh9/3/;Common
+POKEMON;Sizzlipede;Basic;80;1;Fire;false;me01/29/;Common
 POKEMON;Slowbro;Stage 1;120;2;Water;false;pgo/20/;Uncommon
 POKEMON;Slowking;Stage 1;130;1;Water;false;sv8pt5/19/;Uncommon
 POKEMON;Slowpoke;Basic;70;1;Water;false;sv8pt5/18/;Common
 POKEMON;Smeargle;Basic;70;1;Colorless;false;swsh8/209/;Common
 POKEMON;Sneasel;Basic;70;1;Water;false;swsh6/30/;Common
+POKEMON;Snubbull;Basic;70;1;Psychic;false;me02/37/;Common
+POKEMON;Sobble;Basic;70;1;Water;false;me01/39/;Common
+POKEMON;Solrock;Basic;110;1;Fighting;false;me01/75/;Uncommon
+POKEMON;Spearow;Basic;60;1;Colorless;false;me01/102/;Common
 POKEMON;Spinarak;Basic;60;1;Grass;false;pgo/6/;Common
 POKEMON;Steelix;Stage 1;180;1;Metal;false;pgo/44/;Uncommon
 POKEMON;Stoutland;Stage 2;160;1;Colorless;false;swsh7/135/;Rare
+POKEMON;Stufful;Basic;70;1;Colorless;false;me01/111/;Common
 POKEMON;Sudowoodo;Basic;110;1;Rock;false;swsh10/74/;Common
 POKEMON;Suicune;Basic;120;2;Water;false;sv8pt5/24/;Uncommon
+POKEMON;Swinub;Basic;70;1;Water;false;me02/23/;Common
 POKEMON;Tarountula;Basic;50;1;Grass;false;me2pt5/18/;Common
 POKEMON;Thievul 1;Stage 1;100;2;Darkness;false;swsh7/105/;Rare
 POKEMON;Thievul 2;Stage 1;120;1;Darkness;false;me01/90/;Common
