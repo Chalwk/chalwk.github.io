@@ -67,6 +67,18 @@ My Pokémon TCG Collection - Script
 
     const PLACEHOLDER_SVG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100%25' height='100%25' fill='%23e0e0e0'/%3E%3C/svg%3E";
 
+    const formatResistance = (resistance) => {
+        if (!resistance) return [];
+        if (typeof resistance === 'object' && !Array.isArray(resistance) && resistance.symbol && resistance.value !== undefined) {
+            const reduction = -resistance.value;
+            return [`${resistance.symbol} ${reduction}`];
+        }
+        if (Array.isArray(resistance)) {
+            return resistance;
+        }
+        return [];
+    };
+
     const createCardHTML = (card, isPokemon = false) => {
         const imgSrc = getImagePath(card.name);
         const escapedImgSrc = imgSrc.replace(/'/g, "\\'");
@@ -114,8 +126,9 @@ My Pokémon TCG Collection - Script
                 weaknessesHtml = `<div class="weakness"><span class="stat-label">Weakness:</span> ${card.weakness.map(w => `<span class="type-badge">${escapeHtml(w)}</span>`).join('')}</div>`;
             }
             let resistancesHtml = '';
-            if (card.resistance && card.resistance.length) {
-                resistancesHtml = `<div class="resistance"><span class="stat-label">Resistance:</span> ${card.resistance.map(r => `<span class="type-badge">${escapeHtml(r)}</span>`).join('')}</div>`;
+            const resistanceArray = formatResistance(card.resistance);
+            if (resistanceArray.length) {
+                resistancesHtml = `<div class="resistance"><span class="stat-label">Resistance:</span> ${resistanceArray.map(r => `<span class="type-badge">${escapeHtml(r)}</span>`).join('')}</div>`;
             }
             let retreatHtml = '';
             if (card.retreatCost && card.retreatCost > 0) {
@@ -473,7 +486,7 @@ My Pokémon TCG Collection - Script
                         rarity,
                         attacks: attacks || [],
                         weakness: weakness || [],
-                        resistance: resistance || [],
+                        resistance: resistance,
                         retreatCost: retreatCost || 0
                     });
                 });
