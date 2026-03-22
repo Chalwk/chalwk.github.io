@@ -363,8 +363,6 @@ My Pokémon TCG Collection - Stylesheet
             if (!response.ok) throw new Error('Failed to load cards data');
             const data = await response.json();
             const energies = [], supporters = [], items = [], tools = [], pokemonByType = {};
-            const stageMap = { 1: 'Basic', 2: 'Stage 1', 3: 'Stage 2', 4: 'Stage 3' };
-            const mapStage = (stageNum) => stageMap[stageNum] || `Stage ${stageNum}`;
 
             if (data.ENERGY) {
                 data.ENERGY.forEach(entry => {
@@ -420,15 +418,14 @@ My Pokémon TCG Collection - Stylesheet
 
             if (data.POKEMON) {
                 data.POKEMON.forEach(entry => {
-                    const [name, hp, stageNum, type, holo, setPart, rarity] = entry;
-                    const stageStr = mapStage(stageNum);
+                    const [name, hp, stage, count, type, holo, setPart, rarity] = entry;
                     if (!pokemonByType[type]) pokemonByType[type] = [];
                     pokemonByType[type].push({
                         name,
                         hp: parseInt(hp, 10),
-                        stage: stageStr,
+                        stage: stage,
                         type,
-                        count: 1,
+                        count: parseInt(count, 10),
                         holo: holo === true || holo === 'true',
                         url: buildUrlFromPart(setPart),
                         rarity
