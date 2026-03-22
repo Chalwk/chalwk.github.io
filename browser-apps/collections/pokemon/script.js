@@ -38,10 +38,7 @@ My Pokémon TCG Collection - Stylesheet
     let lazyObserver = null;
 
     const getImagePath = (name) => `${IMAGE_BASE}${encodeURIComponent(name)}.jpg`;
-    const buildUrl = (parts, index) => {
-        const shortUrl = parts.length > index ? parts[index].trim() : '';
-        return shortUrl ? BASE_URL + shortUrl.replace(/\/?$/, '/') : '';
-    };
+    const buildUrlFromPart = (part) => part ? BASE_URL + part.replace(/\/?$/, '/') : '';
 
     const normalizeRarity = (rarity) => {
         if (!rarity) return '';
@@ -362,48 +359,81 @@ My Pokémon TCG Collection - Stylesheet
 
     const loadData = async () => {
         try {
-            const response = await fetch('pokemon.txt');
+            const response = await fetch('database.json');
             if (!response.ok) throw new Error('Failed to load cards data');
-            const text = await response.text();
-            const lines = text.split('\n').filter(line => line.trim() !== '');
-
+            const data = await response.json();
             const energies = [], supporters = [], items = [], tools = [], pokemonByType = {};
+            const stageMap = { 1: 'Basic', 2: 'Stage 1', 3: 'Stage 2', 4: 'Stage 3' };
+            const mapStage = (stageNum) => stageMap[stageNum] || `Stage ${stageNum}`;
 
-            for (const line of lines) {
-                const parts = line.split(';').map(s => s.trim());
-                if (parts.length < 2) continue;
-                const category = parts[0];
+            if (data.ENERGY) {
+                data.ENERGY.forEach(entry => {
+                    const [name, count, holo, setPart, rarity] = entry;
+                    energies.push({
+                        name,
+                        count: parseInt(count, 10),
+                        holo: holo === true || holo === 'true',
+                        url: buildUrlFromPart(setPart),
+                        rarity
+                    });
+                });
+            }
 
-                switch(category) {
-                    case 'ENERGY': {
-                        const [ , name, countStr, holoStr ] = parts;
-                        energies.push({ name, count: parseInt(countStr,10), holo: holoStr?.toLowerCase() === 'true', url: buildUrl(parts,4), rarity: parts[5] || '' });
-                        break;
-                    }
-                    case 'SUPPORTER': {
-                        const [ , name, countStr, holoStr ] = parts;
-                        supporters.push({ name, count: parseInt(countStr,10), holo: holoStr?.toLowerCase() === 'true', url: buildUrl(parts,4), rarity: parts[5] || '' });
-                        break;
-                    }
-                    case 'ITEM': {
-                        const [ , name, countStr, holoStr ] = parts;
-                        items.push({ name, count: parseInt(countStr,10), holo: holoStr?.toLowerCase() === 'true', url: buildUrl(parts,4), rarity: parts[5] || '' });
-                        break;
-                    }
-                    case 'TOOL': {
-                        const [ , name, countStr, holoStr ] = parts;
-                        tools.push({ name, count: parseInt(countStr,10), holo: holoStr?.toLowerCase() === 'true', url: buildUrl(parts,4), rarity: parts[5] || '' });
-                        break;
-                    }
-                    case 'POKEMON': {
-                        const [ , name, stage, hpStr, countStr, type, holoStr ] = parts;
-                        const hp = parseInt(hpStr,10);
-                        if (!pokemonByType[type]) pokemonByType[type] = [];
-                        pokemonByType[type].push({ name, stage, hp, count: parseInt(countStr,10), holo: holoStr?.toLowerCase() === 'true', url: buildUrl(parts,7), rarity: parts[8] || '' });
-                        break;
-                    }
-                    default: break;
-                }
+            if (data.SUPPORTER) {
+                data.SUPPORTER.forEach(entry => {
+                    const [name, count, holo, setPart, rarity] = entry;
+                    supporters.push({
+                        name,
+                        count: parseInt(count, 10),
+                        holo: holo === true || holo === 'true',
+                        url: buildUrlFromPart(setPart),
+                        rarity
+                    });
+                });
+            }
+
+            if (data.ITEM) {
+                data.ITEM.forEach(entry => {
+                    const [name, count, holo, setPart, rarity] = entry;
+                    items.push({
+                        name,
+                        count: parseInt(count, 10),
+                        holo: holo === true || holo === 'true',
+                        url: buildUrlFromPart(setPart),
+                        rarity
+                    });
+                });
+            }
+
+            if (data.TOOL) {
+                data.TOOL.forEach(entry => {
+                    const [name, count, holo, setPart, rarity] = entry;
+                    tools.push({
+                        name,
+                        count: parseInt(count, 10),
+                        holo: holo === true || holo === 'true',
+                        url: buildUrlFromPart(setPart),
+                        rarity
+                    });
+                });
+            }
+
+            if (data.POKEMON) {
+                data.POKEMON.forEach(entry => {
+                    const [name, hp, stageNum, type, holo, setPart, rarity] = entry;
+                    const stageStr = mapStage(stageNum);
+                    if (!pokemonByType[type]) pokemonByType[type] = [];
+                    pokemonByType[type].push({
+                        name,
+                        hp: parseInt(hp, 10),
+                        stage: stageStr,
+                        type,
+                        count: 1,
+                        holo: holo === true || holo === 'true',
+                        url: buildUrlFromPart(setPart),
+                        rarity
+                    });
+                });
             }
 
             renderItems(energyContainer, energies);
@@ -423,7 +453,6 @@ My Pokémon TCG Collection - Stylesheet
             allCards = [...itemCards, ...pokemonCards];
 
             observeAllImages();
-
             updateSectionVisibility();
 
             searchInput.addEventListener('input', filterCards);
