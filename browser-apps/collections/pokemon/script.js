@@ -1,3 +1,9 @@
+/*
+Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
+
+My Pokémon TCG Collection - Stylesheet
+*/
+
 (function(){
     const BASE_URL = "https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/";
     const IMAGE_BASE = "images/";
@@ -29,6 +35,7 @@
     let pokemonTypeBlocks = [];
 
     let currentCardElement = null;
+    let lazyObserver = null;
 
     const getImagePath = (name) => `${IMAGE_BASE}${encodeURIComponent(name)}.jpg`;
     const buildUrl = (parts, index) => {
@@ -60,6 +67,8 @@
         });
     };
 
+    const PLACEHOLDER_SVG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100%25' height='100%25' fill='%23e0e0e0'/%3E%3C/svg%3E";
+
     const createCardHTML = (card, isPokemon = false, stage = '', hp = '') => {
         const imgSrc = getImagePath(card.name);
         const escapedImgSrc = imgSrc.replace(/'/g, "\\'");
@@ -88,7 +97,7 @@
                 <div class="${cardTypeClass}" data-name="${escapeHtml(card.name.toLowerCase())}" data-holo="${card.holo}" data-rarity="${card.rarity ? card.rarity.toLowerCase() : ''}" ${isPokemon ? `data-stage="${stage.toLowerCase()}" data-hp="${hp}"` : ''}>
                     ${qtyBadge}
                     ${linkIcon}
-                    <img class="card-thumb" src="${imgSrc}" alt="${escapeHtml(card.name)}" onclick="openLightbox(this.parentElement)" loading="lazy">
+                    <img class="card-thumb" data-src="${imgSrc}" src="${PLACEHOLDER_SVG}" alt="${escapeHtml(card.name)}" loading="lazy">
                     <div class="${nameTag}">
                         ${escapeHtml(card.name)} ${holoTag}
                     </div>
@@ -134,6 +143,14 @@
     window.openLightbox = (cardElement) => {
         if (!cardElement) return;
         currentCardElement = cardElement;
+
+        const cardImg = currentCardElement.querySelector('.card-thumb');
+        if (cardImg && cardImg.dataset.src && (cardImg.src === PLACEHOLDER_SVG || !cardImg.complete)) {
+            modalImg.src = cardImg.dataset.src;
+        } else if (cardImg) {
+            modalImg.src = cardImg.src;
+        }
+
         updateModalContent();
         modal.style.display = 'flex';
         history.pushState({ modal: true }, '');
@@ -173,6 +190,7 @@
 
     const renderItems = (container, items) => {
         container.innerHTML = items.map(item => createCardHTML(item, false)).join('');
+        observeImages(container);
     };
 
     const renderPokemon = (pokemonByType) => {
@@ -193,6 +211,38 @@
             fragment.appendChild(sectionDiv);
         }
         pokemonTypeContainer.appendChild(fragment);
+        observeImages(pokemonTypeContainer);
+    };
+
+    const initLazyObserver = () => {
+        if (lazyObserver) lazyObserver.disconnect();
+        lazyObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    if (img.dataset.src && img.src !== img.dataset.src) {
+                        img.src = img.dataset.src;
+                        img.removeAttribute('data-src');
+                    }
+                    observer.unobserve(img);
+                }
+            });
+        }, {
+            rootMargin: '100px 0px',
+            threshold: 0.01
+        });
+    };
+
+    const observeImages = (container) => {
+        if (!lazyObserver) initLazyObserver();
+        const images = container.querySelectorAll('.card-thumb[data-src]');
+        images.forEach(img => lazyObserver.observe(img));
+    };
+
+    const observeAllImages = () => {
+        if (!lazyObserver) initLazyObserver();
+        const images = document.querySelectorAll('.card-thumb[data-src]');
+        images.forEach(img => lazyObserver.observe(img));
     };
 
     const updateSectionVisibility = () => {
@@ -358,6 +408,8 @@
             const itemCards = Array.from(document.querySelectorAll('.item-card'));
             const pokemonCards = Array.from(document.querySelectorAll('.pokemon-card'));
             allCards = [...itemCards, ...pokemonCards];
+
+            observeAllImages();
 
             updateSectionVisibility();
 
