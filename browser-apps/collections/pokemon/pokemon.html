@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>My Pokémon TCG collection</title>
+    <link href="../../../core.css" rel="stylesheet">
+    <script src="../../../nav-menu.js"></script>
+    <link href="style.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
+          rel="stylesheet">
+</head>
+<body>
+<header class="header"></header>
+
+<main>
+    <div class="container">
+        <h1 class="page-title">
+            <i class="fas fa-dragon"></i> My Pokémon TCG collection
+        </h1>
+
+        <div class="search-wrapper">
+            <i class="fas fa-search"></i>
+            <label for="searchInput"></label><input type="text" id="searchInput"
+                                                    placeholder="E.g. 'charizard', 'holo', 'stage 2', 'hp 120', 'rarity rare'"
+                                                    autocomplete="off">
+            <button id="clearSearch" title="Clear"><i class="fas fa-times"></i></button>
+        </div>
+
+        <div id="noResultsMessage" class="no-results-message">
+            <i class="fas fa-search"></i>
+            <p>No cards match your search.</p>
+        </div>
+
+        <section class="section-card" id="energies">
+            <h2 class="section-heading"><i class="fas fa-bolt"></i> Energies</h2>
+            <div class="card-grid" id="energy-container"></div>
+        </section>
+
+        <section class="section-card" id="trainers">
+            <h2 class="section-heading"><i class="fas fa-user-graduate"></i> Trainers</h2>
+
+            <div class="trainer-subsection">
+                <div class="subsection-title"><i class="fas fa-users"></i> Supporters</div>
+                <div class="card-grid" id="supporters-container"></div>
+            </div>
+
+            <div class="trainer-subsection">
+                <div class="subsection-title"><i class="fas fa-box"></i> Items</div>
+                <div class="card-grid" id="items-container"></div>
+            </div>
+
+            <div class="trainer-subsection">
+                <div class="subsection-title"><i class="fas fa-screwdriver-wrench"></i> Pokémon Tools</div>
+                <div class="card-grid" id="tools-container"></div>
+            </div>
+        </section>
+
+        <section class="section-card" id="pokemon">
+            <h2 class="section-heading"><i class="fas fa-paw"></i> Pokémon roster</h2>
+            <div id="pokemon-type-sections"></div>
+        </section>
+    </div>
+</main>
+
+<div id="imageModal" class="modal" onclick="if(event.target === this) closeModal()">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeModal()">&times;</span>
+        <div class="modal-nav left" id="modalPrevBtn"><i class="fas fa-chevron-left"></i></div>
+        <div class="modal-nav right" id="modalNextBtn"><i class="fas fa-chevron-right"></i></div>
+        <img id="modalImage" src="" alt="Pokémon card">
+        <div id="modalCaption" class="modal-caption"></div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
