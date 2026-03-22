@@ -117,7 +117,7 @@ My Pokémon TCG Collection - Script
             }
             let retreatHtml = '';
             if (card.retreatCost && card.retreatCost > 0) {
-                retreatHtml = `<div class="retreat"><span class="stat-label">Retreat:</span> ${'<i class="fas fa-running"></i>'.repeat(card.retreatCost)}</div>`;
+                retreatHtml = `<div class="retreat"><span class="stat-label">Retreat:</span> ${'<i class="fas fa-star" style="color:silver;margin-right:2px;"></i>'.repeat(card.retreatCost)}</div>`;
             }
             const statsHtml = (weaknessesHtml || resistancesHtml || retreatHtml) ? `<div class="pokemon-stats">${weaknessesHtml}${resistancesHtml}${retreatHtml}</div>` : '';
 

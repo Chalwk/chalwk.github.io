@@ -389,10 +389,23 @@
       "holo": true,
       "setPart": "sv3pt5/6/",
       "rarity": "Double Rare",
-      "attacks": [],
-      "weakness": [],
-      "resistance": null,
-      "retreatCost": 1
+      "attacks": [
+        {
+          "name": "Brave Wing",
+          "damage": 60,
+          "cost": ["Fire", "Colorless"],
+          "effect": "If this Pokémon has any damage counters on it, this attack does 100 more damage."
+        },
+        {
+          "name": "Explosive Vortex",
+          "damage": 180,
+          "cost": ["Fire", "Fire", "Colorless"],
+          "effect": "Discard 3 Energy from this Pokémon."
+        }
+      ],
+      "weakness": ["Water x2"],
+      "resistance": [],
+      "retreatCost": 2
     },
     {
       "name": "Charmander 1",
