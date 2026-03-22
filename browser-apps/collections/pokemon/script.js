@@ -9,6 +9,7 @@ My Pokémon TCG Collection - Stylesheet
     const IMAGE_BASE = "images/";
     const RARITY_MAP = new Map([
         ['common','common'],['uncommon','uncommon'],['rare','rare'],
+        ['rare holo','rare'],['holo rare','rare'], // map "Rare Holo" to "rare"
         ['double rare','double-rare'],['ultra rare','ultra-rare'],['illustration rare','illustration-rare'],
         ['special illustration rare','special-illustration-rare'],['hyper rare','hyper-rare'],
         ['shiny rare','shiny-rare'],['shiny ultra rare','shiny-ultra-rare'],['ace spec rare','ace-spec-rare'],
@@ -366,7 +367,7 @@ My Pokémon TCG Collection - Stylesheet
 
             if (data.ENERGY) {
                 data.ENERGY.forEach(entry => {
-                    const [name, count, holo, setPart, rarity] = entry;
+                    const { name, count, holo, setPart, rarity } = entry;
                     energies.push({
                         name,
                         count: parseInt(count, 10),
@@ -379,7 +380,7 @@ My Pokémon TCG Collection - Stylesheet
 
             if (data.SUPPORTER) {
                 data.SUPPORTER.forEach(entry => {
-                    const [name, count, holo, setPart, rarity] = entry;
+                    const { name, count, holo, setPart, rarity } = entry;
                     supporters.push({
                         name,
                         count: parseInt(count, 10),
@@ -392,7 +393,7 @@ My Pokémon TCG Collection - Stylesheet
 
             if (data.ITEM) {
                 data.ITEM.forEach(entry => {
-                    const [name, count, holo, setPart, rarity] = entry;
+                    const { name, count, holo, setPart, rarity } = entry;
                     items.push({
                         name,
                         count: parseInt(count, 10),
@@ -405,7 +406,7 @@ My Pokémon TCG Collection - Stylesheet
 
             if (data.TOOL) {
                 data.TOOL.forEach(entry => {
-                    const [name, count, holo, setPart, rarity] = entry;
+                    const { name, count, holo, setPart, rarity } = entry;
                     tools.push({
                         name,
                         count: parseInt(count, 10),
@@ -418,7 +419,7 @@ My Pokémon TCG Collection - Stylesheet
 
             if (data.POKEMON) {
                 data.POKEMON.forEach(entry => {
-                    const [name, hp, stage, count, type, holo, setPart, rarity] = entry;
+                    const { name, hp, stage, count, type, holo, setPart, rarity } = entry;
                     if (!pokemonByType[type]) pokemonByType[type] = [];
                     pokemonByType[type].push({
                         name,
