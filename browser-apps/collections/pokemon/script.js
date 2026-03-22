@@ -1,7 +1,7 @@
 /*
 Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
 
-My Pokémon TCG Collection - Stylesheet
+My Pokémon TCG Collection - Script
 */
 
 (function(){
@@ -9,7 +9,7 @@ My Pokémon TCG Collection - Stylesheet
     const IMAGE_BASE = "images/";
     const RARITY_MAP = new Map([
         ['common','common'],['uncommon','uncommon'],['rare','rare'],
-        ['rare holo','rare'],['holo rare','rare'], // map "Rare Holo" to "rare"
+        ['rare holo','rare'],['holo rare','rare'],
         ['double rare','double-rare'],['ultra rare','ultra-rare'],['illustration rare','illustration-rare'],
         ['special illustration rare','special-illustration-rare'],['hyper rare','hyper-rare'],
         ['shiny rare','shiny-rare'],['shiny ultra rare','shiny-ultra-rare'],['ace spec rare','ace-spec-rare'],
@@ -67,7 +67,7 @@ My Pokémon TCG Collection - Stylesheet
 
     const PLACEHOLDER_SVG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100%25' height='100%25' fill='%23e0e0e0'/%3E%3C/svg%3E";
 
-    const createCardHTML = (card, isPokemon = false, stage = '', hp = '') => {
+    const createCardHTML = (card, isPokemon = false) => {
         const imgSrc = getImagePath(card.name);
         const escapedImgSrc = imgSrc.replace(/'/g, "\\'");
         const holoTag = card.holo ? '<span class="holo-indicator">H</span>' : '';
@@ -76,14 +76,52 @@ My Pokémon TCG Collection - Stylesheet
         const qtyBadge = `<span class="qty-badge">×${card.count}</span>`;
 
         let detailsHtml = '';
+        let extraDetailsHtml = '';
+
         if (isPokemon) {
             detailsHtml = `
-                    <div class="pokemon-details">
-                        <span><i class="fas fa-arrow-up"></i> ${escapeHtml(stage)}</span>
-                        <span class="hp-value">${hp} HP</span>
-                        ${rarityBadgeHtml}
-                    </div>
-                `;
+                <div class="pokemon-details">
+                    <span><i class="fas fa-arrow-up"></i> ${escapeHtml(card.stage)}</span>
+                    <span class="hp-value">${card.hp} HP</span>
+                    ${rarityBadgeHtml}
+                </div>
+            `;
+
+            // Attacks
+            let attacksHtml = '';
+            if (card.attacks && card.attacks.length) {
+                attacksHtml = '<div class="attacks-list">';
+                card.attacks.forEach(attack => {
+                    const costHtml = attack.cost.map(c => `<span class="attack-cost">${escapeHtml(c)}</span>`).join('');
+                    attacksHtml += `
+                        <div class="attack">
+                            <div class="attack-header">
+                                <span class="attack-name">${escapeHtml(attack.name)}</span>
+                                <span class="attack-damage">${attack.damage}</span>
+                            </div>
+                            <div class="attack-cost">${costHtml}</div>
+                            ${attack.effect ? `<div class="attack-effect">${escapeHtml(attack.effect)}</div>` : ''}
+                        </div>
+                    `;
+                });
+                attacksHtml += '</div>';
+            }
+
+            let weaknessesHtml = '';
+            if (card.weakness && card.weakness.length) {
+                weaknessesHtml = `<div class="weakness"><span class="stat-label">Weakness:</span> ${card.weakness.map(w => `<span class="type-badge">${escapeHtml(w)}</span>`).join('')}</div>`;
+            }
+            let resistancesHtml = '';
+            if (card.resistance && card.resistance.length) {
+                resistancesHtml = `<div class="resistance"><span class="stat-label">Resistance:</span> ${card.resistance.map(r => `<span class="type-badge">${escapeHtml(r)}</span>`).join('')}</div>`;
+            }
+            let retreatHtml = '';
+            if (card.retreatCost && card.retreatCost > 0) {
+                retreatHtml = `<div class="retreat"><span class="stat-label">Retreat:</span> ${'<i class="fas fa-running"></i>'.repeat(card.retreatCost)}</div>`;
+            }
+            const statsHtml = (weaknessesHtml || resistancesHtml || retreatHtml) ? `<div class="pokemon-stats">${weaknessesHtml}${resistancesHtml}${retreatHtml}</div>` : '';
+
+            extraDetailsHtml = attacksHtml + statsHtml;
         } else {
             detailsHtml = rarityBadgeHtml ? `<div class="item-rarity">${rarityBadgeHtml}</div>` : '';
         }
@@ -92,16 +130,17 @@ My Pokémon TCG Collection - Stylesheet
         const cardTypeClass = isPokemon ? 'pokemon-card' : 'item-card';
 
         return `
-                <div class="${cardTypeClass}" data-name="${escapeHtml(card.name.toLowerCase())}" data-holo="${card.holo}" data-rarity="${card.rarity ? card.rarity.toLowerCase() : ''}" ${isPokemon ? `data-stage="${stage.toLowerCase()}" data-hp="${hp}"` : ''}>
-                    ${qtyBadge}
-                    ${linkIcon}
-                    <img class="card-thumb" data-src="${imgSrc}" src="${PLACEHOLDER_SVG}" alt="${escapeHtml(card.name)}" loading="lazy">
-                    <div class="${nameTag}">
-                        ${escapeHtml(card.name)} ${holoTag}
-                    </div>
-                    ${detailsHtml}
+            <div class="${cardTypeClass}" data-name="${escapeHtml(card.name.toLowerCase())}" data-holo="${card.holo}" data-rarity="${card.rarity ? card.rarity.toLowerCase() : ''}" ${isPokemon ? `data-stage="${card.stage.toLowerCase()}" data-hp="${card.hp}"` : ''}>
+                ${qtyBadge}
+                ${linkIcon}
+                <img class="card-thumb" data-src="${imgSrc}" src="${PLACEHOLDER_SVG}" alt="${escapeHtml(card.name)}" loading="lazy">
+                <div class="${nameTag}">
+                    ${escapeHtml(card.name)} ${holoTag}
                 </div>
-            `;
+                ${detailsHtml}
+                ${extraDetailsHtml ? `<div class="pokemon-extra">${extraDetailsHtml}</div>` : ''}
+            </div>
+        `;
     };
 
     const getVisibleCards = () => {
@@ -215,7 +254,7 @@ My Pokémon TCG Collection - Stylesheet
             const grid = document.createElement('div');
             grid.className = 'card-grid';
             mons.forEach(p => {
-                const cardHTML = createCardHTML(p, true, p.stage, p.hp);
+                const cardHTML = createCardHTML(p, true);
                 grid.insertAdjacentHTML('beforeend', cardHTML);
             });
             sectionDiv.appendChild(grid);
@@ -419,17 +458,21 @@ My Pokémon TCG Collection - Stylesheet
 
             if (data.POKEMON) {
                 data.POKEMON.forEach(entry => {
-                    const { name, hp, stage, count, type, holo, setPart, rarity } = entry;
+                    const { name, hp, stage, count, type, holo, setPart, rarity, attacks, weakness, resistance, retreatCost } = entry;
                     if (!pokemonByType[type]) pokemonByType[type] = [];
                     pokemonByType[type].push({
                         name,
                         hp: parseInt(hp, 10),
-                        stage: stage,
+                        stage,
                         type,
                         count: parseInt(count, 10),
                         holo: holo === true || holo === 'true',
                         url: buildUrlFromPart(setPart),
-                        rarity
+                        rarity,
+                        attacks: attacks || [],
+                        weakness: weakness || [],
+                        resistance: resistance || [],
+                        retreatCost: retreatCost || 0
                     });
                 });
             }

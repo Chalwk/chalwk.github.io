@@ -475,6 +475,96 @@ My Pokémon TCG Collection - Stylesheet
     color: var(--gray-light);
 }
 
+.pokemon-extra {
+    margin-top: 0.5rem;
+    border-top: 1px solid var(--gray-light);
+    padding-top: 0.5rem;
+    font-size: 0.7rem;
+}
+
+.attacks-list {
+    margin-bottom: 0.5rem;
+}
+
+.attack {
+    margin-bottom: 0.5rem;
+    border-bottom: 1px dotted #eee;
+    padding-bottom: 0.3rem;
+}
+
+.attack:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.attack-header {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+}
+
+.attack-name {
+    font-size: 0.75rem;
+}
+
+.attack-damage {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 0.7rem;
+    background: #f0f0f0;
+    padding: 0 0.2rem;
+    border-radius: 3px;
+}
+
+.attack-cost {
+    display: flex;
+    gap: 0.2rem;
+    margin: 0.2rem 0;
+    font-size: 0.65rem;
+    color: var(--gray);
+}
+
+.attack-effect {
+    font-size: 0.65rem;
+    font-style: italic;
+    color: #555;
+    margin-top: 0.2rem;
+}
+
+.pokemon-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.3rem;
+    font-size: 0.65rem;
+}
+
+.weakness, .resistance, .retreat {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+}
+
+.stat-label {
+    font-weight: 600;
+    color: var(--dark);
+}
+
+.type-badge {
+    background: #e9ecef;
+    padding: 0.1rem 0.3rem;
+    border-radius: 3px;
+    font-size: 0.6rem;
+    text-transform: capitalize;
+}
+
+.retreat i {
+    margin-right: 0.1rem;
+    font-size: 0.7rem;
+    color: var(--gray);
+}
+
 @media (max-width: 640px) {
     .card-grid {
         grid-template-columns: repeat(2, 1fr) !important;
@@ -502,6 +592,22 @@ My Pokémon TCG Collection - Stylesheet
         left: 0.2rem;
         top: 0.1rem;
         font-size: 0.65rem;
+    }
+
+    .pokemon-extra {
+        font-size: 0.65rem;
+    }
+    .attack-name {
+        font-size: 0.7rem;
+    }
+    .attack-damage {
+        font-size: 0.65rem;
+    }
+    .attack-effect {
+        font-size: 0.6rem;
+    }
+    .pokemon-stats {
+        font-size: 0.6rem;
     }
 }
 
