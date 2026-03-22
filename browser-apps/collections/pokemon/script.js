@@ -188,6 +188,19 @@ My Pokémon TCG Collection - Stylesheet
     document.addEventListener('keydown', onKeyDown);
     window.addEventListener('popstate', () => { if (modal.style.display === 'flex') window.closeModal(true); });
 
+    document.addEventListener('click', (e) => {
+        const card = e.target.closest('.item-card, .pokemon-card');
+        if (!card) return;
+        if (card.style.display === 'none') return;
+        if (e.target.closest('.card-link-icon')) return;
+        e.preventDefault();
+        window.openLightbox(card);
+    });
+
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+
     const renderItems = (container, items) => {
         container.innerHTML = items.map(item => createCardHTML(item, false)).join('');
         observeImages(container);
