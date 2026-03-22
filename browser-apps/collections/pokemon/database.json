@@ -393,13 +393,13 @@
         {
           "name": "Brave Wing",
           "damage": 60,
-          "cost": ["Fire", "Colorless"],
+          "cost": ["Fire"],
           "effect": "If this Pokémon has any damage counters on it, this attack does 100 more damage."
         },
         {
           "name": "Explosive Vortex",
           "damage": 180,
-          "cost": ["Fire", "Fire", "Colorless"],
+          "cost": ["Fire", "Fire", "Fire", "Fire"],
           "effect": "Discard 3 Energy from this Pokémon."
         }
       ],
@@ -1228,9 +1228,9 @@
           "effect": "Flip a coin. If tails, discard all Energy from this Pokémon."
         }
       ],
-      "weakness": ["Fighting"],
+      "weakness": ["Fighting x2"],
       "resistance": [],
-      "retreatCost": 1
+      "retreatCost": 0
     },
     {
       "name": "Poltchageist",
