@@ -87,19 +87,21 @@ My Pokémon TCG Collection - Script
                 </div>
             `;
 
-            // Attacks
             let attacksHtml = '';
             if (card.attacks && card.attacks.length) {
                 attacksHtml = '<div class="attacks-list">';
                 card.attacks.forEach(attack => {
-                    const costHtml = attack.cost.map(c => `<span class="attack-cost">${escapeHtml(c)}</span>`).join('');
+                    const costHtml = attack.cost.map(c => `<span class="attack-cost-icon">${escapeHtml(c)}</span>`).join('');
                     attacksHtml += `
                         <div class="attack">
                             <div class="attack-header">
                                 <span class="attack-name">${escapeHtml(attack.name)}</span>
                                 <span class="attack-damage">${attack.damage}</span>
                             </div>
-                            <div class="attack-cost">${costHtml}</div>
+                            <div class="attack-cost">
+                                <span class="stat-label">Attack Cost:</span>
+                                ${costHtml}
+                            </div>
                             ${attack.effect ? `<div class="attack-effect">${escapeHtml(attack.effect)}</div>` : ''}
                         </div>
                     `;

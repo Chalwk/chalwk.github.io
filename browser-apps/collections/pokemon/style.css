@@ -519,10 +519,22 @@ My Pokémon TCG Collection - Stylesheet
 
 .attack-cost {
     display: flex;
-    gap: 0.2rem;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.3rem;
     margin: 0.2rem 0;
+}
+
+.attack-cost .stat-label {
+    font-weight: 600;
+    color: var(--dark);
+    margin-right: 0.2rem;
+}
+
+.attack-cost-icon {
     font-size: 0.65rem;
     color: var(--gray);
+    padding: 0 0.2rem;
 }
 
 .attack-effect {
