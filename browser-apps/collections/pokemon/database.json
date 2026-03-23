@@ -216,7 +216,7 @@
       "name" : "Teleportation Attack",
       "damage" : 10,
       "cost" : [ "\uD83D\uDD2E" ],
-      "effect" : "Switch this Pokemon with 1 of your benched Pokemon"
+      "effect" : "Switch this Pokémon with 1 of your benched Pokémon"
     } ],
     "hp" : 50,
     "stage" : "Basic",
