@@ -206,6 +206,7 @@
     "rarity" : "Uncommon",
     "attacks" : [ ]
   } ],
+  "STADIUM" : [ ],
   "POKEMON" : [ {
     "name" : "Abra",
     "count" : 1,
@@ -215,14 +216,14 @@
     "attacks" : [ {
       "name" : "Teleportation Attack",
       "damage" : 10,
-      "cost" : [ "\uD83D\uDD2E" ],
+      "cost" : [ "PSYCHIC" ],
       "effect" : "Switch this Pokémon with 1 of your benched Pokémon"
     } ],
     "hp" : 50,
     "stage" : "Basic",
-    "type" : "Psychic",
-    "weakness" : [ "⚫", "2" ],
-    "resistance" : [ "\uD83D\uDFE4", "-30" ],
+    "type" : "PSYCHIC",
+    "weakness" : [ "DARKNESS", "2" ],
+    "resistance" : [ "FIGHTING", "-30" ],
     "retreatCost" : 1
   }, {
     "name" : "Aipom",
@@ -238,7 +239,7 @@
     } ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "Colorless",
+    "type" : "COLORLESS",
     "weakness" : [ "\uD83D\uDFE4", "2" ],
     "resistance" : null,
     "retreatCost" : 1
@@ -251,13 +252,13 @@
     "attacks" : [ {
       "name" : "Sweet Circle",
       "damage" : 20,
-      "cost" : [ "\uD83D\uDD2E" ],
+      "cost" : [ "PSYCHIC" ],
       "effect" : "This attack does 20 damage for each of your Pokémon in play."
     } ],
     "hp" : 90,
     "stage" : "Stage 1",
-    "type" : "Psychic",
-    "weakness" : [ "⚙️", "2" ],
+    "type" : "PSYCHIC",
+    "weakness" : [ "METAL", "2" ],
     "resistance" : null,
     "retreatCost" : 1
   }, {
@@ -269,7 +270,7 @@
     "attacks" : [ ],
     "hp" : 140,
     "stage" : "Stage 1",
-    "type" : "Fire",
+    "type" : "FIRE",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -282,7 +283,7 @@
     "attacks" : [ ],
     "hp" : 130,
     "stage" : "Stage 1",
-    "type" : "Electric",
+    "type" : "ELECTRIC",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -292,12 +293,17 @@
     "holo" : false,
     "setPart" : "me02/47/",
     "rarity" : "Uncommon",
-    "attacks" : [ ],
+    "attacks" : [ {
+      "name" : "Psychic Sphere",
+      "damage" : 80,
+      "cost" : [ "PSYCHIC", "COLORLESS", "COLORLESS" ],
+      "effect" : ""
+    } ],
     "hp" : 100,
     "stage" : "Stage 1",
-    "type" : "Psychic",
-    "weakness" : null,
-    "resistance" : null,
+    "type" : "PSYCHIC",
+    "weakness" : [ "DARKNESS", "2" ],
+    "resistance" : [ "FIGHTING", "-30" ],
     "retreatCost" : 1
   }, {
     "name" : "Bulbasaur",
@@ -308,7 +314,7 @@
     "attacks" : [ ],
     "hp" : 80,
     "stage" : "Basic",
-    "type" : "Grass",
+    "type" : "GRASS",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -321,7 +327,7 @@
     "attacks" : [ ],
     "hp" : 140,
     "stage" : "Stage 1",
-    "type" : "Fire",
+    "type" : "FIRE",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -334,7 +340,7 @@
     "attacks" : [ ],
     "hp" : 140,
     "stage" : "Stage 1",
-    "type" : "Fire",
+    "type" : "FIRE",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -347,7 +353,7 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "Fire",
+    "type" : "FIRE",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -360,18 +366,18 @@
     "attacks" : [ {
       "name" : "Brave Wing",
       "damage" : 60,
-      "cost" : [ "\uD83D\uDD34" ],
+      "cost" : [ "FIRE" ],
       "effect" : "If this Pokémon has any damage counters on it, this attack does 100 more damage."
     }, {
       "name" : "Explosive Vortex",
-      "damage" : 180,
-      "cost" : [ "\uD83D\uDD34", "\uD83D\uDD34", "\uD83D\uDD34", "\uD83D\uDD34" ],
+      "damage" : 330,
+      "cost" : [ "FIRE", "FIRE", "FIRE", "FIRE" ],
       "effect" : "Discard 3 Energy from this Pokémon."
     } ],
     "hp" : 330,
     "stage" : "Stage 2",
-    "type" : "Fire",
-    "weakness" : [ "Water", "2" ],
+    "type" : "FIRE",
+    "weakness" : [ "WATER", "2" ],
     "resistance" : null,
     "retreatCost" : 2
   }, {
@@ -383,7 +389,7 @@
     "attacks" : [ ],
     "hp" : 60,
     "stage" : "Basic",
-    "type" : "Fire",
+    "type" : "FIRE",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -396,7 +402,7 @@
     "attacks" : [ ],
     "hp" : 80,
     "stage" : "Basic",
-    "type" : "Fire",
+    "type" : "FIRE",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -409,7 +415,7 @@
     "attacks" : [ ],
     "hp" : 90,
     "stage" : "Stage 1",
-    "type" : "Fire",
+    "type" : "FIRE",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -422,7 +428,7 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "Fighting",
+    "type" : "FIGHTING",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -435,7 +441,7 @@
     "attacks" : [ ],
     "hp" : 130,
     "stage" : "Stage 1",
-    "type" : "Water",
+    "type" : "WATER",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -448,7 +454,7 @@
     "attacks" : [ ],
     "hp" : 150,
     "stage" : "Stage 1",
-    "type" : "Fire",
+    "type" : "FIRE",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -461,7 +467,7 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "Psychic",
+    "type" : "PSYCHIC",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -474,7 +480,7 @@
     "attacks" : [ ],
     "hp" : 80,
     "stage" : "Basic",
-    "type" : "Electric",
+    "type" : "ELECTRIC",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -487,7 +493,7 @@
     "attacks" : [ ],
     "hp" : 140,
     "stage" : "Basic",
-    "type" : "Fire",
+    "type" : "FIRE",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -500,7 +506,7 @@
     "attacks" : [ ],
     "hp" : 130,
     "stage" : "Stage 1",
-    "type" : "Metal",
+    "type" : "METAL",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -513,7 +519,7 @@
     "attacks" : [ ],
     "hp" : 120,
     "stage" : "Stage 1",
-    "type" : "Psychic",
+    "type" : "PSYCHIC",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -526,7 +532,7 @@
     "attacks" : [ ],
     "hp" : 40,
     "stage" : "Basic",
-    "type" : "Psychic",
+    "type" : "PSYCHIC",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -539,7 +545,7 @@
     "attacks" : [ ],
     "hp" : 80,
     "stage" : "Basic",
-    "type" : "Water",
+    "type" : "WATER",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -552,7 +558,7 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "Darkness",
+    "type" : "DARKNESS",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -565,7 +571,7 @@
     "attacks" : [ ],
     "hp" : 140,
     "stage" : "Stage 1",
-    "type" : "Darkness",
+    "type" : "DARKNESS",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -578,7 +584,7 @@
     "attacks" : [ ],
     "hp" : 50,
     "stage" : "Basic",
-    "type" : "Psychic",
+    "type" : "PSYCHIC",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -591,7 +597,7 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "Darkness",
+    "type" : "DARKNESS",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -604,7 +610,7 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "Psychic",
+    "type" : "PSYCHIC",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -617,7 +623,7 @@
     "attacks" : [ ],
     "hp" : 100,
     "stage" : "Basic",
-    "type" : "Colorless",
+    "type" : "COLORLESS",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -630,7 +636,7 @@
     "attacks" : [ ],
     "hp" : 80,
     "stage" : "Basic",
-    "type" : "Psychic",
+    "type" : "PSYCHIC",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -643,7 +649,7 @@
     "attacks" : [ ],
     "hp" : 80,
     "stage" : "Basic",
-    "type" : "Darkness",
+    "type" : "DARKNESS",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -656,7 +662,7 @@
     "attacks" : [ ],
     "hp" : 170,
     "stage" : "Stage 2",
-    "type" : "Psychic",
+    "type" : "PSYCHIC",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -669,7 +675,7 @@
     "attacks" : [ ],
     "hp" : 90,
     "stage" : "Basic",
-    "type" : "Fire",
+    "type" : "FIRE",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -682,7 +688,7 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "Grass",
+    "type" : "GRASS",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -695,7 +701,7 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Stage 1",
-    "type" : "Psychic",
+    "type" : "PSYCHIC",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -708,7 +714,7 @@
     "attacks" : [ ],
     "hp" : 80,
     "stage" : "Stage 1",
-    "type" : "Psychic",
+    "type" : "PSYCHIC",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -721,7 +727,7 @@
     "attacks" : [ ],
     "hp" : 120,
     "stage" : "Stage 1",
-    "type" : "Electric",
+    "type" : "ELECTRIC",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -734,7 +740,7 @@
     "attacks" : [ ],
     "hp" : 120,
     "stage" : "Basic",
-    "type" : "Grass",
+    "type" : "GRASS",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -747,7 +753,7 @@
     "attacks" : [ ],
     "hp" : 60,
     "stage" : "Basic",
-    "type" : "Psychic",
+    "type" : "PSYCHIC",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -760,7 +766,7 @@
     "attacks" : [ ],
     "hp" : 130,
     "stage" : "Stage 1",
-    "type" : "Darkness",
+    "type" : "DARKNESS",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -773,7 +779,7 @@
     "attacks" : [ ],
     "hp" : 130,
     "stage" : "Stage 1",
-    "type" : "Darkness",
+    "type" : "DARKNESS",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -786,7 +792,7 @@
     "attacks" : [ ],
     "hp" : 120,
     "stage" : "Stage 1",
-    "type" : "Fire",
+    "type" : "FIRE",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -799,7 +805,7 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "Fire",
+    "type" : "FIRE",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -812,7 +818,7 @@
     "attacks" : [ ],
     "hp" : 100,
     "stage" : "Basic",
-    "type" : "Psychic",
+    "type" : "PSYCHIC",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -825,7 +831,7 @@
     "attacks" : [ ],
     "hp" : 120,
     "stage" : "Basic",
-    "type" : "Colorless",
+    "type" : "COLORLESS",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -838,7 +844,7 @@
     "attacks" : [ ],
     "hp" : 120,
     "stage" : "Stage 1",
-    "type" : "Electric",
+    "type" : "ELECTRIC",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -851,7 +857,7 @@
     "attacks" : [ ],
     "hp" : 120,
     "stage" : "Stage 1",
-    "type" : "Electric",
+    "type" : "ELECTRIC",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -864,7 +870,7 @@
     "attacks" : [ ],
     "hp" : 130,
     "stage" : "Stage 1",
-    "type" : "Colorless",
+    "type" : "COLORLESS",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -877,7 +883,7 @@
     "attacks" : [ ],
     "hp" : 100,
     "stage" : "Stage 1",
-    "type" : "Darkness",
+    "type" : "DARKNESS",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -890,7 +896,7 @@
     "attacks" : [ ],
     "hp" : 160,
     "stage" : "Stage 2",
-    "type" : "Grass",
+    "type" : "GRASS",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -903,7 +909,7 @@
     "attacks" : [ ],
     "hp" : 90,
     "stage" : "Stage 1",
-    "type" : "Water",
+    "type" : "WATER",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -916,7 +922,7 @@
     "attacks" : [ ],
     "hp" : 30,
     "stage" : "Basic",
-    "type" : "Water",
+    "type" : "WATER",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -929,7 +935,7 @@
     "attacks" : [ ],
     "hp" : 90,
     "stage" : "Basic",
-    "type" : "Fire",
+    "type" : "FIRE",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -942,7 +948,7 @@
     "attacks" : [ ],
     "hp" : 90,
     "stage" : "Stage 1",
-    "type" : "Electric",
+    "type" : "ELECTRIC",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -955,7 +961,7 @@
     "attacks" : [ ],
     "hp" : 160,
     "stage" : "Stage 2",
-    "type" : "Electric",
+    "type" : "ELECTRIC",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -968,7 +974,7 @@
     "attacks" : [ ],
     "hp" : 180,
     "stage" : "Stage 2",
-    "type" : "Water",
+    "type" : "WATER",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -981,7 +987,7 @@
     "attacks" : [ ],
     "hp" : 120,
     "stage" : "Basic",
-    "type" : "Electric",
+    "type" : "ELECTRIC",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -994,7 +1000,7 @@
     "attacks" : [ ],
     "hp" : 120,
     "stage" : "Basic",
-    "type" : "Fire",
+    "type" : "FIRE",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1007,7 +1013,7 @@
     "attacks" : [ ],
     "hp" : 140,
     "stage" : "Stage 1",
-    "type" : "Fire",
+    "type" : "FIRE",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1020,7 +1026,7 @@
     "attacks" : [ ],
     "hp" : 60,
     "stage" : "Basic",
-    "type" : "Fighting",
+    "type" : "FIGHTING",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1033,7 +1039,7 @@
     "attacks" : [ ],
     "hp" : 110,
     "stage" : "Stage 1",
-    "type" : "Fighting",
+    "type" : "FIGHTING",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1046,7 +1052,7 @@
     "attacks" : [ ],
     "hp" : 120,
     "stage" : "Stage 1",
-    "type" : "Fire",
+    "type" : "FIRE",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1059,7 +1065,7 @@
     "attacks" : [ ],
     "hp" : 80,
     "stage" : "Basic",
-    "type" : "Fire",
+    "type" : "FIRE",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1072,7 +1078,7 @@
     "attacks" : [ ],
     "hp" : 60,
     "stage" : "Basic",
-    "type" : "Electric",
+    "type" : "ELECTRIC",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1085,7 +1091,7 @@
     "attacks" : [ ],
     "hp" : 80,
     "stage" : "Stage 1",
-    "type" : "Electric",
+    "type" : "ELECTRIC",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1098,7 +1104,7 @@
     "attacks" : [ ],
     "hp" : 140,
     "stage" : "Stage 2",
-    "type" : "Electric",
+    "type" : "ELECTRIC",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1111,7 +1117,7 @@
     "attacks" : [ ],
     "hp" : 110,
     "stage" : "Stage 1",
-    "type" : "Fire",
+    "type" : "FIRE",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1124,18 +1130,18 @@
     "attacks" : [ {
       "name" : "Pika Punch",
       "damage" : 30,
-      "cost" : [ "⬜" ],
+      "cost" : [ "COLORLESS" ],
       "effect" : ""
     }, {
       "name" : "Dynamic Bolt",
       "damage" : 220,
-      "cost" : [ "⚡", "⚡", "⬜" ],
+      "cost" : [ "LIGHTNING", "COLORLESS" ],
       "effect" : "Flip a coin. If tails, discard all Energy from this Pokémon."
     } ],
     "hp" : 190,
     "stage" : "Basic",
-    "type" : "Electric",
-    "weakness" : [ "Fighting", "2" ],
+    "type" : "ELECTRIC",
+    "weakness" : [ "FIGHTING", "2" ],
     "resistance" : null,
     "retreatCost" : 0
   }, {
@@ -1147,7 +1153,7 @@
     "attacks" : [ ],
     "hp" : 30,
     "stage" : "Basic",
-    "type" : "Grass",
+    "type" : "GRASS",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1160,7 +1166,7 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Stage 1",
-    "type" : "Psychic",
+    "type" : "PSYCHIC",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1173,7 +1179,7 @@
     "attacks" : [ ],
     "hp" : 60,
     "stage" : "Basic",
-    "type" : "Fire",
+    "type" : "FIRE",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1186,7 +1192,7 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "Darkness",
+    "type" : "DARKNESS",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1199,7 +1205,7 @@
     "attacks" : [ ],
     "hp" : 100,
     "stage" : "Stage 1",
-    "type" : "Water",
+    "type" : "WATER",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1212,7 +1218,7 @@
     "attacks" : [ ],
     "hp" : 100,
     "stage" : "Stage 1",
-    "type" : "Fire",
+    "type" : "FIRE",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1225,7 +1231,7 @@
     "attacks" : [ ],
     "hp" : 180,
     "stage" : "Basic",
-    "type" : "Dragon",
+    "type" : "DRAGON",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1238,7 +1244,7 @@
     "attacks" : [ ],
     "hp" : 90,
     "stage" : "Basic",
-    "type" : "Water",
+    "type" : "WATER",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1251,7 +1257,7 @@
     "attacks" : [ ],
     "hp" : 130,
     "stage" : "Basic",
-    "type" : "Fire",
+    "type" : "FIRE",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1264,7 +1270,7 @@
     "attacks" : [ ],
     "hp" : 80,
     "stage" : "Basic",
-    "type" : "Darkness",
+    "type" : "DARKNESS",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1277,7 +1283,7 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "Fire",
+    "type" : "FIRE",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1290,7 +1296,7 @@
     "attacks" : [ ],
     "hp" : 120,
     "stage" : "Stage 1",
-    "type" : "Fire",
+    "type" : "FIRE",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1303,7 +1309,7 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "Fighting",
+    "type" : "FIGHTING",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1316,7 +1322,7 @@
     "attacks" : [ ],
     "hp" : 120,
     "stage" : "Stage 1",
-    "type" : "Fighting",
+    "type" : "FIGHTING",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1329,7 +1335,7 @@
     "attacks" : [ ],
     "hp" : 90,
     "stage" : "Basic",
-    "type" : "Psychic",
+    "type" : "PSYCHIC",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1342,7 +1348,7 @@
     "attacks" : [ ],
     "hp" : 110,
     "stage" : "Stage 1",
-    "type" : "Water",
+    "type" : "WATER",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1355,7 +1361,7 @@
     "attacks" : [ ],
     "hp" : 100,
     "stage" : "Stage 1",
-    "type" : "Darkness",
+    "type" : "DARKNESS",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1368,7 +1374,7 @@
     "attacks" : [ ],
     "hp" : 120,
     "stage" : "Stage 1",
-    "type" : "Water",
+    "type" : "WATER",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1381,7 +1387,7 @@
     "attacks" : [ ],
     "hp" : 60,
     "stage" : "Stage 1",
-    "type" : "Psychic",
+    "type" : "PSYCHIC",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1394,7 +1400,7 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "Water",
+    "type" : "WATER",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1407,7 +1413,7 @@
     "attacks" : [ ],
     "hp" : 60,
     "stage" : "Basic",
-    "type" : "Grass",
+    "type" : "GRASS",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1420,7 +1426,7 @@
     "attacks" : [ ],
     "hp" : 160,
     "stage" : "Stage 2",
-    "type" : "Grass",
+    "type" : "GRASS",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1433,7 +1439,7 @@
     "attacks" : [ ],
     "hp" : 60,
     "stage" : "Basic",
-    "type" : "Darkness",
+    "type" : "DARKNESS",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1446,7 +1452,7 @@
     "attacks" : [ ],
     "hp" : 50,
     "stage" : "Basic",
-    "type" : "Grass",
+    "type" : "GRASS",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1459,7 +1465,7 @@
     "attacks" : [ ],
     "hp" : 80,
     "stage" : "Basic",
-    "type" : "Fire",
+    "type" : "FIRE",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1472,7 +1478,7 @@
     "attacks" : [ ],
     "hp" : 120,
     "stage" : "Stage 1",
-    "type" : "Water",
+    "type" : "WATER",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1485,7 +1491,7 @@
     "attacks" : [ ],
     "hp" : 130,
     "stage" : "Stage 1",
-    "type" : "Water",
+    "type" : "WATER",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1498,7 +1504,7 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "Water",
+    "type" : "WATER",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1511,7 +1517,7 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "Colorless",
+    "type" : "COLORLESS",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1524,7 +1530,7 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "Water",
+    "type" : "WATER",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1537,7 +1543,7 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "Psychic",
+    "type" : "PSYCHIC",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1550,7 +1556,7 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "Water",
+    "type" : "WATER",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1563,7 +1569,7 @@
     "attacks" : [ ],
     "hp" : 110,
     "stage" : "Basic",
-    "type" : "Fighting",
+    "type" : "FIGHTING",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1576,7 +1582,7 @@
     "attacks" : [ ],
     "hp" : 60,
     "stage" : "Basic",
-    "type" : "Colorless",
+    "type" : "COLORLESS",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1589,7 +1595,7 @@
     "attacks" : [ ],
     "hp" : 60,
     "stage" : "Basic",
-    "type" : "Grass",
+    "type" : "GRASS",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1602,7 +1608,7 @@
     "attacks" : null,
     "hp" : 180,
     "stage" : "Stage 1",
-    "type" : "Metal",
+    "type" : "METAL",
     "weakness" : null,
     "resistance" : [ "\uD83D\uDFE2", "-30" ],
     "retreatCost" : 1
@@ -1615,7 +1621,7 @@
     "attacks" : [ ],
     "hp" : 160,
     "stage" : "Stage 2",
-    "type" : "Colorless",
+    "type" : "COLORLESS",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1628,7 +1634,7 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "Colorless",
+    "type" : "COLORLESS",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1641,7 +1647,7 @@
     "attacks" : [ ],
     "hp" : 110,
     "stage" : "Basic",
-    "type" : "Fighting",
+    "type" : "FIGHTING",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1654,7 +1660,7 @@
     "attacks" : [ ],
     "hp" : 120,
     "stage" : "Basic",
-    "type" : "Water",
+    "type" : "WATER",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1667,7 +1673,7 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "Water",
+    "type" : "WATER",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1680,7 +1686,7 @@
     "attacks" : [ ],
     "hp" : 80,
     "stage" : "Basic",
-    "type" : "Psychic",
+    "type" : "PSYCHIC",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1693,7 +1699,7 @@
     "attacks" : [ ],
     "hp" : 100,
     "stage" : "Stage 1",
-    "type" : "Fighting",
+    "type" : "FIGHTING",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1706,7 +1712,7 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "Colorless",
+    "type" : "COLORLESS",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1719,7 +1725,7 @@
     "attacks" : [ ],
     "hp" : 80,
     "stage" : "Basic",
-    "type" : "Darkness",
+    "type" : "DARKNESS",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1732,7 +1738,7 @@
     "attacks" : [ ],
     "hp" : 50,
     "stage" : "Basic",
-    "type" : "Grass",
+    "type" : "GRASS",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1745,7 +1751,7 @@
     "attacks" : [ ],
     "hp" : 100,
     "stage" : "Stage 1",
-    "type" : "Darkness",
+    "type" : "DARKNESS",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1758,7 +1764,7 @@
     "attacks" : [ ],
     "hp" : 120,
     "stage" : "Stage 1",
-    "type" : "Darkness",
+    "type" : "DARKNESS",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1771,7 +1777,7 @@
     "attacks" : [ ],
     "hp" : 90,
     "stage" : "Stage 1",
-    "type" : "Grass",
+    "type" : "GRASS",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1784,7 +1790,7 @@
     "attacks" : [ ],
     "hp" : 50,
     "stage" : "Basic",
-    "type" : "Psychic",
+    "type" : "PSYCHIC",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1797,7 +1803,7 @@
     "attacks" : [ ],
     "hp" : 130,
     "stage" : "Basic",
-    "type" : "Fire",
+    "type" : "FIRE",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1810,7 +1816,7 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "Water",
+    "type" : "WATER",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1823,7 +1829,7 @@
     "attacks" : [ ],
     "hp" : 120,
     "stage" : "Stage 1",
-    "type" : "Darkness",
+    "type" : "DARKNESS",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1836,7 +1842,7 @@
     "attacks" : [ ],
     "hp" : 120,
     "stage" : "Stage 1",
-    "type" : "Darkness",
+    "type" : "DARKNESS",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1849,7 +1855,7 @@
     "attacks" : [ ],
     "hp" : 130,
     "stage" : "Stage 1",
-    "type" : "Electric",
+    "type" : "ELECTRIC",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1862,7 +1868,7 @@
     "attacks" : [ ],
     "hp" : 110,
     "stage" : "Basic",
-    "type" : "Grass",
+    "type" : "GRASS",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1875,7 +1881,7 @@
     "attacks" : [ ],
     "hp" : 140,
     "stage" : "Stage 2",
-    "type" : "Colorless",
+    "type" : "COLORLESS",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1888,7 +1894,7 @@
     "attacks" : [ ],
     "hp" : 140,
     "stage" : "Stage 1",
-    "type" : "Fire",
+    "type" : "FIRE",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1901,7 +1907,7 @@
     "attacks" : [ ],
     "hp" : 60,
     "stage" : "Basic",
-    "type" : "Electric",
+    "type" : "ELECTRIC",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1914,7 +1920,7 @@
     "attacks" : [ ],
     "hp" : 120,
     "stage" : "Stage 1",
-    "type" : "Colorless",
+    "type" : "COLORLESS",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1927,7 +1933,7 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "Water",
+    "type" : "WATER",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
@@ -1940,7 +1946,7 @@
     "attacks" : [ ],
     "hp" : 60,
     "stage" : "Basic",
-    "type" : "Psychic",
+    "type" : "PSYCHIC",
     "weakness" : null,
     "resistance" : null,
     "retreatCost" : 1
