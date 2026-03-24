@@ -224,7 +224,8 @@
     "type" : "PSYCHIC",
     "weakness" : [ "DARKNESS", "2" ],
     "resistance" : [ "FIGHTING", "-30" ],
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Aipom",
     "count" : 1,
@@ -234,15 +235,16 @@
     "attacks" : [ {
       "name" : "Astonish",
       "damage" : 20,
-      "cost" : [ "⬜", "⬜" ],
+      "cost" : [ "COLORLESS", "COLORLESS" ],
       "effect" : "Choose a random card from your opponent's hand, and your opponent reveals that card and shuffles it into their deck."
     } ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "COLORLESS",
-    "weakness" : [ "\uD83D\uDFE4", "2" ],
+    "type" : "FIRE",
+    "weakness" : [ "LIGHTNING", "2" ],
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Alcremie",
     "count" : 2,
@@ -260,7 +262,8 @@
     "type" : "PSYCHIC",
     "weakness" : [ "METAL", "2" ],
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Arcanine",
     "count" : 1,
@@ -270,10 +273,11 @@
     "attacks" : [ ],
     "hp" : 140,
     "stage" : "Stage 1",
-    "type" : "FIRE",
+    "type" : "Fire",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Boltund",
     "count" : 1,
@@ -283,10 +287,11 @@
     "attacks" : [ ],
     "hp" : 130,
     "stage" : "Stage 1",
-    "type" : "ELECTRIC",
+    "type" : "Electric",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Brambleghast",
     "count" : 1,
@@ -304,7 +309,8 @@
     "type" : "PSYCHIC",
     "weakness" : [ "DARKNESS", "2" ],
     "resistance" : [ "FIGHTING", "-30" ],
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Bulbasaur",
     "count" : 1,
@@ -314,10 +320,11 @@
     "attacks" : [ ],
     "hp" : 80,
     "stage" : "Basic",
-    "type" : "GRASS",
+    "type" : "Grass",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Centiskorch",
     "count" : 1,
@@ -327,10 +334,11 @@
     "attacks" : [ ],
     "hp" : 140,
     "stage" : "Stage 1",
-    "type" : "FIRE",
+    "type" : "Fire",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Ceruledge",
     "count" : 1,
@@ -340,10 +348,11 @@
     "attacks" : [ ],
     "hp" : 140,
     "stage" : "Stage 1",
-    "type" : "FIRE",
+    "type" : "Fire",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Charcadet",
     "count" : 1,
@@ -353,10 +362,11 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "FIRE",
+    "type" : "Fire",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Charizard EX",
     "count" : 1,
@@ -379,7 +389,8 @@
     "type" : "FIRE",
     "weakness" : [ "WATER", "2" ],
     "resistance" : null,
-    "retreatCost" : 2
+    "retreatCost" : 2,
+    "ability" : null
   }, {
     "name" : "Charmander 1",
     "count" : 1,
@@ -389,10 +400,11 @@
     "attacks" : [ ],
     "hp" : 60,
     "stage" : "Basic",
-    "type" : "FIRE",
+    "type" : "Fire",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Charmander 2",
     "count" : 2,
@@ -402,10 +414,11 @@
     "attacks" : [ ],
     "hp" : 80,
     "stage" : "Basic",
-    "type" : "FIRE",
+    "type" : "Fire",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Charmeleon",
     "count" : 2,
@@ -415,10 +428,11 @@
     "attacks" : [ ],
     "hp" : 90,
     "stage" : "Stage 1",
-    "type" : "FIRE",
+    "type" : "Fire",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Cynthia's Gible",
     "count" : 1,
@@ -428,10 +442,11 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "FIGHTING",
+    "type" : "Fighting",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Cynthia's Milotic",
     "count" : 1,
@@ -441,10 +456,11 @@
     "attacks" : [ ],
     "hp" : 130,
     "stage" : "Stage 1",
-    "type" : "WATER",
+    "type" : "Water",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Darmanitan",
     "count" : 1,
@@ -454,10 +470,11 @@
     "attacks" : [ ],
     "hp" : 150,
     "stage" : "Stage 1",
-    "type" : "FIRE",
+    "type" : "Fire",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Dedenne",
     "count" : 1,
@@ -467,10 +484,11 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "PSYCHIC",
+    "type" : "Psychic",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Electabuzz",
     "count" : 1,
@@ -480,10 +498,11 @@
     "attacks" : [ ],
     "hp" : 80,
     "stage" : "Basic",
-    "type" : "ELECTRIC",
+    "type" : "Electric",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Entei",
     "count" : 1,
@@ -493,10 +512,11 @@
     "attacks" : [ ],
     "hp" : 140,
     "stage" : "Basic",
-    "type" : "FIRE",
+    "type" : "Fire",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Escavalier",
     "count" : 1,
@@ -506,10 +526,11 @@
     "attacks" : [ ],
     "hp" : 130,
     "stage" : "Stage 1",
-    "type" : "METAL",
+    "type" : "Metal",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Espathra",
     "count" : 1,
@@ -519,10 +540,11 @@
     "attacks" : [ ],
     "hp" : 120,
     "stage" : "Stage 1",
-    "type" : "PSYCHIC",
+    "type" : "Psychic",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Flabebe",
     "count" : 1,
@@ -532,10 +554,11 @@
     "attacks" : [ ],
     "hp" : 40,
     "stage" : "Basic",
-    "type" : "PSYCHIC",
+    "type" : "Psychic",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Galarian Mr. Mime",
     "count" : 1,
@@ -545,10 +568,11 @@
     "attacks" : [ ],
     "hp" : 80,
     "stage" : "Basic",
-    "type" : "WATER",
+    "type" : "Water",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Galarian Zigzagoon",
     "count" : 1,
@@ -558,10 +582,11 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "DARKNESS",
+    "type" : "Darkness",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Garbodor",
     "count" : 1,
@@ -571,10 +596,11 @@
     "attacks" : [ ],
     "hp" : 140,
     "stage" : "Stage 1",
-    "type" : "DARKNESS",
+    "type" : "Darkness",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Gastly 1",
     "count" : 1,
@@ -584,10 +610,11 @@
     "attacks" : [ ],
     "hp" : 50,
     "stage" : "Basic",
-    "type" : "PSYCHIC",
+    "type" : "Psychic",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Gastly 2",
     "count" : 1,
@@ -597,10 +624,11 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "DARKNESS",
+    "type" : "Darkness",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Gimmighoul",
     "count" : 1,
@@ -610,10 +638,11 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "PSYCHIC",
+    "type" : "Psychic",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Girafarig",
     "count" : 1,
@@ -623,10 +652,11 @@
     "attacks" : [ ],
     "hp" : 100,
     "stage" : "Basic",
-    "type" : "COLORLESS",
+    "type" : "Colorless",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Greavard",
     "count" : 1,
@@ -636,10 +666,11 @@
     "attacks" : [ ],
     "hp" : 80,
     "stage" : "Basic",
-    "type" : "PSYCHIC",
+    "type" : "Psychic",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Grimer",
     "count" : 1,
@@ -649,10 +680,11 @@
     "attacks" : [ ],
     "hp" : 80,
     "stage" : "Basic",
-    "type" : "DARKNESS",
+    "type" : "Darkness",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Grimmsnarl",
     "count" : 1,
@@ -662,10 +694,11 @@
     "attacks" : [ ],
     "hp" : 170,
     "stage" : "Stage 2",
-    "type" : "PSYCHIC",
+    "type" : "Psychic",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Growlithe",
     "count" : 1,
@@ -675,10 +708,11 @@
     "attacks" : [ ],
     "hp" : 90,
     "stage" : "Basic",
-    "type" : "FIRE",
+    "type" : "Fire",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Grubbin",
     "count" : 2,
@@ -688,10 +722,11 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "GRASS",
+    "type" : "Grass",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Haunter 1",
     "count" : 1,
@@ -701,10 +736,11 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Stage 1",
-    "type" : "PSYCHIC",
+    "type" : "Psychic",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Haunter 2",
     "count" : 1,
@@ -714,10 +750,11 @@
     "attacks" : [ ],
     "hp" : 80,
     "stage" : "Stage 1",
-    "type" : "PSYCHIC",
+    "type" : "Psychic",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Heliolisk",
     "count" : 1,
@@ -727,10 +764,11 @@
     "attacks" : [ ],
     "hp" : 120,
     "stage" : "Stage 1",
-    "type" : "ELECTRIC",
+    "type" : "Electric",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Heracross",
     "count" : 1,
@@ -740,10 +778,11 @@
     "attacks" : [ ],
     "hp" : 120,
     "stage" : "Basic",
-    "type" : "GRASS",
+    "type" : "Grass",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Hisuian Zorua",
     "count" : 1,
@@ -753,10 +792,11 @@
     "attacks" : [ ],
     "hp" : 60,
     "stage" : "Basic",
-    "type" : "PSYCHIC",
+    "type" : "Psychic",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Honchkrow 1",
     "count" : 2,
@@ -766,10 +806,11 @@
     "attacks" : [ ],
     "hp" : 130,
     "stage" : "Stage 1",
-    "type" : "DARKNESS",
+    "type" : "Darkness",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Honchkrow 2",
     "count" : 2,
@@ -779,10 +820,11 @@
     "attacks" : [ ],
     "hp" : 130,
     "stage" : "Stage 1",
-    "type" : "DARKNESS",
+    "type" : "Darkness",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Houndoom",
     "count" : 2,
@@ -792,10 +834,11 @@
     "attacks" : [ ],
     "hp" : 120,
     "stage" : "Stage 1",
-    "type" : "FIRE",
+    "type" : "Fire",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Houndour",
     "count" : 2,
@@ -805,10 +848,11 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "FIRE",
+    "type" : "Fire",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Jynx",
     "count" : 2,
@@ -818,10 +862,11 @@
     "attacks" : [ ],
     "hp" : 100,
     "stage" : "Basic",
-    "type" : "PSYCHIC",
+    "type" : "Psychic",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Kangaskhan",
     "count" : 1,
@@ -831,10 +876,11 @@
     "attacks" : [ ],
     "hp" : 120,
     "stage" : "Basic",
-    "type" : "COLORLESS",
+    "type" : "Colorless",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Kilowattrel",
     "count" : 2,
@@ -844,10 +890,11 @@
     "attacks" : [ ],
     "hp" : 120,
     "stage" : "Stage 1",
-    "type" : "ELECTRIC",
+    "type" : "Electric",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Lanturn",
     "count" : 1,
@@ -857,10 +904,11 @@
     "attacks" : [ ],
     "hp" : 120,
     "stage" : "Stage 1",
-    "type" : "ELECTRIC",
+    "type" : "Electric",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Larry's Braviary",
     "count" : 1,
@@ -870,10 +918,11 @@
     "attacks" : [ ],
     "hp" : 130,
     "stage" : "Stage 1",
-    "type" : "COLORLESS",
+    "type" : "Colorless",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Liepard",
     "count" : 2,
@@ -883,10 +932,11 @@
     "attacks" : [ ],
     "hp" : 100,
     "stage" : "Stage 1",
-    "type" : "DARKNESS",
+    "type" : "Darkness",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Ludicolo",
     "count" : 1,
@@ -896,10 +946,11 @@
     "attacks" : [ ],
     "hp" : 160,
     "stage" : "Stage 2",
-    "type" : "GRASS",
+    "type" : "Grass",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Lumineon",
     "count" : 1,
@@ -909,10 +960,11 @@
     "attacks" : [ ],
     "hp" : 90,
     "stage" : "Stage 1",
-    "type" : "WATER",
+    "type" : "Water",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Magikarp",
     "count" : 1,
@@ -922,10 +974,11 @@
     "attacks" : [ ],
     "hp" : 30,
     "stage" : "Basic",
-    "type" : "WATER",
+    "type" : "Water",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Magmar",
     "count" : 1,
@@ -935,10 +988,11 @@
     "attacks" : [ ],
     "hp" : 90,
     "stage" : "Basic",
-    "type" : "FIRE",
+    "type" : "Fire",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Magneton",
     "count" : 1,
@@ -948,10 +1002,11 @@
     "attacks" : [ ],
     "hp" : 90,
     "stage" : "Stage 1",
-    "type" : "ELECTRIC",
+    "type" : "Electric",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Magnezone",
     "count" : 1,
@@ -961,10 +1016,11 @@
     "attacks" : [ ],
     "hp" : 160,
     "stage" : "Stage 2",
-    "type" : "ELECTRIC",
+    "type" : "Electric",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Mamoswine",
     "count" : 1,
@@ -974,10 +1030,11 @@
     "attacks" : [ ],
     "hp" : 180,
     "stage" : "Stage 2",
-    "type" : "WATER",
+    "type" : "Water",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Miraidon",
     "count" : 1,
@@ -987,10 +1044,11 @@
     "attacks" : [ ],
     "hp" : 120,
     "stage" : "Basic",
-    "type" : "ELECTRIC",
+    "type" : "Electric",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Moltres",
     "count" : 1,
@@ -1000,10 +1058,11 @@
     "attacks" : [ ],
     "hp" : 120,
     "stage" : "Basic",
-    "type" : "FIRE",
+    "type" : "Fire",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "N's Darmanitan",
     "count" : 1,
@@ -1013,10 +1072,11 @@
     "attacks" : [ ],
     "hp" : 140,
     "stage" : "Stage 1",
-    "type" : "FIRE",
+    "type" : "Fire",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Nacli",
     "count" : 1,
@@ -1026,10 +1086,11 @@
     "attacks" : [ ],
     "hp" : 60,
     "stage" : "Basic",
-    "type" : "FIGHTING",
+    "type" : "Fighting",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Naclstack",
     "count" : 1,
@@ -1039,10 +1100,11 @@
     "attacks" : [ ],
     "hp" : 110,
     "stage" : "Stage 1",
-    "type" : "FIGHTING",
+    "type" : "Fighting",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Ninetales",
     "count" : 1,
@@ -1052,10 +1114,11 @@
     "attacks" : [ ],
     "hp" : 120,
     "stage" : "Stage 1",
-    "type" : "FIRE",
+    "type" : "Fire",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Numel",
     "count" : 1,
@@ -1065,10 +1128,11 @@
     "attacks" : [ ],
     "hp" : 80,
     "stage" : "Basic",
-    "type" : "FIRE",
+    "type" : "Fire",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Pawmi",
     "count" : 3,
@@ -1078,10 +1142,11 @@
     "attacks" : [ ],
     "hp" : 60,
     "stage" : "Basic",
-    "type" : "ELECTRIC",
+    "type" : "Electric",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Pawmo",
     "count" : 2,
@@ -1091,10 +1156,11 @@
     "attacks" : [ ],
     "hp" : 80,
     "stage" : "Stage 1",
-    "type" : "ELECTRIC",
+    "type" : "Electric",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Pawmot",
     "count" : 1,
@@ -1104,10 +1170,11 @@
     "attacks" : [ ],
     "hp" : 140,
     "stage" : "Stage 2",
-    "type" : "ELECTRIC",
+    "type" : "Electric",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Pignite",
     "count" : 1,
@@ -1117,10 +1184,11 @@
     "attacks" : [ ],
     "hp" : 110,
     "stage" : "Stage 1",
-    "type" : "FIRE",
+    "type" : "Fire",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Pikachu",
     "count" : 1,
@@ -1140,10 +1208,11 @@
     } ],
     "hp" : 190,
     "stage" : "Basic",
-    "type" : "ELECTRIC",
+    "type" : "LIGHTNING",
     "weakness" : [ "FIGHTING", "2" ],
     "resistance" : null,
-    "retreatCost" : 0
+    "retreatCost" : 0,
+    "ability" : null
   }, {
     "name" : "Poltchageist",
     "count" : 1,
@@ -1153,10 +1222,11 @@
     "attacks" : [ ],
     "hp" : 30,
     "stage" : "Basic",
-    "type" : "GRASS",
+    "type" : "Grass",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Polteageist",
     "count" : 1,
@@ -1166,10 +1236,11 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Stage 1",
-    "type" : "PSYCHIC",
+    "type" : "Psychic",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Ponyta",
     "count" : 1,
@@ -1179,10 +1250,11 @@
     "attacks" : [ ],
     "hp" : 60,
     "stage" : "Basic",
-    "type" : "FIRE",
+    "type" : "Fire",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Poochyena",
     "count" : 1,
@@ -1192,10 +1264,11 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "DARKNESS",
+    "type" : "Darkness",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Prinplup",
     "count" : 1,
@@ -1205,10 +1278,11 @@
     "attacks" : [ ],
     "hp" : 100,
     "stage" : "Stage 1",
-    "type" : "WATER",
+    "type" : "Water",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Rapidash",
     "count" : 1,
@@ -1218,10 +1292,11 @@
     "attacks" : [ ],
     "hp" : 100,
     "stage" : "Stage 1",
-    "type" : "FIRE",
+    "type" : "Fire",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Rayquaza EX",
     "count" : 1,
@@ -1231,10 +1306,11 @@
     "attacks" : [ ],
     "hp" : 180,
     "stage" : "Basic",
-    "type" : "DRAGON",
+    "type" : "Dragon",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Relicanth",
     "count" : 1,
@@ -1244,10 +1320,11 @@
     "attacks" : [ ],
     "hp" : 90,
     "stage" : "Basic",
-    "type" : "WATER",
+    "type" : "Water",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Reshiram",
     "count" : 1,
@@ -1257,10 +1334,11 @@
     "attacks" : [ ],
     "hp" : 130,
     "stage" : "Basic",
-    "type" : "FIRE",
+    "type" : "Fire",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Sableye",
     "count" : 1,
@@ -1270,10 +1348,11 @@
     "attacks" : [ ],
     "hp" : 80,
     "stage" : "Basic",
-    "type" : "DARKNESS",
+    "type" : "Darkness",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Salandit",
     "count" : 1,
@@ -1283,10 +1362,11 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "FIRE",
+    "type" : "Fire",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Salazzle",
     "count" : 1,
@@ -1296,10 +1376,11 @@
     "attacks" : [ ],
     "hp" : 120,
     "stage" : "Stage 1",
-    "type" : "FIRE",
+    "type" : "Fire",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Sandshrew",
     "count" : 1,
@@ -1309,10 +1390,11 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "FIGHTING",
+    "type" : "Fighting",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Sandslash",
     "count" : 1,
@@ -1322,10 +1404,11 @@
     "attacks" : [ ],
     "hp" : 120,
     "stage" : "Stage 1",
-    "type" : "FIGHTING",
+    "type" : "Fighting",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Scream Tail",
     "count" : 1,
@@ -1335,10 +1418,11 @@
     "attacks" : [ ],
     "hp" : 90,
     "stage" : "Basic",
-    "type" : "PSYCHIC",
+    "type" : "Psychic",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Sealeo",
     "count" : 1,
@@ -1348,10 +1432,11 @@
     "attacks" : [ ],
     "hp" : 110,
     "stage" : "Stage 1",
-    "type" : "WATER",
+    "type" : "Water",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Sharpedo 1",
     "count" : 1,
@@ -1361,10 +1446,11 @@
     "attacks" : [ ],
     "hp" : 100,
     "stage" : "Stage 1",
-    "type" : "DARKNESS",
+    "type" : "Darkness",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Sharpedo 2",
     "count" : 1,
@@ -1374,10 +1460,11 @@
     "attacks" : [ ],
     "hp" : 120,
     "stage" : "Stage 1",
-    "type" : "WATER",
+    "type" : "Water",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Shedinja",
     "count" : 1,
@@ -1387,10 +1474,11 @@
     "attacks" : [ ],
     "hp" : 60,
     "stage" : "Stage 1",
-    "type" : "PSYCHIC",
+    "type" : "Psychic",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Shellder",
     "count" : 1,
@@ -1400,10 +1488,11 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "WATER",
+    "type" : "Water",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Shelmet",
     "count" : 1,
@@ -1413,10 +1502,11 @@
     "attacks" : [ ],
     "hp" : 60,
     "stage" : "Basic",
-    "type" : "GRASS",
+    "type" : "Grass",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Shiftry",
     "count" : 2,
@@ -1426,10 +1516,11 @@
     "attacks" : [ ],
     "hp" : 160,
     "stage" : "Stage 2",
-    "type" : "GRASS",
+    "type" : "Grass",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Shroodle",
     "count" : 1,
@@ -1439,10 +1530,11 @@
     "attacks" : [ ],
     "hp" : 60,
     "stage" : "Basic",
-    "type" : "DARKNESS",
+    "type" : "Darkness",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Shroomish",
     "count" : 1,
@@ -1452,10 +1544,11 @@
     "attacks" : [ ],
     "hp" : 50,
     "stage" : "Basic",
-    "type" : "GRASS",
+    "type" : "Grass",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Sizzlipede",
     "count" : 1,
@@ -1465,10 +1558,11 @@
     "attacks" : [ ],
     "hp" : 80,
     "stage" : "Basic",
-    "type" : "FIRE",
+    "type" : "Fire",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Slowbro",
     "count" : 2,
@@ -1478,10 +1572,11 @@
     "attacks" : [ ],
     "hp" : 120,
     "stage" : "Stage 1",
-    "type" : "WATER",
+    "type" : "Water",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Slowking",
     "count" : 1,
@@ -1491,10 +1586,11 @@
     "attacks" : [ ],
     "hp" : 130,
     "stage" : "Stage 1",
-    "type" : "WATER",
+    "type" : "Water",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Slowpoke",
     "count" : 1,
@@ -1504,10 +1600,11 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "WATER",
+    "type" : "Water",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Smeargle",
     "count" : 1,
@@ -1517,10 +1614,11 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "COLORLESS",
+    "type" : "Colorless",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Sneasel",
     "count" : 1,
@@ -1530,10 +1628,11 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "WATER",
+    "type" : "Water",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Snubbull",
     "count" : 1,
@@ -1543,10 +1642,11 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "PSYCHIC",
+    "type" : "Psychic",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Sobble",
     "count" : 1,
@@ -1556,10 +1656,11 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "WATER",
+    "type" : "Water",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Solrock",
     "count" : 1,
@@ -1569,10 +1670,11 @@
     "attacks" : [ ],
     "hp" : 110,
     "stage" : "Basic",
-    "type" : "FIGHTING",
+    "type" : "Fighting",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Spearow",
     "count" : 1,
@@ -1582,10 +1684,11 @@
     "attacks" : [ ],
     "hp" : 60,
     "stage" : "Basic",
-    "type" : "COLORLESS",
+    "type" : "Colorless",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Spinarak",
     "count" : 1,
@@ -1595,10 +1698,11 @@
     "attacks" : [ ],
     "hp" : 60,
     "stage" : "Basic",
-    "type" : "GRASS",
+    "type" : "Grass",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Steelix",
     "count" : 1,
@@ -1608,23 +1712,33 @@
     "attacks" : null,
     "hp" : 180,
     "stage" : "Stage 1",
-    "type" : "METAL",
+    "type" : "Metal",
     "weakness" : null,
     "resistance" : [ "\uD83D\uDFE2", "-30" ],
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Stoutland",
     "count" : 1,
     "holo" : false,
     "setPart" : "swsh7/135/",
     "rarity" : "Rare",
-    "attacks" : [ ],
+    "attacks" : [ {
+      "name" : "Kiock Away",
+      "damage" : 120,
+      "cost" : [ "COLORLESS", "COLORLESS", "COLORLESS" ],
+      "effect" : "Flip a coin. If heads, this attack does 100 more damage."
+    } ],
     "hp" : 160,
     "stage" : "Stage 2",
-    "type" : "COLORLESS",
-    "weakness" : null,
+    "type" : "FIRE",
+    "weakness" : [ "FIGHTING", "2" ],
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 3,
+    "ability" : {
+      "name" : "Intimidating Fang",
+      "description" : "As long as this pokemon is in the Active Spot, your opponent's Active Pokemon's attacks do 30 less damage (before applying Weakness and Resistances)"
+    }
   }, {
     "name" : "Stufful",
     "count" : 1,
@@ -1634,10 +1748,11 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "COLORLESS",
+    "type" : "Colorless",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Sudowoodo",
     "count" : 1,
@@ -1647,10 +1762,11 @@
     "attacks" : [ ],
     "hp" : 110,
     "stage" : "Basic",
-    "type" : "FIGHTING",
+    "type" : "Fighting",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Suicune",
     "count" : 2,
@@ -1660,10 +1776,11 @@
     "attacks" : [ ],
     "hp" : 120,
     "stage" : "Basic",
-    "type" : "WATER",
+    "type" : "Water",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Swinub",
     "count" : 1,
@@ -1673,10 +1790,11 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "WATER",
+    "type" : "Water",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Team Rocket's Drowzee",
     "count" : 1,
@@ -1686,10 +1804,11 @@
     "attacks" : [ ],
     "hp" : 80,
     "stage" : "Basic",
-    "type" : "PSYCHIC",
+    "type" : "Psychic",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Team Rocket's Dugtrio",
     "count" : 1,
@@ -1699,10 +1818,11 @@
     "attacks" : [ ],
     "hp" : 100,
     "stage" : "Stage 1",
-    "type" : "FIGHTING",
+    "type" : "Fighting",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Team Rocket's Meowth",
     "count" : 1,
@@ -1712,10 +1832,11 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "COLORLESS",
+    "type" : "Colorless",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Team Rocket's Murkrow",
     "count" : 1,
@@ -1725,10 +1846,11 @@
     "attacks" : [ ],
     "hp" : 80,
     "stage" : "Basic",
-    "type" : "DARKNESS",
+    "type" : "Darkness",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Team Rocket's Tarountula",
     "count" : 1,
@@ -1738,10 +1860,11 @@
     "attacks" : [ ],
     "hp" : 50,
     "stage" : "Basic",
-    "type" : "GRASS",
+    "type" : "Grass",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Thievul 1",
     "count" : 2,
@@ -1751,10 +1874,11 @@
     "attacks" : [ ],
     "hp" : 100,
     "stage" : "Stage 1",
-    "type" : "DARKNESS",
+    "type" : "Darkness",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Thievul 2",
     "count" : 1,
@@ -1764,10 +1888,11 @@
     "attacks" : [ ],
     "hp" : 120,
     "stage" : "Stage 1",
-    "type" : "DARKNESS",
+    "type" : "Darkness",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Thwackey",
     "count" : 1,
@@ -1777,10 +1902,11 @@
     "attacks" : [ ],
     "hp" : 90,
     "stage" : "Stage 1",
-    "type" : "GRASS",
+    "type" : "Grass",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Togepi",
     "count" : 2,
@@ -1790,10 +1916,11 @@
     "attacks" : [ ],
     "hp" : 50,
     "stage" : "Basic",
-    "type" : "PSYCHIC",
+    "type" : "Psychic",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Torkoal",
     "count" : 2,
@@ -1803,10 +1930,11 @@
     "attacks" : [ ],
     "hp" : 130,
     "stage" : "Basic",
-    "type" : "FIRE",
+    "type" : "Fire",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Totodile",
     "count" : 1,
@@ -1816,10 +1944,11 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "WATER",
+    "type" : "Water",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Toxapex",
     "count" : 1,
@@ -1829,10 +1958,11 @@
     "attacks" : [ ],
     "hp" : 120,
     "stage" : "Stage 1",
-    "type" : "DARKNESS",
+    "type" : "Darkness",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Toxicroak",
     "count" : 1,
@@ -1842,10 +1972,11 @@
     "attacks" : [ ],
     "hp" : 120,
     "stage" : "Stage 1",
-    "type" : "DARKNESS",
+    "type" : "Darkness",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Toxtricity",
     "count" : 1,
@@ -1855,10 +1986,11 @@
     "attacks" : [ ],
     "hp" : 130,
     "stage" : "Stage 1",
-    "type" : "ELECTRIC",
+    "type" : "Electric",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Tropius",
     "count" : 1,
@@ -1868,10 +2000,11 @@
     "attacks" : [ ],
     "hp" : 110,
     "stage" : "Basic",
-    "type" : "GRASS",
+    "type" : "Grass",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Unfezant",
     "count" : 1,
@@ -1881,10 +2014,11 @@
     "attacks" : [ ],
     "hp" : 140,
     "stage" : "Stage 2",
-    "type" : "COLORLESS",
+    "type" : "Colorless",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Volcarona",
     "count" : 1,
@@ -1894,10 +2028,11 @@
     "attacks" : [ ],
     "hp" : 140,
     "stage" : "Stage 1",
-    "type" : "FIRE",
+    "type" : "Fire",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Wattrel",
     "count" : 2,
@@ -1907,10 +2042,11 @@
     "attacks" : [ ],
     "hp" : 60,
     "stage" : "Basic",
-    "type" : "ELECTRIC",
+    "type" : "Electric",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Wigglytuff",
     "count" : 1,
@@ -1920,10 +2056,11 @@
     "attacks" : [ ],
     "hp" : 120,
     "stage" : "Stage 1",
-    "type" : "COLORLESS",
+    "type" : "Colorless",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Wimpod",
     "count" : 3,
@@ -1933,10 +2070,11 @@
     "attacks" : [ ],
     "hp" : 70,
     "stage" : "Basic",
-    "type" : "WATER",
+    "type" : "Water",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   }, {
     "name" : "Woobat",
     "count" : 1,
@@ -1946,9 +2084,10 @@
     "attacks" : [ ],
     "hp" : 60,
     "stage" : "Basic",
-    "type" : "PSYCHIC",
+    "type" : "Psychic",
     "weakness" : null,
     "resistance" : null,
-    "retreatCost" : 1
+    "retreatCost" : 1,
+    "ability" : null
   } ]
 }
