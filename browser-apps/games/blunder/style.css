@@ -121,9 +121,15 @@ Blunder - Stylesheet
 }
 
 @keyframes flip {
-    0% { transform: rotateX(0deg); }
-    50% { transform: rotateX(90deg) scale(1.02); }
-    100% { transform: rotateX(0deg); }
+    0% {
+        transform: rotateX(0deg);
+    }
+    50% {
+        transform: rotateX(90deg) scale(1.02);
+    }
+    100% {
+        transform: rotateX(0deg);
+    }
 }
 
 .keyboard {

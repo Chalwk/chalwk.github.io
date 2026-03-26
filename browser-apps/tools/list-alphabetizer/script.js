@@ -4,7 +4,7 @@ Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
 List Alphabetizer - JavaScript
 */
 
-(function() {
+(function () {
     const inputTextarea = document.getElementById('inputText');
     const alphabetizeBtn = document.getElementById('alphabetizeBtn');
     const scrambleBtn = document.getElementById('scrambleBtn');
@@ -47,6 +47,7 @@ List Alphabetizer - JavaScript
         const selected = Array.from(sortModes).find(r => r.checked)?.value;
         wordNumRow.style.display = selected === 'wordNum' ? 'flex' : 'none';
     }
+
     Array.from(sortModes).forEach(r => r.addEventListener('change', showWordNumRow));
     showWordNumRow();
 
@@ -54,6 +55,7 @@ List Alphabetizer - JavaScript
         const selected = Array.from(outputSepRadios).find(r => r.checked)?.value;
         outputCustomRow.style.display = selected === 'custom' ? 'flex' : 'none';
     }
+
     Array.from(outputSepRadios).forEach(r => r.addEventListener('change', showOutputCustomRow));
     showOutputCustomRow();
 
@@ -94,7 +96,7 @@ List Alphabetizer - JavaScript
             const commas = (text.match(/,/g) || []).length;
             const tabs = (text.match(/\t/g) || []).length;
             const blanks = (text.match(/\n\s*\n/g) || []).length;
-            if (blanks > Math.max(newlines/2, 2)) raw = text.split(/\n\s*\n/).map(s => s.trim());
+            if (blanks > Math.max(newlines / 2, 2)) raw = text.split(/\n\s*\n/).map(s => s.trim());
             else if (tabs > commas && tabs > newlines) raw = text.split('\t').map(s => s.trim());
             else if (commas > newlines) raw = text.split(',').map(s => s.trim());
             else raw = text.split(/\r?\n/).map(s => s.trim());

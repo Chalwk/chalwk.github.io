@@ -36,24 +36,25 @@ Time & Date Calculator - HTML
                 <div class="date-calculator-layout">
                     <div class="left-column">
                         <div class="date-input-group">
-                            <label for="startDate" class="input-label">
+                            <label class="input-label" for="startDate">
                                 <span><i class="fas fa-play"></i> Start date</span>
                             </label>
 
                             <div class="input-with-button">
-                                <input type="date" id="startDate" class="date-input">
-                                <button type="button" class="btn btn-secondary today-btn" data-target="start">
+                                <input class="date-input" id="startDate" type="date">
+                                <button class="btn btn-secondary today-btn" data-target="start" type="button">
                                     <i class="fas fa-calendar-check"></i> Today
                                 </button>
                             </div>
 
                             <div class="time-input-group" id="startTimeGroup" style="display: none;">
-                                <label for="startTime" class="input-label" style="flex-direction: row; gap: 1rem;">
+                                <label class="input-label" for="startTime" style="flex-direction: row; gap: 1rem;">
                                     <span><i class="fas fa-clock"></i> Start time</span>
                                 </label>
                                 <div class="input-with-button">
-                                    <input type="time" id="startTime" class="time-input" value="00:00">
-                                    <button type="button" class="btn btn-secondary now-time-btn" data-target="startTime">
+                                    <input class="time-input" id="startTime" type="time" value="00:00">
+                                    <button class="btn btn-secondary now-time-btn" data-target="startTime"
+                                            type="button">
                                         <i class="fas fa-clock"></i> Now
                                     </button>
                                 </div>
@@ -61,24 +62,24 @@ Time & Date Calculator - HTML
                         </div>
 
                         <div class="date-input-group">
-                            <label for="endDate" class="input-label">
+                            <label class="input-label" for="endDate">
                                 <span><i class="fas fa-stop"></i> End date</span>
                             </label>
 
                             <div class="input-with-button">
-                                <input type="date" id="endDate" class="date-input">
-                                <button type="button" class="btn btn-secondary today-btn" data-target="end">
+                                <input class="date-input" id="endDate" type="date">
+                                <button class="btn btn-secondary today-btn" data-target="end" type="button">
                                     <i class="fas fa-calendar-check"></i> Today
                                 </button>
                             </div>
 
                             <div class="time-input-group" id="endTimeGroup" style="display: none;">
-                                <label for="endTime" class="input-label" style="flex-direction: row; gap: 1rem;">
+                                <label class="input-label" for="endTime" style="flex-direction: row; gap: 1rem;">
                                     <span><i class="fas fa-clock"></i> End time</span>
                                 </label>
                                 <div class="input-with-button">
-                                    <input type="time" id="endTime" class="time-input" value="00:00">
-                                    <button type="button" class="btn btn-secondary now-time-btn" data-target="endTime">
+                                    <input class="time-input" id="endTime" type="time" value="00:00">
+                                    <button class="btn btn-secondary now-time-btn" data-target="endTime" type="button">
                                         <i class="fas fa-clock"></i> Now
                                     </button>
                                 </div>
@@ -87,14 +88,14 @@ Time & Date Calculator - HTML
 
                         <div class="option-row">
                             <label class="checkbox-label">
-                                <input type="checkbox" id="includeEndDate">
+                                <input id="includeEndDate" type="checkbox">
                                 <span>Include end date in calculation (add 1 day)</span>
                             </label>
                         </div>
 
                         <div class="option-row">
                             <label class="checkbox-label">
-                                <input type="checkbox" id="includeTime">
+                                <input id="includeTime" type="checkbox">
                                 <span>Include time (hours:minutes)</span>
                             </label>
                         </div>

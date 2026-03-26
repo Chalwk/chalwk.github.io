@@ -12,16 +12,13 @@ Random Password Generator - JavaScript
     };
 
     const WORDS = [
-        `apple`,`river`,`stone`,`ocean`,`sun`,
-        `moon`,`forest`,`shadow`,`ember`,`silver`,
-        `iron`,`sage`,`crane`,`wolf`,`breeze`,
-        `ember`,`cinder`,`harbor`,`crest`,`lumen`
+        `apple`, `river`, `stone`, `ocean`, `sun`,
+        `moon`, `forest`, `shadow`, `ember`, `silver`,
+        `iron`, `sage`, `crane`, `wolf`, `breeze`,
+        `ember`, `cinder`, `harbor`, `crest`, `lumen`
     ];
 
     const el = (sel, root = document) => root.querySelector(sel);
-    const els = (sel, root = document) => Array.from(root.querySelectorAll(sel));
-    const escapeHtml = s => String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[m]));
-
     const lengthInput = el('#length');
     const lengthVal = el('#lengthVal');
     const upperCheck = el('#upper');
@@ -105,7 +102,7 @@ Random Password Generator - JavaScript
         return out.join('');
     }
 
-    function generatePassphrase(words = 4, opts = {}) {
+    function generatePassphrase(words = 4, _opts = {}) {
         const pick = () => WORDS[Math.floor(Math.random() * WORDS.length)];
         const parts = [];
         for (let i = 0; i < words; i++) {
@@ -113,7 +110,7 @@ Random Password Generator - JavaScript
             if (Math.random() < 0.5) w = w.charAt(0).toUpperCase() + w.slice(1);
             parts.push(w);
         }
-        const sep = opts.passphraseSep !== undefined ? opts.passphraseSep : '-';
+        const sep = '-';
         return parts.join(sep);
     }
 
@@ -139,7 +136,9 @@ Random Password Generator - JavaScript
         return result.join('');
     }
 
-    function log2(x) { return Math.log(x) / Math.LN2; }
+    function log2(x) {
+        return Math.log(x) / Math.LN2;
+    }
 
     function calcEntropy(password, opts) {
         if (opts.pattern) {
@@ -167,15 +166,15 @@ Random Password Generator - JavaScript
         if (seconds < 1) return 'instantly';
 
         const intervals = [
-            { label: 'century', seconds: 3153600000 },
-            { label: 'decade', seconds: 315360000 },
-            { label: 'year', seconds: 31536000 },
-            { label: 'month', seconds: 2592000 },
-            { label: 'week', seconds: 604800 },
-            { label: 'day', seconds: 86400 },
-            { label: 'hour', seconds: 3600 },
-            { label: 'minute', seconds: 60 },
-            { label: 'second', seconds: 1 }
+            {label: 'century', seconds: 3153600000},
+            {label: 'decade', seconds: 315360000},
+            {label: 'year', seconds: 31536000},
+            {label: 'month', seconds: 2592000},
+            {label: 'week', seconds: 604800},
+            {label: 'day', seconds: 86400},
+            {label: 'hour', seconds: 3600},
+            {label: 'minute', seconds: 60},
+            {label: 'second', seconds: 1}
         ];
 
         for (const interval of intervals) {
@@ -190,24 +189,24 @@ Random Password Generator - JavaScript
     function getStrengthLabel(score) {
         const labels = ['Very Weak', 'Weak', 'Fair', 'Strong', 'Very Strong'];
         const colors = ['#ef4444', '#f97316', '#eab308', '#22c55e', '#16a34a'];
-        return { label: labels[score] || '-', score, color: colors[score] || '#6b7280' };
+        return {label: labels[score] || '-', score, color: colors[score] || '#6b7280'};
     }
 
     function analyzePasswordWithZxcvbn(password, opts) {
         if (!password) return null;
 
         try {
-            const result = zxcvbn(password);
+            const result = window['zxcvbn'](password);
             const entropy = calcEntropy(password, opts);
 
             return {
                 score: result.score,
                 entropy: entropy,
-                guessesLog10: result.guesses_log10,
-                crackTimeSeconds: result.crack_times_seconds.offline_slow_hashing_1e4_per_second,
+                guessesLog10: result['guesses_log10'],
+                crackTimeSeconds: result['crack_times_seconds']['offline_slow_hashing_1e4_per_second'],
                 feedback: result.feedback,
-                warnings: result.feedback.warning || '',
-                suggestions: result.feedback.suggestions || []
+                warnings: result['feedback']['warning'] || '',
+                suggestions: result['feedback']['suggestions'] || []
             };
         } catch (e) {
             console.error('zxcvbn analysis failed:', e);
@@ -253,7 +252,7 @@ Random Password Generator - JavaScript
 
     function updateUIFromOptions() {
         const opts = readOptionsFromUI();
-        lengthVal.textContent = opts.length;
+        lengthVal.textContent = String(opts.length);
         passphraseWordsInput.disabled = !opts.passphrase;
     }
 
@@ -266,7 +265,7 @@ Random Password Generator - JavaScript
         zxcvbnScoreEl.textContent = `${analysis.score}/4`;
         zxcvbnScoreEl.style.color = strengthInfo.color;
 
-        const pct = (analysis.score + 1) * 20; // 0-4 score to 20-100%
+        const pct = (analysis.score + 1) * 20;
         strengthBar.style.width = `${pct}%`;
         strengthBar.style.background = strengthInfo.color;
 
@@ -329,7 +328,7 @@ Random Password Generator - JavaScript
                 darkMode: parsed.darkMode || false
             };
         } catch (e) {
-            return { darkMode: false };
+            return {darkMode: false};
         }
     }
 
@@ -376,7 +375,7 @@ Random Password Generator - JavaScript
         darkModeCheck.addEventListener('change', (e) => {
             document.body.classList.toggle('dark-mode', e.target.checked);
             const settings = loadSettings();
-            saveSettings({ ...settings, darkMode: e.target.checked });
+            saveSettings({...settings, darkMode: e.target.checked});
         });
 
         const settings = loadSettings();

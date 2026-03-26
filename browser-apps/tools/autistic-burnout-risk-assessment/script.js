@@ -33,7 +33,7 @@ sliders.forEach((slider, index) => {
     sliderValues[index].textContent = '3';
     slider.classList.add('unanswered');
 
-    slider.addEventListener('input', function() {
+    slider.addEventListener('input', function () {
         sliderValues[index].textContent = this.value;
 
         answeredSliders.add(this.id);
@@ -82,7 +82,7 @@ function initializeCollapsedState() {
         content.style.maxHeight = '0';
         icon.style.transform = 'rotate(-90deg)';
 
-        toggle.addEventListener('click', function() {
+        toggle.addEventListener('click', function () {
             if (content.classList.contains('collapsed')) {
                 content.classList.remove('collapsed');
                 content.style.maxHeight = content.scrollHeight + 'px';
@@ -106,9 +106,9 @@ function calculateRisk() {
 
         sliders.forEach(slider => {
             if (!answeredSliders.has(slider.id)) {
-                slider.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                slider.scrollIntoView({behavior: 'smooth', block: 'center'});
                 slider.focus();
-                return;
+
             }
         });
 
@@ -233,16 +233,16 @@ function calculateRisk() {
     }
     updatePriorityRecommendations(energyFactor, sensoryFactor, executiveFactor, socialFactor, emotionFactor);
 
-    factorBreakdown.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    factorBreakdown.scrollIntoView({behavior: 'smooth', block: 'start'});
 }
 
 function updatePriorityRecommendations(energy, sensory, executive, social, emotion) {
     const factors = [
-        { name: 'energy', score: energy, label: 'Energy Management' },
-        { name: 'sensory', score: sensory, label: 'Sensory Processing' },
-        { name: 'executive', score: executive, label: 'Executive Function' },
-        { name: 'social', score: social, label: 'Social Interaction' },
-        { name: 'emotion', score: emotion, label: 'Emotional Regulation' }
+        {name: 'energy', score: energy, label: 'Energy Management'},
+        {name: 'sensory', score: sensory, label: 'Sensory Processing'},
+        {name: 'executive', score: executive, label: 'Executive Function'},
+        {name: 'social', score: social, label: 'Social Interaction'},
+        {name: 'emotion', score: emotion, label: 'Emotional Regulation'}
     ];
 
     factors.sort((a, b) => b.score - a.score);
@@ -317,7 +317,7 @@ recommendationsBtn.addEventListener('click', () => {
     }
 
     recommendationsCard.style.display = 'block';
-    recommendationsCard.scrollIntoView({ behavior: 'smooth' });
+    recommendationsCard.scrollIntoView({behavior: 'smooth'});
 });
 
 clearHistoryBtn.addEventListener('click', () => {
@@ -344,7 +344,7 @@ function exportData() {
         csv += `${date},${assessment.score},${assessment.factors.energy},${assessment.factors.sensory},${assessment.factors.executive},${assessment.factors.social},${assessment.factors.emotion},${assessment.answeredQuestions || sliders.length}\n`;
     });
 
-    const blob = new Blob([csv], { type: 'text/csv' });
+    const blob = new Blob([csv], {type: 'text/csv'});
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -369,7 +369,7 @@ function renderHistory() {
 
     history.forEach((assessment, index) => {
         const date = new Date(assessment.date).toLocaleDateString();
-        const time = new Date(assessment.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const time = new Date(assessment.date).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
 
         let riskClass = '';
         let riskLevelText = '';

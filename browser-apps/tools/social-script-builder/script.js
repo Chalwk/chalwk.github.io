@@ -7,16 +7,16 @@ Social Script Builder - JavaScript
 (() => {
     const STORAGE_KEY = "social-script-builder-v1";
     const STEP_TYPES = {
-        statement: { name: "I Say", color: "step-type-statement" },
-        question: { name: "They Might Say", color: "step-type-question" },
-        action: { name: "Action I Take", color: "step-type-action" },
-        reminder: { name: "Reminder to Self", color: "step-type-reminder" },
-        transition: { name: "Transition", color: "step-type-transition" },
-        observation: { name: "Observation", color: "step-type-observation" },
-        validation: { name: "Validation", color: "step-type-validation" },
-        boundary: { name: "Boundary", color: "step-type-boundary" },
-        followup: { name: "Follow-up", color: "step-type-followup" },
-        closure: { name: "Closure", color: "step-type-closure" }
+        statement: {name: "I Say", color: "step-type-statement"},
+        question: {name: "They Might Say", color: "step-type-question"},
+        action: {name: "Action I Take", color: "step-type-action"},
+        reminder: {name: "Reminder to Self", color: "step-type-reminder"},
+        transition: {name: "Transition", color: "step-type-transition"},
+        observation: {name: "Observation", color: "step-type-observation"},
+        validation: {name: "Validation", color: "step-type-validation"},
+        boundary: {name: "Boundary", color: "step-type-boundary"},
+        followup: {name: "Follow-up", color: "step-type-followup"},
+        closure: {name: "Closure", color: "step-type-closure"}
     };
 
     const PREMADE_SCRIPTS = [
@@ -25,13 +25,18 @@ Social Script Builder - JavaScript
             title: "Greeting Someone",
             description: "Meeting someone new or greeting familiar people",
             steps: [
-                { id: "g1", type: "statement", text: "Hi [Name]! It's good to see you.", order: 0 },
-                { id: "g2", type: "question", text: "Hi [Name], it's good to see you too.", order: 1 },
-                { id: "g3", type: "statement", text: "How have you been since we last talked?", order: 2 },
-                { id: "g4", type: "question", text: "I've been doing well, thanks! How about you?", order: 3 },
-                { id: "g5", type: "statement", text: "I'm doing well too, thank you.", order: 4 },
-                { id: "g6", type: "reminder", text: "If eye contact feels hard, I'll smile at their forehead or shoulder", order: 5 },
-                { id: "g7", type: "reminder", text: "Taking one deep breath before speaking calms my nerves", order: 6 }
+                {id: "g1", type: "statement", text: "Hi [Name]! It's good to see you.", order: 0},
+                {id: "g2", type: "question", text: "Hi [Name], it's good to see you too.", order: 1},
+                {id: "g3", type: "statement", text: "How have you been since we last talked?", order: 2},
+                {id: "g4", type: "question", text: "I've been doing well, thanks! How about you?", order: 3},
+                {id: "g5", type: "statement", text: "I'm doing well too, thank you.", order: 4},
+                {
+                    id: "g6",
+                    type: "reminder",
+                    text: "If eye contact feels hard, I'll smile at their forehead or shoulder",
+                    order: 5
+                },
+                {id: "g7", type: "reminder", text: "Taking one deep breath before speaking calms my nerves", order: 6}
             ]
         },
         {
@@ -39,13 +44,18 @@ Social Script Builder - JavaScript
             title: "Introducing Myself",
             description: "Meeting someone for the first time",
             steps: [
-                { id: "i1", type: "statement", text: "Hello, I'm Jay. It's nice to meet you.", order: 0 },
-                { id: "i2", type: "question", text: "Hi Jay, I'm [Name]. Nice to meet you too.", order: 1 },
-                { id: "i3", type: "statement", text: "I enjoy [hobby].", order: 2 },
-                { id: "i4", type: "question", text: "What do you do in your free time?", order: 3 },
-                { id: "i5", type: "statement", text: "I like to [activity]. What about you?", order: 4 },
-                { id: "i6", type: "reminder", text: "I'll write 3 bullet points about myself beforehand", order: 5 },
-                { id: "i7", type: "reminder", text: "If feeling shy, I'll focus just on 'Hello, I'm Jay' + smile", order: 6 }
+                {id: "i1", type: "statement", text: "Hello, I'm Jay. It's nice to meet you.", order: 0},
+                {id: "i2", type: "question", text: "Hi Jay, I'm [Name]. Nice to meet you too.", order: 1},
+                {id: "i3", type: "statement", text: "I enjoy [hobby].", order: 2},
+                {id: "i4", type: "question", text: "What do you do in your free time?", order: 3},
+                {id: "i5", type: "statement", text: "I like to [activity]. What about you?", order: 4},
+                {id: "i6", type: "reminder", text: "I'll write 3 bullet points about myself beforehand", order: 5},
+                {
+                    id: "i7",
+                    type: "reminder",
+                    text: "If feeling shy, I'll focus just on 'Hello, I'm Jay' + smile",
+                    order: 6
+                }
             ]
         },
         {
@@ -53,13 +63,18 @@ Social Script Builder - JavaScript
             title: "Asking for Help/Clarification",
             description: "Confused by instructions or missing information",
             steps: [
-                { id: "h1", type: "statement", text: "Excuse me, could you please explain that again?", order: 0 },
-                { id: "h2", type: "question", text: "Sure, [clarified version]", order: 1 },
-                { id: "h3", type: "statement", text: "Thank you - I understand now.", order: 2 },
-                { id: "h4", type: "question", text: "I'm busy right now.", order: 3 },
-                { id: "h5", type: "statement", text: "No problem. When would be a good time?", order: 4 },
-                { id: "h6", type: "reminder", text: "Keep a notepad ready for written explanations", order: 5 },
-                { id: "h7", type: "reminder", text: "If overwhelmed: 'Would email instructions work better for me?'", order: 6 }
+                {id: "h1", type: "statement", text: "Excuse me, could you please explain that again?", order: 0},
+                {id: "h2", type: "question", text: "Sure, [clarified version]", order: 1},
+                {id: "h3", type: "statement", text: "Thank you - I understand now.", order: 2},
+                {id: "h4", type: "question", text: "I'm busy right now.", order: 3},
+                {id: "h5", type: "statement", text: "No problem. When would be a good time?", order: 4},
+                {id: "h6", type: "reminder", text: "Keep a notepad ready for written explanations", order: 5},
+                {
+                    id: "h7",
+                    type: "reminder",
+                    text: "If overwhelmed: 'Would email instructions work better for me?'",
+                    order: 6
+                }
             ]
         },
         {
@@ -67,21 +82,41 @@ Social Script Builder - JavaScript
             title: "Expressing Boundaries",
             description: "Physical/emotional discomfort in interactions",
             steps: [
-                { id: "b1", type: "statement", text: "I feel uncomfortable when [specific action]. Could we [alternative]?", order: 0 },
-                { id: "b2", type: "statement", text: "Example: 'I feel uncomfortable with hugs. Could we wave instead?'", order: 1 },
-                { id: "b3", type: "question", text: "Sorry! I didn't realize.", order: 2 },
-                { id: "b4", type: "statement", text: "Thank you for understanding.", order: 3 },
-                { id: "b5", type: "question", text: "You're too sensitive.", order: 4 },
-                { id: "b6", type: "statement", text: "This is important for my wellbeing.", order: 5 },
-                { id: "b7", type: "reminder", text: "Pre-identify 3 non-negotiable boundaries", order: 6 },
-                { id: "b8", type: "reminder", text: "Practice power stance (feet apart, shoulders back) before speaking", order: 7 }
+                {
+                    id: "b1",
+                    type: "statement",
+                    text: "I feel uncomfortable when [specific action]. Could we [alternative]?",
+                    order: 0
+                },
+                {
+                    id: "b2",
+                    type: "statement",
+                    text: "Example: 'I feel uncomfortable with hugs. Could we wave instead?'",
+                    order: 1
+                },
+                {id: "b3", type: "question", text: "Sorry! I didn't realize.", order: 2},
+                {id: "b4", type: "statement", text: "Thank you for understanding.", order: 3},
+                {id: "b5", type: "question", text: "You're too sensitive.", order: 4},
+                {id: "b6", type: "statement", text: "This is important for my wellbeing.", order: 5},
+                {id: "b7", type: "reminder", text: "Pre-identify 3 non-negotiable boundaries", order: 6},
+                {
+                    id: "b8",
+                    type: "reminder",
+                    text: "Practice power stance (feet apart, shoulders back) before speaking",
+                    order: 7
+                }
             ]
         }
     ];
 
     const el = (sel, root = document) => root.querySelector(sel);
-    const els = (sel, root = document) => Array.from(root.querySelectorAll(sel));
-    const escapeHtml = s => String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[m]));
+    const escapeHtml = s => String(s).replace(/[&<>"']/g, m => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": "&#39;"
+    }[m]));
 
     const scriptTitle = el("#script-title");
     const scriptDescription = el("#script-description");
@@ -113,7 +148,6 @@ Social Script Builder - JavaScript
     const timerDisplay = el("#timer-display");
     const showTimer = el("#show-timer");
     const autoAdvance = el("#auto-advance");
-    const importFile = el("#import-file");
 
     let currentScript = {
         id: null,
@@ -181,7 +215,7 @@ Social Script Builder - JavaScript
         if (newIndex < 0 || newIndex >= currentScript.steps.length) return;
 
         [currentScript.steps[index], currentScript.steps[newIndex]] =
-        [currentScript.steps[newIndex], currentScript.steps[index]];
+            [currentScript.steps[newIndex], currentScript.steps[index]];
 
         renderSteps();
     }
@@ -208,8 +242,8 @@ Social Script Builder - JavaScript
                 <div class="step-type">
                     <select id="step-${step.id}-type" aria-label="Step type" style="padding: 0.5rem; border: 1px solid var(--gray-light); border-radius: var(--radius); width: 100%;">
                         ${Object.entries(STEP_TYPES).map(([key, value]) =>
-                            `<option value="${key}" ${step.type === key ? 'selected' : ''}>${value.name}</option>`
-                        ).join('')}
+                `<option value="${key}" ${step.type === key ? 'selected' : ''}>${value.name}</option>`
+            ).join('')}
                     </select>
                 </div>
                 <div class="step-actions">
@@ -245,7 +279,7 @@ Social Script Builder - JavaScript
         }
 
         const filteredScripts = scripts.filter(script =>
-        !q || script.title.toLowerCase().includes(q) || script.description.toLowerCase().includes(q)
+            !q || script.title.toLowerCase().includes(q) || script.description.toLowerCase().includes(q)
         );
 
         if (filteredScripts.length === 0) {
@@ -434,7 +468,7 @@ Social Script Builder - JavaScript
         }
 
         const dataStr = JSON.stringify(currentScript, null, 2);
-        const dataBlob = new Blob([dataStr], { type: "application/json" });
+        const dataBlob = new Blob([dataStr], {type: "application/json"});
 
         const url = URL.createObjectURL(dataBlob);
         const link = document.createElement("a");

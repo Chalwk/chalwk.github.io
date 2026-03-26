@@ -236,15 +236,15 @@ Social Script Builder - HTML
     });
 
     if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
+        window.addEventListener('load', function () {
             const scope = '/browser-apps/tools/social-script-builder/';
-            navigator.serviceWorker.register('sw.js', { scope: scope })
-                .then(function(registration) {
-                console.log('SW registered: ', registration);
-            })
-                .catch(function(registrationError) {
-                console.log('SW registration failed: ', registrationError);
-            });
+            navigator.serviceWorker.register('sw.js', {scope: scope})
+                .then(function (registration) {
+                    console.log('SW registered: ', registration);
+                })
+                .catch(function (registrationError) {
+                    console.log('SW registration failed: ', registrationError);
+                });
         });
     }
 

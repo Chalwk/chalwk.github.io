@@ -710,7 +710,7 @@ function filterPlaces() {
 function setupSearch() {
     const searchInput = document.getElementById('search-input');
 
-    searchInput.addEventListener('input', function() {
+    searchInput.addEventListener('input', function () {
         const searchTerm = this.value.toLowerCase();
 
         document.querySelectorAll('.place-card').forEach(card => {
@@ -737,7 +737,7 @@ function setupSearch() {
     });
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     generateCategoryButtons();
     generatePlaceCards();
     setupSearch();

@@ -259,29 +259,65 @@ My Pokémon TCG Collection - Stylesheet
     font-size: 0.65rem;
     font-weight: 500;
     line-height: 1.3;
-    background-color: rgba(0,0,0,0.08);
+    background-color: rgba(0, 0, 0, 0.08);
     color: #fff;
     text-transform: uppercase;
     letter-spacing: 0.2px;
     white-space: nowrap;
     border-radius: 3px;
 }
+
 .item-rarity {
     margin-top: 0.2rem;
     display: flex;
     justify-content: flex-start;
 }
-.rarity-common { background-color: #6c757d; }
-.rarity-uncommon { background-color: #28a745; }
-.rarity-rare { background-color: #007bff; }
-.rarity-double-rare { background-color: #17a2b8; }
-.rarity-ultra-rare { background-color: #6f42c1; }
-.rarity-illustration-rare { background-color: #e83e8c; }
-.rarity-special-illustration-rare { background-color: #ffc107; color: #212529; }
-.rarity-hyper-rare { background-color: #fd7e14; }
-.rarity-shiny-rare { background-color: #20c997; }
-.rarity-shiny-ultra-rare { background-color: #1e7e6c; }
-.rarity-ace-spec-rare { background-color: #dc3545; }
+
+.rarity-common {
+    background-color: #6c757d;
+}
+
+.rarity-uncommon {
+    background-color: #28a745;
+}
+
+.rarity-rare {
+    background-color: #007bff;
+}
+
+.rarity-double-rare {
+    background-color: #17a2b8;
+}
+
+.rarity-ultra-rare {
+    background-color: #6f42c1;
+}
+
+.rarity-illustration-rare {
+    background-color: #e83e8c;
+}
+
+.rarity-special-illustration-rare {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.rarity-hyper-rare {
+    background-color: #fd7e14;
+}
+
+.rarity-shiny-rare {
+    background-color: #20c997;
+}
+
+.rarity-shiny-ultra-rare {
+    background-color: #1e7e6c;
+}
+
+.rarity-ace-spec-rare {
+    background-color: #dc3545;
+}
+
 .rarity-promo {
     background-color: #000;
     color: #ffd700;
@@ -289,6 +325,7 @@ My Pokémon TCG Collection - Stylesheet
     position: relative;
     padding-left: 1.2rem;
 }
+
 .rarity-promo::before {
     content: "★";
     position: absolute;
@@ -297,6 +334,7 @@ My Pokémon TCG Collection - Stylesheet
     font-size: 0.7rem;
     color: #ffd700;
 }
+
 .rarity-unknown {
     background-color: #adb5bd;
 }
@@ -318,7 +356,7 @@ My Pokémon TCG Collection - Stylesheet
     left: 8px;
     z-index: 2;
     pointer-events: none;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     margin: 0;
 }
 
@@ -336,7 +374,7 @@ My Pokémon TCG Collection - Stylesheet
     justify-content: center;
     color: var(--primary);
     text-decoration: none;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
     transition: 0.2s;
     font-size: 14px;
 }
@@ -346,16 +384,45 @@ My Pokémon TCG Collection - Stylesheet
     color: white;
 }
 
-.type-psychic { border-left-color: var(--type-psychic); }
-.type-darkness { border-left-color: var(--type-darkness); }
-.type-electric { border-left-color: var(--type-electric); }
-.type-dragon { border-left-color: var(--type-dragon); }
-.type-rock { border-left-color: var(--type-rock); }
-.type-colorless { border-left-color: var(--type-colorless); }
-.type-fire { border-left-color: var(--type-fire); }
-.type-metal { border-left-color: var(--type-metal); }
-.type-grass { border-left-color: var(--type-grass); }
-.type-water { border-left-color: var(--type-water); }
+.type-psychic {
+    border-left-color: var(--type-psychic);
+}
+
+.type-darkness {
+    border-left-color: var(--type-darkness);
+}
+
+.type-electric {
+    border-left-color: var(--type-electric);
+}
+
+.type-dragon {
+    border-left-color: var(--type-dragon);
+}
+
+.type-rock {
+    border-left-color: var(--type-rock);
+}
+
+.type-colorless {
+    border-left-color: var(--type-colorless);
+}
+
+.type-fire {
+    border-left-color: var(--type-fire);
+}
+
+.type-metal {
+    border-left-color: var(--type-metal);
+}
+
+.type-grass {
+    border-left-color: var(--type-grass);
+}
+
+.type-water {
+    border-left-color: var(--type-water);
+}
 
 .modal {
     display: none;
@@ -365,7 +432,7 @@ My Pokémon TCG Collection - Stylesheet
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0,0,0,0.8);
+    background-color: rgba(0, 0, 0, 0.8);
     align-items: center;
     justify-content: center;
 }
@@ -376,7 +443,7 @@ My Pokémon TCG Collection - Stylesheet
     background: white;
     padding: 1rem;
     border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     position: relative;
     display: flex;
     flex-direction: column;
@@ -396,7 +463,7 @@ My Pokémon TCG Collection - Stylesheet
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(0,0,0,0.6);
+    background: rgba(0, 0, 0, 0.6);
     color: white;
     width: 44px;
     height: 44px;
@@ -411,19 +478,34 @@ My Pokémon TCG Collection - Stylesheet
     z-index: 10;
     user-select: none;
 }
+
 .modal-nav:hover {
-    background: rgba(0,0,0,0.85);
+    background: rgba(0, 0, 0, 0.85);
     transform: translateY(-50%) scale(1.05);
 }
+
 .modal-nav.left {
     left: -60px;
 }
+
 .modal-nav.right {
     right: -60px;
 }
+
 @media (max-width: 768px) {
-    .modal-nav.left { left: -20px; width: 36px; height: 36px; font-size: 24px; }
-    .modal-nav.right { right: -20px; width: 36px; height: 36px; font-size: 24px; }
+    .modal-nav.left {
+        left: -20px;
+        width: 36px;
+        height: 36px;
+        font-size: 24px;
+    }
+
+    .modal-nav.right {
+        right: -20px;
+        width: 36px;
+        height: 36px;
+        font-size: 24px;
+    }
 }
 
 .modal-caption {
@@ -432,7 +514,7 @@ My Pokémon TCG Collection - Stylesheet
     font-weight: 500;
     color: #333;
     text-align: center;
-    background: rgba(255,255,255,0.9);
+    background: rgba(255, 255, 255, 0.9);
     padding: 6px 14px;
     border-radius: 40px;
     max-width: 90%;
@@ -452,7 +534,7 @@ My Pokémon TCG Collection - Stylesheet
     font-size: 22px;
     cursor: pointer;
     border: 1px solid #ccc;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     font-weight: bold;
     z-index: 20;
 }
@@ -597,9 +679,11 @@ My Pokémon TCG Collection - Stylesheet
         white-space: normal;
         word-break: keep-all;
     }
+
     .rarity-promo {
         padding-left: 1rem;
     }
+
     .rarity-promo::before {
         left: 0.2rem;
         top: 0.1rem;
@@ -609,15 +693,19 @@ My Pokémon TCG Collection - Stylesheet
     .pokemon-extra {
         font-size: 0.65rem;
     }
+
     .attack-name {
         font-size: 0.7rem;
     }
+
     .attack-damage {
         font-size: 0.65rem;
     }
+
     .attack-effect {
         font-size: 0.6rem;
     }
+
     .pokemon-stats {
         font-size: 0.6rem;
     }
@@ -629,9 +717,11 @@ My Pokémon TCG Collection - Stylesheet
         flex-wrap: wrap;
         gap: 0.3rem;
     }
+
     .pokemon-details {
         font-size: 0.7rem;
     }
+
     .rarity-badge {
         font-size: 0.55rem;
         padding: 0.05rem 0.3rem;
@@ -642,5 +732,8 @@ My Pokémon TCG Collection - Stylesheet
     .card-grid {
         grid-template-columns: repeat(5, minmax(160px, 1fr));
     }
-    .card-thumb { aspect-ratio: 4 / 5; }
+
+    .card-thumb {
+        aspect-ratio: 4 / 5;
+    }
 }

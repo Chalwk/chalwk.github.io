@@ -4,16 +4,16 @@ Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
 My Pokémon TCG Collection - Script
 */
 
-(function(){
+(function () {
     const BASE_URL = "https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/";
     const IMAGE_BASE = "images/";
     const RARITY_MAP = new Map([
-        ['common','common'],['uncommon','uncommon'],['rare','rare'],
-        ['rare holo','rare'],['holo rare','rare'],
-        ['double rare','double-rare'],['ultra rare','ultra-rare'],['illustration rare','illustration-rare'],
-        ['special illustration rare','special-illustration-rare'],['hyper rare','hyper-rare'],
-        ['shiny rare','shiny-rare'],['shiny ultra rare','shiny-ultra-rare'],['ace spec rare','ace-spec-rare'],
-        ['promo','promo']
+        ['common', 'common'], ['uncommon', 'uncommon'], ['rare', 'rare'],
+        ['rare holo', 'rare'], ['holo rare', 'rare'],
+        ['double rare', 'double-rare'], ['ultra rare', 'ultra-rare'], ['illustration rare', 'illustration-rare'],
+        ['special illustration rare', 'special-illustration-rare'], ['hyper rare', 'hyper-rare'],
+        ['shiny rare', 'shiny-rare'], ['shiny ultra rare', 'shiny-ultra-rare'], ['ace spec rare', 'ace-spec-rare'],
+        ['promo', 'promo']
     ]);
 
     const TYPE_ICON_MAP = {
@@ -69,12 +69,12 @@ My Pokémon TCG Collection - Script
 
     const escapeHtml = (str) => {
         if (!str) return '';
-        return str.replace(/[&<>]/g, function(m) {
+        return str.replace(/[&<>]/g, function (m) {
             if (m === '&') return '&amp;';
             if (m === '<') return '&lt;';
             if (m === '>') return '&gt;';
             return m;
-        }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+        }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function (c) {
             return c;
         });
     };
@@ -234,7 +234,7 @@ My Pokémon TCG Collection - Script
 
         updateModalContent();
         modal.style.display = 'flex';
-        history.pushState({ modal: true }, '');
+        history.pushState({modal: true}, '');
     };
 
     window.closeModal = (skipHistoryBack = false) => {
@@ -267,7 +267,9 @@ My Pokémon TCG Collection - Script
         navigateModal(1);
     });
     document.addEventListener('keydown', onKeyDown);
-    window.addEventListener('popstate', () => { if (modal.style.display === 'flex') window.closeModal(true); });
+    window.addEventListener('popstate', () => {
+        if (modal.style.display === 'flex') window.closeModal(true);
+    });
 
     document.addEventListener('click', (e) => {
         const card = e.target.closest('.item-card, .pokemon-card');
@@ -378,7 +380,7 @@ My Pokémon TCG Collection - Script
 
     const parseSearchTokens = (term) => {
         const tokens = term.toLowerCase().split(/\s+/).filter(t => t);
-        const conditions = { holo: null, stage: null, hp: null, rarity: null, nameTokens: [] };
+        const conditions = {holo: null, stage: null, hp: null, rarity: null, nameTokens: []};
         const keywords = new Set(['holo', 'stage', 'hp', 'rarity']);
         let i = 0;
         while (i < tokens.length) {
@@ -393,8 +395,10 @@ My Pokémon TCG Collection - Script
                 while (i < tokens.length && !keywords.has(tokens[i]) && !tokens[i].includes(':')) valueParts.push(tokens[i++]);
                 const valueStr = valueParts.join(' ');
                 if (keyword === 'stage') conditions.stage = valueStr;
-                else if (keyword === 'hp') { const hpVal = parseInt(valueStr, 10); if (!isNaN(hpVal)) conditions.hp = hpVal; }
-                else if (keyword === 'rarity') conditions.rarity = valueStr;
+                else if (keyword === 'hp') {
+                    const hpVal = parseInt(valueStr, 10);
+                    if (!isNaN(hpVal)) conditions.hp = hpVal;
+                } else if (keyword === 'rarity') conditions.rarity = valueStr;
             } else if (token.startsWith('stage:')) {
                 conditions.stage = token.substring(6);
                 i++;
@@ -434,7 +438,13 @@ My Pokémon TCG Collection - Script
         if (filterDebounceTimer) clearTimeout(filterDebounceTimer);
         filterDebounceTimer = setTimeout(() => {
             const term = searchInput.value.trim();
-            const conditions = term ? parseSearchTokens(term) : { holo: null, stage: null, hp: null, rarity: null, nameTokens: [] };
+            const conditions = term ? parseSearchTokens(term) : {
+                holo: null,
+                stage: null,
+                hp: null,
+                rarity: null,
+                nameTokens: []
+            };
             for (let card of allCards) {
                 card.style.display = matchesCard(card, conditions) ? 'flex' : 'none';
             }
@@ -452,7 +462,7 @@ My Pokémon TCG Collection - Script
 
             if (data.ENERGY) {
                 data.ENERGY.forEach(entry => {
-                    const { name, count, holo, setPart, rarity } = entry;
+                    const {name, count, holo, setPart, rarity} = entry;
                     energies.push({
                         name,
                         count: parseInt(count, 10),
@@ -465,7 +475,7 @@ My Pokémon TCG Collection - Script
 
             if (data.SUPPORTER) {
                 data.SUPPORTER.forEach(entry => {
-                    const { name, count, holo, setPart, rarity } = entry;
+                    const {name, count, holo, setPart, rarity} = entry;
                     supporters.push({
                         name,
                         count: parseInt(count, 10),
@@ -478,7 +488,7 @@ My Pokémon TCG Collection - Script
 
             if (data.ITEM) {
                 data.ITEM.forEach(entry => {
-                    const { name, count, holo, setPart, rarity } = entry;
+                    const {name, count, holo, setPart, rarity} = entry;
                     items.push({
                         name,
                         count: parseInt(count, 10),
@@ -491,7 +501,7 @@ My Pokémon TCG Collection - Script
 
             if (data.TOOL) {
                 data.TOOL.forEach(entry => {
-                    const { name, count, holo, setPart, rarity } = entry;
+                    const {name, count, holo, setPart, rarity} = entry;
                     tools.push({
                         name,
                         count: parseInt(count, 10),
@@ -504,7 +514,20 @@ My Pokémon TCG Collection - Script
 
             if (data.POKEMON) {
                 data.POKEMON.forEach(entry => {
-                    const { name, hp, stage, count, type, holo, setPart, rarity, attacks, weakness, resistance, retreatCost } = entry;
+                    const {
+                        name,
+                        hp,
+                        stage,
+                        count,
+                        type,
+                        holo,
+                        setPart,
+                        rarity,
+                        attacks,
+                        weakness,
+                        resistance,
+                        retreatCost
+                    } = entry;
                     if (!pokemonByType[type]) pokemonByType[type] = [];
                     pokemonByType[type].push({
                         name,

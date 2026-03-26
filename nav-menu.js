@@ -4,7 +4,7 @@ Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
 nav-menu.js
 */
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const header = document.querySelector('header.header');
     const pathSegments = window.location.pathname.split('/');
     const privateWebsiteIndex = pathSegments.indexOf('private-website');
@@ -15,78 +15,77 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     if (header) {
-        const headerHTML = `
-<div class="container">
-    <a class="logo" href="${basePath}index.html" aria-label="Home - Jericho's Portfolio">
-        <i class="fas fa-code"></i> Jericho
-    </a>
 
-    <nav class="nav-desktop" aria-label="Main Navigation">
-        <ul class="nav-links">
-            <li><a href="${basePath}index.html#about">About</a></li>
-            <li><a href="${basePath}browser-apps/apps_and_tools.html">Apps & Tools</a></li>
-            <li class="dropdown">
-                <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true">
-                    Other Stuff <i class="fas fa-chevron-down" aria-hidden="true"></i>
+        header.innerHTML = `
+            <div class="container">
+                <a class="logo" href="${basePath}index.html" aria-label="Home - Jericho's Portfolio">
+                    <i class="fas fa-code"></i> Jericho
+                </a>
+            
+                <nav class="nav-desktop" aria-label="Main Navigation">
+                    <ul class="nav-links">
+                        <li><a href="${basePath}index.html#about">About</a></li>
+                        <li><a href="${basePath}browser-apps/apps_and_tools.html">Apps & Tools</a></li>
+                        <li class="dropdown">
+                            <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true">
+                                Other Stuff <i class="fas fa-chevron-down" aria-hidden="true"></i>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li role="none"><a href="https://chalwk.github.io/CPAS/" role="menuitem">CPAS</a></li>
+                                <li role="none"><a href="${basePath}browser-apps/collections/pokemon/pokemon.html" role="menuitem">My Pokémon TCG collection</a></li>
+                                <li class="dropdown-submenu" role="none">
+                                    <button class="submenu-toggle" aria-expanded="false">
+                                        Education <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                                    </button>
+                                    <ul class="submenu" role="menu">
+                                        <li role="none"><a href="${basePath}education/understanding-autism.html" role="menuitem">Understanding Autism</a></li>
+                                        <li role="none"><a href="${basePath}education/stick-figure-comics.html" role="menuitem">Autism through Stick Figures</a></li>
+                                        <li role="none"><a href="${basePath}education/github-pages-tutorial.html" role="menuitem">Creating a GitHub Pages Website</a></li>
+                                        <li role="none"><a href="${basePath}education/arachnology.html" role="menuitem">Local Aranid Research</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><a class="donate-btn" href="https://www.paypal.com/ncp/payment/XUPTKDU6LKM3G" target="_blank" rel="noopener"><i class="fas fa-heart"></i> Support Me</a></li>
+                    </ul>
+                </nav>
+            
+                <button class="hamburger" aria-label="Toggle menu" aria-expanded="false">
+                    <span></span>
+                    <span></span>
+                    <span></span>
                 </button>
-                <ul class="dropdown-menu" role="menu">
-                    <li role="none"><a href="https://chalwk.github.io/CPAS/" role="menuitem">CPAS</a></li>
-                    <li role="none"><a href="${basePath}browser-apps/collections/pokemon/pokemon.html" role="menuitem">My Pokémon TCG collection</a></li>
-                    <li class="dropdown-submenu" role="none">
-                        <button class="submenu-toggle" aria-expanded="false">
-                            Education <i class="fas fa-chevron-right" aria-hidden="true"></i>
-                        </button>
-                        <ul class="submenu" role="menu">
-                            <li role="none"><a href="${basePath}education/understanding-autism.html" role="menuitem">Understanding Autism</a></li>
-                            <li role="none"><a href="${basePath}education/stick-figure-comics.html" role="menuitem">Autism through Stick Figures</a></li>
-                            <li role="none"><a href="${basePath}education/github-pages-tutorial.html" role="menuitem">Creating a GitHub Pages Website</a></li>
-                            <li role="none"><a href="${basePath}education/arachnology.html" role="menuitem">Local Aranid Research</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-            <li><a class="donate-btn" href="https://www.paypal.com/ncp/payment/XUPTKDU6LKM3G" target="_blank" rel="noopener"><i class="fas fa-heart"></i> Support Me</a></li>
-        </ul>
-    </nav>
-
-    <button class="hamburger" aria-label="Toggle menu" aria-expanded="false">
-        <span></span>
-        <span></span>
-        <span></span>
-    </button>
-
-    <nav class="nav-mobile" aria-label="Mobile Navigation">
-        <ul class="nav-mobile-links">
-            <li><a href="${basePath}index.html#about">About</a></li>
-            <li><a href="${basePath}browser-apps/apps_and_tools.html">Apps & Tools</a></li>
-            <li class="dropdown">
-                <button class="dropdown-toggle">
-                    Other Stuff
-                    <i class="fas fa-chevron-down"></i>
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a href="https://chalwk.github.io/CPAS/">CPAS</a></li>
-                    <li><a href="${basePath}browser-apps/collections/pokemon/pokemon.html">My Pokémon TCG collection</a></li>
-                    <li class="dropdown-submenu">
-                        <button class="submenu-toggle">
-                            Education
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
-                        <ul class="submenu">
-                            <li><a href="${basePath}education/understanding-autism.html">Understanding Autism</a></li>
-                            <li><a href="${basePath}education/stick-figure-comics.html">Autism through Stick Figures</a></li>
-                            <li><a href="${basePath}education/github-pages-tutorial.html">Creating a GitHub Pages Website</a></li>
-                            <li><a href="${basePath}education/arachnology.html">Local Aranid Research</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-            <li><a class="donate-btn" href="https://www.paypal.com/ncp/payment/XUPTKDU6LKM3G" target="_blank" rel="noopener"><i class="fas fa-heart"></i> Support Me</a></li>
-        </ul>
-    </nav>
-</div>`;
-
-        header.innerHTML = headerHTML;
+            
+                <nav class="nav-mobile" aria-label="Mobile Navigation">
+                    <ul class="nav-mobile-links">
+                        <li><a href="${basePath}index.html#about">About</a></li>
+                        <li><a href="${basePath}browser-apps/apps_and_tools.html">Apps & Tools</a></li>
+                        <li class="dropdown">
+                            <button class="dropdown-toggle">
+                                Other Stuff
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a href="https://chalwk.github.io/CPAS/">CPAS</a></li>
+                                <li><a href="${basePath}browser-apps/collections/pokemon/pokemon.html">My Pokémon TCG collection</a></li>
+                                <li class="dropdown-submenu">
+                                    <button class="submenu-toggle">
+                                        Education
+                                        <i class="fas fa-chevron-right"></i>
+                                    </button>
+                                    <ul class="submenu">
+                                        <li><a href="${basePath}education/understanding-autism.html">Understanding Autism</a></li>
+                                        <li><a href="${basePath}education/stick-figure-comics.html">Autism through Stick Figures</a></li>
+                                        <li><a href="${basePath}education/github-pages-tutorial.html">Creating a GitHub Pages Website</a></li>
+                                        <li><a href="${basePath}education/arachnology.html">Local Aranid Research</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><a class="donate-btn" href="https://www.paypal.com/ncp/payment/XUPTKDU6LKM3G" target="_blank" rel="noopener"><i class="fas fa-heart"></i> Support Me</a></li>
+                    </ul>
+                </nav>
+            </div>`;
 
         const donateStyle = document.createElement('style');
         donateStyle.textContent = `
@@ -119,7 +118,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const toggle = dropdown.querySelector('.dropdown-toggle');
             const menu = dropdown.querySelector('.dropdown-menu');
 
-            toggle.addEventListener('click', function(e) {
+            toggle.addEventListener('click', function (e) {
                 if (window.innerWidth <= 768) return;
                 e.stopPropagation();
                 const isExpanded = this.getAttribute('aria-expanded') === 'true';
@@ -136,7 +135,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
 
-        document.addEventListener('click', function(e) {
+        document.addEventListener('click', function (e) {
             if (window.innerWidth <= 768) return;
             if (!e.target.closest('.dropdown')) {
                 desktopDropdowns.forEach(dropdown => {
@@ -191,7 +190,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const mobileSubmenus = navMobile.querySelectorAll('.dropdown-submenu');
 
         if (hamburger) {
-            hamburger.addEventListener('click', function() {
+            hamburger.addEventListener('click', function () {
                 const isExpanded = this.getAttribute('aria-expanded') === 'true';
                 this.setAttribute('aria-expanded', !isExpanded);
                 this.classList.toggle('active');
@@ -203,7 +202,7 @@ document.addEventListener('DOMContentLoaded', function() {
         mobileDropdowns.forEach(dropdown => {
             const toggle = dropdown.querySelector('.dropdown-toggle');
             if (toggle) {
-                toggle.addEventListener('click', function(e) {
+                toggle.addEventListener('click', function (e) {
                     e.preventDefault();
                     e.stopPropagation();
                     const parentLi = this.closest('li');
@@ -215,7 +214,7 @@ document.addEventListener('DOMContentLoaded', function() {
         mobileSubmenus.forEach(submenu => {
             const toggle = submenu.querySelector('.submenu-toggle');
             if (toggle) {
-                toggle.addEventListener('click', function(e) {
+                toggle.addEventListener('click', function (e) {
                     e.preventDefault();
                     e.stopPropagation();
                     submenu.classList.toggle('active');
@@ -225,7 +224,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const mobileLinks = navMobile.querySelectorAll('a');
         mobileLinks.forEach(link => {
-            link.addEventListener('click', function() {
+            link.addEventListener('click', function () {
                 hamburger.classList.remove('active');
                 hamburger.setAttribute('aria-expanded', 'false');
                 navMobile.classList.remove('active');
@@ -233,7 +232,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
 
-        document.addEventListener('keydown', function(e) {
+        document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape') {
                 hamburger.classList.remove('active');
                 hamburger.setAttribute('aria-expanded', 'false');
@@ -325,9 +324,9 @@ document.addEventListener('DOMContentLoaded', function() {
     document.head.appendChild(scrollStyle);
 
     let scrollTimeout;
-    window.addEventListener('scroll', function() {
+    window.addEventListener('scroll', function () {
         clearTimeout(scrollTimeout);
-        scrollTimeout = setTimeout(function() {
+        scrollTimeout = setTimeout(function () {
             const isVisible = window.pageYOffset > 300;
             scrollBtn.classList.toggle('visible', isVisible);
             scrollBtn.setAttribute('tabindex', isVisible ? '0' : '-1');
@@ -335,7 +334,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 100);
     });
 
-    scrollBtn.addEventListener('click', function() {
+    scrollBtn.addEventListener('click', function () {
         window.scrollTo({
             top: 0,
             behavior: 'smooth'
@@ -358,7 +357,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.body.appendChild(footer);
     }
 
-    document.addEventListener('keydown', function(e) {
+    document.addEventListener('keydown', function (e) {
         if (e.key === 'Tab' && document.body.classList.contains('menu-open')) {
             const navMobile = document.querySelector('.nav-mobile');
             if (!navMobile) return;

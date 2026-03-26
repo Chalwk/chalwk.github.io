@@ -4,78 +4,150 @@ Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
 Speed Reading Tester - JavaScript
 */
 
-(function() {
+(function () {
     const stories = [
         {
             title: "The Lost Key",
             text: "Elena found a small brass key under the porch. It was old and tarnished, but she felt it was important. She tried it on every lock in the house: the front door, the desk drawer, even the old chest in the attic. None worked. Disappointed, she sat on the garden wall. A glint caught her eye - a tiny lock on a weathered box half-buried in the soil. The key turned smoothly. Inside lay a bundle of letters written by her great-grandmother. Elena spent the evening reading about a love story she never knew.",
             questions: [
-                { q: "Where did Elena find the key?", opts: ["In the attic", "Under the porch", "Inside a box", "On the garden wall"], correct: 1 },
-                { q: "What was inside the box?", opts: ["Jewellery", "Gold coins", "Letters", "A photograph"], correct: 2 },
-                { q: "Who wrote the letters?", opts: ["Elena's mother", "Her great-grandmother", "A stranger", "Her grandfather"], correct: 1 }
+                {
+                    q: "Where did Elena find the key?",
+                    opts: ["In the attic", "Under the porch", "Inside a box", "On the garden wall"],
+                    correct: 1
+                },
+                {
+                    q: "What was inside the box?",
+                    opts: ["Jewellery", "Gold coins", "Letters", "A photograph"],
+                    correct: 2
+                },
+                {
+                    q: "Who wrote the letters?",
+                    opts: ["Elena's mother", "Her great-grandmother", "A stranger", "Her grandfather"],
+                    correct: 1
+                }
             ]
         },
         {
             title: "The Birthday Surprise",
             text: "Leo saved his allowance for months. He wanted to buy his mother a beautiful brooch she had seen in the antique shop. The day before her birthday, he walked to the store with his pocket full of coins and notes. The brooch was still there, glowing under the glass. The shopkeeper smiled and wrapped it in soft paper. On the morning of the birthday, Leo placed the small package beside her breakfast plate. When his mother opened it, her eyes filled with tears. She hugged him tightly and whispered that it was the best gift ever.",
             questions: [
-                { q: "What did Leo want to buy?", opts: ["A necklace", "A brooch", "A ring", "A watch"], correct: 1 },
-                { q: "Where did he buy it?", opts: ["A mall", "An antique shop", "A market", "Online"], correct: 1 },
-                { q: "How did his mother react?", opts: ["She was surprised but quiet", "She cried and hugged him", "She asked for the receipt", "She put it away"], correct: 1 }
+                {q: "What did Leo want to buy?", opts: ["A necklace", "A brooch", "A ring", "A watch"], correct: 1},
+                {q: "Where did he buy it?", opts: ["A mall", "An antique shop", "A market", "Online"], correct: 1},
+                {
+                    q: "How did his mother react?",
+                    opts: ["She was surprised but quiet", "She cried and hugged him", "She asked for the receipt", "She put it away"],
+                    correct: 1
+                }
             ]
         },
         {
             title: "Mountain Hike",
             text: "Three friends - Mia, Carlos, and Jin - decided to hike the Eagle Peak trail. They started at sunrise, carrying water and sandwiches. The path was steep, but the views got better with every step. After two hours they reached a rocky outcrop. Below them lay a valley covered in mist, and above, an eagle circled. They rested, ate their lunch, and took photos. On the way down, Carlos slipped and twisted his ankle. Mia and Jin helped him hobble slowly. They reached the car just as it began to rain. Despite the pain, Carlos grinned and said, 'We'll be back next month.'",
             questions: [
-                { q: "How many friends went hiking?", opts: ["Two", "Three", "Four", "Five"], correct: 1 },
-                { q: "What happened to Carlos?", opts: ["He got lost", "He twisted his ankle", "He ran out of water", "He saw a bear"], correct: 1 },
-                { q: "What did they see above them?", opts: ["A hawk", "A plane", "An eagle", "Clouds"], correct: 2 }
+                {q: "How many friends went hiking?", opts: ["Two", "Three", "Four", "Five"], correct: 1},
+                {
+                    q: "What happened to Carlos?",
+                    opts: ["He got lost", "He twisted his ankle", "He ran out of water", "He saw a bear"],
+                    correct: 1
+                },
+                {q: "What did they see above them?", opts: ["A hawk", "A plane", "An eagle", "Clouds"], correct: 2}
             ]
         },
         {
             title: "The Garden Secret",
             text: "Maya's grandmother always spent hours in her garden, tending to roses and lavender. When she passed away, she left Maya a small key with a note: 'Dig where the sunflowers bloom.' Maya waited until spring, then took a shovel to the back corner where sunflowers had grown the year before. About two feet down, she hit a metal box. Inside was a stack of letters tied with ribbon and a faded photograph of a young man in uniform. Maya learned that her grandmother had a sweetheart during the war who never returned. The garden held her memories.",
             questions: [
-                { q: "What did Maya's grandmother leave her?", opts: ["A diary", "A key and a note", "A ring", "A flower pot"], correct: 1 },
-                { q: "Where did Maya dig?", opts: ["Under the rose bush", "Where sunflowers bloomed", "Near the fence", "By the lavender"], correct: 1 },
-                { q: "What was in the box?", opts: ["Jewelry and coins", "Letters and a photograph", "A medal and a flag", "Seeds and soil"], correct: 1 }
+                {
+                    q: "What did Maya's grandmother leave her?",
+                    opts: ["A diary", "A key and a note", "A ring", "A flower pot"],
+                    correct: 1
+                },
+                {
+                    q: "Where did Maya dig?",
+                    opts: ["Under the rose bush", "Where sunflowers bloomed", "Near the fence", "By the lavender"],
+                    correct: 1
+                },
+                {
+                    q: "What was in the box?",
+                    opts: ["Jewelry and coins", "Letters and a photograph", "A medal and a flag", "Seeds and soil"],
+                    correct: 1
+                }
             ]
         },
         {
             title: "The Lost Puppy",
             text: "On a rainy Tuesday, Sam heard a whimpering sound coming from the bushes near his garage. He parted the wet leaves and found a small, shivering puppy with a muddy collar but no tag. Sam brought it inside, dried it off, and made a bed from an old blanket. He put up posters around the neighborhood. Three days later, a girl named Lily called, crying with relief. The puppy, named Buster, had slipped out of her yard during the storm. Sam and Lily became friends, and Buster visited often.",
             questions: [
-                { q: "Where did Sam find the puppy?", opts: ["In the street", "In bushes near his garage", "At the park", "Under his porch"], correct: 1 },
-                { q: "How did Lily find out about the puppy?", opts: ["She saw a poster", "Sam called her", "The puppy ran home", "A neighbor told her"], correct: 0 },
-                { q: "What was the puppy's name?", opts: ["Sam", "Buster", "Lily", "Tag"], correct: 1 }
+                {
+                    q: "Where did Sam find the puppy?",
+                    opts: ["In the street", "In bushes near his garage", "At the park", "Under his porch"],
+                    correct: 1
+                },
+                {
+                    q: "How did Lily find out about the puppy?",
+                    opts: ["She saw a poster", "Sam called her", "The puppy ran home", "A neighbor told her"],
+                    correct: 0
+                },
+                {q: "What was the puppy's name?", opts: ["Sam", "Buster", "Lily", "Tag"], correct: 1}
             ]
         },
         {
             title: "The Science Fair",
             text: "For the school science fair, Priya wanted to build a volcano that erupted with colored foam. She mixed baking soda, vinegar, and red food coloring, but the eruption was weak. Her friend Omar suggested adding dish soap. The next attempt produced a spectacular red fountain that flowed down the sides. The judges were impressed by her persistence and awarded her second place. Priya learned that small changes can make a big difference.",
             questions: [
-                { q: "What was Priya's science fair project?", opts: ["A solar system model", "A volcano", "A robot", "A plant experiment"], correct: 1 },
-                { q: "What did Omar suggest adding?", opts: ["More vinegar", "Baking soda", "Dish soap", "Salt"], correct: 2 },
-                { q: "What place did Priya win?", opts: ["First", "Second", "Third", "Honorable mention"], correct: 1 }
+                {
+                    q: "What was Priya's science fair project?",
+                    opts: ["A solar system model", "A volcano", "A robot", "A plant experiment"],
+                    correct: 1
+                },
+                {
+                    q: "What did Omar suggest adding?",
+                    opts: ["More vinegar", "Baking soda", "Dish soap", "Salt"],
+                    correct: 2
+                },
+                {q: "What place did Priya win?", opts: ["First", "Second", "Third", "Honorable mention"], correct: 1}
             ]
         },
         {
             title: "The Old Violin",
             text: "In his grandfather's attic, Liam found a dusty violin case. Inside was a beautiful instrument with a note: 'For Liam, may you find your music.' Liam had never played before, but he signed up for lessons at school. At first, the sounds were screechy, but he practiced every day. By the end of the year, he could play a simple melody. During a family gathering, he performed the song for his grandparents. His grandfather's eyes glistened as he whispered, 'That was your great-grandmother's violin.'",
             questions: [
-                { q: "Where did Liam find the violin?", opts: ["In a music shop", "In his grandfather's attic", "At a garage sale", "In school"], correct: 1 },
-                { q: "What did the note say?", opts: ["'For Liam, may you find your music.'", "'This is very old.'", "'Learn to play.'", "'From Grandma.'"], correct: 0 },
-                { q: "Who originally owned the violin?", opts: ["Liam's grandfather", "A famous musician", "Liam's great-grandmother", "A neighbor"], correct: 2 }
+                {
+                    q: "Where did Liam find the violin?",
+                    opts: ["In a music shop", "In his grandfather's attic", "At a garage sale", "In school"],
+                    correct: 1
+                },
+                {
+                    q: "What did the note say?",
+                    opts: ["'For Liam, may you find your music.'", "'This is very old.'", "'Learn to play.'", "'From Grandma.'"],
+                    correct: 0
+                },
+                {
+                    q: "Who originally owned the violin?",
+                    opts: ["Liam's grandfather", "A famous musician", "Liam's great-grandmother", "A neighbor"],
+                    correct: 2
+                }
             ]
         },
         {
             title: "The Mysterious Map",
             text: "While cleaning out her late uncle's study, Sofia discovered a rolled-up parchment behind a bookshelf. It was a hand-drawn map of the town with an X marked in the park. Curious, she went to the spot and found a small metal box buried under an oak tree. Inside were old coins and a letter addressed to her uncle from a childhood friend. The letter mentioned a promise to bury a time capsule together. Sofia decided to add a letter of her own and rebury it for future discovery.",
             questions: [
-                { q: "Where did Sofia find the map?", opts: ["In a drawer", "Behind a bookshelf", "Under the bed", "In the attic"], correct: 1 },
-                { q: "What was marked on the map?", opts: ["A house", "A river", "An X in the park", "A school"], correct: 2 },
-                { q: "What did Sofia do with the time capsule?", opts: ["Kept the coins", "Gave it to a museum", "Added a letter and reburied it", "Threw it away"], correct: 2 }
+                {
+                    q: "Where did Sofia find the map?",
+                    opts: ["In a drawer", "Behind a bookshelf", "Under the bed", "In the attic"],
+                    correct: 1
+                },
+                {
+                    q: "What was marked on the map?",
+                    opts: ["A house", "A river", "An X in the park", "A school"],
+                    correct: 2
+                },
+                {
+                    q: "What did Sofia do with the time capsule?",
+                    opts: ["Kept the coins", "Gave it to a museum", "Added a letter and reburied it", "Threw it away"],
+                    correct: 2
+                }
             ]
         }
     ];
@@ -272,7 +344,7 @@ Speed Reading Tester - JavaScript
         storyElapsedSeconds = 0;
         let html = '';
         story.questions.forEach((q, idx) => {
-            html += `<div class="question-item"><p>${idx+1}. ${q.q}</p>`;
+            html += `<div class="question-item"><p>${idx + 1}. ${q.q}</p>`;
             q.opts.forEach((opt, optIdx) => {
                 html += `<label><input type="radio" name="q${idx}" value="${optIdx}"> ${opt}</label>`;
             });

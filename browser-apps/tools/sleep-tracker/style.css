@@ -185,6 +185,7 @@ Sleep Tracker - Stylesheet
     color: white;
     border: none;
 }
+
 .btn-danger:hover {
     background: #991b1b;
 }
@@ -326,7 +327,7 @@ Sleep Tracker - Stylesheet
     opacity: 0;
     transition: opacity 0.3s, visibility 0.3s;
     font-size: 0.85rem;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .toast.show {
@@ -368,7 +369,7 @@ Sleep Tracker - Stylesheet
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0, 0, 0, 0.5);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -383,7 +384,7 @@ Sleep Tracker - Stylesheet
     width: 90%;
     max-height: 80%;
     overflow-y: auto;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     font-size: 0.9rem;
 }
 
@@ -434,16 +435,20 @@ Sleep Tracker - Stylesheet
         flex-direction: column;
         align-items: stretch;
     }
+
     .date-input, .time-input, .number-input {
         width: 100%;
     }
+
     .today-btn, .now-btn {
         width: 100%;
     }
+
     .stats-card {
         flex-direction: column;
         gap: 0.8rem;
     }
+
     .wake-event-row {
         flex-wrap: wrap;
     }

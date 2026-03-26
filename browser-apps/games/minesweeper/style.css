@@ -104,9 +104,9 @@ Minesweeper - JavaScript
     font-weight: 700;
     border-radius: var(--radius-sm);
     background: var(--gray-light);
-    border: 1px solid rgba(0,0,0,0.08);
+    border: 1px solid rgba(0, 0, 0, 0.08);
     cursor: pointer;
-    box-shadow: inset 0 -2px 0 rgba(0,0,0,0.06);
+    box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.06);
     font-family: var(--font-mono);
     font-size: 0.9rem;
     transition: var(--transition);
@@ -121,7 +121,7 @@ Minesweeper - JavaScript
     background: var(--light);
     cursor: default;
     box-shadow: none;
-    border: 1px solid rgba(0,0,0,0.04);
+    border: 1px solid rgba(0, 0, 0, 0.04);
     transform: none;
 }
 
@@ -138,14 +138,37 @@ Minesweeper - JavaScript
     color: #8b7d7d;
 }
 
-.cell[style*="color:#0b61f7"] { color: #0b61f7; }
-.cell[style*="color:#0b8f1a"] { color: #0b8f1a; }
-.cell[style*="color:#f22f2f"] { color: #f22f2f; }
-.cell[style*="color:#1b2f6b"] { color: #1b2f6b; }
-.cell[style*="color:#7b1f1f"] { color: #7b1f1f; }
-.cell[style*="color:#009966"] { color: #009966; }
-.cell[style*="color:#333333"] { color: #333333; }
-.cell[style*="color:#666666"] { color: #666666; }
+.cell[style*="color:#0b61f7"] {
+    color: #0b61f7;
+}
+
+.cell[style*="color:#0b8f1a"] {
+    color: #0b8f1a;
+}
+
+.cell[style*="color:#f22f2f"] {
+    color: #f22f2f;
+}
+
+.cell[style*="color:#1b2f6b"] {
+    color: #1b2f6b;
+}
+
+.cell[style*="color:#7b1f1f"] {
+    color: #7b1f1f;
+}
+
+.cell[style*="color:#009966"] {
+    color: #009966;
+}
+
+.cell[style*="color:#333333"] {
+    color: #333333;
+}
+
+.cell[style*="color:#666666"] {
+    color: #666666;
+}
 
 .minesweeper-game-actions {
     display: flex;
@@ -171,7 +194,7 @@ Minesweeper - JavaScript
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
     align-items: center;

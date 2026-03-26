@@ -28,13 +28,13 @@ My Pokémon TCG Collection - HTML
 
         <div class="search-wrapper">
             <i class="fas fa-search"></i>
-            <label for="searchInput"></label><input type="text" id="searchInput"
+            <label for="searchInput"></label><input autocomplete="off" id="searchInput"
                                                     placeholder="E.g. 'charizard', 'holo', 'stage 2', 'hp 120', 'rarity rare'"
-                                                    autocomplete="off">
+                                                    type="text">
             <button id="clearSearch" title="Clear"><i class="fas fa-times"></i></button>
         </div>
 
-        <div id="noResultsMessage" class="no-results-message">
+        <div class="no-results-message" id="noResultsMessage">
             <i class="fas fa-search"></i>
             <p>No cards match your search.</p>
         </div>
@@ -70,13 +70,13 @@ My Pokémon TCG Collection - HTML
     </div>
 </main>
 
-<div id="imageModal" class="modal" onclick="if(event.target === this) closeModal()">
+<div class="modal" id="imageModal" onclick="if(event.target === this) closeModal()">
     <div class="modal-content">
         <span class="close-modal" onclick="closeModal()">&times;</span>
         <div class="modal-nav left" id="modalPrevBtn"><i class="fas fa-chevron-left"></i></div>
         <div class="modal-nav right" id="modalNextBtn"><i class="fas fa-chevron-right"></i></div>
-        <img id="modalImage" src="" alt="Pokémon card">
-        <div id="modalCaption" class="modal-caption"></div>
+        <img alt="Pokémon card" id="modalImage" src="">
+        <div class="modal-caption" id="modalCaption"></div>
     </div>
 </div>
 

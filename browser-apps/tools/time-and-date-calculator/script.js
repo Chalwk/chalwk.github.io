@@ -4,7 +4,7 @@ Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
 Time & Date Calculator - JavaScript
 */
 
-(function() {
+(function () {
     const startDateInput = document.getElementById('startDate');
     const endDateInput = document.getElementById('endDate');
     const includeEndDateChk = document.getElementById('includeEndDate');
@@ -23,7 +23,7 @@ Time & Date Calculator - JavaScript
     const resultMd = document.getElementById('resultMd');
     const resultAlt = document.getElementById('resultAlt');
 
-    includeTimeChk.addEventListener('change', function() {
+    includeTimeChk.addEventListener('change', function () {
         const show = includeTimeChk.checked;
         startTimeGroup.style.display = show ? 'flex' : 'none';
         endTimeGroup.style.display = show ? 'flex' : 'none';
@@ -58,7 +58,7 @@ Time & Date Calculator - JavaScript
         const month = parseInt(parts[1], 10);
         const day = parseInt(parts[2], 10);
         if (isNaN(year) || isNaN(month) || isNaN(day)) return null;
-        return { year, month, day };
+        return {year, month, day};
     }
 
     function getTodayString() {
@@ -99,7 +99,7 @@ Time & Date Calculator - JavaScript
             years--;
             months += 12;
         }
-        return { years, months, days };
+        return {years, months, days};
     }
 
     function formatNumber(n) {

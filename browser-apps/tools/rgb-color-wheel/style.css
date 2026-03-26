@@ -72,7 +72,7 @@ canvas {
     min-width: 30px;
     font-weight: 500;
     color: var(--dark);
-    font-family: var(--font-mono);
+    font-family: var(--font-mono), monospace;
 }
 
 .range {
@@ -186,7 +186,7 @@ canvas {
 }
 
 .hex-display {
-    font-family: var(--font-mono);
+    font-family: var(--font-mono), monospace;
     font-weight: 600;
     font-size: 1.25rem;
     color: var(--dark);
@@ -248,7 +248,7 @@ canvas {
     border: 1px solid var(--gray-light);
     border-radius: var(--radius);
     padding: 1rem;
-    font-family: var(--font-mono);
+    font-family: var(--font-mono), monospace;
     font-size: 0.9rem;
 }
 

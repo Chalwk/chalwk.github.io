@@ -139,25 +139,6 @@ Understanding Autism Page
             border-left: 4px solid var(--secondary);
         }
 
-        .page-btn {
-            display: inline-block;
-            background: var(--primary);
-            color: white;
-            padding: 0.8rem 1.5rem;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            text-decoration: none;
-        }
-
-        .page-btn:hover {
-            background: var(--accent);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
         .resources-list {
             list-style-type: none;
         }
@@ -182,13 +163,6 @@ Understanding Autism Page
 
         .communication-tips li {
             margin-bottom: 0.5rem;
-        }
-
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            margin: 1.5rem 0;
         }
 
         .social-links a {
@@ -234,7 +208,7 @@ Understanding Autism Page
             border-radius: 10px;
             padding: 1rem;
             margin: 2rem auto;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
             max-width: 1200px;
         }
 
@@ -747,14 +721,14 @@ Understanding Autism Page
 
 <script>
     document.querySelectorAll('.page-nav-link').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
+        anchor.addEventListener('click', function (e) {
             e.preventDefault();
 
             const targetId = this.getAttribute('href');
-            if(targetId === '#') return;
+            if (targetId === '#') return;
 
             const targetElement = document.querySelector(targetId);
-            if(targetElement) {
+            if (targetElement) {
                 window.scrollTo({
                     top: targetElement.offsetTop - 100,
                     behavior: 'smooth'
@@ -771,7 +745,6 @@ Understanding Autism Page
 
         sections.forEach(section => {
             const sectionTop = section.offsetTop;
-            const sectionHeight = section.clientHeight;
             if (pageYOffset >= sectionTop - 150) {
                 current = section.getAttribute('id');
             }

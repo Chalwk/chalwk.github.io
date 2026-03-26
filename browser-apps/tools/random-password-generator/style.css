@@ -25,6 +25,7 @@ Random Password Generator - Stylesheet
         grid-template-columns: 1fr 400px;
         align-items: start;
     }
+
     .panel-bottom {
         grid-column: 1 / -1;
     }

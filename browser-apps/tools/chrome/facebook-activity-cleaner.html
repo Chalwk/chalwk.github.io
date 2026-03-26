@@ -638,7 +638,7 @@ Facebook Activity Cleaner - Chrome Console Script
 </main>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const copyButton = document.getElementById('copyScriptBtn');
         const updateButton = document.getElementById('updateScriptBtn');
         const scriptContent = document.getElementById('scriptContent');
@@ -677,13 +677,13 @@ Facebook Activity Cleaner - Chrome Console Script
             const codeElement = document.querySelector('.script-code');
             const lines = codeElement.textContent.split('\n');
             codeElement.innerHTML = lines.map((line, index) =>
-            `<span class="script-code-line">${line}</span>`
+                `<span class="script-code-line">${line}</span>`
             ).join('\n');
         }
 
         updateButton.addEventListener('click', updateScriptWithValues);
 
-        copyButton.addEventListener('click', async function() {
+        copyButton.addEventListener('click', async function () {
             try {
                 await navigator.clipboard.writeText(currentScriptCode);
 

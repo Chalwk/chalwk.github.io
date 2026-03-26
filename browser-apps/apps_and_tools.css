@@ -357,8 +357,7 @@ body.apps-tools-page {
     font-weight: 600;
     color: var(--darker);
     border-bottom: 3px solid transparent;
-    border-image: linear-gradient(135deg, var(--primary), var(--secondary));
-    border-image-slice: 1;
+    border-image: linear-gradient(135deg, var(--primary), var(--secondary)) 1;
     padding-bottom: 10px;
     display: inline-block;
 }

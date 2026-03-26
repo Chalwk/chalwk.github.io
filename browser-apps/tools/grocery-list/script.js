@@ -38,12 +38,12 @@ function initApp() {
 }
 
 function setupOnlineOfflineListener() {
-    window.addEventListener('online', function() {
+    window.addEventListener('online', function () {
         isOnline = true;
         showStatusMessage('Back online', 'success');
     });
 
-    window.addEventListener('offline', function() {
+    window.addEventListener('offline', function () {
         isOnline = false;
         showStatusMessage('You are currently offline', 'warning');
     });
@@ -74,7 +74,7 @@ function showStatusMessage(message, type) {
 function saveData() {
     try {
         localStorage.setItem('groceryData', JSON.stringify(groceryData));
-    } catch(e) {
+    } catch (e) {
         showStatusMessage('Failed to save data', 'error');
     }
 }
@@ -179,7 +179,7 @@ function renderGroceries() {
 function setupSearch() {
     const searchInput = document.getElementById('searchInput');
 
-    searchInput.addEventListener('input', function() {
+    searchInput.addEventListener('input', function () {
         const searchTerm = this.value.toLowerCase().trim();
         const allCards = document.querySelectorAll('.grocery-card');
 
@@ -225,7 +225,7 @@ function setupSearch() {
 }
 
 function setupCheckboxes() {
-    document.addEventListener('change', function(e) {
+    document.addEventListener('change', function (e) {
         if (e.target.classList.contains('grocery-checkbox')) {
             const itemKey = e.target.dataset.key;
             const isChecked = e.target.checked;
@@ -255,7 +255,7 @@ function setupFilters() {
     const filterButtons = document.querySelectorAll('.btn[data-filter]');
 
     filterButtons.forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
             filterButtons.forEach(btn => btn.classList.remove('active'));
             this.classList.add('active');
 
@@ -264,7 +264,7 @@ function setupFilters() {
         });
     });
 
-    document.getElementById('clearAll').addEventListener('click', function() {
+    document.getElementById('clearAll').addEventListener('click', function () {
         if (confirm('Are you sure you want to clear all needed items?')) {
             localStorage.removeItem('neededGroceryItems');
             renderGroceries();
@@ -286,7 +286,7 @@ function applyFilter(filter) {
         const visibleCards = Array.from(grid.querySelectorAll('.grocery-card')).filter(card => {
             const isNeeded = card.classList.contains('needed');
 
-            switch(filter) {
+            switch (filter) {
                 case 'all':
                     card.style.display = 'flex';
                     return true;
@@ -331,7 +331,7 @@ function applyFilter(filter) {
 }
 
 function setupCategoryToggles() {
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function (e) {
         if (e.target.closest('.category-toggle')) {
             const section = e.target.closest('.category-section');
             const grid = section.querySelector('.grocery-grid');
@@ -352,12 +352,12 @@ function setupDropdown() {
     const dropdown = document.querySelector('.dropdown');
     const dropdownToggle = dropdown.querySelector('.dropdown-toggle');
 
-    dropdownToggle.addEventListener('click', function(e) {
+    dropdownToggle.addEventListener('click', function (e) {
         e.stopPropagation();
         dropdown.classList.toggle('active');
     });
 
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function (e) {
         if (!dropdown.contains(e.target)) {
             dropdown.classList.remove('active');
         }
@@ -365,7 +365,7 @@ function setupDropdown() {
 
     const dropdownItems = dropdown.querySelectorAll('.dropdown-menu .btn');
     dropdownItems.forEach(item => {
-        item.addEventListener('click', function() {
+        item.addEventListener('click', function () {
             dropdown.classList.remove('active');
         });
     });
@@ -402,7 +402,7 @@ function updateStats() {
 }
 
 function setupExport() {
-    document.getElementById('exportBtn').addEventListener('click', function() {
+    document.getElementById('exportBtn').addEventListener('click', function () {
         const dataToExport = {
             groceryData: groceryData,
             neededItems: JSON.parse(localStorage.getItem('neededGroceryItems') || '{}')
@@ -427,16 +427,16 @@ function setupExport() {
 function setupImport() {
     const fileInput = document.getElementById('importFile');
 
-    document.getElementById('importBtn').addEventListener('click', function() {
+    document.getElementById('importBtn').addEventListener('click', function () {
         fileInput.click();
     });
 
-    fileInput.addEventListener('change', function(e) {
+    fileInput.addEventListener('change', function (e) {
         const file = e.target.files[0];
         if (!file) return;
 
         const reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = function (e) {
             try {
                 const importedData = JSON.parse(e.target.result);
 
@@ -477,14 +477,14 @@ function setupCategoryManagement() {
 
     let currentCategory = null;
 
-    document.getElementById('addCategoryBtn').addEventListener('click', function() {
+    document.getElementById('addCategoryBtn').addEventListener('click', function () {
         document.getElementById('categoryModalTitle').textContent = 'Add Category';
         categoryNameInput.value = '';
         currentCategory = null;
         categoryModal.style.display = 'flex';
     });
 
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function (e) {
         if (e.target.closest('.category-edit')) {
             currentCategory = e.target.closest('.category-edit').dataset.category;
             document.getElementById('categoryModalTitle').textContent = 'Edit Category';
@@ -493,7 +493,7 @@ function setupCategoryManagement() {
         }
     });
 
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function (e) {
         if (e.target.closest('.category-delete')) {
             const category = e.target.closest('.category-delete').dataset.category;
             if (confirm(`Are you sure you want to delete the category "${category}" and all its items?`)) {
@@ -512,7 +512,7 @@ function setupCategoryManagement() {
         }
     });
 
-    categoryForm.addEventListener('submit', function(e) {
+    categoryForm.addEventListener('submit', function (e) {
         e.preventDefault();
         const newCategoryName = categoryNameInput.value.trim();
 
@@ -533,18 +533,18 @@ function setupCategoryManagement() {
         }
     });
 
-    cancelCategoryBtn.addEventListener('click', function() {
+    cancelCategoryBtn.addEventListener('click', function () {
         categoryModal.style.display = 'none';
     });
 
     closeButtons.forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
             categoryModal.style.display = 'none';
             document.getElementById('itemModal').style.display = 'none';
         });
     });
 
-    window.addEventListener('click', function(e) {
+    window.addEventListener('click', function (e) {
         if (e.target === categoryModal) {
             categoryModal.style.display = 'none';
         }
@@ -568,7 +568,7 @@ function setupItemManagement() {
     let currentItem = null;
     let currentItemCategory = null;
 
-    document.getElementById('addItemBtn').addEventListener('click', function() {
+    document.getElementById('addItemBtn').addEventListener('click', function () {
         populateCategorySelect();
         document.getElementById('itemModalTitle').textContent = 'Add Item';
         clearItemForm();
@@ -578,7 +578,7 @@ function setupItemManagement() {
         itemModal.style.display = 'flex';
     });
 
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function (e) {
         if (e.target.closest('.grocery-edit')) {
             currentItemCategory = e.target.closest('.grocery-edit').dataset.category;
             currentItem = e.target.closest('.grocery-edit').dataset.item;
@@ -598,7 +598,7 @@ function setupItemManagement() {
         }
     });
 
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function (e) {
         if (e.target.closest('.grocery-delete')) {
             const category = e.target.closest('.grocery-delete').dataset.category;
             const itemName = e.target.closest('.grocery-delete').dataset.item;
@@ -619,7 +619,7 @@ function setupItemManagement() {
         }
     });
 
-    deleteItemBtn.addEventListener('click', function() {
+    deleteItemBtn.addEventListener('click', function () {
         if (currentItem && currentItemCategory) {
             if (confirm(`Are you sure you want to delete "${currentItem}"?`)) {
                 groceryData[currentItemCategory] = groceryData[currentItemCategory].filter(item => item.name !== currentItem);
@@ -632,7 +632,7 @@ function setupItemManagement() {
         }
     });
 
-    itemForm.addEventListener('submit', function(e) {
+    itemForm.addEventListener('submit', function (e) {
         e.preventDefault();
         const category = itemCategorySelect.value;
         const name = itemNameInput.value.trim();
@@ -677,7 +677,7 @@ function setupItemManagement() {
         }
     });
 
-    cancelItemBtn.addEventListener('click', function() {
+    cancelItemBtn.addEventListener('click', function () {
         itemModal.style.display = 'none';
     });
 

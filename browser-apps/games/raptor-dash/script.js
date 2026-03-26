@@ -15,6 +15,7 @@ Raptor Dash - JavaScript
         canvas.height = Math.floor(rect.height * DPR);
         ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
     }
+
     window.addEventListener('resize', resize);
 
     let running = false;
@@ -74,7 +75,7 @@ Raptor Dash - JavaScript
             const density = 0.6 + difficulty * 1.2 + rng() * 0.6;
             const gapMin = 220 - difficulty * 80 - rng() * 60;
             const gapMax = gapMin + 160 + rng() * 280;
-            segs.push({ theme, density, gapMin: Math.round(gapMin), gapMax: Math.round(gapMax) });
+            segs.push({theme, density, gapMin: Math.round(gapMin), gapMax: Math.round(gapMax)});
         }
         return segs;
     }
@@ -114,18 +115,18 @@ Raptor Dash - JavaScript
         if (type === 'spike') {
             const h = 56 + Math.round(rng() * 48);
             const w = 26 + Math.round(rng() * 18);
-            return { type: 'spike', x, y: 0, w, h, pass: false };
+            return {type: 'spike', x, y: 0, w, h, pass: false};
         }
         if (type === 'barrel') {
             const w = 46 + Math.round(rng() * 38);
             const h = 38 + Math.round(rng() * 20);
-            return { type: 'barrel', x, w, h, pass: false };
+            return {type: 'barrel', x, w, h, pass: false};
         }
         if (type === 'drone') {
             const w = 60;
             const h = 40;
             const ybase = groundY - player.h - 80 - Math.round(rng() * 120);
-            return { type: 'drone', x, w, h, y: ybase, osc: rng() * Math.PI * 2, pass: false };
+            return {type: 'drone', x, w, h, y: ybase, osc: rng() * Math.PI * 2, pass: false};
         }
         return createObstacle('spike', x);
     }
@@ -231,7 +232,15 @@ Raptor Dash - JavaScript
 
     function spawnParticles(x, y, color) {
         for (let i = 0; i < 18; i++) {
-            particles.push({ x, y, vx: (rng() - 0.5) * 420, vy: (rng() - 1.5) * 360, life: 0.9 + rng() * 0.9, size: 2 + rng() * 3, color });
+            particles.push({
+                x,
+                y,
+                vx: (rng() - 0.5) * 420,
+                vy: (rng() - 1.5) * 360,
+                life: 0.9 + rng() * 0.9,
+                size: 2 + rng() * 3,
+                color
+            });
         }
     }
 
@@ -290,20 +299,73 @@ Raptor Dash - JavaScript
 
     canvas.addEventListener('pointerdown', e => onJump());
 
-    btnStart.addEventListener('click', () => { resetGame(); });
-    btnPause.addEventListener('click', () => { paused = !paused; btnPause.innerHTML = paused ? '<i class="fas fa-play"></i> Resume' : '<i class="fas fa-pause"></i> Pause'; });
+    btnStart.addEventListener('click', () => {
+        resetGame();
+    });
+    btnPause.addEventListener('click', () => {
+        paused = !paused;
+        btnPause.innerHTML = paused ? '<i class="fas fa-play"></i> Resume' : '<i class="fas fa-pause"></i> Pause';
+    });
 
     let audioCtx;
-    function ensureAudio() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
-    function playJumpTone() { try { ensureAudio(); const o = audioCtx.createOscillator(); const g = audioCtx.createGain(); o.type = 'sine'; o.frequency.value = 420; g.gain.value = 0.02; o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + 0.06); } catch (e) { } }
-    function playBoostTone() { try { ensureAudio(); const o = audioCtx.createOscillator(); const g = audioCtx.createGain(); o.type = 'triangle'; o.frequency.value = 620; g.gain.value = 0.03; o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + 0.09); } catch (e) { } }
-    function playCollision() { try { ensureAudio(); const o = audioCtx.createOscillator(); const g = audioCtx.createGain(); o.type = 'square'; o.frequency.value = 120; g.gain.value = 0.06; o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + 0.12); } catch (e) { } }
+
+    function ensureAudio() {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+
+    function playJumpTone() {
+        try {
+            ensureAudio();
+            const o = audioCtx.createOscillator();
+            const g = audioCtx.createGain();
+            o.type = 'sine';
+            o.frequency.value = 420;
+            g.gain.value = 0.02;
+            o.connect(g);
+            g.connect(audioCtx.destination);
+            o.start();
+            o.stop(audioCtx.currentTime + 0.06);
+        } catch (e) {
+        }
+    }
+
+    function playBoostTone() {
+        try {
+            ensureAudio();
+            const o = audioCtx.createOscillator();
+            const g = audioCtx.createGain();
+            o.type = 'triangle';
+            o.frequency.value = 620;
+            g.gain.value = 0.03;
+            o.connect(g);
+            g.connect(audioCtx.destination);
+            o.start();
+            o.stop(audioCtx.currentTime + 0.09);
+        } catch (e) {
+        }
+    }
+
+    function playCollision() {
+        try {
+            ensureAudio();
+            const o = audioCtx.createOscillator();
+            const g = audioCtx.createGain();
+            o.type = 'square';
+            o.frequency.value = 120;
+            g.gain.value = 0.06;
+            o.connect(g);
+            g.connect(audioCtx.destination);
+            o.start();
+            o.stop(audioCtx.currentTime + 0.12);
+        } catch (e) {
+        }
+    }
 
     function collide(a, b) {
         return a.x < b.x + b.w &&
-        a.x + a.w > b.x &&
-        a.y < b.y + b.h &&
-        a.y + a.h > b.y;
+            a.x + a.w > b.x &&
+            a.y < b.y + b.h &&
+            a.y + a.h > b.y;
     }
 
     function checkPlayerCollision(player, obstacle) {
@@ -345,23 +407,23 @@ Raptor Dash - JavaScript
     }
 
     function checkSpikeCollision(player, spike) {
-        const spikeTop = { x: spike.x + spike.w * 0.5, y: spike.y + spike.h * 0.05 };
-        const spikeLeft = { x: spike.x + spike.w * 0.25, y: spike.y + spike.h * 0.3 };
-        const spikeRight = { x: spike.x + spike.w * 0.75, y: spike.y + spike.h * 0.3 };
-        const spikeBaseLeft = { x: spike.x, y: spike.y + spike.h };
-        const spikeBaseRight = { x: spike.x + spike.w, y: spike.y + spike.h };
+        const spikeTop = {x: spike.x + spike.w * 0.5, y: spike.y + spike.h * 0.05};
+        const spikeLeft = {x: spike.x + spike.w * 0.25, y: spike.y + spike.h * 0.3};
+        const spikeRight = {x: spike.x + spike.w * 0.75, y: spike.y + spike.h * 0.3};
+        const spikeBaseLeft = {x: spike.x, y: spike.y + spike.h};
+        const spikeBaseRight = {x: spike.x + spike.w, y: spike.y + spike.h};
 
         const playerCorners = [
-            { x: player.x, y: player.y },
-            { x: player.x + player.w, y: player.y },
-            { x: player.x, y: player.y + player.h },
-            { x: player.x + player.w, y: player.y + player.h }
+            {x: player.x, y: player.y},
+            {x: player.x + player.w, y: player.y},
+            {x: player.x, y: player.y + player.h},
+            {x: player.x + player.w, y: player.y + player.h}
         ];
 
         for (let corner of playerCorners) {
             if (pointInTriangle(corner, spikeTop, spikeLeft, spikeRight) ||
-            pointInTriangle(corner, spikeLeft, spikeBaseLeft, spikeBaseRight) ||
-            pointInTriangle(corner, spikeLeft, spikeRight, spikeBaseRight)) {
+                pointInTriangle(corner, spikeLeft, spikeBaseLeft, spikeBaseRight) ||
+                pointInTriangle(corner, spikeLeft, spikeRight, spikeBaseRight)) {
                 return true;
             }
         }
@@ -417,7 +479,10 @@ Raptor Dash - JavaScript
                 o.osc += dt * 4 * (0.8 + rng() * 0.4);
                 o.y += Math.sin(o.osc) * 6 * dt * 60;
             }
-            if (!o.pass && o.x + (o.w || 30) < player.x) { o.pass = true; distance += 8; }
+            if (!o.pass && o.x + (o.w || 30) < player.x) {
+                o.pass = true;
+                distance += 8;
+            }
         }
         obstacles = obstacles.filter(o => o.x + (o.w || 30) > -60);
 
@@ -443,7 +508,9 @@ Raptor Dash - JavaScript
         for (let i = particles.length - 1; i >= 0; i--) {
             const p = particles[i];
             p.vy += 1000 * dt;
-            p.x += p.vx * dt; p.y += p.vy * dt; p.life -= dt;
+            p.x += p.vx * dt;
+            p.y += p.vy * dt;
+            p.life -= dt;
             if (p.life <= 0) particles.splice(i, 1);
         }
 
@@ -784,9 +851,12 @@ Raptor Dash - JavaScript
         ctx.fillStyle = 'rgba(124,200,255,0.98)';
         ctx.fillRect(x + w * 0.18, y + h * 0.28, w * 0.64, h * 0.36);
         ctx.beginPath();
-        ctx.arc(x + 8, y + 6, 6, 0, Math.PI * 2); ctx.fillStyle = 'rgba(0,0,0,0.12)'; ctx.fill();
+        ctx.arc(x + 8, y + 6, 6, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(0,0,0,0.12)';
+        ctx.fill();
         ctx.beginPath();
-        ctx.arc(x + w - 8, y + 6, 6, 0, Math.PI * 2); ctx.fill();
+        ctx.arc(x + w - 8, y + 6, 6, 0, Math.PI * 2);
+        ctx.fill();
         ctx.restore();
     }
 

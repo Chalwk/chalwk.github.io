@@ -18,7 +18,7 @@ core.css (script shared between pages)
     --warning: #f59e0b;
     --error: #ef4444;
 
-    --font-primary: 'Roboto', sans-serif;
+    --font-primary: "Inter", Arial, sans-serif;
     --font-mono: 'Source Code Pro', monospace;
 
     --section-padding: 5rem 0;
@@ -46,17 +46,16 @@ html {
 }
 
 body {
-    font-family: var(--font-primary);
+    font-family: var(--font-primary), sans-serif;
     font-size: 16px;
     line-height: 1.6;
     color: var(--dark);
     background-color: var(--light);
     overflow-x: hidden;
-    background-image:
-    radial-gradient(circle at 10% 20%, rgba(30, 136, 229, 0.03) 0%, transparent 30%),
+    background-image: radial-gradient(circle at 10% 20%, rgba(30, 136, 229, 0.03) 0%, transparent 30%),
     radial-gradient(circle at 90% 70%, rgba(66, 165, 245, 0.03) 0%, transparent 30%),
     radial-gradient(circle at 30% 80%, rgba(13, 71, 161, 0.03) 0%, transparent 30%),
-    repeating-linear-gradient(45deg, rgba(0,0,0,0.01) 0px, rgba(0,0,0,0.01) 2px, transparent 2px, transparent 8px);
+    repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.01) 0px, rgba(0, 0, 0, 0.01) 2px, transparent 2px, transparent 8px);
 }
 
 body.menu-open {

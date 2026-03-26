@@ -119,9 +119,15 @@ Autistic Burnout Risk Assessment - Stylesheet
 }
 
 @keyframes pulse {
-    0% { opacity: 1; }
-    50% { opacity: 0.8; }
-    100% { opacity: 1; }
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
 .factor-group {
@@ -145,7 +151,7 @@ Autistic Burnout Risk Assessment - Stylesheet
     padding: 15px;
     background: white;
     border-radius: var(--radius);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .question-text {

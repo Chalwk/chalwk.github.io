@@ -29,49 +29,49 @@ const JOKE_APIS = [
         name: 'Dad Jokes',
         source: 'icanhazdadjoke',
         url: 'https://icanhazdadjoke.com/',
-        headers: { Accept: 'application/json' },
+        headers: {Accept: 'application/json'},
         parser: (data) => data.joke
     },
     {
         name: 'Chuck Norris',
         source: 'api.chucknorris.io',
         url: 'https://api.chucknorris.io/jokes/random',
-        headers: { Accept: 'application/json' },
+        headers: {Accept: 'application/json'},
         parser: (data) => data.value
     },
     {
         name: 'JokeAPI',
         source: 'jokeapi.dev',
         url: 'https://v2.jokeapi.dev/joke/Any?type=single',
-        headers: { Accept: 'application/json' },
+        headers: {Accept: 'application/json'},
         parser: (data) => data.joke || `${data.setup} ${data.delivery}`
     },
     {
         name: 'Programming',
         source: 'jokeapi.dev',
         url: 'https://v2.jokeapi.dev/joke/Programming?type=single',
-        headers: { Accept: 'application/json' },
+        headers: {Accept: 'application/json'},
         parser: (data) => data.joke || `${data.setup} ${data.delivery}`
     },
     {
         name: 'Official Joke API',
         source: 'official-joke-api.appspot.com',
         url: 'https://official-joke-api.appspot.com/jokes/random',
-        headers: { Accept: 'application/json' },
+        headers: {Accept: 'application/json'},
         parser: (data) => `${data.setup} ${data.punchline}`
     },
     {
         name: 'Geek Jokes',
         source: 'geek-jokes.sameerkumar.website',
         url: 'https://geek-jokes.sameerkumar.website/api?format=json',
-        headers: { Accept: 'application/json' },
+        headers: {Accept: 'application/json'},
         parser: (data) => data.joke
     },
     {
         name: 'Random Jokes',
         source: 'sv443.net/jokeapi',
         url: 'https://v2.jokeapi.dev/joke/Miscellaneous,Dark,Any?type=single',
-        headers: { Accept: 'application/json' },
+        headers: {Accept: 'application/json'},
         parser: (data) => data.joke || `${data.setup} ${data.delivery}`
     }
 ];
@@ -93,7 +93,7 @@ async function fetchJoke() {
 
     try {
         const res = await fetch(api.url, {
-            headers: { ...api.headers, "User-Agent": "GiggleFactory/1.0" }
+            headers: {...api.headers, "User-Agent": "GiggleFactory/1.0"}
         });
 
         if (!res.ok) throw new Error(`API error: ${res.status}`);
@@ -116,7 +116,7 @@ async function fetchJoke() {
 
         try {
             const res = await fetch(nextApi.url, {
-                headers: { ...nextApi.headers, "User-Agent": "GiggleFactory/1.0" }
+                headers: {...nextApi.headers, "User-Agent": "GiggleFactory/1.0"}
             });
 
             if (!res.ok) throw new Error(`API error: ${res.status}`);

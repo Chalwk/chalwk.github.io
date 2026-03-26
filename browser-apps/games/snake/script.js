@@ -31,11 +31,12 @@ const now = () => performance.now();
 function loadStats() {
     try {
         const raw = localStorage.getItem(CONFIG.storageKey);
-        return raw ? JSON.parse(raw) : { best: 0, played: 0 };
+        return raw ? JSON.parse(raw) : {best: 0, played: 0};
     } catch {
-        return { best: 0, played: 0 };
+        return {best: 0, played: 0};
     }
 }
+
 function saveStats(stats) {
     localStorage.setItem(CONFIG.storageKey, JSON.stringify(stats));
 }
@@ -49,7 +50,11 @@ class SFX {
             this.enabled = false;
         }
     }
-    toggle(on) { this.enabled = !!on; }
+
+    toggle(on) {
+        this.enabled = !!on;
+    }
+
     beep(freq = 440, time = 0.05, type = 'sine', gain = 0.07) {
         if (!this.enabled || !this.ctx) return;
         const ctx = this.ctx;
@@ -58,7 +63,8 @@ class SFX {
         o.type = type;
         o.frequency.value = freq;
         g.gain.value = gain;
-        o.connect(g); g.connect(ctx.destination);
+        o.connect(g);
+        g.connect(ctx.destination);
         o.start();
         g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + time);
         o.stop(ctx.currentTime + time + 0.02);
@@ -66,7 +72,7 @@ class SFX {
 }
 
 class Grid {
-    constructor(canvas, cellSize){
+    constructor(canvas, cellSize) {
         this.canvas = canvas;
         this.ctx = canvas.getContext('2d');
         this.cellSize = cellSize;
@@ -75,12 +81,13 @@ class Grid {
         this.resize();
         window.addEventListener('resize', () => this.resize());
     }
-    resize(){
+
+    resize() {
         const container = this.canvas.parentElement;
         const maxWidth = container.clientWidth - 20;
         const maxHeight = Math.min(600, window.innerHeight * 0.7);
 
-        const aspectRatio = 16/9;
+        const aspectRatio = 16 / 9;
         let width = maxWidth;
         let height = width / aspectRatio;
 
@@ -94,14 +101,16 @@ class Grid {
         this.cols = Math.floor(width / this.cellSize);
         this.rows = Math.floor(height / this.cellSize);
     }
-    clear(){
+
+    clear() {
         const c = this.ctx;
         c.save();
         c.fillStyle = CONFIG.colors.bg;
-        c.fillRect(0,0,this.canvas.width,this.canvas.height);
+        c.fillRect(0, 0, this.canvas.width, this.canvas.height);
         c.restore();
     }
-    drawCell(x,y, styleFn){
+
+    drawCell(x, y, styleFn) {
         const px = x * this.cellSize;
         const py = y * this.cellSize;
         styleFn(this.ctx, px, py, this.cellSize);
@@ -109,27 +118,29 @@ class Grid {
 }
 
 class Snake {
-    constructor(startX, startY){
-        this.segs = [{x:startX, y:startY}];
-        this.dir = {x:1,y:0};
+    constructor(startX, startY) {
+        this.segs = [{x: startX, y: startY}];
+        this.dir = {x: 1, y: 0};
         this.buffer = [];
         this.growBy = 0;
         this.alive = true;
         this.invulnerable = false;
         this.maxLen = 1000;
     }
-    setDir(dx,dy){
+
+    setDir(dx, dy) {
         if (this.buffer.length > 0) {
-            const last = this.buffer[this.buffer.length-1];
+            const last = this.buffer[this.buffer.length - 1];
             if (last.x === dx && last.y === dy) return;
         } else {
             if (this.dir.x === -dx && this.dir.y === -dy) return;
             if (this.dir.x === dx && this.dir.y === dy) return;
         }
-        this.buffer.push({x:dx,y:dy});
+        this.buffer.push({x: dx, y: dy});
         if (this.buffer.length > 2) this.buffer.shift();
     }
-    step(){
+
+    step() {
         if (this.buffer.length) this.dir = this.buffer.shift();
         const newHead = {x: this.segs[0].x + this.dir.x, y: this.segs[0].y + this.dir.y};
         this.segs.unshift(newHead);
@@ -140,25 +151,47 @@ class Snake {
         }
         if (this.segs.length > this.maxLen) this.segs.length = this.maxLen;
     }
-    grow(n=1){ this.growBy += n; }
-    shrink(n=2){
-        for (let i=0;i<n;i++) if (this.segs.length>1) this.segs.pop();
+
+    grow(n = 1) {
+        this.growBy += n;
     }
-    collidesWithSelf(){
+
+    shrink(n = 2) {
+        for (let i = 0; i < n; i++) if (this.segs.length > 1) this.segs.pop();
+    }
+
+    collidesWithSelf() {
         const [h, ...rest] = this.segs;
         return rest.some(s => s.x === h.x && s.y === h.y);
     }
-    head() { return this.segs[0]; }
+
+    head() {
+        return this.segs[0];
+    }
 }
 
 class EntityManager {
-    constructor(){ this.food = []; this.powerups = []; this.obstacles = []; this.portals = []; }
-    clear(){ this.food = []; this.powerups = []; this.obstacles = []; this.portals = []; }
+    constructor() {
+        this.food = [];
+        this.powerups = [];
+        this.obstacles = [];
+        this.portals = [];
+    }
+
+    clear() {
+        this.food = [];
+        this.powerups = [];
+        this.obstacles = [];
+        this.portals = [];
+    }
 }
 
 class Powerup {
-    constructor(x,y, type, duration=6000){
-        this.x = x; this.y = y; this.type = type; this.duration = duration;
+    constructor(x, y, type, duration = 6000) {
+        this.x = x;
+        this.y = y;
+        this.type = type;
+        this.duration = duration;
         this.spawned = now();
     }
 }
@@ -191,9 +224,9 @@ class Game {
         requestAnimationFrame(this.loop);
     }
 
-    resetGame(fromMenu=false){
-        const startX = Math.floor(this.grid.cols/2);
-        const startY = Math.floor(this.grid.rows/2);
+    resetGame(fromMenu = false) {
+        const startX = Math.floor(this.grid.cols / 2);
+        const startY = Math.floor(this.grid.rows / 2);
         this.snake = new Snake(startX, startY);
         this.snake.grow(3);
         this.entities.clear();
@@ -211,7 +244,7 @@ class Game {
         this.nextFoodSpawn = now() + 200;
         this.obstacleCount = this.activeMode === 'obstacles' ? Math.floor(this.grid.cols * this.grid.rows * 0.02) : 0;
         if (this.obstacleCount > 0) {
-            for (let i=0;i<this.obstacleCount;i++) {
+            for (let i = 0; i < this.obstacleCount; i++) {
                 const p = this.randomEmptyCell();
                 if (p) this.entities.obstacles.push(p);
             }
@@ -222,14 +255,14 @@ class Game {
 
     setupInput() {
         this.keyMap = {
-            ArrowUp: () => this.snake.setDir(0,-1),
-            ArrowDown: () => this.snake.setDir(0,1),
-            ArrowLeft: () => this.snake.setDir(-1,0),
-            ArrowRight: () => this.snake.setDir(1,0),
-            w: () => this.snake.setDir(0,-1),
-            s: () => this.snake.setDir(0,1),
-            a: () => this.snake.setDir(-1,0),
-            d: () => this.snake.setDir(1,0),
+            ArrowUp: () => this.snake.setDir(0, -1),
+            ArrowDown: () => this.snake.setDir(0, 1),
+            ArrowLeft: () => this.snake.setDir(-1, 0),
+            ArrowRight: () => this.snake.setDir(1, 0),
+            w: () => this.snake.setDir(0, -1),
+            s: () => this.snake.setDir(0, 1),
+            a: () => this.snake.setDir(-1, 0),
+            d: () => this.snake.setDir(1, 0),
             ' ': () => this.togglePause(),
             p: () => this.togglePause(),
         };
@@ -241,31 +274,52 @@ class Game {
             }
             const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
             if (this.controlScheme === 'arrows') {
-                if (this.keyMap[e.key]) { e.preventDefault(); this.keyMap[e.key](); }
+                if (this.keyMap[e.key]) {
+                    e.preventDefault();
+                    this.keyMap[e.key]();
+                }
             } else {
-                if (this.keyMap[k]) { e.preventDefault(); this.keyMap[k](); }
+                if (this.keyMap[k]) {
+                    e.preventDefault();
+                    this.keyMap[k]();
+                }
             }
         });
 
-        $('btn-start').addEventListener('click', () => { this.startFromMenu(); });
-        $('btn-how').addEventListener('click', () => { this.showInfo(true); });
-        $('btn-back').addEventListener('click', () => { this.showInfo(false); });
-        $('btn-stats')?.addEventListener('click', () => { alert(JSON.stringify(this.stats, null, 2)); });
+        $('btn-start').addEventListener('click', () => {
+            this.startFromMenu();
+        });
+        $('btn-how').addEventListener('click', () => {
+            this.showInfo(true);
+        });
+        $('btn-back').addEventListener('click', () => {
+            this.showInfo(false);
+        });
+        $('btn-stats')?.addEventListener('click', () => {
+            alert(JSON.stringify(this.stats, null, 2));
+        });
         $('btn-pause').addEventListener('click', () => this.togglePause());
         $('btn-sound').addEventListener('click', () => {
             this.sfx.toggle(!this.sfx.enabled);
             $('btn-sound').textContent = this.sfx.enabled ? '🔊' : '🔈';
         });
-        $('btn-restart').addEventListener('click', () => { this.resetGame(); this.state='playing'; this.updateUI(); });
-        $('btn-menu').addEventListener('click', () => { this.state='menu'; this.updateUI(); });
+        $('btn-restart').addEventListener('click', () => {
+            this.resetGame();
+            this.state = 'playing';
+            this.updateUI();
+        });
+        $('btn-menu').addEventListener('click', () => {
+            this.state = 'menu';
+            this.updateUI();
+        });
 
         document.querySelectorAll('#touch-controls [data-dir]').forEach(btn => {
             btn.addEventListener('click', () => {
                 const d = btn.dataset.dir;
-                if (d === 'up') this.snake.setDir(0,-1);
-                if (d === 'down') this.snake.setDir(0,1);
-                if (d === 'left') this.snake.setDir(-1,0);
-                if (d === 'right') this.snake.setDir(1,0);
+                if (d === 'up') this.snake.setDir(0, -1);
+                if (d === 'down') this.snake.setDir(0, 1);
+                if (d === 'left') this.snake.setDir(-1, 0);
+                if (d === 'right') this.snake.setDir(1, 0);
             });
         });
 
@@ -278,14 +332,15 @@ class Game {
         window.addEventListener('resize', checkTouch);
     }
 
-    startFromMenu(){
+    startFromMenu() {
         this.resetGame(false);
         this.state = 'playing';
         $('overlay-info').classList.add('hidden');
         $('overlay').classList.add('hidden');
         this.updateUI();
     }
-    showInfo(show){
+
+    showInfo(show) {
         if (show) {
             $('overlay-info').classList.remove('hidden');
             $('overlay').classList.add('hidden');
@@ -295,9 +350,17 @@ class Game {
         }
     }
 
-    togglePause(){
-        if (this.state === 'playing') { this.state = 'paused'; this.updateUI(); this.sfx.beep(220, 0.05); }
-        else if (this.state === 'paused') { this.state = 'playing'; this.lastTick = now(); this.updateUI(); this.sfx.beep(660, 0.05); }
+    togglePause() {
+        if (this.state === 'playing') {
+            this.state = 'paused';
+            this.updateUI();
+            this.sfx.beep(220, 0.05);
+        } else if (this.state === 'paused') {
+            this.state = 'playing';
+            this.lastTick = now();
+            this.updateUI();
+            this.sfx.beep(660, 0.05);
+        }
     }
 
     showPowerupMessage(type) {
@@ -324,7 +387,7 @@ class Game {
         }, 2000);
     }
 
-    updateUI(){
+    updateUI() {
         $('overlay').classList.toggle('hidden', this.state !== 'menu');
         $('overlay-gameover').classList.toggle('hidden', this.state !== 'gameover');
         $('score').textContent = `Score: ${this.score}`;
@@ -342,73 +405,89 @@ class Game {
             const x = rand(1, this.grid.cols - 2);
             const y = rand(1, this.grid.rows - 2);
             const blocked = this.entities.obstacles.some(o => o.x === x && o.y === y)
-            || this.entities.food.some(f => f.x === x && f.y === y)
-            || this.entities.powerups.some(p => p.x === x && p.y === y)
-            || this.snake.segs.some(s => s.x === x && s.y === y)
-            || this.entities.portals.some(p => p.x === x && p.y === y);
-            if (!blocked) return {x,y};
+                || this.entities.food.some(f => f.x === x && f.y === y)
+                || this.entities.powerups.some(p => p.x === x && p.y === y)
+                || this.snake.segs.some(s => s.x === x && s.y === y)
+                || this.entities.portals.some(p => p.x === x && p.y === y);
+            if (!blocked) return {x, y};
         }
         return null;
     }
 
-    spawnFood(special=false){
+    spawnFood(special = false) {
         const p = this.randomEmptyCell();
         if (!p) return;
-        const food = {x:p.x, y:p.y, points: special ? 50 : 10, golden: special};
+        const food = {x: p.x, y: p.y, points: special ? 50 : 10, golden: special};
         this.entities.food.push(food);
     }
 
-    spawnPowerup(){
+    spawnPowerup() {
         const p = this.randomEmptyCell();
         if (!p) return;
-        const types = ['speed','slow','shrink','mult','phase','life','magnet'];
+        const types = ['speed', 'slow', 'shrink', 'mult', 'phase', 'life', 'magnet'];
         const type = pick(types);
-        this.entities.powerups.push(new Powerup(p.x,p.y,type, 5000 + (type==='mult'?8000:0)));
+        this.entities.powerups.push(new Powerup(p.x, p.y, type, 5000 + (type === 'mult' ? 8000 : 0)));
     }
 
-    spawnPortalPair(){
+    spawnPortalPair() {
         const a = this.randomEmptyCell();
         const b = this.randomEmptyCell();
         if (!a || !b) return;
-        this.entities.portals.push({x:a.x,y:a.y,id:1});
-        this.entities.portals.push({x:b.x,y:b.y,id:2});
+        this.entities.portals.push({x: a.x, y: a.y, id: 1});
+        this.entities.portals.push({x: b.x, y: b.y, id: 2});
     }
 
     applyPowerup(power) {
         const t = power.type;
         this.showPowerupMessage(t);
-        switch(t){
+        switch (t) {
             case 'speed':
-                this.tickRate *= 1.6; this.tickInterval = 1000/this.tickRate; this.sfx.beep(1200,0.08);
-                this.setPowerTimer('speed', 4500, () => { this.tickRate /= 1.6; this.tickInterval = 1000/this.tickRate; });
+                this.tickRate *= 1.6;
+                this.tickInterval = 1000 / this.tickRate;
+                this.sfx.beep(1200, 0.08);
+                this.setPowerTimer('speed', 4500, () => {
+                    this.tickRate /= 1.6;
+                    this.tickInterval = 1000 / this.tickRate;
+                });
                 break;
             case 'slow':
-                this.tickRate /= 1.6; this.tickInterval = 1000/this.tickRate; this.sfx.beep(220,0.08);
-                this.setPowerTimer('slow', 4500, () => { this.tickRate *= 1.6; this.tickInterval = 1000/this.tickRate; });
+                this.tickRate /= 1.6;
+                this.tickInterval = 1000 / this.tickRate;
+                this.sfx.beep(220, 0.08);
+                this.setPowerTimer('slow', 4500, () => {
+                    this.tickRate *= 1.6;
+                    this.tickInterval = 1000 / this.tickRate;
+                });
                 break;
             case 'shrink':
                 this.snake.shrink(3);
-                this.sfx.beep(320,0.06);
+                this.sfx.beep(320, 0.06);
                 break;
             case 'mult':
-                this.multiplier = 2; this.multTimer = now() + 7000; this.sfx.beep(1500,0.08,'triangle');
+                this.multiplier = 2;
+                this.multTimer = now() + 7000;
+                this.sfx.beep(1500, 0.08, 'triangle');
                 break;
             case 'phase':
-                this.snake.invulnerable = true; this.setPowerTimer('phase', 6000, ()=>{ this.snake.invulnerable = false; });
-                this.sfx.beep(900,0.08,'sine');
+                this.snake.invulnerable = true;
+                this.setPowerTimer('phase', 6000, () => {
+                    this.snake.invulnerable = false;
+                });
+                this.sfx.beep(900, 0.08, 'sine');
                 break;
             case 'life':
                 this.life = Math.min(3, this.life + 1);
-                this.sfx.beep(840,0.06);
+                this.sfx.beep(840, 0.06);
                 break;
             case 'magnet':
-                this.setPowerTimer('magnet', 5000, ()=>{});
-                this.sfx.beep(550,0.06);
+                this.setPowerTimer('magnet', 5000, () => {
+                });
+                this.sfx.beep(550, 0.06);
                 break;
         }
     }
 
-    setPowerTimer(name, ms, onExpire){
+    setPowerTimer(name, ms, onExpire) {
         if (this.powerTimers[name]) clearTimeout(this.powerTimers[name]);
         this.powerTimers[name] = setTimeout(() => {
             delete this.powerTimers[name];
@@ -416,15 +495,15 @@ class Game {
         }, ms);
     }
 
-    killSnake(){
+    killSnake() {
         if (this.snake.invulnerable && this.life > 0) {
             return;
         }
         if (this.life > 1) {
             this.life--;
-            this.snake = new Snake(Math.floor(this.grid.cols/2), Math.floor(this.grid.rows/2));
+            this.snake = new Snake(Math.floor(this.grid.cols / 2), Math.floor(this.grid.rows / 2));
             this.snake.grow(3);
-            this.sfx.beep(120,0.2,'sawtooth');
+            this.sfx.beep(120, 0.2, 'sawtooth');
             return;
         }
         this.state = 'gameover';
@@ -434,28 +513,28 @@ class Game {
         }
         saveStats(this.stats);
         this.updateUI();
-        this.sfx.beep(120,0.4,'square', 0.12);
+        this.sfx.beep(120, 0.4, 'square', 0.12);
     }
 
-    eatFood(foodIndex){
+    eatFood(foodIndex) {
         const f = this.entities.food.splice(foodIndex, 1)[0];
         this.snake.grow(2);
         const pts = f.points * this.multiplier;
         this.score += pts;
         this.combo++;
-        if (this.combo % 4 === 0) this.sfx.beep(1200 + this.combo*6, 0.06, 'sine', 0.06);
+        if (this.combo % 4 === 0) this.sfx.beep(1200 + this.combo * 6, 0.06, 'sine', 0.06);
         else this.sfx.beep(920, 0.05);
         if (Math.random() < 0.08) this.spawnFood(true);
         this.updateUI();
     }
 
-    eatPowerup(ix){
-        const p = this.entities.powerups.splice(ix,1)[0];
+    eatPowerup(ix) {
+        const p = this.entities.powerups.splice(ix, 1)[0];
         this.applyPowerup(p);
         this.updateUI();
     }
 
-    loop(t){
+    loop(t) {
         this._animFrame = requestAnimationFrame(this.loop);
         const elapsed = t - (this.lastTick || t);
         this.lastTick = t;
@@ -484,13 +563,14 @@ class Game {
         this.render();
     }
 
-    tick(){
+    tick() {
         this.snake.step();
 
         const h = this.snake.head();
         if (this.activeMode === 'walls') {
             if (h.x < 0 || h.y < 0 || h.x >= this.grid.cols || h.y >= this.grid.rows) {
-                this.killSnake(); return;
+                this.killSnake();
+                return;
             }
         } else {
             if (h.x < 0) h.x = this.grid.cols - 1;
@@ -510,7 +590,7 @@ class Game {
                     if (other) {
                         this.snake.segs[0].x = other.x;
                         this.snake.segs[0].y = other.y;
-                        this.sfx.beep(980,0.05);
+                        this.sfx.beep(980, 0.05);
                         break;
                     }
                 }
@@ -534,10 +614,14 @@ class Game {
         }
 
         if (this.powerTimers['magnet']) {
-            let nearest = null; let dist = 99999;
+            let nearest = null;
+            let dist = 99999;
             for (const f of this.entities.food) {
                 const d = Math.abs(f.x - h.x) + Math.abs(f.y - h.y);
-                if (d < dist) { dist = d; nearest = f; }
+                if (d < dist) {
+                    dist = d;
+                    nearest = f;
+                }
             }
             if (nearest && dist > 0) {
                 nearest.x += Math.sign(h.x - nearest.x);
@@ -557,7 +641,8 @@ class Game {
         }
 
         if (this.multTimer && now() > this.multTimer) {
-            this.multiplier = 1; this.multTimer = 0;
+            this.multiplier = 1;
+            this.multTimer = 0;
         }
 
         if (this.activeMode === 'obstacles' && Math.random() < 0.02) {
@@ -568,47 +653,53 @@ class Game {
         if (this.score > 0 && this.score % 200 === 0) {
             if (Math.random() < 0.08) {
                 this.level++;
-                this.sfx.beep(1200 + this.level*30, 0.06);
+                this.sfx.beep(1200 + this.level * 30, 0.06);
                 this.tickRate *= 1.05;
-                this.tickInterval = 1000/this.tickRate;
+                this.tickInterval = 1000 / this.tickRate;
             }
         }
 
         this.updateUI();
     }
 
-    render(){
+    render() {
         const c = this.grid.ctx;
         this.grid.clear();
 
         c.save();
         c.globalAlpha = 0.04;
         c.strokeStyle = '#ffffff';
-        for (let x=0;x<=this.grid.cols;x++){
-            c.beginPath(); c.moveTo(x*this.grid.cellSize,0); c.lineTo(x*this.grid.cellSize,this.grid.rows*this.grid.cellSize); c.stroke();
+        for (let x = 0; x <= this.grid.cols; x++) {
+            c.beginPath();
+            c.moveTo(x * this.grid.cellSize, 0);
+            c.lineTo(x * this.grid.cellSize, this.grid.rows * this.grid.cellSize);
+            c.stroke();
         }
-        for (let y=0;y<=this.grid.rows;y++){
-            c.beginPath(); c.moveTo(0,y*this.grid.cellSize); c.lineTo(this.grid.cols*this.grid.cellSize,y*this.grid.cellSize); c.stroke();
+        for (let y = 0; y <= this.grid.rows; y++) {
+            c.beginPath();
+            c.moveTo(0, y * this.grid.cellSize);
+            c.lineTo(this.grid.cols * this.grid.cellSize, y * this.grid.cellSize);
+            c.stroke();
         }
         c.restore();
 
         for (const o of this.entities.obstacles) {
-            this.grid.drawCell(o.x,o.y,(ctx,px,py,s)=> {
+            this.grid.drawCell(o.x, o.y, (ctx, px, py, s) => {
                 ctx.fillStyle = CONFIG.colors.obstacle;
-                ctx.fillRect(px+1,py+1,s-2,s-2);
+                ctx.fillRect(px + 1, py + 1, s - 2, s - 2);
                 ctx.globalAlpha = 0.6;
                 ctx.fillStyle = '#222';
-                ctx.fillRect(px+3,py+3,s-6,s-6);
+                ctx.fillRect(px + 3, py + 3, s - 6, s - 6);
                 ctx.globalAlpha = 1;
             });
         }
 
         for (const p of this.entities.portals) {
-            this.grid.drawCell(p.x,p.y,(ctx,px,py,s)=>{
+            this.grid.drawCell(p.x, p.y, (ctx, px, py, s) => {
                 ctx.save();
-                ctx.translate(px+s/2,py+s/2);
+                ctx.translate(px + s / 2, py + s / 2);
                 ctx.beginPath();
-                ctx.arc(0,0,s*0.35,0,Math.PI*2);
+                ctx.arc(0, 0, s * 0.35, 0, Math.PI * 2);
                 ctx.fillStyle = 'rgba(139,92,246,0.18)';
                 ctx.fill();
                 ctx.lineWidth = 2;
@@ -619,13 +710,21 @@ class Game {
         }
 
         for (const f of this.entities.food) {
-            this.grid.drawCell(f.x,f.y,(ctx,px,py,s)=>{
+            this.grid.drawCell(f.x, f.y, (ctx, px, py, s) => {
                 ctx.beginPath();
                 ctx.fillStyle = f.golden ? CONFIG.colors.golden : CONFIG.colors.food;
-                ctx.roundRect = function(x,y,w,h,r){ this.beginPath(); this.moveTo(x+r,y); this.arcTo(x+w,y,x+w,y+h,r); this.arcTo(x+w,y+h,x,y+h,r); this.arcTo(x,y+h,x,y,r); this.arcTo(x,y,x+w,y,r); this.closePath(); }
-                ctx.roundRect(px+3,py+3,s-6,s-6,3);
+                ctx.roundRect = function (x, y, w, h, r) {
+                    this.beginPath();
+                    this.moveTo(x + r, y);
+                    this.arcTo(x + w, y, x + w, y + h, r);
+                    this.arcTo(x + w, y + h, x, y + h, r);
+                    this.arcTo(x, y + h, x, y, r);
+                    this.arcTo(x, y, x + w, y, r);
+                    this.closePath();
+                }
+                ctx.roundRect(px + 3, py + 3, s - 6, s - 6, 3);
                 ctx.fill();
-                if (f.golden){
+                if (f.golden) {
                     ctx.strokeStyle = 'rgba(255,220,120,0.6)';
                     ctx.lineWidth = 1;
                     ctx.stroke();
@@ -635,12 +734,12 @@ class Game {
 
         for (const p of this.entities.powerups) {
             const t = (now() - p.spawned) / 300;
-            this.grid.drawCell(p.x,p.y,(ctx,px,py,s)=>{
+            this.grid.drawCell(p.x, p.y, (ctx, px, py, s) => {
                 ctx.save();
-                ctx.translate(px+s/2, py+s/2);
+                ctx.translate(px + s / 2, py + s / 2);
                 ctx.globalAlpha = 0.9;
                 ctx.beginPath();
-                ctx.arc(0,0, s*0.28 + Math.sin(t)*1.6, 0, Math.PI*2);
+                ctx.arc(0, 0, s * 0.28 + Math.sin(t) * 1.6, 0, Math.PI * 2);
                 ctx.fillStyle = CONFIG.colors.powerup;
                 ctx.fill();
                 ctx.restore();
@@ -650,16 +749,16 @@ class Game {
         for (let i = this.snake.segs.length - 1; i >= 0; i--) {
             const seg = this.snake.segs[i];
             const isHead = i === 0;
-            this.grid.drawCell(seg.x, seg.y, (ctx,px,py,s)=>{
+            this.grid.drawCell(seg.x, seg.y, (ctx, px, py, s) => {
                 ctx.save();
                 ctx.beginPath();
                 ctx.fillStyle = isHead ? CONFIG.colors.snakeHead : CONFIG.colors.snake;
                 const alpha = 0.65 + (1 - (i / this.snake.segs.length)) * 0.4;
                 ctx.globalAlpha = alpha;
-                ctx.fillRect(px+1,py+1,s-2,s-2);
+                ctx.fillRect(px + 1, py + 1, s - 2, s - 2);
                 if (isHead) {
                     ctx.fillStyle = 'rgba(255,255,255,0.12)';
-                    ctx.fillRect(px + s*0.15, py + s*0.15, s*0.2, s*0.2);
+                    ctx.fillRect(px + s * 0.15, py + s * 0.15, s * 0.2, s * 0.2);
                 }
                 ctx.restore();
             });
@@ -667,7 +766,7 @@ class Game {
 
         c.save();
         c.fillStyle = 'rgba(0,0,0,0.16)';
-        c.fillRect(10,10,140,60);
+        c.fillRect(10, 10, 140, 60);
         c.fillStyle = '#dff7ff';
         c.font = '14px system-ui,Segoe UI,Roboto';
         c.fillText(`Level: ${this.level}`, 18, 30);
@@ -678,17 +777,17 @@ class Game {
         if (this.state === 'paused') {
             c.save();
             c.fillStyle = 'rgba(0,0,0,0.44)';
-            c.fillRect(0,0,this.canvas.width,this.canvas.height);
+            c.fillRect(0, 0, this.canvas.width, this.canvas.height);
             c.fillStyle = '#fff';
             c.font = 'bold 46px system-ui';
             c.textAlign = 'center';
-            c.fillText('PAUSED', this.canvas.width/2, this.canvas.height/2);
+            c.fillText('PAUSED', this.canvas.width / 2, this.canvas.height / 2);
             c.restore();
         }
     }
 }
 
-CanvasRenderingContext2D.prototype.roundRect = function(x,y,w,h,r){
+CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
     if (r === undefined) r = 6;
     this.beginPath();
     this.moveTo(x + r, y);
@@ -711,9 +810,10 @@ window.addEventListener('load', () => {
     const stats = loadStats();
     $('best').textContent = `Best: ${stats.best}`;
 
-    ['modeSelect','difficultySelect','controlSelect'].forEach(id => {
+    ['modeSelect', 'difficultySelect', 'controlSelect'].forEach(id => {
         const el = $(id);
         if (!el) return;
-        el.addEventListener('change', () => {});
+        el.addEventListener('change', () => {
+        });
     });
 });

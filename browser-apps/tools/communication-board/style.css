@@ -284,9 +284,11 @@ Communication Board - Stylesheet
 .communication-board.grid-3x4 {
     grid-template-columns: repeat(3, minmax(0, 1fr));
 }
+
 .communication-board.grid-4x6 {
     grid-template-columns: repeat(4, minmax(0, 1fr));
 }
+
 .communication-board.grid-6x8 {
     grid-template-columns: repeat(6, minmax(0, 1fr));
 }

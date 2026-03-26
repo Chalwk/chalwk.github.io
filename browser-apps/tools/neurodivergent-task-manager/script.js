@@ -129,7 +129,7 @@ function loadTemplate(template) {
     showNotification(`"${template.title}" template loaded!`, 'info');
 }
 
-taskForm.addEventListener('submit', function(e) {
+taskForm.addEventListener('submit', function (e) {
     e.preventDefault();
 
     const title = document.getElementById('task-title').value;
@@ -167,7 +167,7 @@ taskForm.addEventListener('submit', function(e) {
     showNotification('Task created successfully!', 'success');
 });
 
-addStepBtn.addEventListener('click', function() {
+addStepBtn.addEventListener('click', function () {
     const stepCount = document.querySelectorAll('.step-input').length + 1;
     const stepInput = document.createElement('div');
     stepInput.className = 'step-input';
@@ -179,7 +179,7 @@ addStepBtn.addEventListener('click', function() {
     updateRemoveButtons();
 });
 
-stepsContainer.addEventListener('click', function(e) {
+stepsContainer.addEventListener('click', function (e) {
     if (e.target.classList.contains('btn-remove-step')) {
         const stepInput = e.target.closest('.step-input');
         if (stepInput && document.querySelectorAll('.step-input').length > 1) {
@@ -335,7 +335,7 @@ function createTaskElement(task) {
     return taskElement;
 }
 
-tasksList.addEventListener('click', function(e) {
+tasksList.addEventListener('click', function (e) {
     const taskId = parseInt(e.target.dataset.taskId);
     if (e.target.classList.contains('complete-task')) {
         completeTask(taskId);
@@ -348,7 +348,7 @@ tasksList.addEventListener('click', function(e) {
     }
 });
 
-completedTasks.addEventListener('click', function(e) {
+completedTasks.addEventListener('click', function (e) {
     if (e.target.classList.contains('btn-delete-completed')) {
         const taskId = parseInt(e.target.dataset.taskId);
         deleteCompletedTask(taskId);
@@ -547,17 +547,20 @@ function updateStats() {
 
 function updateAchievements() {
     const achievements = [
-        { id: 'achievement-1', condition: userStats.tasksCompleted >= 1 },
-        { id: 'achievement-2', condition: userStats.streak >= 3 },
-        { id: 'achievement-3', condition: userStats.tasksCompleted >= 10 },
-        { id: 'achievement-4', condition: timerUses >= 5 },
-        { id: 'achievement-5', condition: userStats.tasksCompleted >= 25 },
-        { id: 'achievement-6', condition: userStats.streak >= 7 },
-        { id: 'achievement-7', condition: completedTasksList.reduce((total, task) => total + task.steps.filter(step => step.completed).length, 0) >= 50 },
-        { id: 'achievement-8', condition: completedTasksList.filter(task => task.priority === 'high').length >= 5 }
+        {id: 'achievement-1', condition: userStats.tasksCompleted >= 1},
+        {id: 'achievement-2', condition: userStats.streak >= 3},
+        {id: 'achievement-3', condition: userStats.tasksCompleted >= 10},
+        {id: 'achievement-4', condition: timerUses >= 5},
+        {id: 'achievement-5', condition: userStats.tasksCompleted >= 25},
+        {id: 'achievement-6', condition: userStats.streak >= 7},
+        {
+            id: 'achievement-7',
+            condition: completedTasksList.reduce((total, task) => total + task.steps.filter(step => step.completed).length, 0) >= 50
+        },
+        {id: 'achievement-8', condition: completedTasksList.filter(task => task.priority === 'high').length >= 5}
     ];
 
-    achievements.forEach(({ id, condition }) => {
+    achievements.forEach(({id, condition}) => {
         if (condition) unlockAchievement(id);
     });
 }

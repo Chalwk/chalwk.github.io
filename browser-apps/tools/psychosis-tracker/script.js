@@ -4,7 +4,7 @@ Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
 Psychosis Tracker - JavaScript
 */
 
-(function() {
+(function () {
     const dateInput = document.getElementById('logDate');
     const timeInput = document.getElementById('logTime');
     const durationInput = document.getElementById('logDuration');
@@ -74,7 +74,7 @@ Psychosis Tracker - JavaScript
 
         const toggle = () => {
             checkbox.checked = !checkbox.checked;
-            checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+            checkbox.dispatchEvent(new Event('change', {bubbles: true}));
         };
 
         header.addEventListener('click', (e) => {
@@ -121,11 +121,11 @@ Psychosis Tracker - JavaScript
     setupCollapsible(tookMedicationCheckbox, medicationFields, 'medicationIcon');
     setupCollapsible(trackSleepCheckbox, sleepFields, 'sleepIcon');
 
-    stressSlider.addEventListener('input', function() {
+    stressSlider.addEventListener('input', function () {
         stressDisplay.textContent = this.value;
     });
 
-    intensitySlider.addEventListener('input', function() {
+    intensitySlider.addEventListener('input', function () {
         intensityDisplay.textContent = this.value;
         this.setAttribute('aria-valuenow', this.value);
     });
@@ -152,7 +152,7 @@ Psychosis Tracker - JavaScript
         timeInput.value = getCurrentTime();
     });
 
-    copingOtherCheckbox.addEventListener('change', function(e) {
+    copingOtherCheckbox.addEventListener('change', function (e) {
         if (this.checked) {
             customCopingContainer.style.display = 'block';
             customCopingInput.focus();
@@ -162,7 +162,7 @@ Psychosis Tracker - JavaScript
         }
     });
 
-    hallucinationOtherCheckbox.addEventListener('change', function(e) {
+    hallucinationOtherCheckbox.addEventListener('change', function (e) {
         if (this.checked) {
             customHallucinationContainer.style.display = 'block';
             customHallucinationInput.focus();
@@ -172,7 +172,7 @@ Psychosis Tracker - JavaScript
         }
     });
 
-    clearFormBtn.addEventListener('click', function() {
+    clearFormBtn.addEventListener('click', function () {
         resetForm();
         editingId = null;
         updateAddButtonText();
@@ -283,7 +283,7 @@ Psychosis Tracker - JavaScript
     function exportData() {
         const entries = loadEntries();
         const dataStr = JSON.stringify(entries, null, 2);
-        const blob = new Blob([dataStr], { type: 'application/json' });
+        const blob = new Blob([dataStr], {type: 'application/json'});
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
@@ -499,7 +499,11 @@ Psychosis Tracker - JavaScript
         let html = '';
         entries.slice(0, 15).forEach(entry => {
             const dateObj = new Date(entry.date + 'T12:00:00');
-            const formattedDate = dateObj.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+            const formattedDate = dateObj.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
             const timeStr = entry.time ? ` · ${entry.time}` : '';
             const durationStr = entry.duration ? ` · ${entry.duration} min` : '';
             const intensity = entry.intensity ? `🔥 ${entry.intensity}/10` : '';
@@ -743,20 +747,20 @@ Psychosis Tracker - JavaScript
         const selectedRange = document.querySelector('input[name="summaryRange"]:checked').value;
         let startDate, endDate;
         const today = new Date();
-        today.setHours(0,0,0,0);
+        today.setHours(0, 0, 0, 0);
 
         if (selectedRange === 'week') {
             endDate = new Date(today);
-            endDate.setHours(23,59,59,999);
+            endDate.setHours(23, 59, 59, 999);
             startDate = new Date(today);
             startDate.setDate(today.getDate() - 6);
-            startDate.setHours(0,0,0,0);
+            startDate.setHours(0, 0, 0, 0);
         } else if (selectedRange === 'month') {
             endDate = new Date(today);
-            endDate.setHours(23,59,59,999);
+            endDate.setHours(23, 59, 59, 999);
             startDate = new Date(today);
             startDate.setDate(today.getDate() - 29);
-            startDate.setHours(0,0,0,0);
+            startDate.setHours(0, 0, 0, 0);
         } else {
             if (!summaryStartDate.value || !summaryEndDate.value) {
                 alert('Please select both start and end dates.');
@@ -779,7 +783,7 @@ Psychosis Tracker - JavaScript
         const filtered = entries.filter(e => {
             if (!e.date) return false;
             return e.date >= startStr && e.date <= endStr;
-        }).sort((a,b) => a.date.localeCompare(b.date) || (a.time || '').localeCompare(b.time || ''));
+        }).sort((a, b) => a.date.localeCompare(b.date) || (a.time || '').localeCompare(b.time || ''));
 
         if (filtered.length === 0) return 'No entries in this period.';
 
@@ -790,7 +794,12 @@ Psychosis Tracker - JavaScript
             if (entryDateStr !== currentDate) {
                 if (currentDate) summary += '\n';
                 const d = new Date(entryDateStr + 'T12:00:00');
-                summary += d.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) + ':\n';
+                summary += d.toLocaleDateString('en-US', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                }) + ':\n';
                 currentDate = entryDateStr;
             }
             summary += `  - ${entry.time ? entry.time : 'time not recorded'}: `;

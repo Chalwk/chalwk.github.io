@@ -229,24 +229,6 @@ GitHub Pages Tutorial
             font-weight: bold;
         }
 
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            margin: 1.5rem 0;
-        }
-
-        .social-links a {
-            color: white;
-            font-size: 1.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .social-links a:hover {
-            color: var(--secondary);
-            transform: translateY(-3px);
-        }
-
         .github-icon {
             display: inline-block;
             width: 20px;
@@ -288,7 +270,7 @@ GitHub Pages Tutorial
             border-radius: 10px;
             padding: 1rem;
             margin: 2rem auto;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
             max-width: 1200px;
         }
 
@@ -896,7 +878,7 @@ openssl s_client -connect yourdomain.com:443</code></pre>
             </div>
 
             <div style="text-align: center; margin: 2rem 0;">
-                <a href="https://github.com/new" target="_blank" class="page-btn">
+                <a class="page-btn" href="https://github.com/new" target="_blank">
                     <i class="fab fa-github"></i> Create Your GitHub Pages Site Now
                 </a>
             </div>
@@ -906,14 +888,14 @@ openssl s_client -connect yourdomain.com:443</code></pre>
 
 <script>
     document.querySelectorAll('.page-nav-link').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
+        anchor.addEventListener('click', function (e) {
             e.preventDefault();
 
             const targetId = this.getAttribute('href');
-            if(targetId === '#') return;
+            if (targetId === '#') return;
 
             const targetElement = document.querySelector(targetId);
-            if(targetElement) {
+            if (targetElement) {
                 window.scrollTo({
                     top: targetElement.offsetTop - 100,
                     behavior: 'smooth'
@@ -930,7 +912,6 @@ openssl s_client -connect yourdomain.com:443</code></pre>
 
         sections.forEach(section => {
             const sectionTop = section.offsetTop;
-            const sectionHeight = section.clientHeight;
             if (pageYOffset >= sectionTop - 150) {
                 current = section.getAttribute('id');
             }

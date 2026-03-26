@@ -19,9 +19,9 @@ self.addEventListener('install', event => {
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then(cache => {
-            console.log('Opened cache');
-            return cache.addAll(urlsToCache);
-        })
+                console.log('Opened cache');
+                return cache.addAll(urlsToCache);
+            })
             .then(() => self.skipWaiting())
     );
 });
@@ -50,12 +50,12 @@ self.addEventListener('fetch', event => {
     event.respondWith(
         caches.match(event.request)
             .then(response => {
-            return response || fetch(event.request);
-        })
+                return response || fetch(event.request);
+            })
             .catch(() => {
-            if (event.request.destination === 'document') {
-                return caches.match('/browser-apps/tools/social-script-builder/index.html');
-            }
-        })
+                if (event.request.destination === 'document') {
+                    return caches.match('/browser-apps/tools/social-script-builder/index.html');
+                }
+            })
     );
 });

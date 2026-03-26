@@ -8,11 +8,11 @@ Sleep Tracker - HTML
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Sleep Tracker (mental health support)</title>
     <link href="../../../core.css" rel="stylesheet"/>
     <script src="../../../nav-menu.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
           rel="stylesheet">
     <link href="style.css" rel="stylesheet"/>
@@ -41,8 +41,8 @@ Sleep Tracker - HTML
                                 <span><i class="fas fa-calendar-day"></i> date</span>
                             </label>
                             <div class="input-with-button">
-                                <input type="date" id="logDate" class="date-input" required>
-                                <button type="button" class="btn btn-secondary today-btn" id="todayDateBtn">
+                                <input class="date-input" id="logDate" required type="date">
+                                <button class="btn btn-secondary today-btn" id="todayDateBtn" type="button">
                                     <i class="fas fa-calendar-check"></i> today
                                 </button>
                             </div>
@@ -53,8 +53,8 @@ Sleep Tracker - HTML
                                 <span><i class="fas fa-bed"></i> bedtime (attempted to sleep)</span>
                             </label>
                             <div class="input-with-button">
-                                <input type="time" id="bedtime" class="time-input">
-                                <button type="button" class="btn btn-secondary now-btn" id="nowBedtimeBtn">
+                                <input class="time-input" id="bedtime" type="time">
+                                <button class="btn btn-secondary now-btn" id="nowBedtimeBtn" type="button">
                                     <i class="fas fa-clock"></i> now
                                 </button>
                             </div>
@@ -65,8 +65,8 @@ Sleep Tracker - HTML
                                 <span><i class="fas fa-sun"></i> wake time (final)</span>
                             </label>
                             <div class="input-with-button">
-                                <input type="time" id="wakeTime" class="time-input">
-                                <button type="button" class="btn btn-secondary now-btn" id="nowWakeTimeBtn">
+                                <input class="time-input" id="wakeTime" type="time">
+                                <button class="btn btn-secondary now-btn" id="nowWakeTimeBtn" type="button">
                                     <i class="fas fa-clock"></i> now
                                 </button>
                             </div>
@@ -76,25 +76,26 @@ Sleep Tracker - HTML
                             <div class="collapse-header" data-target="difficultyFields">
                                 <i class="fas fa-chevron-right collapse-icon" id="difficultyIcon"></i>
                                 <span><i class="fas fa-exclamation-triangle"></i> Sleep difficulty</span>
-                                <label for="hadDifficulty"></label><input type="checkbox" id="hadDifficulty"
-                                                                          style="display: none;">
+                                <label for="hadDifficulty"></label><input id="hadDifficulty" style="display: none;"
+                                                                          type="checkbox">
                             </div>
-                            <div id="difficultyFields" class="collapse-content" style="display: none;">
+                            <div class="collapse-content" id="difficultyFields" style="display: none;">
                                 <div class="input-group">
                                     <label class="input-label" for="difficultyLevel">
                                         <span><i class="fas fa-gauge-high"></i> difficulty falling asleep (1=easy, 10=very hard)</span>
                                     </label>
                                     <div class="intensity-wrapper">
-                                        <input type="range" id="difficultyLevel" class="intensity-slider" min="1"
-                                               max="10" value="5">
+                                        <input class="intensity-slider" id="difficultyLevel" max="10" min="1"
+                                               type="range" value="5">
                                         <span class="intensity-value" id="difficultyDisplay">5</span>
                                     </div>
                                 </div>
                                 <div class="input-group">
                                     <label class="input-label" for="difficultyReason">
                                         <span><i class="fas fa-question-circle"></i> why? (optional)</span>
-                                        <input type="text" id="difficultyReason" class="text-input"
-                                               placeholder="e.g. racing mind, pain...">
+                                        <input class="text-input" id="difficultyReason"
+                                               placeholder="e.g. racing mind, pain..."
+                                               type="text">
                                     </label>
                                 </div>
                             </div>
@@ -104,12 +105,12 @@ Sleep Tracker - HTML
                             <div class="collapse-header" data-target="wakeEventsFields">
                                 <i class="fas fa-chevron-right collapse-icon" id="wakeEventsIcon"></i>
                                 <span><i class="fas fa-clock"></i> Wake events</span>
-                                <label for="hadWakeEvents"></label><input type="checkbox" id="hadWakeEvents"
-                                                                          style="display: none;">
+                                <label for="hadWakeEvents"></label><input id="hadWakeEvents" style="display: none;"
+                                                                          type="checkbox">
                             </div>
-                            <div id="wakeEventsFields" class="collapse-content" style="display: none;">
-                                <div id="wakeEventsContainer" class="wake-events-container"></div>
-                                <button type="button" class="btn btn-secondary" id="addWakeEventBtn">
+                            <div class="collapse-content" id="wakeEventsFields" style="display: none;">
+                                <div class="wake-events-container" id="wakeEventsContainer"></div>
+                                <button class="btn btn-secondary" id="addWakeEventBtn" type="button">
                                     <i class="fas fa-plus"></i> add wake event
                                 </button>
                             </div>
@@ -119,36 +120,36 @@ Sleep Tracker - HTML
                             <div class="collapse-header" data-target="symptomsFields">
                                 <i class="fas fa-chevron-right collapse-icon" id="symptomsIcon"></i>
                                 <span><i class="fas fa-brain"></i> Nighttime symptoms</span>
-                                <label for="hadSymptoms"></label><input type="checkbox" id="hadSymptoms"
-                                                                        style="display: none;">
+                                <label for="hadSymptoms"></label><input id="hadSymptoms" style="display: none;"
+                                                                        type="checkbox">
                             </div>
-                            <div id="symptomsFields" class="collapse-content" style="display: none;">
+                            <div class="collapse-content" id="symptomsFields" style="display: none;">
                                 <div class="checkbox-group">
                                     <label class="checkbox-label">
-                                        <input type="checkbox" id="racingThoughts"> <i class="fas fa-brain"></i> racing
+                                        <input id="racingThoughts" type="checkbox"> <i class="fas fa-brain"></i> racing
                                         thoughts
                                     </label>
                                 </div>
                                 <div class="checkbox-group">
                                     <label class="checkbox-label">
-                                        <input type="checkbox" id="nightmares"> <i class="fas fa-dragon"></i> nightmares
+                                        <input id="nightmares" type="checkbox"> <i class="fas fa-dragon"></i> nightmares
                                     </label>
                                     <div id="traumaNightmareContainer"
                                          style="margin-left: 1.5rem; margin-top: 0.3rem; display: none;">
                                         <label class="checkbox-label">
-                                            <input type="checkbox" id="traumaNightmare"> trauma-related nightmare
+                                            <input id="traumaNightmare" type="checkbox"> trauma-related nightmare
                                         </label>
                                     </div>
                                 </div>
                                 <div class="checkbox-group">
                                     <label class="checkbox-label">
-                                        <input type="checkbox" id="fearSleep"> <i class="fas fa-frown"></i> fear to go
+                                        <input id="fearSleep" type="checkbox"> <i class="fas fa-frown"></i> fear to go
                                         to sleep
                                     </label>
                                 </div>
                                 <div class="checkbox-group">
                                     <label class="checkbox-label">
-                                        <input type="checkbox" id="restlessness"> <i class="fas fa-running"></i> feeling
+                                        <input id="restlessness" type="checkbox"> <i class="fas fa-running"></i> feeling
                                         hyperactive / restlessness
                                     </label>
                                 </div>
@@ -159,29 +160,32 @@ Sleep Tracker - HTML
                             <div class="collapse-header" data-target="morningFields">
                                 <i class="fas fa-chevron-right collapse-icon" id="morningIcon"></i>
                                 <span><i class="fas fa-sun"></i> Morning routine & mood</span>
-                                <label for="hadMorning"></label><input type="checkbox" id="hadMorning"
-                                                                       style="display: none;">
+                                <label for="hadMorning"></label><input id="hadMorning" style="display: none;"
+                                                                       type="checkbox">
                             </div>
-                            <div id="morningFields" class="collapse-content" style="display: none;">
+                            <div class="collapse-content" id="morningFields" style="display: none;">
                                 <div class="input-group">
                                     <label class="input-label" for="mood">
                                         <span><i class="fas fa-smile"></i> mood when waking up</span>
-                                        <input type="text" id="mood" class="text-input"
-                                               placeholder="e.g. refreshed, tired, anxious...">
+                                        <input class="text-input" id="mood"
+                                               placeholder="e.g. refreshed, tired, anxious..."
+                                               type="text">
                                     </label>
                                 </div>
                                 <div class="input-group">
                                     <label class="input-label" for="preRoutine">
                                         <span><i class="fas fa-moon"></i> pre‑bedtime routine</span>
-                                        <textarea id="preRoutine" class="notes-textarea" rows="2"
-                                                  placeholder="e.g. read, screen time, meditation..."></textarea>
+                                        <textarea class="notes-textarea" id="preRoutine"
+                                                  placeholder="e.g. read, screen time, meditation..."
+                                                  rows="2"></textarea>
                                     </label>
                                 </div>
                                 <div class="input-group">
                                     <label class="input-label" for="postRoutine">
                                         <span><i class="fas fa-sun"></i> wake‑up routine</span>
-                                        <textarea id="postRoutine" class="notes-textarea" rows="2"
-                                                  placeholder="e.g. stretched, coffee, exercise..."></textarea>
+                                        <textarea class="notes-textarea" id="postRoutine"
+                                                  placeholder="e.g. stretched, coffee, exercise..."
+                                                  rows="2"></textarea>
                                     </label>
                                 </div>
                             </div>
@@ -191,26 +195,26 @@ Sleep Tracker - HTML
                             <div class="collapse-header" data-target="additionalFields">
                                 <i class="fas fa-chevron-right collapse-icon" id="additionalIcon"></i>
                                 <span><i class="fas fa-cloud-sun"></i> Lifestyle & environment</span>
-                                <label for="hadAdditional"></label><input type="checkbox" id="hadAdditional"
-                                                                          style="display: none;">
+                                <label for="hadAdditional"></label><input id="hadAdditional" style="display: none;"
+                                                                          type="checkbox">
                             </div>
-                            <div id="additionalFields" class="collapse-content" style="display: none;">
+                            <div class="collapse-content" id="additionalFields" style="display: none;">
                                 <div class="checkbox-group">
-                                    <label class="checkbox-label"><input type="checkbox" id="stress"> <i
+                                    <label class="checkbox-label"><input id="stress" type="checkbox"> <i
                                             class="fas fa-exclamation-triangle"></i> Stress (feeling stressed)</label>
-                                    <label class="checkbox-label"><input type="checkbox" id="caffeine"> <i
+                                    <label class="checkbox-label"><input id="caffeine" type="checkbox"> <i
                                             class="fas fa-coffee"></i> Caffeine after 2pm</label>
-                                    <label class="checkbox-label"><input type="checkbox" id="alcohol"> <i
+                                    <label class="checkbox-label"><input id="alcohol" type="checkbox"> <i
                                             class="fas fa-wine-bottle"></i> Alcohol in evening</label>
-                                    <label class="checkbox-label"><input type="checkbox" id="exercise"> <i
+                                    <label class="checkbox-label"><input id="exercise" type="checkbox"> <i
                                             class="fas fa-dumbbell"></i> Exercise within 2h of bed</label>
-                                    <label class="checkbox-label"><input type="checkbox" id="screenTime"> <i
+                                    <label class="checkbox-label"><input id="screenTime" type="checkbox"> <i
                                             class="fas fa-tv"></i> Screen time before bed</label>
-                                    <label class="checkbox-label"><input type="checkbox" id="medication"> <i
+                                    <label class="checkbox-label"><input id="medication" type="checkbox"> <i
                                             class="fas fa-pills"></i> Medication (sleep-related)</label>
-                                    <label class="checkbox-label"><input type="checkbox" id="environment"> <i
+                                    <label class="checkbox-label"><input id="environment" type="checkbox"> <i
                                             class="fas fa-volume-up"></i> Environment (noise/temp)</label>
-                                    <label class="checkbox-label"><input type="checkbox" id="seasonalDepression"> <i
+                                    <label class="checkbox-label"><input id="seasonalDepression" type="checkbox"> <i
                                             class="fas fa-cloud-sun"></i> Seasonal depression pattern</label>
                                 </div>
                             </div>
@@ -219,8 +223,8 @@ Sleep Tracker - HTML
                         <div class="input-group">
                             <label class="input-label" for="notes">
                                 <span><i class="fas fa-pen"></i> private notes</span>
-                                <textarea id="notes" class="notes-textarea" rows="2"
-                                          placeholder="anything else..."></textarea>
+                                <textarea class="notes-textarea" id="notes" placeholder="anything else..."
+                                          rows="2"></textarea>
                             </label>
                         </div>
 
@@ -242,7 +246,7 @@ Sleep Tracker - HTML
                             <button class="btn btn-secondary" id="summaryBtn"><i class="fas fa-chart-bar"></i> summarize
                             </button>
                         </div>
-                        <input type="file" id="importFile" accept=".json,application/json" style="display: none;">
+                        <input accept=".json,application/json" id="importFile" style="display: none;" type="file">
                     </div>
 
                     <div class="right-column">
@@ -265,10 +269,9 @@ Sleep Tracker - HTML
                             </div>
                         </div>
 
-                        <h4 style="margin: 0 0 0.75rem 0; display: flex; gap:0.5rem;"><i class="fas fa-history"></i>
-                            recent nights</h4>
+                        <h4 style="margin: 0 0 0.75rem 0; display: flex; gap:0.5rem;"><i class="fas fa-history"></i>Recent nights</h4>
                         <div class="entries-list" id="entriesList">
-                            <div class="empty-message">✨ no entries yet. use the form to start.</div>
+                            <div class="empty-message">No entries yet. Use the form to start.</div>
                         </div>
                     </div>
                 </div>
@@ -277,28 +280,28 @@ Sleep Tracker - HTML
     </div>
 </main>
 
-<div id="summaryModal" class="modal" style="display: none;">
+<div class="modal" id="summaryModal" style="display: none;">
     <div class="modal-content">
         <span class="close-modal">&times;</span>
         <h3>Generate Sleep Summary</h3>
         <div class="modal-options">
-            <label><input type="radio" name="summaryRange" value="week" checked> Last 7 days</label>
-            <label><input type="radio" name="summaryRange" value="month"> Last 30 days</label>
-            <label><input type="radio" name="summaryRange" value="custom"> Custom range</label>
+            <label><input checked name="summaryRange" type="radio" value="week"> Last 7 days</label>
+            <label><input name="summaryRange" type="radio" value="month"> Last 30 days</label>
+            <label><input name="summaryRange" type="radio" value="custom"> Custom range</label>
             <div id="customRangeInputs" style="display: none; margin-top: 10px;">
-                <label>From: <input type="date" id="summaryStartDate"></label>
-                <label>To: <input type="date" id="summaryEndDate"></label>
+                <label>From: <input id="summaryStartDate" type="date"></label>
+                <label>To: <input id="summaryEndDate" type="date"></label>
             </div>
         </div>
         <button class="btn btn-primary" id="generateSummaryBtn">Generate</button>
         <div id="summaryOutput"
              style="margin-top: 15px; max-height: 300px; overflow-y: auto; background: #f5f5f5; padding: 10px; border-radius: 4px; white-space: pre-wrap; font-family: monospace;"></div>
-        <button class="btn btn-secondary" id="copySummaryBtn" style="margin-top: 10px;" disabled>Copy to clipboard
+        <button class="btn btn-secondary" disabled id="copySummaryBtn" style="margin-top: 10px;">Copy to clipboard
         </button>
     </div>
 </div>
 
-<div id="toast" class="toast">✓ Entry saved</div>
+<div class="toast" id="toast">✓ Entry saved</div>
 
 <script src="script.js"></script>
 </body>

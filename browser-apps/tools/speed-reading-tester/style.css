@@ -11,6 +11,7 @@ Speed Reading Tester - Stylesheet
     border-bottom: 2px solid var(--gray-light);
     padding-bottom: 0.5rem;
 }
+
 .tab-btn {
     background: none;
     border: none;
@@ -22,11 +23,13 @@ Speed Reading Tester - Stylesheet
     border-radius: var(--radius) var(--radius) 0 0;
     transition: all 0.2s;
 }
+
 .tab-btn.active {
     color: var(--primary);
     background: var(--light);
     border-bottom: 3px solid var(--primary);
 }
+
 .word-flash-area {
     background: var(--light);
     border: 2px dashed var(--gray-light);
@@ -36,7 +39,7 @@ Speed Reading Tester - Stylesheet
     margin: 1.5rem 0;
     font-size: 3.5rem;
     font-weight: 500;
-    font-family: var(--font-mono);
+    font-family: var(--font-mono), monospace;
     min-height: 180px;
     display: flex;
     align-items: center;
@@ -44,6 +47,7 @@ Speed Reading Tester - Stylesheet
     color: var(--dark);
     word-break: break-word;
 }
+
 .story-text {
     background: white;
     border: 1px solid var(--gray-light);
@@ -56,6 +60,7 @@ Speed Reading Tester - Stylesheet
     margin: 1rem 0;
     color: var(--dark);
 }
+
 .stats-row {
     display: flex;
     gap: 2rem;
@@ -66,6 +71,7 @@ Speed Reading Tester - Stylesheet
     border-radius: var(--radius);
     margin: 1rem 0;
 }
+
 .wpm-badge {
     background: var(--primary);
     color: white;
@@ -73,24 +79,29 @@ Speed Reading Tester - Stylesheet
     border-radius: 2rem;
     font-weight: 600;
 }
+
 .question-item {
     background: var(--light);
     padding: 1rem;
     border-radius: var(--radius);
     margin-bottom: 1rem;
 }
+
 .question-item p {
     font-weight: 500;
     margin-bottom: 0.75rem;
 }
+
 .question-item label {
     display: block;
     margin: 0.25rem 0;
     font-size: 0.95rem;
 }
+
 .hidden {
     display: none !important;
 }
+
 .finish-btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;

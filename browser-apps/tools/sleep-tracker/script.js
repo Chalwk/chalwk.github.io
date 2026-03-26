@@ -4,7 +4,7 @@ Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
 Sleep Tracker - JavaScript
 */
 
-(function() {
+(function () {
     const dateInput = document.getElementById('logDate');
     const bedtimeInput = document.getElementById('bedtime');
     const wakeTimeInput = document.getElementById('wakeTime');
@@ -57,11 +57,31 @@ Sleep Tracker - JavaScript
     const copySummaryBtn = document.getElementById('copySummaryBtn');
 
     const collapsibles = [
-        { checkbox: document.getElementById('hadDifficulty'), content: document.getElementById('difficultyFields'), icon: 'difficultyIcon' },
-        { checkbox: document.getElementById('hadWakeEvents'), content: document.getElementById('wakeEventsFields'), icon: 'wakeEventsIcon' },
-        { checkbox: document.getElementById('hadSymptoms'), content: document.getElementById('symptomsFields'), icon: 'symptomsIcon' },
-        { checkbox: document.getElementById('hadMorning'), content: document.getElementById('morningFields'), icon: 'morningIcon' },
-        { checkbox: document.getElementById('hadAdditional'), content: document.getElementById('additionalFields'), icon: 'additionalIcon' }
+        {
+            checkbox: document.getElementById('hadDifficulty'),
+            content: document.getElementById('difficultyFields'),
+            icon: 'difficultyIcon'
+        },
+        {
+            checkbox: document.getElementById('hadWakeEvents'),
+            content: document.getElementById('wakeEventsFields'),
+            icon: 'wakeEventsIcon'
+        },
+        {
+            checkbox: document.getElementById('hadSymptoms'),
+            content: document.getElementById('symptomsFields'),
+            icon: 'symptomsIcon'
+        },
+        {
+            checkbox: document.getElementById('hadMorning'),
+            content: document.getElementById('morningFields'),
+            icon: 'morningIcon'
+        },
+        {
+            checkbox: document.getElementById('hadAdditional'),
+            content: document.getElementById('additionalFields'),
+            icon: 'additionalIcon'
+        }
     ];
 
     const STORAGE_KEY = 'sleep_entries';
@@ -93,7 +113,7 @@ Sleep Tracker - JavaScript
 
         const toggle = () => {
             checkbox.checked = !checkbox.checked;
-            checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+            checkbox.dispatchEvent(new Event('change', {bubbles: true}));
         };
 
         header.addEventListener('click', (e) => {
@@ -116,7 +136,7 @@ Sleep Tracker - JavaScript
 
     dateInput.value = getTodayDate();
 
-    difficultySlider.addEventListener('input', function() {
+    difficultySlider.addEventListener('input', function () {
         difficultyDisplay.textContent = this.value;
     });
 
@@ -131,7 +151,7 @@ Sleep Tracker - JavaScript
         wakeTimeInput.value = getCurrentTime();
     });
 
-    nightmares.addEventListener('change', function() {
+    nightmares.addEventListener('change', function () {
         traumaContainer.style.display = this.checked ? 'block' : 'none';
         if (!this.checked) traumaNightmare.checked = false;
     });
@@ -168,7 +188,7 @@ Sleep Tracker - JavaScript
             const time = row.querySelector('.time-input').value;
             const ease = row.querySelector('.ease-select').value;
             if (time) {
-                events.push({ time, ease });
+                events.push({time, ease});
             }
         });
         return events;
@@ -278,7 +298,7 @@ Sleep Tracker - JavaScript
     function exportData() {
         const entries = loadEntries();
         const dataStr = JSON.stringify(entries, null, 2);
-        const blob = new Blob([dataStr], { type: 'application/json' });
+        const blob = new Blob([dataStr], {type: 'application/json'});
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
@@ -410,23 +430,28 @@ Sleep Tracker - JavaScript
 
         if (entry.difficultyLevel || entry.difficultyReason) {
             const cb = document.getElementById('hadDifficulty');
-            if (!cb.checked) cb.checked = true; cb.dispatchEvent(new Event('change'));
+            if (!cb.checked) cb.checked = true;
+            cb.dispatchEvent(new Event('change'));
         }
         if (entry.awakenings && entry.awakenings.length) {
             const cb = document.getElementById('hadWakeEvents');
-            if (!cb.checked) cb.checked = true; cb.dispatchEvent(new Event('change'));
+            if (!cb.checked) cb.checked = true;
+            cb.dispatchEvent(new Event('change'));
         }
         if (entry.racingThoughts || entry.nightmares || entry.fearSleep || entry.restlessness) {
             const cb = document.getElementById('hadSymptoms');
-            if (!cb.checked) cb.checked = true; cb.dispatchEvent(new Event('change'));
+            if (!cb.checked) cb.checked = true;
+            cb.dispatchEvent(new Event('change'));
         }
         if (entry.mood || entry.preRoutine || entry.postRoutine) {
             const cb = document.getElementById('hadMorning');
-            if (!cb.checked) cb.checked = true; cb.dispatchEvent(new Event('change'));
+            if (!cb.checked) cb.checked = true;
+            cb.dispatchEvent(new Event('change'));
         }
         if (entry.stress || entry.caffeine || entry.alcohol || entry.exercise || entry.screenTime || entry.medication || entry.environment || entry.seasonalDepression) {
             const cb = document.getElementById('hadAdditional');
-            if (!cb.checked) cb.checked = true; cb.dispatchEvent(new Event('change'));
+            if (!cb.checked) cb.checked = true;
+            cb.dispatchEvent(new Event('change'));
         }
 
         editingId = entry.id;
@@ -462,7 +487,11 @@ Sleep Tracker - JavaScript
         let html = '';
         entries.slice(0, 15).forEach(entry => {
             const dateObj = new Date(entry.date + 'T12:00:00');
-            const formattedDate = dateObj.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+            const formattedDate = dateObj.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
             const bedtime = entry.bedtime || '--:--';
             const wakeTime = entry.wakeTime || '--:--';
             const awakeningsCount = entry.awakenings ? entry.awakenings.length : 0;
@@ -567,20 +596,20 @@ Sleep Tracker - JavaScript
         const selectedRange = document.querySelector('input[name="summaryRange"]:checked').value;
         let startDate, endDate;
         const today = new Date();
-        today.setHours(0,0,0,0);
+        today.setHours(0, 0, 0, 0);
 
         if (selectedRange === 'week') {
             endDate = new Date(today);
-            endDate.setHours(23,59,59,999);
+            endDate.setHours(23, 59, 59, 999);
             startDate = new Date(today);
             startDate.setDate(today.getDate() - 6);
-            startDate.setHours(0,0,0,0);
+            startDate.setHours(0, 0, 0, 0);
         } else if (selectedRange === 'month') {
             endDate = new Date(today);
-            endDate.setHours(23,59,59,999);
+            endDate.setHours(23, 59, 59, 999);
             startDate = new Date(today);
             startDate.setDate(today.getDate() - 29);
-            startDate.setHours(0,0,0,0);
+            startDate.setHours(0, 0, 0, 0);
         } else {
             if (!summaryStartDate.value || !summaryEndDate.value) {
                 alert('Please select both start and end dates.');
@@ -603,7 +632,7 @@ Sleep Tracker - JavaScript
         const filtered = entries.filter(e => {
             if (!e.date) return false;
             return e.date >= startStr && e.date <= endStr;
-        }).sort((a,b) => a.date.localeCompare(b.date) || (a.bedtime || '').localeCompare(b.bedtime || ''));
+        }).sort((a, b) => a.date.localeCompare(b.date) || (a.bedtime || '').localeCompare(b.bedtime || ''));
 
         if (filtered.length === 0) return 'No entries in this period.';
 
@@ -614,7 +643,12 @@ Sleep Tracker - JavaScript
             if (entryDateStr !== currentDate) {
                 if (currentDate) summary += '\n';
                 const d = new Date(entryDateStr + 'T12:00:00');
-                summary += d.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) + ':\n';
+                summary += d.toLocaleDateString('en-US', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                }) + ':\n';
                 currentDate = entryDateStr;
             }
             summary += `  - Bedtime: ${entry.bedtime || '--:--'}, Wake: ${entry.wakeTime || '--:--'}, Difficulty: ${entry.difficultyLevel}/10`;

@@ -155,7 +155,8 @@ Communication Board - JavaScript
         if (raw) {
             try {
                 settings = Object.assign(settings, JSON.parse(raw));
-            } catch { }
+            } catch {
+            }
         }
         loadVolume();
     }
@@ -537,7 +538,7 @@ Communication Board - JavaScript
             node.addEventListener('pointerdown', (e) => {
                 e.preventDefault();
                 startPressTimer();
-            }, { passive: false });
+            }, {passive: false});
 
             node.addEventListener('pointerup', clearPressTimer);
             node.addEventListener('pointerleave', clearPressTimer);
@@ -679,11 +680,11 @@ Communication Board - JavaScript
             const offset = x - box.left - box.width / 2;
 
             if (offset < 0 && offset > closest.offset) {
-                return { offset: offset, element: child };
+                return {offset: offset, element: child};
             } else {
                 return closest;
             }
-        }, { offset: Number.NEGATIVE_INFINITY }).element;
+        }, {offset: Number.NEGATIVE_INFINITY}).element;
     }
 
     function backupPhrase() {
@@ -794,7 +795,10 @@ Communication Board - JavaScript
         const color = symbolColorInput.value;
         const category = symbolCategoryInput.value || 'Basic Communication';
 
-        if (!text) { alert('Please enter text'); return; }
+        if (!text) {
+            alert('Please enter text');
+            return;
+        }
 
         if (symbolImageFile.files && symbolImageFile.files[0]) {
             image = await fileToDataURL(symbolImageFile.files[0]);
@@ -805,11 +809,11 @@ Communication Board - JavaScript
         if (currentEditingSymbol && currentEditingSymbol.id) {
             const idx = symbols.findIndex(s => s.id === currentEditingSymbol.id);
             if (idx !== -1) {
-                symbols[idx] = Object.assign({}, symbols[idx], { text, image, color, category });
+                symbols[idx] = Object.assign({}, symbols[idx], {text, image, color, category});
             }
         } else {
             const newId = symbols.length > 0 ? Math.max(...symbols.map(s => s.id)) + 1 : 1;
-            symbols.push({ id: newId, text, image, color, category });
+            symbols.push({id: newId, text, image, color, category});
         }
         saveSymbols();
         renderBoard();
@@ -844,7 +848,7 @@ Communication Board - JavaScript
             settings,
             categories: getCategories()
         };
-        const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+        const blob = new Blob([JSON.stringify(payload, null, 2)], {type: 'application/json'});
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
@@ -1020,7 +1024,8 @@ Communication Board - JavaScript
         renderBoard();
     });
 
-    symbolImageFile.addEventListener('change', () => { });
+    symbolImageFile.addEventListener('change', () => {
+    });
 
     settingsVoiceSelect.addEventListener('change', () => {
         const selectedVoice = settingsVoiceSelect.value;

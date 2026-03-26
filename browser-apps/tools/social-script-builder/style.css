@@ -103,7 +103,7 @@ Social Script Builder - Stylesheet
     font-size: 0.9rem;
     resize: vertical;
     min-height: 60px;
-    font-family: var(--font-primary);
+    font-family: var(--font-primary), sans-serif;
     background: white;
 }
 
@@ -123,16 +123,55 @@ Social Script Builder - Stylesheet
     margin-top: 0.5rem;
 }
 
-.step-type-statement { background: #dbeafe; color: #1e40af; }
-.step-type-question { background: #f0fdf4; color: #166534; }
-.step-type-action { background: #fef3c7; color: #92400e; }
-.step-type-reminder { background: #f3e8ff; color: #7c3aed; }
-.step-type-transition { background: #e0f2fe; color: #0369a1; }
-.step-type-observation { background: #f0f9ff; color: #0c4a6e; }
-.step-type-validation { background: #f0fdfa; color: #0f766e; }
-.step-type-boundary { background: #fef2f2; color: #991b1b; }
-.step-type-followup { background: #faf5ff; color: #7c3aed; }
-.step-type-closure { background: #fffbeb; color: #92400e; }
+.step-type-statement {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.step-type-question {
+    background: #f0fdf4;
+    color: #166534;
+}
+
+.step-type-action {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.step-type-reminder {
+    background: #f3e8ff;
+    color: #7c3aed;
+}
+
+.step-type-transition {
+    background: #e0f2fe;
+    color: #0369a1;
+}
+
+.step-type-observation {
+    background: #f0f9ff;
+    color: #0c4a6e;
+}
+
+.step-type-validation {
+    background: #f0fdfa;
+    color: #0f766e;
+}
+
+.step-type-boundary {
+    background: #fef2f2;
+    color: #991b1b;
+}
+
+.step-type-followup {
+    background: #faf5ff;
+    color: #7c3aed;
+}
+
+.step-type-closure {
+    background: #fffbeb;
+    color: #92400e;
+}
 
 .preview-modal {
     border: none;
@@ -249,7 +288,7 @@ Social Script Builder - Stylesheet
     border: 1px solid var(--gray-light);
     font-size: 0.95rem;
     background: white;
-    font-family: var(--font-primary);
+    font-family: var(--font-primary), sans-serif;
 }
 
 .field input:focus,
@@ -400,7 +439,7 @@ Social Script Builder - Stylesheet
     height: 100%;
     background: var(--primary);
     transition: width 0.3s;
-    width: 0%;
+    width: 0;
 }
 
 .practice-controls {

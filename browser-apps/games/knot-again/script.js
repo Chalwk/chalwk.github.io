@@ -35,7 +35,7 @@ Knot Again - JavaScript
 
         function onSegment(a, b, c) {
             return Math.min(a.x, b.x) <= c.x + 1e-6 && c.x <= Math.max(a.x, b.x) + 1e-6 &&
-            Math.min(a.y, b.y) <= c.y + 1e-6 && c.y <= Math.max(a.y, b.y) + 1e-6;
+                Math.min(a.y, b.y) <= c.y + 1e-6 && c.y <= Math.max(a.y, b.y) + 1e-6;
         }
 
         const o1 = orient(p1, p2, p3);
@@ -66,8 +66,8 @@ Knot Again - JavaScript
         const maxEdges = Math.floor(nodeCount * 1.6);
 
         const cx = state.w / 2,
-        cy = state.h / 2,
-        r = Math.min(state.w, state.h) / 2 - 90;
+            cy = state.h / 2,
+            r = Math.min(state.w, state.h) / 2 - 90;
         const basePositions = [];
 
         for (let i = 0; i < nodeCount; i++) {
@@ -82,10 +82,10 @@ Knot Again - JavaScript
 
         function crossesExisting(i, j) {
             const p1 = basePositions[i],
-            p2 = basePositions[j];
+                p2 = basePositions[j];
             for (const e of edges) {
                 const q1 = basePositions[e.a],
-                q2 = basePositions[e.b];
+                    q2 = basePositions[e.b];
                 if (e.a === i || e.b === i || e.a === j || e.b === j) continue;
                 if (segmentsIntersect(p1, p2, q1, q2)) return true;
             }
@@ -151,8 +151,8 @@ Knot Again - JavaScript
 
     function buildScene(spec) {
         clearSvg();
-        state.nodes = spec.nodes.map(n => ({ ...n }));
-        state.edges = spec.edges.map(e => ({ a: e.a, b: e.b }));
+        state.nodes = spec.nodes.map(n => ({...n}));
+        state.edges = spec.edges.map(e => ({a: e.a, b: e.b}));
 
         for (const e of state.edges) {
             const A = state.nodes[e.a];
@@ -315,12 +315,12 @@ Knot Again - JavaScript
         for (let i = 0; i < state.edges.length; i++) {
             for (let j = i + 1; j < state.edges.length; j++) {
                 const e1 = state.edges[i],
-                e2 = state.edges[j];
+                    e2 = state.edges[j];
                 if (e1.a === e2.a || e1.a === e2.b || e1.b === e2.a || e1.b === e2.b) continue;
                 const p1 = state.nodes[e1.a],
-                p2 = state.nodes[e1.b];
+                    p2 = state.nodes[e1.b];
                 const p3 = state.nodes[e2.a],
-                p4 = state.nodes[e2.b];
+                    p4 = state.nodes[e2.b];
                 if (segmentsIntersect(p1, p2, p3, p4)) {
                     crossings.add(i);
                     crossings.add(j);
@@ -410,7 +410,7 @@ Knot Again - JavaScript
 
         for (const e of state.edges) {
             const A = state.nodes[e.a],
-            B = state.nodes[e.b];
+                B = state.nodes[e.b];
             e.el.setAttribute('x1', A.x);
             e.el.setAttribute('y1', A.y);
             e.el.setAttribute('x2', B.x);

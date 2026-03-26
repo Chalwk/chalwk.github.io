@@ -26,7 +26,7 @@ function loadData() {
             affordabilityItems: parsed.affordabilityItems || defaultData.affordabilityItems
         };
     }
-    return { ...defaultData };
+    return {...defaultData};
 }
 
 function saveData() {
@@ -43,7 +43,7 @@ function saveData() {
     localStorage.setItem('billsTrackerData', JSON.stringify(dataToSave));
 }
 
-let { incomeStreams, weeklyBills, biWeeklyBills, monthlyBills, invoices, affordabilityItems } = loadData();
+let {incomeStreams, weeklyBills, biWeeklyBills, monthlyBills, invoices, affordabilityItems} = loadData();
 
 const weeklyIncomeEl = document.getElementById('weekly-income');
 const weeklyExpensesEl = document.getElementById('weekly-expenses');
@@ -114,7 +114,7 @@ function calculateTotalWeeklyIncome() {
         }
     });
 
-    return { recurring: total, oneOff: oneOffTotal };
+    return {recurring: total, oneOff: oneOffTotal};
 }
 
 function attachIncomeEventListeners() {
@@ -133,7 +133,7 @@ function attachIncomeEventListeners() {
     });
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     updateCalculations();
     renderWeeklyBills();
     renderMonthlyBills();
@@ -226,8 +226,8 @@ function updateCalculations() {
     }, 0);
 
     const totalWeeklyExpenses = weeklyExpensesFromWeeklyBills +
-    weeklyExpensesFromBiWeeklyBills +
-    weeklyExpensesFromMonthlyBills;
+        weeklyExpensesFromBiWeeklyBills +
+        weeklyExpensesFromMonthlyBills;
 
     weeklyIncomeEl.textContent = `$${totalWeeklyIncome.toFixed(2)}`;
     weeklyExpensesEl.textContent = `$${totalWeeklyExpenses.toFixed(2)}`;
@@ -242,8 +242,8 @@ function updateCalculations() {
     }
 
     const totalMonthlyExpenses = (weeklyExpensesFromWeeklyBills +
-    weeklyExpensesFromBiWeeklyBills +
-    weeklyExpensesFromMonthlyBills) * 4.33;
+        weeklyExpensesFromBiWeeklyBills +
+        weeklyExpensesFromMonthlyBills) * 4.33;
     monthlyAverageEl.textContent = `$${totalMonthlyExpenses.toFixed(2)}`;
 
     checkIncomeStreamsStatus();
@@ -268,8 +268,8 @@ function renderWeeklyBills() {
 
     allBills.forEach(bill => {
         const weeklyAmount = bill.frequency === "Bi-weekly" ?
-        `$${bill.amount.toFixed(2)} ($${(bill.amount/2).toFixed(2)}/week)` :
-        `$${bill.amount.toFixed(2)}`;
+            `$${bill.amount.toFixed(2)} ($${(bill.amount / 2).toFixed(2)}/week)` :
+            `$${bill.amount.toFixed(2)}`;
 
         const row = document.createElement('tr');
         row.innerHTML = `
@@ -381,14 +381,14 @@ function renderInvoices() {
 
             <div class="invoice-payments">
                 ${invoice.payments.length > 0 ?
-                    invoice.payments.map(payment => `
+            invoice.payments.map(payment => `
                         <div class="payment-row">
                             <span>${formatDate(payment.date)}</span>
                             <span>$${payment.amount.toFixed(2)}</span>
                         </div>
                     `).join('') :
-                    '<p>No payments recorded</p>'
-                }
+            '<p>No payments recorded</p>'
+        }
             </div>
 
             <div class="actions" style="margin-top: 15px;">
@@ -471,8 +471,8 @@ function renderIncomeStreams() {
         const row = document.createElement('tr');
         const statusClass = income.status === 'active' ? 'status-active' : 'status-ended';
         const statusText = income.isOneOff ?
-        (income.amount > 0 ? 'Active' : 'Ended') :
-        income.status;
+            (income.amount > 0 ? 'Active' : 'Ended') :
+            income.status;
 
         row.innerHTML = `
             <td>${income.name}</td>
@@ -486,8 +486,8 @@ function renderIncomeStreams() {
                 <button class="btn btn-warning btn-sm edit-income" data-id="${income.id}">Edit</button>
                 <button class="btn btn-danger btn-sm delete-income" data-id="${income.id}">Delete</button>
                 ${income.isOneOff && income.amount > 0 ?
-                    `<button class="btn btn-info btn-sm spend-oneoff" data-id="${income.id}">Spend</button>` :
-                    ''}
+            `<button class="btn btn-info btn-sm spend-oneoff" data-id="${income.id}">Spend</button>` :
+            ''}
             </td>
         `;
 
@@ -550,8 +550,8 @@ function renderAffordabilityItems() {
             <td>${displayTimeframe}</td>
             <td class="${item.analyzed ? 'affordable' : 'not-analyzed'}">
                 ${item.analyzed ?
-                    (weeklyNeeded <= remainingBalance ? 'Affordable ✓' : 'Not Affordable ✗') :
-                    'Not Analyzed'}
+            (weeklyNeeded <= remainingBalance ? 'Affordable ✓' : 'Not Affordable ✗') :
+            'Not Analyzed'}
             </td>
             <td class="actions">
                 <button class="btn btn-info btn-sm analyze-item" data-id="${item.id}">Analyze</button>
@@ -590,7 +590,7 @@ function renderAffordabilityItems() {
 }
 
 function formatDate(dateString) {
-    const options = { day: 'numeric', month: 'short', year: 'numeric' };
+    const options = {day: 'numeric', month: 'short', year: 'numeric'};
     return new Date(dateString).toLocaleDateString('en-US', options);
 }
 
@@ -708,18 +708,18 @@ function saveBill(e) {
             if (frequency === "Bi-weekly") {
                 const index = biWeeklyBills.findIndex(b => b.id === parseInt(id));
                 if (index !== -1) {
-                    biWeeklyBills[index] = { ...biWeeklyBills[index], ...billData };
+                    biWeeklyBills[index] = {...biWeeklyBills[index], ...billData};
                 }
             } else {
                 const index = weeklyBills.findIndex(b => b.id === parseInt(id));
                 if (index !== -1) {
-                    weeklyBills[index] = { ...weeklyBills[index], ...billData };
+                    weeklyBills[index] = {...weeklyBills[index], ...billData};
                 }
             }
         } else {
             const index = monthlyBills.findIndex(b => b.id === parseInt(id));
             if (index !== -1) {
-                monthlyBills[index] = { ...monthlyBills[index], ...billData };
+                monthlyBills[index] = {...monthlyBills[index], ...billData};
             }
         }
     } else {
@@ -818,7 +818,7 @@ function openIncomeModal(id = null) {
         document.getElementById('income-start-date').valueAsDate = new Date();
     }
 
-    frequencySelect.addEventListener('change', function() {
+    frequencySelect.addEventListener('change', function () {
         const isOneOff = this.value === "One-off";
         document.getElementById('income-dates-group').style.display = isOneOff ? 'none' : 'flex';
     });
@@ -900,7 +900,7 @@ function deleteIncome(id) {
 
 function openAffordabilityModal(id = null) {
     document.getElementById('affordability-modal-title').textContent =
-    id ? 'Edit Affordability Item' : 'Add Affordability Item';
+        id ? 'Edit Affordability Item' : 'Add Affordability Item';
     document.getElementById('affordability-id').value = id || '';
 
     if (id) {
@@ -944,7 +944,15 @@ function saveAffordabilityItem(e) {
     if (id) {
         const index = affordabilityItems.findIndex(i => i.id === parseInt(id));
         if (index !== -1) {
-            affordabilityItems[index] = { ...affordabilityItems[index], name, description, totalCost, deposit, timeframe, analyzed: false };
+            affordabilityItems[index] = {
+                ...affordabilityItems[index],
+                name,
+                description,
+                totalCost,
+                deposit,
+                timeframe,
+                analyzed: false
+            };
         }
     } else {
         const newId = Math.max(...affordabilityItems.map(i => i.id), 0) + 1;
@@ -1080,7 +1088,7 @@ function exportData() {
     };
 
     const dataStr = JSON.stringify(data, null, 2);
-    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const dataBlob = new Blob([dataStr], {type: 'application/json'});
 
     const link = document.createElement('a');
     link.href = URL.createObjectURL(dataBlob);
@@ -1093,7 +1101,7 @@ function importData(event) {
     if (!file) return;
 
     const reader = new FileReader();
-    reader.onload = function(e) {
+    reader.onload = function (e) {
         try {
             const importedData = JSON.parse(e.target.result);
 
