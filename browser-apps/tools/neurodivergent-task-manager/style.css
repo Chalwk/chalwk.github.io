@@ -12,13 +12,13 @@ Neurodivergent Task Manager - Stylesheet
 
 .task-item {
     background-color: white;
+    border: 1px solid var(--gray-light);
     border-left: 4px solid var(--primary);
     padding: 1rem;
     margin-bottom: 1rem;
     border-radius: var(--radius);
     box-shadow: var(--shadow-sm);
     transition: var(--transition);
-    border: 1px solid var(--gray-light);
 }
 
 .task-item:hover {
@@ -162,7 +162,7 @@ Neurodivergent Task Manager - Stylesheet
 .progress-fill {
     height: 100%;
     background-color: var(--accent);
-    width: 0%;
+    width: 0;
     transition: width 0.5s ease;
 }
 
@@ -180,7 +180,7 @@ Neurodivergent Task Manager - Stylesheet
     font-size: 1.25rem;
     font-weight: 600;
     color: var(--primary);
-    font-family: var(--font-mono);
+    font-family: var(--font-mono), monospace;
 }
 
 .task-actions {

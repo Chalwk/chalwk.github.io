@@ -97,7 +97,7 @@ function populateTemplateDropdown() {
     templateDropdown.innerHTML = '<option value="">Select a template</option>';
     taskTemplates.forEach((template, index) => {
         const option = document.createElement('option');
-        option.value = index;
+        option.value = index.toString();
         option.textContent = `${template.title} (${template.steps.length} steps)`;
         templateDropdown.appendChild(option);
     });

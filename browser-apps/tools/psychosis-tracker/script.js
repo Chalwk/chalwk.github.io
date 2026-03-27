@@ -152,7 +152,7 @@ Psychosis Tracker - JavaScript
         timeInput.value = getCurrentTime();
     });
 
-    copingOtherCheckbox.addEventListener('change', function (e) {
+    copingOtherCheckbox.addEventListener('change', function () {
         if (this.checked) {
             customCopingContainer.style.display = 'block';
             customCopingInput.focus();
@@ -162,7 +162,7 @@ Psychosis Tracker - JavaScript
         }
     });
 
-    hallucinationOtherCheckbox.addEventListener('change', function (e) {
+    hallucinationOtherCheckbox.addEventListener('change', function () {
         if (this.checked) {
             customHallucinationContainer.style.display = 'block';
             customHallucinationInput.focus();
@@ -296,8 +296,16 @@ Psychosis Tracker - JavaScript
         const reader = new FileReader();
         reader.onload = (e) => {
             try {
-                const imported = JSON.parse(e.target.result);
-                if (!Array.isArray(imported)) throw new Error('Invalid format');
+                const result = e.target.result;
+                if (typeof result !== 'string') {
+                    alert('Failed to import: unexpected data format.');
+                    return;
+                }
+                const imported = JSON.parse(result);
+                if (!Array.isArray(imported)) {
+                    alert('Failed to import: invalid JSON format (expected array).');
+                    return;
+                }
                 if (confirm('This will replace all current entries. Continue?')) {
                     saveEntries(imported);
                     renderAll();
@@ -462,7 +470,7 @@ Psychosis Tracker - JavaScript
 
     function renderAll() {
         const entries = loadEntries();
-        totalSpan.textContent = entries.length;
+        totalSpan.textContent = entries.length.toString();
 
         if (entries.length === 0) {
             avgSpan.textContent = '-';
@@ -471,15 +479,14 @@ Psychosis Tracker - JavaScript
             const intensities = entries.filter(e => e.intensity != null).map(e => e.intensity);
             if (intensities.length > 0) {
                 const sum = intensities.reduce((acc, i) => acc + i, 0);
-                const avg = (sum / intensities.length).toFixed(1);
-                avgSpan.textContent = avg;
+                avgSpan.textContent = (sum / intensities.length).toFixed(1);
             } else {
                 avgSpan.textContent = '-';
             }
 
             const now = new Date();
             const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-            const weekCount = entries.filter(e => {
+            weekSpan.textContent = entries.filter(e => {
                 let entryDate;
                 if (e.time) {
                     entryDate = new Date(`${e.date}T${e.time}:00`);
@@ -487,12 +494,11 @@ Psychosis Tracker - JavaScript
                     entryDate = new Date(e.timestamp);
                 }
                 return entryDate >= sevenDaysAgo;
-            }).length;
-            weekSpan.textContent = weekCount;
+            }).length.toString();
         }
 
         if (entries.length === 0) {
-            entriesListDiv.innerHTML = '<div class="empty-message">✨ no entries yet. use the form to start.</div>';
+            entriesListDiv.innerHTML = '<div class="empty-message">No entries yet. Use the form to start.</div>';
             return;
         }
 
@@ -508,7 +514,6 @@ Psychosis Tracker - JavaScript
             const durationStr = entry.duration ? ` · ${entry.duration} min` : '';
             const intensity = entry.intensity ? `🔥 ${entry.intensity}/10` : '';
             const voiceSnippet = entry.voice ? `“${entry.voice.substring(0, 60)}${entry.voice.length > 60 ? '…' : ''}”` : null;
-            const fullVoice = entry.voice || '';
 
             const hallTypes = entry.hallucinationTypes ? entry.hallucinationTypes.join(', ') : '';
             const moodEp = entry.moodEpisode ? ` · mood: ${entry.moodEpisode}` : '';
@@ -520,7 +525,6 @@ Psychosis Tracker - JavaScript
 
             const copingList = entry.coping && entry.coping.length ? entry.coping.join(', ') : 'none recorded';
             const notes = entry.notes ? `<div class="entry-note-preview"><i class="fas fa-pencil-alt"></i> ${entry.notes.substring(0, 50)}${entry.notes.length > 50 ? '…' : ''}</div>` : '';
-            const fullNotes = entry.notes || '';
 
             const showMoreVoice = entry.voice && entry.voice.length > 60 ? `<button class="show-more-btn" data-field="voice" data-id="${entry.id}">show more</button>` : '';
             const showMoreNotes = entry.notes && entry.notes.length > 50 ? `<button class="show-more-btn" data-field="notes" data-id="${entry.id}">show more</button>` : '';

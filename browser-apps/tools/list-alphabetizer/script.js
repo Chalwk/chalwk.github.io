@@ -29,7 +29,6 @@ List Alphabetizer - JavaScript
     const ignoreIndefiniteChk = document.getElementById('ignoreIndefinite');
     const ignoreCaseChk = document.getElementById('ignoreCase');
 
-    const caseRadios = document.getElementsByName('caseOption');
     const numberResultsChk = document.getElementById('numberResults');
     const numberSeparator = document.getElementById('numberSeparator');
     const addCustomTextChk = document.getElementById('addCustomText');
