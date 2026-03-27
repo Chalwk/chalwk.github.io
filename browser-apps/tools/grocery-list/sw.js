@@ -62,7 +62,12 @@ self.addEventListener('fetch', function (event) {
 
                         caches.open(CACHE_NAME)
                             .then(function (cache) {
-                                cache.put(event.request, responseToCache);
+                                cache.put(event.request, responseToCache).catch(function (err) {
+                                    console.error('Failed to cache response:', err);
+                                });
+                            })
+                            .catch(function (err) {
+                                console.error('Failed to open cache:', err);
                             });
 
                         return response;

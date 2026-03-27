@@ -4,6 +4,24 @@ Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
 Communication Board - Stylesheet
 */
 
+:root {
+    --primary: #4a86e8;
+    --primary-rgb: 74, 134, 232;
+    --light: #f9fafb;
+    --dark: #111827;
+    --gray-light: #e5e7eb;
+    --gray: #6b7280;
+
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+
+    --radius-sm: 0.25rem;
+    --radius: 0.375rem;
+    --radius-lg: 0.5rem;
+}
+
 .visually-hidden {
     position: absolute !important;
     height: 1px;

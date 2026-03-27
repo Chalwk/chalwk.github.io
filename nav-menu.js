@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                         <li role="none"><a href="${basePath}education/understanding-autism.html" role="menuitem">Understanding Autism</a></li>
                                         <li role="none"><a href="${basePath}education/stick-figure-comics.html" role="menuitem">Autism through Stick Figures</a></li>
                                         <li role="none"><a href="${basePath}education/github-pages-tutorial.html" role="menuitem">Creating a GitHub Pages Website</a></li>
-                                        <li role="none"><a href="${basePath}education/arachnology.html" role="menuitem">Local Aranid Research</a></li>
+                                        <li role="none"><a href="${basePath}education/arachnology.html" role="menuitem">Local Arachnid Research</a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                         <li><a href="${basePath}education/understanding-autism.html">Understanding Autism</a></li>
                                         <li><a href="${basePath}education/stick-figure-comics.html">Autism through Stick Figures</a></li>
                                         <li><a href="${basePath}education/github-pages-tutorial.html">Creating a GitHub Pages Website</a></li>
-                                        <li><a href="${basePath}education/arachnology.html">Local Aranid Research</a></li>
+                                        <li><a href="${basePath}education/arachnology.html">Local Arachnid Research</a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -330,7 +330,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const isVisible = window.pageYOffset > 300;
             scrollBtn.classList.toggle('visible', isVisible);
             scrollBtn.setAttribute('tabindex', isVisible ? '0' : '-1');
-            scrollBtn.setAttribute('aria-hidden', !isVisible);
+            scrollBtn.setAttribute('aria-hidden', String(!isVisible));
         }, 100);
     });
 

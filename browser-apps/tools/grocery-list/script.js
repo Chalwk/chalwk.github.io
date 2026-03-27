@@ -278,7 +278,6 @@ function setupFilters() {
 }
 
 function applyFilter(filter) {
-    const allCards = document.querySelectorAll('.grocery-card');
     const allSections = document.querySelectorAll('.category-section');
 
     allSections.forEach(section => {
@@ -396,8 +395,8 @@ function updateStats() {
         }
     });
 
-    document.getElementById('totalItems').textContent = totalItems;
-    document.getElementById('neededItems').textContent = neededCount;
+    document.getElementById('totalItems').textContent = String(totalItems);
+    document.getElementById('neededItems').textContent = String(neededCount);
     document.getElementById('totalPrice').textContent = `$${totalPrice.toFixed(2)}`;
 }
 
@@ -438,7 +437,12 @@ function setupImport() {
         const reader = new FileReader();
         reader.onload = function (e) {
             try {
-                const importedData = JSON.parse(e.target.result);
+                const result = e.target.result;
+                if (typeof result !== 'string') {
+                    showStatusMessage('Error importing file: Unexpected file content type', 'error');
+                    return;
+                }
+                const importedData = JSON.parse(result);
 
                 if (importedData.groceryData) {
                     groceryData = importedData.groceryData;

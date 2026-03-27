@@ -67,11 +67,11 @@ function renderGrid() {
     gridEl.innerHTML = '';
     for (let r = 0; r < MAX_GUESSES; r++) {
         const rowEl = el('div', 'row');
-        rowEl.setAttribute('data-row', r);
+        rowEl.setAttribute('data-row', r.toString());
         for (let c = 0; c < WORD_LENGTH; c++) {
             const tile = el('div', 'tile', board[r][c] || '');
-            tile.setAttribute('data-row', r);
-            tile.setAttribute('data-col', c);
+            tile.setAttribute('data-row', r.toString());
+            tile.setAttribute('data-col', c.toString());
             tile.setAttribute('tabindex', '-1');
             rowEl.appendChild(tile);
         }

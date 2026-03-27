@@ -546,7 +546,6 @@ function gameLoop() {
 }
 
 function initializeGame() {
-    const container = canvas.parentElement;
     const maxWidth = Math.min(800, window.innerWidth - 60);
     canvas.width = maxWidth;
     canvas.height = maxWidth * 0.75;

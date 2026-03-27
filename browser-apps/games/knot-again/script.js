@@ -24,10 +24,6 @@ Knot Again - JavaScript
         h: 700
     };
 
-    function randRange(min, max) {
-        return Math.random() * (max - min) + min;
-    }
-
     function segmentsIntersect(p1, p2, p3, p4) {
         function orient(a, b, c) {
             return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
@@ -340,7 +336,7 @@ Knot Again - JavaScript
                 e.el.setAttribute('stroke-width', 3);
             }
         }
-        crossCountEl.textContent = crossCount;
+        crossCountEl.textContent = crossCount.toString();
         edgeCountEl.textContent = state.edges.length;
 
         if (crossCount === 0) {

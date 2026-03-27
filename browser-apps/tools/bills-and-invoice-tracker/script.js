@@ -723,8 +723,7 @@ function saveBill(e) {
             }
         }
     } else {
-        const newId = Math.max(...[...weeklyBills, ...monthlyBills, ...biWeeklyBills].map(b => b.id), 0) + 1;
-        billData.id = newId;
+        billData.id = Math.max(...[...weeklyBills, ...monthlyBills, ...biWeeklyBills].map(b => b.id), 0) + 1;
 
         if (type === 'weekly') {
             if (frequency === "Bi-weekly") {

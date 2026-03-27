@@ -105,14 +105,6 @@ Facebook Activity Cleaner - Chrome Console Script
             transform: translateY(-1px);
         }
 
-        .copy-button.success {
-            background: var(--success);
-        }
-
-        .copy-button.error {
-            background: var(--error);
-        }
-
         .instructions {
             background: var(--light);
             border-left: 4px solid var(--accent);
@@ -676,7 +668,7 @@ Facebook Activity Cleaner - Chrome Console Script
         function updateLineNumbers() {
             const codeElement = document.querySelector('.script-code');
             const lines = codeElement.textContent.split('\n');
-            codeElement.innerHTML = lines.map((line, index) =>
+            codeElement.innerHTML = lines.map(line =>
                 `<span class="script-code-line">${line}</span>`
             ).join('\n');
         }
@@ -684,51 +676,25 @@ Facebook Activity Cleaner - Chrome Console Script
         updateButton.addEventListener('click', updateScriptWithValues);
 
         copyButton.addEventListener('click', async function () {
+            const originalText = copyButton.innerHTML;
+            const originalClass = copyButton.className;
+
             try {
                 await navigator.clipboard.writeText(currentScriptCode);
 
-                const originalText = copyButton.innerHTML;
-                const originalClass = copyButton.className;
-
                 copyButton.innerHTML = '<i class="fas fa-check"></i> Copied!';
                 copyButton.className = 'copy-button success';
-
-                setTimeout(() => {
-                    copyButton.innerHTML = originalText;
-                    copyButton.className = originalClass;
-                }, 2000);
-
             } catch (err) {
                 console.error('Failed to copy text: ', err);
 
-                const originalText = copyButton.innerHTML;
-                const originalClass = copyButton.className;
-
                 copyButton.innerHTML = '<i class="fas fa-times"></i> Failed to copy';
                 copyButton.className = 'copy-button error';
-
-                setTimeout(() => {
-                    copyButton.innerHTML = originalText;
-                    copyButton.className = originalClass;
-                }, 2000);
-
-                const textArea = document.createElement('textarea');
-                textArea.value = currentScriptCode;
-                document.body.appendChild(textArea);
-                textArea.select();
-                try {
-                    document.execCommand('copy');
-                    copyButton.innerHTML = '<i class="fas fa-check"></i> Copied!';
-                    copyButton.className = 'copy-button success';
-                    setTimeout(() => {
-                        copyButton.innerHTML = originalText;
-                        copyButton.className = originalClass;
-                    }, 2000);
-                } catch (fallbackErr) {
-                    console.error('Fallback copy failed: ', fallbackErr);
-                }
-                document.body.removeChild(textArea);
             }
+
+            setTimeout(() => {
+                copyButton.innerHTML = originalText;
+                copyButton.className = originalClass;
+            }, 2000);
         });
 
         updateLineNumbers();

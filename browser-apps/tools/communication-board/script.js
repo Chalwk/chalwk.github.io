@@ -97,7 +97,10 @@ Communication Board - JavaScript
     async function loadSymbolsFromFile() {
         try {
             const response = await fetch('symbols.txt');
-            if (!response.ok) throw new Error('Failed to load symbols.txt');
+            if (!response.ok) {
+                showToast('Failed to load symbols.txt, using empty board');
+                return [];
+            }
             const text = await response.text();
             const lines = text.split('\n').filter(line => line.trim() !== '');
             const newSymbols = [];
@@ -363,8 +366,8 @@ Communication Board - JavaScript
     function isImageSource(str) {
         if (!str) return false;
         if (isUrl(str)) return true;
-        if (str.startsWith('data:image/')) return true;
-        return false;
+        return !!str.startsWith('data:image/');
+
     }
 
     function toggleSettingsMenu() {
@@ -596,7 +599,7 @@ Communication Board - JavaScript
             item.className = 'phrase-item';
             item.setAttribute('draggable', 'true');
             item.setAttribute('role', 'listitem');
-            item.dataset.index = index;
+            item.dataset.index = index.toString();
             item.title = 'Click to remove. Drag to reorder.';
 
             if (isImageSource(symbol.image)) {
@@ -864,6 +867,10 @@ Communication Board - JavaScript
         const reader = new FileReader();
         reader.onload = () => {
             try {
+                if (typeof reader.result !== 'string') {
+                    alert('Import failed: invalid file content');
+                    return;
+                }
                 const parsed = JSON.parse(reader.result);
                 if (parsed.symbols && Array.isArray(parsed.symbols)) {
                     const existingIds = new Set(symbols.map(s => s.id));

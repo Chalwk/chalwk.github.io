@@ -733,7 +733,7 @@ footer p {
     }
 }
 
-@media (prefers-contrast: high) {
+@media (prefers-contrast: more) {
     .dropdown-menu,
     .submenu,
     .nav-mobile {
