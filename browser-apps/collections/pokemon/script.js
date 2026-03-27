@@ -107,7 +107,6 @@ My Pokémon TCG Collection - Script
 
     const createCardHTML = (card, isPokemon = false) => {
         const imgSrc = getImagePath(card.name);
-        const escapedImgSrc = imgSrc.replace(/'/g, "\\'");
         const holoTag = card.holo ? '<span class="holo-indicator">H</span>' : '';
         const linkIcon = card.url ? `<a href="${card.url}" target="_blank" rel="noopener" class="card-link-icon" title="View on Pokémon Database"><i class="fas fa-external-link-alt"></i></a>` : '';
         const rarityBadgeHtml = getRarityBadge(card.rarity);
