@@ -1,8 +1,4 @@
-/*
-Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
-
-Knot Again - JavaScript
-*/
+/* Copyright (c) 2024-2026. Jericho Crosby (Chalwk) */
 
 (() => {
     const svg = document.getElementById('svg');

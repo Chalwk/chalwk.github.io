@@ -1,8 +1,4 @@
-/*
-Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
-
-Autistic Burnout Risk Assessment - JavaScript
-*/
+/* Copyright (c) 2024-2026. Jericho Crosby (Chalwk) */
 
 const calculateBtn = document.getElementById('calculate-btn');
 const saveBtn = document.getElementById('save-btn');

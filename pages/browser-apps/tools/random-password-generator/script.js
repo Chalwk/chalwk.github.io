@@ -1,8 +1,4 @@
-/*
-Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
-
-Random Password Generator - JavaScript
-*/
+/* Copyright (c) 2024-2026. Jericho Crosby (Chalwk) */
 
 (() => {
     const CONFIG = {

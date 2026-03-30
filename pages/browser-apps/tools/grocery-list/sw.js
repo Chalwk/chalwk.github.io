@@ -1,8 +1,4 @@
-/*
-Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
-
-Grocery List - JavaScript (service worker)
-*/
+/* Copyright (c) 2024-2026. Jericho Crosby (Chalwk) */
 
 const CACHE_NAME = 'grocery-list-v1.0.0';
 const urlsToCache = [

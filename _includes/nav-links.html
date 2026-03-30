@@ -1,0 +1,31 @@
+<ul class="{{ include.ul_class | default: 'nav-links' }}">
+    <li><a href="{{ site.baseurl }}/index.html#about">About</a></li>
+    <li><a href="{{ site.baseurl }}/pages/browser-apps/index.html">Apps & Tools</a></li>
+    <li class="dropdown">
+        <button aria-expanded="false" aria-haspopup="true" class="dropdown-toggle">
+            Other Stuff <i aria-hidden="true" class="fas fa-chevron-down"></i>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+            <li role="none"><a href="https://chalwk.github.io/CPAS/" role="menuitem">CPAS</a></li>
+            <li role="none"><a href="{{ site.baseurl }}/pages/browser-apps/collections/pokemon/index.html"
+                               role="menuitem">My Pokémon TCG collection</a></li>
+            <li class="dropdown-submenu" role="none">
+                <button aria-expanded="false" class="submenu-toggle">
+                    Education <i aria-hidden="true" class="fas fa-chevron-right"></i>
+                </button>
+                <ul class="submenu" role="menu">
+                    <li role="none"><a href="{{ site.baseurl }}/pages/education/understanding-autism/index.html"
+                                       role="menuitem">Understanding Autism</a></li>
+                    <li role="none"><a href="{{ site.baseurl }}/pages/education/stick-figure-comics/index.html"
+                                       role="menuitem">Autism through Stick Figures</a></li>
+                    <li role="none"><a href="{{ site.baseurl }}/pages/education/github-pages-tutorial/index.html"
+                                       role="menuitem">Creating a GitHub Pages Website</a></li>
+                    <li role="none"><a href="{{ site.baseurl }}/pages/education/arachnology/index.html"
+                                       role="menuitem">Local Arachnid Research</a></li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+    <li><a class="donate-btn" href="https://www.paypal.com/ncp/payment/XUPTKDU6LKM3G" rel="noopener"
+           target="_blank"><i class="fas fa-heart"></i> Support Me</a></li>
+</ul>

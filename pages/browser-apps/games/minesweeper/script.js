@@ -1,8 +1,4 @@
-/*
-Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
-
-Minesweeper - JavaScript
-*/
+/* Copyright (c) 2024-2026. Jericho Crosby (Chalwk) */
 
 (() => {
     const boardEl = document.getElementById('board');

@@ -1,8 +1,4 @@
-/*
-Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
-
-Neurodivergent Task Manager - JavaScript
-*/
+/* Copyright (c) 2024-2026. Jericho Crosby (Chalwk) */
 
 const taskForm = document.getElementById('task-form');
 const tasksList = document.getElementById('tasks-list');

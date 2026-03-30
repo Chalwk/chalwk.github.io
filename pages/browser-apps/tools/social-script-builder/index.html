@@ -1,34 +1,18 @@
-<!--
-Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
+---
+layout: default
+title: Social Script Builder
+description: Create and practice customizable social scripts for various situations.
+pwa: true
+---
 
-Social Script Builder - HTML
--->
+<!-- Copyright (c) 2024-2026. Jericho Crosby (Chalwk) -->
 
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width,initial-scale=1" name="viewport"/>
-    <title>Social Script Builder</title>
-    <meta content="Create and practice customizable social scripts for various situations." name="description"/>
-    <meta content="#4a86e8" name="theme-color"/>
-    <meta content="yes" name="apple-mobile-web-app-capable">
-    <meta content="default" name="apple-mobile-web-app-status-bar-style">
-    <meta content="Social Script Builder" name="apple-mobile-web-app-title">
-    <link href="icons/icon-192x192.png" rel="apple-touch-icon">
-    <link href="manifest.json" rel="manifest">
-    <link href="../../../../assets/css/core.css" rel="stylesheet"/>
-    <script src="../../../../assets/js/nav-menu.js"></script>
-    <link href="style.css" rel="stylesheet"/>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
-          rel="stylesheet">
-</head>
-<body>
-
-<header class="header"></header>
+<link rel="stylesheet" href="style.css">
 
 <main>
+
+    <link rel="manifest" href="manifest.json">
+
     <div class="container">
         <div class="app-grid">
             <section class="panel panel-style">
@@ -117,6 +101,7 @@ Social Script Builder - HTML
     </div>
 </main>
 
+<!-- Modals -->
 <dialog aria-labelledby="practice-title" class="modal-base practice-modal" id="practice-modal">
     <div class="modal-header">
         <h3 id="practice-title">Practice: <span id="practice-script-name"></span></h3>
@@ -200,71 +185,9 @@ Social Script Builder - HTML
 <script src="script.js"></script>
 
 <script>
-    let deferredPrompt;
-    const installButton = document.createElement('button');
-
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-
-        installButton.style.display = 'block';
-        installButton.textContent = 'Install App';
-        installButton.className = 'btn btn-primary';
-        installButton.style.margin = '10px auto';
-        installButton.style.display = 'block';
-
-        installButton.addEventListener('click', () => {
-            installButton.style.display = 'none';
-            deferredPrompt.prompt();
-            deferredPrompt.userChoice.then((choiceResult) => {
-                if (choiceResult.outcome === 'accepted') {
-                    console.log('User accepted the install prompt');
-                } else {
-                    console.log('User dismissed the install prompt');
-                }
-                deferredPrompt = null;
-            });
-        });
-
-        document.querySelector('.footer-container').prepend(installButton);
-    });
-
-    window.addEventListener('appinstalled', () => {
-        deferredPrompt = null;
-        installButton.style.display = 'none';
-        console.log('PWA was installed');
-    });
-
     if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function () {
-            const scope = '/browser-apps/tools/social-script-builder/';
-            navigator.serviceWorker.register('sw.js', {scope: scope})
-                .then(function (registration) {
-                    console.log('SW registered: ', registration);
-                })
-                .catch(function (registrationError) {
-                    console.log('SW registration failed: ', registrationError);
-                });
-        });
+        navigator.serviceWorker.register('sw.js')
+            .then(reg => console.log('Service Worker registered', reg))
+            .catch(err => console.error('Service Worker registration failed', err));
     }
-
-    const offlineIndicator = document.createElement('div');
-    offlineIndicator.id = 'offline-indicator';
-    offlineIndicator.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; background: var(--warning); color: #92400e; text-align: center; padding: 8px; font-size: 0.9rem; z-index: 1000; display: none;';
-    offlineIndicator.textContent = 'You are currently offline. Some features may be limited.';
-    document.body.prepend(offlineIndicator);
-
-    function updateOnlineStatus() {
-        if (!navigator.onLine) {
-            offlineIndicator.style.display = 'block';
-        } else {
-            offlineIndicator.style.display = 'none';
-        }
-    }
-
-    window.addEventListener('online', updateOnlineStatus);
-    window.addEventListener('offline', updateOnlineStatus);
-    updateOnlineStatus();
 </script>
-</body>
-</html>
