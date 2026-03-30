@@ -585,13 +585,52 @@ a:hover {
     outline-offset: 2px;
 }
 
-/* PWA (hides navbar and footer when in standalone mode) */
+/* ==== PWA STYLES ==== */
 @media all and (display-mode: standalone) {
     .header,
     footer {
         display: none;
     }
 }
+
+.install-pwa-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 40px;
+    padding: 12px 24px;
+    font-size: 1rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, background 0.2s;
+}
+
+.install-pwa-btn:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .install-pwa-btn {
+        display: flex;
+    }
+}
+
+@media (min-width: 769px) {
+    .install-pwa-btn {
+        display: none;
+    }
+}
+
+/*====== END OF PWA STYLES ======*/
 
 @media (max-width: 768px) {
     .nav-desktop {
