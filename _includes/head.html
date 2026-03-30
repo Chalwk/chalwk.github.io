@@ -18,3 +18,8 @@
 <!-- Prism.js for code highlighting -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+
+<!-- PWA manifest -->
+{% if page.pwa %}
+<link rel="manifest" href="{{ site.baseurl }}{{ page.dir }}manifest.json">
+{% endif %}
