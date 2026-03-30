@@ -16,7 +16,7 @@ default_icons:
     type: "image/png"
     purpose: "any maskable"
 
-default_categories: ["accessibility"]
+default_categories: ["accessibility", "games"]
 
 default_urls:
   - "./"
