@@ -585,6 +585,14 @@ a:hover {
     outline-offset: 2px;
 }
 
+/* PWA (hides navbar and footer when in standalone mode) */
+@media all and (display-mode: standalone) {
+    .header,
+    footer {
+        display: none;
+    }
+}
+
 @media (max-width: 768px) {
     .nav-desktop {
         display: none;
