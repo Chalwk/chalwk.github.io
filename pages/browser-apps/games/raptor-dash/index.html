@@ -1,0 +1,60 @@
+---
+layout: default
+title: Raptor Dash
+description: Jump, dodge, and ride the thermals. Procedurally generated levels - every run is new.
+---
+
+<!-- Copyright (c) 2024-2026. Jericho Crosby (Chalwk) -->
+
+<link rel="stylesheet" href="style.css">
+
+<main>
+    <div class="container">
+        <section class="panel">
+            <div class="panel-head">
+                <h1>Raptor Dash</h1>
+                <p class="muted small">Jump, dodge, and ride the thermals. Procedurally generated levels - every run is
+                    new.</p>
+            </div>
+
+            <div class="game-instructions">
+                <h4><i class="fas fa-gamepad"></i> Controls:</h4>
+                <div>
+                    <div><i class="fas fa-space-shuttle"></i> <strong>Space / Up / Click:</strong> Jump</div>
+                    <div><i class="fas fa-arrow-down"></i> <strong>Down Arrow:</strong> Crouch</div>
+                    <div><i class="fas fa-redo"></i> <strong>Double-tap Jump:</strong> Boost (if available)</div>
+                    <div><i class="fas fa-play"></i> <strong>Start Button:</strong> Begin/Restart game</div>
+                    <div><i class="fas fa-pause"></i> <strong>Pause Button:</strong> Pause/Resume</div>
+                </div>
+            </div>
+
+            <div class="game-area">
+                <canvas id="game"></canvas>
+            </div>
+
+            <div class="game-controls">
+                <div class="game-stats">
+                    <div>
+                        <strong>Score:</strong>
+                        <span id="score">0</span>
+                    </div>
+                    <div>
+                        <strong>Level:</strong>
+                        <span id="level">1</span>
+                    </div>
+                </div>
+
+                <div class="controls">
+                    <button class="btn" id="btn-start">
+                        <i class="fas fa-play"></i> Start
+                    </button>
+                    <button class="btn btn-secondary" id="btn-pause">
+                        <i class="fas fa-pause"></i> Pause
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<script src="script.js"></script>

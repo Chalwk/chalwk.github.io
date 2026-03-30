@@ -1,0 +1,70 @@
+---
+layout: default
+title: Knot again!
+description: Untangle the ropes by dragging the dots. Clear all red crossings to win!
+---
+
+<!-- Copyright (c) 2024-2026. Jericho Crosby (Chalwk) -->
+
+<link rel="stylesheet" href="style.css">
+
+<main>
+    <div class="container">
+        <section class="panel knot-panel">
+            <div class="panel-head">
+                <h1 class="knot-title">Knot Again</h1>
+                <p class="muted small knot-description">Untangle the ropes by dragging the dots. Clear all red crossings
+                    to win!</p>
+            </div>
+
+            <div class="knot-game-container">
+                <div class="knot-game-area">
+                    <div class="canvas-wrapper">
+                        <div class="canvas-stats-bar">
+                            <div class="canvas-stat-item">
+                                <div class="canvas-stat-label">Level</div>
+                                <div class="canvas-stat-value level-value" id="levelLabel">1</div>
+                            </div>
+                            <div class="canvas-stat-item">
+                                <div class="canvas-stat-label">Edges</div>
+                                <div class="canvas-stat-value edge-value" id="edgeCount">0</div>
+                            </div>
+                            <div class="canvas-stat-item">
+                                <div class="canvas-stat-label">Crossings</div>
+                                <div class="canvas-stat-value cross-value" id="crossCount">0</div>
+                            </div>
+                        </div>
+
+                        <svg class="svg-canvas" id="svg" preserveAspectRatio="xMidYMid meet"
+                             viewBox="0 0 1000 700"></svg>
+
+                        <div class="win-overlay hidden" id="winOverlay">
+                            <div class="win-card">
+                                <h2 class="win-title">Nice! Puzzle solved.</h2>
+                                <p class="win-message">Ready for the next one?</p>
+                                <div class="win-actions">
+                                    <button class="btn btn-primary" id="winNext">Next Level</button>
+                                    <button class="btn btn-secondary" id="winShuffle">Shuffle</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="knot-controls">
+                        <button class="btn btn-secondary" id="resetBtn">
+                            <i class="fas fa-undo"></i> Reset
+                        </button>
+                        <button class="btn btn-secondary" id="shuffleBtn">
+                            <i class="fas fa-random"></i> Shuffle
+                        </button>
+                        <button class="btn btn-primary" id="nextBtn">
+                            <i class="fas fa-forward"></i> Next Level
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<script src="script.js"></script>

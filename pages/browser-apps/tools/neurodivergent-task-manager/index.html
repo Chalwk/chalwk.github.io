@@ -1,0 +1,175 @@
+---
+layout: default
+title: Neurodivergent Task Manager
+description: Task manager designed for neurodivergent individuals with visual timers, chunking, and gamification
+---
+
+<!-- Copyright (c) 2024-2026. Jericho Crosby (Chalwk) -->
+
+<link rel="stylesheet" href="style.css">
+
+<main>
+    <div class="container">
+        <div class="app-grid task-manager-app">
+            <div class="panel task-manager-header">
+                <div class="panel-head">
+                    <h2 class="task-manager-title">Neurodivergent Task Manager</h2>
+                    <p class="muted small task-manager-subtitle">Designed with neurodivergent needs in mind - visual
+                        timers, task chunking,
+                        and gamification.</p>
+                </div>
+
+                <div class="user-stats task-user-stats">
+                    <div class="stat task-stat stat-points">
+                        <div class="stat-value" id="points">0</div>
+                        <div class="stat-label">Points</div>
+                    </div>
+                    <div class="stat task-stat stat-streak">
+                        <div class="stat-value" id="streak">0</div>
+                        <div class="stat-label">Day Streak</div>
+                    </div>
+                    <div class="stat task-stat stat-completed">
+                        <div class="stat-value" id="tasks-completed">0</div>
+                        <div class="stat-label">Tasks Done</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="main-content task-main-content">
+                <div class="left-column">
+                    <div class="panel task-form-panel">
+                        <h3 class="task-form-title">Create New Task</h3>
+                        <form class="task-form" id="task-form">
+                            <div class="form-group task-form-group">
+                                <label class="form-label" for="task-title">Task Title</label>
+                                <input class="form-input" id="task-title" placeholder="What needs to be done?" required
+                                       type="text">
+                            </div>
+                            <div class="form-group task-form-group">
+                                <label class="form-label" for="task-description">Description</label>
+                                <textarea class="form-input textarea-input" id="task-description"
+                                          placeholder="More details about the task..." rows="3"></textarea>
+                            </div>
+                            <div class="form-group task-form-group">
+                                <label class="form-label" for="task-priority">Priority</label>
+                                <select class="form-input" id="task-priority">
+                                    <option value="low">Low</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="high">High</option>
+                                </select>
+                            </div>
+                            <div class="form-group task-form-group">
+                                <label class="form-label">Break into Steps (Chunking)</label>
+                                <div class="steps-container" id="steps-container">
+                                    <div class="step-input">
+                                        <label>
+                                            <input class="step-text" placeholder="Step 1" type="text">
+                                        </label>
+                                        <button class="btn-remove-step" disabled type="button">×</button>
+                                    </div>
+                                </div>
+                                <button class="btn btn-secondary" id="add-step" type="button">+ Add Step</button>
+                            </div>
+                            <div class="form-group task-form-group">
+                                <label class="form-label" for="task-timer">Timer (minutes)</label>
+                                <input class="form-input" id="task-timer" min="1" type="number" value="25">
+                            </div>
+                            <div class="form-group task-form-group">
+                                <label class="form-label" for="task-reminder">Reminder</label>
+                                <input class="form-input" id="task-reminder" type="datetime-local">
+                            </div>
+                            <button class="btn btn-primary" type="submit">Create Task</button>
+                        </form>
+                    </div>
+
+                    <div class="panel templates-panel">
+                        <h3 class="templates-title">Task Templates 🎯</h3>
+                        <label for="template-dropdown"></label>
+                        <select class="template-dropdown form-input" id="template-dropdown">
+                            <option value="">Select a template</option>
+                        </select>
+                        <button class="btn btn-secondary" id="use-template-btn">Use Template</button>
+                    </div>
+                </div>
+
+                <div class="middle-column">
+                    <div class="panel tasks-list-panel">
+                        <h3 class="tasks-list-title">Today's Tasks</h3>
+                        <div class="tasks-list" id="tasks-list"></div>
+                    </div>
+
+                    <div class="panel completed-tasks-panel">
+                        <h3 class="completed-tasks-title">Completed Tasks</h3>
+                        <div class="completed-tasks" id="completed-tasks"></div>
+                    </div>
+                </div>
+
+                <div class="right-column">
+                    <div class="panel reminders-panel">
+                        <h3 class="reminders-title">Upcoming Reminders</h3>
+                        <div class="reminders-list" id="reminders-list"></div>
+                    </div>
+
+                    <div class="panel achievements-panel">
+                        <h3 class="achievements-title">Achievements</h3>
+                        <div class="achievements-grid">
+                            <div class="achievement locked" id="achievement-1">
+                                <div class="achievement-icon">⭐</div>
+                                <div class="achievement-title">First Task</div>
+                            </div>
+                            <div class="achievement locked" id="achievement-2">
+                                <div class="achievement-icon">🔥</div>
+                                <div class="achievement-title">3-Day Streak</div>
+                            </div>
+                            <div class="achievement locked" id="achievement-3">
+                                <div class="achievement-icon">🏆</div>
+                                <div class="achievement-title">Task Master</div>
+                            </div>
+                            <div class="achievement locked" id="achievement-4">
+                                <div class="achievement-icon">⏰</div>
+                                <div class="achievement-title">Timer User</div>
+                            </div>
+                            <div class="achievement locked" id="achievement-5">
+                                <div class="achievement-icon">🚀</div>
+                                <div class="achievement-title">Productivity Pro</div>
+                            </div>
+                            <div class="achievement locked" id="achievement-6">
+                                <div class="achievement-icon">🛡️</div>
+                                <div class="achievement-title">Week Warrior</div>
+                            </div>
+                            <div class="achievement locked" id="achievement-7">
+                                <div class="achievement-icon">📝</div>
+                                <div class="achievement-title">Step Master</div>
+                            </div>
+                            <div class="achievement locked" id="achievement-8">
+                                <div class="achievement-icon">🎯</div>
+                                <div class="achievement-title">Priority Finisher</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel timer-panel">
+                        <h3 class="timer-title">Visual Timer</h3>
+                        <div class="timer-container">
+                            <div class="timer-circle">
+                                <div class="timer-text" id="visual-timer">25:00</div>
+                            </div>
+                            <div class="timer-controls">
+                                <button class="btn btn-success" id="start-timer">Start</button>
+                                <button class="btn btn-warning" id="pause-timer">Pause</button>
+                                <button class="btn btn-danger" id="reset-timer">Reset</button>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="custom-timer">Custom Timer (minutes)</label>
+                                <input class="form-input" id="custom-timer" min="1" type="number" value="25">
+                                <button class="btn btn-secondary" id="set-custom-timer">Set Timer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script src="script.js"></script>

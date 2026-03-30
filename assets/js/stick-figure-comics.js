@@ -1,0 +1,228 @@
+// Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
+
+(function () {
+    const Style = {
+        skin: '#f9d7b0',
+        outline: '#8b5a2b',
+        strokeWidth: 2,
+        headRadius: 18,
+        accentRed: '#ff6b6b',
+        accentRedLight: '#ff8c8c',
+        thoughtBubbleFill: 'white',
+        bookFill: '#f0e0b0',
+        fontFamily: 'Source Code Pro',
+        smallFont: 8,
+        normalFont: 10,
+    };
+
+    function svgContent(inner, bgColor = '#f0e9e0') {
+        return `<svg class="comic-svg" viewBox="0 0 300 200" preserveAspectRatio="xMidYMid meet">
+                <rect width="300" height="200" fill="${bgColor}" rx="10" ry="10"/>
+                ${inner}
+            </svg>`;
+    }
+
+    const comics = [
+        {
+            id: 'sensory-overload',
+            title: '⚡ Sensory Overload',
+            caption: 'Everyday environments can feel overwhelming - lights buzz, noises blend into a painful roar. A quiet space helps.',
+            bg: '#f0e9e0',
+            svg: function () {
+                return svgContent(`
+
+                    <line x1="20" y1="20" x2="70" y2="70" stroke="${Style.accentRed}" stroke-width="${Style.strokeWidth}" opacity="0.7"/>
+                    <line x1="90" y1="30" x2="150" y2="80" stroke="${Style.accentRedLight}" stroke-width="${Style.strokeWidth}" opacity="0.7"/>
+                    <line x1="200" y1="40" x2="250" y2="90" stroke="${Style.accentRed}" stroke-width="${Style.strokeWidth}" opacity="0.7"/>
+                    <line x1="40" y1="120" x2="100" y2="170" stroke="${Style.accentRedLight}" stroke-width="${Style.strokeWidth}" opacity="0.7"/>
+                    <line x1="130" y1="140" x2="190" y2="190" stroke="${Style.accentRed}" stroke-width="${Style.strokeWidth}" opacity="0.7"/>
+                    <line x1="220" y1="130" x2="280" y2="180" stroke="${Style.accentRedLight}" stroke-width="${Style.strokeWidth}" opacity="0.7"/>
+
+                    <circle cx="150" cy="100" r="${Style.headRadius}" fill="${Style.skin}" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                    <line x1="150" y1="118" x2="150" y2="160" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                    <line x1="150" y1="130" x2="120" y2="110" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                    <line x1="150" y1="130" x2="180" y2="110" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                    <line x1="150" y1="160" x2="120" y2="190" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                    <line x1="150" y1="160" x2="180" y2="190" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                    <circle cx="135" cy="95" r="5" fill="${Style.skin}" stroke="${Style.outline}" stroke-width="1.5"/>
+                    <circle cx="165" cy="95" r="5" fill="${Style.skin}" stroke="${Style.outline}" stroke-width="1.5"/>
+                    <circle cx="170" cy="70" r="3" fill="#88ccff"/>
+                    <text x="50" y="90" font-family="${Style.fontFamily}" font-size="12" fill="#b34141">TOO MUCH!</text>
+                `, this.bg);
+            }
+        },
+        {
+            id: 'special-interest',
+            title: '🔍 Special Interest',
+            caption: 'A special interest brings intense joy and focus - like a whole universe inside one topic.',
+            bg: '#e6f0e6',
+            svg: function () {
+                return svgContent(`
+                    <circle cx="120" cy="90" r="${Style.headRadius}" fill="${Style.skin}" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                    <line x1="120" y1="108" x2="120" y2="150" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                    <line x1="120" y1="120" x2="90" y2="100" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                    <line x1="120" y1="120" x2="150" y2="100" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                    <line x1="120" y1="150" x2="90" y2="180" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                    <line x1="120" y1="150" x2="150" y2="180" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                    <rect x="160" y="60" width="50" height="60" fill="${Style.bookFill}" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}" rx="3"/>
+                    <line x1="170" y1="70" x2="200" y2="70" stroke="${Style.outline}" stroke-width="1.5"/>
+                    <line x1="170" y1="80" x2="200" y2="80" stroke="${Style.outline}" stroke-width="1.5"/>
+                    <line x1="170" y1="90" x2="200" y2="90" stroke="${Style.outline}" stroke-width="1.5"/>
+                    <text x="170" y="110" font-family="${Style.fontFamily}" font-size="${Style.smallFont}" fill="${Style.outline}">TRAINS</text>
+                    <path d="M70 40 Q50 40 50 60 Q50 80 75 80 Q75 70 85 70 Q100 70 100 50 Q100 30 70 40" fill="${Style.thoughtBubbleFill}" stroke="${Style.outline}" stroke-width="1.5"/>
+                    <text x="65" y="55" font-family="${Style.fontFamily}" font-size="${Style.smallFont}" fill="${Style.outline}">🚂🚃🚃</text>
+                `, this.bg);
+            }
+        },
+        {
+            id: 'communication',
+            title: '💬 Literal Interpretation',
+            caption: 'Literal thinking can turn idioms into confusing puzzles. Clarity and directness help.',
+            bg: '#e6ecf5',
+            svg: function () {
+                return svgContent(`
+                    <circle cx="90" cy="80" r="15" fill="${Style.skin}" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                    <line x1="90" y1="95" x2="90" y2="135" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                    <line x1="90" y1="105" x2="65" y2="90" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                    <line x1="90" y1="105" x2="115" y2="90" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                    <line x1="90" y1="135" x2="65" y2="165" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                    <line x1="90" y1="135" x2="115" y2="165" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                    <circle cx="210" cy="80" r="15" fill="${Style.skin}" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                    <line x1="210" y1="95" x2="210" y2="135" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                    <line x1="210" y1="105" x2="185" y2="90" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                    <line x1="210" y1="105" x2="235" y2="90" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                    <line x1="210" y1="135" x2="185" y2="165" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                    <line x1="210" y1="135" x2="235" y2="165" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                    <text x="40" y="48" font-family="${Style.fontFamily}" font-size="12">"It's raining</text>
+                    <text x="40" y="60" font-family="${Style.fontFamily}" font-size="12">cats and dogs!"</text>
+                    <text x="205" y="48" font-family="${Style.fontFamily}" font-size="12">"Where are</text>
+                    <text x="205" y="61" font-family="${Style.fontFamily}" font-size="12">the animals?"</text>
+                `, this.bg);
+            }
+        },
+        {
+            id: 'stimming',
+            title: '🌀 Stimming',
+            caption: 'Stimming (repetitive movements) helps regulate emotions, focus, and express joy.',
+            bg: '#f5e6d3',
+            svg: function () {
+                return svgContent(`
+                    <circle cx="150" cy="90" r="${Style.headRadius}" fill="${Style.skin}" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                    <line x1="150" y1="108" x2="150" y2="150" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                    <line x1="150" y1="120" x2="110" y2="100" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                    <line x1="150" y1="120" x2="190" y2="100" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                    <line x1="150" y1="120" x2="100" y2="130" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}" opacity="0.5"/>
+                    <line x1="150" y1="120" x2="200" y2="130" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}" opacity="0.5"/>
+                    <line x1="150" y1="120" x2="90" y2="140" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}" opacity="0.3"/>
+                    <line x1="150" y1="120" x2="210" y2="140" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}" opacity="0.3"/>
+                    <line x1="150" y1="150" x2="120" y2="180" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                    <line x1="150" y1="150" x2="180" y2="180" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                    <text x="80" y="60" font-family="${Style.fontFamily}" font-size="12" fill="#5a9e5a">✨ feels good ✨</text>
+                `, this.bg);
+            }
+        },
+        {
+            id: 'routine',
+            title: '⏰ Unexpected Change',
+            caption: 'Sudden changes to routine can feel like the ground disappears. Predictability = safety.',
+            bg: '#eeddcc',
+            svg: function () {
+                return svgContent(`
+                    <circle cx="150" cy="80" r="${Style.headRadius}" fill="${Style.skin}" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                    <line x1="135" y1="70" x2="145" y2="75" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                    <line x1="165" y1="70" x2="155" y2="75" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                    <path d="M140 95 Q150 100 160 95" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}" fill="none"/>
+                    <line x1="150" y1="98" x2="150" y2="130" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                    <line x1="150" y1="110" x2="120" y2="95" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                    <line x1="150" y1="110" x2="180" y2="95" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                    <line x1="150" y1="130" x2="120" y2="160" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                    <line x1="150" y1="130" x2="180" y2="160" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+
+                    <rect x="50" y="20" width="80" height="50" fill="#ffdddd" stroke="#b34141" stroke-width="2" rx="5"/>
+
+                    <line x1="50" y1="20" x2="130" y2="70" stroke="#b34141" stroke-width="2"/>
+                    <text x="60" y="45" font-family="${Style.fontFamily}" font-size="11" fill="#b34141">SCHEDULE</text>
+                    <text x="70" y="58" font-family="${Style.fontFamily}" font-size="8" fill="#b34141">CHANGED!</text>
+                `, this.bg);
+            }
+        },
+        {
+            id: 'masking',
+            title: '🎭 Masking',
+            caption: 'Masking (hiding autistic traits) is exhausting. Being allowed to be yourself is a relief.',
+            bg: '#cfd8dc',
+            svg: function () {
+                return svgContent(`
+                    <circle cx="150" cy="80" r="${Style.headRadius}" fill="${Style.skin}" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                    <line x1="150" y1="98" x2="150" y2="140" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                    <line x1="150" y1="110" x2="120" y2="95" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                    <line x1="150" y1="110" x2="180" y2="95" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                    <line x1="150" y1="140" x2="120" y2="170" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                    <line x1="150" y1="140" x2="180" y2="170" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+
+                    <circle cx="150" cy="80" r="16" fill="#f0d0b0" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}" stroke-dasharray="3 2"/>
+                    <line x1="150" y1="68" x2="150" y2="92" stroke="${Style.outline}" stroke-width="1.5" stroke-dasharray="2 2"/>
+                    <path d="M140 90 Q150 100 160 90" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}" fill="none"/>
+                    <text x="40" y="40" font-family="${Style.fontFamily}" font-size="12" fill="#37474f">"I have to pretend</text>
+                    <text x="40" y="55" font-family="${Style.fontFamily}" font-size="12" fill="#37474f">all day..."</text>
+                `, this.bg);
+            }
+        },
+        {
+            id: 'same-foods-daily',
+            title: '🍽️ Same Foods Daily',
+            caption: 'Eating the same foods every day is comforting and predictable for me.',
+            bg: '#f5e9da',
+            svg: function () {
+                let weeklyIcons = '';
+                const days = ['M', 'T', 'W', 'T', 'F'];
+                for (let i = 0; i < 5; i++) {
+                    let x = 195 + i * 20;
+                    let letter = days[i];
+                    weeklyIcons += `<text x="${x - 3}" y="180" font-family="${Style.fontFamily}" font-size="8" fill="${Style.outline}">${letter}</text>\n`;
+                    weeklyIcons += `<circle cx="${x}" cy="190" r="5" fill="white" stroke="${Style.outline}" stroke-width="1.5"/>\n`;
+                }
+                return svgContent(`
+                        <line x1="70" y1="155" x2="230" y2="155" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                        <line x1="120" y1="155" x2="120" y2="170" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                        <line x1="180" y1="155" x2="180" y2="170" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+
+                        <circle cx="200" cy="140" r="15" fill="white" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                        <circle cx="200" cy="140" r="8" fill="#d2a679" stroke="${Style.outline}" stroke-width="1"/>
+                        <circle cx="196" cy="136" r="1.5" fill="white"/>
+                        <circle cx="204" cy="136" r="1.5" fill="white"/>
+                        <circle cx="200" cy="131" r="1.5" fill="white"/>
+
+                        <circle cx="150" cy="70" r="${Style.headRadius}" fill="${Style.skin}" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                        <circle cx="140" cy="65" r="4" fill="${Style.skin}" stroke="${Style.outline}" stroke-width="1.5"/>
+                        <circle cx="160" cy="65" r="4" fill="${Style.skin}" stroke="${Style.outline}" stroke-width="1.5"/>
+                        <path d="M140 80 Q150 88 160 80" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}" fill="none"/>
+                        <line x1="150" y1="88" x2="150" y2="140" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                        <line x1="150" y1="105" x2="120" y2="125" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                        <line x1="150" y1="105" x2="180" y2="125" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                        <line x1="150" y1="140" x2="120" y2="175" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+                        <line x1="150" y1="140" x2="180" y2="175" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
+
+                        ${weeklyIcons}
+
+                        <text x="40" y="40" font-family="${Style.fontFamily}" font-size="12" fill="${Style.outline}">Same foods,</text>
+                        <text x="40" y="55" font-family="${Style.fontFamily}" font-size="12" fill="${Style.outline}">every day 😊</text>
+                    `, this.bg);
+            }
+        }
+    ];
+
+    const grid = document.getElementById('comics-grid');
+    grid.innerHTML = '';
+    comics.forEach(comic => {
+        const card = document.createElement('div');
+        card.className = 'comic-card';
+        card.id = comic.id;
+        card.innerHTML = `
+            <h3 class="comic-title">${comic.title}</h3>
+            ${comic.svg()}
+            <p class="comic-caption">${comic.caption}</p>
+        `;
+        grid.appendChild(card);
+    });
+})();

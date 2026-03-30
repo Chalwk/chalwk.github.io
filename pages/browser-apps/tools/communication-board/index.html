@@ -1,0 +1,231 @@
+---
+layout: default
+title: Communication Board (AAC)
+description: AAC Communication Board
+---
+
+<!-- Copyright (c) 2024-2026. Jericho Crosby (Chalwk) -->
+
+<link rel="stylesheet" href="style.css">
+
+<main>
+    <div class="container">
+        <div class="app-container">
+            <div class="app-header">
+                <div class="header-left">
+                    <h2>Communication Board</h2>
+                    <div class="header-sub">
+                        <label class="visually-hidden" for="categorySelect">Filter symbols by category</label>
+                        <select id="categorySelect" title="Filter by category">
+                            <option value="All">All Categories</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="header-controls">
+                    <div class="settings-dropdown">
+                        <button aria-label="Settings" class="settings-toggle" id="settingsToggle" title="Settings">
+                            <i class="fas fa-cog"></i>
+                        </button>
+                        <div class="settings-menu" id="settingsMenu">
+                            <div class="settings-group">
+                                <button class="btn btn-secondary" id="addSymbolBtn">
+                                    <i class="fas fa-plus"></i> Add Symbol
+                                </button>
+                                <button class="btn btn-secondary" id="editModeBtn">
+                                    <i class="fas fa-edit"></i> Edit Mode
+                                </button>
+                                <button class="btn btn-primary" id="saveBtn">
+                                    <i class="fas fa-save"></i> Save
+                                </button>
+                            </div>
+                            <div class="settings-group">
+                                <button class="btn btn-secondary" id="exportBtn" title="Export symbols and settings">
+                                    <i class="fas fa-download"></i> Export
+                                </button>
+                                <label class="btn btn-secondary import-label" for="importFile" title="Import symbols">
+                                    <i class="fas fa-upload"></i> Import
+                                    <input accept="application/json" id="importFile" type="file">
+                                </label>
+                            </div>
+                            <div class="settings-group">
+                                <button class="btn btn-secondary" id="manageCategoriesBtn">
+                                    <i class="fas fa-tags"></i> Manage Categories
+                                </button>
+                            </div>
+                            <div class="settings-group">
+                                <button class="btn btn-secondary" id="openSettingsPanelBtn">
+                                    <i class="fas fa-sliders-h"></i> Additional Settings
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="main-content">
+                <div class="phrase-bar">
+                    <div aria-live="polite" class="phrase-display" id="phraseDisplay" role="list">
+                        <span class="empty-message">Select symbols to build your phrase</span>
+                    </div>
+                    <div class="phrase-controls">
+                        <button class="btn btn-primary" id="speakBtn">
+                            <i class="fas fa-volume-up"></i> Speak
+                        </button>
+                        <button class="btn btn-secondary" id="clearBtn">
+                            <i class="fas fa-trash"></i> Clear
+                        </button>
+                    </div>
+                </div>
+
+                <div class="board-toolbar">
+                    <input aria-label="Search symbols" id="globalSearch" placeholder="Search symbols..." type="text">
+                </div>
+
+                <div aria-label="Communication board" class="board-container" id="boardWrap" tabindex="0">
+                    <div class="communication-board" id="communicationBoard" role="list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div aria-hidden="true" aria-labelledby="modalTitle" aria-modal="true" class="modal" id="editModal" role="dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="modalTitle">Edit Symbol</h2>
+            <span aria-label="Close" class="close" id="closeModal" role="button">&times;</span>
+        </div>
+        <div class="modal-body">
+            <form id="symbolForm">
+                <div class="form-group">
+                    <label for="symbolText">Text</label>
+                    <input id="symbolText" required type="text">
+                </div>
+                <div class="form-group">
+                    <label for="symbolImage">Image URL or emoji</label>
+                    <input id="symbolImage" placeholder="https:// or data:, or emoji" type="text">
+                    <small>Or upload an image file</small>
+                    <input accept="image/*" id="symbolImageFile" type="file">
+                </div>
+                <div class="form-group">
+                    <label for="symbolColor">Background color</label>
+                    <input id="symbolColor" type="color" value="#4a86e8">
+                </div>
+                <div class="form-group">
+                    <label for="symbolCategory">Category</label>
+                    <select id="symbolCategory"></select>
+                </div>
+
+                <div class="form-actions">
+                    <button class="btn btn-danger" id="deleteBtn" type="button">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                    <div class="modal-buttons">
+                        <button class="btn btn-secondary" id="cancelEdit" type="button">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fas fa-save"></i> Save Changes
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div aria-hidden="true" aria-labelledby="categoriesModalTitle" aria-modal="true" class="modal" id="categoriesModal"
+     role="dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="categoriesModalTitle">Manage Categories</h2>
+            <span aria-label="Close" class="close" id="closeCategoriesModal" role="button">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="newCategoryName">New Category Name</label>
+                <input id="newCategoryName" placeholder="Enter category name" type="text">
+                <button class="btn btn-primary" id="addCategoryBtn">
+                    <i class="fas fa-plus"></i> Add Category
+                </button>
+            </div>
+
+            <div class="categories-list" id="categoriesList"></div>
+
+            <div class="form-actions">
+                <button class="btn btn-secondary" id="closeCategoriesBtn">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div aria-hidden="true" aria-labelledby="settingsModalTitle" aria-modal="true" class="modal" id="settingsModal"
+     role="dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="settingsModalTitle">Settings</h2>
+            <span aria-label="Close" class="close" id="closeSettingsModal" role="button">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div class="settings-panel">
+                <div class="settings-section">
+                    <h3>Appearance</h3>
+                    <div class="form-group">
+                        <label for="settingsThemeSelect">Theme</label>
+                        <select id="settingsThemeSelect">
+                            <option value="auto">Auto (System)</option>
+                            <option value="light">Light</option>
+                            <option value="dark">Dark</option>
+                            <option value="high-contrast">High Contrast</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Speech</h3>
+                    <div class="form-group">
+                        <label for="settingsVolumeSelect">Speech Volume</label>
+                        <select id="settingsVolumeSelect">
+                            <option value="1.0">100% (Loud)</option>
+                            <option value="0.8">80%</option>
+                            <option value="0.6">60% (Medium)</option>
+                            <option value="0.4">40%</option>
+                            <option value="0.2">20% (Quiet)</option>
+                            <option value="0.1">10% (Very Quiet)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="settingsVoiceSelect">Voice</label>
+                        <select id="settingsVoiceSelect"></select>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Board Layout</h3>
+                    <div class="form-group">
+                        <label for="settingsGridSizeSelect">Grid Size</label>
+                        <select id="settingsGridSizeSelect">
+                            <option value="auto">Auto Responsive</option>
+                            <option value="3x4">3 × 4</option>
+                            <option value="4x6">4 × 6</option>
+                            <option value="6x8">6 × 8</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button class="btn btn-secondary" id="closeSettingsBtn">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div aria-atomic="true" aria-live="assertive" class="toast" id="toast"></div>
+
+<script src="script.js"></script>

@@ -1,0 +1,280 @@
+/* Copyright (c) 2024-2026. Jericho Crosby (Chalwk) */
+
+.hero-spider {
+    padding: 8rem 0 4rem;
+    background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+    color: white;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-spider::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.05"><path fill="white" d="M20 20 L30 10 L40 20 L50 10 L60 20 L70 10 L80 20 L70 30 L80 40 L70 50 L80 60 L70 70 L60 60 L50 70 L40 60 L30 70 L20 60 L30 50 L20 40 L30 30 Z"/></svg>');
+    background-size: 120px;
+}
+
+.hero-spider .hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-spider h1 {
+    color: white;
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+}
+
+.hero-spider .subtitle {
+    font-size: 1.2rem;
+    color: var(--gray-light);
+    margin-bottom: 2rem;
+}
+
+.tab-content {
+    display: block !important;
+}
+
+.content-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    margin-bottom: 2rem;
+    transition: var(--transition);
+}
+
+.content-card:hover {
+    box-shadow: var(--shadow-lg);
+}
+
+.content-card h2 {
+    color: var(--darker);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--gray-light);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.content-card h2 i {
+    color: var(--primary);
+}
+
+.content-card h3 {
+    color: var(--dark);
+    margin: 1.5rem 0 1rem;
+    font-size: 1.3rem;
+}
+
+.species-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.2rem;
+    margin-top: 1.5rem;
+}
+
+.species-card {
+    background: var(--light);
+    border-radius: var(--radius);
+    padding: 1rem;
+    border-left: 4px solid var(--primary);
+    transition: var(--transition);
+}
+
+.species-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+}
+
+.species-name {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--darker);
+    margin-bottom: 0.3rem;
+}
+
+.endemic-tag {
+    background: var(--primary);
+    color: white;
+    font-size: 0.7rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 30px;
+    margin-left: 0.5rem;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.species-details p {
+    margin: 0.2rem 0;
+    color: var(--gray);
+    font-size: 0.85rem;
+}
+
+.favourites-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.favourite-card {
+    background: var(--light);
+    border-radius: var(--radius-lg);
+    padding: 1.8rem;
+    border: 1px solid var(--gray-light);
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+}
+
+.favourite-card:hover {
+    box-shadow: var(--shadow);
+}
+
+.favourite-card h3 {
+    color: var(--darker);
+    margin-top: 0;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid var(--primary);
+    padding-bottom: 0.5rem;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.favourite-card h4 {
+    color: var(--dark);
+    margin: 1.2rem 0 0.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.favourite-card p {
+    margin: 0.5rem 0;
+    line-height: 1.6;
+}
+
+.favourite-card ul {
+    margin: 0.5rem 0;
+    padding-left: 1.5rem;
+}
+
+.favourite-card li {
+    margin-bottom: 0.25rem;
+}
+
+.endemic-badge {
+    background: var(--primary);
+    color: white;
+    font-size: 0.8rem;
+    padding: 0.2rem 0.8rem;
+    border-radius: 30px;
+    display: inline-block;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+}
+
+.task-list {
+    list-style: none;
+    padding: 0;
+}
+
+.task-list li {
+    padding: 0.6rem 0 0.6rem 1.8rem;
+    position: relative;
+    border-bottom: 1px dashed var(--gray-light);
+}
+
+.task-list li:last-child {
+    border-bottom: none;
+}
+
+.task-list li::before {
+    content: "🕷️";
+    position: absolute;
+    left: 0;
+    top: 0.6rem;
+    font-size: 1rem;
+}
+
+.research-highlight {
+    background: linear-gradient(135deg, #f8fafc, #e9ecef);
+    border-radius: var(--radius);
+    padding: 1.8rem;
+    margin: 2rem 0;
+    border-left: 4px solid var(--secondary);
+    box-shadow: var(--shadow-sm);
+}
+
+.research-highlight ul {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    padding-left: 1.5rem;
+}
+
+.research-highlight li {
+    margin-bottom: 0.25rem;
+}
+
+.myth-fact-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2rem 0;
+}
+
+.myth-fact-table th {
+    background: var(--primary);
+    color: white;
+    padding: 0.8rem 1rem;
+    text-align: left;
+    font-weight: 600;
+}
+
+.myth-fact-table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--gray-light);
+    vertical-align: top;
+}
+
+.myth-label {
+    font-weight: 600;
+    color: #b91c1c;
+}
+
+.fact-label {
+    font-weight: 600;
+    color: #0d9488;
+}
+
+.species-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+}
+
+.species-table th {
+    background: var(--gray-light);
+    color: var(--darker);
+    padding: 0.75rem;
+    font-weight: 600;
+}
+
+.species-table td {
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--gray-light);
+}
+
+@media (max-width: 768px) {
+    .hero-spider h1 {
+        font-size: 2.2rem;
+    }
+}

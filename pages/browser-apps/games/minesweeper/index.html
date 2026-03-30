@@ -1,0 +1,97 @@
+---
+layout: default
+title: Minesweeper
+description: Classic Minesweeper with multiple difficulty levels and custom options.
+---
+
+<!-- Copyright (c) 2024-2026. Jericho Crosby (Chalwk) -->
+
+<link rel="stylesheet" href="style.css">
+
+<main>
+    <div class="container">
+        <div class="app-grid">
+            <section class="panel minesweeper-panel">
+                <div class="panel-head">
+                    <h1 class="minesweeper-title">Minesweeper</h1>
+                    <p class="muted small minesweeper-description">Classic Minesweeper with multiple difficulty levels
+                        and custom options.</p>
+                </div>
+
+                <div class="minesweeper-game-controls">
+                    <button class="btn btn-primary" id="newBtn">
+                        <i class="fas fa-plus-circle"></i> New Game
+                    </button>
+
+                    <div class="difficulty-select">
+                        <label for="difficulty">Difficulty:</label>
+                        <select class="select" id="difficulty">
+                            <option value="beginner">Beginner (9×9, 10)</option>
+                            <option value="intermediate">Intermediate (16×16, 40)</option>
+                            <option value="expert">Expert (16×30, 99)</option>
+                            <option value="custom">Custom</option>
+                        </select>
+                    </div>
+
+                    <div class="minesweeper-custom-panel hidden" id="customPanel">
+                        <div class="custom-input">
+                            <label class="sr-only" for="rows">Rows</label>
+                            <input id="rows" max="50" min="5" placeholder="Rows" type="number">
+                        </div>
+                        <div class="custom-input">
+                            <label class="sr-only" for="cols">Columns</label>
+                            <input id="cols" max="80" min="5" placeholder="Cols" type="number">
+                        </div>
+                        <div class="custom-input">
+                            <label class="sr-only" for="mines">Mines</label>
+                            <input id="mines" min="1" placeholder="Mines" type="number">
+                        </div>
+                        <button class="btn btn-secondary small" id="applyCustom">Apply</button>
+                    </div>
+
+                    <div class="minesweeper-status-display">
+                        <div class="status-item">
+                            <span id="mineCount">Mines: 10</span>
+                        </div>
+                        <div class="status-item">
+                            <span id="timer">00:00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="minesweeper-board-wrap" id="boardWrap">
+                    <div aria-label="Minesweeper board" class="minesweeper-board" id="board" tabindex="0"></div>
+                </div>
+
+                <div class="minesweeper-game-actions">
+                    <button class="btn btn-secondary" id="flagToggle">
+                        <i class="fas fa-flag"></i> Toggle Flagging
+                    </button>
+                    <button class="btn btn-secondary" id="hintBtn">
+                        <i class="fas fa-lightbulb"></i> Hint
+                    </button>
+                    <button class="btn btn-secondary" id="revealAllBtn">
+                        <i class="fas fa-eye"></i> Reveal Solution
+                    </button>
+                    <button class="btn btn-secondary" id="bestTimesBtn">
+                        <i class="fas fa-trophy"></i> Best Times
+                    </button>
+                    <label class="btn btn-secondary theme-toggle-label">
+                        <input id="themeToggle" type="checkbox">
+                        <i class="fas fa-moon"></i> Dark Theme
+                    </label>
+                </div>
+            </section>
+        </div>
+    </div>
+</main>
+
+<div class="modal hidden" id="bestTimesModal">
+    <div class="modal-inner">
+        <h3 class="modal-title">Best Times</h3>
+        <ul class="best-times-list" id="bestTimesList"></ul>
+        <button class="btn btn-primary" id="closeBestTimes">Close</button>
+    </div>
+</div>
+
+<script src="script.js"></script>

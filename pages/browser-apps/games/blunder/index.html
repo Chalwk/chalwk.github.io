@@ -1,0 +1,52 @@
+---
+layout: default
+title: Blunder - Wordle-like Game
+description: Guess the 5-letter word in 6 tries. Hit Enter to submit. Click tiles to toggle focus.
+---
+
+<!-- Copyright (c) 2024-2026. Jericho Crosby (Chalwk) -->
+
+<link rel="stylesheet" href="style.css">
+
+<main>
+    <div class="container">
+        <section class="panel blunder-panel">
+            <div class="panel-head">
+                <h1 class="blunder-title">
+                    <i class="fas fa-puzzle-piece blunder-title-icon"></i>Blunder
+                </h1>
+                <p class="muted blunder-description">
+                    Guess the 5-letter word in 6 tries. Hit Enter to submit. Click tiles to toggle focus.
+                </p>
+            </div>
+
+            <div class="game-container">
+                <div class="blunder-controls-row">
+                    <div class="blunder-controls">
+                        <button class="btn blunder-new-game-btn" id="newGameBtn">
+                            <i class="fas fa-redo"></i> New Game
+                        </button>
+                        <button class="btn btn-secondary" id="statsBtn">
+                            <i class="fas fa-chart-bar"></i> Stats
+                        </button>
+                        <button class="btn btn-secondary" id="helpBtn">
+                            <i class="fas fa-question-circle"></i> Help
+                        </button>
+                    </div>
+                </div>
+
+                <div aria-atomic="true" aria-live="polite" class="grid" id="grid"></div>
+                <div aria-hidden="false" class="keyboard" id="keyboard"></div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<div aria-modal="true" class="modal hidden" id="modal" role="dialog">
+    <div class="modal-card" role="document">
+        <button aria-label="Close" class="modal-close" id="modalClose">✕</button>
+        <div class="modal-content" id="modalContent"></div>
+    </div>
+</div>
+
+<script src="script.js"></script>

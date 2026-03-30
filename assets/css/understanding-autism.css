@@ -1,0 +1,234 @@
+/* Copyright (c) 2024-2026. Jericho Crosby (Chalwk) */
+
+:root {
+    --primary: #4a6fa5;
+    --secondary: #ff9a3c;
+    --accent: #6b5b95;
+    --light: #f8f9fa;
+    --dark: #343a40;
+    --success: #28a745;
+    --info: #17a2b8;
+    --warning: #ffc107;
+    --danger: #dc3545;
+    --spectrum-1: #ff595e;
+    --spectrum-2: #ff9a3c;
+    --spectrum-3: #ffca3a;
+    --spectrum-4: #8ac926;
+    --spectrum-5: #1982c4;
+    --spectrum-6: #6a4c93;
+}
+
+.hero-banner {
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: white;
+    padding: 4rem 1rem;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.hero-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.page-title {
+    font-size: 2.8rem;
+    margin-bottom: 0.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.tagline {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    margin-bottom: 1.5rem;
+}
+
+.page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.section {
+    background-color: white;
+    border-radius: 10px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+}
+
+.section:hover {
+    transform: translateY(-5px);
+}
+
+.page-section h2 {
+    color: var(--primary);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--secondary);
+    display: inline-block;
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.card {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+    padding: 1rem;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: white;
+    font-weight: 600;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+.spectrum-visual {
+    display: flex;
+    height: 30px;
+    border-radius: 15px;
+    overflow: hidden;
+    margin: 1.5rem 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.spectrum-color {
+    flex: 1;
+}
+
+.interactive-element {
+    background-color: var(--light);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    border-left: 4px solid var(--secondary);
+}
+
+.resources-list {
+    list-style-type: none;
+}
+
+.resources-list li {
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+    position: relative;
+}
+
+.resources-list li:before {
+    content: "•";
+    color: var(--secondary);
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+}
+
+.communication-tips ul {
+    padding-left: 1.5rem;
+}
+
+.communication-tips li {
+    margin-bottom: 0.5rem;
+}
+
+.social-links a {
+    color: white;
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.social-links a:hover {
+    color: var(--secondary);
+    transform: translateY(-3px);
+}
+
+.nz-flag {
+    display: inline-block;
+    width: 20px;
+    height: 15px;
+    background: linear-gradient(to bottom, #00247D 0%, #00247D 50%, #fff 50%, #fff 100%);
+    position: relative;
+    margin-right: 5px;
+}
+
+.nz-flag:before, .nz-flag:after {
+    content: "";
+    position: absolute;
+    background: #CC142B;
+}
+
+.nz-flag:before {
+    width: 100%;
+    height: 2px;
+    top: 7px;
+}
+
+.nz-flag:after {
+    width: 2px;
+    height: 100%;
+    left: 7px;
+}
+
+.page-nav {
+    background: white;
+    border-radius: 10px;
+    padding: 1rem;
+    margin: 2rem auto;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    max-width: 1200px;
+}
+
+.page-nav-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.page-nav-link {
+    padding: 0.5rem 1rem;
+    background: var(--light);
+    border-radius: 5px;
+    text-decoration: none;
+    color: var(--dark);
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.page-nav-link:hover {
+    background: var(--primary);
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .page-title {
+        font-size: 2.2rem;
+    }
+
+    .card-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .page-nav-links {
+        flex-direction: column;
+        align-items: center;
+    }
+}

@@ -1,0 +1,112 @@
+---
+layout: default
+title: Time & Date Calculator
+description: AAC Communication Board
+---
+
+<!-- Copyright (c) 2024-2026. Jericho Crosby (Chalwk) -->
+
+<link rel="stylesheet" href="style.css">
+
+<main>
+    <div class="container">
+        <div class="app-grid app-margin-top">
+            <section class="panel panel-custom">
+                <div class="panel-head">
+                    <h2><i class="fas fa-calendar-alt"></i> Time & Date Calculator</h2>
+                    <p class="muted small">Calculate days between two dates - with or without the end date, and see the
+                        result in different time units.</p>
+                </div>
+
+                <div class="date-calculator-layout">
+                    <div class="left-column">
+                        <div class="date-input-group">
+                            <label class="input-label" for="startDate">
+                                <span><i class="fas fa-play"></i> Start date</span>
+                            </label>
+
+                            <div class="input-with-button">
+                                <input class="date-input" id="startDate" type="date">
+                                <button class="btn btn-secondary today-btn" data-target="start" type="button">
+                                    <i class="fas fa-calendar-check"></i> Today
+                                </button>
+                            </div>
+
+                            <div class="time-input-group" id="startTimeGroup" style="display: none;">
+                                <label class="input-label" for="startTime" style="flex-direction: row; gap: 1rem;">
+                                    <span><i class="fas fa-clock"></i> Start time</span>
+                                </label>
+                                <div class="input-with-button">
+                                    <input class="time-input" id="startTime" type="time" value="00:00">
+                                    <button class="btn btn-secondary now-time-btn" data-target="startTime"
+                                            type="button">
+                                        <i class="fas fa-clock"></i> Now
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="date-input-group">
+                            <label class="input-label" for="endDate">
+                                <span><i class="fas fa-stop"></i> End date</span>
+                            </label>
+
+                            <div class="input-with-button">
+                                <input class="date-input" id="endDate" type="date">
+                                <button class="btn btn-secondary today-btn" data-target="end" type="button">
+                                    <i class="fas fa-calendar-check"></i> Today
+                                </button>
+                            </div>
+
+                            <div class="time-input-group" id="endTimeGroup" style="display: none;">
+                                <label class="input-label" for="endTime" style="flex-direction: row; gap: 1rem;">
+                                    <span><i class="fas fa-clock"></i> End time</span>
+                                </label>
+                                <div class="input-with-button">
+                                    <input class="time-input" id="endTime" type="time" value="00:00">
+                                    <button class="btn btn-secondary now-time-btn" data-target="endTime" type="button">
+                                        <i class="fas fa-clock"></i> Now
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="option-row">
+                            <label class="checkbox-label">
+                                <input id="includeEndDate" type="checkbox">
+                                <span>Include end date in calculation (add 1 day)</span>
+                            </label>
+                        </div>
+
+                        <div class="option-row">
+                            <label class="checkbox-label">
+                                <input id="includeTime" type="checkbox">
+                                <span>Include time (hours:minutes)</span>
+                            </label>
+                        </div>
+
+                        <div class="button-group">
+                            <button class="btn btn-primary" id="calculateBtn">
+                                <i class="fas fa-calculator"></i> Calculate
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="right-column">
+                        <div class="result-box" id="resultBox">
+                            <div class="result-line" id="resultLine1">From and including: [Start Date]</div>
+                            <div class="result-line" id="resultLine2">To, [including/excluding] [End Date]</div>
+                            <div class="result-line result-days" id="resultDays">Result: - days</div>
+                            <div class="result-line" id="resultDesc">Select dates to calculate the difference.</div>
+                            <div class="result-line" id="resultYmd">Or - years, - months, - days</div>
+                            <div class="result-line" id="resultMd">Or - months, - days</div>
+                            <div class="result-alt" id="resultAlt">Alternative time units will appear here.</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</main>
+
+<script src="script.js"></script>

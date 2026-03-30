@@ -1,0 +1,565 @@
+---
+layout: default
+title: Creating a GitHub Pages Website
+description: A step-by-step guide to hosting static websites for free using GitHub Pages.
+---
+
+<!-- Copyright (c) 2024-2026. Jericho Crosby (Chalwk) -->
+
+<link rel="stylesheet" href="{{ site.baseurl }}/assets/css/github-pages-tutorial.css">
+
+<main>
+    <div class="hero-banner">
+        <div class="hero-content">
+            <h1 class="page-title">Creating a GitHub Pages Website</h1>
+            <p class="tagline">A Step-by-Step Guide to Hosting Static Websites for Free</p>
+        </div>
+    </div>
+
+    <div class="page-nav">
+        <div class="page-nav-links">
+            <a class="page-nav-link" href="#what-is-github-pages">What is GitHub Pages?</a>
+            <a class="page-nav-link" href="#prerequisites">Prerequisites</a>
+            <a class="page-nav-link" href="#step-by-step">Step-by-Step Guide</a>
+            <a class="page-nav-link" href="#custom-domain">Custom Domain</a>
+            <a class="page-nav-link" href="#troubleshooting">Troubleshooting</a>
+            <a class="page-nav-link" href="#resources">Resources</a>
+        </div>
+    </div>
+
+    <div class="page-container">
+        <section class="section page-section" id="what-is-github-pages">
+            <h2>What is GitHub Pages?</h2>
+            <p>GitHub Pages is a free static site hosting service provided by GitHub that takes HTML, CSS, and
+                JavaScript files directly from a repository on GitHub, optionally runs them through a build process, and
+                publishes a website.</p>
+
+            <div class="interactive-element">
+                <h3>Key Features</h3>
+                <ul style="padding-left: 1.5rem;">
+                    <li><strong>Free hosting</strong> for static websites</li>
+                    <li><strong>Custom domain</strong> support (optional)</li>
+                    <li><strong>SSL encryption</strong> (HTTPS) by default</li>
+                    <li><strong>Git integration</strong> for version control</li>
+                    <li><strong>Jekyll support</strong> for static site generation</li>
+                    <li><strong>Unlimited bandwidth</strong> and traffic</li>
+                </ul>
+            </div>
+
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-header">Types of GitHub Pages</div>
+                    <div class="card-body">
+                        <p>There are three main types:</p>
+                        <ul style="padding-left: 1.5rem;">
+                            <li><strong>User/Organization Pages:</strong> <code
+                                    class="code-inline">username.github.io</code></li>
+                            <li><strong>Project Pages:</strong> <code
+                                    class="code-inline">username.github.io/repository</code></li>
+                            <li><strong>Custom Domain:</strong> Your own domain name</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">Limitations</div>
+                    <div class="card-body">
+                        <p>What GitHub Pages <strong>can't</strong> do:</p>
+                        <ul style="padding-left: 1.5rem;">
+                            <li>Server-side code (PHP, Ruby, Python)</li>
+                            <li>Dynamic database-driven sites</li>
+                            <li>Server-side authentication</li>
+                            <li>Heavy processing on server</li>
+                            <li>More than 1GB bandwidth/month (rarely hit)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">Perfect For</div>
+                    <div class="card-body">
+                        <p>GitHub Pages is ideal for:</p>
+                        <ul style="padding-left: 1.5rem;">
+                            <li>Personal portfolios</li>
+                            <li>Project documentation</li>
+                            <li>Blogs (with Jekyll)</li>
+                            <li>Educational resources</li>
+                            <li>Resume websites</li>
+                            <li>Small business sites</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section page-section" id="prerequisites">
+            <h2>Prerequisites</h2>
+            <p>Before you start, make sure you have these basics covered:</p>
+
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-header">GitHub Account</div>
+                    <div class="card-body">
+                        <p>You need a free GitHub account:</p>
+                        <ol style="padding-left: 1.5rem;">
+                            <li>Go to <a href="https://github.com" target="_blank">github.com</a></li>
+                            <li>Click "Sign up"</li>
+                            <li>Choose a username (this will be part of your URL)</li>
+                            <li>Verify your email address</li>
+                        </ol>
+                        <p class="note-box">Your username becomes part of your GitHub Pages URL: <code
+                                class="code-inline">username.github.io</code>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">Basic Knowledge</div>
+                    <div class="card-body">
+                        <p>You should understand:</p>
+                        <ul style="padding-left: 1.5rem;">
+                            <li>Basic HTML and CSS</li>
+                            <li>How to create and edit text files</li>
+                            <li>Basic Git concepts (optional but helpful)</li>
+                            <li>File organization</li>
+                        </ul>
+                        <p>Don't worry if you're new to Git - we'll cover the basics!</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">Tools</div>
+                    <div class="card-body">
+                        <p>Helpful tools to have:</p>
+                        <ul style="padding-left: 1.5rem;">
+                            <li>A code editor (VS Code, Sublime Text, etc.)</li>
+                            <li>Git installed on your computer (optional)</li>
+                            <li>A modern web browser</li>
+                            <li>File Explorer/Finder knowledge</li>
+                        </ul>
+                        <p>You can do everything through the GitHub website if needed!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section page-section" id="step-by-step">
+            <h2>Step-by-Step Guide</h2>
+            <p>Follow these steps to create your first GitHub Pages site:</p>
+
+            <ol class="step-list">
+                <li>
+                    <h3>Create a New Repository</h3>
+                    <p>On GitHub, create a new repository with this specific name:</p>
+                    <div class="code-block">
+                        <pre><code class="language-bash">username.github.io</code></pre>
+                    </div>
+                    <p>Replace "username" with your actual GitHub username. This naming convention is important!</p>
+                    <div class="warning-box">
+                        <strong>Important:</strong> The repository <strong>must</strong> be public for the free version
+                        of GitHub Pages.
+                    </div>
+                </li>
+
+                <li>
+                    <h3>Initialize with README</h3>
+                    <p>When creating the repository:</p>
+                    <ul style="padding-left: 1.5rem;">
+                        <li>Check "Add a README file"</li>
+                        <li>Choose a license if you want (optional)</li>
+                        <li>Click "Create repository"</li>
+                    </ul>
+                    <p>The README file is your project's front page on GitHub.</p>
+                </li>
+
+                <li>
+                    <h3>Add Your First HTML File</h3>
+                    <p>Create a file named <code class="code-inline">index.html</code> in your repository:</p>
+                    <div class="code-block">
+                        <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;My GitHub Pages Site&lt;/title&gt;
+    &lt;style&gt;
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #0366d6;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Hello World!&lt;/h1&gt;
+    &lt;p&gt;My GitHub Pages site is live!&lt;/p&gt;
+    &lt;p&gt;Visit: &lt;code&gt;https://username.github.io&lt;/code&gt;&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                    </div>
+                    <p>You can add this file directly on GitHub by clicking "Add file" → "Create new file".</p>
+                </li>
+
+                <li>
+                    <h3>Enable GitHub Pages</h3>
+                    <p>Go to your repository Settings → Pages:</p>
+                    <ul style="padding-left: 1.5rem;">
+                        <li>Under "Source", select "Deploy from a branch"</li>
+                        <li>Choose "main" branch (or "master" if you have that)</li>
+                        <li>Select the <code class="code-inline">/ (root)</code> folder</li>
+                        <li>Click "Save"</li>
+                    </ul>
+                    <div class="note-box">
+                        It may take 1-2 minutes for your site to deploy. You'll see a "Your site is published at..."
+                        message when it's ready.
+                    </div>
+                </li>
+
+                <li>
+                    <h3>Visit Your Site</h3>
+                    <p>Open a new tab and go to:</p>
+                    <div class="code-block">
+                        <pre><code class="language-bash">https://username.github.io</code></pre>
+                    </div>
+                    <p>Replace "username" with your GitHub username. You should see your "Hello World!" page!</p>
+
+                    <div class="note-box">
+                        <strong>Pro Tip:</strong> You can simply type <code
+                            class="code-inline">username.github.io</code> without the <code
+                            class="code-inline">https://</code> in your browser's address bar. Modern browsers will
+                        automatically use HTTPS, and GitHub will load your site securely. This is a great shorter way to
+                        access your site!
+                    </div>
+
+                    <p class="note-box">The URL is always <code class="code-inline">https://</code> - GitHub provides
+                        SSL certificates automatically.</p>
+                </li>
+
+                <li>
+                    <h3>Customize Your Site</h3>
+                    <p>Add more files to your repository:</p>
+                    <ul style="padding-left: 1.5rem;">
+                        <li><code class="code-inline">style.css</code> - for styling</li>
+                        <li><code class="code-inline">script.js</code> - for interactivity</li>
+                        <li><code class="code-inline">about.html</code> - additional pages</li>
+                        <li><code class="code-inline">images/</code> folder - for images</li>
+                    </ul>
+                    <p>Link to CSS files in your HTML:</p>
+                    <div class="code-block">
+                        <pre><code class="language-html">&lt;link rel="stylesheet" href="style.css"&gt;</code></pre>
+                    </div>
+                </li>
+
+                <li>
+                    <h3>Add Simple JavaScript (Beginner Example)</h3>
+                    <p>Create a file named <code class="code-inline">script.js</code> with this basic code:</p>
+                    <div class="code-block">
+                        <pre><code class="language-javascript">// This code adds interactivity to your website
+
+// Wait for the page to load
+document.addEventListener('DOMContentLoaded', function() {
+
+    // Get the button and message elements
+    const button = document.getElementById('demoButton');
+    const message = document.getElementById('demoMessage');
+
+    // Add a click event to the button
+    button.addEventListener('click', function() {
+        // Change the text and color when clicked
+        message.textContent = 'Button clicked! JavaScript is working!';
+        message.style.color = '#28a745';
+
+        // Add a simple animation
+        button.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+            button.style.transform = 'scale(1)';
+        }, 150);
+    });
+
+    // Simple console log to show it's working
+    console.log('GitHub Pages JavaScript loaded successfully!');
+});</code></pre>
+                    </div>
+                    <p>Update your <code class="code-inline">index.html</code> to include the JavaScript:</p>
+                    <div class="code-block">
+                        <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;My GitHub Pages Site&lt;/title&gt;
+    &lt;link rel="stylesheet" href="style.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Hello World!&lt;/h1&gt;
+    &lt;p id="demoMessage"&gt;Click the button to test JavaScript.&lt;/p&gt;
+    &lt;button id="demoButton"&gt;Click Me!&lt;/button&gt;
+    &lt;script src="script.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                    </div>
+                    <p>This simple example shows how to add interactivity to your GitHub Pages site.</p>
+                </li>
+            </ol>
+
+            <div class="interactive-element">
+                <h3>Quick Test: Is Your Site Live?</h3>
+                <p>Copy and paste this command in your terminal (or use a web browser):</p>
+                <div class="code-block">
+                    <pre><code class="language-bash">curl -I https://username.github.io</code></pre>
+                </div>
+                <p>You should see <code class="code-inline">HTTP/2 200</code> which means your site is successfully
+                    deployed!</p>
+            </div>
+        </section>
+
+        <section class="section page-section" id="custom-domain">
+            <h2>Using a Custom Domain</h2>
+            <p>You can use your own domain name (like <code class="code-inline">yourdomain.com</code>) with GitHub
+                Pages:</p>
+
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-header">Step 1: Buy a Domain</div>
+                    <div class="card-body">
+                        <p>Purchase a domain from:</p>
+                        <ul style="padding-left: 1.5rem;">
+                            <li>Namecheap</li>
+                            <li>GoDaddy</li>
+                            <li>Google Domains</li>
+                            <li>Cloudflare</li>
+                        </ul>
+                        <p>Prices range from $10-15/year for a .com domain.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">Step 2: Add CNAME File</div>
+                    <div class="card-body">
+                        <p>In your repository, create a file named <code class="code-inline">CNAME</code> (all caps)
+                            with one line:</p>
+                        <div class="code-block">
+                            <pre><code class="language-bash">yourdomain.com</code></pre>
+                        </div>
+                        <p>Or if you want www:</p>
+                        <div class="code-block">
+                            <pre><code class="language-bash">www.yourdomain.com</code></pre>
+                        </div>
+                        <p>Commit this file to your repository.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">Step 3: Configure DNS</div>
+                    <div class="card-body">
+                        <p>In your domain registrar's DNS settings, add:</p>
+                        <ul style="padding-left: 1.5rem;">
+                            <li>
+                                <strong>A records</strong> pointing to:
+                                <div class="code-block">
+                    <pre><code class="language-bash">185.199.108.153
+185.199.109.153
+185.199.110.153
+185.199.111.153</code></pre>
+                                </div>
+                            </li>
+                            <li>
+                                Or a <strong>CNAME record</strong> pointing to:
+                                <div class="code-block">
+                                    <pre><code class="language-bash">username.github.io</code></pre>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="note-box">
+                <strong>Note:</strong> DNS changes can take up to 48 hours to propagate globally. GitHub will
+                automatically provision an SSL certificate for your custom domain.
+            </div>
+
+            <div class="interactive-element">
+                <h3>Verify HTTPS on Custom Domain</h3>
+                <p>After setting up your custom domain, GitHub will automatically enable HTTPS. Check:</p>
+                <ol style="padding-left: 1.5rem;">
+                    <li>Wait a few minutes after DNS propagation</li>
+                    <li>Visit <code class="code-inline">https://yourdomain.com</code></li>
+                    <li>Look for the padlock icon in your browser's address bar</li>
+                    <li>If it doesn't work immediately, wait up to 24 hours for SSL provisioning</li>
+                </ol>
+            </div>
+        </section>
+
+        <section class="section page-section" id="troubleshooting">
+            <h2>Common Issues & Troubleshooting</h2>
+
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-header" style="background: var(--danger);">404 Error</div>
+                    <div class="card-body">
+                        <p><strong>Problem:</strong> "Page not found" when visiting your site.</p>
+                        <p><strong>Solutions:</strong></p>
+                        <ul style="padding-left: 1.5rem;">
+                            <li>Make sure repository is named correctly: <code
+                                    class="code-inline">username.github.io</code></li>
+                            <li>Check that GitHub Pages is enabled in Settings → Pages</li>
+                            <li>Ensure you have an <code class="code-inline">index.html</code> file</li>
+                            <li>Wait 1-2 minutes after enabling Pages</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header" style="background: var(--warning);">CSS/JS Not Loading</div>
+                    <div class="card-body">
+                        <p><strong>Problem:</strong> Styles or scripts aren't working.</p>
+                        <p><strong>Solutions:</strong></p>
+                        <ul style="padding-left: 1.5rem;">
+                            <li>Check file paths are correct (case-sensitive!)</li>
+                            <li>Use relative paths: <code class="code-inline">href="css/style.css"</code></li>
+                            <li>Clear browser cache (Ctrl+F5 or Cmd+Shift+R)</li>
+                            <li>Check browser console for errors (F12)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header" style="background: var(--info);">Updates Not Showing</div>
+                    <div class="card-body">
+                        <p><strong>Problem:</strong> Changes aren't visible on live site.</p>
+                        <p><strong>Solutions:</strong></p>
+                        <ul style="padding-left: 1.5rem;">
+                            <li>GitHub Pages builds take 1-2 minutes</li>
+                            <li>Check Actions tab for build status</li>
+                            <li>Clear browser cache</li>
+                            <li>Try incognito/private browsing mode</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="interactive-element">
+                <h3>Quick Debugging Commands</h3>
+                <p>Use these commands to check your site's status:</p>
+                <div class="code-block">
+                    <pre><code class="language-bash"># Check if site is accessible
+curl -I https://username.github.io
+
+# Check DNS for custom domain
+nslookup yourdomain.com
+
+# Check SSL certificate
+openssl s_client -connect yourdomain.com:443</code></pre>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <strong>Build Failures:</strong> If your site fails to build, check the Actions tab in your repository
+                for error messages. Common issues include Jekyll build errors or syntax errors in configuration files.
+            </div>
+        </section>
+
+        <section class="section page-section" id="resources">
+            <h2>Resources & Further Learning</h2>
+
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-header">Official Documentation</div>
+                    <div class="card-body">
+                        <ul class="resources-list">
+                            <li><span class="github-icon"></span> <a href="https://pages.github.com" target="_blank">GitHub
+                                Pages Official Site</a></li>
+                            <li><span class="github-icon"></span> <a href="https://docs.github.com/en/pages"
+                                                                     target="_blank">GitHub Pages Docs</a></li>
+                            <li><span class="github-icon"></span> <a
+                                    href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site"
+                                    target="_blank">Custom Domain Guide</a></li>
+                            <li><span class="github-icon"></span> <a href="https://jekyllrb.com/docs/github-pages/"
+                                                                     target="_blank">Jekyll on GitHub Pages</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">Learning Resources</div>
+                    <div class="card-body">
+                        <ul class="resources-list">
+                            <li><span class="github-icon"></span> <a href="https://www.w3schools.com/html/"
+                                                                     target="_blank">W3Schools HTML Tutorial</a></li>
+                            <li><span class="github-icon"></span> <a href="https://www.w3schools.com/css/"
+                                                                     target="_blank">W3Schools CSS Tutorial</a></li>
+                            <li><span class="github-icon"></span> <a
+                                    href="https://guides.github.com/activities/hello-world/" target="_blank">GitHub
+                                Hello World Guide</a></li>
+                            <li><span class="github-icon"></span> <a
+                                    href="https://www.freecodecamp.org/news/git-and-github-for-beginners/"
+                                    target="_blank">Git & GitHub for Beginners</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">Example Sites</div>
+                    <div class="card-body">
+                        <ul class="resources-list">
+                            <li><span class="github-icon"></span> <a href="https://github.com/pages-themes"
+                                                                     target="_blank">GitHub Pages Themes</a></li>
+                            <li><span class="github-icon"></span> <a
+                                    href="https://github.com/collections/github-pages-examples" target="_blank">GitHub
+                                Pages Examples</a></li>
+                            <li><span class="github-icon"></span> <a href="http://chalwk.github.io/" target="_blank">My
+                                GitHub Pages Site</a> (this site!)
+                            </li>
+                            <li><span class="github-icon"></span> <a
+                                    href="https://jekyllthemes.io/github-pages-templates" target="_blank">Jekyll
+                                Templates</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="interactive-element">
+                <h3>Next Steps</h3>
+                <p>Once you have a basic site, consider:</p>
+                <div class="card-grid">
+                    <div class="card">
+                        <div class="card-header">Advanced Features</div>
+                        <div class="card-body">
+                            <ul style="padding-left: 1.5rem;">
+                                <li>Using Jekyll for blogging</li>
+                                <li>Adding Google Analytics</li>
+                                <li>Implementing a contact form (with Formspree or similar)</li>
+                                <li>Adding a custom 404 page</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">Development Tips</div>
+                        <div class="card-body">
+                            <ul style="padding-left: 1.5rem;">
+                                <li>Use Git locally for version control</li>
+                                <li>Set up a local development server</li>
+                                <li>Learn about responsive design</li>
+                                <li>Explore GitHub Actions for CI/CD</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin: 2rem 0;">
+                <a class="page-btn" href="https://github.com/new" target="_blank">
+                    <i class="fab fa-github"></i> Create Your GitHub Pages Site Now
+                </a>
+            </div>
+        </section>
+    </div>
+</main>
+
+<script src="{{ site.baseurl }}/assets/js/github-pages-tutorial.js"></script>

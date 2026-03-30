@@ -1,0 +1,64 @@
+---
+layout: default
+title: Tic-Tac-Toe
+description: Win 3 small boards in a row to win the game. Next move is dictated by previous move's position.
+---
+
+<!-- Copyright (c) 2024-2026. Jericho Crosby (Chalwk) -->
+
+<link rel="stylesheet" href="style.css">
+
+<main>
+    <div class="container">
+        <section class="panel">
+            <div class="panel-head">
+                <h1>Ultimate Tic-Tac-Toe</h1>
+                <p class="muted small">Win 3 small boards in a row to win the game. Next move is dictated by previous
+                    move's position.</p>
+            </div>
+
+            <div class="game-instructions">
+                <h4><i class="fas fa-info-circle"></i> Rules:</h4>
+                <div>
+                    <div><i class="fas fa-times"></i> <strong>Player X:</strong> Starts the game</div>
+                    <div><i class="fas fa-circle"></i> <strong>Player O:</strong> Second player</div>
+                    <div><i class="fas fa-arrow-right"></i> <strong>Next Board:</strong> Determined by opponent's last
+                        move position
+                    </div>
+                    <div><i class="fas fa-trophy"></i> <strong>Win Condition:</strong> Win 3 small boards in a row</div>
+                    <div><i class="fas fa-redo"></i> <strong>Reset:</strong> Start a new game</div>
+                </div>
+            </div>
+
+            <div id="mode-selection">
+                <button class="btn btn-secondary" id="pvp">Player vs Player</button>
+                <button class="btn" id="pvai">Player vs AI</button>
+            </div>
+
+            <div id="game-container">
+                <div id="game-board"></div>
+                <div id="winning-line"></div>
+            </div>
+
+            <div class="game-stats">
+                <div>
+                    <strong>Current Player:</strong>
+                    <span id="current-player">X</span>
+                </div>
+                <div>
+                    <strong>Next Board:</strong>
+                    <span id="next-board">Any</span>
+                </div>
+                <div>
+                    <strong>Status:</strong>
+                    <span id="status">Player X's turn</span>
+                </div>
+                <button class="btn btn-secondary" id="reset">
+                    <i class="fas fa-redo"></i> New Game
+                </button>
+            </div>
+        </section>
+    </div>
+</main>
+
+<script src="script.js"></script>

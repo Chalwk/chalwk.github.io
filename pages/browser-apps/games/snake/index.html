@@ -1,0 +1,117 @@
+---
+layout: default
+title: Snake Game
+description: Fast. Fancy. Frenetic.
+---
+
+<!-- Copyright (c) 2024-2026. Jericho Crosby (Chalwk) -->
+
+<link rel="stylesheet" href="style.css">
+
+<main>
+    <div class="container">
+        <section class="panel">
+            <div class="panel-head">
+                <h1>Snake Game</h1>
+                <p class="muted small">Fast. Fancy. Frenetic.</p>
+            </div>
+            <div class="game-area">
+                <div class="game-header">
+                    <div class="game-info">
+                        <div id="score">Score: 0</div>
+                        <div id="best">Best: 0</div>
+                    </div>
+                    <div class="powerup-message" id="powerup-message"></div>
+                    <div class="game-controls">
+                        <button class="btn btn-secondary" id="btn-pause">Pause</button>
+                        <button class="btn btn-secondary" id="btn-sound">🔊</button>
+                    </div>
+                </div>
+
+                <div id="gameContainer">
+                    <canvas id="gameCanvas" tabindex="0"></canvas>
+                </div>
+
+                <div class="overlay menu" id="overlay">
+                    <div class="menu-card">
+                        <h2>Snake</h2>
+                        <p class="tagline">Fast. Fancy. Frenetic.</p>
+
+                        <div class="menu-controls">
+                            <label>Mode
+                                <select id="modeSelect">
+                                    <option value="classic">Classic</option>
+                                    <option value="walls">Walls</option>
+                                    <option value="obstacles">Obstacles</option>
+                                    <option value="portal">Portals</option>
+                                </select>
+                            </label>
+
+                            <label>Difficulty
+                                <select id="difficultySelect">
+                                    <option value="easy">Easy</option>
+                                    <option selected value="normal">Normal</option>
+                                    <option value="hard">Hard</option>
+                                </select>
+                            </label>
+
+                            <label>Controls
+                                <select id="controlSelect">
+                                    <option value="arrows">Arrows</option>
+                                    <option value="wasd">WASD</option>
+                                </select>
+                            </label>
+                        </div>
+
+                        <div class="menu-buttons">
+                            <button class="btn btn-primary" id="btn-start">Start</button>
+                            <button class="btn btn-secondary" id="btn-how">How to play</button>
+                        </div>
+
+                        <div class="smallprint">
+                            Tip: Golden apples are worth a lot. Powerups are temporary but game changing.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="overlay info-panel hidden" id="overlay-info">
+                    <div class="info-card">
+                        <h3>How to play</h3>
+                        <ul>
+                            <li>Eat food to grow and score points.</li>
+                            <li>Use powerups for short advantages.</li>
+                            <li>Avoid colliding with yourself and (depending on mode) walls or obstacles.</li>
+                            <li>Pause with Space or the Pause button. Touch controls supported.</li>
+                        </ul>
+                        <button class="btn btn-secondary" id="btn-back">Back</button>
+                    </div>
+                </div>
+
+                <div class="overlay game-over hidden" id="overlay-gameover">
+                    <div class="gameover-card">
+                        <h3>Game Over</h3>
+                        <p id="go-score">Score: 0</p>
+                        <p id="go-best">Best: 0</p>
+                        <div class="menu-buttons">
+                            <button class="btn btn-primary" id="btn-restart">Restart</button>
+                            <button class="btn btn-secondary" id="btn-menu">Main Menu</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="touch-controls hidden" id="touch-controls">
+                    <div class="dpad">
+                        <button class="tc btn-round" data-dir="up">▲</button>
+                        <div class="tc-row">
+                            <button class="tc btn-round" data-dir="left">◄</button>
+                            <button class="tc btn-round" data-dir="down">▼</button>
+                            <button class="tc btn-round" data-dir="right">►</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<script src="script.js"></script>

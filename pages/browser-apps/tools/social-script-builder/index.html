@@ -1,0 +1,270 @@
+<!--
+Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
+
+Social Script Builder - HTML
+-->
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width,initial-scale=1" name="viewport"/>
+    <title>Social Script Builder</title>
+    <meta content="Create and practice customizable social scripts for various situations." name="description"/>
+    <meta content="#4a86e8" name="theme-color"/>
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="default" name="apple-mobile-web-app-status-bar-style">
+    <meta content="Social Script Builder" name="apple-mobile-web-app-title">
+    <link href="icons/icon-192x192.png" rel="apple-touch-icon">
+    <link href="manifest.json" rel="manifest">
+    <link href="../../../../assets/css/core.css" rel="stylesheet"/>
+    <script src="../../../../assets/js/nav-menu.js"></script>
+    <link href="style.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
+          rel="stylesheet">
+</head>
+<body>
+
+<header class="header"></header>
+
+<main>
+    <div class="container">
+        <div class="app-grid">
+            <section class="panel panel-style">
+                <div class="panel-head">
+                    <h2>Script Editor</h2>
+                    <p class="small">Build your social script step by step.</p>
+                </div>
+
+                <div class="script-meta">
+                    <label class="field">
+                        <span>Script Title</span>
+                        <input id="script-title" placeholder="e.g., Ordering coffee, Phone call to doctor" type="text"/>
+                    </label>
+                    <label class="field">
+                        <span>Situation Description</span>
+                        <textarea id="script-description"
+                                  placeholder="Describe the social situation this script is for..."
+                                  rows="2"></textarea>
+                    </label>
+                </div>
+
+                <div class="script-steps">
+                    <h3>Script Steps</h3>
+                    <div aria-label="Script steps" class="steps-list" id="steps-list" role="list"></div>
+
+                    <div class="step-actions step-actions-container">
+                        <button class="btn btn-primary" id="add-step" type="button">+ Add Step</button>
+                        <select aria-label="Step type" id="step-type">
+                            <option value="statement">I Say</option>
+                            <option value="question">They Might Say</option>
+                            <option value="action">Action I Take</option>
+                            <option value="reminder">Reminder to Self</option>
+                            <option value="transition">Transition</option>
+                            <option value="observation">Observation</option>
+                            <option value="validation">Validation</option>
+                            <option value="boundary">Boundary</option>
+                            <option value="followup">Follow-up</option>
+                            <option value="closure">Closure</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="script-actions script-actions-container">
+                    <button class="btn btn-primary" id="save-script">Save Script</button>
+                    <button class="btn btn-secondary" id="new-script">New Script</button>
+                    <button class="btn btn-secondary" id="export-script">Export</button>
+                </div>
+            </section>
+
+            <section class="panel panel-style">
+                <div class="panel-head">
+                    <h2>Script Library</h2>
+                    <p class="small">Your saved scripts and practice tools.</p>
+                </div>
+
+                <div class="search-controls">
+                    <input aria-label="Search scripts" class="search-input" id="search-scripts"
+                           placeholder="Search scripts..." type="text"/>
+                </div>
+
+                <div aria-label="Saved scripts" class="scripts-library" id="scripts-library" role="list">
+                    <div class="empty-library">No scripts saved yet. Create your first script!</div>
+                </div>
+
+                <div class="premade-scripts-section">
+                    <h3>Pre-made Script Templates</h3>
+                    <p class="small">Based on common social situations</p>
+                    <div aria-label="Pre-made scripts" class="premade-scripts" id="premade-scripts" role="list"></div>
+                </div>
+
+                <div class="practice-tools practice-tools-section">
+                    <h3>Practice Tools</h3>
+                    <div class="tool-options">
+                        <label class="checkbox tool-option-label">
+                            <input class="checkbox-input" id="show-timer" type="checkbox"/>
+                            <span>Show practice timer</span>
+                        </label>
+                        <label class="checkbox tool-option-label">
+                            <input class="checkbox-input" id="auto-advance" type="checkbox"/>
+                            <span>Auto-advance steps</span>
+                        </label>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</main>
+
+<dialog aria-labelledby="practice-title" class="modal-base practice-modal" id="practice-modal">
+    <div class="modal-header">
+        <h3 id="practice-title">Practice: <span id="practice-script-name"></span></h3>
+        <button aria-label="Close practice" class="btn btn-secondary" id="close-practice">×</button>
+    </div>
+
+    <div class="practice-content">
+        <div class="practice-step">
+            <div class="step-content" id="current-step-text"></div>
+            <div class="step-type-badge" id="current-step-type"></div>
+        </div>
+
+        <div class="practice-progress">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            <span id="progress-text">Step 1 of 1</span>
+        </div>
+
+        <div class="practice-controls">
+            <button class="btn btn-secondary" id="prev-step">Previous</button>
+            <button class="btn btn-primary" id="next-step">Next</button>
+            <button class="btn btn-secondary" id="reset-practice">Restart</button>
+        </div>
+
+        <div class="practice-timer" id="practice-timer">
+            <span>Time: </span>
+            <span id="timer-display">00:00</span>
+        </div>
+    </div>
+</dialog>
+
+<dialog aria-labelledby="help-title" class="modal-base help-modal" id="help-modal">
+    <div class="modal-header">
+        <h3 id="help-title">How to Use Social Script Builder</h3>
+        <button aria-label="Close help" class="btn btn-secondary" id="close-help">×</button>
+    </div>
+
+    <div class="help-content">
+        <div class="help-section">
+            <h4>Creating Scripts</h4>
+            <p>Build scripts for social situations that feel challenging. Add different types of steps:</p>
+            <ul>
+                <li><strong>I Say</strong>: Things you will say</li>
+                <li><strong>They Might Say</strong>: Possible responses from others</li>
+                <li><strong>Action I Take</strong>: Physical actions or behaviors</li>
+                <li><strong>Reminder to Self</strong>: Internal thoughts or coping strategies</li>
+            </ul>
+        </div>
+
+        <div class="help-section">
+            <h4>Pre-made Templates</h4>
+            <p>Use our pre-made script templates for common social situations. These are based on proven social
+                scripting techniques and can be customized to fit your needs.</p>
+        </div>
+
+        <div class="help-section">
+            <h4>Practice Mode</h4>
+            <p>Use practice mode to rehearse your scripts. This helps build muscle memory and reduces anxiety in real
+                situations.</p>
+        </div>
+
+        <div class="help-section">
+            <h4>Tips for Success</h4>
+            <ul>
+                <li>Start with simple, frequently encountered situations</li>
+                <li>Practice in a low-stress environment first</li>
+                <li>Modify scripts based on real-world experience</li>
+                <li>Use the reminder steps for anxiety management</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="modal-actions">
+        <button class="btn btn-primary" id="close-help-btn">Got it!</button>
+    </div>
+</dialog>
+
+<input accept=".json" id="import-file" style="display: none;" type="file"/>
+
+<script src="script.js"></script>
+
+<script>
+    let deferredPrompt;
+    const installButton = document.createElement('button');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+
+        installButton.style.display = 'block';
+        installButton.textContent = 'Install App';
+        installButton.className = 'btn btn-primary';
+        installButton.style.margin = '10px auto';
+        installButton.style.display = 'block';
+
+        installButton.addEventListener('click', () => {
+            installButton.style.display = 'none';
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('User accepted the install prompt');
+                } else {
+                    console.log('User dismissed the install prompt');
+                }
+                deferredPrompt = null;
+            });
+        });
+
+        document.querySelector('.footer-container').prepend(installButton);
+    });
+
+    window.addEventListener('appinstalled', () => {
+        deferredPrompt = null;
+        installButton.style.display = 'none';
+        console.log('PWA was installed');
+    });
+
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function () {
+            const scope = '/browser-apps/tools/social-script-builder/';
+            navigator.serviceWorker.register('sw.js', {scope: scope})
+                .then(function (registration) {
+                    console.log('SW registered: ', registration);
+                })
+                .catch(function (registrationError) {
+                    console.log('SW registration failed: ', registrationError);
+                });
+        });
+    }
+
+    const offlineIndicator = document.createElement('div');
+    offlineIndicator.id = 'offline-indicator';
+    offlineIndicator.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; background: var(--warning); color: #92400e; text-align: center; padding: 8px; font-size: 0.9rem; z-index: 1000; display: none;';
+    offlineIndicator.textContent = 'You are currently offline. Some features may be limited.';
+    document.body.prepend(offlineIndicator);
+
+    function updateOnlineStatus() {
+        if (!navigator.onLine) {
+            offlineIndicator.style.display = 'block';
+        } else {
+            offlineIndicator.style.display = 'none';
+        }
+    }
+
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+    updateOnlineStatus();
+</script>
+</body>
+</html>

@@ -1,0 +1,305 @@
+/* Copyright (c) 2024-2026. Jericho Crosby (Chalwk) */
+
+:root {
+    --primary: #24292e;
+    --secondary: #0366d6;
+    --accent: #28a745;
+    --light: #f6f8fa;
+    --dark: #1b1f23;
+    --success: #28a745;
+    --info: #0366d6;
+    --warning: #dbab09;
+    --danger: #d73a49;
+    --github-1: #24292e;
+    --github-2: #0366d6;
+    --github-3: #28a745;
+    --github-4: #dbab09;
+    --github-5: #d73a49;
+    --github-6: #6f42c1;
+}
+
+.hero-banner {
+    background: linear-gradient(135deg, var(--primary), #2d333b);
+    color: white;
+    padding: 4rem 1rem;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.hero-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.page-title {
+    font-size: 2.8rem;
+    margin-bottom: 0.5rem;
+    color: #ffffff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.tagline {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    margin-bottom: 1.5rem;
+}
+
+.page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.section {
+    background-color: white;
+    border-radius: 10px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+}
+
+.section:hover {
+    transform: translateY(-5px);
+}
+
+.page-section h2 {
+    color: var(--primary);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--secondary);
+    display: inline-block;
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.card {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border: 1px solid #e1e4e8;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+    padding: 1rem;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: white;
+    font-weight: 600;
+    font-family: 'Source Code Pro', monospace;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+.interactive-element {
+    background-color: var(--light);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    border-left: 4px solid var(--secondary);
+    font-family: 'Source Code Pro', monospace;
+}
+
+.code-block {
+    background: #0a101a;
+    border-radius: 8px;
+    margin: 1rem 0;
+    overflow: hidden;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.code-block pre {
+    margin: 0;
+    padding: 1.5rem;
+    overflow-x: auto;
+    white-space: pre;
+}
+
+.code-inline {
+    background: var(--light);
+    padding: 0.2rem 0.4rem;
+    border-radius: 3px;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 0.9rem;
+    border: 1px solid #e1e4e8;
+}
+
+.page-btn {
+    display: inline-block;
+    background: var(--primary);
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.page-btn:hover {
+    background: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.resources-list {
+    list-style-type: none;
+}
+
+.resources-list li {
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+    position: relative;
+}
+
+.resources-list li:before {
+    content: "•";
+    color: var(--secondary);
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+}
+
+.step-list {
+    counter-reset: step-counter;
+    list-style-type: none;
+}
+
+.step-list li {
+    counter-increment: step-counter;
+    margin-bottom: 1.5rem;
+    padding-left: 3rem;
+    position: relative;
+    padding-top: 0.5rem;
+}
+
+.step-list li:before {
+    content: counter(step-counter);
+    background: var(--primary);
+    color: white;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-weight: bold;
+}
+
+.github-icon {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background: black;
+    border-radius: 50%;
+    position: relative;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+.github-icon:before,
+.github-icon:after {
+    content: "";
+    position: absolute;
+    background: white;
+}
+
+.github-icon:before {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    top: 3px;
+    left: 5px;
+}
+
+.github-icon:after {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: black;
+    top: 6px;
+    left: 8px;
+    z-index: 1;
+}
+
+.page-nav {
+    background: white;
+    border-radius: 10px;
+    padding: 1rem;
+    margin: 2rem auto;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    max-width: 1200px;
+}
+
+.page-nav-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.page-nav-link {
+    padding: 0.5rem 1rem;
+    background: var(--light);
+    border-radius: 5px;
+    text-decoration: none;
+    color: var(--dark);
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.page-nav-link:hover {
+    background: var(--primary);
+    color: white;
+}
+
+.note-box {
+    background: #fff8e1;
+    border-left: 4px solid var(--warning);
+    padding: 1rem;
+    margin: 1.5rem 0;
+    border-radius: 0 5px 5px 0;
+}
+
+.warning-box {
+    background: #ffebee;
+    border-left: 4px solid var(--danger);
+    padding: 1rem;
+    margin: 1.5rem 0;
+    border-radius: 0 5px 5px 0;
+}
+
+@media (max-width: 768px) {
+    .page-title {
+        font-size: 2.2rem;
+    }
+
+    .card-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .page-nav-links {
+        flex-direction: column;
+        align-items: center;
+    }
+}

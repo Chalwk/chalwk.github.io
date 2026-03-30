@@ -1,0 +1,79 @@
+---
+layout: default
+title: Speed Reading Tester
+description: Two modes: word-by-word with increasing speed, or read a full story and check comprehension.
+---
+
+<!-- Copyright (c) 2024-2026. Jericho Crosby (Chalwk) -->
+
+<link rel="stylesheet" href="style.css">
+
+<main>
+    <div class="container">
+        <div class="app-grid" style="grid-template-columns: 1fr;">
+            <section class="panel panel-custom">
+                <div class="panel-head">
+                    <h2><i class="fas fa-gauge-high"></i> Speed Reading Tester</h2>
+                    <p class="muted small">Two modes: word‑by‑word with increasing speed, or read a full story and check
+                        comprehension.</p>
+                </div>
+                <div class="mode-tabs">
+                    <button class="tab-btn active" id="tabRSVP"><i class="fas fa-bolt"></i> RSVP (word flash)</button>
+                    <button class="tab-btn" id="tabStory"><i class="fas fa-book-open"></i> Full story</button>
+                </div>
+                <div id="rsvpPanel">
+                    <div class="word-flash-area" id="wordDisplay">
+                        <span id="currentWord">⟵ press begin</span>
+                    </div>
+                    <div class="stats-row">
+                        <span><i class="fas fa-tachometer-alt"></i> WPM: <span id="liveWpm">120</span></span>
+                        <span><i class="fas fa-fast-forward"></i> speed inc. every word</span>
+                        <span><i class="fas fa-chart-simple"></i> word <span id="wordCount">0</span>/<span
+                                id="totalWords">0</span></span>
+                    </div>
+                    <div class="button-group">
+                        <button class="btn btn-primary" id="rsvpBegin"><i class="fas fa-play"></i> Begin</button>
+                        <button class="btn btn-secondary" disabled id="rsvpStop"><i class="fas fa-stop"></i> Stop
+                        </button>
+                        <button class="btn btn-secondary" id="rsvpReset"><i class="fas fa-rotate-left"></i> Reset
+                        </button>
+                    </div>
+                    <p class="muted small" style="margin-top:0.5rem"><i class="fas fa-info-circle"></i> Speed starts at
+                        120 WPM and increases by 2 WPM after each word. Max 800 WPM.</p>
+                </div>
+                <div class="hidden" id="storyPanel">
+                    <div class="option-row">
+                        <label for="storySelect">Choose a story:</label>
+                        <select class="date-input" id="storySelect" style="width:auto; min-width:200px;">
+                            <!-- Options will be populated by JavaScript -->
+                        </select>
+                    </div>
+                    <div class="story-text" id="storyTextDisplay">Loading story...</div>
+                    <div class="stats-row">
+                        <span><i class="fas fa-clock"></i> Time: <span id="storyTimer">0.0</span> s</span>
+                        <span><i class="fas fa-file-lines"></i> Words: <span id="storyWordCount">0</span></span>
+                    </div>
+                    <div class="button-group">
+                        <button class="btn btn-primary" id="storyStart"><i class="fas fa-play"></i> Start reading
+                        </button>
+                        <button class="btn btn-secondary finish-btn" disabled id="storyFinish"><i
+                                class="fas fa-flag-checkered"></i> I'm done
+                        </button>
+                        <button class="btn btn-secondary" id="storyReset"><i class="fas fa-undo"></i> Reset</button>
+                    </div>
+                    <div class="hidden" id="comprehensionArea">
+                        <hr style="margin:1.5rem 0">
+                        <h3><i class="fas fa-question-circle"></i> Quick comprehension check</h3>
+                        <div id="questionsContainer"></div>
+                        <button class="btn btn-primary" id="submitAnswers"><i class="fas fa-check-double"></i> Submit
+                            answers
+                        </button>
+                        <div id="comprehensionScore" style="margin-top:1rem; font-weight:500;"></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</main>
+
+<script src="script.js"></script>
