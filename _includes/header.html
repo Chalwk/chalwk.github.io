@@ -2,48 +2,58 @@
 
 <header class="header">
     <div class="container">
-        <a class="logo" href="{{ site.baseurl }}/index.html" aria-label="Home - Jericho's Portfolio">
+        <a aria-label="Home - Jericho's Portfolio" class="logo" href="{{ site.baseurl }}/index.html">
             <i class="fas fa-code"></i> Jericho
         </a>
 
-        <nav class="nav-desktop" aria-label="Main Navigation">
+        <nav aria-label="Main Navigation" class="nav-desktop">
             <ul class="nav-links">
                 <li><a href="{{ site.baseurl }}/index.html#about">About</a></li>
-                <li><a href="{{ site.baseurl }}/pages/browser-apps/apps-and-tools.html">Apps & Tools</a></li>
+                <li><a href="{{ site.baseurl }}/pages/browser-apps/index.html">Apps & Tools</a></li>
                 <li class="dropdown">
-                    <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true">
-                        Other Stuff <i class="fas fa-chevron-down" aria-hidden="true"></i>
+                    <button aria-expanded="false" aria-haspopup="true" class="dropdown-toggle">
+                        Other Stuff <i aria-hidden="true" class="fas fa-chevron-down"></i>
                     </button>
                     <ul class="dropdown-menu" role="menu">
                         <li role="none"><a href="https://chalwk.github.io/CPAS/" role="menuitem">CPAS</a></li>
-                        <li role="none"><a href="{{ site.baseurl }}/pages/browser-apps/collections/pokemon/pokemon.html" role="menuitem">My Pokémon TCG collection</a></li>
+                        <li role="none"><a href="{{ site.baseurl }}/pages/browser-apps/collections/pokemon/index.html"
+                                           role="menuitem">My Pokémon TCG collection</a></li>
                         <li class="dropdown-submenu" role="none">
-                            <button class="submenu-toggle" aria-expanded="false">
-                                Education <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                            <button aria-expanded="false" class="submenu-toggle">
+                                Education <i aria-hidden="true" class="fas fa-chevron-right"></i>
                             </button>
                             <ul class="submenu" role="menu">
-                                <li role="none"><a href="{{ site.baseurl }}/pages/education/understanding-autism.html" role="menuitem">Understanding Autism</a></li>
-                                <li role="none"><a href="{{ site.baseurl }}/pages/education/stick-figure-comics.html" role="menuitem">Autism through Stick Figures</a></li>
-                                <li role="none"><a href="{{ site.baseurl }}/pages/education/github-pages-tutorial.html" role="menuitem">Creating a GitHub Pages Website</a></li>
-                                <li role="none"><a href="{{ site.baseurl }}/pages/education/arachnology.html" role="menuitem">Local Arachnid Research</a></li>
+                                <li role="none"><a
+                                        href="{{ site.baseurl }}/pages/education/understanding-autism/index.html"
+                                        role="menuitem">Understanding Autism</a></li>
+                                <li role="none"><a
+                                        href="{{ site.baseurl }}/pages/education/stick-figure-comics/index.html"
+                                        role="menuitem">Autism through Stick Figures</a></li>
+                                <li role="none"><a
+                                        href="{{ site.baseurl }}/pages/education/github-pages-tutorial/index.html"
+                                        role="menuitem">Creating a GitHub Pages Website</a></li>
+                                <li role="none"><a
+                                        href="{{ site.baseurl }}/pages/education/arachnology/index.html"
+                                        role="menuitem">Local Arachnid Research</a></li>
                             </ul>
                         </li>
                     </ul>
                 </li>
-                <li><a class="donate-btn" href="https://www.paypal.com/ncp/payment/XUPTKDU6LKM3G" target="_blank" rel="noopener"><i class="fas fa-heart"></i> Support Me</a></li>
+                <li><a class="donate-btn" href="https://www.paypal.com/ncp/payment/XUPTKDU6LKM3G" rel="noopener"
+                       target="_blank"><i class="fas fa-heart"></i> Support Me</a></li>
             </ul>
         </nav>
 
-        <button class="hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <button aria-expanded="false" aria-label="Toggle menu" class="hamburger">
             <span></span>
             <span></span>
             <span></span>
         </button>
 
-        <nav class="nav-mobile" aria-label="Mobile Navigation">
+        <nav aria-label="Mobile Navigation" class="nav-mobile">
             <ul class="nav-mobile-links">
                 <li><a href="{{ site.baseurl }}/index.html#about">About</a></li>
-                <li><a href="{{ site.baseurl }}/pages/browser-apps/apps-and-tools.html">Apps & Tools</a></li>
+                <li><a href="{{ site.baseurl }}/pages/browser-apps/index.html">Apps & Tools</a></li>
                 <li class="dropdown">
                     <button class="dropdown-toggle">
                         Other Stuff
@@ -51,22 +61,31 @@
                     </button>
                     <ul class="dropdown-menu">
                         <li><a href="https://chalwk.github.io/CPAS/">CPAS</a></li>
-                        <li><a href="{{ site.baseurl }}/pages/browser-apps/collections/pokemon/pokemon.html">My Pokémon TCG collection</a></li>
+                        <li><a href="{{ site.baseurl }}/pages/browser-apps/collections/pokemon/index.html">My Pokémon
+                            TCG collection</a></li>
                         <li class="dropdown-submenu">
                             <button class="submenu-toggle">
                                 Education
                                 <i class="fas fa-chevron-right"></i>
                             </button>
                             <ul class="submenu">
-                                <li><a href="{{ site.baseurl }}/pages/education/understanding-autism.html">Understanding Autism</a></li>
-                                <li><a href="{{ site.baseurl }}/pages/education/stick-figure-comics.html">Autism through Stick Figures</a></li>
-                                <li><a href="{{ site.baseurl }}/pages/education/github-pages-tutorial.html">Creating a GitHub Pages Website</a></li>
-                                <li><a href="{{ site.baseurl }}/pages/education/arachnology.html">Local Arachnid Research</a></li>
+                                <li>
+                                    <a href="{{ site.baseurl }}/pages/education/understanding-autism/index.html">Understanding
+                                        Autism</a></li>
+                                <li>
+                                    <a href="{{ site.baseurl }}/pages/education/stick-figure-comics/index.html">Autism
+                                        through Stick Figures</a></li>
+                                <li>
+                                    <a href="{{ site.baseurl }}/pages/education/github-pages-tutorial/index.html">Creating
+                                        a GitHub Pages Website</a></li>
+                                <li><a href="{{ site.baseurl }}/pages/education/arachnology/index.html">Local
+                                    Arachnid Research</a></li>
                             </ul>
                         </li>
                     </ul>
                 </li>
-                <li><a class="donate-btn" href="https://www.paypal.com/ncp/payment/XUPTKDU6LKM3G" target="_blank" rel="noopener"><i class="fas fa-heart"></i> Support Me</a></li>
+                <li><a class="donate-btn" href="https://www.paypal.com/ncp/payment/XUPTKDU6LKM3G" rel="noopener"
+                       target="_blank"><i class="fas fa-heart"></i> Support Me</a></li>
             </ul>
         </nav>
     </div>
@@ -83,14 +102,17 @@
         align-items: center;
         gap: 0.5rem;
     }
+
     .nav-links .donate-btn:hover, .nav-mobile-links .donate-btn:hover {
         background: var(--primary-dark);
         transform: translateY(-2px);
         box-shadow: var(--shadow);
     }
+
     .nav-links .donate-btn i, .nav-mobile-links .donate-btn i {
         color: inherit;
     }
+
     .nav-links .donate-btn::after {
         display: none;
     }

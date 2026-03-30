@@ -210,10 +210,6 @@ resetBtn.addEventListener("click", () => {
     initMaze(mazeSize);
 });
 
-browserBtn.addEventListener("click", () => {
-    window.location.href = "../../apps-and-tools.html";
-});
-
 sizeSelect.addEventListener("change", (e) => {
     mazeSize = parseInt(e.target.value, 10);
     initMaze(mazeSize);
