@@ -586,7 +586,6 @@ a:hover {
 }
 
 /* ==== PWA STYLES ==== */
-
 @media all and (display-mode: standalone) {
     .header,
     footer {
@@ -638,8 +637,265 @@ a:hover {
         display: none;
     }
 }
-
 /*====== END OF PWA STYLES ======*/
+
+/* ========== BLOG STYLES ========== */
+.post-list {
+    list-style: none;
+    padding: 0;
+    margin: 2rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.post-list li {
+    background: linear-gradient(145deg, #ffffff, #f9f9f9);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    padding: 1.8rem;
+    border-left: 6px solid;
+    border-image: linear-gradient(180deg, var(--primary), var(--secondary), var(--accent)) 1;
+    border-left-style: solid;
+    border-left-width: 6px;
+    border-image-slice: 1;
+    position: relative;
+    overflow: hidden;
+}
+
+.post-list li:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+}
+
+.post-list a {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--primary);
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    background-size: 0% 2px;
+    background-repeat: no-repeat;
+    background-position: bottom left;
+    transition: background-size 0.3s ease;
+}
+
+.post-list a:hover {
+    background-size: 100% 2px;
+    color: var(--primary-dark);
+    text-decoration: none;
+}
+
+.post-date {
+    display: inline-block;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--gray);
+    background: rgba(30, 136, 229, 0.1);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    margin-bottom: 1rem;
+    letter-spacing: 0.3px;
+}
+
+.post-list p {
+    color: var(--dark);
+    line-height: 1.6;
+    margin-top: 0.5rem;
+    font-size: 1rem;
+}
+
+.post {
+    max-width: 800px;
+    margin: 2rem auto;
+    background: linear-gradient(145deg, #ffffff, #f9f9f9);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    padding: 2.5rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.post:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.post h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--darker);
+    background: linear-gradient(135deg, var(--darker), var(--primary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
+    position: relative;
+}
+
+.post h1::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    border-radius: 2px;
+}
+
+.post-meta {
+    font-size: 0.9rem;
+    color: var(--gray);
+    margin: 1rem 0 2rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.post-meta time {
+    background: rgba(30, 136, 229, 0.1);
+    padding: 0.2rem 0.8rem;
+    border-radius: 20px;
+}
+
+.post-content {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--dark);
+}
+
+.post-content h2,
+.post-content h3,
+.post-content h4 {
+    margin-top: 1.8rem;
+    margin-bottom: 0.8rem;
+    color: var(--darker);
+    font-weight: 600;
+}
+
+.post-content h2 {
+    font-size: 1.8rem;
+    border-left: 4px solid var(--primary);
+    padding-left: 1rem;
+}
+
+.post-content h3 {
+    font-size: 1.5rem;
+}
+
+.post-content p {
+    margin-bottom: 1.2rem;
+}
+
+.post-content a {
+    color: var(--primary);
+    text-decoration: underline;
+    transition: color 0.2s;
+}
+
+.post-content a:hover {
+    color: var(--primary-dark);
+    text-decoration: none;
+}
+
+.post-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    margin: 1.5rem 0;
+    display: block;
+}
+
+.post-content blockquote {
+    margin: 1.5rem 0;
+    padding: 1rem 1.5rem;
+    background: rgba(30, 136, 229, 0.05);
+    border-left: 4px solid var(--primary);
+    font-style: italic;
+    color: var(--gray);
+    border-radius: var(--radius);
+}
+
+.post-content ul,
+.post-content ol {
+    margin: 1rem 0 1rem 2rem;
+}
+
+.post-content li {
+    margin-bottom: 0.5rem;
+}
+
+.post-content pre {
+    background: #1e1e1e;
+    border-radius: var(--radius);
+    padding: 1rem;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+}
+
+.post-content code {
+    font-family: var(--font-mono);
+    background: rgba(30, 136, 229, 0.1);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.9em;
+    color: var(--primary-dark);
+}
+
+.post-content pre code {
+    background: transparent;
+    padding: 0;
+    color: #f8fafc;
+}
+
+@media (max-width: 768px) {
+    .post-list li {
+        padding: 1.2rem;
+    }
+
+    .post-list a {
+        font-size: 1.4rem;
+    }
+
+    .post {
+        padding: 1.5rem;
+        margin: 1rem;
+    }
+
+    .post h1 {
+        font-size: 1.8rem;
+    }
+
+    .post-content {
+        font-size: 1rem;
+    }
+
+    .post-content h2 {
+        font-size: 1.5rem;
+    }
+
+    .post-content h3 {
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .post-list a {
+        font-size: 1.2rem;
+    }
+
+    .post-date {
+        font-size: 0.75rem;
+    }
+}
+/* ========== END OF BLOG STYLES ========== */
 
 @media (max-width: 768px) {
     .nav-desktop {
