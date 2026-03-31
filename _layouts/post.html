@@ -158,6 +158,7 @@ layout: default
         padding: 1rem;
         overflow-x: auto;
         margin: 1.5rem 0;
+        position: relative;
     }
 
     .post-content pre code {
@@ -171,6 +172,24 @@ layout: default
     .highlight code {
         background-color: #2d2d2d !important;
         color: #f8fafc !important;
+    }
+
+    .copy-btn {
+        position: absolute;
+        top: 0.25rem;
+        right: 0.25rem;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+        cursor: pointer;
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 3px;
+        opacity: 0.8;
+        transition: opacity 0.2s;
+    }
+    .copy-btn:hover {
+        opacity: 1;
     }
 
     @media (max-width: 768px) {
@@ -195,3 +214,25 @@ layout: default
         }
     }
 </style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll(".post-content pre").forEach(pre => {
+            const button = document.createElement("button");
+            button.className = "copy-btn";
+            button.textContent = "Copy";
+            pre.appendChild(button);
+
+            button.addEventListener("click", async () => {
+                const code = pre.querySelector("code").innerText;
+                try {
+                    await navigator.clipboard.writeText(code);
+                    button.textContent = "Copied!";
+                    setTimeout(() => button.textContent = "Copy", 2000);
+                } catch (err) {
+                    console.error("Copy failed:", err);
+                }
+            });
+        });
+    });
+</script>

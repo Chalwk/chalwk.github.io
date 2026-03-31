@@ -52,8 +52,8 @@ Before we begin, make sure you have the following tools on your local Windows ma
 
 1. Visit the [ReadyToGo releases page](https://github.com/Chalwk/HALO-SCRIPT-PROJECTS/releases/tag/ReadyToGo).
 2. Download either `HPC_Server.zip` (for Halo PC) or `HCE_Server.zip` (for Halo Custom Edition).
-3. Extract the ZIP file on your local computer. You'll now have a folder named `HPC_Server` or `HCE_Server`. Keep it
-   handy - we'll upload it to the VPS later.
+3. Extract the ZIP file on your local computer. You'll now have a folder named `HPC_Server` or `HCE_Server`.
+   Keep it handy - we'll upload it to the VPS later.
 
 ---
 
