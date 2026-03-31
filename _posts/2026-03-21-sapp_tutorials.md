@@ -1,13 +1,13 @@
 ---
 layout: post
-title: "SAPP Tutorials: Complete Guide to Lua Scripting for Halo PC/CE"
+title: "SAPP Tutorials: Guide to Lua Scripting for Halo PC/CE"
 date: 2026-03-31
 author: Jericho Crosby
 categories: [ education, halo, modding ]
 tags: [ sapp, lua, halo, scripting, tutorial ]
 ---
 
-These tutorials cover a variety of things that you need to start writing Lua scripts for **SAPP** (the dedicated server
+This page covers a variety of things that you need to start writing Lua scripts for **SAPP** (the dedicated server
 mod for Halo PC/CE). You'll learn:
 
 - The basics of SAPP Lua scripting (events, callbacks, API version)
@@ -55,7 +55,7 @@ end
 
 ## 2. Tutorial 1: Welcome Message
 
-**File:** `Welcome Message.lua`
+**File:** `welcome-message.lua`
 
 This script greets players when they join and displays the current map and game mode.
 
@@ -180,8 +180,8 @@ This script responds to player chat commands like `!hello`.
 --------------------------------------------------------------------------------
 -- CONFIG / CONSTANTS
 --------------------------------------------------------------------------------
-local COMMAND_PREFIX = "!"                -- Prefix that identifies commands
-local HELLO_COMMAND = "hello"             -- Example command
+local COMMAND_PREFIX = "!"    -- Prefix that identifies commands
+local HELLO_COMMAND = "hello" -- Example command
 
 -- * Required for all SAPP Lua scripts.
 -- Tells SAPP the Lua API version being used on the server.
@@ -639,4 +639,4 @@ Now that you have the basics and a full template, you can:
 - Use `timer()` for delayed or repeating actions.
 - Experiment with `get_var()` and `set_var()` to modify player properties.
 - Explore the FFI library for advanced system integration.
-- Join the SAPP community to share your scripts and get help.
+- Join the HSP community to share your scripts and get help.
