@@ -1,31 +1,13 @@
+---
+layout: default
+title: Grocery List
+description: Create and manage your grocery list.
+pwa: true
+---
+
 <!-- Copyright (c) 2024-2026. Jericho Crosby (Chalwk) -->
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="#4a86e8" name="theme-color">
-    <meta content="⚠️ Check an item to indicate that it needs to be purchased." name="description">
-    <title>Grocery List</title>
-
-    <link href="../../../../assets/css/core.css" rel="stylesheet"/>
-    <script src="../../../../assets/js/nav-menu.js"></script>
-    <link href="style.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
-          rel="stylesheet">
-
-    <link href="manifest.json" rel="manifest">
-    <link href="icons/icon-192x192.png" rel="icon" type="image/png">
-    <meta content="yes" name="apple-mobile-web-app-capable">
-    <meta content="default" name="apple-mobile-web-app-status-bar-style">
-    <meta content="Grocery List" name="apple-mobile-web-app-title">
-    <link href="icons/icon-192x192.png" rel="apple-touch-icon">
-</head>
-<body>
-
-<header class="header"></header>
+<link rel="stylesheet" href="style.css">
 
 <main class="section grocery-main">
     <div class="container">
@@ -143,12 +125,3 @@
 <input accept=".json" id="importFile" style="display: none;" type="file">
 
 <script src="script.js"></script>
-
-<link rel="manifest" href="manifest.json">
-<script>
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js')
-            .then(reg => console.log('Service Worker registered', reg))
-            .catch(err => console.error('Service Worker registration failed', err));
-    }
-</script>

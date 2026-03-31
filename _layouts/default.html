@@ -20,5 +20,15 @@
 {% include footer.html %}
 <script defer src="{{ site.baseurl }}/assets/js/nav-menu.js"></script>
 <script defer src="{{ site.baseurl }}/assets/js/pwa-install.js"></script>
+
+{% if page.pwa %}
+<script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('{{ page.dir }}sw.js')
+            .then(reg => console.log('Service Worker registered', reg))
+            .catch(err => console.error('Service Worker registration failed', err));
+    }
+</script>
+{% endif %}
 </body>
 </html>
