@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "How to Host a Halo PC/CE Dedicated Server on a Linux VPS (Ubuntu 22.04)"
-date: 2025-09-10
+date: 2025-08-29
 author: Jericho Crosby
 categories: [ education, halo, modding ]
 tags: [ sapp, lua, halo, scripting, tutorial ]

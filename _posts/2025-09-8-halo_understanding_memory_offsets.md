@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Halo PC/CE: Understanding Memory Offsets"
-date: 2025-08-27
+date: 2025-09-8
 author: Jericho Crosby
 categories: [ education, halo, modding ]
 tags: [ sapp, lua, halo, scripting, tutorial ]
