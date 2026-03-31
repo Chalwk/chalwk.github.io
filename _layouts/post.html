@@ -36,11 +36,8 @@ layout: default
         padding: 2.5rem;
         box-shadow: var(--shadow);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
-        border-left: 6px solid;
+        border-left: 6px solid transparent;
         border-image: linear-gradient(180deg, var(--primary), var(--secondary), var(--accent)) 1;
-        border-left-style: solid;
-        border-left-width: 6px;
-        border-image-slice: 1;
     }
 
     .post-card:hover {
@@ -59,7 +56,6 @@ layout: default
     .post h1 {
         font-size: 2.5rem;
         margin-bottom: 0.5rem;
-        color: var(--darker);
         background: linear-gradient(135deg, var(--darker), var(--primary));
         -webkit-background-clip: text;
         background-clip: text;
@@ -156,7 +152,7 @@ layout: default
     }
 
     .post-content code {
-        font-family: var(--font-mono);
+        font-family: var(--font-mono), monospace;
         background: rgba(30, 136, 229, 0.1);
         padding: 0.2rem 0.4rem;
         border-radius: 4px;
