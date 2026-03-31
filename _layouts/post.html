@@ -2,16 +2,22 @@
 layout: default
 ---
 
-<!-- Copyright (c) 2024-2026. Jericho Crosby (Chalwk). -->
+<!-- Copyright (c) 2024-2026. Jericho Crosby (Chalwk) -->
 
-<article class="post">
-    <h1>{{ page.title }}</h1>
-    <p class="post-meta">
-        <time datetime="{{ page.date | date_to_xmlschema }}">
-            {{ page.date | date: "%B %-d, %Y" }}
-        </time>
-        {% if page.author %} • {{ page.author }}{% endif %}
-    </p>
+<section class="section blog-section">
+    <div class="container">
+        <div class="post-card">
+            <article class="post">
+                <h1>{{ page.title }}</h1>
+                <p class="post-meta">
+                    <time datetime="{{ page.date | date_to_xmlschema }}">
+                        {{ page.date | date: "%B %-d, %Y" }}
+                    </time>
+                    {% if page.author %} • {{ page.author }}{% endif %}
+                </p>
 
-    <div class="post-content">{{ content }}</div>
-</article>
+                <div class="post-content">{{ content }}</div>
+            </article>
+        </div>
+    </div>
+</section>

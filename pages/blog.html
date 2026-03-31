@@ -4,16 +4,22 @@ title: Blog
 permalink: /blog/
 ---
 
-<!-- Copyright (c) 2024-2026. Jericho Crosby (Chalwk). -->
+<!-- Copyright (c) 2024-2026. Jericho Crosby (Chalwk) -->
 
-<h1>Blog</h1>
+<section class="section blog-section">
+    <div class="container">
+        <div class="about-card">
+            <h1 class="blog-heading">Blog</h1>
 
-<ul class="post-list">
-    {% for post in site.posts %}
-    <li>
-        <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
-        <span class="post-date">{{ post.date | date: "%B %-d, %Y" }}</span>
-        <p>{{ post.excerpt | strip_html | truncatewords: 30 }}</p>
-    </li>
-    {% endfor %}
-</ul>
+            <ul class="post-list">
+                {% for post in site.posts %}
+                <li>
+                    <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+                    <span class="post-date">{{ post.date | date: "%B %-d, %Y" }}</span>
+                    <p>{{ post.excerpt | strip_html | truncatewords: 30 }}</p>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</section>
