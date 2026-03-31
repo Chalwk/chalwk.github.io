@@ -9,8 +9,9 @@ permalink: /blog/
 <section class="section blog-section">
     <div class="container">
         <div class="about-card">
-            <h1 class="blog-heading">Blog</h1>
-
+            <h1 class="blog-heading">
+                <i class="fas fa-blog blog-icon"></i> Blog
+            </h1>
             <ul class="post-list">
                 {% for post in site.posts %}
                 <li class="post-item">
@@ -180,6 +181,98 @@ permalink: /blog/
 </script>
 
 <style>
+
+    .blog-icon {
+        margin-right: 0.5rem;
+    }
+
+    .blog-heading {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 2rem;
+        position: relative;
+        color: var(--darker);
+    }
+
+    .blog-heading::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        width: 80px;
+        height: 3px;
+        background: linear-gradient(90deg, var(--primary), var(--secondary));
+        border-radius: 2px;
+    }
+
+    .post-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .post-list li {
+        background: linear-gradient(145deg, #ffffff, #f9f9f9);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        padding: 2rem;
+        border-left: 6px solid;
+        border-image: linear-gradient(180deg, var(--primary), var(--secondary), var(--accent)) 1;
+        border-left-style: solid;
+        border-left-width: 6px;
+        border-image-slice: 1;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .post-list li:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .post-list a {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--primary);
+        text-decoration: none;
+        display: inline-block;
+        margin-bottom: 0.5rem;
+        background: linear-gradient(90deg, var(--primary), var(--secondary));
+        background-size: 0% 2px;
+        background-repeat: no-repeat;
+        background-position: bottom left;
+        transition: background-size 0.3s ease;
+    }
+
+    .post-list a:hover {
+        background-size: 100% 2px;
+        color: var(--primary-dark);
+        text-decoration: none;
+    }
+
+    .post-date {
+        display: inline-block;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--gray);
+        background: rgba(30, 136, 229, 0.1);
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        margin-bottom: 1rem;
+        letter-spacing: 0.02em;
+    }
+
+    .post-list p {
+        color: var(--dark);
+        line-height: 1.6;
+        margin-top: 0.5rem;
+        font-size: 1rem;
+    }
+
     .pagination-container {
         margin-top: 3rem;
         text-align: center;
@@ -227,6 +320,30 @@ permalink: /blog/
     .pagination-btn:disabled {
         opacity: 0.5;
         cursor: not-allowed;
+    }
+
+    @media (max-width: 768px) {
+        .post-list li {
+            padding: 1.5rem;
+        }
+
+        .post-list a {
+            font-size: 1.4rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .post-list a {
+            font-size: 1.2rem;
+        }
+
+        .post-date {
+            font-size: 0.75rem;
+        }
+
+        .blog-heading {
+            font-size: 1.6rem;
+        }
     }
 
     @media (max-width: 640px) {

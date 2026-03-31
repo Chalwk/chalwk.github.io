@@ -28,3 +28,163 @@ layout: default
         </div>
     </div>
 </section>
+
+<style>
+    .post-card {
+        background: linear-gradient(145deg, #ffffff, #f9f9f9);
+        border-radius: var(--radius-lg);
+        padding: 2.5rem;
+        box-shadow: var(--shadow);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-left: 6px solid;
+        border-image: linear-gradient(180deg, var(--primary), var(--secondary), var(--accent)) 1;
+        border-left-style: solid;
+        border-left-width: 6px;
+        border-image-slice: 1;
+    }
+
+    .post-card:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .post {
+        max-width: 100%;
+        margin: 0 auto;
+        background: transparent;
+        box-shadow: none;
+        padding: 0;
+    }
+
+    .post h1 {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+        color: var(--darker);
+        background: linear-gradient(135deg, var(--darker), var(--primary));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        display: inline-block;
+        position: relative;
+    }
+
+    .post h1::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        width: 80px;
+        height: 3px;
+        background: linear-gradient(90deg, var(--primary), var(--secondary));
+        border-radius: 2px;
+    }
+
+    .post-content {
+        font-size: 1.05rem;
+        line-height: 1.7;
+        color: var(--dark);
+    }
+
+    .post-content h2,
+    .post-content h3,
+    .post-content h4 {
+        margin-top: 1.8rem;
+        margin-bottom: 0.8rem;
+        color: var(--darker);
+        font-weight: 600;
+    }
+
+    .post-content h2 {
+        font-size: 1.8rem;
+        border-left: 4px solid var(--primary);
+        padding-left: 1rem;
+    }
+
+    .post-content h3 {
+        font-size: 1.5rem;
+    }
+
+    .post-content p {
+        margin-bottom: 1.2rem;
+    }
+
+    .post-content a {
+        color: var(--primary);
+        text-decoration: underline;
+        transition: color 0.2s;
+    }
+
+    .post-content a:hover {
+        color: var(--primary-dark);
+        text-decoration: none;
+    }
+
+    .post-content img {
+        max-width: 100%;
+        height: auto;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow-sm);
+        margin: 1.5rem 0;
+        display: block;
+    }
+
+    .post-content blockquote {
+        margin: 1.5rem 0;
+        padding: 1rem 1.5rem;
+        background: rgba(30, 136, 229, 0.05);
+        border-left: 4px solid var(--primary);
+        font-style: italic;
+        color: var(--gray);
+        border-radius: var(--radius);
+    }
+
+    .post-content ul,
+    .post-content ol {
+        margin: 1rem 0 1rem 2rem;
+    }
+
+    .post-content li {
+        margin-bottom: 0.5rem;
+    }
+
+    .post-content pre {
+        background: #1e1e1e;
+        border-radius: var(--radius);
+        padding: 1rem;
+        overflow-x: auto;
+        margin: 1.5rem 0;
+    }
+
+    .post-content code {
+        font-family: var(--font-mono);
+        background: rgba(30, 136, 229, 0.1);
+        padding: 0.2rem 0.4rem;
+        border-radius: 4px;
+        font-size: 0.9em;
+        color: var(--primary-dark);
+    }
+
+    .post-content pre code {
+        background: transparent;
+        padding: 0;
+        color: #f8fafc;
+    }
+
+    @media (max-width: 768px) {
+        .post-card {
+            padding: 1.5rem;
+        }
+        .post h1 {
+            font-size: 1.8rem;
+        }
+        .post-content {
+            font-size: 1rem;
+        }
+        .post-content h2 {
+            font-size: 1.5rem;
+        }
+        .post-content h3 {
+            font-size: 1.3rem;
+        }
+    }
+</style>
