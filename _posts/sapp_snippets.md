@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "SAPP Lua Snippets"
-date: 2026-03-31
+date: 31-03-2026
 author: Jericho Crosby
 categories: [ education, halo, modding ]
 tags: [ sapp, lua, halo, scripting, tutorial ]
