@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Halo: Understanding Memory Offsets"
+title: "Halo PC/CE: Understanding Memory Offsets"
 date: 31-03-2026
 author: Jericho Crosby
 categories: [ education, halo, modding ]

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "SAPP Multi-server Management"
+title: "Halo PC/CE: SAPP Multi-server Management"
 date: 31-03-2026
 author: Jericho Crosby
 categories: [ education, halo, modding ]

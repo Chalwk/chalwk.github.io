@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Halo Server Port Forwarding"
+title: "Halo PC/CE: Server Port Forwarding"
 date: 31-03-2026
 author: Jericho Crosby
 categories: [ education, halo, modding ]

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "SAPP Lua Snippets"
+title: "Halo PC/CE: SAPP Lua Snippets"
 date: 31-03-2026
 author: Jericho Crosby
 categories: [ education, halo, modding ]
