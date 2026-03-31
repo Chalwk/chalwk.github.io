@@ -38,7 +38,7 @@ permalink: /blog/
 </section>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const POSTS_PER_PAGE = 5;
         const originalList = document.querySelector('.post-list');
         if (!originalList) {
@@ -52,6 +52,7 @@ permalink: /blog/
             return;
         }
         const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
+
         function getCurrentPageFromHash() {
             const hash = window.location.hash;
             const match = hash.match(/page-(\d+)/);
@@ -64,7 +65,9 @@ permalink: /blog/
             }
             return 1;
         }
+
         let currentPage = getCurrentPageFromHash();
+
         function renderPage(page) {
             const start = (page - 1) * POSTS_PER_PAGE;
             const end = start + POSTS_PER_PAGE;
@@ -83,6 +86,7 @@ permalink: /blog/
             });
             container.appendChild(newList);
         }
+
         function renderPagination() {
             const controlsContainer = document.getElementById('pagination-controls');
             controlsContainer.innerHTML = '';
@@ -100,7 +104,10 @@ permalink: /blog/
                 prevBtn.setAttribute('aria-disabled', 'true');
             } else {
                 prevBtn.addEventListener('click', () => {
-                    if (currentPage > 1) setPage(currentPage - 1);
+                    if (currentPage > 1) {
+                        setPage(currentPage - 1);
+                        window.scrollTo({top: 0, behavior: 'smooth'});
+                    }
                 });
             }
             const nextBtn = document.createElement('button');
@@ -111,7 +118,10 @@ permalink: /blog/
                 nextBtn.setAttribute('aria-disabled', 'true');
             } else {
                 nextBtn.addEventListener('click', () => {
-                    if (currentPage < totalPages) setPage(currentPage + 1);
+                    if (currentPage < totalPages) {
+                        setPage(currentPage + 1);
+                        window.scrollTo({top: 0, behavior: 'smooth'});
+                    }
                 });
             }
             const pageNumbersDiv = document.createElement('div');
@@ -130,8 +140,10 @@ permalink: /blog/
                     pageBtn.classList.add('active');
                     pageBtn.setAttribute('aria-current', 'page');
                 }
-                pageBtn.addEventListener('click', (function(pageNum) {
-                    return function() { setPage(pageNum); };
+                pageBtn.addEventListener('click', (function (pageNum) {
+                    return function () {
+                        setPage(pageNum);
+                    };
                 })(i));
                 pageNumbersDiv.appendChild(pageBtn);
             }
@@ -140,6 +152,7 @@ permalink: /blog/
             nav.appendChild(nextBtn);
             controlsContainer.appendChild(nav);
         }
+
         function setPage(page) {
             if (page < 1) page = 1;
             if (page > totalPages) page = totalPages;
@@ -149,7 +162,8 @@ permalink: /blog/
             renderPagination();
             history.pushState(null, null, '#page-' + currentPage);
         }
-        window.addEventListener('hashchange', function() {
+
+        window.addEventListener('hashchange', function () {
             const newPage = getCurrentPageFromHash();
             if (newPage !== currentPage) {
                 currentPage = newPage;
@@ -170,6 +184,7 @@ permalink: /blog/
         margin-top: 3rem;
         text-align: center;
     }
+
     .pagination-nav {
         display: flex;
         flex-wrap: wrap;
@@ -177,6 +192,7 @@ permalink: /blog/
         align-items: center;
         gap: 0.75rem;
     }
+
     .pagination-btn,
     .pagination-number {
         background: transparent;
@@ -191,6 +207,7 @@ permalink: /blog/
         min-width: 2.5rem;
         text-align: center;
     }
+
     .pagination-btn:hover:not(:disabled),
     .pagination-number:hover:not(.active) {
         background: var(--primary);
@@ -198,6 +215,7 @@ permalink: /blog/
         color: white;
         transform: translateY(-2px);
     }
+
     .pagination-number.active {
         background: var(--primary);
         border-color: var(--primary);
@@ -205,14 +223,17 @@ permalink: /blog/
         cursor: default;
         box-shadow: var(--shadow-sm);
     }
+
     .pagination-btn:disabled {
         opacity: 0.5;
         cursor: not-allowed;
     }
+
     @media (max-width: 640px) {
         .pagination-nav {
             gap: 0.4rem;
         }
+
         .pagination-btn,
         .pagination-number {
             padding: 0.35rem 0.7rem;
