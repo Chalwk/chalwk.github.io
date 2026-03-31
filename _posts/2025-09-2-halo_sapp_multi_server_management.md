@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Halo PC/CE: SAPP Multi-server Management"
-date: 2026-03-31
+date: 2025-09-2
 author: Jericho Crosby
 categories: [ education, halo, modding ]
 tags: [ sapp, lua, halo, scripting, tutorial ]

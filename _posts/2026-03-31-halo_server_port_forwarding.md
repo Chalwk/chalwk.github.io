@@ -73,7 +73,7 @@ Every router brands this section differently. Look for one of these names:
 - **Firewall** (then a sub-tab like "Port Forwarding")
 - **Applications & Gaming**
 
-If you cannot find it, search the web for "*[Your Router Model] port forwarding*" – you will likely find a specific
+If you cannot find it, search the web for "*[Your Router Model] port forwarding*" - you will likely find a specific
 guide.
 
 ---

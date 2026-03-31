@@ -164,10 +164,10 @@ end
 
 ### Key Concepts
 
-- `register_callback(cb['EVENT_JOIN'], "OnPlayerJoin")` – Calls your function when a player joins.
-- `timer(milliseconds, "functionName", params)` – Delays execution.
-- `get_var(index, '$name')` – Retrieves player or server variables.
-- `rprint(playerIndex, message)` – Sends a private message to that player.
+- `register_callback(cb['EVENT_JOIN'], "OnPlayerJoin")` - Calls your function when a player joins.
+- `timer(milliseconds, "functionName", params)` - Delays execution.
+- `get_var(index, '$name')` - Retrieves player or server variables.
+- `rprint(playerIndex, message)` - Sends a private message to that player.
 
 > **Warning:** The `timer` function expects milliseconds. A common mistake is to pass seconds directly. Always multiply
 > seconds by 1000.
@@ -230,9 +230,9 @@ end
 
 ### Key Concepts
 
-- `cb['EVENT_CHAT']` – Triggered every time a player sends a chat message.
-- `return false` – Prevents the message from being broadcast to other players.
-- `string.lower()` – Makes commands case-insensitive (so `!HELLO` works as well).
+- `cb['EVENT_CHAT']` - Triggered every time a player sends a chat message.
+- `return false` - Prevents the message from being broadcast to other players.
+- `string.lower()` - Makes commands case-insensitive (so `!HELLO` works as well).
 
 > **Tip:** You can add more commands by extending the if-else chain or using a lookup table. For many commands, consider
 > a table mapping command names to handler functions.
@@ -327,10 +327,10 @@ end
 
 ### Key Concepts
 
-- `cb['EVENT_KILL']` – Triggered on every kill (victimIndex, killerIndex).
-- `get_var(killerIndex, "$kills")` – Returns the player's current kill count as a string.
-- `say_all(message)` – Broadcasts a message to everyone on the server.
-- `tonumber()` – Converts the kill count from string to number for comparisons.
+- `cb['EVENT_KILL']` - Triggered on every kill (victimIndex, killerIndex).
+- `get_var(killerIndex, "$kills")` - Returns the player's current kill count as a string.
+- `say_all(message)` - Broadcasts a message to everyone on the server.
+- `tonumber()` - Converts the kill count from string to number for comparisons.
 
 > **Warning:** SAPP returns many values as strings (e.g., "$kills" comes as a string). Always use `tonumber()` before
 > arithmetic or comparisons, or you may get unexpected results.
@@ -347,7 +347,7 @@ but you also get advanced features like the `ffi` library to call C functions an
 ### 5.1 What LuaJIT Gives You
 
 - Full compatibility with **Lua 5.1**
-- `ffi` library – call C functions, define structs, work with raw memory
+- `ffi` library - call C functions, define structs, work with raw memory
 - Better performance for math-heavy or iterative code
 
 > **Note:** SAPP scripts run in a sandboxed environment. Some operating system APIs may be restricted, and unsafe memory
@@ -403,11 +403,11 @@ end
 
 #### How It Works
 
-1. **`api_version`** – Required for SAPP 1.12.0.0 scripts.
-2. **`ffi.cdef`** – Declares the C function signature so LuaJIT knows how to call it.
-3. **`ffi.C.GetTickCount()`** – Calls the actual Windows API function.
-4. **`cprint`** – A SAPP built-in that prints colored text to the server console (color code 10 is green).
-5. **`OnTick`** – Runs every game tick (about 30 times per second). We use `os.clock()` to throttle the output to once
+1. **`api_version`** - Required for SAPP 1.12.0.0 scripts.
+2. **`ffi.cdef`** - Declares the C function signature so LuaJIT knows how to call it.
+3. **`ffi.C.GetTickCount()`** - Calls the actual Windows API function.
+4. **`cprint`** - A SAPP built-in that prints colored text to the server console (color code 10 is green).
+5. **`OnTick`** - Runs every game tick (about 30 times per second). We use `os.clock()` to throttle the output to once
    every 10 seconds.
 
 ### 5.4 Key Tips and Safety
@@ -416,7 +416,7 @@ end
 - Avoid writing memory directly unless you know the exact structure and offset.
 - Remember that SAPP Lua is sandboxed; not all OS APIs or memory operations are available.
 
-> **Tip:** Use FFI to read server performance counters, system time, or interact with external libraries – but always
+> **Tip:** Use FFI to read server performance counters, system time, or interact with external libraries - but always
 > test thoroughly on a non-production server first.
 
 ---

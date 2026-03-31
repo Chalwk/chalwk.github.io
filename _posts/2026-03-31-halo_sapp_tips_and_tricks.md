@@ -24,11 +24,11 @@ Let's dive in.
 Before writing any code, ensure your script declares the correct API version and the three essential functions. This is
 the foundational skeleton for any SAPP Lua script.
 
-- **`api_version`** – Always declare this at the top of your script. The API version must match the version SAPP is
+- **`api_version`** - Always declare this at the top of your script. The API version must match the version SAPP is
   using. You can check the current version with the `lua_api_v` command in your server console. If the major version
   differs, the script will not load.
 
-- **Required Functions** – Your script must include `OnScriptLoad()`, `OnScriptUnload()`, and optionally `OnError()`.
+- **Required Functions** - Your script must include `OnScriptLoad()`, `OnScriptUnload()`, and optionally `OnError()`.
     - `OnScriptLoad()`: Initialize your script and register all event callbacks here.
     - `OnScriptUnload()`: Clean up tasks (reset server states, unregister callbacks).
     - `OnError(Message)`: Highly recommended for debugging. Use `print(debug.traceback())` inside to get stack traces
@@ -56,7 +56,7 @@ function OnError(Message)
 end
 ```
 
-> **Tip:** Always include `OnError` – without it, runtime errors can fail silently, making debugging a nightmare.
+> **Tip:** Always include `OnError` - without it, runtime errors can fail silently, making debugging a nightmare.
 
 ---
 
@@ -96,11 +96,11 @@ end
 SAPP provides powerful built-in functions to interact with the game and server. Using these is key to writing effective
 scripts.
 
-- **`execute_command("command_string")`** – Execute any server command (kick players, change maps, adjust settings).
-- **`say(PlayerIndex, "message")` & `say_all("message")`** – Send chat messages to a specific player or everyone.
-- **`get_var(PlayerIndex, "$variable")`** – Fetch SAPP variable values like `"$hp"` (health) or `"$warnings"`. Use `0`
+- **`execute_command("command_string")`** - Execute any server command (kick players, change maps, adjust settings).
+- **`say(PlayerIndex, "message")` & `say_all("message")`** - Send chat messages to a specific player or everyone.
+- **`get_var(PlayerIndex, "$variable")`** - Fetch SAPP variable values like `"$hp"` (health) or `"$warnings"`. Use `0`
   instead of PlayerIndex to get a server variable.
-- **`rand(min, max)`** – Cryptographically secure random number. Useful for random spawns or effects.
+- **`rand(min, max)`** - Cryptographically secure random number. Useful for random spawns or effects.
 
 **Example: Random Teleport on Spawn**
 
@@ -121,15 +121,15 @@ end
 ### Localize Heavily Used Globals
 
 Cache frequently used globals into locals at the top of your script or function (e.g.,
-`local table_insert = table.insert`). Local variable access is faster than global table lookups – a small win that helps
+`local table_insert = table.insert`). Local variable access is faster than global table lookups - a small win that helps
 in hot code paths.
 
-### Be GC-Aware – Control Collection During Quiet Moments
+### Be GC-Aware - Control Collection During Quiet Moments
 
 Lua's garbage collector can cause small pauses. If you must, use `collectgarbage()` tactically (e.g., during round end
 or idle). Use this sparingly and measure first.
 
-### Minimize Garbage – Reuse Tables / Object Pools
+### Minimize Garbage - Reuse Tables / Object Pools
 
 Creating many small temporary tables each tick increases GC churn and can cause frame hitches. Reuse tables with a
 simple pool.
@@ -149,7 +149,7 @@ local function freetable(t)
 end
 ```
 
-### Avoid Heavy Work Inside Callbacks – Batch & Defer
+### Avoid Heavy Work Inside Callbacks - Batch & Defer
 
 If an event fires often (weapon pickups, damage), do the minimum in the callback, then push work to a timer or queue
 processed at a lower frequency (e.g., every 200ms).
@@ -192,11 +192,11 @@ of custom checks to avoid edge-case bugs with slot indices and spectators.
 
 ## Security & Sanity Checks
 
-- **Validate every client command** – Check player index exists, admin level for privileged commands, numeric ranges,
+- **Validate every client command** - Check player index exists, admin level for privileged commands, numeric ranges,
   and types. Never `loadstring` arbitrary strings from clients.
 - **Rate-limit resource-hungry actions** (spawns, custom commands). Per-player cooldown tables are simple and effective.
-- **Anti-tampering** – Assume a modified client will attempt odd commands; log suspicious behaviour server-side for
-  review. SAPP offers anti-cheat utilities – use them.
+- **Anti-tampering** - Assume a modified client will attempt odd commands; log suspicious behaviour server-side for
+  review. SAPP offers anti-cheat utilities - use them.
 
 ---
 
@@ -245,7 +245,7 @@ max_idle 1
 
 This prevents the default 60-second idle/mapcycle behavior that commonly shows up as a 60-second "hang" on boot.
 
-- **SAPP docs – `max_idle` behavior:** Sets how many seconds of server idle before SAPP restarts the mapcycle. Default
+- **SAPP docs - `max_idle` behavior:** Sets how many seconds of server idle before SAPP restarts the mapcycle. Default
   is 60 seconds. Changing it to `1` makes that restart happen almost immediately.
 - **Where to put it:** Some Halo servers use two `init.txt` files (one for the dedicated server, another for SAPP). Put
   `max_idle 1` in the SAPP `init.txt` to avoid the 60-second delay.
@@ -254,7 +254,7 @@ This prevents the default 60-second idle/mapcycle behavior that commonly shows u
 
 - `max_idle` affects how SAPP handles *idle* servers (mapcycle restarts). Setting it to `1` avoids the startup pause,
   but if you rely on idle mapcycle behavior for other reasons, test the change first.
-- Make sure you edit the correct `init.txt` (the SAPP one) – some installs have two.
+- Make sure you edit the correct `init.txt` (the SAPP one) - some installs have two.
 
 ---
 
@@ -459,8 +459,8 @@ The color is defined by a single number, calculated by combining a **Foreground*
 **Formula:**  
 `Color Number = Foreground_Color + (Background_Color * 16)`
 
-- **Foreground** – text color (value 0 to 15).
-- **Background** – color behind the text (value 0 to 15, multiplied by 16).
+- **Foreground** - text color (value 0 to 15).
+- **Background** - color behind the text (value 0 to 15, multiplied by 16).
 
 **Example:**  
 Green text (Foreground 10) on Black background (Background 0):  
@@ -521,7 +521,7 @@ set_ccolor 11
 - **Admin Message:** Light Purple (13)
 - **Debug Data:** Gray (8)
 
-> **Pro Tip:** Avoid high-intensity background colors (like White 15) for large text blocks – they are hard to read. Use
+> **Pro Tip:** Avoid high-intensity background colors (like White 15) for large text blocks - they are hard to read. Use
 > them sparingly for important warnings.
 
 **Resetting:** To return to default (Light Gray on Black), use `set_ccolor 7`.
@@ -537,22 +537,22 @@ Denial-of-Service)**. The key difference is one attacker vs. many.
 
 SAPP is excellent at mitigating common nuisances and basic attacks:
 
-1. **Packet Flooding** – `packet_limit` (default 1000 packets/second per IP) instantly kicks any single IP exceeding the
+1. **Packet Flooding** - `packet_limit` (default 1000 packets/second per IP) instantly kicks any single IP exceeding the
    threshold. Stops simple UDP floods.
-2. **Join Spamming** – `antihalofp` automatically IP bans players who attempt to join too frequently. Neutralizes tools
+2. **Join Spamming** - `antihalofp` automatically IP bans players who attempt to join too frequently. Neutralizes tools
    like "Halo Flood Prevent".
-3. **RCON Brute-Force Protection** – After 4 failed RCON password attempts, the IP is banned for one hour.
-4. **Resource Management** – Core fixes reduce CPU usage and memory leaks, making the server more resilient.
+3. **RCON Brute-Force Protection** - After 4 failed RCON password attempts, the IP is banned for one hour.
+4. **Resource Management** - Core fixes reduce CPU usage and memory leaks, making the server more resilient.
 
 ### Where It Falls Short (The Limitations)
 
 A true, large-scale **D**DoS attack will overwhelm SAPP's protections:
 
-- **No Volume-Based Mitigation** – `packet_limit` works per IP. A DDoS uses thousands of unique IPs; each appears as
+- **No Volume-Based Mitigation** - `packet_limit` works per IP. A DDoS uses thousands of unique IPs; each appears as
   normal traffic. The network port still saturates.
-- **Application Layer vs. Network Layer** – SAPP works at the application layer (understands Halo's protocol). It cannot
+- **Application Layer vs. Network Layer** - SAPP works at the application layer (understands Halo's protocol). It cannot
   filter at the network layer or distinguish legitimate packets from garbage bandwidth floods.
-- **On-Server Only** – If attack traffic is large enough, it can saturate the server's network card before SAPP even
+- **On-Server Only** - If attack traffic is large enough, it can saturate the server's network card before SAPP even
   processes packets.
 
 ### Summary
@@ -567,8 +567,8 @@ A true, large-scale **D**DoS attack will overwhelm SAPP's protections:
 
 **Recommendations:**
 
-1. **For most server hosts** – SAPP's protections are **enough**. They handle 99% of attacks you will ever see.
-2. **If you are a high-profile target** (popular scrim server, tournament) – You **must** have additional protection:
+1. **For most server hosts** - SAPP's protections are **enough**. They handle 99% of attacks you will ever see.
+2. **If you are a high-profile target** (popular scrim server, tournament) - You **must** have additional protection:
     - Use a game server provider with **DDoS mitigation** at the network level.
     - Look into proxy services (complex for game traffic).
     - Ensure your host has infrastructure to absorb large attacks.
