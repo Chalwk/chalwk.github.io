@@ -38,8 +38,10 @@ To get started with finding and using offsets in Halo PC/CE, consider the follow
   tutorial that walks through the process of locating offsets using Cheat Engine.
 *
     *
+
 *[Tutorial: Finding Offsets Using Cheat Engine - UnKnoWnCheaTs](https://www.unknowncheats.me/forum/general-programming-and-reversing/200702-finding-offsets-using-cheat-engine.html)
 **: A comprehensive guide on using Cheat Engine to find memory offsets.
+
 * **[Halo Map Tools 3 - Bungie Forums](https://forums.bungie.org/halo/archive13.pl?read=390998)**: A discussion on using
   Halo Map Tools 3 for offset manipulation.
 
