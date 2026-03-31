@@ -1,34 +1,36 @@
 ---
 layout: post
 title: "Halo PC/CE: SAPP Lua Scripting"
-date: 31-03-2026
+date: 2026-03-31
 author: Jericho Crosby
 categories: [ education, halo, modding ]
 tags: [ sapp, lua, halo, scripting, tutorial ]
 ---
 
-This page covers a variety of things that you need to start writing Lua scripts for **SAPP** (the dedicated server
-mod for Halo PC/CE). You'll learn:
+Welcome to the world of SAPP Lua scripting for Halo PC and Custom Edition. This guide will take you from zero to writing
+your own server scripts, whether you want to welcome players, handle chat commands, track kills, or even tap into system
+functions with LuaJIT and FFI.
 
-- The basics of SAPP Lua scripting (events, callbacks, API version)
+You will learn:
+
+- The essential structure of every SAPP Lua script (API version, events, callbacks)
 - Three complete tutorials: Welcome Message, Chat Command, and Kill Counter
-- How to use **LuaJIT** and the **FFI library** for advanced functionality
-- A blank template with every available event callback
+- How to use LuaJIT and the FFI library for advanced system integration
+- A blank template with every available event callback to jumpstart your projects
 
-All code examples are fully functional and ready to use on your server.
+All code examples are ready to run on your dedicated server.
 
 ---
 
-## 1. The Basics: Every SAPP Script Needs This
+## 1. The Basics: What Every SAPP Script Needs
 
-All SAPP Lua scripts must declare the API version at the top:
+Every SAPP Lua script must declare the API version at the top. This tells the server which Lua API your script expects.
 
 ```lua
 api_version = '1.12.0.0'
 ```
 
-This tells SAPP which Lua API version the script expects. After that, you register callbacks inside `OnScriptLoad()` and
-implement the corresponding functions.
+After that, you register callbacks inside `OnScriptLoad()` and implement the corresponding functions.
 
 ### Core Structure
 
@@ -51,13 +53,17 @@ function OnPlayerJoin(playerIndex)
 end
 ```
 
+> **Tip:** Always test your scripts on a local server first. A small mistake (like an infinite loop) can crash the
+> server.
+
 ---
 
 ## 2. Tutorial 1: Welcome Message
 
 **File:** `welcome-message.lua`
 
-This script greets players when they join and displays the current map and game mode.
+This script greets players when they join and displays the current map and game mode. It uses a short delay so the
+message does not appear immediately, giving the game a moment to settle.
 
 ```lua
 ---------------------------------------------------
@@ -156,12 +162,15 @@ function DelayedWelcome(playerIndex)
 end
 ```
 
-**Key concepts:**
+### Key Concepts
 
-- `register_callback(cb['EVENT_JOIN'], "OnPlayerJoin")` - calls your function when a player joins.
-- `timer(milliseconds, "functionName", params)` - delays execution.
-- `get_var(index, "$name")` - retrieves player or server variables.
-- `rprint(playerIndex, message)` - sends a private message to that player.
+- `register_callback(cb['EVENT_JOIN'], "OnPlayerJoin")` – Calls your function when a player joins.
+- `timer(milliseconds, "functionName", params)` – Delays execution.
+- `get_var(index, '$name')` – Retrieves player or server variables.
+- `rprint(playerIndex, message)` – Sends a private message to that player.
+
+> **Warning:** The `timer` function expects milliseconds. A common mistake is to pass seconds directly. Always multiply
+> seconds by 1000.
 
 ---
 
@@ -169,7 +178,8 @@ end
 
 **File:** `Chat Command.lua`
 
-This script responds to player chat commands like `!hello`.
+This script responds to player chat commands like `!hello`. It blocks the original message from appearing in global
+chat, so only the command response is seen.
 
 ```lua
 ---------------------------------------------------
@@ -218,11 +228,14 @@ function OnPlayerChat(playerIndex, message, type)
 end
 ```
 
-**Key concepts:**
+### Key Concepts
 
-- `cb['EVENT_CHAT']` - triggered every time a player sends a chat message.
-- `return false` - prevents the message from being broadcast to other players.
-- Use `string.lower()` to make commands case‑insensitive.
+- `cb['EVENT_CHAT']` – Triggered every time a player sends a chat message.
+- `return false` – Prevents the message from being broadcast to other players.
+- `string.lower()` – Makes commands case-insensitive (so `!HELLO` works as well).
+
+> **Tip:** You can add more commands by extending the if-else chain or using a lookup table. For many commands, consider
+> a table mapping command names to handler functions.
 
 ---
 
@@ -230,7 +243,8 @@ end
 
 **File:** `Kill Counter.lua`
 
-This script tracks player kills and announces milestones.
+This script tracks player kills and announces milestones (like 5, 10, 25, and 50 kills). It also shows a private message
+to the killer after each kill.
 
 ```lua
 ---------------------------------------------------
@@ -311,12 +325,15 @@ function OnKill(victimIndex, killerIndex)
 end
 ```
 
-**Key concepts:**
+### Key Concepts
 
-- `cb['EVENT_KILL']` - triggered on every kill (victimIndex, killerIndex).
-- `get_var(killerIndex, "$kills")` - returns the player's current kill count.
-- `say_all(message)` - broadcasts a message to everyone on the server.
-- Use `tonumber()` because SAPP returns values as strings.
+- `cb['EVENT_KILL']` – Triggered on every kill (victimIndex, killerIndex).
+- `get_var(killerIndex, "$kills")` – Returns the player's current kill count as a string.
+- `say_all(message)` – Broadcasts a message to everyone on the server.
+- `tonumber()` – Converts the kill count from string to number for comparisons.
+
+> **Warning:** SAPP returns many values as strings (e.g., "$kills" comes as a string). Always use `tonumber()` before
+> arithmetic or comparisons, or you may get unexpected results.
 
 ---
 
@@ -324,17 +341,17 @@ end
 
 **File:** `Using LuaJIT and ffi in SAPP.md`
 
-SAPP uses **LuaJIT**, a high-performance just-in-time compiler for **Lua 5.1**. This means most Lua 5.1 code works, plus
-you get advanced features like the `ffi` library to interface with C functions and memory.
+SAPP uses **LuaJIT**, a high-performance just-in-time compiler for Lua 5.1. This means most Lua 5.1 code works normally,
+but you also get advanced features like the `ffi` library to call C functions and manipulate memory directly.
 
 ### 5.1 What LuaJIT Gives You
 
-- Fully compatible with **Lua 5.1**
-- `ffi` library: call C functions, define structs, manipulate memory
-- Performance improvements for math-heavy or iterative code
+- Full compatibility with **Lua 5.1**
+- `ffi` library – call C functions, define structs, work with raw memory
+- Better performance for math-heavy or iterative code
 
-> **Note:** SAPP scripts run in a sandboxed environment. Some OS APIs may be restricted, and unsafe memory operations
-> can crash the server.
+> **Note:** SAPP scripts run in a sandboxed environment. Some operating system APIs may be restricted, and unsafe memory
+> operations can crash the server. Proceed with caution.
 
 ### 5.2 Checking if `ffi` is Available
 
@@ -351,11 +368,11 @@ end
 ```
 
 - `pcall` prevents crashes if `ffi` is blocked.
-- Output appears in the server console.
+- The output appears in the server console.
 
 ### 5.3 Fully Functional Demo: Ticks Since Boot
 
-Real-world FFI use: calling `GetTickCount` from Windows to get milliseconds since system boot.
+Here is a real-world FFI example: calling `GetTickCount` from the Windows API to get milliseconds since system boot.
 
 ```lua
 api_version = '1.12.0.0'
@@ -384,19 +401,23 @@ function OnTick()
 end
 ```
 
-**How It Works**
+#### How It Works
 
-1. **`api_version`** - Required for SAPP 1.12.0.0 scripts.
-2. **`ffi.cdef`** - Declares the C function signature.
-3. **`ffi.C.GetTickCount()`** - Calls the Windows API to get milliseconds since system boot.
-4. **`cprint`** - Prints colored text to the server console (SAPP built-in).
-5. **`OnTick`** - Prints ticks every 10 seconds to show live updates.
+1. **`api_version`** – Required for SAPP 1.12.0.0 scripts.
+2. **`ffi.cdef`** – Declares the C function signature so LuaJIT knows how to call it.
+3. **`ffi.C.GetTickCount()`** – Calls the actual Windows API function.
+4. **`cprint`** – A SAPP built-in that prints colored text to the server console (color code 10 is green).
+5. **`OnTick`** – Runs every game tick (about 30 times per second). We use `os.clock()` to throttle the output to once
+   every 10 seconds.
 
 ### 5.4 Key Tips and Safety
 
-- Stick to **safe, read-only operations** at first.
-- Avoid writing memory directly unless you know the exact structure.
-- Remember: SAPP Lua is sandboxed, so not all OS APIs or memory operations are available.
+- Start with **safe, read-only operations**. Do not write to arbitrary memory addresses.
+- Avoid writing memory directly unless you know the exact structure and offset.
+- Remember that SAPP Lua is sandboxed; not all OS APIs or memory operations are available.
+
+> **Tip:** Use FFI to read server performance counters, system time, or interact with external libraries – but always
+> test thoroughly on a non-production server first.
 
 ---
 
@@ -404,7 +425,7 @@ end
 
 **File:** `blank_tutorial.lua`
 
-Use this as a starting point for your own scripts. It includes every available SAPP event callback with helpful
+Use this template as a starting point for your own scripts. It includes every available SAPP event callback with helpful
 comments.
 
 ```lua
@@ -637,6 +658,6 @@ Now that you have the basics and a full template, you can:
 
 - Combine multiple event callbacks into one script.
 - Use `timer()` for delayed or repeating actions.
-- Experiment with `get_var()` and `set_var()` to modify player properties.
+- Experiment with `get_var()` and `set_var()` to modify player properties (health, shields, weapons).
 - Explore the FFI library for advanced system integration.
 - Join the HSP community to share your scripts and get help.
