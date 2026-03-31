@@ -639,7 +639,7 @@ a:hover {
 }
 /*====== END OF PWA STYLES ======*/
 
-/* ========== BLOG STYLES ========== */
+/* ========== BLOG LISTING STYLES ========== */
 .post-list {
     list-style: none;
     padding: 0;
@@ -856,6 +856,22 @@ a:hover {
 }
 
 @media (max-width: 768px) {
+    .nav-desktop {
+        display: none;
+    }
+
+    .hamburger {
+        display: flex;
+    }
+
+    .nav-mobile {
+        display: flex;
+    }
+
+    .header.active {
+        background: rgba(255, 255, 255, 0.98);
+    }
+
     .post-list li {
         padding: 1.2rem;
     }
@@ -886,6 +902,12 @@ a:hover {
     }
 }
 
+@media (min-width: 769px) {
+    .nav-mobile {
+        display: none !important;
+    }
+}
+
 @media (max-width: 480px) {
     .post-list a {
         font-size: 1.2rem;
@@ -893,31 +915,6 @@ a:hover {
 
     .post-date {
         font-size: 0.75rem;
-    }
-}
-/* ========== END OF BLOG STYLES ========== */
-
-@media (max-width: 768px) {
-    .nav-desktop {
-        display: none;
-    }
-
-    .hamburger {
-        display: flex;
-    }
-
-    .nav-mobile {
-        display: flex;
-    }
-
-    .header.active {
-        background: rgba(255, 255, 255, 0.98);
-    }
-}
-
-@media (min-width: 769px) {
-    .nav-mobile {
-        display: none !important;
     }
 }
 
