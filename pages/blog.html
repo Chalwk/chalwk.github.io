@@ -14,27 +14,209 @@ permalink: /blog/
             <ul class="post-list">
                 {% for post in site.posts %}
                 <li class="post-item">
-
                     <h2 class="post-title">
                         <a href="{{ post.url | relative_url }}">
                             {{ post.title }}
                         </a>
                     </h2>
-
                     <div class="post-meta">
                         <span class="post-date">
                             {{ post.date | date: "%B %-d, %Y" }}
                         </span>
                     </div>
-
                     <p class="post-excerpt">
                         {{ post.excerpt | strip_html | truncatewords: 30 }}
                     </p>
-
                 </li>
                 {% endfor %}
             </ul>
 
+            <div id="paginated-post-list"></div>
+            <div class="pagination-container" id="pagination-controls"></div>
         </div>
     </div>
 </section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const POSTS_PER_PAGE = 5;
+        const originalList = document.querySelector('.post-list');
+        if (!originalList) {
+            document.getElementById('paginated-post-list').innerHTML = '<p>No blog posts found.</p>';
+            return;
+        }
+        const allPosts = Array.from(originalList.querySelectorAll('.post-item'));
+        originalList.style.display = 'none';
+        if (allPosts.length === 0) {
+            document.getElementById('paginated-post-list').innerHTML = '<p>No blog posts found.</p>';
+            return;
+        }
+        const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
+        function getCurrentPageFromHash() {
+            const hash = window.location.hash;
+            const match = hash.match(/page-(\d+)/);
+            if (match && match[1]) {
+                let page = parseInt(match[1], 10);
+                if (isNaN(page)) page = 1;
+                if (page < 1) page = 1;
+                if (page > totalPages) page = totalPages;
+                return page;
+            }
+            return 1;
+        }
+        let currentPage = getCurrentPageFromHash();
+        function renderPage(page) {
+            const start = (page - 1) * POSTS_PER_PAGE;
+            const end = start + POSTS_PER_PAGE;
+            const postsToShow = allPosts.slice(start, end);
+            const container = document.getElementById('paginated-post-list');
+            container.innerHTML = '';
+            if (postsToShow.length === 0) {
+                container.innerHTML = '<p>No posts on this page.</p>';
+                return;
+            }
+            const newList = document.createElement('ul');
+            newList.className = 'post-list';
+            postsToShow.forEach(post => {
+                const clonedItem = post.cloneNode(true);
+                newList.appendChild(clonedItem);
+            });
+            container.appendChild(newList);
+        }
+        function renderPagination() {
+            const controlsContainer = document.getElementById('pagination-controls');
+            controlsContainer.innerHTML = '';
+            if (totalPages <= 1) return;
+            const nav = document.createElement('nav');
+            nav.setAttribute('aria-label', 'Blog pagination');
+            nav.className = 'pagination-nav';
+            const prevDisabled = currentPage === 1;
+            const nextDisabled = currentPage === totalPages;
+            const prevBtn = document.createElement('button');
+            prevBtn.innerHTML = '&laquo; Prev';
+            prevBtn.className = 'pagination-btn prev-btn';
+            if (prevDisabled) {
+                prevBtn.disabled = true;
+                prevBtn.setAttribute('aria-disabled', 'true');
+            } else {
+                prevBtn.addEventListener('click', () => {
+                    if (currentPage > 1) setPage(currentPage - 1);
+                });
+            }
+            const nextBtn = document.createElement('button');
+            nextBtn.innerHTML = 'Next &raquo;';
+            nextBtn.className = 'pagination-btn next-btn';
+            if (nextDisabled) {
+                nextBtn.disabled = true;
+                nextBtn.setAttribute('aria-disabled', 'true');
+            } else {
+                nextBtn.addEventListener('click', () => {
+                    if (currentPage < totalPages) setPage(currentPage + 1);
+                });
+            }
+            const pageNumbersDiv = document.createElement('div');
+            pageNumbersDiv.className = 'pagination-numbers';
+            let startPage = Math.max(1, currentPage - 2);
+            let endPage = Math.min(totalPages, currentPage + 2);
+            if (endPage - startPage < 4) {
+                if (startPage === 1) endPage = Math.min(totalPages, startPage + 4);
+                if (endPage === totalPages) startPage = Math.max(1, endPage - 4);
+            }
+            for (let i = startPage; i <= endPage; i++) {
+                const pageBtn = document.createElement('button');
+                pageBtn.textContent = i;
+                pageBtn.className = 'pagination-number';
+                if (i === currentPage) {
+                    pageBtn.classList.add('active');
+                    pageBtn.setAttribute('aria-current', 'page');
+                }
+                pageBtn.addEventListener('click', (function(pageNum) {
+                    return function() { setPage(pageNum); };
+                })(i));
+                pageNumbersDiv.appendChild(pageBtn);
+            }
+            nav.appendChild(prevBtn);
+            nav.appendChild(pageNumbersDiv);
+            nav.appendChild(nextBtn);
+            controlsContainer.appendChild(nav);
+        }
+        function setPage(page) {
+            if (page < 1) page = 1;
+            if (page > totalPages) page = totalPages;
+            if (page === currentPage) return;
+            currentPage = page;
+            renderPage(currentPage);
+            renderPagination();
+            history.pushState(null, null, '#page-' + currentPage);
+        }
+        window.addEventListener('hashchange', function() {
+            const newPage = getCurrentPageFromHash();
+            if (newPage !== currentPage) {
+                currentPage = newPage;
+                renderPage(currentPage);
+                renderPagination();
+            }
+        });
+        renderPage(currentPage);
+        renderPagination();
+        if (!window.location.hash) {
+            history.replaceState(null, null, '#page-1');
+        }
+    });
+</script>
+
+<style>
+    .pagination-container {
+        margin-top: 3rem;
+        text-align: center;
+    }
+    .pagination-nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    .pagination-btn,
+    .pagination-number {
+        background: transparent;
+        border: 1px solid var(--gray-light);
+        color: var(--dark);
+        font-weight: 500;
+        padding: 0.5rem 1rem;
+        border-radius: var(--radius);
+        cursor: pointer;
+        transition: var(--transition);
+        font-size: 0.9rem;
+        min-width: 2.5rem;
+        text-align: center;
+    }
+    .pagination-btn:hover:not(:disabled),
+    .pagination-number:hover:not(.active) {
+        background: var(--primary);
+        border-color: var(--primary);
+        color: white;
+        transform: translateY(-2px);
+    }
+    .pagination-number.active {
+        background: var(--primary);
+        border-color: var(--primary);
+        color: white;
+        cursor: default;
+        box-shadow: var(--shadow-sm);
+    }
+    .pagination-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+    @media (max-width: 640px) {
+        .pagination-nav {
+            gap: 0.4rem;
+        }
+        .pagination-btn,
+        .pagination-number {
+            padding: 0.35rem 0.7rem;
+            font-size: 0.8rem;
+        }
+    }
+</style>
