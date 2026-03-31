@@ -158,10 +158,10 @@ end
 
 **Key concepts:**
 
-- `register_callback(cb['EVENT_JOIN'], "OnPlayerJoin")` – calls your function when a player joins.
-- `timer(milliseconds, "functionName", params)` – delays execution.
-- `get_var(index, "$name")` – retrieves player or server variables.
-- `rprint(playerIndex, message)` – sends a private message to that player.
+- `register_callback(cb['EVENT_JOIN'], "OnPlayerJoin")` - calls your function when a player joins.
+- `timer(milliseconds, "functionName", params)` - delays execution.
+- `get_var(index, "$name")` - retrieves player or server variables.
+- `rprint(playerIndex, message)` - sends a private message to that player.
 
 ---
 
@@ -220,8 +220,8 @@ end
 
 **Key concepts:**
 
-- `cb['EVENT_CHAT']` – triggered every time a player sends a chat message.
-- `return false` – prevents the message from being broadcast to other players.
+- `cb['EVENT_CHAT']` - triggered every time a player sends a chat message.
+- `return false` - prevents the message from being broadcast to other players.
 - Use `string.lower()` to make commands case‑insensitive.
 
 ---
@@ -313,9 +313,9 @@ end
 
 **Key concepts:**
 
-- `cb['EVENT_KILL']` – triggered on every kill (victimIndex, killerIndex).
-- `get_var(killerIndex, "$kills")` – returns the player’s current kill count.
-- `say_all(message)` – broadcasts a message to everyone on the server.
+- `cb['EVENT_KILL']` - triggered on every kill (victimIndex, killerIndex).
+- `get_var(killerIndex, "$kills")` - returns the player's current kill count.
+- `say_all(message)` - broadcasts a message to everyone on the server.
 - Use `tonumber()` because SAPP returns values as strings.
 
 ---
@@ -386,11 +386,11 @@ end
 
 **How It Works**
 
-1. **`api_version`** – Required for SAPP 1.12.0.0 scripts.
-2. **`ffi.cdef`** – Declares the C function signature.
-3. **`ffi.C.GetTickCount()`** – Calls the Windows API to get milliseconds since system boot.
-4. **`cprint`** – Prints colored text to the server console (SAPP built-in).
-5. **`OnTick`** – Prints ticks every 10 seconds to show live updates.
+1. **`api_version`** - Required for SAPP 1.12.0.0 scripts.
+2. **`ffi.cdef`** - Declares the C function signature.
+3. **`ffi.C.GetTickCount()`** - Calls the Windows API to get milliseconds since system boot.
+4. **`cprint`** - Prints colored text to the server console (SAPP built-in).
+5. **`OnTick`** - Prints ticks every 10 seconds to show live updates.
 
 ### 5.4 Key Tips and Safety
 

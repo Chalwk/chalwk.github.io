@@ -1,80 +1,138 @@
 ---
 layout: post
 title: "Halo PC/CE: Modding References & Tools"
-date: 31-03-2026
+date: 2026-03-31
 author: Jericho Crosby
 categories: [ education, halo, modding ]
 tags: [ sapp, lua, halo, scripting, tutorial ]
 ---
 
-* [**SAPP docs (official)**](https://halo-sapp.readthedocs.io/en/latest/scripting/index.html) - SAPP's Lua API, events,
-  commands, and examples.
-* [**Phasor (legacy)**](https://phasor.halonet.net/) - legacy server extension/docs; helpful for older scripts and
+Whether you are tweaking weapon stats, building custom multiplayer maps, or writing Lua scripts
+for your server, having the right references and tools makes all the difference. This guide compiles the essential
+resources for Halo PC and Custom Edition (CE) modding - from classic HEK utilities to modern cross-platform toolchains.
+
+Let us dive in.
+
+---
+
+## Official Documentation & Community Hubs
+
+Start here for official docs, forums, and map repositories.
+
+- **[SAPP docs (official)](https://halo-sapp.readthedocs.io/en/latest/scripting/index.html)** - Complete Lua API,
+  events, commands, and examples for SAPP server extension.
+- **[Phasor (legacy)](https://phasor.halonet.net/)** - Legacy server extension and docs; useful for older scripts and
   historical examples.
-* [**Phasor V1 Docs**](http://phasor.halonet.net/archive/docs/05x.html) - Documentation for Phasor V1.
-* [**Phasor V2 Docs**](http://phasor.halonet.net/archive/docs/200.html) - Documentation for Phasor V2.
-* [**Halopedia - Halo: Combat Evolved (main)**](https://www.halopedia.org/Halo:_Combat_Evolved) - canonical game/tag
-  behavior & weapon overviews.
-* [**Halopedia - Category weapons**](https://www.halopedia.org/Halo:_Combat_Evolved#Weapons) - full list of weapons in
+- **[Phasor V1 Docs](http://phasor.halonet.net/archive/docs/05x.html)** - Documentation for Phasor V1.
+- **[Phasor V2 Docs](http://phasor.halonet.net/archive/docs/200.html)** - Documentation for Phasor V2.
+- **[Halopedia - Halo: Combat Evolved](https://www.halopedia.org/Halo:_Combat_Evolved)** - Canonical game behavior, tag
+  structure, and weapon overviews.
+- **[Halopedia - Weapons category](https://www.halopedia.org/Halo:_Combat_Evolved#Weapons)** - Full list of weapons in
   Halo.
-* [**Netcode (Wikipedia)**](https://en.wikipedia.org/wiki/Netcode) - general networking concepts (
-  tickrate/latency/packet loss) useful for server sync debugging.
-* [**Exploring the Halo 1 System Link Protocol - hllmn.net (2023-09-18)**](https://hllmn.net/blog/2023-09-18_h1x-net/) -
-  deep, low-level CE networking reverse-engineering.
-* [**OpenCarnage (forum & community)**](https://opencarnage.net/) - threads, HEK help, scripts, and CE community
-  resources.
-* [**Elite Game Servers - SAPP overview & examples**](https://www.elitegameservers.net/sapp/) - practical SAPP usage
-  notes.
-* [**HAC2 Map Repo**](https://maps.halonet.net/) - Custom maps for PC & CE.
-* [**HaloMaps.org**](https://www.halomaps.org/hce/) - Custom maps for PC & CE.
+- **[OpenCarnage](https://opencarnage.net/)** - Forums, HEK help, scripts, and CE community discussions.
+- **[Elite Game Servers - SAPP overview](https://www.elitegameservers.net/sapp/)** - Practical SAPP usage notes and
+  examples.
+- **[HAC2 Map Repo](https://maps.halonet.net/)** - Custom maps for PC & CE.
+- **[HaloMaps.org](https://www.halomaps.org/hce/)** - Another large archive of custom maps.
+
+## Deep Dives & Networking
+
+When you need to understand netcode, packet loss, or the Halo 1 system link protocol:
+
+- **[Netcode (Wikipedia)](https://en.wikipedia.org/wiki/Netcode)** - General networking concepts (tickrate, latency,
+  packet loss) useful for server sync debugging.
+- **[Exploring the Halo 1 System Link Protocol](https://hllmn.net/blog/2023-09-18_h1x-net/)** (hllmn.net, 2023) -
+  Low‑level reverse engineering of CE networking.
+
+> **Tip:** Understanding how Halo handles network updates will save you hours of frustration when debugging weird
+> desyncs or script lag.
 
 ---
 
-# Extra references - Modding tools
+## Modding Tools
 
-**Classic HEK (Halo Editing Kit) tools**
+You have two main eras of tooling: the classic HEK suite and modern community replacements.
 
-* **HEK:** [Nexus Mods](https://www.nexusmods.com/halo/mods/6)
-* **Sapien (scenario/map editor)** - in-editor placement, scenario preview & radiosity (part of HEK / CE mod tools).
-* **Guerilla (tag editor)** - view/edit structured tag fields (we use Guerilla for many tag-level tweaks).
-* **Tool (build/asset compiler)** - bitmap & asset conversion, map build pipeline.
-* **Tag Test (`tag_test.exe`)** - test & debug maps locally (part of HEK / mod tools).
-  (These are bundled with the classic HEK / CE Mod Tools; see Reclaimers / HEK resources for downloads and guides.)
+### Classic HEK (Halo Editing Kit)
 
-**Modern & community toolchains**
+These are the original tools Bungie released for CE. They still work, but require some patience on modern Windows.
 
-* **Invader - official project page & downloads (modern, cross-platform toolkit)
-  **: [Open Carnage](https://invader.opencarnage.net/) and GitHub: [SnowyMouse](https://github.com/SnowyMouse/invader).
-* **Assembly (XboxChaos) - multi-generation .map editor / patcher**: [XboxChaos](https://github.com/XboxChaos/Assembly).
-* **MEK / Mozz Editing Kit (MEK)** - alternate community editing suite (extractors &
-  GUIs): [Sigmmma](https://github.com/Sigmmma/mek).
+- **[HEK on Nexus Mods](https://www.nexusmods.com/halo/mods/6)** - The full Halo Editing Kit installer.
+- **Sapien** - Scenario and map editor (in‑editor placement, scenario preview, radiosity).
+- **Guerilla** - Tag editor (view and edit structured tag fields - your go‑to for weapon tweaks).
+- **Tool** - Command‑line asset compiler (bitmap conversion, map build pipeline).
+- **Tag Test (`tag_test.exe`)** - Launch and debug maps locally without a full server.
 
-**Client-side mods / scripting platforms**
+> **Warning:** Classic HEK tools are 32‑bit and may need compatibility settings (Windows 7 mode, admin rights). Some
+> users report better stability with `dgVoodoo2` for DirectX 9 fallback.
 
-* **Chimera (CE client mod & Lua support)** - [Chimera](https://github.com/SnowyMouse/chimera) (client QoL + modding +
-  scripting).
-* **Balltze (plugin-loader / mod platform for CE)** - [MangoFizz](https://github.com/MangoFizz/balltze)
-  and [Shadowmods](https://balltze.shadowmods.net/).
+### Modern & Community Toolchains
+
+These tools are cross‑platform, scriptable, and under active development.
+
+- **[Invader](https://invader.opencarnage.net/)** - Modern, cross‑platform toolkit for extracting, building, and
+  modifying Halo maps.  
+  GitHub: [SnowyMouse/invader](https://github.com/SnowyMouse/invader)
+- **[Assembly](https://github.com/XboxChaos/Assembly)** - Multi‑generation `.map` editor and patcher (XboxChaos).
+- **[MEK (Mozz Editing Kit)](https://github.com/Sigmmma/mek)** - Alternate editing suite with extractors and GUIs.
+
+> **Tip:** Use Invader if you need batch/CI workflows or want to avoid the classic HEK's quirks. Assembly is excellent
+> for quick tag edits and patching existing maps.
 
 ---
 
-## Lua / scripting helpers & libs
+## Client‑Side Mods & Scripting Platforms
 
-* **lua-blam (Sledmine)** - memory/tag helper module for CE Lua
-  scripting: [Sledmine](https://github.com/Sledmine/lua-blam).
-* **Mercury (package manager for CE mods)** - [Sledmine](https://github.com/Sledmine/mercury) (helps bundle/distribute
-  addons).
+Enhance your local game or test scripts without a dedicated server.
 
-**Asset / model pipelines (Blender & exporters)**
+- **[Chimera](https://github.com/SnowyMouse/chimera)** - CE client modification with Lua support, quality‑of‑life
+  features, and modding APIs.
+- **[Balltze](https://github.com/MangoFizz/balltze)** - Plugin loader and mod platform for CE.  
+  Documentation: [balltze.shadowmods.net](https://balltze.shadowmods.net/)
 
-* **Halo Asset Blender Development Toolset** - Blender addon for importing/exporting H1
-  assets: [General-101](https://github.com/General-101/Halo-Asset-Blender-Development-Toolset).
-* **Other Blender tools / importers (ekur, foundry, blender-halo-tools)** - search GitHub for `ekur`, `Foundry`, or
-  `blender-halo-tools` for community add-ons and pipelines.
+> **Tip:** Run Chimera locally to prototype Lua scripts before deploying them to a SAPP‑powered server.
 
-## Quick usage tips
+---
 
-* If you want a **classic HEK workflow** - use **Sapien + Guerilla + Tool + Tag Test** (HEK).
-* For **modern, scriptable workflows** (batch/CI, safer extraction), use **Invader + Assembly + MEK**.
-* For **client-side scripting / QoL / testing** - run **Chimera** locally and test server scripts with **SAPP** on the
-  server.
+## Lua Scripting Helpers & Package Management
+
+These libraries make writing and distributing CE Lua scripts easier.
+
+- **[lua-blam](https://github.com/Sledmine/lua-blam)** - Memory and tag helper module for CE Lua scripting (by
+  Sledmine).
+- **[Mercury](https://github.com/Sledmine/mercury)** - Package manager for CE mods. Helps bundle and distribute addons
+  cleanly.
+
+> **Best practice:** Use Mercury to manage dependencies and share your scripts with the community.
+
+---
+
+## Asset Pipelines & Blender Tools
+
+If you are creating custom models or importing assets, these Blender addons are essential.
+
+- **[Halo Asset Blender Development Toolset](https://github.com/General-101/Halo-Asset-Blender-Development-Toolset)** -
+  Import/export H1 assets directly in Blender.
+- **Other community tools** - Search GitHub for `ekur`, `Foundry`, or `blender-halo-tools` to find additional importers
+  and pipelines.
+
+> **Tip:** Always export to the correct tag format (e.g., `.gbxmodel` for models) and use Tool or Invader to compile
+> them into your map.
+
+---
+
+## Quick Usage Tips - Which Workflow Should You Choose?
+
+- **Classic HEK workflow** - Use **Sapien + Guerilla + Tool + Tag Test** if you are following old tutorials or need
+  precise radiosity builds.  
+  *Best for: learning the original pipeline, building singleplayer scenarios.*
+
+- **Modern, scriptable workflow** - Reach for **Invader + Assembly + MEK** when you want cross‑platform support, batch
+  operations, or safer extraction.  
+  *Best for: team projects, CI pipelines, or if you are tired of HEK crashes.*
+
+- **Client‑side scripting / testing** - Run **Chimera** locally to write and test Lua scripts. Once stable, deploy the
+  same scripts on a **SAPP** server.  
+  *Best for: rapid prototyping and quality‑of‑life mods.*
+
+---
