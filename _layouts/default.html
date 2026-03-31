@@ -1,18 +1,15 @@
 <!-- Copyright (c) 2024-2026. Jericho Crosby (Chalwk). -->
 
 <!DOCTYPE html>
-<html lang="en">
-{% include head.html %}
+
+<html lang="en">{% include head.html %}
 <body>
-<header class="header">
-    {% include header.html %}
-</header>
-<main>
-    {{ content }}
-</main>
+
+<header class="header">{% include header.html %}</header>
+<main>{{ content }}</main>
 
 <div id="pwa-install-container">
-    <button id="pwa-install-button" class="install-pwa-btn" aria-label="Install App">
+    <button aria-label="Install App" class="install-pwa-btn" id="pwa-install-button">
         <i class="fas fa-download"></i> Install App
     </button>
 </div>
@@ -30,5 +27,6 @@
     }
 </script>
 {% endif %}
+
 </body>
 </html>
