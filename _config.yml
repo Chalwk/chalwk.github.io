@@ -4,6 +4,7 @@ title: Jericho Crosby (Chalwk)
 description: Autistic developer, gamer, and advocate - building tools, mods, and games.
 url: https://chalwk.github.io
 baseurl: ""
+incremental: true
 
 # PWA Defaults
 default_icons:
