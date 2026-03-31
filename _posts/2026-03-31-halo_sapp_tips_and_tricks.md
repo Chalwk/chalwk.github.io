@@ -250,7 +250,7 @@ This avoids per-tick loops.
 * **Priority queues:** for tasks of different criticality (e.g., immediate score updates vs. log writes), use separate
   queues to avoid blocking critical flows.
 
-# startup_hang_max_idle_fix.md
+# Startup Hang Max Idle Fix
 
 Add this line to your SAPP `init.txt` (the one in the SAPP folder):
 
@@ -273,7 +273,7 @@ This prevents the default 60-second idle/mapcycle behavior that commonly shows u
   pause, but if you rely on idle mapcycle behavior for other reasons you may want to test the change first.
 * Make sure you edit the correct `init.txt` (the SAPP one) - some installs have two `init.txt` files (server vs. SAPP).
 
-# timing_and_movement.md
+# Timing & Movement
 
 **Timing & Movement**
 
@@ -330,15 +330,15 @@ approximations.
 
 # Sources:
 
-[Scripting - c20](https://c20.reclaimers.net/h1/scripting)
-[Halo in 60 FPS - Halo PC: Development - Open Carnage](https://opencarnage.net/index.php?%2Ftopic%2F6527-halo-in-60-fps)
-[Set up metric units in Blender - Halo CE - Open Carnage](https://opencarnage.net/index.php?%2Ftopic%2F8402-set-up-metric-units-in-blender)
-[Scale and unit conversions - c20](https://c20.reclaimers.net/general/scale)
-[weapon - c20](https://c20.reclaimers.net/h1/tags/object/item/weapon)
-[(HEK) Halo Editing Kit for Halo (CE) Custom Edition](https://www.halomaps.org/hce/detail.cfm?fid=411)
-[Halo CE: The Xbox Experience - Open Carnage](https://opencarnage.net/index.php?%2Ftopic%2F5784-halo-ce-the-xbox-experience)
+- [Scripting - c20](https://c20.reclaimers.net/h1/scripting)
+- [Halo in 60 FPS - Halo PC: Development - Open Carnage](https://opencarnage.net/index.php?%2Ftopic%2F6527-halo-in-60-fps)
+- [Set up metric units in Blender - Halo CE - Open Carnage](https://opencarnage.net/index.php?%2Ftopic%2F8402-set-up-metric-units-in-blender)
+- [Scale and unit conversions - c20](https://c20.reclaimers.net/general/scale)
+- [weapon - c20](https://c20.reclaimers.net/h1/tags/object/item/weapon)
+- [(HEK) Halo Editing Kit for Halo (CE) Custom Edition](https://www.halomaps.org/hce/detail.cfm?fid=411)
+- [Halo CE: The Xbox Experience - Open Carnage](https://opencarnage.net/index.php?%2Ftopic%2F5784-halo-ce-the-xbox-experience)
 
-# assigning_3_or_more_weapons.md
+# Assigning 3 or more weapons
 
 Delay **tertiary** and **quaternary** assignments by `≥250ms` to prevent them from dropping.
 
@@ -387,7 +387,7 @@ end
 function OnScriptUnload() end
 ```
 
-# fixing_vehicle_physics_glitch.md
+# Fixing vehicle physics glitch
 
 Sometimes, directly writing a vehicle's position with `write_vector3d()` can cause glitchy physics. This method reduces,
 but does not fully eliminate teleport glitches.
@@ -412,7 +412,7 @@ write_bit(object + 0x10, 0, 0)
 write_bit(object + 0x10, 5, 0)
 ```
 
-# name_password_admin_setup.md
+# Name Password Admin Setup
 
 I generally **do not recommend adding users as hash-admins**, since many players are using pirated clients. Similarly,
 because most players have **dynamic IP addresses**, assigning them as IP-admins is often impractical.
@@ -442,7 +442,7 @@ For these members, I advise using the **Name/Password system** instead.
 
 For users with **legitimate CD Keys**, the **hash-based system** remains the recommended method.
 
-# player_count_var_delay_fix.md
+# Player Count Var Delay
 
 During `EVENT_LEAVE`, `get_var(0, "$pn")` does not update immediately.
 Subtract `1` manually to get the correct player count.
@@ -456,7 +456,7 @@ function OnLeave()
 end
 ```
 
-# rand_upper_bound.md
+# SAPP's rand() upper bound
 
 SAPP's built-in `rand()` excludes the maximum value.
 Fix: increment the upper bound by `1` to include it.
@@ -469,9 +469,7 @@ local i = rand(1, #t + 1)
 print(t[i]) -- ensures 1 to #t
 ```
 
-# sapp_console_colors.md
-
-## 🎨 SAPP Console Color Tutorial (`cprint` / `set_ccolor`)
+# 🎨 SAPP Console Color Tutorial (`cprint` / `set_ccolor`)
 
 Understanding how to use colors in SAPP's console and messages can make your server logs, automated messages, and
 scripts much more readable and organized. The system is based on the classic Windows console color attributes.
@@ -568,9 +566,7 @@ to read. Use them sparingly for important warnings.
 **Resetting:** If you change the console with `set_ccolor` and want to go back to the default (Light Gray on Black), use
 `set_ccolor 7`.
 
-# sapp_dos_protection.md
-
-## SAPP's "DoS" Protection: Explained
+# SAPP's "DoS" Protection: Explained
 
 Let's be precise: SAPP offers **DoS (Denial-of-Service)** protection, which is different from **DDoS (Distributed
 Denial-of-Service)**. The key difference is one attacker vs. many.
