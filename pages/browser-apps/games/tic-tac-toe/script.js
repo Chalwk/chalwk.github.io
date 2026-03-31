@@ -1,4 +1,4 @@
-/* Copyright (c) 2024-2026. Jericho Crosby (Chalwk) */
+// Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
 
 const gameBoard = document.getElementById('game-board');
 const status = document.getElementById('status');

@@ -1,4 +1,4 @@
-/* Copyright (c) 2024-2026. Jericho Crosby (Chalwk) */
+// Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
 
 const MAX_GUESSES = 6;
 const WORD_LENGTH = 5;

@@ -1,4 +1,4 @@
-/* Copyright (c) 2024-2026. Jericho Crosby (Chalwk) */
+// Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
 
 const taskForm = document.getElementById('task-form');
 const tasksList = document.getElementById('tasks-list');

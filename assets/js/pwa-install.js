@@ -14,6 +14,7 @@ if (installButton) {
     installButton.addEventListener('click', async () => {
         if (!deferredPrompt) return;
         deferredPrompt.prompt();
+        // noinspection JSUnresolvedVariable
         const { outcome } = await deferredPrompt.userChoice;
         console.log(`User response to install prompt: ${outcome}`);
         deferredPrompt = null;
