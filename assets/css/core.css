@@ -586,11 +586,20 @@ a:hover {
 }
 
 /* ==== PWA STYLES ==== */
+
 @media all and (display-mode: standalone) {
     .header,
     footer {
         display: none;
     }
+}
+
+#pwa-install-container {
+    display: none;
+}
+
+#pwa-install-container.visible {
+    display: block;
 }
 
 .install-pwa-btn {
@@ -619,13 +628,13 @@ a:hover {
 }
 
 @media (max-width: 768px) {
-    .install-pwa-btn {
-        display: flex;
+    #pwa-install-container.visible {
+        display: block;
     }
 }
 
 @media (min-width: 769px) {
-    .install-pwa-btn {
+    #pwa-install-container.visible {
         display: none;
     }
 }

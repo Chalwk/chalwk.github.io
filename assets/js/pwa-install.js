@@ -5,8 +5,8 @@ let deferredPrompt;
 window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
-    const installContainer = document.getElementById('pwa-install-container');
-    if (installContainer) installContainer.style.display = 'block';
+    const container = document.getElementById('pwa-install-container');
+    if (container) container.classList.add('visible');
 });
 
 const installButton = document.getElementById('pwa-install-button');
@@ -15,14 +15,15 @@ if (installButton) {
         if (!deferredPrompt) return;
         deferredPrompt.prompt();
         const { outcome } = await deferredPrompt.userChoice;
-        console.log(`User response to the install prompt: ${outcome}`);
+        console.log(`User response to install prompt: ${outcome}`);
         deferredPrompt = null;
-        document.getElementById('pwa-install-container').style.display = 'none';
+        const container = document.getElementById('pwa-install-container');
+        if (container) container.classList.remove('visible');
     });
 }
 
 window.addEventListener('appinstalled', () => {
-    console.log('PWA was installed');
-    document.getElementById('pwa-install-container').style.display = 'none';
+    const container = document.getElementById('pwa-install-container');
+    if (container) container.classList.remove('visible');
     deferredPrompt = null;
 });
