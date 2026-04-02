@@ -16,12 +16,12 @@ layout: default
                     </a>
                 </div>
 
-                <p class="post-meta">
-                    <time datetime="{{ page.date | date_to_xmlschema }}">Published: {{ page.date | date: "%B %-d, %Y" }}</time>
+                <div class="post-meta">
+                    <span class="publish-date"><time datetime="{{ page.date | date_to_xmlschema }}">Published: {{ page.date | date: "%B %-d, %Y" }}</time></span>
                     {% if page.last_modified_at %}
-                    <br>Updated: <time datetime="{{ page.last_modified_at | date_to_xmlschema }}">{{ page.last_modified_at | date: "%B %-d, %Y" }}</time>
+                    <span class="update-date"><time datetime="{{ page.last_modified_at | date_to_xmlschema }}">Updated: {{ page.last_modified_at | date: "%B %-d, %Y" }}</time></span>
                     {% endif %}
-                </p>
+                </div>
 
                 <div class="post-content">{{ content }}</div>
             </article>
@@ -30,12 +30,18 @@ layout: default
 </section>
 
 <style>
+    :root {
+        --transition-fast: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
     .post-card {
-        background: linear-gradient(145deg, #ffffff, #f9f9f9);
+        border: 2px solid var(--gray-light);
         border-radius: var(--radius-lg);
+        background: white;
+        background: linear-gradient(145deg, #ffffff, #f9f9f9);
         padding: 2.5rem;
         box-shadow: var(--shadow);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        transition: var(--transition-fast);
         border-left: 6px solid transparent;
         border-image: linear-gradient(180deg, var(--primary), var(--secondary), var(--accent)) 1;
     }
@@ -188,6 +194,7 @@ layout: default
         opacity: 0.8;
         transition: opacity 0.2s;
     }
+
     .copy-btn:hover {
         opacity: 1;
     }

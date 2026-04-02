@@ -660,23 +660,6 @@ a:hover {
     border-radius: 20px;
 }
 
-.blog-section .about-card,
-.blog-section .post-card {
-    border: 2px solid var(--gray-light);
-    border-radius: var(--radius-lg);
-    background: white;
-    padding: 2rem;
-    box-shadow: var(--shadow);
-    transition: var(--transition);
-}
-
-@media (max-width: 768px) {
-    .blog-section .about-card,
-    .blog-section .post-card {
-        padding: 1.5rem;
-    }
-}
-
 main {
     margin-top: 80px;
 }
