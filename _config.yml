@@ -8,10 +8,6 @@ incremental: true
 highlighter: rouge
 markdown: kramdown
 
-kramdown:
-  input: GFM
-  smart_quotes: ["'", "'", '"', '"']
-
 # PWA Defaults
 default_icons:
   - src: "icons/icon-192x192.png"
