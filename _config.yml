@@ -32,12 +32,24 @@ social:
 locale: en_NZ
 
 # ============================================================
-# Plugins (must be listed here and in Gemfile)
+# Plugins
 # ============================================================
 plugins:
   - jekyll-seo-tag
   - jekyll-sitemap
   - jekyll-feed
+  - jekyll-paginate-v2      # ← modern pagination
+
+# ============================================================
+# Pagination V2 (blog)
+# ============================================================
+pagination:
+  enabled: true
+  per_page: 5
+  permalink: '/page:num/'
+  title: ':title - page :num'
+  sort_field: 'date'
+  sort_reverse: true
 
 # ============================================================
 # Default front matter for posts and pages
