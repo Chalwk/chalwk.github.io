@@ -37,6 +37,7 @@ locale: en_NZ
 plugins:
   - jekyll-seo-tag
   - jekyll-sitemap
+  - jekyll-feed
 
 # ============================================================
 # Default front matter for posts and pages
