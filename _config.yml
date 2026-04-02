@@ -8,10 +8,20 @@ incremental: true
 highlighter: rouge
 markdown: kramdown
 
-plugins:
-  - jekyll-seo-tag
-  - jekyll-sitemap
-  - jekyll-feed
+# Default front matter for posts and pages
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
+      author: "Jericho Crosby"
+      permalink: /blog/:year/:month/:day/:title/
+  - scope:
+      path: ""
+      type: pages
+    values:
+      layout: default
 
 # PWA Defaults
 default_icons:
@@ -24,7 +34,7 @@ default_icons:
     type: "image/png"
     purpose: "any maskable"
 
-default_categories: [ "accessibility", "games" ]
+default_categories: ["accessibility", "games"]
 
 default_urls:
   - "./"

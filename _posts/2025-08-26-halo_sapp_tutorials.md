@@ -1,8 +1,6 @@
 ---
-layout: post
 title: "Halo PC/CE: SAPP Lua Scripting"
-date: 2025-08-26
-author: Jericho Crosby
+date: 2025-09-08
 categories: [ education, halo, modding ]
 tags: [ sapp, lua, halo, scripting, tutorial ]
 ---

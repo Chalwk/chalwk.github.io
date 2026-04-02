@@ -1,8 +1,6 @@
 ---
-layout: post
 title: "Halo PC/CE: Server Port Forwarding"
 date: 2025-09-1
-author: Jericho Crosby
 categories: [ education, halo, modding ]
 tags: [ sapp, phasor, halo, server, port-forwarding, tutorial ]
 ---

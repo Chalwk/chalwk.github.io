@@ -1,8 +1,6 @@
 ---
-layout: post
 title: "Halo PC/CE: SAPP Tips & Tricks"
 date: 2025-09-8
-author: Jericho Crosby
 categories: [ education, halo, modding ]
 tags: [ sapp, lua, halo, scripting, tutorial ]
 ---

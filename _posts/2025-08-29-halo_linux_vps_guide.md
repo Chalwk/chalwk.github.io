@@ -1,8 +1,6 @@
 ---
-layout: post
 title: "Halo PC/CE: How to host a Linux VPS (Ubuntu 22.04)"
 date: 2025-08-29
-author: Jericho Crosby
 categories: [ education, halo, modding ]
 tags: [ sapp, lua, halo, scripting, tutorial ]
 ---
