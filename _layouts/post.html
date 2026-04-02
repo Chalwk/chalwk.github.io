@@ -17,10 +17,19 @@ layout: default
                 </div>
 
                 <div class="post-meta">
-                    <span class="publish-date"><time datetime="{{ page.date | date_to_xmlschema }}">Published: {{ page.date | date: "%B %-d, %Y" }}</time></span>
+                    <span class="publish-date">
+                        <time datetime="{{ page.date | date_to_xmlschema }}">Published: {{ page.date | date: "%B %-d, %Y" }}</time>
+                    </span>
                     {% if page.last_modified_at %}
-                    <span class="update-date"><time datetime="{{ page.last_modified_at | date_to_xmlschema }}">Updated: {{ page.last_modified_at | date: "%B %-d, %Y" }}</time></span>
+                    <span class="update-date">
+                        <time datetime="{{ page.last_modified_at | date_to_xmlschema }}">Updated: {{ page.last_modified_at | date: "%B %-d, %Y" }}</time>
+                    </span>
                     {% endif %}
+
+                    {% assign words = content | number_of_words %}
+                    <span class="reading-time">
+                        ~ {{ words | divided_by: 200 | at_least: 1 }} min read
+                    </span>
                 </div>
 
                 <div class="post-content">{{ content }}</div>
