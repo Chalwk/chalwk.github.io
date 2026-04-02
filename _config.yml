@@ -10,7 +10,7 @@ markdown: kramdown
 
 kramdown:
   input: GFM
-  smart_quotes: "none"
+  smart_quotes: ["'", "'", '"', '"']
 
 # PWA Defaults
 default_icons:
@@ -31,5 +31,5 @@ default_urls:
   - "./style.css"
   - "./script.js"
   - "./manifest.json"
-  - "./icons/icon-192x512.png"
+  - "./icons/icon-192x192.png"
   - "./icons/icon-512x512.png"
