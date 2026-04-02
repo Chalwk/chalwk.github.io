@@ -12,6 +12,15 @@ permalink: /blog/
             <h1 class="blog-heading">
                 <i class="fas fa-blog blog-icon"></i> Blog
             </h1>
+
+            <div class="blog-search">
+                <label for="search-input">Search blog posts</label>
+                <input autocomplete="off" id="search-input"
+                       placeholder="🔍 Search posts by title or content..."
+                       type="text">
+                <div class="search-results" id="search-results" style="display: none;"></div>
+            </div>
+
             <ul class="post-list">
                 {% for post in site.posts %}
                 <li class="post-item">
@@ -38,6 +47,93 @@ permalink: /blog/
     </div>
 </section>
 
+<style>
+    .blog-search {
+        margin-bottom: 2rem;
+        position: relative;
+    }
+
+    #search-input {
+        width: 100%;
+        padding: 0.8rem 1rem;
+        font-size: 1rem;
+        border: 2px solid var(--gray-light);
+        border-radius: var(--radius);
+        background: white;
+        transition: var(--transition);
+        font-family: inherit;
+    }
+
+    #search-input:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(30, 136, 229, 0.1);
+    }
+
+    .search-results {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        border: 1px solid var(--gray-light);
+        border-radius: var(--radius);
+        margin-top: 0.5rem;
+        max-height: 60vh;
+        overflow-y: auto;
+        box-shadow: var(--shadow-lg);
+        z-index: 100;
+    }
+
+    .search-result-item {
+        padding: 1rem;
+        border-bottom: 1px solid var(--gray-light);
+        transition: background 0.2s;
+    }
+
+    .search-result-item:last-child {
+        border-bottom: none;
+    }
+
+    .search-result-item:hover {
+        background: rgba(30, 136, 229, 0.05);
+    }
+
+    .search-result-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+    }
+
+    .search-result-title a {
+        color: var(--primary);
+        text-decoration: none;
+    }
+
+    .search-result-title a:hover {
+        text-decoration: underline;
+    }
+
+    .search-result-date {
+        font-size: 0.8rem;
+        color: var(--gray);
+        margin-bottom: 0.5rem;
+    }
+
+    .search-result-excerpt {
+        font-size: 0.9rem;
+        color: var(--dark);
+        line-height: 1.4;
+    }
+
+    .no-results {
+        padding: 2rem;
+        text-align: center;
+        color: var(--gray);
+    }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const POSTS_PER_PAGE = 5;
@@ -135,7 +231,7 @@ permalink: /blog/
             }
             for (let i = startPage; i <= endPage; i++) {
                 const pageBtn = document.createElement('button');
-                pageBtn.textContent = i;
+                pageBtn.textContent = String(i);
                 pageBtn.className = 'pagination-number';
                 if (i === currentPage) {
                     pageBtn.classList.add('active');
@@ -177,6 +273,46 @@ permalink: /blog/
         if (!window.location.hash) {
             history.replaceState(null, null, '#page-1');
         }
+
+        const searchInput = document.getElementById('search-input');
+        const resultsContainer = document.getElementById('search-results');
+        const paginatedContainer = document.getElementById('paginated-post-list');
+        const paginationControls = document.getElementById('pagination-controls');
+
+        resultsContainer.style.display = 'none';
+
+        SimpleJekyllSearch({
+            searchInput: searchInput,
+            resultsContainer: resultsContainer,
+            json: '{{ site.baseurl }}/search.json',
+            searchResultTemplate: `
+                <div class="search-result-item">
+                    <div class="search-result-title">
+                        <a href="{url}">{title}</a>
+                    </div>
+                    <div class="search-result-date">{date}</div>
+                    <div class="search-result-excerpt">{excerpt}</div>
+                </div>
+            `,
+            noResultsText: '<div class="no-results">No posts found. Try a different keyword.</div>',
+            limit: 10,
+            fuzzy: false
+        });
+
+        searchInput.addEventListener('input', function () {
+            const query = this.value.trim();
+            if (query === '') {
+                paginatedContainer.style.display = 'block';
+                paginationControls.style.display = 'flex';
+                resultsContainer.style.display = 'none';
+                renderPage(currentPage);
+                renderPagination();
+            } else {
+                paginatedContainer.style.display = 'none';
+                paginationControls.style.display = 'none';
+                resultsContainer.style.display = 'block';
+            }
+        });
     });
 </script>
 

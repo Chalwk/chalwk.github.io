@@ -1,0 +1,14 @@
+---
+layout: none
+---
+{% comment %} Copyright (c) 2024-2026. Jericho Crosby (Chalwk) {% endcomment %}
+[
+  {% for post in site.posts %}
+    {
+      "title": {{ post.title | jsonify }},
+      "url": {{ post.url | relative_url | jsonify }},
+      "date": {{ post.date | date: "%B %-d, %Y" | jsonify }},
+      "excerpt": {{ post.excerpt | strip_html | truncatewords: 30 | jsonify }}
+    }{% unless forloop.last %},{% endunless %}
+  {% endfor %}
+]
