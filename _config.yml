@@ -1,14 +1,46 @@
 # Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
 
+# ============================================================
+# Site settings
+# ============================================================
 title: Jericho Crosby (Chalwk)
 description: Autistic developer, gamer, and advocate - building tools, mods, and games.
 url: https://chalwk.github.io
 baseurl: ""
+
+# ============================================================
+# Build behaviour
+# ============================================================
 incremental: true
 highlighter: rouge
 markdown: kramdown
 
+# ============================================================
+# SEO & Social sharing (used by jekyll-seo-tag)
+# ============================================================
+author:
+  name: Jericho Crosby
+  url: https://github.com/Chalwk
+
+social:
+  name: Jericho Crosby
+  links:
+    - https://github.com/Chalwk
+    - https://www.twitch.tv/chalwk
+    - https://discord.com/channels/@me/707058110396760094
+
+locale: en_NZ
+
+# ============================================================
+# Plugins (must be listed here and in Gemfile)
+# ============================================================
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+# ============================================================
 # Default front matter for posts and pages
+# ============================================================
 defaults:
   - scope:
       path: ""
@@ -23,7 +55,9 @@ defaults:
     values:
       layout: default
 
-# PWA Defaults
+# ============================================================
+# PWA (Progressive Web App) configuration
+# ============================================================
 default_icons:
   - src: "icons/icon-192x192.png"
     sizes: "192x192"
@@ -34,7 +68,7 @@ default_icons:
     type: "image/png"
     purpose: "any maskable"
 
-default_categories: ["accessibility", "games"]
+default_categories: [ "accessibility", "games" ]
 
 default_urls:
   - "./"
