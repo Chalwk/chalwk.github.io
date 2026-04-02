@@ -7,13 +7,18 @@ title: Jericho Crosby (Chalwk)
 description: Autistic developer, gamer, and advocate - building tools, mods, and games.
 url: https://chalwk.github.io
 baseurl: ""
+locale: en_NZ
+timezone: Pacific/Auckland
 
 # ============================================================
 # Build behaviour
 # ============================================================
 incremental: true
+plugins_cache: true
 highlighter: rouge
 markdown: kramdown
+sass:
+  style: compressed
 
 # ============================================================
 # SEO & Social sharing (used by jekyll-seo-tag)
@@ -30,8 +35,6 @@ social:
     - https://discord.com/channels/@me/707058110396760094
 
 image: /assets/images/avatar2.png
-
-locale: en_NZ
 
 # ============================================================
 # Plugins
