@@ -65,7 +65,7 @@
     display: block;
     background: var(--darker);
     border-radius: var(--radius);
-    max-width: 100%;
+    width: 100%;
     height: auto;
     aspect-ratio: 16/9;
     user-select: none;
@@ -162,10 +162,10 @@
 }
 
 .touch-controls {
-    position: absolute;
-    right: 1rem;
-    bottom: 1rem;
-    z-index: 5;
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 .dpad {
@@ -244,12 +244,8 @@
     }
 
     #gameCanvas {
-        height: 400px;
-    }
-
-    .touch-controls {
-        right: 0.5rem;
-        bottom: 0.5rem;
+        height: auto;
+        max-height: 70vh;
     }
 
     .btn-round {
@@ -260,10 +256,6 @@
 }
 
 @media (max-width: 480px) {
-    #gameCanvas {
-        height: 300px;
-    }
-
     .menu-card,
     .info-card,
     .gameover-card {

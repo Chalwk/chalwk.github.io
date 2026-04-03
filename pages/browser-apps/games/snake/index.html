@@ -32,6 +32,17 @@ description: Fast. Fancy. Frenetic.
                     <canvas id="gameCanvas" tabindex="0"></canvas>
                 </div>
 
+                <div class="touch-controls hidden" id="touch-controls">
+                    <div class="dpad">
+                        <button class="tc btn-round" data-dir="up">▲</button>
+                        <div class="tc-row">
+                            <button class="tc btn-round" data-dir="left">◄</button>
+                            <button class="tc btn-round" data-dir="down">▼</button>
+                            <button class="tc btn-round" data-dir="right">►</button>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="overlay menu" id="overlay">
                     <div class="menu-card">
                         <h2>Snake</h2>
@@ -95,17 +106,6 @@ description: Fast. Fancy. Frenetic.
                         <div class="menu-buttons">
                             <button class="btn btn-primary" id="btn-restart">Restart</button>
                             <button class="btn btn-secondary" id="btn-menu">Main Menu</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="touch-controls hidden" id="touch-controls">
-                    <div class="dpad">
-                        <button class="tc btn-round" data-dir="up">▲</button>
-                        <div class="tc-row">
-                            <button class="tc btn-round" data-dir="left">◄</button>
-                            <button class="tc btn-round" data-dir="down">▼</button>
-                            <button class="tc btn-round" data-dir="right">►</button>
                         </div>
                     </div>
                 </div>
