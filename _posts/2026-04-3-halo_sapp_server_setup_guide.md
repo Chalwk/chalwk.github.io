@@ -6,7 +6,7 @@ tags: [ sapp, lua, halo, scripting, tutorial ]
 ---
 
 Running a Halo dedicated server with SAPP is easy when you have a pre-configured package. Running *multiple* servers can
-also be easy - if you understand how SAPP separates global and instance-specific files.
+also be easy - if you understand how SAPP can separate global and instance-specific files.
 
 This guide starts with a **single-server instance** - exactly what you get in the pre-configured package from
 the [ReadyToGo releases](https://github.com/Chalwk/HALO-SCRIPT-PROJECTS/releases/tag/ReadyToGo). You will
