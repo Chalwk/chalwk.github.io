@@ -4,7 +4,8 @@
 <!-- Basic document metadata -->
 <!-- ============================================================ -->
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+{% assign scale = site.mobile_initial_scale | default: 0.65 %}
+<meta name="viewport" content="width=device-width, initial-scale={{ scale }}, user-scalable=yes, viewport-fit=cover">
 
 <!-- ============================================================ -->
 <!-- Manual title & description (fallback before jekyll-seo-tag) -->

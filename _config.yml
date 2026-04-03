@@ -9,6 +9,7 @@ url: https://chalwk.github.io
 baseurl: ""
 locale: en_NZ
 timezone: Pacific/Auckland
+mobile_initial_scale: 0.65
 
 # ============================================================
 # Build behaviour
