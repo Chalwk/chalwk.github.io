@@ -1,6 +1,6 @@
 ---
 title: "Halo PC/CE: SAPP Multi-server Management"
-date: 2025-09-8
+date: 2026-04-3
 categories: [ education, halo, modding ]
 tags: [ sapp, lua, halo, scripting, tutorial ]
 ---
