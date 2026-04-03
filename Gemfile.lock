@@ -39,8 +39,6 @@ GEM
       safe_yaml (~> 1.0)
       terminal-table (>= 1.8, < 4.0)
       webrick (~> 1.7)
-    jekyll-feed (0.17.0)
-      jekyll (>= 3.7, < 5.0)
     jekyll-last-modified-at (1.3.2)
       jekyll (>= 3.7, < 5.0)
     jekyll-sass-converter (3.1.0)
@@ -73,7 +71,7 @@ GEM
     rexml (3.4.4)
     rouge (4.7.0)
     safe_yaml (1.0.5)
-    sass-embedded (1.98.0-x64-mingw-ucrt)
+    sass-embedded (1.99.0-x64-mingw-ucrt)
       google-protobuf (~> 4.31)
     terminal-table (3.0.2)
       unicode-display_width (>= 1.1.1, < 3)
@@ -90,7 +88,6 @@ PLATFORMS
 
 DEPENDENCIES
   jekyll (~> 4.3)
-  jekyll-feed
   jekyll-last-modified-at
   jekyll-seo-tag
   jekyll-sitemap
@@ -114,7 +111,6 @@ CHECKSUMS
   http_parser.rb (0.8.1) sha256=9ae8df145b39aa5398b2f90090d651c67bd8e2ebfe4507c966579f641e11097a
   i18n (1.14.8) sha256=285778639134865c5e0f6269e0b818256017e8cde89993fdfcbfb64d088824a5
   jekyll (4.4.1) sha256=4c1144d857a5b2b80d45b8cf5138289579a9f8136aadfa6dd684b31fe2bc18c1
-  jekyll-feed (0.17.0) sha256=689aab16c877949bb9e7a5c436de6278318a51ecb974792232fd94d8b3acfcc3
   jekyll-last-modified-at (1.3.2) sha256=c4c08f137453e9b40764a769450870d05970e0934651a1fd9ef081f4a6e9a815
   jekyll-sass-converter (3.1.0) sha256=83925d84f1d134410c11d0c6643b0093e82e3a3cf127e90757a85294a3862443
   jekyll-seo-tag (2.8.0) sha256=3f2ed1916d56f14ebfa38e24acde9b7c946df70cb183af2cb5f0598f21ae6818
@@ -135,7 +131,7 @@ CHECKSUMS
   rexml (3.4.4) sha256=19e0a2c3425dfbf2d4fc1189747bdb2f849b6c5e74180401b15734bc97b5d142
   rouge (4.7.0) sha256=dba5896715c0325c362e895460a6d350803dbf6427454f49a47500f3193ea739
   safe_yaml (1.0.5) sha256=a6ac2d64b7eb027bdeeca1851fe7e7af0d668e133e8a88066a0c6f7087d9f848
-  sass-embedded (1.98.0-x64-mingw-ucrt) sha256=68d5cd941a58200a5724c83df1fcfdf1b5eec5dbdda9ac58f1f643db02b90cab
+  sass-embedded (1.99.0-x64-mingw-ucrt) sha256=33f14df01a84d979c0cf5dea43b3e520bf95dbc461d7aee3dbdc249c19e8e1f9
   terminal-table (3.0.2) sha256=f951b6af5f3e00203fb290a669e0a85c5dd5b051b3b023392ccfd67ba5abae91
   tzinfo (2.0.6) sha256=8daf828cc77bcf7d63b0e3bdb6caa47e2272dcfaf4fbfe46f8c3a9df087a829b
   tzinfo-data (1.2026.1) sha256=4ea36519ae5ae2cf0fad471207a519be006daf42e3b2359ee9e9c53f113609fd

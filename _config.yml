@@ -43,7 +43,6 @@ image: /assets/images/avatar2.png
 plugins:
   - jekyll-seo-tag
   - jekyll-sitemap
-  - jekyll-feed
   - jekyll-last-modified-at
 
 # ============================================================

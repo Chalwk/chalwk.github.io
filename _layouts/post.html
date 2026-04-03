@@ -175,6 +175,9 @@ layout: default
         overflow-x: auto;
         margin: 1.5rem 0;
         position: relative;
+        white-space: pre;
+        word-break: normal;
+        word-wrap: normal;
     }
 
     .post-content pre code {
@@ -182,12 +185,29 @@ layout: default
         padding: 0;
         color: #f8fafc;
         font-family: var(--font-mono), monospace;
+        white-space: pre;
     }
 
     .highlight pre,
     .highlight code {
         background-color: #2d2d2d !important;
         color: #f8fafc !important;
+        white-space: pre !important;
+    }
+
+    .post-content table {
+        display: block;
+        overflow-x: auto;
+        max-width: 100%;
+        white-space: nowrap;
+        border-collapse: collapse;
+    }
+
+    .post-content p,
+    .post-content li,
+    .post-content blockquote {
+        white-space: normal;
+        word-wrap: break-word;
     }
 
     .copy-btn {
@@ -218,20 +238,6 @@ layout: default
         overflow-wrap: break-word;
     }
 
-    .post-content pre,
-    .post-content code {
-        max-width: 100%;
-        white-space: pre-wrap;
-        word-break: break-word;
-        overflow-x: auto;
-    }
-
-    .post-content table {
-        display: block;
-        overflow-x: auto;
-        max-width: 100%;
-    }
-
     @media (max-width: 768px) {
         .post-card {
             padding: 1.5rem;
@@ -251,6 +257,10 @@ layout: default
 
         .post-content h3 {
             font-size: 1.3rem;
+        }
+
+        .post-content pre {
+            font-size: 0.85rem;
         }
     }
 </style>

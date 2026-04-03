@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const hamburger = document.querySelector('.hamburger');
     const navMobile = document.querySelector('.nav-mobile');
     if (hamburger && navMobile) {
-        hamburger.addEventListener('click', function (e) {
+        hamburger.addEventListener('click', function () {
             requestAnimationFrame(() => {
                 const isExpanded = this.getAttribute('aria-expanded') === 'true';
                 this.setAttribute('aria-expanded', !isExpanded);
@@ -96,7 +96,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     e.preventDefault();
                     e.stopPropagation();
                     const parentLi = this.closest('li');
-                    // Use classList.toggle directly – fast enough
                     parentLi.classList.toggle('active');
                 });
             }
