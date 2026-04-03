@@ -27,8 +27,10 @@ layout: default
                     {% endif %}
 
                     {% assign words = content | number_of_words %}
+                    {% assign reading_time = words | divided_by: 200 %}
+                    {% if reading_time < 1 %}{% assign reading_time = 1 %}{% endif %}
                     <span class="reading-time">
-                        ~ {{ words | divided_by: 200 | at_least: 1 }} min read
+                        ~ {{ reading_time }} min read
                     </span>
                 </div>
 
@@ -38,8 +40,8 @@ layout: default
                         <summary class="toc-summary">
                             <i class="fas fa-list-ul" aria-hidden="true"></i> Table of Contents
                         </summary>
-                        <div class="toc-content">
-                            {{ content | toc_only }}
+                        <div class="toc-content" id="jekyll-toc-placeholder">
+                            <ul><li>Loading table of contents…</li></ul>
                         </div>
                     </details>
                 </div>
@@ -181,17 +183,8 @@ layout: default
         border-bottom-color: var(--primary-dark);
     }
 
-    .toc-content .toc-level-1 {
-        margin-left: 0;
-    }
-    .toc-content .toc-level-2 {
+    .toc-content ul ul {
         margin-left: 1rem;
-    }
-    .toc-content .toc-level-3 {
-        margin-left: 2rem;
-    }
-    .toc-content .toc-level-4 {
-        margin-left: 3rem;
     }
 
     .post-content {
@@ -370,12 +363,6 @@ layout: default
         .toc-content {
             padding: 0.5rem 1rem 0.75rem 1.5rem;
         }
-        .toc-content .toc-level-2 {
-            margin-left: 0.75rem;
-        }
-        .toc-content .toc-level-3 {
-            margin-left: 1.5rem;
-        }
     }
 </style>
 
@@ -398,5 +385,52 @@ layout: default
                 }
             });
         });
+
+        const tocPlaceholder = document.getElementById('jekyll-toc-placeholder');
+        if (!tocPlaceholder) return;
+
+        const content = document.querySelector('.post-content');
+        if (!content) return;
+
+        const headings = content.querySelectorAll('h1, h2, h3, h4, h5, h6');
+        if (headings.length === 0) {
+            tocPlaceholder.innerHTML = '<p><em>No headings found</em></p>';
+            return;
+        }
+
+        let toc = document.createElement('ul');
+        let stack = [{level: 1, list: toc}];
+
+        headings.forEach((heading, idx) => {
+            if (!heading.id) {
+                heading.id = 'toc-heading-' + idx;
+            }
+
+            const level = parseInt(heading.tagName[1], 10);
+            const link = document.createElement('a');
+            link.href = '#' + heading.id;
+            link.textContent = heading.innerText;
+
+            const item = document.createElement('li');
+            item.appendChild(link);
+
+            while (stack.length > 1 && stack[stack.length - 1].level >= level) {
+                stack.pop();
+            }
+            let parentList = stack[stack.length - 1].list;
+            if (level > stack[stack.length - 1].level) {
+                const newUl = document.createElement('ul');
+                const lastLi = parentList.lastElementChild;
+                if (lastLi && lastLi.tagName === 'LI') {
+                    lastLi.appendChild(newUl);
+                    parentList = newUl;
+                    stack.push({level: level, list: newUl});
+                }
+            }
+            parentList.appendChild(item);
+        });
+
+        tocPlaceholder.innerHTML = '';
+        tocPlaceholder.appendChild(toc);
     });
 </script>
