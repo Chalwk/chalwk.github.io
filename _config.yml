@@ -41,6 +41,7 @@ image: /assets/images/avatar2.png
 # Plugins
 # ============================================================
 plugins:
+  - jekyll-toc
   - jekyll-seo-tag
   - jekyll-sitemap
   - jekyll-last-modified-at
@@ -56,11 +57,13 @@ defaults:
       layout: post
       author: "Jericho Crosby"
       permalink: /blog/:year/:month/:day/:title/
+      toc: true
   - scope:
       path: ""
       type: pages
     values:
       layout: default
+      toc: true
 
 # ============================================================
 # PWA (Progressive Web App) configuration

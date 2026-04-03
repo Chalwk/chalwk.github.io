@@ -32,6 +32,19 @@ layout: default
                     </span>
                 </div>
 
+                {% if page.toc != false %}
+                <div class="toc-container">
+                    <details class="toc-details" {% if page.toc_open %}open{% endif %}>
+                        <summary class="toc-summary">
+                            <i class="fas fa-list-ul" aria-hidden="true"></i> Table of Contents
+                        </summary>
+                        <div class="toc-content">
+                            {{ content | toc_only }}
+                        </div>
+                    </details>
+                </div>
+                {% endif %}
+
                 <div class="post-content">{{ content }}</div>
             </article>
         </div>
@@ -88,6 +101,97 @@ layout: default
         height: 3px;
         background: linear-gradient(90deg, var(--primary), var(--secondary));
         border-radius: 2px;
+    }
+
+    .toc-container {
+        margin: 2rem 0 1.5rem 0;
+        background: rgba(30, 136, 229, 0.03);
+        border-radius: var(--radius);
+        border: 1px solid var(--gray-light);
+        overflow: hidden;
+    }
+
+    .toc-details {
+        background: transparent;
+        border: none;
+    }
+
+    .toc-summary {
+        padding: 0.75rem 1.25rem;
+        font-weight: 600;
+        font-size: 1.1rem;
+        cursor: pointer;
+        background: rgba(30, 136, 229, 0.05);
+        color: var(--darker);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        list-style: none;
+        transition: background 0.2s;
+    }
+
+    .toc-summary::-webkit-details-marker {
+        display: none;
+    }
+
+    .toc-summary::before {
+        content: '▶';
+        font-size: 0.8rem;
+        display: inline-block;
+        transition: transform 0.2s;
+    }
+
+    .toc-details[open] .toc-summary::before {
+        transform: rotate(90deg);
+    }
+
+    .toc-summary:hover {
+        background: rgba(30, 136, 229, 0.1);
+    }
+
+    .toc-summary i {
+        color: var(--primary);
+        font-size: 1rem;
+    }
+
+    .toc-content {
+        padding: 0.75rem 1.5rem 1rem 2rem;
+    }
+
+    .toc-content ul {
+        margin: 0;
+        padding-left: 1.2rem;
+        list-style: none;
+    }
+
+    .toc-content li {
+        margin: 0.4rem 0;
+        line-height: 1.4;
+    }
+
+    .toc-content a {
+        color: var(--primary);
+        text-decoration: none;
+        border-bottom: 1px dotted transparent;
+        transition: border-color 0.2s, color 0.2s;
+    }
+
+    .toc-content a:hover {
+        color: var(--primary-dark);
+        border-bottom-color: var(--primary-dark);
+    }
+
+    .toc-content .toc-level-1 {
+        margin-left: 0;
+    }
+    .toc-content .toc-level-2 {
+        margin-left: 1rem;
+    }
+    .toc-content .toc-level-3 {
+        margin-left: 2rem;
+    }
+    .toc-content .toc-level-4 {
+        margin-left: 3rem;
     }
 
     .post-content {
@@ -261,6 +365,16 @@ layout: default
 
         .post-content pre {
             font-size: 0.85rem;
+        }
+
+        .toc-content {
+            padding: 0.5rem 1rem 0.75rem 1.5rem;
+        }
+        .toc-content .toc-level-2 {
+            margin-left: 0.75rem;
+        }
+        .toc-content .toc-level-3 {
+            margin-left: 1.5rem;
         }
     }
 </style>
