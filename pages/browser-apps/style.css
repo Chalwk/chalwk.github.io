@@ -136,7 +136,7 @@ body.apps-tools-page {
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
-    min-height: 420px;
+    min-height: 340px; /* Reduced from 420px to fix spacing above play button */
 }
 
 .card p {
@@ -227,7 +227,7 @@ body.apps-tools-page {
     }
 
     .card {
-        min-height: 400px;
+        min-height: 320px; /* Reduced from 400px */
     }
 }
 
@@ -247,7 +247,7 @@ body.apps-tools-page {
 
     .card {
         padding: 25px 20px;
-        min-height: 380px;
+        min-height: 300px; /* Reduced from 380px */
     }
 
     .category-header h2 {
@@ -278,7 +278,7 @@ body.apps-tools-page {
 
     .card {
         padding: 20px 15px;
-        min-height: 350px;
+        min-height: 280px; /* Reduced from 350px */
     }
 
     .game-icon {
@@ -324,7 +324,7 @@ body.apps-tools-page {
 
     .card {
         padding: 20px 15px;
-        min-height: 320px;
+        min-height: 260px; /* Reduced from 320px */
     }
 
     .game-icon {
@@ -365,7 +365,7 @@ body.apps-tools-page {
     }
 
     .card {
-        min-height: 300px;
+        min-height: 240px; /* Reduced from 300px */
     }
 }
 
