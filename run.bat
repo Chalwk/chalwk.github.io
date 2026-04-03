@@ -20,8 +20,8 @@ if %DO_CLEAN%==1 (
 )
 
 REM Start Jekyll server with live reload
-echo Starting Jekyll server...
-start cmd /k "cd /d %~dp0 && bundle exec jekyll serve --livereload"
+echo Starting Jekyll server on 127.0.0.1:4000...
+start cmd /k "cd /d %~dp0 && bundle exec jekyll serve --livereload --host 0.0.0.0"
 
 REM Open browser after slight delay
 timeout /t 5 /nobreak
