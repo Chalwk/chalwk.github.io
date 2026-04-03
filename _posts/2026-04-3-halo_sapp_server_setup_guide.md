@@ -5,22 +5,20 @@ categories: [ education, halo, modding ]
 tags: [ sapp, lua, halo, scripting, tutorial ]
 ---
 
-# A Masterclass in SAPP Server Management
+Running a Halo dedicated server with SAPP is easy when you have a pre-configured package. Running *multiple* servers can
+also be easy - if you understand how SAPP separates global and instance-specific files.
 
-Running a Halo dedicated server with SAPP is easy when you have a pre‑configured package. Running *multiple* servers can
-also be easy - if you understand how SAPP separates global and instance‑specific files.
-
-This guide starts with a **single‑server instance** - exactly what you get in the pre‑configured package from
+This guide starts with a **single-server instance** - exactly what you get in the pre-configured package from
 the [ReadyToGo releases](https://github.com/Chalwk/HALO-SCRIPT-PROJECTS/releases/tag/ReadyToGo). You will
 learn what every file and folder does, and how to launch your server. Then, without repeating file descriptions, you
-will learn how to **convert the single instance into a multi‑server cluster** - adding more game modes on different
+will learn how to **convert the single instance into a multi-server cluster** - adding more game modes on different
 ports while sharing admin settings, maps, and SAPP binaries.
 
 ---
 
-## What You Get in a Pre‑Configured Package
+## What You Get in a Pre-Configured Package
 
-The ready‑to‑run archive (e.g., `HCE_Server.zip`) contains a complete, working SAPP server environment. Below is the
+The ready-to-run archive (e.g., `HCE_Server.zip`) contains a complete, working SAPP server environment. Below is the
 exact folder structure you will see after extracting the zip file.
 
 ```
@@ -36,7 +34,7 @@ exact folder structure you will see after extracting the zip file.
 │   ssleay32.dll                         # OpenSSL library
 │   Strings.dll                          # SAPP loader / string library
 │
-├───cg                                   # Instance‑specific configs
+├───cg                                   # Instance-specific configs
 │   │   init.txt                         # Server startup commands (root)
 │   │
 │   ├───sapp                             # SAPP configs for this instance
@@ -57,7 +55,7 @@ exact folder structure you will see after extracting the zip file.
 │       ... (all standard maps)
 │
 └───sapp                                 # GLOBAL shared configuration
-admins.txt                               # CD‑key based admins
+admins.txt                               # CD-key based admins
 areas.txt                                # Custom map areas
 ipbans.txt                               # IP ban list
 locations.txt                            # Named teleport locations
@@ -66,7 +64,7 @@ users.txt                                # Name/password based admins
 
 > **Note:** The package contains **one** server instance (the `cg` folder). If you want to run multiple servers (
 > different game modes on different ports), you will expand this structure -
-> see [Converting to Multi‑Server](#converting-a-single-server-package-to-multi-server).
+> see [Converting to Multi-Server](#converting-a-single-server-package-to-multi-server).
 
 ---
 
@@ -91,7 +89,7 @@ users.txt                                # Name/password based admins
   pointing to a file; the package includes it for convenience but it only works on PC).
 
 - **`run.bat`** (Windows) and **`run.sh`** (Linux/Wine)  
-  Launch scripts that start the server with the correct command‑line arguments.
+  Launch scripts that start the server with the correct command-line arguments.
   See [How to Run the Single Server](#how-to-run-the-single-server-out-of-the-box).
 
 ### Global Shared Configs (`sapp\`)
@@ -99,12 +97,12 @@ users.txt                                # Name/password based admins
 These files are read from the root `sapp\` folder and are **shared across every server instance** of the same platform.
 This gives you unified administration.
 
-- **`admins.txt`** - CD‑key based administrators (V1 admins). Format: one CD‑key hash per line, optionally with an admin
+- **`admins.txt`** - CD-key based administrators (V1 admins). Format: one CD-key hash per line, optionally with an admin
   level and IP ranges.  
-  *Example:* `0123456789abcdef0123456789abcdef 4`  
+  *Example:* `0123456789abcdef0123456789abcdef 4`
   If you add an admin here, they are admin on *all* servers.
 
-- **`users.txt`** - Name‑and‑password based administrators (V2 admins). Each line contains a name, an MD5‑hashed
+- **`users.txt`** - Name-and-password based administrators (V2 admins). Each line contains a name, an MD5-hashed
   password, and a level.  
   *Example:* `AdminName 5f4dcc3b5aa765d61d8327deb882cf99 4`  
   Shared across all servers - log in once, manage everywhere.
@@ -118,7 +116,7 @@ This gives you unified administration.
 - **`locations.txt`** - Named coordinates (X,Y,Z) for teleport commands like `t <player> <location>`. Shared across
   instances.
 
-### Instance‑Specific Configs (`cg\` and `cg\sapp\`)
+### Instance-Specific Configs (`cg\` and `cg\sapp\`)
 
 The folder `cg\` holds configuration for **your single server instance**. Everything inside is unique to this server.
 
@@ -127,7 +125,7 @@ The folder `cg\` holds configuration for **your single server instance**. Everyt
   and **must end with the `load` command** to activate SAPP.
 
 - **`cg\sapp\init.txt`**  
-  The SAPP configuration file for this instance. Controls Lua scripting, map voting, map cycles, no‑lead mode, admin
+  The SAPP configuration file for this instance. Controls Lua scripting, map voting, map cycles, no-lead mode, admin
   permissions, etc.  
   *Typical settings:* `lua true`, `mapvote true`, `no_lead true`, `sapp_console true`.
 
@@ -136,7 +134,7 @@ The folder `cg\` holds configuration for **your single server instance**. Everyt
   SAPP commands), and the required admin level.
 
 - **`cg\sapp\events.txt`**  
-  Event‑based scripting (simpler than Lua). Lines define what happens when, for example, a player dies (`event_die`) or
+  Event-based scripting (simpler than Lua). Lines define what happens when, for example, a player dies (`event_die`) or
   scores (`event_score`).
 
 - **`cg\sapp\mapcycle.txt`**  
@@ -169,7 +167,7 @@ Contains all `.map` files. Shared across all server instances. Add new maps here
    Open `cg\init.txt` and change `sv_name "your_server_name_here"` to your desired server name.
 
 3. **Launch the server**
-    - On Windows: double‑click `run.bat`.
+    - On Windows: double-click `run.bat`.
     - On Linux / macOS with Wine: make `run.sh` executable (`chmod +x run.sh`) and run `./run.sh`.
 
 The batch script (`run.bat`) contains:
@@ -184,7 +182,7 @@ set exec=%path%\init.txt
 ```
 
 - `%~dp0` expands to the folder where the script is located (makes it portable).
-- `-path` tells the server where to find the instance‑specific configs (`cg\`).
+- `-path` tells the server where to find the instance-specific configs (`cg\`).
 - `-exec` points to the main `init.txt`.
 - `-port` sets the UDP port (default 2302).
 
@@ -196,7 +194,7 @@ That's it - you now have a working SAPP server.
 
 ---
 
-## Converting a Single‑Server Package to Multi‑Server
+## Converting a Single-Server Package to Multi-Server
 
 The package is designed to be easily expanded to run **multiple server instances** (e.g., different game modes on
 different ports) without duplicating large files. Here is how to do it.
@@ -230,7 +228,7 @@ Edit the following files inside `cg\gun_game\` to give the new server its own id
 - **`init.txt`** - Change `sv_name` (server name) and optionally `sv_password`.
 - **`sapp\init.txt`** - Adjust SAPP settings (e.g., different mapvote options, Lua scripts to load).
 - **`sapp\mapcycle.txt`** or **`sapp\mapvotes.txt`** - Provide a different map rotation.
-- **`sapp\lua\`** - Place game‑mode‑specific Lua scripts here.
+- **`sapp\lua\`** - Place game-mode-specific Lua scripts here.
 
 > **Note:** The `load` command in `init.txt` must remain the last line.
 
@@ -252,7 +250,7 @@ On Linux, copy `run.sh` to `run_gun_game.sh` and change the `PORT` variable acco
 
 ### Step 4: Launch Multiple Servers
 
-- **Manually** - Double‑click each `.bat` file (or run each `.sh`). Each runs in its own console window.
+- **Manually** - Double-click each `.bat` file (or run each `.sh`). Each runs in its own console window.
 - **All at once (Windows)** - Use a master batch file with Windows Terminal:
 
 ```batch
