@@ -6,7 +6,7 @@ description: Fetch fresh jokes from multiple APIs. Click the big button or doubl
 
 <!-- Copyright (c) 2024-2026. Jericho Crosby (Chalwk) -->
 
-<link rel="stylesheet" href="style.css">
+<link href="style.css" rel="stylesheet">
 
 <main>
     <div class="container">
@@ -42,6 +42,12 @@ description: Fetch fresh jokes from multiple APIs. Click the big button or doubl
                     <button class="btn btn-secondary btn-fallback" id="fallbackBtn" title="Use a local fallback joke">
                         <i class="fas fa-database"></i> Local Fallback
                     </button>
+                    <button class="btn btn-secondary" id="quickJBtn" title="New Joke (J)">
+                        <i class="fas fa-sync-alt"></i> J
+                    </button>
+                    <button class="btn btn-secondary" id="quickABtn" title="Cycle API (A)">
+                        <i class="fas fa-exchange-alt"></i> A
+                    </button>
                 </div>
 
                 <div class="extras joke-extras">
@@ -53,14 +59,6 @@ description: Fetch fresh jokes from multiple APIs. Click the big button or doubl
                 </div>
             </div>
         </section>
-    </div>
-    <div class="mobile-actions">
-        <button class="btn mobile-action-btn" id="mobileJBtn" title="New Joke (J)">
-            <i class="fas fa-sync-alt"></i> <span>J</span>
-        </button>
-        <button class="btn mobile-action-btn" id="mobileABtn" title="Cycle API (A)">
-            <i class="fas fa-exchange-alt"></i> <span>A</span>
-        </button>
     </div>
 </main>
 

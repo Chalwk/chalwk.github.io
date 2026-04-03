@@ -189,41 +189,8 @@ window.addEventListener('keydown', (e) => {
     }
 });
 
-const mobileJBtn = document.getElementById('mobileJBtn');
-const mobileABtn = document.getElementById('mobileABtn');
-
-mobileJBtn.addEventListener('click', () => {
-    fetchJoke();
-    mobileJBtn.style.transform = 'scale(0.95)';
-    setTimeout(() => {
-        mobileJBtn.style.transform = '';
-    }, 150);
-});
-
-mobileABtn.addEventListener('click', () => {
-    cycleApi();
-    fetchJoke();
-    mobileABtn.style.transform = 'scale(0.95)';
-    setTimeout(() => {
-        mobileABtn.style.transform = '';
-    }, 150);
-});
-
-function updateTipForMobile() {
-    if (window.innerWidth <= 768) {
-        const tipElement = document.querySelector('.extras-tip');
-        if (tipElement) {
-            tipElement.innerHTML = `
-                <i class="fas fa-mobile-alt"></i>
-                Quick Actions: Tap <i class="fas fa-sync-alt"></i>J for new joke,
-                <i class="fas fa-exchange-alt"></i>A to cycle API
-            `;
-        }
-    }
-}
-
-updateTipForMobile();
-window.addEventListener('resize', updateTipForMobile);
+const quickJBtn = document.getElementById('quickJBtn');
+const quickABtn = document.getElementById('quickABtn');
 
 function vibrateIfSupported() {
     if ('vibrate' in navigator) {
@@ -231,16 +198,19 @@ function vibrateIfSupported() {
     }
 }
 
-newJokeBtn.addEventListener('click', () => {
+quickJBtn.addEventListener('click', () => {
+    fetchJoke();
     vibrateIfSupported();
+    quickJBtn.style.transform = 'scale(0.95)';
+    setTimeout(() => { quickJBtn.style.transform = ''; }, 150);
 });
 
-mobileJBtn.addEventListener('click', () => {
+quickABtn.addEventListener('click', () => {
+    cycleApi();
+    fetchJoke();
     vibrateIfSupported();
-});
-
-mobileABtn.addEventListener('click', () => {
-    vibrateIfSupported();
+    quickABtn.style.transform = 'scale(0.95)';
+    setTimeout(() => { quickABtn.style.transform = ''; }, 150);
 });
 
 fetchJoke();
