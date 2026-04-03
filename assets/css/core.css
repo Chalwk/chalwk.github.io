@@ -636,6 +636,7 @@ a:hover {
         display: none;
     }
 }
+
 /*====== END OF PWA STYLES ======*/
 
 .blog-section {
@@ -758,12 +759,15 @@ footer p {
     .nav-desktop {
         display: none;
     }
+
     .hamburger {
         display: flex;
     }
+
     .nav-mobile {
         display: flex;
     }
+
     .header.active {
         background: rgba(255, 255, 255, 0.98);
     }
@@ -835,5 +839,25 @@ footer p {
     .hamburger,
     .scroll-to-top {
         display: none !important;
+    }
+}
+
+.post-content h1,
+.post-content h2,
+.post-content h3,
+.post-content h4,
+.post-content h5,
+.post-content h6 {
+    scroll-margin-top: 80px;
+}
+
+@media (max-width: 768px) {
+    .post-content h1,
+    .post-content h2,
+    .post-content h3,
+    .post-content h4,
+    .post-content h5,
+    .post-content h6 {
+        scroll-margin-top: 70px;
     }
 }
