@@ -119,6 +119,7 @@ body.apps-tools-page {
     max-width: var(--container-max);
     padding: 0 20px;
     margin-bottom: 50px;
+    align-items: stretch;
 }
 
 .card {
@@ -132,6 +133,44 @@ body.apps-tools-page {
     overflow: hidden;
     z-index: 1;
     box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    min-height: 420px;
+}
+
+.card p {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
+    flex: none;
+    margin-bottom: 0;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--gray);
+}
+
+.play-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: #fff;
+    padding: 12px 25px;
+    border-radius: 50px;
+    transition: var(--transition);
+    font-weight: 500;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    margin-top: auto;
+    align-self: center;
+    width: auto;
 }
 
 .card:hover {
@@ -166,30 +205,6 @@ body.apps-tools-page {
     color: var(--darker);
 }
 
-.card p {
-    font-size: 0.95rem;
-    margin-bottom: 25px;
-    line-height: 1.6;
-    color: var(--gray);
-}
-
-.play-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    color: #fff;
-    padding: 12px 25px;
-    border-radius: 50px;
-    transition: var(--transition);
-    font-weight: 500;
-    box-shadow: var(--shadow);
-    position: relative;
-    overflow: hidden;
-    z-index: 1;
-}
-
 .play-button:hover {
     transform: translateY(-3px);
     box-shadow: var(--shadow-lg);
@@ -210,6 +225,10 @@ body.apps-tools-page {
         grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
         gap: 25px;
     }
+
+    .card {
+        min-height: 400px;
+    }
 }
 
 @media (max-width: 768px) {
@@ -228,6 +247,7 @@ body.apps-tools-page {
 
     .card {
         padding: 25px 20px;
+        min-height: 380px;
     }
 
     .category-header h2 {
@@ -243,6 +263,11 @@ body.apps-tools-page {
     .category-section {
         margin: 30px auto 50px;
     }
+
+    .card p {
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
 }
 
 @media (max-width: 768px) and (min-width: 481px) {
@@ -253,6 +278,7 @@ body.apps-tools-page {
 
     .card {
         padding: 20px 15px;
+        min-height: 350px;
     }
 
     .game-icon {
@@ -269,7 +295,6 @@ body.apps-tools-page {
 
     .card p {
         font-size: 0.85rem;
-        margin-bottom: 20px;
         line-height: 1.5;
     }
 
@@ -299,6 +324,7 @@ body.apps-tools-page {
 
     .card {
         padding: 20px 15px;
+        min-height: 320px;
     }
 
     .game-icon {
@@ -315,7 +341,6 @@ body.apps-tools-page {
 
     .card p {
         font-size: 0.8rem;
-        margin-bottom: 18px;
         line-height: 1.4;
     }
 
@@ -337,6 +362,10 @@ body.apps-tools-page {
     .games-grid {
         grid-template-columns: 1fr;
         gap: 20px;
+    }
+
+    .card {
+        min-height: 300px;
     }
 }
 
