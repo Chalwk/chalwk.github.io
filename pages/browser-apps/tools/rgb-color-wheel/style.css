@@ -147,7 +147,7 @@ canvas {
     margin-top: 2rem;
 }
 
-.panel-custom {
+.panel {
     background: var(--light);
     border: 1px solid var(--gray-light);
     border-radius: var(--radius-lg);

@@ -1133,7 +1133,7 @@ end
 
 - This must be called **every tick** (e.g., inside `OnTick`) to keep the player hidden. The offsets `0xF8`, `0xFC`, and
   `0x100` are the player's world position in the static player table.
-- The player will appear to be in a spectator-like state but can still move on their own client – they'll be frozen
+- The player will appear to be in a spectator-like state but can still move on their own client - they'll be frozen
   off-map for others.
 - Works best when combined with `player_disable` or similar to prevent interaction.
 
