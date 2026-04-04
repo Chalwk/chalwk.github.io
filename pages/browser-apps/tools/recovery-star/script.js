@@ -2,16 +2,16 @@
 
 (function () {
     const DOMAINS = [
-        {id: "mentalHealth", name: "Managing Mental Health", icon: "fas fa-brain"},
-        {id: "physicalHealth", name: "Physical Health", icon: "fas fa-heartbeat"},
-        {id: "livingSkills", name: "Living Skills", icon: "fas fa-utensils"},
-        {id: "friendsCommunity", name: "Friends and Community", icon: "fas fa-users"},
-        {id: "useOfTime", name: "Use of Time", icon: "fas fa-clock"},
-        {id: "relationships", name: "Relationships", icon: "fas fa-hand-holding-heart"},
-        {id: "addictiveBehavior", name: "Addictive Behavior", icon: "fas fa-ban"},
-        {id: "home", name: "Home", icon: "fas fa-home"},
-        {id: "identitySelfEsteem", name: "Identity & Self-Esteem", icon: "fas fa-smile"},
-        {id: "trustHope", name: "Trust and Hope", icon: "fas fa-dove"}
+        { id: "mentalHealth", name: "Managing Mental Health", icon: "fas fa-brain" },
+        { id: "physicalHealth", name: "Physical Health", icon: "fas fa-heartbeat" },
+        { id: "livingSkills", name: "Living Skills", icon: "fas fa-utensils" },
+        { id: "friendsCommunity", name: "Friends and Community", icon: "fas fa-users" },
+        { id: "useOfTime", name: "Use of Time", icon: "fas fa-clock" },
+        { id: "relationships", name: "Relationships", icon: "fas fa-hand-holding-heart" },
+        { id: "addictiveBehavior", name: "Addictive Behavior", icon: "fas fa-ban" },
+        { id: "home", name: "Home", icon: "fas fa-home" },
+        { id: "identitySelfEsteem", name: "Identity & Self-Esteem", icon: "fas fa-smile" },
+        { id: "trustHope", name: "Trust and Hope", icon: "fas fa-dove" }
     ];
 
     const STORAGE_KEY = "recoveryStarAppData";
@@ -27,29 +27,6 @@
     const resetBtn = document.getElementById("resetAllBtn");
     const domainsContainer = document.getElementById("domainsContainer");
 
-    function loadFromStorage() {
-        const stored = localStorage.getItem(STORAGE_KEY);
-        if (stored) {
-            try {
-                const parsed = JSON.parse(stored);
-                if (parsed.ratings && parsed.notes) {
-                    appData = parsed;
-                } else {
-                    initDefaultData();
-                }
-            } catch (e) {
-                initDefaultData();
-            }
-        } else {
-            initDefaultData();
-        }
-        DOMAINS.forEach(domain => {
-            if (appData.ratings[domain.id] === undefined) appData.ratings[domain.id] = 5;
-            if (appData.notes[domain.id] === undefined) appData.notes[domain.id] = "";
-        });
-        persistData();
-    }
-
     function initDefaultData() {
         const ratings = {};
         const notes = {};
@@ -57,11 +34,73 @@
             ratings[domain.id] = 5;
             notes[domain.id] = "";
         });
-        appData = {ratings, notes};
+        appData = { ratings, notes };
+    }
+
+    function loadFromStorage() {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+            try {
+                const parsed = JSON.parse(stored);
+                if (parsed && parsed.ratings && parsed.notes) {
+                    appData = parsed;
+                } else {
+                    initDefaultData();
+                }
+            } catch (error) {
+                initDefaultData();
+            }
+        } else {
+            initDefaultData();
+        }
+
+        DOMAINS.forEach(domain => {
+            if (appData.ratings[domain.id] === undefined) appData.ratings[domain.id] = 5;
+            if (appData.notes[domain.id] === undefined) appData.notes[domain.id] = "";
+        });
+
+        persistData();
     }
 
     function persistData() {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+    }
+
+    function computeAverage() {
+        let sum = 0;
+        DOMAINS.forEach(domain => {
+            sum += Number(appData.ratings[domain.id] || 0);
+        });
+        return (sum / DOMAINS.length).toFixed(1);
+    }
+
+    function updateAverageDisplay() {
+        if (avgSpan) avgSpan.textContent = computeAverage();
+    }
+
+    function clampRating(value) {
+        return Math.min(10, Math.max(1, Number(value) || 1));
+    }
+
+    function ratingToSliderPercent(value) {
+        const rating = clampRating(value);
+        if (rating <= 5) {
+            return ((rating - 1) / 4) * 50;
+        }
+        return 50 + ((rating - 5) / 5) * 50;
+    }
+
+    function syncSliderVisuals(slider) {
+        if (!slider) return;
+        const shell = slider.closest(".slider-shell");
+        if (!shell) return;
+
+        const value = clampRating(slider.value);
+        const percent = ratingToSliderPercent(value);
+
+        shell.style.setProperty("--fill-width", `${percent}%`);
+        shell.style.setProperty("--thumb-left", `${percent}%`);
+        shell.dataset.value = String(value);
     }
 
     function updateSingleDomainRating(domainId, newRating) {
@@ -69,22 +108,15 @@
         if (!card) return;
 
         const ratingValueSpan = card.querySelector(".rating-value");
-        if (ratingValueSpan) {
-            ratingValueSpan.textContent = `${newRating} / 10`;
-        }
+        if (ratingValueSpan) ratingValueSpan.textContent = `${newRating} / 10`;
 
         const ratingLabel = card.querySelector(".rating-label");
-        if (ratingLabel) {
-            ratingLabel.textContent = String(newRating);
-        }
+        if (ratingLabel) ratingLabel.textContent = String(newRating);
 
         const slider = card.querySelector(".rating-slider");
         if (slider) {
-            const currentValue = Number(slider.value);
-
-            if (currentValue !== newRating) {
-                slider.value = String(newRating);
-            }
+            if (Number(slider.value) !== newRating) slider.value = String(newRating);
+            syncSliderVisuals(slider);
         }
     }
 
@@ -96,12 +128,10 @@
     }
 
     function setRating(domainId, newRating) {
-        const clamped = Math.min(10, Math.max(1, newRating));
+        const clamped = clampRating(newRating);
         appData.ratings[domainId] = clamped;
         persistData();
-
         updateSingleDomainRating(domainId, clamped);
-
         drawStar();
         updateAverageDisplay();
     }
@@ -123,70 +153,129 @@
         updateAverageDisplay();
     }
 
-    function computeAverage() {
-        let sum = 0;
-        DOMAINS.forEach(d => {
-            sum += appData.ratings[d.id];
-        });
-        return (sum / DOMAINS.length).toFixed(1);
+    function resizeCanvasForDisplay() {
+        if (!canvas) return;
+
+        const wrapper = canvas.parentElement;
+        const displayedWidth = Math.floor(Math.min(wrapper.clientWidth, 560));
+        const cssSize = Math.max(320, displayedWidth);
+        const dpr = window.devicePixelRatio || 1;
+
+        const pixelSize = Math.round(cssSize * dpr);
+        if (canvas.width !== pixelSize || canvas.height !== pixelSize) {
+            canvas.width = pixelSize;
+            canvas.height = pixelSize;
+            canvas.style.width = `${cssSize}px`;
+            canvas.style.height = `${cssSize}px`;
+        }
     }
 
-    function updateAverageDisplay() {
-        avgSpan.textContent = computeAverage();
+    function drawLabelOnArc(text, centerX, centerY, angle, radius, fontSize, color) {
+        const chars = Array.from(text);
+        const reversed = angle > Math.PI / 2 && angle < (3 * Math.PI) / 2;
+        const glyphs = reversed ? chars.reverse() : chars;
+
+        ctx.save();
+        ctx.font = `600 ${fontSize}px Inter, system-ui, sans-serif`;
+        ctx.fillStyle = color;
+        ctx.textBaseline = "middle";
+        ctx.textAlign = "center";
+
+        const glyphWidths = glyphs.map(ch => ctx.measureText(ch).width);
+        const totalWidth = glyphWidths.reduce((sum, width) => sum + width, 0);
+        const arcLength = Math.max(totalWidth, 1);
+        const totalAngle = arcLength / radius;
+        let cursor = angle - totalAngle / 2;
+
+        glyphs.forEach((glyph, index) => {
+            const glyphWidth = glyphWidths[index];
+            const glyphAngle = cursor + (glyphWidth / radius) / 2;
+            const x = centerX + radius * Math.cos(glyphAngle);
+            const y = centerY + radius * Math.sin(glyphAngle);
+
+            ctx.save();
+            ctx.translate(x, y);
+            let rotation = glyphAngle + Math.PI / 2;
+            if (reversed) rotation += Math.PI;
+            ctx.rotate(rotation);
+
+            ctx.shadowColor = "rgba(255,255,255,0.75)";
+            ctx.shadowBlur = 6;
+            ctx.fillText(glyph, 0, 0);
+            ctx.restore();
+
+            cursor += glyphWidth / radius;
+        });
+
+        ctx.restore();
     }
 
     function drawStar() {
         if (!canvas || !ctx) return;
+
+        resizeCanvasForDisplay();
         const size = canvas.width;
-        const centerX = size / 2;
-        const centerY = size / 2;
-        const maxRadius = size * 0.42;
-        const minRadius = size * 0.12;
+        const dpr = window.devicePixelRatio || 1;
+        const logicalSize = size / dpr;
+        const centerX = logicalSize / 2;
+        const centerY = logicalSize / 2;
+        const maxRadius = logicalSize * 0.34;
+        const minRadius = logicalSize * 0.12;
+        const labelRadius = logicalSize * 0.47;
 
-        const ratings = DOMAINS.map(d => appData.ratings[d.id]);
-        const radii = ratings.map(r => minRadius + (r - 1) / 9 * (maxRadius - minRadius));
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.clearRect(0, 0, logicalSize, logicalSize);
 
+        const ratings = DOMAINS.map(domain => clampRating(appData.ratings[domain.id]));
+        const radii = ratings.map(rating => minRadius + ((rating - 1) / 9) * (maxRadius - minRadius));
         const angleStep = (Math.PI * 2) / DOMAINS.length;
-        let points = [];
-        for (let i = 0; i < DOMAINS.length; i++) {
-            let angle = -Math.PI / 2 + i * angleStep;
-            let r = radii[i];
-            let x = centerX + r * Math.cos(angle);
-            let y = centerY + r * Math.sin(angle);
-            points.push({x, y, angle, rating: ratings[i]});
-        }
 
-        ctx.clearRect(0, 0, size, size);
+        const points = DOMAINS.map((domain, index) => {
+            const angle = -Math.PI / 2 + index * angleStep;
+            const r = radii[index];
+            return {
+                x: centerX + r * Math.cos(angle),
+                y: centerY + r * Math.sin(angle),
+                angle,
+                rating: ratings[index],
+                name: domain.name
+            };
+        });
+
         ctx.save();
-        ctx.shadowBlur = 0;
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, maxRadius + 34, 0, Math.PI * 2);
+        ctx.fillStyle = "#fbf7f0";
+        ctx.fill();
 
         ctx.beginPath();
-        ctx.arc(centerX, centerY, maxRadius + 8, 0, Math.PI * 2);
-        ctx.fillStyle = "#fdf8ed";
+        ctx.arc(centerX, centerY, maxRadius + 16, 0, Math.PI * 2);
+        ctx.fillStyle = "#fffdf9";
         ctx.fill();
+
         ctx.beginPath();
-        ctx.arc(centerX, centerY, maxRadius - 2, 0, Math.PI * 2);
-        ctx.fillStyle = "#fffaf2";
+        ctx.arc(centerX, centerY, maxRadius, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(255,255,255,0.9)";
         ctx.fill();
 
         for (let level = 1; level <= 10; level++) {
-            const ringRadius = minRadius + (level - 1) / 9 * (maxRadius - minRadius);
+            const ringRadius = minRadius + ((level - 1) / 9) * (maxRadius - minRadius);
             ctx.beginPath();
             ctx.arc(centerX, centerY, ringRadius, 0, Math.PI * 2);
-            ctx.strokeStyle = "#e0d6c6";
-            ctx.lineWidth = 0.8;
+            ctx.strokeStyle = level === 5 ? "#d2c6b4" : "#e8dfd2";
+            ctx.lineWidth = level === 5 ? 1.2 : 0.8;
             ctx.stroke();
         }
 
         for (let i = 0; i < DOMAINS.length; i++) {
-            let angle = -Math.PI / 2 + i * angleStep;
-            let xEnd = centerX + maxRadius * Math.cos(angle);
-            let yEnd = centerY + maxRadius * Math.sin(angle);
+            const angle = -Math.PI / 2 + i * angleStep;
+            const xEnd = centerX + maxRadius * Math.cos(angle);
+            const yEnd = centerY + maxRadius * Math.sin(angle);
             ctx.beginPath();
             ctx.moveTo(centerX, centerY);
             ctx.lineTo(xEnd, yEnd);
-            ctx.strokeStyle = "#e9e0d0";
-            ctx.lineWidth = 1.2;
+            ctx.strokeStyle = "#ede3d6";
+            ctx.lineWidth = 1.15;
             ctx.stroke();
         }
 
@@ -196,158 +285,72 @@
             ctx.lineTo(points[i].x, points[i].y);
         }
         ctx.closePath();
+
         const gradient = ctx.createLinearGradient(centerX - maxRadius, centerY - maxRadius, centerX + maxRadius, centerY + maxRadius);
-        gradient.addColorStop(0, "#ffd966");
-        gradient.addColorStop(0.5, "#f4a261");
+        gradient.addColorStop(0, "#ffe08a");
+        gradient.addColorStop(0.55, "#f6b26b");
         gradient.addColorStop(1, "#e76f51");
         ctx.fillStyle = gradient;
         ctx.fill();
-        ctx.strokeStyle = "#ffffff";
+        ctx.strokeStyle = "rgba(255,255,255,0.9)";
         ctx.lineWidth = 2.5;
         ctx.stroke();
 
         ctx.beginPath();
-        ctx.arc(centerX, centerY, maxRadius * 0.18, 0, Math.PI * 2);
-        ctx.fillStyle = "#fff1c1";
+        ctx.arc(centerX, centerY, maxRadius * 0.17, 0, Math.PI * 2);
+        ctx.fillStyle = "#fff1c7";
         ctx.fill();
+        ctx.strokeStyle = "rgba(44,125,160,0.08)";
+        ctx.lineWidth = 1;
+        ctx.stroke();
 
-        for (let p of points) {
-            const nodeSize = 6 + (p.rating - 1) / 9 * 5;
+        points.forEach(point => {
+            const nodeSize = 6 + ((point.rating - 1) / 9) * 5;
+
             ctx.beginPath();
-            ctx.arc(p.x, p.y, nodeSize, 0, Math.PI * 2);
-            ctx.fillStyle = "#ffffff";
+            ctx.arc(point.x, point.y, nodeSize + 2, 0, Math.PI * 2);
+            ctx.fillStyle = "rgba(255,255,255,0.95)";
             ctx.fill();
-            ctx.shadowBlur = 6;
+
+            ctx.beginPath();
+            ctx.arc(point.x, point.y, nodeSize, 0, Math.PI * 2);
             ctx.fillStyle = "#2c7da0";
-            ctx.arc(p.x, p.y, nodeSize * 0.6, 0, Math.PI * 2);
             ctx.fill();
-            ctx.shadowBlur = 0;
+
             ctx.beginPath();
-            ctx.arc(p.x - 1, p.y - 1, nodeSize * 0.2, 0, Math.PI * 2);
-            ctx.fillStyle = "#ffffff";
+            ctx.arc(point.x - 1, point.y - 1, Math.max(1.8, nodeSize * 0.25), 0, Math.PI * 2);
+            ctx.fillStyle = "rgba(255,255,255,0.95)";
             ctx.fill();
-        }
+        });
 
-        ctx.font = `500 ${Math.floor(size * 0.035)}px "Inter", system-ui`;
-        ctx.fillStyle = "#3a5a6e";
+        const labelFontSize = Math.max(11, Math.min(16, logicalSize * 0.022));
+        const labelColor = "#2d4a62";
+        DOMAINS.forEach((domain, index) => {
+            const angle = -Math.PI / 2 + index * angleStep;
+            drawLabelOnArc(domain.name, centerX, centerY, angle, labelRadius, labelFontSize, labelColor);
+        });
+
+        ctx.font = `700 ${Math.max(42, logicalSize * 0.12)}px Inter, system-ui, sans-serif`;
+        ctx.fillStyle = "#2c3e50";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.shadowColor = "rgba(255,255,255,0.9)";
+        ctx.shadowBlur = 8;
+        ctx.fillText("★", centerX, centerY - logicalSize * 0.01);
+
         ctx.shadowBlur = 0;
-        for (let i = 0; i < DOMAINS.length; i++) {
-            let angle = -Math.PI / 2 + i * angleStep;
-            let labelRadius = maxRadius + 16;
-            let xLabel = centerX + labelRadius * Math.cos(angle);
-            let yLabel = centerY + labelRadius * Math.sin(angle);
-            let shortName = DOMAINS[i].name;
-            if (shortName.length > 14) shortName = shortName.substring(0, 12) + "..";
-            ctx.fillText(shortName, xLabel - 12, yLabel + 4);
-        }
-
-        ctx.font = `bold ${Math.floor(size * 0.085)}px "Inter", system-ui`;
-        const starChar = "★";
-        const starMetrics = ctx.measureText(starChar);
-        const starWidth = starMetrics.width;
-        ctx.fillStyle = "#2c3e4e";
-        ctx.fillText(starChar, centerX - starWidth / 2, centerY + 8);
-
-        ctx.font = `${Math.floor(size * 0.045)}px "Inter", system-ui`;
-        const recoveryText = "recovery";
-        const recoveryMetrics = ctx.measureText(recoveryText);
-        const recoveryWidth = recoveryMetrics.width;
+        ctx.font = `600 ${Math.max(16, logicalSize * 0.035)}px Inter, system-ui, sans-serif`;
         ctx.fillStyle = "#2d4a62";
-        ctx.fillText(recoveryText, centerX - recoveryWidth / 2, centerY + 32);
+        ctx.fillText("recovery", centerX, centerY + logicalSize * 0.07);
 
-        ctx.font = `500 ${Math.floor(size * 0.032)}px "JetBrains Mono", monospace`;
+        ctx.font = `600 ${Math.max(13, logicalSize * 0.022)}px JetBrains Mono, monospace`;
         ctx.fillStyle = "#1f5068";
-        for (let p of points) {
-            let ratingText = Math.round(p.rating);
-            let offsetX = p.x + 10;
-            let offsetY = p.y - 8;
-            ctx.fillText(ratingText.toString(), offsetX, offsetY);
-        }
+        points.forEach(point => {
+            const ratingText = String(point.rating);
+            ctx.fillText(ratingText, point.x + 11, point.y - 9);
+        });
 
         ctx.restore();
-    }
-
-    function renderAllDomains() {
-        if (!domainsContainer) return;
-        domainsContainer.innerHTML = "";
-        DOMAINS.forEach(domain => {
-            const rating = appData.ratings[domain.id];
-            const note = appData.notes[domain.id] || "";
-
-            const card = document.createElement("div");
-            card.className = "domain-card";
-            card.dataset.id = domain.id;
-
-            const headerDiv = document.createElement("div");
-            headerDiv.className = "domain-header";
-            headerDiv.innerHTML = `
-                <div class="domain-title">
-                    <i class="${domain.icon}"></i> ${domain.name}
-                </div>
-                <div class="rating-value" id="ratingValue-${domain.id}">${rating} / 10</div>
-            `;
-
-            const sliderContainer = document.createElement("div");
-            sliderContainer.className = "slider-container";
-
-            const sliderWrapper = document.createElement("div");
-            sliderWrapper.className = "slider-wrapper";
-
-            const slider = document.createElement("input");
-            slider.type = "range";
-            slider.min = "1";
-            slider.max = "10";
-            slider.step = "1";
-            slider.value = String(rating);
-            slider.classList.add("rating-slider");
-
-            const markersDiv = document.createElement("div");
-            markersDiv.className = "slider-markers";
-            markersDiv.innerHTML = `<span>1 Low</span><span>5 Neutral</span><span>10 High</span>`;
-
-            sliderWrapper.appendChild(slider);
-            sliderWrapper.appendChild(markersDiv);
-
-            const ratingLabel = document.createElement("span");
-            ratingLabel.className = "rating-label";
-            ratingLabel.textContent = `${rating}`;
-
-            sliderContainer.appendChild(sliderWrapper);
-            sliderContainer.appendChild(ratingLabel);
-
-            slider.addEventListener("input", (e) => {
-                e.stopPropagation();
-                const newVal = parseInt(e.target.value, 10);
-                ratingLabel.textContent = newVal.toString();
-                const ratingSpan = card.querySelector(`.rating-value`);
-                if (ratingSpan) ratingSpan.textContent = `${newVal} / 10`;
-                setRating(domain.id, newVal);
-            });
-
-            slider.addEventListener("change", (e) => {
-                const newVal = parseInt(e.target.value, 10);
-                setRating(domain.id, newVal);
-            });
-
-            const textarea = document.createElement("textarea");
-            textarea.className = "notes-area";
-            textarea.rows = 2;
-            textarea.placeholder = `e.g., ${getPlaceholderForDomain(domain.name)}`;
-            textarea.value = note;
-            textarea.addEventListener("change", (e) => {
-                setNote(domain.id, e.target.value);
-            });
-            textarea.addEventListener("blur", (e) => {
-                setNote(domain.id, e.target.value);
-            });
-
-            card.appendChild(headerDiv);
-            card.appendChild(sliderContainer);
-            card.appendChild(textarea);
-            domainsContainer.appendChild(card);
-        });
-        updateAverageDisplay();
-        drawStar();
     }
 
     function getPlaceholderForDomain(name) {
@@ -366,17 +369,116 @@
         return placeholders[name] || "Write your personal note here...";
     }
 
-    function handleCanvasResize() {
-        if (canvas) drawStar();
+    function renderAllDomains() {
+        if (!domainsContainer) return;
+
+        domainsContainer.innerHTML = "";
+
+        DOMAINS.forEach(domain => {
+            const rating = clampRating(appData.ratings[domain.id]);
+            const note = appData.notes[domain.id] || "";
+
+            const card = document.createElement("div");
+            card.className = "domain-card";
+            card.dataset.id = domain.id;
+
+            const headerDiv = document.createElement("div");
+            headerDiv.className = "domain-header";
+            headerDiv.innerHTML = `
+                <div class="domain-title">
+                    <i class="${domain.icon}"></i>
+                    <span>${domain.name}</span>
+                </div>
+                <div class="rating-value" id="ratingValue-${domain.id}">${rating} / 10</div>
+            `;
+
+            const sliderContainer = document.createElement("div");
+            sliderContainer.className = "slider-container";
+
+            const sliderShell = document.createElement("div");
+            sliderShell.className = "slider-shell";
+            sliderShell.style.setProperty("--fill-width", `${ratingToSliderPercent(rating)}%`);
+            sliderShell.style.setProperty("--thumb-left", `${ratingToSliderPercent(rating)}%`);
+
+            const sliderTrack = document.createElement("div");
+            sliderTrack.className = "slider-track";
+
+            const sliderFill = document.createElement("div");
+            sliderFill.className = "slider-fill";
+
+            const sliderThumb = document.createElement("div");
+            sliderThumb.className = "slider-thumb";
+
+            const slider = document.createElement("input");
+            slider.type = "range";
+            slider.min = "1";
+            slider.max = "10";
+            slider.step = "1";
+            slider.value = String(rating);
+            slider.classList.add("rating-slider");
+            slider.setAttribute("aria-label", `${domain.name} rating`);
+
+            const markersDiv = document.createElement("div");
+            markersDiv.className = "slider-markers";
+            markersDiv.innerHTML = `
+                <span class="slider-marker left">1 Low</span>
+                <span class="slider-marker center">5 Neutral</span>
+                <span class="slider-marker right">10 High</span>
+            `;
+
+            sliderShell.appendChild(sliderTrack);
+            sliderShell.appendChild(sliderFill);
+            sliderShell.appendChild(sliderThumb);
+            sliderShell.appendChild(slider);
+            sliderShell.appendChild(markersDiv);
+
+            const ratingLabel = document.createElement("span");
+            ratingLabel.className = "rating-label";
+            ratingLabel.textContent = String(rating);
+
+            sliderContainer.appendChild(sliderShell);
+            sliderContainer.appendChild(ratingLabel);
+
+            const textarea = document.createElement("textarea");
+            textarea.className = "notes-area";
+            textarea.rows = 2;
+            textarea.placeholder = `e.g., ${getPlaceholderForDomain(domain.name)}`;
+            textarea.value = note;
+            textarea.addEventListener("change", e => setNote(domain.id, e.target.value));
+            textarea.addEventListener("blur", e => setNote(domain.id, e.target.value));
+
+            card.appendChild(headerDiv);
+            card.appendChild(sliderContainer);
+            card.appendChild(textarea);
+            domainsContainer.appendChild(card);
+
+            slider.addEventListener("input", e => {
+                const newVal = clampRating(e.target.value);
+                ratingLabel.textContent = String(newVal);
+                ratingValue.textContent = `${newVal} / 10`;
+                syncSliderVisuals(slider);
+                setRating(domain.id, newVal);
+            });
+
+            slider.addEventListener("change", e => {
+                const newVal = clampRating(e.target.value);
+                setRating(domain.id, newVal);
+            });
+
+            syncSliderVisuals(slider);
+        });
+
+        updateAverageDisplay();
+        drawStar();
     }
 
     function init() {
         loadFromStorage();
         renderAllDomains();
-        drawStar();
         updateAverageDisplay();
+        drawStar();
 
-        window.addEventListener("resize", handleCanvasResize);
+        window.addEventListener("resize", drawStar);
 
         if (resetBtn) {
             resetBtn.addEventListener("click", () => {
@@ -387,7 +489,7 @@
         }
 
         const resizeObserver = new ResizeObserver(() => drawStar());
-        if (canvas) resizeObserver.observe(canvas);
+        if (canvas) resizeObserver.observe(canvas.parentElement);
     }
 
     init();
