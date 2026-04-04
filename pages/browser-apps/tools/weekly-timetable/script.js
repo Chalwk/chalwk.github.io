@@ -502,6 +502,10 @@
             .replace(/'/g, '&#39;');
     }
 
+    function isRemoveIconClick(target) {
+        return target.closest('.remove-day-icon') || target.closest('.remove-period-icon');
+    }
+
     els.addDayBtn.addEventListener('click', addDay);
     els.addPeriodBtn.addEventListener('click', addPeriod);
     els.resetDaysBtn.addEventListener('click', resetDays);
@@ -514,7 +518,8 @@
         event.target.value = '';
     });
 
-    els.tableHead.addEventListener('dblclick', event => {
+    els.tableHead.addEventListener('click', event => {
+        if (isRemoveIconClick(event.target)) return;
         const header = event.target.closest('.day-header');
         if (!header) return;
         const index = Number(header.dataset.dayIndex);
@@ -522,7 +527,9 @@
         if (nextValue !== null) setDayName(index, nextValue);
     });
 
-    els.tableBody.addEventListener('dblclick', event => {
+    els.tableBody.addEventListener('click', event => {
+        if (isRemoveIconClick(event.target)) return;
+
         const subjectCell = event.target.closest('.subject-cell');
         if (subjectCell) {
             const periodIndex = Number(subjectCell.dataset.periodIndex);
@@ -532,6 +539,7 @@
             if (nextValue !== null) setSubject(periodIndex, dayIndex, nextValue);
             return;
         }
+
         const periodCell = event.target.closest('.period-cell');
         if (periodCell && !event.target.closest('.remove-period-icon')) {
             const periodIndex = Number(periodCell.dataset.periodIndex);

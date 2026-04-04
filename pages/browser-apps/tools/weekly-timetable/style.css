@@ -162,6 +162,12 @@ body {
     font-size: 0.9rem;
 }
 
+.timetable-table td,
+.timetable-table th {
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
 .timetable-table th,
 .timetable-table td {
     padding: 0.85rem 0.5rem;
