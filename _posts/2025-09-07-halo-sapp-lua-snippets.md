@@ -257,20 +257,29 @@ MetaIndex of the first matching tag, or `nil` if not found.
 **Code:**
 
 ```lua
+local base_tag_table = 0x40440000   -- Halo's tag table base address
+
+-- Searches tags by substring in name/path, optionally filtered by class.
+-- Returns meta index of first match, or nil if none found.
 local function findTagByNameSubstring(substring, class_filter)
-    local base_tag_table = 0x40440000
     substring = substring:lower()
-    local tag_array = read_dword(base_tag_table)
-    local tag_count = read_dword(base_tag_table + 0xC)
+    local tag_array = read_dword(base_tag_table)          -- pointer to first tag entry
+    local tag_count = read_dword(base_tag_table + 0xC)    -- total number of tags
+
+    -- If a class filter is provided, get its class hash once
+    local filter_hash = class_filter and read_dword(lookup_tag(class_filter, "")) or nil
+
     for i = 0, tag_count - 1 do
-        local tag = tag_array + 0x20 * i
-        local class = read_dword(tag)
-        if class_filter == nil or class == read_dword(lookup_tag(class_filter, "")) then
-            local name_ptr = read_dword(tag + 0x10)
-            if name_ptr ~= 0 then
+        local tag = tag_array + 0x20 * i                  -- each tag entry is 32 bytes
+        local class_hash = read_dword(tag)                -- tag's class hash (e.g., 0x77656170 = "weap")
+
+        -- Apply class filter if specified
+        if not filter_hash or class_hash == filter_hash then
+            local name_ptr = read_dword(tag + 0x10)       -- pointer to tag name string
+            if name_ptr and name_ptr ~= 0 then
                 local name = read_string(name_ptr)
                 if name and name:lower():find(substring, 1, true) then
-                    return read_dword(tag + 0xC)
+                    return read_dword(tag + 0xC)          -- meta index of the tag
                 end
             end
         end
@@ -278,6 +287,34 @@ local function findTagByNameSubstring(substring, class_filter)
     return nil
 end
 ```
+
+**Example usage:**
+
+```lua
+-- Find any weapon with "rocket" in its name
+local rocket_meta = findTagByNameSubstring("rocket", "weap")
+if rocket_meta then
+    print("Found rocket launcher meta: " .. rocket_meta)
+    -- Spawn one at a location
+	spawn_object("", "", 100, 100, 100, 0, rocket_meta)
+end
+
+-- Find any vehicle containing "ghost" (case-insensitive)
+local ghost_meta = findTagByNameSubstring("ghost", "vehi")
+
+-- Search all tags for "flag" (could be weapon, scenery, etc.)
+local flag_meta = findTagByNameSubstring("flag", nil)
+```
+
+**How it works:**
+
+- Iterates through every tag in the map's tag table.
+- Compares the tag's class hash against the optional `class_filter` (converted via `lookup_tag`).
+- Performs a simple substring search on the tag's full path/name (case-insensitive).
+- Returns the meta index (usable with `spawn_object`) of the first match.
+
+**Note:** The search stops at the first match. If you need all matches, modify the function to collect results in a
+table.
 
 ---
 
@@ -417,38 +454,65 @@ Finds the flag (objective) tag on the current map and returns its meta ID and ta
 **Code:**
 
 ```lua
-local flag_meta_id, flag_tag_name
-local base_tag_table = 0x40440000
-local tag_entry_size = 0x20
-local tag_data_offset = 0x14
-local bit_check_offset = 0x308
-local bit_index = 3
+local base_tag_table = 0x40440000   -- Halo's tag table base address
 
+-- Returns meta ID and tag name of the flag (if present on the map)
 local function getFlagData()
-    local tag_array = read_dword(base_tag_table)
-    local tag_count = read_dword(base_tag_table + 0xC)
+    local tag_array = read_dword(base_tag_table)          -- pointer to first tag entry
+    local tag_count = read_dword(base_tag_table + 0xC)    -- total number of tags
+
     for i = 0, tag_count - 1 do
-        local tag = tag_array + tag_entry_size * i
-        local tag_class = read_dword(tag)
-        if tag_class == 0x77656170 then -- "weap"
-            local tag_data = read_dword(tag + tag_data_offset)
-            if read_bit(tag_data + bit_check_offset, bit_index) == 1 then
-                if read_byte(tag_data + 2) == 0 then
-                    flag_meta_id = read_dword(tag + 0xC)
-                    flag_tag_name = read_string(read_dword(tag + 0x10))
-                    return flag_meta_id, flag_tag_name
+        local tag = tag_array + 0x20 * i                  -- each tag entry is 32 bytes
+        local tag_class = read_dword(tag)                 -- class hash (0x77656170 = "weap")
+
+        if tag_class == 0x77656170 then                   -- only interested in weapons (may be different on CE)
+            local tag_data = read_dword(tag + 0x14)       -- pointer to tag data in memory
+            -- Check if this weapon is an objective (bit 3 at offset 0x308)
+            if read_bit(tag_data + 0x308, 3) == 1 then
+                -- Byte at offset 0x2: 0 = flag, 4 = oddball
+                if read_byte(tag_data + 0x2) == 0 then
+                    local meta_id = read_dword(tag + 0xC)            -- meta index
+                    local name_ptr = read_dword(tag + 0x10)          -- pointer to tag name
+                    local tag_name = read_string(name_ptr)           -- e.g., "objects\weapons\multiplayer\flag\flag"
+                    return meta_id, tag_name
                 end
             end
         end
     end
-    return nil, nil
+    return nil, nil   -- no flag found on this map
+end
+```
+
+**Example usage:**
+
+```lua
+local flag_meta, flag_name
+
+function OnScriptLoad()
+    flag_meta, flag_name = getFlagData()
+    if flag_meta then
+        print("Flag found: " .. flag_name .. " (meta: " .. flag_meta .. ")")
+    else
+        print("No flag on this map.")
+    end
+end
+
+-- Use the cached values elsewhere (e.g., spawning the flag)
+function OnPlayerDeath(player_index)
+    if flag_meta then
+        -- Respawn flag at custom position
+		spawn_object("", "", 100, 100, 100, 0, flag_meta)
+    end
 end
 ```
 
 **How it works:**
 
-- Looks for a weapon tag (`weap`) with the "objective" bit set.
+- Looks for a weapon tag (`weap`) with the "objective" bit set at offset `0x308`, bit index `3`.
 - Byte `+2` of the tag data equals `0` for flag (oddball is `4`).
+
+**Note:** The result can be cached globally (as shown above) because the map's tag table doesn't change during gameplay.
+Call `getFlagData()` once in `OnScriptLoad` or during `EVENT_GAME_START` for efficiency.
 
 ---
 
