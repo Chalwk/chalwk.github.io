@@ -188,7 +188,7 @@ with facing direction.
 
 **Parameters:**
 
-- `dyn_player_player` (number) - dynamic player memory address.
+- `dyn_player` (number) - dynamic player memory address.
 - `px, py, pz` (numbers) - Spawn coordinates.
 - `pR` (number) - Rotation in radians.
 - `z_off` (number, optional) - Vertical offset. Defaults to `0.3`.
@@ -196,14 +196,14 @@ with facing direction.
 **Code:**
 
 ```lua
-local function spawnObject(dyn_player_player, px, py, pz, pR, z_off)
+local function spawnObject(dyn_player, px, py, pz, pR, z_off)
     z_off = z_off or 0.3
     local x = px
     local y = py
     local z = pz + z_off
     local r = pR
-    write_vector3d(dyn_player_player + 0x5C, x, y, z)
-    write_vector3d(dyn_player_player + 0x74, math.cos(r), math.sin(r), 0)
+    write_vector3d(dyn_player + 0x5C, x, y, z)
+    write_vector3d(dyn_player + 0x74, math.cos(r), math.sin(r), 0)
 end
 ```
 
