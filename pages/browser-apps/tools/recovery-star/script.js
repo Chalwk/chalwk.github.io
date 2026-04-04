@@ -171,47 +171,26 @@
     }
 
     function drawLabelOnArc(text, centerX, centerY, angle, radius, fontSize, color) {
-        const chars = Array.from(text);
-
-        const normalizeAngle = a => ((a % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
-        const normalized = normalizeAngle(angle);
-
-        const reversed = normalized >= Math.PI / 2 && normalized <= (3 * Math.PI) / 2;
-        const glyphs = reversed ? [...chars].reverse() : chars;
-
         ctx.save();
         ctx.font = `600 ${fontSize}px Inter, system-ui, sans-serif`;
         ctx.fillStyle = color;
         ctx.textBaseline = "middle";
         ctx.textAlign = "center";
 
-        const glyphWidths = glyphs.map(ch => ctx.measureText(ch).width);
-        const totalWidth = glyphWidths.reduce((sum, width) => sum + width, 0);
-        const totalAngle = Math.max(totalWidth, 1) / radius;
+        const x = centerX + radius * Math.cos(angle);
+        const y = centerY + radius * Math.sin(angle);
 
-        let cursor = angle - totalAngle / 2;
+        let rotation = angle + Math.PI / 2;
 
-        glyphs.forEach((glyph, index) => {
-            const glyphWidth = glyphWidths[index];
-            const glyphAngle = cursor + (glyphWidth / radius) / 2;
-            const x = centerX + radius * Math.cos(glyphAngle);
-            const y = centerY + radius * Math.sin(glyphAngle);
+        if (rotation > Math.PI / 2 && rotation < (3 * Math.PI) / 2) {
+            rotation += Math.PI;
+        }
 
-            ctx.save();
-            ctx.translate(x, y);
-
-            let rotation = glyphAngle + Math.PI / 2;
-            if (reversed) rotation += Math.PI;
-
-            ctx.rotate(rotation);
-            ctx.shadowColor = "rgba(255,255,255,0.75)";
-            ctx.shadowBlur = 6;
-            ctx.fillText(glyph, 0, 0);
-            ctx.restore();
-
-            cursor += glyphWidth / radius;
-        });
-
+        ctx.translate(x, y);
+        ctx.rotate(rotation);
+        ctx.shadowColor = "rgba(255,255,255,0.75)";
+        ctx.shadowBlur = 6;
+        ctx.fillText(text, 0, 0);
         ctx.restore();
     }
 
