@@ -242,37 +242,6 @@
     z-index: 1;
 }
 
-.page-nav {
-    background: white;
-    border-radius: 10px;
-    padding: 1rem;
-    margin: 2rem auto;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    max-width: 1200px;
-}
-
-.page-nav-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    justify-content: center;
-}
-
-.page-nav-link {
-    padding: 0.5rem 1rem;
-    background: var(--light);
-    border-radius: 5px;
-    text-decoration: none;
-    color: var(--dark);
-    font-weight: 500;
-    transition: all 0.3s ease;
-}
-
-.page-nav-link:hover {
-    background: var(--primary);
-    color: white;
-}
-
 .note-box {
     background: #fff8e1;
     border-left: 4px solid var(--warning);
@@ -296,10 +265,5 @@
 
     .card-grid {
         grid-template-columns: 1fr;
-    }
-
-    .page-nav-links {
-        flex-direction: column;
-        align-items: center;
     }
 }
