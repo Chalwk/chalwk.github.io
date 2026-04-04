@@ -372,7 +372,7 @@
 
     function init() {
         loadFromStorage();
-        renderAllDomains();    // initial render
+        renderAllDomains();
         drawStar();
         updateAverageDisplay();
 
