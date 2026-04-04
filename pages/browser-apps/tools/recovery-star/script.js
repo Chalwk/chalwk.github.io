@@ -64,10 +64,44 @@
         localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
     }
 
+    function updateSingleDomainRating(domainId, newRating) {
+        const card = document.querySelector(`.domain-card[data-id="${domainId}"]`);
+        if (!card) return;
+
+        const ratingValueSpan = card.querySelector(".rating-value");
+        if (ratingValueSpan) {
+            ratingValueSpan.textContent = `${newRating} / 10`;
+        }
+
+        const ratingLabel = card.querySelector(".rating-label");
+        if (ratingLabel) {
+            ratingLabel.textContent = String(newRating);
+        }
+
+        const slider = card.querySelector(".rating-slider");
+        if (slider) {
+            const currentValue = Number(slider.value);
+
+            if (currentValue !== newRating) {
+                slider.value = String(newRating);
+            }
+        }
+    }
+
+    function updateSingleDomainNote(domainId, noteText) {
+        const card = document.querySelector(`.domain-card[data-id="${domainId}"]`);
+        if (!card) return;
+        const textarea = card.querySelector(".notes-area");
+        if (textarea && textarea.value !== noteText) textarea.value = noteText;
+    }
+
     function setRating(domainId, newRating) {
-        appData.ratings[domainId] = Math.min(10, Math.max(1, newRating));
+        const clamped = Math.min(10, Math.max(1, newRating));
+        appData.ratings[domainId] = clamped;
         persistData();
-        renderAllDomains();
+
+        updateSingleDomainRating(domainId, clamped);
+
         drawStar();
         updateAverageDisplay();
     }
@@ -75,7 +109,7 @@
     function setNote(domainId, noteText) {
         appData.notes[domainId] = noteText;
         persistData();
-        renderAllDomains();
+        updateSingleDomainNote(domainId, noteText);
     }
 
     function resetAllRatings() {
@@ -123,7 +157,6 @@
         }
 
         ctx.clearRect(0, 0, size, size);
-
         ctx.save();
         ctx.shadowBlur = 0;
 
@@ -131,7 +164,6 @@
         ctx.arc(centerX, centerY, maxRadius + 8, 0, Math.PI * 2);
         ctx.fillStyle = "#fdf8ed";
         ctx.fill();
-
         ctx.beginPath();
         ctx.arc(centerX, centerY, maxRadius - 2, 0, Math.PI * 2);
         ctx.fillStyle = "#fffaf2";
@@ -164,7 +196,6 @@
             ctx.lineTo(points[i].x, points[i].y);
         }
         ctx.closePath();
-
         const gradient = ctx.createLinearGradient(centerX - maxRadius, centerY - maxRadius, centerX + maxRadius, centerY + maxRadius);
         gradient.addColorStop(0, "#ffd966");
         gradient.addColorStop(0.5, "#f4a261");
@@ -197,33 +228,40 @@
             ctx.fill();
         }
 
-        ctx.font = `500 ${Math.floor(size * 0.045)}px "Inter", system-ui`;
+        ctx.font = `500 ${Math.floor(size * 0.035)}px "Inter", system-ui`;
         ctx.fillStyle = "#3a5a6e";
         ctx.shadowBlur = 0;
         for (let i = 0; i < DOMAINS.length; i++) {
             let angle = -Math.PI / 2 + i * angleStep;
-            let labelRadius = maxRadius + 18;
+            let labelRadius = maxRadius + 16;
             let xLabel = centerX + labelRadius * Math.cos(angle);
             let yLabel = centerY + labelRadius * Math.sin(angle);
-            let shortName = DOMAINS[i].name.split(" ").slice(0, 2).join(" ");
-            if (shortName.length > 12) shortName = shortName.substring(0, 10) + "..";
+            let shortName = DOMAINS[i].name;
+            if (shortName.length > 14) shortName = shortName.substring(0, 12) + "..";
             ctx.fillText(shortName, xLabel - 12, yLabel + 4);
         }
 
         ctx.font = `bold ${Math.floor(size * 0.085)}px "Inter", system-ui`;
+        const starChar = "★";
+        const starMetrics = ctx.measureText(starChar);
+        const starWidth = starMetrics.width;
         ctx.fillStyle = "#2c3e4e";
-        ctx.fillText("★", centerX - 14, centerY + 10);
-        ctx.font = `${Math.floor(size * 0.048)}px "Inter"`;
-        ctx.fillStyle = "#2d4a62";
-        ctx.fillText("recovery", centerX - 34, centerY + 34);
+        ctx.fillText(starChar, centerX - starWidth / 2, centerY + 8);
 
-        ctx.font = `500 ${Math.floor(size * 0.035)}px "JetBrains Mono", monospace`;
+        ctx.font = `${Math.floor(size * 0.045)}px "Inter", system-ui`;
+        const recoveryText = "recovery";
+        const recoveryMetrics = ctx.measureText(recoveryText);
+        const recoveryWidth = recoveryMetrics.width;
+        ctx.fillStyle = "#2d4a62";
+        ctx.fillText(recoveryText, centerX - recoveryWidth / 2, centerY + 32);
+
+        ctx.font = `500 ${Math.floor(size * 0.032)}px "JetBrains Mono", monospace`;
         ctx.fillStyle = "#1f5068";
         for (let p of points) {
             let ratingText = Math.round(p.rating);
             let offsetX = p.x + 10;
             let offsetY = p.y - 8;
-            ctx.fillText(ratingText, offsetX, offsetY);
+            ctx.fillText(ratingText.toString(), offsetX, offsetY);
         }
 
         ctx.restore();
@@ -257,15 +295,15 @@
 
             const slider = document.createElement("input");
             slider.type = "range";
-            slider.min = 1;
-            slider.max = 10;
-            slider.step = 1;
-            slider.value = rating;
+            slider.min = "1";
+            slider.max = "10";
+            slider.step = "1";
+            slider.value = String(rating);
             slider.classList.add("rating-slider");
 
             const markersDiv = document.createElement("div");
             markersDiv.className = "slider-markers";
-            markersDiv.innerHTML = `<span>❶ Low</span><span>❼ Neutral</span><span>🔟 High</span>`;
+            markersDiv.innerHTML = `<span>1 Low</span><span>5 Neutral</span><span>10 High</span>`;
 
             sliderWrapper.appendChild(slider);
             sliderWrapper.appendChild(markersDiv);
@@ -329,20 +367,16 @@
     }
 
     function handleCanvasResize() {
-        if (canvas) {
-            drawStar();
-        }
+        if (canvas) drawStar();
     }
 
     function init() {
         loadFromStorage();
-        renderAllDomains();
+        renderAllDomains();    // initial render
         drawStar();
         updateAverageDisplay();
 
-        window.addEventListener("resize", () => {
-            handleCanvasResize();
-        });
+        window.addEventListener("resize", handleCanvasResize);
 
         if (resetBtn) {
             resetBtn.addEventListener("click", () => {
@@ -352,9 +386,7 @@
             });
         }
 
-        const resizeObserver = new ResizeObserver(() => {
-            drawStar();
-        });
+        const resizeObserver = new ResizeObserver(() => drawStar());
         if (canvas) resizeObserver.observe(canvas);
     }
 
