@@ -112,20 +112,36 @@ Checks whether a specific vehicle object is currently occupied by any player.
 **Code:**
 
 ```lua
+-- Returns true if any alive player is riding in the given vehicle object
 local function isVehicleOccupied(vehicleObject)
     for i = 1, 16 do
-        local dyn = get_dynamic_player(i)
-        if player_present(i) and player_alive(i) and dyn ~= 0 then
-            local vehicle_id = read_dword(dyn + 0x11C)
-            if vehicle_id == 0xFFFFFFFF then goto next_player end
-            local vehicle_obj = get_object_memory(vehicle_id)
-            if vehicle_obj ~= 0 and vehicle_obj == vehicleObject then
-                return true
+        if player_present(i) and player_alive(i) then
+            local dyn = get_dynamic_player(i)
+            if dyn ~= 0 then
+                local vehicle_id = read_dword(dyn + 0x11C)		-- player's current vehicle ID
+                if vehicle_id ~= 0xFFFFFFFF then				-- 0xFFFFFFFF means no vehicle
+                    local vehicle_obj = get_object_memory(vehicle_id)
+                    if vehicle_obj == vehicleObject then return true end
+                end
             end
-            ::next_player::
         end
     end
     return false
+end
+```
+
+**Example usage:**
+
+```lua
+-- Prevent anyone from entering a specific vehicle (e.g., a reserved vehicle)
+local reserved_vehicle = get_object_memory(some_vehicle_id)
+
+function OnTick()
+    for i = 1, 16 do
+        if player_alive(i) and isVehicleOccupied(reserved_vehicle) then
+            exit_vehicle(i) -- eject the player immediately
+        end
+    end
 end
 ```
 
