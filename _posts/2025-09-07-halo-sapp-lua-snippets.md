@@ -188,7 +188,7 @@ with facing direction.
 
 **Parameters:**
 
-- `dyn_player` (number) - Dynamic player memory address.
+- `dyn_player_player` (number) - dynamic player memory address.
 - `px, py, pz` (numbers) - Spawn coordinates.
 - `pR` (number) - Rotation in radians.
 - `z_off` (number, optional) - Vertical offset. Defaults to `0.3`.
@@ -196,19 +196,49 @@ with facing direction.
 **Code:**
 
 ```lua
-local function spawnObject(dyn_player, px, py, pz, pR, z_off)
+local function spawnObject(dyn_player_player, px, py, pz, pR, z_off)
     z_off = z_off or 0.3
     local x = px
     local y = py
     local z = pz + z_off
     local r = pR
-    write_vector3d(dyn_player + 0x5C, x, y, z)
-    write_vector3d(dyn_player + 0x74, math.cos(r), math.sin(r), 0)
+    write_vector3d(dyn_player_player + 0x5C, x, y, z)
+    write_vector3d(dyn_player_player + 0x74, math.cos(r), math.sin(r), 0)
 end
 ```
 
-**Explanation:** The forward vector (offset `0x74`) controls which direction the player faces. Using `math.cos` and
-`math.sin` converts radians to a unit vector.
+**Example usage:**
+
+```lua
+-- Teleport a player to a specific location
+function OnChat(playerId, message)
+    if message == "/tp" then
+        local dyn_player = get_dynamic_player(playerId)
+        if dyn_player and dyn_player ~= 0 then
+            spawnObject(dyn_player, 100, 50, 5, 0)   -- x=100, y=50, z=5, rotation=0
+            say(playerId, "Teleported to coordinates (100, 50, 5)")
+        end
+        return false
+    end
+end
+
+-- Set a custom spawn point for a player after death (OnPlayerSpawn override)
+local custom_spawn = { x = -200, y = 150, z = 10, rot = math.rad(90) }
+
+function OnPlayerDeath(playerId)
+    -- Store that this player should respawn at custom location
+    -- (You'd need a global table to track this)
+    local dyn_player = get_dynamic_player(playerId)
+    if dyn_player then
+        -- Teleport immediately (could be used as instant respawn)
+        spawnObject(dyn_player, custom_spawn.x, custom_spawn.y, custom_spawn.z, custom_spawn.rot, 0.5)
+    end
+end
+```
+
+**Explanation:**  
+The function writes the new position (offset `0x5C`) and forward vector (offset `0x74`) which determines facing
+direction. The vertical offset `z_off` lifts the player slightly above the ground to avoid falling through the map.
 
 ---
 
