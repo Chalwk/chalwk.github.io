@@ -172,8 +172,12 @@
 
     function drawLabelOnArc(text, centerX, centerY, angle, radius, fontSize, color) {
         const chars = Array.from(text);
-        const reversed = angle > Math.PI / 2 && angle < (3 * Math.PI) / 2;
-        const glyphs = reversed ? chars.reverse() : chars;
+
+        const normalizeAngle = a => ((a % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
+        const normalized = normalizeAngle(angle);
+
+        const reversed = normalized >= Math.PI / 2 && normalized <= (3 * Math.PI) / 2;
+        const glyphs = reversed ? [...chars].reverse() : chars;
 
         ctx.save();
         ctx.font = `600 ${fontSize}px Inter, system-ui, sans-serif`;
@@ -183,8 +187,8 @@
 
         const glyphWidths = glyphs.map(ch => ctx.measureText(ch).width);
         const totalWidth = glyphWidths.reduce((sum, width) => sum + width, 0);
-        const arcLength = Math.max(totalWidth, 1);
-        const totalAngle = arcLength / radius;
+        const totalAngle = Math.max(totalWidth, 1) / radius;
+
         let cursor = angle - totalAngle / 2;
 
         glyphs.forEach((glyph, index) => {
@@ -195,10 +199,11 @@
 
             ctx.save();
             ctx.translate(x, y);
+
             let rotation = glyphAngle + Math.PI / 2;
             if (reversed) rotation += Math.PI;
-            ctx.rotate(rotation);
 
+            ctx.rotate(rotation);
             ctx.shadowColor = "rgba(255,255,255,0.75)";
             ctx.shadowBlur = 6;
             ctx.fillText(glyph, 0, 0);
