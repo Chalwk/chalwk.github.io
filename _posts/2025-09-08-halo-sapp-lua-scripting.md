@@ -659,3 +659,70 @@ Now that you have the basics and a full template, you can:
 - Experiment with `get_var()` and `set_var()` to modify player properties (health, shields, weapons).
 - Explore the FFI library for advanced system integration.
 - Join the HSP community to share your scripts and get help.
+
+---
+
+## 8. Special Text Positioning Characters (`|l`, `|r`, `|c`, `|n`, `|t`)
+
+When sending private messages with `rprint()`, you can prefix your message with one of several special characters to
+reposition the text on the player’s screen. This only works if the player has the **HAC2 client** installed. Players
+using **Chimera** (or vanilla Halo) will not see the repositioning effect; their messages will appear at default
+positions defined by the client.
+
+### Available Positioning Characters
+
+| Prefix | Effect                                                |
+|--------|-------------------------------------------------------|
+| `\|l`  | Left-align the message (default position).            |
+| `\|r`  | Right-align the message.                              |
+| `\|c`  | Center the message horizontally.                      |
+| `\|n`  | Place the message at the “normal” (default) position. |
+| `\|t`  | Tab the message                                       |
+
+These characters are stripped from the displayed message and only affect layout.
+
+#### Example
+
+```lua
+rprint("|cHello, welcome to my server")   -- Centers the message
+rprint("|rPlayer joined: " .. playerName) -- Right‑aligns the message
+```
+
+### Chimera Users: Adjusting Text Position
+
+Chimera does not recognise `|l`, `|r`, `|c`, or `|n`. Instead, all text positioning (including server messages sent via
+`rprint`) is controlled through the `[custom_chat]` section of `chimera.ini`. Chimera users can change the default
+alignment, offset, anchor point, and more for server messages.
+
+Key settings in `chimera.ini` that affect `rprint` messages:
+
+```ini
+[custom_chat]
+; Server message offset (x and y; HUD pixels)
+server_message_x = 360
+server_message_y = 60
+
+; Server message dimensions (width and height)
+server_message_w = 350
+server_message_h = 380
+
+; Anchor point (top_left, top_right, center, bottom_left, bottom_right)
+server_message_anchor = top_right
+
+; Font (smaller, small, large, console, system)
+server_message_font = small
+
+; Animation time, display duration, fade time, etc.
+server_slide_time_length = 0
+server_time_up = 5.0
+server_fade_out_time = 1.0
+```
+
+By modifying these values, Chimera users can achieve similar repositioning effects globally for all server messages,
+regardless of what the script sends.
+
+> **Note:** Because HAC2 and Chimera handle text positioning differently, scripters should avoid relying solely on `|c`,
+`|l`, etc., for critical information. For maximum compatibility, consider sending plain messages and let players
+> configure their own client’s layout via `chimera.ini` if they use Chimera.
+
+---
