@@ -4,7 +4,7 @@
 
 **Autistic Developer · Gamer · Advocate**
 
-  <img src="assets/images/avatar2.png" alt="Halo Script Projects" width="250">
+  <img src="assets/images/avatar2.png" alt="Avatar" width="250">
 
   <br>
 
