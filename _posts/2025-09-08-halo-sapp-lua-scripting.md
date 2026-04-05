@@ -650,19 +650,7 @@ end
 
 ---
 
-## 7. Next Steps
-
-Now that you have the basics and a full template, you can:
-
-- Combine multiple event callbacks into one script.
-- Use `timer()` for delayed or repeating actions.
-- Experiment with `get_var()` and `set_var()` to modify player properties (health, shields, weapons).
-- Explore the FFI library for advanced system integration.
-- Join the HSP community to share your scripts and get help.
-
----
-
-## 8. Special Text Positioning Characters (`|l`, `|r`, `|c`, `|n`, `|t`)
+## 7. Special Text Positioning Characters (`|l`, `|r`, `|c`, `|n`, `|t`)
 
 When sending private messages with `rprint()`, you can prefix your message with one of several special characters to
 reposition the text on the player’s screen. This only works if the player has the **HAC2 client** installed. Players
@@ -724,5 +712,17 @@ regardless of what the script sends.
 > **Note:** Because HAC2 and Chimera handle text positioning differently, scripters should avoid relying solely on `|c`,
 `|l`, etc., for critical information. For maximum compatibility, consider sending plain messages and let players
 > configure their own client’s layout via `chimera.ini` if they use Chimera.
+
+---
+
+## 8. Next Steps
+
+Now that you have the basics and a full template, you can:
+
+- Combine multiple event callbacks into one script.
+- Use `timer()` for delayed or repeating actions.
+- Experiment with `get_var()` and `set_var()` to modify player properties (health, shields, weapons).
+- Explore the FFI library for advanced system integration.
+- Join the HSP community to share your scripts and get help.
 
 ---
