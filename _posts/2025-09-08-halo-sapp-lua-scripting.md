@@ -163,14 +163,17 @@ end
 ### Key Concepts
 
 - `register_callback(cb['EVENT_JOIN'], "OnPlayerJoin")` - Calls your function when a player joins.
-- `timer(milliseconds, "functionName", params)` - Delays execution.
+- `timer(milliseconds, "functionName", ...)` - Delays execution.
+    - **First argument:** number (milliseconds)
+    - **Second argument:** string (name of the function to call)
+    - **Additional optional arguments:** any number of strings or numbers (tables are **not** allowed).
+    - Example: `timer(1000, "DoThis", 1, 2, 3, 4)`
 - `get_var(index, '$name')` - Retrieves player or server variables.
 - `rprint(playerIndex, message)` - Sends a private message to that player.
 
 > **Warning:** The `timer` function expects milliseconds. A common mistake is to pass seconds directly. Always multiply
-> seconds by 1000.
-
----
+> seconds by 1000. **Note about arguments:** You can pass multiple optional arguments (strings or numbers) to `timer`.
+> Tables are **not** supported. In the example above we only pass one argument (a player index) for simplicity.
 
 ## 3. Tutorial 2: Chat Command
 

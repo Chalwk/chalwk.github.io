@@ -65,14 +65,14 @@ the callbacks you absolutely need**.
 
 ### Key Event Callbacks
 
-| Callback                         | Trigger                                | Notes                                                                                                                               |
-|----------------------------------|----------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------|
-| `cb['EVENT_SPAWN']`              | Player spawns                          |                                                                                                                                     |
-| `cb['EVENT_DIE']`                | Player dies                            |                                                                                                                                     |
-| `cb['EVENT_CHAT']`               | Chat message sent                      | Return `false` to block the message                                                                                                 |
-| `cb['EVENT_COMMAND']`            | Player executes a command              | Create custom admin commands or block existing ones. Return `false` to block.                                                       |
-| `cb['EVENT_OBJECT_SPAWN']`       | Object (weapon, vehicle, etc.) created | Can return a different MapID to change what spawns                                                                                  |
-| `cb['EVENT_DAMAGE_APPLICATION']` | Damage applied                         | Modify damage amounts or block entirely. *Tip: To block fall damage without issues, use `return true, 0` instead of `return false`* |
+| Callback                         | Trigger                                | Notes                                                                                                   |
+|----------------------------------|----------------------------------------|---------------------------------------------------------------------------------------------------------|
+| `cb['EVENT_SPAWN']`              | Player spawns                          |                                                                                                         |
+| `cb['EVENT_DIE']`                | Player dies                            |                                                                                                         |
+| `cb['EVENT_CHAT']`               | Chat message sent                      | Return `false` to block the message                                                                     |
+| `cb['EVENT_COMMAND']`            | Player executes a command              | Create custom admin commands or block existing ones. Return `false` to block.                           |
+| `cb['EVENT_OBJECT_SPAWN']`       | Object (weapon, vehicle, etc.) created | Can return a different MapID to change what spawns                                                      |
+| `cb['EVENT_DAMAGE_APPLICATION']` | Damage applied                         | Adjust or block damage. **Tip:** For safe fall damage blocking, use `return true, 0` not `return false` |
 
 **Example: Custom Command Handling**
 
@@ -336,8 +336,8 @@ local function assignWeapons(playerId)
     local quaternary_weapon = spawn_object('weap', WEAPONS[4], 0, 0, 0)
     
     -- Assign tertiary and quaternary weapons with a delay
-    timer(250, 'assign_weapon', tertiary_weapon, playerId)
-    timer(500, 'assign_weapon', quaternary_weapon, playerId)
+    timer(250, "assign_weapon", tertiary_weapon, playerId)
+    timer(500, "assign_weapon", quaternary_weapon, playerId)
     
     -- Technical note: 
     -- SAPP's "assign_weapon" function will fail silently/safely if the player is dead.
@@ -402,9 +402,7 @@ For these members, use the **Name/Password system** instead.
       `admin_add Chalwk mySecurePassword123 3`
 
 2. **Activating admin privileges:**  
-   After joining the server, admins must enter:  
-   `login <password>`  
-   in in-game chat to activate their privileges.
+   After joining the server, admins must enter `login <password>` in in-game chat to activate their privileges.
 
 **Security Recommendations:**
 
