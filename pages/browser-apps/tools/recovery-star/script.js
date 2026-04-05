@@ -127,13 +127,16 @@
         if (textarea && textarea.value !== noteText) textarea.value = noteText;
     }
 
-    function setRating(domainId, newRating) {
+    function setRating(domainId, newRating, saveAndDraw = true) {
         const clamped = clampRating(newRating);
         appData.ratings[domainId] = clamped;
-        persistData();
         updateSingleDomainRating(domainId, clamped);
-        drawStar();
-        updateAverageDisplay();
+
+        if (saveAndDraw) {
+            persistData();
+            drawStar();
+            updateAverageDisplay();
+        }
     }
 
     function setNote(domainId, noteText) {
@@ -455,17 +458,19 @@
             card.appendChild(textarea);
             domainsContainer.appendChild(card);
 
+            const ratingValue = headerDiv.querySelector(".rating-value");
+
             slider.addEventListener("input", e => {
                 const newVal = clampRating(e.target.value);
                 ratingLabel.textContent = String(newVal);
                 ratingValue.textContent = `${newVal} / 10`;
                 syncSliderVisuals(slider);
-                setRating(domain.id, newVal);
+                setRating(domain.id, newVal, false);
             });
 
             slider.addEventListener("change", e => {
                 const newVal = clampRating(e.target.value);
-                setRating(domain.id, newVal);
+                setRating(domain.id, newVal, true);
             });
 
             syncSliderVisuals(slider);
