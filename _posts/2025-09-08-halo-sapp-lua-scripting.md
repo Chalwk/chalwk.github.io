@@ -662,13 +662,13 @@ positions defined by the client.
 
 ### Available Positioning Characters
 
-| Prefix | Effect                                                |
-|--------|-------------------------------------------------------|
-| `\|l`  | Left-align the message (default position).            |
-| `\|r`  | Right-align the message.                              |
-| `\|c`  | Center the message horizontally.                      |
-| `\|n`  | Place the message at the “normal” (default) position. |
-| `\|t`  | Tab the message                                       |
+| Prefix  | Effect                                                |
+|---------|-------------------------------------------------------|
+| **\|l** | Left-align the message (default position).            |
+| **\|r** | Right-align the message.                              |
+| **\|c** | Center the message horizontally.                      |
+| **\|n** | Place the message at the “normal” (default) position. |
+| **\|t** | Tab the message                                       |
 
 These characters are stripped from the displayed message and only affect layout.
 
