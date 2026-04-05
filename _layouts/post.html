@@ -293,18 +293,22 @@ layout: default
     }
 
     .post-content table {
-        display: block;
-        overflow-x: auto;
-        max-width: 100%;
-        white-space: nowrap;
+        display: table;
+        width: 100%;
         border-collapse: collapse;
+        table-layout: auto;
     }
 
-    .post-content p,
-    .post-content li,
-    .post-content blockquote {
-        white-space: normal;
-        word-wrap: break-word;
+    .post-content th,
+    .post-content td {
+        border: 1px solid var(--gray-light);
+        padding: 0.5rem 0.75rem;
+        text-align: left;
+    }
+
+    .post-content th {
+        background: var(--gray-light);
+        font-weight: 600;
     }
 
     .copy-btn {
@@ -362,6 +366,17 @@ layout: default
 
         .toc-content {
             padding: 0.5rem 1rem 0.75rem 1.5rem;
+        }
+
+        .post-content table {
+            display: block;
+            overflow-x: auto;
+            width: 100%;
+        }
+
+        .post-content th,
+        .post-content td {
+            white-space: nowrap;
         }
     }
 </style>
