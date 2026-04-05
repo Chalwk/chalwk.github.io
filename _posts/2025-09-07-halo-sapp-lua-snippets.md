@@ -1,5 +1,5 @@
 ---
-title: "Halo PC/CE: SAPP Lua Snippets"
+title: "Halo: SAPP Lua Snippets"
 date: 2025-09-8
 categories: [ education, halo, modding ]
 tags: [ sapp, lua, halo, scripting, tutorial ]

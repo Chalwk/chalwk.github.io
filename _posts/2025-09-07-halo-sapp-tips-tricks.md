@@ -1,5 +1,5 @@
 ---
-title: "Halo PC/CE: SAPP Tips & Tricks"
+title: "Halo: SAPP Tips & Tricks"
 date: 2025-09-8
 categories: [ education, halo, modding ]
 tags: [ sapp, lua, halo, scripting, tutorial ]

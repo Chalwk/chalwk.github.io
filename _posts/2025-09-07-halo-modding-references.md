@@ -1,5 +1,5 @@
 ---
-title: "Halo PC/CE: Modding References & Tools"
+title: "Halo: Modding References & Tools"
 date: 2025-09-8
 categories: [ education, halo, modding ]
 tags: [ sapp, lua, halo, scripting, tutorial ]

@@ -1,5 +1,5 @@
 ---
-title: "Halo PC/CE: Understanding Memory Offsets"
+title: "Halo: Understanding Memory Offsets"
 date: 2025-09-8
 categories: [ education, halo, modding ]
 tags: [ sapp, lua, halo, scripting, tutorial ]

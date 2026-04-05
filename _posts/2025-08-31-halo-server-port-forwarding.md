@@ -1,5 +1,5 @@
 ---
-title: "Halo PC/CE: Server Port Forwarding"
+title: "Halo: Server Port Forwarding"
 date: 2025-09-1
 categories: [ education, halo, modding ]
 tags: [ sapp, phasor, halo, server, port-forwarding, tutorial ]

@@ -1,17 +1,17 @@
 ---
-title: "Halo PC/CE: How to host a Linux VPS (Ubuntu 22.04)"
+title: "Halo: How to host a Linux VPS (Ubuntu 22.04)"
 date: 2025-08-29
 categories: [ education, halo, modding ]
 tags: [ sapp, lua, halo, scripting, tutorial ]
 ---
 
-Welcome to the definitive guide for setting up a **Halo PC / Custom Edition dedicated server** on a Linux VPS. Whether
-you're a seasoned Halo veteran or a budding server admin, this walkthrough will take you from a fresh Ubuntu 22.04 LTS
-instance to a fully functional, secure, and remotely manageable Halo server.
+Welcome to the definitive guide for setting up a **Halo PC/CE dedicated server** on a Linux VPS. Whether you're a
+seasoned Halo veteran or a budding server admin, this walkthrough will take you from a fresh Ubuntu 22.04 LTS instance
+to a fully functional, secure, and remotely manageable Halo server.
 
 We'll use **Wine** to run the Windows-based Halo dedicated server executable, **TightVNC** (or the optional **X2Go**)
 for a graphical interface, and **BitVise SSH Client** for secure remote access. Along the way, we'll harden the server
-with a firewall, SSH key authentication, and fail2ban to keep your new server safe.
+with a firewall, SSH key authentication, and **fail2ban** to keep your new server safe.
 
 **Estimated time:** 35-60 minutes (especially if you're new to Linux).
 
@@ -425,12 +425,12 @@ Paste:
 
 ```ini
 [Desktop Entry]
-Version=1.0
-Type=Application
-Name=RENAME_THIS
-Exec=/home/haloadmin/HCE_Server/run.sh
-Icon=utilities-terminal
-Categories=Game;
+Version = 1.0
+Type = Application
+Name = RENAME_THIS
+Exec = /home/haloadmin/HCE_Server/run.sh
+Icon = utilities-terminal
+Categories = Game;
 ```
 
 Save and exit. Then make the desktop file executable:
