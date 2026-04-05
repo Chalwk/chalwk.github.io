@@ -171,26 +171,45 @@
     }
 
     function drawLabelOnArc(text, centerX, centerY, angle, radius, fontSize, color) {
+        if (!text || text.length === 0) return;
+
         ctx.save();
         ctx.font = `600 ${fontSize}px Inter, system-ui, sans-serif`;
         ctx.fillStyle = color;
         ctx.textBaseline = "middle";
         ctx.textAlign = "center";
+        ctx.shadowColor = "rgba(255,255,255,0.85)";
+        ctx.shadowBlur = 5;
 
-        const x = centerX + radius * Math.cos(angle);
-        const y = centerY + radius * Math.sin(angle);
+        const fullWidth = ctx.measureText(text).width;
+        const angularSpan = fullWidth / radius;
+        let startAngle = angle - angularSpan / 2;
 
-        let rotation = angle + Math.PI / 2;
+        const shouldReverse = Math.sin(angle) > 0;
+        let chars = text.split('');
+        if (shouldReverse) chars = chars.reverse();
 
-        if (rotation > Math.PI / 2 && rotation < (3 * Math.PI) / 2) {
-            rotation += Math.PI;
+        let currentX = 0;
+        for (let i = 0; i < chars.length; i++) {
+            const char = chars[i];
+            const charWidth = ctx.measureText(char).width;
+            const charAngle = startAngle + (currentX + charWidth / 2) / radius;
+            const x = centerX + radius * Math.cos(charAngle);
+            const y = centerY + radius * Math.sin(charAngle);
+
+            ctx.save();
+            ctx.translate(x, y);
+            let rotation = charAngle + Math.PI / 2;
+            if (shouldReverse) {
+                rotation += Math.PI;
+            }
+            ctx.rotate(rotation);
+            ctx.fillText(char, 0, 0);
+            ctx.restore();
+
+            currentX += charWidth;
         }
 
-        ctx.translate(x, y);
-        ctx.rotate(rotation);
-        ctx.shadowColor = "rgba(255,255,255,0.75)";
-        ctx.shadowBlur = 6;
-        ctx.fillText(text, 0, 0);
         ctx.restore();
     }
 
