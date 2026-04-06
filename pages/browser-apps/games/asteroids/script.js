@@ -6,6 +6,7 @@ const scoreDisplay = document.getElementById('scoreDisplay');
 const livesDisplay = document.getElementById('livesDisplay');
 const restartBtn = document.getElementById('restartBtn');
 
+// Mobile control buttons
 const rotateLeftBtn = document.getElementById('rotateLeftBtn');
 const rotateRightBtn = document.getElementById('rotateRightBtn');
 const thrustBtn = document.getElementById('thrustBtn');
@@ -18,6 +19,7 @@ let lives = 3;
 let gameOver = false;
 let stars = [];
 
+// Simple starfield background
 class Star {
     constructor(x, y, size, speed) {
         this.x = x;
@@ -37,6 +39,7 @@ class Star {
     }
 }
 
+// Keep canvas looking good on all devices
 function resizeCanvas() {
     const isMobile = window.innerWidth <= 768;
     const container = canvas.parentElement;
@@ -73,6 +76,7 @@ function initializeStars() {
     }
 }
 
+// Keyboard state tracking
 const keys = {};
 
 document.addEventListener('keydown', e => {
@@ -89,13 +93,13 @@ document.addEventListener('keyup', e => {
     keys[e.code] = false;
 });
 
+// Hook up touch/mouse events for mobile buttons
 function setupMobileControls() {
     rotateLeftBtn.addEventListener('touchstart', (e) => {
         e.preventDefault();
         keys['ArrowLeft'] = true;
         rotateLeftBtn.classList.add('active');
     });
-
     rotateLeftBtn.addEventListener('touchend', (e) => {
         e.preventDefault();
         keys['ArrowLeft'] = false;
@@ -107,7 +111,6 @@ function setupMobileControls() {
         keys['ArrowRight'] = true;
         rotateRightBtn.classList.add('active');
     });
-
     rotateRightBtn.addEventListener('touchend', (e) => {
         e.preventDefault();
         keys['ArrowRight'] = false;
@@ -119,13 +122,13 @@ function setupMobileControls() {
         keys['ArrowUp'] = true;
         thrustBtn.classList.add('active');
     });
-
     thrustBtn.addEventListener('touchend', (e) => {
         e.preventDefault();
         keys['ArrowUp'] = false;
         thrustBtn.classList.remove('active');
     });
 
+    // Shoot handling: respects cooldown and can spam with touch hold
     shootBtn.addEventListener('touchstart', (e) => {
         e.preventDefault();
         keys['Space'] = true;
@@ -144,7 +147,6 @@ function setupMobileControls() {
             }, 200);
         }
     });
-
     shootBtn.addEventListener('touchend', (e) => {
         e.preventDefault();
         keys['Space'] = false;
@@ -159,43 +161,38 @@ function setupMobileControls() {
         setTimeout(() => mobileRestartBtn.classList.remove('active'), 200);
     });
 
+    // Also support mouse clicks for dev/testing
     rotateLeftBtn.addEventListener('mousedown', (e) => {
         e.preventDefault();
         keys['ArrowLeft'] = true;
     });
-
     rotateLeftBtn.addEventListener('mouseup', () => {
         keys['ArrowLeft'] = false;
     });
-
     rotateRightBtn.addEventListener('mousedown', (e) => {
         e.preventDefault();
         keys['ArrowRight'] = true;
     });
-
     rotateRightBtn.addEventListener('mouseup', () => {
         keys['ArrowRight'] = false;
     });
-
     thrustBtn.addEventListener('mousedown', (e) => {
         e.preventDefault();
         keys['ArrowUp'] = true;
     });
-
     thrustBtn.addEventListener('mouseup', () => {
         keys['ArrowUp'] = false;
     });
-
     shootBtn.addEventListener('mousedown', (e) => {
         e.preventDefault();
         keys['Space'] = true;
     });
-
     shootBtn.addEventListener('mouseup', () => {
         keys['Space'] = false;
     });
 }
 
+// Player object
 const player = {
     x: canvas.width / 2,
     y: canvas.height / 2,
@@ -221,6 +218,7 @@ function drawPlayer(x, y, size = 1) {
     ctx.restore();
 }
 
+// Asteroids with random jagged shape
 class Asteroid {
     constructor(x, y, radius, velocity) {
         this.x = x;
@@ -237,6 +235,7 @@ class Asteroid {
     update() {
         this.x += this.velocity.x;
         this.y += this.velocity.y;
+        // wrap around edges
         if (this.x < 0) this.x = canvas.width;
         if (this.x > canvas.width) this.x = 0;
         if (this.y < 0) this.y = canvas.height;
@@ -288,6 +287,7 @@ function shootBullet() {
     });
 }
 
+// Simple enemy ship that moves down and shoots at player
 class Enemy {
     constructor() {
         this.x = Math.random() * canvas.width;
@@ -340,6 +340,7 @@ class Enemy {
 let enemy = null;
 let enemySpawnTimer = Math.floor(Math.random() * 500) + 500;
 
+// Wrap objects around canvas edges
 function wrap(obj) {
     if (obj.x < 0) obj.x = canvas.width;
     if (obj.x > canvas.width) obj.x = 0;
@@ -347,9 +348,11 @@ function wrap(obj) {
     if (obj.y > canvas.height) obj.y = 0;
 }
 
+// Main game logic update
 function update() {
     if (gameOver) return;
 
+    // Rotation & thrust
     if (keys['ArrowLeft']) player.angle -= 0.07;
     if (keys['ArrowRight']) player.angle += 0.07;
     if (keys['ArrowUp']) {
@@ -362,6 +365,7 @@ function update() {
 
     wrap(player);
 
+    // Shooting with cooldown
     if (keys['Space']) {
         if (player.canShoot) {
             shootBullet();
@@ -370,6 +374,7 @@ function update() {
         }
     }
 
+    // Update bullets
     player.bullets.forEach((b, i) => {
         b.x += Math.cos(b.angle) * b.speed;
         b.y += Math.sin(b.angle) * b.speed;
@@ -380,6 +385,7 @@ function update() {
 
     asteroids.forEach(a => a.update());
 
+    // Enemy spawning & update
     if (!enemy) {
         enemySpawnTimer--;
         if (enemySpawnTimer <= 0) {
@@ -391,6 +397,7 @@ function update() {
     if (enemy) {
         enemy.update();
 
+        // Enemy bullet collision with player
         enemy.bullets.forEach((b, i) => {
             const dx = b.x - player.x;
             const dy = b.y - player.y;
@@ -411,6 +418,7 @@ function update() {
         }
     }
 
+    // Player bullet vs asteroid collision
     player.bullets.forEach((b, i) => {
         asteroids.forEach((a, j) => {
             const dx = b.x - a.x;
@@ -421,6 +429,7 @@ function update() {
                 asteroids.splice(j, 1);
                 score += 10;
                 scoreDisplay.textContent = score;
+                // Split big asteroids into two smaller ones
                 if (a.radius > 15) {
                     asteroids.push(new Asteroid(a.x, a.y, a.radius / 2, {
                         x: (Math.random() - 0.5) * 2,
@@ -435,6 +444,7 @@ function update() {
         });
     });
 
+    // Player collision with asteroid
     asteroids.forEach((a, i) => {
         const dx = a.x - player.x;
         const dy = a.y - player.y;
@@ -463,6 +473,7 @@ function update() {
     });
 }
 
+// Draw all the things
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -472,7 +483,6 @@ function draw() {
     });
 
     asteroids.forEach(a => a.draw());
-
     drawPlayer(player.x, player.y);
 
     player.bullets.forEach(b => {
@@ -484,6 +494,7 @@ function draw() {
 
     if (enemy) enemy.draw();
 
+    // Game over overlay
     if (gameOver) {
         ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -507,6 +518,7 @@ function draw() {
     }
 }
 
+// Keyboard restart (R key)
 document.addEventListener('keydown', e => {
     if (gameOver && e.key.toLowerCase() === 'r') {
         e.preventDefault();
@@ -516,6 +528,7 @@ document.addEventListener('keydown', e => {
 
 restartBtn.addEventListener('click', restartGame);
 
+// Reset everything
 function restartGame() {
     score = 0;
     lives = 3;
@@ -560,6 +573,7 @@ window.addEventListener('load', () => {
     }
 });
 
+// Make canvas focusable for keyboard events
 canvas.addEventListener('click', () => {
     canvas.focus();
 });
@@ -575,6 +589,7 @@ canvas.addEventListener('keydown', (e) => {
     }
 });
 
+// Prevent context menu on buttons
 document.querySelectorAll('.control-btn').forEach(btn => {
     btn.addEventListener('contextmenu', (e) => {
         e.preventDefault();

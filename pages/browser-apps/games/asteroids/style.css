@@ -1,13 +1,13 @@
 /* Copyright (c) 2024-2026. Jericho Crosby (Chalwk) */
 
+/* Main panel styling */
 .asteroids-panel {
     background: var(--light);
     border: 1px solid var(--gray-light);
     border-radius: var(--radius-lg);
-    padding: 1.5rem;
     margin-top: 2rem;
     position: relative;
-    padding-bottom: 140px;
+    padding: 1.5rem 1.5rem 140px;
 }
 
 .panel-head {
@@ -19,6 +19,7 @@
     margin-bottom: 0.5rem;
 }
 
+/* Instructions box */
 .game-instructions {
     margin-bottom: 1.5rem;
     padding: 1rem;
@@ -32,7 +33,7 @@
     background: rgba(59, 130, 246, 0.1);
     border-radius: var(--radius-sm);
     border-left: 4px solid var(--primary);
-    display: none;
+    display: none; /* hidden on desktop, shown on mobile */
 }
 
 .instructions-title {
@@ -46,6 +47,7 @@
     gap: 0.5rem;
 }
 
+/* Canvas container & canvas itself */
 #gameContainer {
     display: flex;
     justify-content: center;
@@ -63,13 +65,14 @@
     user-select: none;
     -webkit-user-select: none;
     -webkit-touch-callout: none;
-    touch-action: none;
+    touch-action: none; /* prevents scrolling on touch */
 }
 
 #gameCanvas:focus {
     outline: none;
 }
 
+/* Score/lives bar */
 .game-stats {
     display: flex;
     justify-content: space-between;
@@ -95,6 +98,8 @@
     margin-left: 0.5rem;
 }
 
+/* Mobile touch controls (positioned at bottom of panel) */
+/* I need to redo this */
 .mobile-controls {
     position: absolute;
     bottom: 1.5rem;
@@ -137,6 +142,7 @@
     font-size: 1.2rem;
 }
 
+/* Button colors */
 .rotate-left {
     background: var(--primary);
     color: white;
@@ -164,22 +170,24 @@
     flex: 1;
 }
 
+/* Press feedback */
 .control-btn:active {
     transform: scale(0.95);
     opacity: 0.9;
 }
 
+/* Responsive: tablets & phones */
 @media (max-width: 768px) {
     .asteroids-panel {
         padding-bottom: 160px;
     }
 
     .mobile-instructions {
-        display: block;
+        display: block; /* show mobile hint */
     }
 
     .mobile-controls {
-        display: flex;
+        display: flex; /* show touch buttons */
     }
 
     #gameCanvas {
@@ -187,7 +195,7 @@
         height: 60vh;
         max-height: 500px;
         min-height: 350px;
-        aspect-ratio: unset;
+        aspect-ratio: unset; /* allow custom height on mobile */
     }
 
     .game-stats {
@@ -201,6 +209,7 @@
     }
 }
 
+/* Small phones */
 @media (max-width: 480px) {
     #gameCanvas {
         height: 50vh;
@@ -218,8 +227,7 @@
     }
 
     .asteroids-panel {
-        padding: 1rem;
-        padding-bottom: 150px;
+        padding: 1rem 1rem 150px;
     }
 
     .mobile-controls {
@@ -229,6 +237,7 @@
     }
 }
 
+/* Hide mobile controls on desktop with mouse (hover + fine pointer) */
 @media (hover: hover) and (pointer: fine) {
     .mobile-controls {
         display: none !important;

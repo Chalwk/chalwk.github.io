@@ -15,6 +15,7 @@ description: Classic arcade game with spaceship controls and asteroid destructio
                 <h1 class="panel-title">Asteroids Adaptation</h1>
                 <p class="muted small">Classic arcade game with spaceship controls and asteroid destruction.</p>
             </div>
+            <!-- Game instructions & controls reference -->
             <div class="game-instructions">
                 <h4 class="instructions-title"><i class="fas fa-info-circle"></i> Controls:</h4>
                 <div class="instructions-grid">
@@ -28,9 +29,11 @@ description: Classic arcade game with spaceship controls and asteroid destructio
                     <strong><i class="fas fa-mobile-alt"></i> Touch Controls:</strong> Use buttons below for mobile play
                 </div>
             </div>
+            <!-- Main game canvas container -->
             <div id="gameContainer">
                 <canvas id="gameCanvas" tabindex="0"></canvas>
             </div>
+            <!-- Score, lives, restart button (hidden until game over) -->
             <div class="game-stats">
                 <div class="stat-item">
                     <strong class="stat-label">Score:</strong>
@@ -44,6 +47,7 @@ description: Classic arcade game with spaceship controls and asteroid destructio
                     <i class="fas fa-redo"></i> Restart Game
                 </button>
             </div>
+            <!-- Mobile touch buttons (visible only on small screens) -->
             <div class="mobile-controls" id="mobileControls">
                 <div class="controls-row">
                     <button class="control-btn rotate-left" id="rotateLeftBtn">
