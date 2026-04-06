@@ -10,12 +10,14 @@ layout: default
             <article class="post">
                 <h1>{{ page.title }}</h1>
 
+                <!-- back to blog button -->
                 <div class="post-navigation" style="margin-top: 0.5rem;">
                     <a class="btn btn-secondary back-to-blog" href="{{ site.baseurl }}/blog/">
                         ← Back to Blog
                     </a>
                 </div>
 
+                <!-- publish/update dates + reading time -->
                 <div class="post-meta">
                     <span class="publish-date">
                         <time datetime="{{ page.date | date_to_xmlschema }}">Published: {{ page.date | date: "%B %-d, %Y" }}</time>
@@ -35,6 +37,7 @@ layout: default
                     </span>
                 </div>
 
+                <!-- table of contents (collapsible) -->
                 {% if page.toc != false %}
                 <div class="toc-container">
                     <details class="toc-details" {% if page.toc_open %}open{% endif %}>
@@ -48,12 +51,14 @@ layout: default
                 </div>
                 {% endif %}
 
+                <!-- main post content -->
                 <div class="post-content">{{ content }}</div>
             </article>
         </div>
     </div>
 </section>
 
+<!-- post-specific styles -->
 <style>
     :root {
         --transition-fast: transform 0.3s ease, box-shadow 0.3s ease;
@@ -428,6 +433,7 @@ layout: default
 
 <script>
     document.addEventListener("DOMContentLoaded", () => {
+        // wrap each <pre> with a copy button (unless already wrapped)
         document.querySelectorAll(".post-content pre").forEach(pre => {
             if (pre.parentElement.classList.contains("code-block-wrapper")) return;
 
@@ -453,6 +459,7 @@ layout: default
             });
         });
 
+        // generate TOC from headings inside .post-content
         const tocPlaceholder = document.getElementById('jekyll-toc-placeholder');
         if (!tocPlaceholder) return;
 

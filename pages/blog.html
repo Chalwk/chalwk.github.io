@@ -13,6 +13,7 @@ permalink: /blog/
                 <i class="fas fa-blog blog-icon"></i> Blog
             </h1>
 
+            <!-- Search box for filtering posts -->
             <div class="blog-search">
                 <label for="search-input">Search blog posts</label>
                 <input autocomplete="off" id="search-input"
@@ -21,6 +22,7 @@ permalink: /blog/
                 <div class="search-results" id="search-results" style="display: none;"></div>
             </div>
 
+            <!-- original post list -->
             <ul class="post-list">
                 {% for post in site.posts %}
                 <li class="post-item">
@@ -41,6 +43,7 @@ permalink: /blog/
                 {% endfor %}
             </ul>
 
+            <!-- Pagination stuff -->
             <div id="paginated-post-list"></div>
             <div class="pagination-container" id="pagination-controls"></div>
         </div>
@@ -48,6 +51,7 @@ permalink: /blog/
 </section>
 
 <style>
+    /* basic search styling */
     .blog-search {
         margin-bottom: 2rem;
         position: relative;
@@ -136,6 +140,7 @@ permalink: /blog/
 <script src="https://cdn.jsdelivr.net/npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        // ----- Pagination setup -----
         const POSTS_PER_PAGE = 5;
         const originalList = document.querySelector('.post-list');
         if (!originalList) {
@@ -143,13 +148,14 @@ permalink: /blog/
             return;
         }
         const allPosts = Array.from(originalList.querySelectorAll('.post-item'));
-        originalList.style.display = 'none';
+        originalList.style.display = 'none'; // hide original list, we'll show paginated one
         if (allPosts.length === 0) {
             document.getElementById('paginated-post-list').innerHTML = '<p>No blog posts found.</p>';
             return;
         }
         const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
 
+        // read current page from URL hash like #page-3
         function getCurrentPageFromHash() {
             const hash = window.location.hash;
             const match = hash.match(/page-(\d+)/);
@@ -165,6 +171,7 @@ permalink: /blog/
 
         let currentPage = getCurrentPageFromHash();
 
+        // render posts for given page
         function renderPage(page) {
             const start = (page - 1) * POSTS_PER_PAGE;
             const end = start + POSTS_PER_PAGE;
@@ -184,6 +191,7 @@ permalink: /blog/
             container.appendChild(newList);
         }
 
+        // render pagination buttons
         function renderPagination() {
             const controlsContainer = document.getElementById('pagination-controls');
             controlsContainer.innerHTML = '';
@@ -260,6 +268,7 @@ permalink: /blog/
             history.pushState(null, null, '#page-' + currentPage);
         }
 
+        // listen to hash changes (e.g., back/forward)
         window.addEventListener('hashchange', function () {
             const newPage = getCurrentPageFromHash();
             if (newPage !== currentPage) {
@@ -268,12 +277,15 @@ permalink: /blog/
                 renderPagination();
             }
         });
+        
+        // initial render
         renderPage(currentPage);
         renderPagination();
         if (!window.location.hash) {
             history.replaceState(null, null, '#page-1');
         }
 
+        // ----- Live search using SimpleJekyllSearch -----
         const searchInput = document.getElementById('search-input');
         const resultsContainer = document.getElementById('search-results');
         const paginatedContainer = document.getElementById('paginated-post-list');
@@ -299,6 +311,7 @@ permalink: /blog/
             fuzzy: false
         });
 
+        // show/hide search results vs normal paginated view
         searchInput.addEventListener('input', function () {
             const query = this.value.trim();
             if (query === '') {
@@ -317,6 +330,7 @@ permalink: /blog/
 </script>
 
 <style>
+    /* card + post styling */
     .about-card {
         border: 2px solid var(--gray-light);
         border-radius: var(--radius-lg);
@@ -460,6 +474,7 @@ permalink: /blog/
         cursor: not-allowed;
     }
 
+    /* responsive tweaks */
     @media (max-width: 768px) {
         .post-list li {
             padding: 1.5rem;

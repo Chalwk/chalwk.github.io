@@ -5,9 +5,13 @@
 <html lang="en">{% include head.html %}
 <body>
 
+<!-- main site header -->
 <header class="header">{% include header.html %}</header>
+
+<!-- page content injected here -->
 <main>{{ content }}</main>
 
+<!-- PWA install button container (hidden until ready) -->
 <div id="pwa-install-container">
     <button aria-label="Install App" class="install-pwa-btn" id="pwa-install-button">
         <i class="fas fa-download"></i> Install App
@@ -15,9 +19,12 @@
 </div>
 
 {% include footer.html %}
+
+<!-- load nav & PWA scripts -->
 <script defer src="{{ site.baseurl }}/assets/js/nav-menu.js"></script>
 <script defer src="{{ site.baseurl }}/assets/js/pwa-install.js"></script>
 
+<!-- if this page wants a service worker, register it -->
 {% if page.pwa %}
 <script>
     if ('serviceWorker' in navigator) {

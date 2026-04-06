@@ -3,6 +3,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     const header = document.querySelector('header.header');
     if (header) {
+        // desktop dropdowns: toggle on click (not hover)
         const desktopDropdowns = header.querySelectorAll('.nav-desktop .dropdown');
         desktopDropdowns.forEach(dropdown => {
             const toggle = dropdown.querySelector('.dropdown-toggle');
@@ -14,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const isExpanded = this.getAttribute('aria-expanded') === 'true';
                 this.setAttribute('aria-expanded', !isExpanded);
 
+                // close other dropdowns
                 desktopDropdowns.forEach(other => {
                     if (other !== dropdown) {
                         other.querySelector('.dropdown-toggle').setAttribute('aria-expanded', 'false');
@@ -25,6 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
 
+        // click outside closes all desktop dropdowns
         document.addEventListener('click', function (e) {
             if (window.innerWidth <= 768) return;
             if (!e.target.closest('.dropdown')) {
@@ -35,6 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
+        // submenu positioning: avoid going off-screen right
         function adjustSubmenuPosition(submenu) {
             if (window.innerWidth <= 768) return;
             const parentLi = submenu.closest('.dropdown-submenu');
@@ -75,6 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // mobile menu hamburger toggle
     const hamburger = document.querySelector('.hamburger');
     const navMobile = document.querySelector('.nav-mobile');
     if (hamburger && navMobile) {
@@ -88,6 +93,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
 
+        // mobile dropdowns: expand/collapse on click
         const mobileDropdowns = navMobile.querySelectorAll('.dropdown');
         mobileDropdowns.forEach(dropdown => {
             const toggle = dropdown.querySelector('.dropdown-toggle');
@@ -101,6 +107,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
+        // mobile submenus
         const mobileSubmenus = navMobile.querySelectorAll('.dropdown-submenu');
         mobileSubmenus.forEach(submenu => {
             const toggle = submenu.querySelector('.submenu-toggle');
@@ -113,6 +120,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
+        // close mobile menu when any link is clicked
         const mobileLinks = navMobile.querySelectorAll('a');
         mobileLinks.forEach(link => {
             link.addEventListener('click', function () {
@@ -123,6 +131,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
 
+        // ESC key closes mobile menu
         document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape') {
                 hamburger.classList.remove('active');
@@ -133,6 +142,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // scroll-to-top button: appears after scrolling
     const scrollBtn = document.createElement('button');
     scrollBtn.id = 'scrollToTopBtn';
     scrollBtn.className = 'scroll-to-top';
@@ -232,6 +242,7 @@ document.addEventListener('DOMContentLoaded', function () {
         this.blur();
     });
 
+    // trap focus inside mobile menu when open
     document.addEventListener('keydown', function (e) {
         if (e.key === 'Tab' && document.body.classList.contains('menu-open')) {
             const navMobile = document.querySelector('.nav-mobile');

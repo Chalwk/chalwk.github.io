@@ -1,5 +1,6 @@
 /* Copyright (c) 2024-2026. Jericho Crosby (Chalwk) */
 
+/* table layout for line numbers if needed */
 .highlight table td {
     padding: 5px;
 }
@@ -8,6 +9,7 @@
     margin: 0;
 }
 
+/* comments - muted greenish */
 .highlight .c, .highlight .ch, .highlight .cd, .highlight .cpf {
     color: #75715e;
     font-style: italic;
@@ -34,11 +36,13 @@
     font-style: italic;
 }
 
+/* errors - red on dark bg */
 .highlight .err {
     color: #960050;
     background-color: #1e0010;
 }
 
+/* git diff additions/deletions */
 .highlight .gi {
     color: #ffffff;
     background-color: #324932;
@@ -49,6 +53,7 @@
     background-color: #493131;
 }
 
+/* emphasis */
 .highlight .ge {
     font-style: italic;
 }
@@ -66,6 +71,7 @@
     color: #aa0000;
 }
 
+/* headings and meta */
 .highlight .gh {
     color: #999999;
 }
@@ -86,6 +92,7 @@
     color: #aaaaaa;
 }
 
+/* keywords - light blue */
 .highlight .k, .highlight .kv {
     color: #66d9ef;
     font-weight: bold;
@@ -116,6 +123,7 @@
     font-weight: bold;
 }
 
+/* operators and control flow - pink */
 .highlight .kn {
     color: #f92672;
     font-weight: bold;
@@ -131,6 +139,7 @@
     font-weight: bold;
 }
 
+/* numbers and constants - purple */
 .highlight .mf {
     color: #ae81ff;
 }
@@ -159,6 +168,7 @@
     color: #ae81ff;
 }
 
+/* strings - yellow/gold */
 .highlight .sa {
     color: #66d9ef;
     font-weight: bold;
@@ -208,6 +218,7 @@
     color: #e6db74;
 }
 
+/* functions and tags - light green */
 .highlight .na {
     color: #a6e22e;
 }
@@ -236,6 +247,7 @@
     color: #66d9ef;
 }
 
+/* everything else - mostly off-white */
 .highlight .bp {
     color: #f8f8f2;
 }
@@ -281,6 +293,7 @@
     color: #f92672;
 }
 
+/* base style for code blocks - dark background, light text */
 .highlight {
     color: #f8f8f2;
     background-color: #49483e;
