@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Minesweeper
+title: Classic Minesweeper
 description: Classic Minesweeper with multiple difficulty levels and custom options.
 ---
 
@@ -13,11 +13,12 @@ description: Classic Minesweeper with multiple difficulty levels and custom opti
         <div class="app-grid">
             <section class="panel minesweeper-panel">
                 <div class="panel-head">
-                    <h1 class="minesweeper-title">Minesweeper</h1>
+                    <h1 class="minesweeper-title">Classic Minesweeper</h1>
                     <p class="muted small minesweeper-description">Classic Minesweeper with multiple difficulty levels
                         and custom options.</p>
                 </div>
 
+                <!-- game controls: new game, difficulty, custom settings -->
                 <div class="minesweeper-game-controls">
                     <button class="btn btn-primary" id="newBtn">
                         <i class="fas fa-plus-circle"></i> New Game
@@ -33,6 +34,7 @@ description: Classic Minesweeper with multiple difficulty levels and custom opti
                         </select>
                     </div>
 
+                    <!-- custom board settings (hidden by default) -->
                     <div class="minesweeper-custom-panel hidden" id="customPanel">
                         <div class="custom-input">
                             <label class="sr-only" for="rows">Rows</label>
@@ -49,6 +51,7 @@ description: Classic Minesweeper with multiple difficulty levels and custom opti
                         <button class="btn btn-secondary small" id="applyCustom">Apply</button>
                     </div>
 
+                    <!-- status: mine counter & timer -->
                     <div class="minesweeper-status-display">
                         <div class="status-item">
                             <span id="mineCount">Mines: 10</span>
@@ -59,10 +62,12 @@ description: Classic Minesweeper with multiple difficulty levels and custom opti
                     </div>
                 </div>
 
+                <!-- dynamic board container -->
                 <div class="minesweeper-board-wrap" id="boardWrap">
                     <div aria-label="Minesweeper board" class="minesweeper-board" id="board" tabindex="0"></div>
                 </div>
 
+                <!-- utility buttons -->
                 <div class="minesweeper-game-actions">
                     <button class="btn btn-secondary" id="flagToggle">
                         <i class="fas fa-flag"></i> Toggle Flagging
@@ -86,6 +91,7 @@ description: Classic Minesweeper with multiple difficulty levels and custom opti
     </div>
 </main>
 
+<!-- best times modal popup -->
 <div class="modal hidden" id="bestTimesModal">
     <div class="modal-inner">
         <h3 class="modal-title">Best Times</h3>

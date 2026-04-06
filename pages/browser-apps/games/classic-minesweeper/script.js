@@ -1,6 +1,7 @@
 // Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
 
 (() => {
+    // DOM stuff
     const boardEl = document.getElementById('board');
     const mineCountEl = document.getElementById('mineCount');
     const timerEl = document.getElementById('timer');
@@ -20,6 +21,7 @@
     const bestTimesList = document.getElementById('bestTimesList');
     const closeBestTimes = document.getElementById('closeBestTimes');
 
+    // game state vars
     let rows = 9, cols = 9, mines = 10;
     let board = [];
     let started = false;
@@ -31,12 +33,14 @@
     let firstClick = true;
     let revealedCount = 0;
 
+    // preset difficulties
     const presets = {
         beginner: {rows: 9, cols: 9, mines: 10},
         intermediate: {rows: 16, cols: 16, mines: 40},
         expert: {rows: 16, cols: 30, mines: 99}
     };
 
+    // helpers
     function clamp(v, a, b) {
         return Math.max(a, Math.min(b, v));
     }
@@ -45,6 +49,7 @@
         return Math.floor(Math.random() * max);
     }
 
+    // reset everything and draw empty board
     function resetState(r, c, m) {
         rows = r;
         cols = c;
@@ -64,13 +69,14 @@
         updateMineCounter();
         boardEl.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
         boardEl.innerHTML = '';
+
+        // create clickable cells
         for (let r = 0; r < rows; r++) {
             for (let c = 0; c < cols; c++) {
                 const cell = document.createElement('button');
                 cell.className = 'cell';
                 cell.setAttribute('data-r', r);
                 cell.setAttribute('data-c', c);
-                cell.setAttribute('aria-label', `cell ${r + 1},${c + 1}`);
                 cell.addEventListener('click', onCellClick);
                 cell.addEventListener('contextmenu', onCellRightClick);
                 cell.addEventListener('dblclick', onCellDblClick);
@@ -79,23 +85,23 @@
         }
     }
 
+    // place mines after first click, avoid blowing up the first cell
     function placeMines(firstR, firstC) {
         const forbidden = new Set();
         for (let dr = -1; dr <= 1; dr++) for (let dc = -1; dc <= 1; dc++) {
             const rr = firstR + dr, cc = firstC + dc;
             if (rr >= 0 && rr < rows && cc >= 0 && cc < cols) forbidden.add(rr + '_' + cc);
         }
-
         let placed = 0;
         while (placed < mines) {
             const r = randInt(rows);
             const c = randInt(cols);
             const key = r + '_' + c;
-            if (forbidden.has(key)) continue;
-            if (board[r][c].isMine) continue;
+            if (forbidden.has(key) || board[r][c].isMine) continue;
             board[r][c].isMine = true;
             placed++;
         }
+        // calc adjacent numbers
         for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
             let adj = 0;
             for (let dr = -1; dr <= 1; dr++) for (let dc = -1; dc <= 1; dc++) {
@@ -107,6 +113,7 @@
         }
     }
 
+    // reveal a single cell (recursive for blanks)
     function revealCell(r, c) {
         if (ended) return;
         const cellObj = board[r][c];
@@ -127,20 +134,18 @@
             el.textContent = cellObj.adjacent;
             el.style.color = colorForNumber(cellObj.adjacent);
         } else {
+            // flood fill empty cells
             for (let dr = -1; dr <= 1; dr++) for (let dc = -1; dc <= 1; dc++) {
                 if (dr === 0 && dc === 0) continue;
                 const rr = r + dr, cc = c + dc;
                 if (rr >= 0 && rr < rows && cc >= 0 && cc < cols) revealCell(rr, cc);
             }
         }
-
         checkWin();
     }
 
     function checkWin() {
-        if (revealedCount === rows * cols - mines) {
-            endGame(true);
-        }
+        if (revealedCount === rows * cols - mines) endGame(true);
     }
 
     function endGame(win) {
@@ -148,6 +153,7 @@
         clearInterval(timer);
         timer = null;
         if (!win) {
+            // show all mines on loss
             for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
                 const obj = board[r][c];
                 const el = getCellEl(r, c);
@@ -167,6 +173,7 @@
         return boardEl.querySelector(`.cell[data-r='${r}'][data-c='${c}']`);
     }
 
+    // number colors (classic minesweeper style)
     function colorForNumber(n) {
         const map = {
             1: '#0b61f7',
@@ -181,6 +188,7 @@
         return map[n] || '#000';
     }
 
+    // --- event handlers ---
     function onCellClick(e) {
         if (ended) return;
         const el = e.currentTarget;
@@ -199,6 +207,7 @@
         revealCell(r, c);
     }
 
+    // right-click: cycle flag -> question -> none
     function onCellRightClick(e) {
         e.preventDefault();
         if (ended) return;
@@ -227,6 +236,8 @@
         updateMineCounter();
     }
 
+    // double-click to reveal neighbors if flagged count matches adjacent
+    // This is a mess, but it works.
     function onCellDblClick(e) {
         if (ended) return;
         const el = e.currentTarget;
@@ -260,17 +271,32 @@
     }
 
     function formatTime(s) {
-        const mm = String(Math.floor(s / 60)).padStart(2, '0');
-        const ss = String(s % 60).padStart(2, '0');
-        return `${mm}:${ss}`;
+        return `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
     }
 
+    // new game from current difficulty/custom settings
+    function startNewGame() {
+        const val = difficultySelect.value;
+        if (presets[val]) {
+            const p = presets[val];
+            rows = p.rows;
+            cols = p.cols;
+            mines = p.mines;
+        } else {
+            rows = clamp(Number(rowsInput.value) || 9, 5, 50);
+            cols = clamp(Number(colsInput.value) || 9, 5, 80);
+            mines = clamp(Number(minesInput.value) || 10, 1, rows * cols - 1);
+        }
+        resetState(rows, cols, mines);
+    }
+
+    // --- UI listeners ---
     newBtn.addEventListener('click', () => startNewGame());
+
     difficultySelect.addEventListener('change', () => {
         const val = difficultySelect.value;
-        if (val === 'custom') {
-            customPanel.classList.remove('hidden');
-        } else {
+        if (val === 'custom') customPanel.classList.remove('hidden');
+        else {
             customPanel.classList.add('hidden');
             const p = presets[val];
             if (p) {
@@ -323,23 +349,14 @@
 
     flagToggle.addEventListener('click', () => {
         flagsMode = !flagsMode;
-        flagToggle.innerHTML = flagsMode ?
-            '<i class="fas fa-flag"></i> Toggle Flagging' :
-            '<i class="fas fa-ban"></i> Flagging Off';
+        flagToggle.innerHTML = flagsMode ? '<i class="fas fa-flag"></i> Toggle Flagging' : '<i class="fas fa-ban"></i> Flagging Off';
     });
 
     themeToggle.addEventListener('change', () => {
         document.body.classList.toggle('dark', themeToggle.checked);
     });
 
-    bestTimesBtn.addEventListener('click', () => {
-        showBestTimes();
-    });
-
-    closeBestTimes.addEventListener('click', () => {
-        bestTimesModal.classList.add('hidden');
-    });
-
+    // best times storage & display
     function saveBestTime(r, c, m, t) {
         const key = `best_${r}x${c}_${m}`;
         const prev = JSON.parse(localStorage.getItem(key) || '[]');
@@ -352,9 +369,8 @@
         bestTimesList.innerHTML = '';
         const key = `best_${rows}x${cols}_${mines}`;
         const list = JSON.parse(localStorage.getItem(key) || '[]');
-        if (list.length === 0) {
-            bestTimesList.innerHTML = '<li>No best times yet</li>';
-        } else {
+        if (list.length === 0) bestTimesList.innerHTML = '<li>No best times yet</li>';
+        else {
             list.forEach((s, i) => {
                 const li = document.createElement('li');
                 li.textContent = `${i + 1}. ${formatTime(s)}`;
@@ -364,21 +380,9 @@
         bestTimesModal.classList.remove('hidden');
     }
 
-    function startNewGame() {
-        const val = difficultySelect.value;
-        if (presets[val]) {
-            const p = presets[val];
-            rows = p.rows;
-            cols = p.cols;
-            mines = p.mines;
-        } else {
-            rows = clamp(Number(rowsInput.value) || 9, 5, 50);
-            cols = clamp(Number(colsInput.value) || 9, 5, 80);
-            mines = clamp(Number(minesInput.value) || 10, 1, rows * cols - 1);
-        }
-        resetState(rows, cols, mines);
-    }
+    bestTimesBtn.addEventListener('click', showBestTimes);
+    closeBestTimes.addEventListener('click', () => bestTimesModal.classList.add('hidden'));
 
+    // init game
     startNewGame();
-
 })();
