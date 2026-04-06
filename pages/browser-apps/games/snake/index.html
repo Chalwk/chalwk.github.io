@@ -6,7 +6,7 @@ description: Fast. Fancy. Frenetic.
 
 <!-- Copyright (c) 2024-2026. Jericho Crosby (Chalwk) -->
 
-<link rel="stylesheet" href="style.css">
+<link href="style.css" rel="stylesheet">
 
 <main>
     <div class="container">
@@ -21,6 +21,7 @@ description: Fast. Fancy. Frenetic.
                         <div id="score">Score: 0</div>
                         <div id="best">Best: 0</div>
                     </div>
+                    <!-- power-up popup appears here -->
                     <div class="powerup-message" id="powerup-message"></div>
                     <div class="game-controls">
                         <button class="btn btn-secondary" id="btn-pause">Pause</button>
@@ -29,9 +30,10 @@ description: Fast. Fancy. Frenetic.
                 </div>
 
                 <div id="gameContainer">
-                    <canvas id="gameCanvas" tabindex="0"></canvas>
+                    <canvas id="gameCanvas" tabindex="0"></canvas>  <!-- canvas takes keyboard focus -->
                 </div>
 
+                <!-- touch controls for mobile - hidden by default, shows up if touch detected -->
                 <div class="touch-controls hidden" id="touch-controls">
                     <div class="dpad">
                         <button class="tc btn-round" data-dir="up">▲</button>
@@ -43,6 +45,7 @@ description: Fast. Fancy. Frenetic.
                     </div>
                 </div>
 
+                <!-- main menu overlay - shows first -->
                 <div class="overlay menu" id="overlay">
                     <div class="menu-card">
                         <h2>Snake</h2>
@@ -85,6 +88,7 @@ description: Fast. Fancy. Frenetic.
                     </div>
                 </div>
 
+                <!-- how-to-play info panel -->
                 <div class="overlay info-panel hidden" id="overlay-info">
                     <div class="info-card">
                         <h3>How to play</h3>
@@ -98,6 +102,7 @@ description: Fast. Fancy. Frenetic.
                     </div>
                 </div>
 
+                <!-- game over screen -->
                 <div class="overlay game-over hidden" id="overlay-gameover">
                     <div class="gameover-card">
                         <h3>Game Over</h3>
