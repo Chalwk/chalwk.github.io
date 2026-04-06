@@ -1,8 +1,11 @@
 // Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
 
 (function () {
+    // Base URLs & image paths
     const BASE_URL = "https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/";
     const IMAGE_BASE = "/assets/images/pokemon-cards/";
+
+    // Map raw rarity strings to CSS class names
     const RARITY_MAP = new Map([
         ['common', 'common'], ['uncommon', 'uncommon'], ['rare', 'rare'],
         ['rare holo', 'rare'], ['holo rare', 'rare'],
@@ -12,20 +15,14 @@
         ['promo', 'promo']
     ]);
 
+    // FontAwesome icons per Pokémon type
     const TYPE_ICON_MAP = {
-        psychic: 'brain',
-        fire: 'fire',
-        water: 'water',
-        grass: 'leaf',
-        lightning: 'bolt',
-        fighting: 'fist',
-        darkness: 'moon',
-        metal: 'cog',
-        fairy: 'star',
-        dragon: 'dragon',
-        colorless: 'circle'
+        psychic: 'brain', fire: 'fire', water: 'water', grass: 'leaf',
+        lightning: 'bolt', fighting: 'fist', darkness: 'moon', metal: 'cog',
+        fairy: 'star', dragon: 'dragon', colorless: 'circle'
     };
 
+    // DOM stuff
     const energyContainer = document.getElementById('energy-container');
     const supportersContainer = document.getElementById('supporters-container');
     const itemsContainer = document.getElementById('items-container');
@@ -40,15 +37,16 @@
     const modalPrevBtn = document.getElementById('modalPrevBtn');
     const modalNextBtn = document.getElementById('modalNextBtn');
 
-    let allCards = [];
+    let allCards = []; // Flat list of all card DOM elements for filtering
     let energySection, trainersSection, pokemonSection;
     let trainerSubsections = [];
     let pokemonTypeBlocks = [];
-
-    let currentCardElement = null;
+    let currentCardElement = null; // Currently opened card in modal
     let lazyObserver = null;
 
+    // Helper: build image path from card name
     const getImagePath = (name) => `${IMAGE_BASE}${encodeURIComponent(name)}.jpg`;
+    // Build external link (Pokémon Database) from set part
     const buildUrlFromPart = (part) => part ? BASE_URL + part.replace(/\/?$/, '/') : '';
 
     const normalizeRarity = (rarity) => {
@@ -57,6 +55,7 @@
         return RARITY_MAP.get(key) || 'unknown';
     };
 
+    // Returns HTML for rarity badge
     const getRarityBadge = (rarity) => {
         if (!rarity) return '';
         const normalized = normalizeRarity(rarity);
@@ -77,6 +76,7 @@
 
     const PLACEHOLDER_SVG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100%25' height='100%25' fill='%23e0e0e0'/%3E%3C/svg%3E";
 
+    // Format weakness/resistance arrays from raw data
     const formatWeakness = (weakness) => {
         if (!weakness) return [];
         if (Array.isArray(weakness) && weakness.length === 2 && typeof weakness[1] === 'string' && !isNaN(parseInt(weakness[1]))) {
@@ -95,12 +95,11 @@
             const reduction = -resistance.value;
             return [`${resistance.symbol} ${reduction}`];
         }
-        if (Array.isArray(resistance)) {
-            return resistance;
-        }
+        if (Array.isArray(resistance)) return resistance;
         return [];
     };
 
+    // Generates HTML for a single card (Pokémon or trainer/energy)
     const createCardHTML = (card, isPokemon = false) => {
         const imgSrc = getImagePath(card.name);
         const holoTag = card.holo ? '<span class="holo-indicator">H</span>' : '';
@@ -112,6 +111,7 @@
         let extraDetailsHtml = '';
 
         if (isPokemon) {
+            // Pokémon specific: stage, HP, attacks, weakness/resistance, retreat
             detailsHtml = `
                 <div class="pokemon-details">
                     <span><i class="fas fa-arrow-up"></i> ${escapeHtml(card.stage)}</span>
@@ -162,6 +162,7 @@
             const statsHtml = (weaknessesHtml || resistancesHtml || retreatHtml) ? `<div class="pokemon-stats">${weaknessesHtml}${resistancesHtml}${retreatHtml}</div>` : '';
             extraDetailsHtml = attacksHtml + statsHtml;
         } else {
+            // Non-Pokémon: just rarity badge
             detailsHtml = rarityBadgeHtml ? `<div class="item-rarity">${rarityBadgeHtml}</div>` : '';
         }
 
@@ -182,10 +183,12 @@
         `;
     };
 
+    // Get all visible cards (not hidden by search)
     const getVisibleCards = () => {
         return Array.from(document.querySelectorAll('.item-card, .pokemon-card')).filter(card => card.style.display !== 'none');
     };
 
+    // Update modal image & caption based on currentCardElement
     const updateModalContent = () => {
         if (!currentCardElement) return;
         const img = currentCardElement.querySelector('.card-thumb');
@@ -200,6 +203,7 @@
         modalCaption.innerText = `${cardName} ${qty}`;
     };
 
+    // Navigate left/right in modal across visible cards
     const navigateModal = (direction) => {
         if (!currentCardElement) return;
         const visibleCards = getVisibleCards();
@@ -216,6 +220,7 @@
         updateModalContent();
     };
 
+    // Exposed globally for onclick handlers
     window.openLightbox = (cardElement) => {
         if (!cardElement) return;
         currentCardElement = cardElement;
@@ -240,6 +245,7 @@
         }
     };
 
+    // Keyboard controls for modal
     const onKeyDown = (e) => {
         if (modal.style.display !== 'flex') return;
         if (e.key === 'ArrowLeft') {
@@ -266,6 +272,7 @@
         if (modal.style.display === 'flex') window.closeModal(true);
     });
 
+    // Click on card opens modal, but not if clicking external link
     document.addEventListener('click', (e) => {
         const card = e.target.closest('.item-card, .pokemon-card');
         if (!card) return;
@@ -279,6 +286,7 @@
         if (e.target === modal) closeModal();
     });
 
+    // Render helpers for each container
     const renderItems = (container, items) => {
         container.innerHTML = items.map(item => createCardHTML(item, false)).join('');
         observeImages(container);
@@ -307,6 +315,7 @@
         observeImages(pokemonTypeContainer);
     };
 
+    // Lazy image loading using IntersectionObserver (I should probably optimize this)
     const initLazyObserver = () => {
         if (lazyObserver) lazyObserver.disconnect();
         lazyObserver = new IntersectionObserver((entries, observer) => {
@@ -338,6 +347,7 @@
         images.forEach(img => lazyObserver.observe(img));
     };
 
+    // Hide empty sections when filtering
     const updateSectionVisibility = () => {
         const countVisibleInGrid = (grid) => grid ? Array.from(grid.children).filter(card => card.style.display !== 'none').length : 0;
 
@@ -366,6 +376,7 @@
         const totalVisible = allCards.filter(card => card.style.display !== 'none').length;
         noResultsDiv.style.display = totalVisible === 0 ? 'block' : 'none';
 
+        // If currently opened card becomes hidden, close modal
         if (modal.style.display === 'flex' && currentCardElement) {
             if (currentCardElement.style.display === 'none') {
                 closeModal(true);
@@ -373,6 +384,7 @@
         }
     };
 
+    // Parse search string into conditions: holo, stage, hp, rarity, name tokens
     const parseSearchTokens = (term) => {
         const tokens = term.toLowerCase().split(/\s+/).filter(t => t);
         const conditions = {holo: null, stage: null, hp: null, rarity: null, nameTokens: []};
@@ -414,6 +426,7 @@
         return conditions;
     };
 
+    // Check if a card matches the parsed conditions
     const matchesCard = (card, conditions) => {
         if (conditions.holo !== null && card.dataset.holo !== 'true') return false;
         if (conditions.stage !== null && !(card.dataset.stage || '').includes(conditions.stage)) return false;
@@ -434,11 +447,7 @@
         filterDebounceTimer = setTimeout(() => {
             const term = searchInput.value.trim();
             const conditions = term ? parseSearchTokens(term) : {
-                holo: null,
-                stage: null,
-                hp: null,
-                rarity: null,
-                nameTokens: []
+                holo: null, stage: null, hp: null, rarity: null, nameTokens: []
             };
             for (let card of allCards) {
                 card.style.display = matchesCard(card, conditions) ? 'flex' : 'none';
@@ -448,6 +457,7 @@
         }, 16);
     };
 
+    // Fetch data from /data/pokemon-database.json and build the UI
     const loadData = async () => {
         try {
             const response = await fetch('/data/pokemon-database.json');
@@ -459,11 +469,8 @@
                 data.ENERGY.forEach(entry => {
                     const {name, count, holo, setPart, rarity} = entry;
                     energies.push({
-                        name,
-                        count: parseInt(count, 10),
-                        holo: holo === true || holo === 'true',
-                        url: buildUrlFromPart(setPart),
-                        rarity
+                        name, count: parseInt(count, 10), holo: holo === true || holo === 'true',
+                        url: buildUrlFromPart(setPart), rarity
                     });
                 });
             }
@@ -472,11 +479,8 @@
                 data.SUPPORTER.forEach(entry => {
                     const {name, count, holo, setPart, rarity} = entry;
                     supporters.push({
-                        name,
-                        count: parseInt(count, 10),
-                        holo: holo === true || holo === 'true',
-                        url: buildUrlFromPart(setPart),
-                        rarity
+                        name, count: parseInt(count, 10), holo: holo === true || holo === 'true',
+                        url: buildUrlFromPart(setPart), rarity
                     });
                 });
             }
@@ -485,11 +489,8 @@
                 data.ITEM.forEach(entry => {
                     const {name, count, holo, setPart, rarity} = entry;
                     items.push({
-                        name,
-                        count: parseInt(count, 10),
-                        holo: holo === true || holo === 'true',
-                        url: buildUrlFromPart(setPart),
-                        rarity
+                        name, count: parseInt(count, 10), holo: holo === true || holo === 'true',
+                        url: buildUrlFromPart(setPart), rarity
                     });
                 });
             }
@@ -498,11 +499,8 @@
                 data.TOOL.forEach(entry => {
                     const {name, count, holo, setPart, rarity} = entry;
                     tools.push({
-                        name,
-                        count: parseInt(count, 10),
-                        holo: holo === true || holo === 'true',
-                        url: buildUrlFromPart(setPart),
-                        rarity
+                        name, count: parseInt(count, 10), holo: holo === true || holo === 'true',
+                        url: buildUrlFromPart(setPart), rarity
                     });
                 });
             }
@@ -510,33 +508,14 @@
             if (data.POKEMON) {
                 data.POKEMON.forEach(entry => {
                     const {
-                        name,
-                        hp,
-                        stage,
-                        count,
-                        type,
-                        holo,
-                        setPart,
-                        rarity,
-                        attacks,
-                        weakness,
-                        resistance,
-                        retreatCost
+                        name, hp, stage, count, type, holo, setPart, rarity,
+                        attacks, weakness, resistance, retreatCost
                     } = entry;
                     if (!pokemonByType[type]) pokemonByType[type] = [];
                     pokemonByType[type].push({
-                        name,
-                        hp: parseInt(hp, 10),
-                        stage,
-                        type,
-                        count: parseInt(count, 10),
-                        holo: holo === true || holo === 'true',
-                        url: buildUrlFromPart(setPart),
-                        rarity,
-                        attacks: attacks || [],
-                        weakness: weakness || [],
-                        resistance: resistance,
-                        retreatCost: retreatCost || 0
+                        name, hp: parseInt(hp, 10), stage, type, count: parseInt(count, 10),
+                        holo: holo === true || holo === 'true', url: buildUrlFromPart(setPart), rarity,
+                        attacks: attacks || [], weakness: weakness || [], resistance, retreatCost: retreatCost || 0
                     });
                 });
             }
@@ -547,6 +526,7 @@
             renderItems(toolsContainer, tools);
             renderPokemon(pokemonByType);
 
+            // Cache section elements for visibility toggling
             energySection = document.getElementById('energies');
             trainersSection = document.getElementById('trainers');
             pokemonSection = document.getElementById('pokemon');

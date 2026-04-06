@@ -14,6 +14,7 @@ description: Personal collection of Pokémon TCG cards, organized by type and ra
             <i class="fas fa-dragon"></i> My Pokémon TCG collection
         </h1>
 
+        <!-- Search bar with clear button -->
         <div class="search-wrapper">
             <i class="fas fa-search"></i>
             <label for="searchInput"></label><input autocomplete="off" id="searchInput"
@@ -22,16 +23,19 @@ description: Personal collection of Pokémon TCG cards, organized by type and ra
             <button id="clearSearch" title="Clear"><i class="fas fa-times"></i></button>
         </div>
 
+        <!-- Shown when no cards match search -->
         <div class="no-results-message" id="noResultsMessage">
             <i class="fas fa-search"></i>
             <p>No cards match your search.</p>
         </div>
 
+        <!-- Energies section -->
         <section class="section-card" id="energies">
             <h2 class="section-heading"><i class="fas fa-bolt"></i> Energies</h2>
             <div class="card-grid" id="energy-container"></div>
         </section>
 
+        <!-- Trainers: split into Supporters, Items, Tools -->
         <section class="section-card" id="trainers">
             <h2 class="section-heading"><i class="fas fa-user-graduate"></i> Trainers</h2>
 
@@ -51,6 +55,7 @@ description: Personal collection of Pokémon TCG cards, organized by type and ra
             </div>
         </section>
 
+        <!-- Pokémon roster - types get filled dynamically -->
         <section class="section-card" id="pokemon">
             <h2 class="section-heading"><i class="fas fa-paw"></i> Pokémon roster</h2>
             <div id="pokemon-type-sections"></div>
@@ -58,6 +63,7 @@ description: Personal collection of Pokémon TCG cards, organized by type and ra
     </div>
 </main>
 
+<!-- Lightbox modal for card images -->
 <div class="modal" id="imageModal" onclick="if(event.target === this) closeModal()">
     <div class="modal-content">
         <span class="close-modal" onclick="closeModal()">&times;</span>
