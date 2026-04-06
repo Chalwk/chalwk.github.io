@@ -35,7 +35,7 @@ social:
     - https://www.twitch.tv/chalwk
     - https://discord.com/channels/@me/707058110396760094   # my discord id
 
-image: /assets/images/avatar2.png   # profile pic for cards
+image: https://chalwk.github.io/assets/images/avatar2.png   # profile pic for cards
 
 # ------------------------------------------------------------
 # Plugins - extra features
