@@ -8,7 +8,6 @@
 
   <br>
 
-  <!-- Contact badges -->
   <a href="mailto:chalwk.dev@gmail.com">
     <img src="https://img.shields.io/badge/Email-chalwk.dev@gmail.com-c14438?style=for-the-badge&logo=gmail&logoColor=white" alt="Email">
   </a>
