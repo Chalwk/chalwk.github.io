@@ -37,14 +37,12 @@ layout: default
 
                 {% if page.toc != false %}
                 <div class="toc-container">
-                    <details %} %}open{% class="toc-details" endif if page.toc_open {%>
+                    <details class="toc-details" {% if page.toc_open %}open{% endif %}>
                         <summary class="toc-summary">
-                            <i aria-hidden="true" class="fas fa-list-ul"></i> Table of Contents
+                            <i class="fas fa-list-ul" aria-hidden="true"></i> Table of Contents
                         </summary>
                         <div class="toc-content" id="jekyll-toc-placeholder">
-                            <ul>
-                                <li>Loading table of contents…</li>
-                            </ul>
+                            <ul><li>Loading table of contents…</li></ul>
                         </div>
                     </details>
                 </div>
