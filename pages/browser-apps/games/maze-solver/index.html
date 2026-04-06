@@ -6,7 +6,7 @@ description: Play a maze game with WASD or arrow keys, or touch controls.
 
 <!-- Copyright (c) 2024-2026. Jericho Crosby (Chalwk) -->
 
-<link rel="stylesheet" href="style.css">
+<link href="style.css" rel="stylesheet">
 
 <main>
     <div class="container">
@@ -16,12 +16,14 @@ description: Play a maze game with WASD or arrow keys, or touch controls.
                 <p class="muted small maze-subtitle">WASD / Arrows • Touch-friendly • Hint included</p>
             </div>
 
+            <!-- quick instructions for players -->
             <div class="maze-instructions">
                 <h4 class="instructions-title"><i class="fas fa-info-circle"></i> Objective:</h4>
                 <p>Move your <span class="pill green">player</span> to the <span class="pill red">goal</span>. Use WASD
                     or arrow keys, or the touch D-pad below.</p>
             </div>
 
+            <!-- top toolbar: restart, hint, size selector, return button -->
             <div class="maze-controls-top">
                 <div class="maze-left-controls">
                     <button class="btn" id="reset-btn"><i class="fas fa-redo"></i> Restart</button>
@@ -41,6 +43,7 @@ description: Play a maze game with WASD or arrow keys, or touch controls.
                 </div>
             </div>
 
+            <!-- live stats: moves, timer, best score for this maze size -->
             <div class="maze-game-stats">
                 <div class="stat-item">
                     <strong class="stat-label">Moves:</strong>
@@ -56,10 +59,12 @@ description: Play a maze game with WASD or arrow keys, or touch controls.
                 </div>
             </div>
 
+            <!-- the actual maze grid will be injected here -->
             <div class="maze-game-container" id="game-container">
                 <div class="maze-container" id="maze-container"></div>
             </div>
 
+            <!-- touch-friendly D-pad for mobile users -->
             <div class="maze-touch-controls">
                 <h4 class="touch-controls-title"><i class="fas fa-gamepad"></i> Touch Controls:</h4>
                 <div class="dpad" id="touch-controls">

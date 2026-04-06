@@ -6,11 +6,12 @@ description: AAC Communication Board
 
 <!-- Copyright (c) 2024-2026. Jericho Crosby (Chalwk) -->
 
-<link rel="stylesheet" href="style.css">
+<link href="style.css" rel="stylesheet">
 
 <main>
     <div class="container">
         <div class="app-container">
+            <!-- header: title, category filter, and settings cog -->
             <div class="app-header">
                 <div class="header-left">
                     <h2>Communication Board</h2>
@@ -23,6 +24,7 @@ description: AAC Communication Board
                 </div>
 
                 <div class="header-controls">
+                    <!-- gear dropdown with all the power tools: add/edit, save, import/export, categories, extra settings -->
                     <div class="settings-dropdown">
                         <button aria-label="Settings" class="settings-toggle" id="settingsToggle" title="Settings">
                             <i class="fas fa-cog"></i>
@@ -64,6 +66,7 @@ description: AAC Communication Board
             </div>
 
             <div class="main-content">
+                <!-- phrase builder: shows selected symbols, can drag to reorder -->
                 <div class="phrase-bar">
                     <div aria-live="polite" class="phrase-display" id="phraseDisplay" role="list">
                         <span class="empty-message">Select symbols to build your phrase</span>
@@ -78,10 +81,12 @@ description: AAC Communication Board
                     </div>
                 </div>
 
+                <!-- search bar to filter symbols on the board -->
                 <div class="board-toolbar">
                     <input aria-label="Search symbols" id="globalSearch" placeholder="Search symbols..." type="text">
                 </div>
 
+                <!-- the actual communication board - symbols go here -->
                 <div aria-label="Communication board" class="board-container" id="boardWrap" tabindex="0">
                     <div class="communication-board" id="communicationBoard" role="list"></div>
                 </div>
@@ -90,6 +95,7 @@ description: AAC Communication Board
     </div>
 </main>
 
+<!-- Modal: edit or delete a single symbol -->
 <div aria-hidden="true" aria-labelledby="modalTitle" aria-modal="true" class="modal" id="editModal" role="dialog">
     <div class="modal-content">
         <div class="modal-header">
@@ -135,6 +141,7 @@ description: AAC Communication Board
     </div>
 </div>
 
+<!-- Modal: add/rename/delete categories -->
 <div aria-hidden="true" aria-labelledby="categoriesModalTitle" aria-modal="true" class="modal" id="categoriesModal"
      role="dialog">
     <div class="modal-content">
@@ -162,6 +169,7 @@ description: AAC Communication Board
     </div>
 </div>
 
+<!-- Modal: extra settings (theme, speech volume/voice, fixed grid sizes) -->
 <div aria-hidden="true" aria-labelledby="settingsModalTitle" aria-modal="true" class="modal" id="settingsModal"
      role="dialog">
     <div class="modal-content">

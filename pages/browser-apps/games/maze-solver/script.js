@@ -19,6 +19,7 @@ let timeSeconds = 0;
 let started = false;
 let gameCompleted = false;
 
+// key for localStorage best score per maze size
 function bestKey(size) {
     return `maze_best_${size}`;
 }
@@ -28,6 +29,7 @@ function updateBestUI() {
     bestElement.textContent = b ? `Best: ${b} moves` : "Best: -";
 }
 
+// Fisher-Yates shuffle for frontier randomization
 function shuffle(arr) {
     for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -35,8 +37,10 @@ function shuffle(arr) {
     }
 }
 
+// generate maze using randomized Prim's algorithm (with extra passage carving)
 function generateMaze(size) {
     const grid = Array.from({length: size}, () => Array(size).fill(1));
+    // start at a random odd cell
     const startX = Math.floor(Math.random() * (size - 1)) | 1;
     const startY = Math.floor(Math.random() * (size - 1)) | 1;
 
@@ -70,11 +74,13 @@ function generateMaze(size) {
         }
     }
 
+    // force entry and exit
     grid[0][1] = 0;
     grid[1][0] = 0;
     grid[size - 1][size - 2] = 0;
     grid[size - 2][size - 1] = 0;
 
+    // add some extra openings (makes maze less perfect, more fun)
     for (let i = 0; i < size * 2; i++) {
         const x = Math.floor(Math.random() * (size - 2)) + 1;
         const y = Math.floor(Math.random() * (size - 2)) + 1;
@@ -99,6 +105,7 @@ function generateMaze(size) {
     return grid;
 }
 
+// dynamically set cell size based on container width, clamp between 18-40px
 function computeCellSize() {
     const container = document.getElementById('game-container');
     const containerWidth = container.clientWidth - 40;
@@ -108,6 +115,7 @@ function computeCellSize() {
     mazeContainer.style.gridTemplateColumns = `repeat(${mazeSize}, var(--cell-size))`;
 }
 
+// render the whole maze, color cells, player, goal
 function drawMaze() {
     computeCellSize();
     mazeContainer.innerHTML = "";
@@ -132,6 +140,7 @@ function drawMaze() {
     updateBestUI();
 }
 
+// attempt to move player, check win condition
 function movePlayer(dx, dy) {
     if (gameCompleted) return;
 
@@ -166,6 +175,7 @@ function movePlayer(dx, dy) {
     }
 }
 
+// keyboard controls (WASD + arrows) with preventDefault to avoid page scroll
 document.addEventListener("keydown", e => {
     const key = e.key.toLowerCase();
     if (["arrowup", "arrowdown", "arrowleft", "arrowright", " "].includes(key)) {
@@ -192,6 +202,7 @@ document.addEventListener("keydown", e => {
     }
 });
 
+// touch dpad listeners
 document.querySelectorAll("#touch-controls button").forEach(btn => {
     btn.addEventListener("click", () => {
         const dir = btn.dataset.dir;
@@ -211,6 +222,7 @@ sizeSelect.addEventListener("change", (e) => {
     initMaze(mazeSize);
 });
 
+// timer start/stop/reset
 function startTimer() {
     if (timer) clearInterval(timer);
     timer = setInterval(() => {
@@ -233,6 +245,7 @@ function resetTimer() {
     timerElement.textContent = `Time: 0s`;
 }
 
+// BFS to find shortest path from player to goal (used for hint)
 function findShortestPath() {
     const q = [];
     const visited = Array.from({length: mazeSize}, () => Array(mazeSize).fill(false));
@@ -275,6 +288,7 @@ function findShortestPath() {
     return path;
 }
 
+// highlight the next few cells on the shortest path for 2.2 seconds
 hintBtn.addEventListener("click", () => {
     const path = findShortestPath();
     if (!path || path.length <= 1) return;
@@ -292,6 +306,7 @@ hintBtn.addEventListener("click", () => {
     setTimeout(() => cells.forEach(c => c.classList.remove("hint")), 2200);
 });
 
+// (re)start everything: new maze, reset stats, stop timer
 function initMaze(size) {
     mazeSize = size;
     maze = generateMaze(mazeSize);
@@ -305,5 +320,6 @@ function initMaze(size) {
     updateBestUI();
 }
 
+// adapt grid when window resizes (may need to be adjusted)
 window.addEventListener('resize', computeCellSize);
 window.addEventListener('load', initMaze(mazeSize));

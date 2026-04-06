@@ -1,5 +1,6 @@
 /* Copyright (c) 2024-2026. Jericho Crosby (Chalwk) */
 
+/* main panel styles */
 .maze-panel {
     background: var(--light);
     border: 1px solid var(--gray-light);
@@ -17,6 +18,7 @@
     color: var(--gray);
 }
 
+/* instruction box with colorful pills */
 .maze-instructions {
     margin-bottom: 1.5rem;
     padding: 1rem;
@@ -47,6 +49,7 @@
     color: #ffb4b4;
 }
 
+/* top control bar: buttons + size selector */
 .maze-controls-top {
     display: flex;
     justify-content: space-between;
@@ -80,6 +83,7 @@
     margin-left: 0.5rem;
 }
 
+/* moves/time/best stats row */
 .maze-game-stats {
     display: flex;
     justify-content: space-between;
@@ -107,6 +111,7 @@
     margin-left: 0.5rem;
 }
 
+/* container holding the maze grid */
 .maze-game-container {
     display: flex;
     justify-content: center;
@@ -114,6 +119,7 @@
     min-height: 300px;
 }
 
+/* actual CSS grid for maze cells */
 .maze-container {
     display: grid;
     gap: 3px;
@@ -123,6 +129,7 @@
     box-shadow: var(--shadow-lg);
 }
 
+/* touch dpad styling */
 .maze-touch-controls {
     text-align: center;
     margin-bottom: 1.5rem;
@@ -161,6 +168,7 @@
     gap: 0.5rem;
 }
 
+/* base cell style, size set by JS */
 .cell {
     width: var(--cell-size);
     height: var(--cell-size);
@@ -178,6 +186,7 @@
     border: 1px solid rgba(255, 255, 255, 0.02);
 }
 
+/* player (green) with slight glow */
 .player {
     background: linear-gradient(180deg, #22c55e, #16a34a);
     box-shadow: 0 6px 18px rgba(34, 197, 94, 0.18);
@@ -195,6 +204,7 @@
     opacity: 0.6;
 }
 
+/* goal (red) pulsing animation */
 .end {
     background: linear-gradient(180deg, #fb7185, #ef4444);
     box-shadow: 0 6px 18px rgba(239, 68, 68, 0.16);
@@ -216,6 +226,7 @@
     }
 }
 
+/* hint cell flash (light yellow) */
 .hint {
     background: linear-gradient(180deg, #fffbeb, #fef3c7);
     box-shadow: 0 6px 12px rgba(255, 223, 93, 0.12);
@@ -238,6 +249,7 @@
     }
 }
 
+/* responsive tweaks for smaller screens */
 @media (max-width: 768px) {
     .maze-controls-top {
         flex-direction: column;

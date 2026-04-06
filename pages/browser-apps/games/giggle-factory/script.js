@@ -1,5 +1,6 @@
 // Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
 
+// DOM elements we'll poke...
 const jokeText = document.getElementById('jokeText');
 const newJokeBtn = document.getElementById('newJokeBtn');
 const copyBtn = document.getElementById('copyBtn');
@@ -9,6 +10,7 @@ const status = document.getElementById('status');
 const jokeType = document.getElementById('jokeType');
 const jokeSource = document.getElementById('jokeSource');
 
+// backup jokes when APIs throw tantrums
 const FALLBACK_JOKES = [
     "I told my computer I needed a break, and it said 'No problem - I'll go to sleep.'",
     "Why do programmers prefer dark mode? Because light attracts bugs.",
@@ -17,9 +19,10 @@ const FALLBACK_JOKES = [
     "Parallel lines have so much in common. It's a shame they'll never meet."
 ];
 
-let lastJoke = '';
-let currentApiIndex = 0;
+let lastJoke = '';         // store current joke for copy/tweet
+let currentApiIndex = 0; // which API we're using
 
+// list of joke APIs - each has name, source label, url, headers, and a parser to extract the funny text
 const JOKE_APIS = [
     {
         name: 'Dad Jokes',
@@ -72,15 +75,18 @@ const JOKE_APIS = [
     }
 ];
 
+// move to next API (cycles)
 function cycleApi() {
     currentApiIndex = (currentApiIndex + 1) % JOKE_APIS.length;
     return JOKE_APIS[currentApiIndex];
 }
 
+// get the current API object
 function getCurrentApi() {
     return JOKE_APIS[currentApiIndex];
 }
 
+// fetch a joke from current API, fallback to next API if fails, then local jokes if all dead
 async function fetchJoke() {
     const api = getCurrentApi();
     setStatus(`fetching from ${api.source}...`);
@@ -106,7 +112,7 @@ async function fetchJoke() {
         setStatus(`from ${api.source}`);
     } catch (err) {
         console.warn(`Fetch from ${api.source} failed:`, err);
-
+        // try the next API in line as emergency fallback
         const nextApi = cycleApi();
         setStatus(`${api.source} failed, trying ${nextApi.source}`);
 
@@ -140,22 +146,27 @@ async function fetchJoke() {
     }
 }
 
+// display joke and remember it
 function showJoke(text) {
     lastJoke = text;
     jokeText.textContent = text;
 }
 
+// update status message
 function setStatus(txt) {
     status.textContent = txt;
 }
 
+// button: get a new joke
 newJokeBtn.addEventListener('click', fetchJoke);
 
+// double-click on new joke button cycles API then fetches
 newJokeBtn.addEventListener('dblclick', () => {
     cycleApi();
     fetchJoke();
 });
 
+// local fallback button - uses static list
 fallbackBtn.addEventListener('click', () => {
     const local = FALLBACK_JOKES[Math.floor(Math.random() * FALLBACK_JOKES.length)];
     jokeType.textContent = 'local fallback';
@@ -164,6 +175,7 @@ fallbackBtn.addEventListener('click', () => {
     setStatus('served from local stash');
 });
 
+// copy joke to clipboard
 copyBtn.addEventListener('click', async () => {
     try {
         await navigator.clipboard.writeText(lastJoke || jokeText.textContent);
@@ -173,12 +185,14 @@ copyBtn.addEventListener('click', async () => {
     }
 });
 
+// tweet the current joke
 tweetBtn.addEventListener('click', () => {
     const text = encodeURIComponent(lastJoke || jokeText.textContent);
     const url = `https://twitter.com/intent/tweet?text=${text}`;
     window.open(url, '_blank');
 });
 
+// keyboard shortcuts: J for new joke, A to cycle API
 window.addEventListener('keydown', (e) => {
     if (e.key.toLowerCase() === 'j') {
         fetchJoke();
@@ -189,6 +203,7 @@ window.addEventListener('keydown', (e) => {
     }
 });
 
+// extra tiny buttons for power users - with a lil haptic feedback
 const quickJBtn = document.getElementById('quickJBtn');
 const quickABtn = document.getElementById('quickABtn');
 
@@ -202,7 +217,9 @@ quickJBtn.addEventListener('click', () => {
     fetchJoke();
     vibrateIfSupported();
     quickJBtn.style.transform = 'scale(0.95)';
-    setTimeout(() => { quickJBtn.style.transform = ''; }, 150);
+    setTimeout(() => {
+        quickJBtn.style.transform = '';
+    }, 150);
 });
 
 quickABtn.addEventListener('click', () => {
@@ -210,7 +227,9 @@ quickABtn.addEventListener('click', () => {
     fetchJoke();
     vibrateIfSupported();
     quickABtn.style.transform = 'scale(0.95)';
-    setTimeout(() => { quickABtn.style.transform = ''; }, 150);
+    setTimeout(() => {
+        quickABtn.style.transform = '';
+    }, 150);
 });
 
 fetchJoke();

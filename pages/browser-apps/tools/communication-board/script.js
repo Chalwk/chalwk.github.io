@@ -1,6 +1,7 @@
 // Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
 
 (() => {
+    // --- DOM stuff ---
     const communicationBoard = document.getElementById('communicationBoard');
     const phraseDisplay = document.getElementById('phraseDisplay');
     const speakBtn = document.getElementById('speakBtn');
@@ -45,10 +46,11 @@
     const settingsToggle = document.getElementById('settingsToggle');
     const settingsMenu = document.getElementById('settingsMenu');
 
-    let symbols = [];
-    let currentPhrase = [];
-    let phraseHistory = [];
-    let isEditMode = false;
+    // --- app state ---
+    let symbols = [];         // all symbol objects
+    let currentPhrase = [];   // symbols currently in phrase strip
+    let phraseHistory = [];   // undo stack
+    let isEditMode = false;   // whether board is in edit mode
     let currentEditingSymbol = null;
     let settings = {
         filterCategory: 'All',
@@ -57,6 +59,7 @@
         volume: 0.6
     };
 
+    // localStorage keys
     const LS = {
         symbolsKey: 'cb.symbols',
         settingsKey: 'cb.settings',
@@ -81,6 +84,7 @@
         'Time & Schedule'
     ];
 
+    // --- persistence helpers ---
     function saveSymbols() {
         localStorage.setItem(LS.symbolsKey, JSON.stringify(symbols));
         showToast('Symbols saved');
@@ -90,6 +94,7 @@
         localStorage.setItem(LS.symbolsKey, JSON.stringify(symbols));
     }
 
+    // load initial symbols from symbols.txt if nothing in localStorage
     async function loadSymbolsFromFile() {
         try {
             const response = await fetch('symbols.txt');
@@ -137,6 +142,7 @@
             saveSymbolsSilently();
         }
 
+        // merge any new categories from symbols into the category list
         const symbolCategories = [...new Set(symbols.map(s => s.category))];
         const existingCategories = getCategories();
         const mergedCategories = [...new Set([...existingCategories, ...symbolCategories])];
@@ -174,29 +180,26 @@
         localStorage.setItem(LS.volumeKey, volume.toString());
     }
 
+    // --- theme handling ---
     function applyTheme(theme) {
         document.body.classList.remove('theme-light', 'theme-dark', 'theme-high-contrast');
-
         if (theme === 'auto') {
             document.body.classList.add('theme-auto');
         } else {
             document.body.classList.add(`theme-${theme}`);
         }
-
         updateThemeColor(theme);
     }
 
     function updateThemeColor(theme) {
         const themeColorMeta = document.querySelector('meta[name="theme-color"]');
         if (!themeColorMeta) return;
-
         const colors = {
             light: '#4a86e8',
             dark: '#1a1a1a',
             'high-contrast': '#000000',
             auto: '#4a86e8'
         };
-
         themeColorMeta.content = colors[theme] || colors.auto;
     }
 
@@ -218,6 +221,7 @@
         showToast(`Theme set to ${theme}`);
     }
 
+    // --- category CRUD ---
     function getCategories() {
         const categoriesRaw = localStorage.getItem(LS.categoriesKey);
         if (categoriesRaw) {
@@ -239,13 +243,11 @@
             showToast('Please enter a category name');
             return false;
         }
-
         const categories = getCategories();
         if (categories.includes(name.trim())) {
             showToast('Category already exists');
             return false;
         }
-
         categories.push(name.trim());
         saveCategories(categories);
         updateCategorySelects();
@@ -258,26 +260,23 @@
             showToast('Please enter a category name');
             return false;
         }
-
         const categories = getCategories();
         if (categories.includes(newName.trim()) && newName.trim() !== oldName) {
             showToast('Category already exists');
             return false;
         }
-
         const index = categories.indexOf(oldName);
         if (index !== -1) {
             categories[index] = newName.trim();
             saveCategories(categories);
         }
-
+        // update symbols that used the old category
         symbols.forEach(symbol => {
             if (symbol.category === oldName) {
                 symbol.category = newName.trim();
             }
         });
         saveSymbols();
-
         updateCategorySelects();
         renderBoard();
         showToast(`Category renamed to "${newName}"`);
@@ -286,13 +285,11 @@
 
     function deleteCategory(name) {
         if (!name) return false;
-
         const symbolsInCategory = symbols.filter(s => s.category === name);
         if (symbolsInCategory.length > 0) {
             if (!confirm(`This category contains ${symbolsInCategory.length} symbol(s). Deleting it will move these symbols to "Basic Communication". Continue?`)) {
                 return false;
             }
-
             symbols.forEach(symbol => {
                 if (symbol.category === name) {
                     symbol.category = 'Basic Communication';
@@ -300,19 +297,16 @@
             });
             saveSymbols();
         }
-
         const categories = getCategories();
         const index = categories.indexOf(name);
         if (index !== -1) {
             categories.splice(index, 1);
             saveCategories(categories);
         }
-
         if (settings.filterCategory === name) {
             settings.filterCategory = 'All';
             saveSettings();
         }
-
         updateCategorySelects();
         renderBoard();
         showToast(`Category "${name}" deleted`);
@@ -321,7 +315,6 @@
 
     function updateCategorySelects() {
         const categories = getCategories();
-
         symbolCategoryInput.innerHTML = '';
         categories.forEach(category => {
             const option = document.createElement('option');
@@ -329,17 +322,15 @@
             option.textContent = category;
             symbolCategoryInput.appendChild(option);
         });
-
         renderCategorySelect();
     }
 
+    // --- UI helpers ---
     function showToast(msg, timeout = 2200) {
         if (!toast || !msg) return;
-
         toast.textContent = msg;
         toast.style.opacity = '1';
         toast.style.visibility = 'visible';
-
         setTimeout(() => {
             toast.style.opacity = '0';
             setTimeout(() => {
@@ -363,9 +354,9 @@
         if (!str) return false;
         if (isUrl(str)) return true;
         return !!str.startsWith('data:image/');
-
     }
 
+    // --- settings menu toggle (click-outside aware) ---
     function toggleSettingsMenu() {
         settingsMenu.parentElement.classList.toggle('active');
     }
@@ -380,6 +371,7 @@
         }
     });
 
+    // --- categories modal ---
     function openCategoriesModal() {
         categoriesModal.setAttribute('aria-hidden', 'false');
         renderCategoriesList();
@@ -394,7 +386,6 @@
     function renderCategoriesList() {
         const categories = getCategories();
         categoriesList.innerHTML = '';
-
         categories.forEach(category => {
             const categoryItem = document.createElement('div');
             categoryItem.className = 'category-item';
@@ -407,19 +398,16 @@
             `;
             categoriesList.appendChild(categoryItem);
         });
-
         document.querySelectorAll('.rename-category-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const oldCategory = e.target.dataset.category;
                 const input = e.target.closest('.category-item').querySelector('.category-name-input');
                 const newCategory = input.value.trim();
-
                 if (renameCategory(oldCategory, newCategory)) {
                     renderCategoriesList();
                 }
             });
         });
-
         document.querySelectorAll('.delete-category-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const category = e.target.dataset.category;
@@ -430,13 +418,12 @@
         });
     }
 
+    // --- settings modal & voice setup ---
     function openSettingsModal() {
         settingsModal.setAttribute('aria-hidden', 'false');
-
         settingsThemeSelect.value = settings.theme;
         settingsVolumeSelect.value = settings.volume.toString();
         settingsGridSizeSelect.value = settings.gridSize;
-
         populateSettingsVoices();
         closeSettingsMenu();
     }
@@ -448,16 +435,13 @@
     function populateSettingsVoices() {
         const voices = speechSynthesis.getVoices();
         settingsVoiceSelect.innerHTML = '';
-
         const defaultOption = document.createElement('option');
         defaultOption.value = '';
         defaultOption.textContent = 'Default Voice';
         defaultOption.selected = !localStorage.getItem(LS.voiceKey);
         settingsVoiceSelect.appendChild(defaultOption);
-
         const stored = localStorage.getItem(LS.voiceKey);
         let foundStored = false;
-
         voices.forEach(v => {
             const o = document.createElement('option');
             o.value = v.name;
@@ -468,12 +452,12 @@
             }
             settingsVoiceSelect.appendChild(o);
         });
-
         if (!foundStored && voices.length > 0 && stored) {
             localStorage.removeItem(LS.voiceKey);
         }
     }
 
+    // long-press to preview symbol speech
     function previewSpeak(symbol) {
         const text = symbol.text;
         if (!text || !('speechSynthesis' in window)) return;
@@ -493,10 +477,10 @@
         speechSynthesis.speak(ut);
     }
 
+    // --- main board rendering (symbol grid) ---
     function renderBoard() {
         communicationBoard.innerHTML = '';
         const searchValue = (globalSearch?.value || "").toLowerCase();
-
         const filtered = symbols.filter(s => {
             const categoryOk = settings.filterCategory === 'All' || s.category === settings.filterCategory;
             const searchOk = s.text.toLowerCase().includes(searchValue);
@@ -511,6 +495,7 @@
             node.style.backgroundColor = symbol.color || '#e8f0fe';
             if (isEditMode) node.classList.add('editing');
 
+            // display image or fallback emoji
             if (isImageSource(symbol.image)) {
                 node.innerHTML = `<img src="${symbol.image}" alt="${symbol.text}"><span>${symbol.text}</span>`;
             } else {
@@ -522,6 +507,7 @@
                 else addToPhrase(symbol);
             });
 
+            // long-press preview (pointer events)
             let pressTimer = null;
 
             function startPressTimer() {
@@ -538,7 +524,6 @@
                 e.preventDefault();
                 startPressTimer();
             }, {passive: false});
-
             node.addEventListener('pointerup', clearPressTimer);
             node.addEventListener('pointerleave', clearPressTimer);
             node.addEventListener('pointercancel', clearPressTimer);
@@ -561,15 +546,14 @@
         applyGridSetting();
     }
 
+    // category filter dropdown
     function renderCategorySelect() {
         const categories = getCategories();
         const cats = Array.from(new Set(['All', ...categories]));
         categorySelect.innerHTML = '<option value="All">All Categories</option>';
         cats.forEach(cat => {
             const option = document.createElement('option');
-
             option.style.color = symbols.find(s => s.category === cat)?.color || '#4a86e8';
-
             option.value = cat;
             option.textContent = cat;
             if (settings.filterCategory === cat) option.selected = true;
@@ -577,9 +561,9 @@
         });
     }
 
+    // --- phrase strip: display, drag/drop reorder, remove on click ---
     function updatePhraseDisplay() {
         phraseDisplay.innerHTML = '';
-
         phraseDisplay.classList.remove('drag-active');
 
         if (currentPhrase.length === 0) {
@@ -604,18 +588,19 @@
                 item.innerHTML = `<span style="font-size:1.2rem; margin-right:6px;">${symbol.image}</span><span>${symbol.text}</span>`;
             }
 
+            // click to remove
             item.addEventListener('click', () => {
                 backupPhrase();
                 currentPhrase.splice(index, 1);
                 updatePhraseDisplay();
             });
 
+            // drag start
             item.addEventListener('dragstart', (e) => {
                 e.dataTransfer.setData('text/plain', index.toString());
                 e.dataTransfer.effectAllowed = 'move';
                 item.classList.add('dragging');
                 phraseDisplay.classList.add('drag-active');
-
                 setTimeout(() => {
                     item.style.opacity = '0.4';
                 }, 0);
@@ -632,21 +617,16 @@
             item.addEventListener('dragover', (e) => {
                 e.preventDefault();
                 e.dataTransfer.dropEffect = 'move';
-
                 document.querySelectorAll('.phrase-item').forEach(el => {
                     el.classList.remove('drag-over');
                 });
-
                 const afterElement = getDragAfterElement(phraseDisplay, e.clientX);
                 if (afterElement) {
                     afterElement.classList.add('drag-over');
                 }
             });
 
-            item.addEventListener('dragenter', (e) => {
-                e.preventDefault();
-            });
-
+            item.addEventListener('dragenter', (e) => e.preventDefault());
             item.addEventListener('dragleave', (e) => {
                 if (!item.contains(e.relatedTarget)) {
                     item.classList.remove('drag-over');
@@ -657,10 +637,8 @@
                 e.preventDefault();
                 const fromIndex = parseInt(e.dataTransfer.getData('text/plain'), 10);
                 const toIndex = index;
-
                 if (!Number.isFinite(fromIndex)) return;
                 if (fromIndex === toIndex) return;
-
                 backupPhrase();
                 const [moved] = currentPhrase.splice(fromIndex, 1);
                 currentPhrase.splice(toIndex, 0, moved);
@@ -671,13 +649,12 @@
         });
     }
 
+    // helper for drag reorder: find closest element based on mouse X
     function getDragAfterElement(container, x) {
         const draggableElements = [...container.querySelectorAll('.phrase-item:not(.dragging)')];
-
         return draggableElements.reduce((closest, child) => {
             const box = child.getBoundingClientRect();
             const offset = x - box.left - box.width / 2;
-
             if (offset < 0 && offset > closest.offset) {
                 return {offset: offset, element: child};
             } else {
@@ -686,6 +663,7 @@
         }, {offset: Number.NEGATIVE_INFINITY}).element;
     }
 
+    // --- undo support ---
     function backupPhrase() {
         phraseHistory.push(JSON.stringify(currentPhrase));
         if (phraseHistory.length > 30) phraseHistory.shift();
@@ -720,31 +698,24 @@
         updatePhraseDisplay();
     }
 
+    // speak the whole phrase using TTS
     function speakPhrase() {
         if (currentPhrase.length === 0) return;
         const phraseText = currentPhrase.map(s => s.text).join(' ');
-
         if ('speechSynthesis' in window) {
             speechSynthesis.cancel();
-
             const utter = new SpeechSynthesisUtterance(phraseText);
             utter.rate = 0.95;
             utter.pitch = 1;
             utter.volume = settings.volume;
-
             const chosen = localStorage.getItem(LS.voiceKey);
             if (chosen) {
                 const voices = speechSynthesis.getVoices();
                 const voice = voices.find(x => x.name === chosen);
-                if (voice) {
-                    utter.voice = voice;
-                }
+                if (voice) utter.voice = voice;
             }
-
             utter.onerror = (event) => {
-                if (event.error === 'interrupted') {
-                    return;
-                }
+                if (event.error === 'interrupted') return;
                 console.error('Speech synthesis error:', event);
                 showToast('Speech error, trying without voice selection');
                 if (chosen) {
@@ -755,13 +726,13 @@
                     speechSynthesis.speak(fallbackUtter);
                 }
             };
-
             speechSynthesis.speak(utter);
         } else {
             alert(phraseText);
         }
     }
 
+    // --- edit symbol modal (add/edit) ---
     function openEditModal(symbol = null) {
         isEditMode = true;
         document.body.classList.add('edit-mode');
@@ -799,10 +770,10 @@
             return;
         }
 
+        // if user uploaded a file, convert to dataURL
         if (symbolImageFile.files && symbolImageFile.files[0]) {
             image = await fileToDataURL(symbolImageFile.files[0]);
         }
-
         if (!image) image = text.charAt(0) || '?';
 
         if (currentEditingSymbol && currentEditingSymbol.id) {
@@ -841,6 +812,7 @@
         });
     }
 
+    // --- export / import ---
     function exportJSON() {
         const payload = {
             symbols,
@@ -900,6 +872,7 @@
         closeSettingsMenu();
     }
 
+    // --- grid layout ---
     function applyGridSetting() {
         const board = document.getElementById('communicationBoard');
         if (!board) return;
@@ -917,16 +890,13 @@
     function populateVoices() {
         const voices = speechSynthesis.getVoices();
         settingsVoiceSelect.innerHTML = '';
-
         const defaultOption = document.createElement('option');
         defaultOption.value = '';
         defaultOption.textContent = 'Default Voice';
         defaultOption.selected = !localStorage.getItem(LS.voiceKey);
         settingsVoiceSelect.appendChild(defaultOption);
-
         const stored = localStorage.getItem(LS.voiceKey);
         let foundStored = false;
-
         voices.forEach(v => {
             const o = document.createElement('option');
             o.value = v.name;
@@ -937,7 +907,6 @@
             }
             settingsVoiceSelect.appendChild(o);
         });
-
         if (!foundStored && voices.length > 0 && stored) {
             localStorage.removeItem(LS.voiceKey);
             showToast('Previous voice not available, using default');
@@ -952,6 +921,7 @@
         closeSettingsMenu();
     }
 
+    // --- event listeners ---
     speakBtn.addEventListener('click', speakPhrase);
     clearBtn.addEventListener('click', clearPhrase);
     editModeBtn.addEventListener('click', toggleEditMode);
@@ -976,7 +946,6 @@
             renderCategoriesList();
         }
     });
-
     newCategoryName.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
             e.preventDefault();
@@ -991,19 +960,16 @@
     settingsThemeSelect.addEventListener('change', () => {
         saveTheme(settingsThemeSelect.value);
     });
-
     settingsVolumeSelect.addEventListener('change', () => {
         settings.volume = parseFloat(settingsVolumeSelect.value);
         saveSettings();
         showToast(`Volume set to ${Math.round(settings.volume * 100)}%`);
     });
-
     settingsGridSizeSelect.addEventListener('change', () => {
         settings.gridSize = settingsGridSizeSelect.value;
         saveSettings();
         applyGridSetting();
     });
-
     settingsVoiceSelect.addEventListener('change', () => {
         const selectedVoice = settingsVoiceSelect.value;
         if (selectedVoice) {
@@ -1027,9 +993,11 @@
         renderBoard();
     });
 
+    // just to satisfy file input change (no extra logic needed)
     symbolImageFile.addEventListener('change', () => {
     });
 
+    // duplicate voice change listener (already handled above, but keep as is)
     settingsVoiceSelect.addEventListener('change', () => {
         const selectedVoice = settingsVoiceSelect.value;
         if (selectedVoice) {
@@ -1041,6 +1009,7 @@
         }
     });
 
+    // keyboard shortcuts: 'e' toggles edit mode, Ctrl+Z undo, Escape closes settings menu
     boardWrap.addEventListener('keydown', (ev) => {
         if (ev.key === 'e') {
             toggleEditMode();
@@ -1055,6 +1024,7 @@
         }
     });
 
+    // --- init everything ---
     async function init() {
         loadSettings();
         await loadSymbols();
@@ -1062,7 +1032,6 @@
         updateCategorySelects();
         renderBoard();
         updatePhraseDisplay();
-
         applyGridSetting();
 
         function loadVoices() {
@@ -1085,11 +1054,9 @@
         }
 
         loadVoices();
-
         if (speechSynthesis.onvoiceschanged !== undefined) {
             speechSynthesis.onvoiceschanged = loadVoices;
         }
-
         setTimeout(loadVoices, 1000);
     }
 
