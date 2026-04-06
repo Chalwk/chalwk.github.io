@@ -112,21 +112,34 @@ Checks whether a specific vehicle object is currently occupied by any player.
 **Code:**
 
 ```lua
--- Returns true if any alive player is riding in the given vehicle object
+-- Helper: Returns the vehicle object memory address for a given player index, or nil if not in a vehicle
+local function getPlayerVehicleObject(i)
+    -- Ensure the player exists and is alive
+    if not player_present(i) or not player_alive(i) then return end
+
+    -- Get dynamic player object address (contains runtime state like position, vehicle link)
+    local dyn = get_dynamic_player(i)
+    if dyn == 0 then return end
+
+    -- Offset 0x11C holds the object ID of the vehicle the player is currently in
+    -- 0xFFFFFFFF means "no vehicle"
+    local vehicle_id = read_dword(dyn + 0x11C)
+    if vehicle_id == 0xFFFFFFFF then return end
+
+    -- Convert object ID to actual memory address of the vehicle object
+    return get_object_memory(vehicle_id)
+end
+
+-- Checks if any player is inside the given vehicle object
 local function isVehicleOccupied(vehicleObject)
+    -- Loop through all possible player slots (Halo supports up to 16 players)
     for i = 1, 16 do
-        if player_present(i) and player_alive(i) then
-            local dyn = get_dynamic_player(i)
-            if dyn ~= 0 then
-                local vehicle_id = read_dword(dyn + 0x11C)		-- player's current vehicle ID
-                if vehicle_id ~= 0xFFFFFFFF then				-- 0xFFFFFFFF means no vehicle
-                    local vehicle_obj = get_object_memory(vehicle_id)
-                    if vehicle_obj == vehicleObject then return true end
-                end
-            end
+        -- Compare the vehicle this player is in with the target vehicle
+        if getPlayerVehicleObject(i) == vehicleObject then
+            return true  -- Found at least one occupant
         end
     end
-    return false
+    return false         -- No players found in this vehicle
 end
 ```
 
