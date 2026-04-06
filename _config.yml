@@ -1,29 +1,29 @@
-# Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
+# Copyright (c) 2024-2026 Jericho Crosby (Chalwk)
 
-# ============================================================
-# Site settings
-# ============================================================
+# ------------------------------------------------------------
+# Site settings - the basics
+# ------------------------------------------------------------
 title: Jericho Crosby (Chalwk)
 description: Autistic developer, gamer, and advocate - building tools, mods, and games.
 url: https://chalwk.github.io
 baseurl: ""
 locale: en_NZ
 timezone: Pacific/Auckland
-mobile_initial_scale: 0.65
+mobile_initial_scale: 0.65   # makes mobile view a bit zoomed out
 
-# ============================================================
-# Build behaviour
-# ============================================================
-incremental: true
+# ------------------------------------------------------------
+# Build behaviour - speed & style
+# ------------------------------------------------------------
+incremental: true        # faster rebuilds
 plugins_cache: true
-highlighter: rouge
+highlighter: rouge       # syntax highlighting
 markdown: kramdown
 sass:
-  style: compressed
+  style: compressed     # smaller CSS
 
-# ============================================================
-# SEO & Social sharing (used by jekyll-seo-tag)
-# ============================================================
+# ------------------------------------------------------------
+# SEO & social (used by jekyll-seo-tag)
+# ------------------------------------------------------------
 author:
   name: Jericho Crosby
   url: https://github.com/Chalwk
@@ -33,22 +33,22 @@ social:
   links:
     - https://github.com/Chalwk
     - https://www.twitch.tv/chalwk
-    - https://discord.com/channels/@me/707058110396760094
+    - https://discord.com/channels/@me/707058110396760094   # my discord id
 
-image: /assets/images/avatar2.png
+image: /assets/images/avatar2.png   # profile pic for cards
 
-# ============================================================
-# Plugins
-# ============================================================
+# ------------------------------------------------------------
+# Plugins - extra features
+# ------------------------------------------------------------
 plugins:
-  - jekyll-toc
-  - jekyll-seo-tag
-  - jekyll-sitemap
-  - jekyll-last-modified-at
+  - jekyll-toc               # table of contents
+  - jekyll-seo-tag           # meta tags + open graph
+  - jekyll-sitemap           # generate sitemap.xml
+  - jekyll-last-modified-at  # show when file last changed (see _posts)
 
-# ============================================================
-# Default front matter for posts and pages
-# ============================================================
+# ------------------------------------------------------------
+# Default front matter for posts/pages (saves typing)
+# ------------------------------------------------------------
 defaults:
   - scope:
       path: ""
@@ -56,7 +56,7 @@ defaults:
     values:
       layout: post
       author: "Jericho Crosby"
-      permalink: /blog/:year/:month/:day/:title/
+      permalink: /blog/:year/:month/:day/:title/   # clean blog URLs
       toc: true
   - scope:
       path: ""
@@ -65,9 +65,9 @@ defaults:
       layout: default
       toc: true
 
-# ============================================================
-# PWA (Progressive Web App) configuration
-# ============================================================
+# ------------------------------------------------------------
+# PWA (Progressive Web App) icons & offline urls
+# ------------------------------------------------------------
 default_icons:
   - src: "icons/icon-192x192.png"
     sizes: "192x192"
@@ -80,7 +80,7 @@ default_icons:
 
 default_categories: [ "accessibility", "games" ]
 
-default_urls:
+default_urls:   # files to cache for offline PWA
   - "./"
   - "./index.html"
   - "./style.css"
