@@ -58,8 +58,6 @@ end
 
 ## 2. Tutorial 1: Welcome Message
 
-**File:** `welcome-message.lua`
-
 This script greets players when they join and displays the current map and game mode. It uses a short delay so the
 message does not appear immediately, giving the game a moment to settle.
 
@@ -177,8 +175,6 @@ end
 
 ## 3. Tutorial 2: Chat Command
 
-**File:** `Chat Command.lua`
-
 This script responds to player chat commands like `!hello`. It blocks the original message from appearing in global
 chat, so only the command response is seen.
 
@@ -241,8 +237,6 @@ end
 ---
 
 ## 4. Tutorial 3: Kill Counter
-
-**File:** `Kill Counter.lua`
 
 This script tracks player kills and announces milestones (like 5, 10, 25, and 50 kills). It also shows a private message
 to the killer after each kill.
@@ -340,8 +334,6 @@ end
 
 ## 5. Advanced: Using LuaJIT and FFI in SAPP
 
-**File:** `Using LuaJIT and ffi in SAPP.md`
-
 SAPP uses **LuaJIT**, a high-performance just-in-time compiler based on Lua 5.1. This means most Lua 5.1 code works
 normally, but LuaJIT also includes some features from newer Lua versions and its own extensions.
 
@@ -428,8 +420,6 @@ end
 ---
 
 ## 6. Complete Blank Template (All Event Callbacks)
-
-**File:** `blank_tutorial.lua`
 
 Use this template as a starting point for your own scripts. It includes every available SAPP event callback with helpful
 comments.
