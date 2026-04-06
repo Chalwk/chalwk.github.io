@@ -21,6 +21,7 @@ description: Guess the 5-letter word in 6 tries. Hit Enter to submit. Click tile
             </div>
 
             <div class="game-container">
+                <!-- action buttons row -->
                 <div class="blunder-controls-row">
                     <div class="blunder-controls">
                         <button class="btn blunder-new-game-btn" id="newGameBtn">
@@ -35,6 +36,7 @@ description: Guess the 5-letter word in 6 tries. Hit Enter to submit. Click tile
                     </div>
                 </div>
 
+                <!-- game grid and keyboard -->
                 <div aria-atomic="true" aria-live="polite" class="grid" id="grid"></div>
                 <div aria-hidden="false" class="keyboard" id="keyboard"></div>
             </div>
@@ -42,6 +44,7 @@ description: Guess the 5-letter word in 6 tries. Hit Enter to submit. Click tile
     </div>
 </main>
 
+<!-- modal popup for stats/help/endgame messages -->
 <div aria-modal="true" class="modal hidden" id="modal" role="dialog">
     <div class="modal-card" role="document">
         <button aria-label="Close" class="modal-close" id="modalClose">✕</button>

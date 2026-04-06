@@ -3,6 +3,7 @@
 const MAX_GUESSES = 6;
 const WORD_LENGTH = 5;
 
+// DOM stuff
 const gridEl = document.getElementById('grid');
 const keyboardEl = document.getElementById('keyboard');
 const newGameBtn = document.getElementById('newGameBtn');
@@ -12,15 +13,17 @@ const modalClose = document.getElementById('modalClose');
 const statsBtn = document.getElementById('statsBtn');
 const helpBtn = document.getElementById('helpBtn');
 
+// game state
 let wordlist = [];
-let allowedSet = new Set();
+let allowedSet = new Set(); // valid guesses
 let secret = '';
 let board = Array.from({length: MAX_GUESSES}, () => Array.from({length: WORD_LENGTH}, () => ''));
 let row = 0;
 let col = 0;
 let finished = false;
-let keyboardState = {};
+let keyboardState = {}; // tracks key colors (correct/present/absent)
 
+// helper: create element
 function el(tag, cls, text) {
     const e = document.createElement(tag);
     if (cls) e.className = cls;
@@ -28,6 +31,7 @@ function el(tag, cls, text) {
     return e;
 }
 
+// load dictionary from words.txt, fallback to built-in list
 async function loadWords() {
     try {
         const resp = await fetch('words.txt');
@@ -47,6 +51,7 @@ async function loadWords() {
     }
 }
 
+// start fresh game
 function newGame() {
     secret = wordlist[Math.floor(Math.random() * wordlist.length)];
     board = Array.from({length: MAX_GUESSES}, () => Array.from({length: WORD_LENGTH}, () => ''));
@@ -59,6 +64,7 @@ function newGame() {
     announce("New game. Start guessing.");
 }
 
+// draw the 6x5 grid
 function renderGrid() {
     gridEl.innerHTML = '';
     for (let r = 0; r < MAX_GUESSES; r++) {
@@ -75,12 +81,14 @@ function renderGrid() {
     }
 }
 
+// keyboard layout (three rows)
 const KEY_LAYOUT = [
     ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
     ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
     ['Enter', 'z', 'x', 'c', 'v', 'b', 'n', 'm', 'Backspace']
 ];
 
+// render on-screen keyboard with current key colors
 function renderKeyboard() {
     keyboardEl.innerHTML = '';
     for (const line of KEY_LAYOUT) {
@@ -98,6 +106,7 @@ function renderKeyboard() {
     }
 }
 
+// handle key presses (both physical and on-screen)
 function handleKey(key) {
     if (finished) return;
 
@@ -125,6 +134,7 @@ function handleKey(key) {
     }
 }
 
+// update a single tile in the grid
 function updateTile(r, c) {
     const rowEl = gridEl.querySelector(`.row[data-row="${r}"]`);
     if (!rowEl) return;
@@ -132,6 +142,7 @@ function updateTile(r, c) {
     if (tile) tile.textContent = board[r][c] ? board[r][c].toUpperCase() : '';
 }
 
+// submit current row's guess, check validity and evaluate
 function submitGuess() {
     if (col !== WORD_LENGTH) {
         pulseRow(row);
@@ -148,6 +159,7 @@ function submitGuess() {
     const result = evaluateGuess(guess, secret);
     applyResultToRow(row, result);
 
+    // update keyboard colors based on result
     for (let i = 0; i < WORD_LENGTH; i++) {
         const l = guess[i];
         const status = result[i];
@@ -171,10 +183,12 @@ function submitGuess() {
     }
 }
 
+// evaluate guess against secret -> array of 'correct'/'present'/'absent'
 function evaluateGuess(guess, secretWord) {
     const status = Array(WORD_LENGTH).fill('absent');
     const secretArr = secretWord.split('');
     const guessArr = guess.split('');
+    // first pass: exact matches
     for (let i = 0; i < WORD_LENGTH; i++) {
         if (guessArr[i] === secretArr[i]) {
             status[i] = 'correct';
@@ -182,6 +196,7 @@ function evaluateGuess(guess, secretWord) {
             guessArr[i] = null;
         }
     }
+    // second pass: misplaced letters
     for (let i = 0; i < WORD_LENGTH; i++) {
         if (guessArr[i] === null) continue;
         const idx = secretArr.indexOf(guessArr[i]);
@@ -196,6 +211,7 @@ function evaluateGuess(guess, secretWord) {
     return status;
 }
 
+// apply color classes to a whole row with flip animation
 function applyResultToRow(r, result) {
     const rowEl = gridEl.querySelector(`.row[data-row="${r}"]`);
     if (!rowEl) return;
@@ -212,6 +228,7 @@ function applyResultToRow(r, result) {
     });
 }
 
+// visual feedback: row bounce for short guess
 function pulseRow(r) {
     const rowEl = gridEl.querySelector(`.row[data-row="${r}"]`);
     if (!rowEl) return;
@@ -222,6 +239,7 @@ function pulseRow(r) {
     ], {duration: 320, easing: 'ease'});
 }
 
+// shake row for invalid word
 function shakeRow(r) {
     const rowEl = gridEl.querySelector(`.row[data-row="${r}"]`);
     if (!rowEl) return;
@@ -233,6 +251,7 @@ function shakeRow(r) {
     ], {duration: 320, easing: 'ease'});
 }
 
+// update keyboard state (only upgrade to higher priority status)
 function upgradeKeyState(letter, status) {
     const prev = keyboardState[letter] || null;
     const ranking = {'correct': 3, 'present': 2, 'absent': 1, null: 0};
@@ -241,6 +260,7 @@ function upgradeKeyState(letter, status) {
     }
 }
 
+// physical keyboard handler
 document.addEventListener('keydown', (e) => {
     if (finished) return;
     if (e.key === 'Backspace' || e.key === 'Enter') {
@@ -252,6 +272,7 @@ document.addEventListener('keydown', (e) => {
     if (/^[a-z]$/.test(k)) handleKey(k);
 });
 
+// modal display
 function showModal(html) {
     modalContent.innerHTML = '';
     if (typeof html === 'string') modalContent.innerHTML = html;
@@ -264,6 +285,7 @@ modal.addEventListener('click', (e) => {
     if (e.target === modal) modal.classList.add('hidden');
 });
 
+// screen reader announcement
 function announce(text) {
     const live = document.createElement('div');
     live.style.position = 'absolute';
@@ -301,6 +323,7 @@ function showLoss() {
     showModal(wrapper);
 }
 
+// copy shareable result text to clipboard
 function shareResult() {
     const lines = [];
     for (let r = 0; r <= row && r < MAX_GUESSES; r++) {
@@ -321,6 +344,7 @@ function shareResult() {
     });
 }
 
+// stats stored in localStorage
 const STATS_KEY = 'blunder_stats_v1';
 
 function getStats() {
