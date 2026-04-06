@@ -1,5 +1,6 @@
 /* Copyright (c) 2024-2026. Jericho Crosby (Chalwk) */
 
+/* page setup - center everything */
 body.apps-tools-page {
     display: flex;
     flex-direction: column;
@@ -8,6 +9,7 @@ body.apps-tools-page {
     position: relative;
 }
 
+/* header area with title & gradient text */
 .apps-header {
     text-align: center;
     margin: 100px 0 50px;
@@ -41,6 +43,7 @@ body.apps-tools-page {
     margin: 0 auto;
 }
 
+/* three little dots decoration */
 .header-decoration {
     display: flex;
     justify-content: center;
@@ -64,6 +67,7 @@ body.apps-tools-page {
     background: var(--secondary);
 }
 
+/* each category (Games / Tools) */
 .category-section {
     width: 100%;
     max-width: var(--container-max);
@@ -77,6 +81,7 @@ body.apps-tools-page {
     position: relative;
 }
 
+/* circular icon per category */
 .category-icon {
     width: 80px;
     height: 80px;
@@ -111,6 +116,7 @@ body.apps-tools-page {
     margin: 0 auto;
 }
 
+/* responsive card grid */
 .games-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -122,6 +128,7 @@ body.apps-tools-page {
     align-items: stretch;
 }
 
+/* individual game/tool card */
 .card {
     background: white;
     border-radius: var(--radius-lg);
@@ -139,6 +146,7 @@ body.apps-tools-page {
     min-height: 340px;
 }
 
+/* limit description to 3 lines */
 .card p {
     display: -webkit-box;
     -webkit-line-clamp: 3;
@@ -154,6 +162,7 @@ body.apps-tools-page {
     color: var(--gray);
 }
 
+/* title max 2 lines */
 .card h3 {
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -168,6 +177,7 @@ body.apps-tools-page {
     word-break: break-word;
 }
 
+/* shiny play button */
 .play-button {
     display: inline-flex;
     align-items: center;
@@ -188,12 +198,14 @@ body.apps-tools-page {
     width: auto;
 }
 
+/* card hover lift & border glow */
 .card:hover {
     transform: translateY(-10px);
     box-shadow: var(--shadow-lg);
     border-color: var(--primary);
 }
 
+/* round icon inside card */
 .game-icon {
     width: 70px;
     height: 70px;
@@ -209,6 +221,7 @@ body.apps-tools-page {
     transition: var(--transition);
 }
 
+/* fun hover wiggle */
 .card:hover .game-icon {
     transform: scale(1.1) rotate(5deg);
 }
@@ -228,6 +241,7 @@ body.apps-tools-page {
     transform: translateX(5px);
 }
 
+/* responsive adjustments */
 @media (max-width: 1024px) {
     .games-grid {
         grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -249,6 +263,7 @@ body.apps-tools-page {
     }
 }
 
+/* smaller screens */
 @media (max-width: 768px) {
     .apps-header {
         margin: 90px 0 40px;
@@ -295,6 +310,7 @@ body.apps-tools-page {
     }
 }
 
+/* 3-column on medium phones */
 @media (max-width: 768px) and (min-width: 481px) {
     .games-grid {
         grid-template-columns: repeat(3, 1fr);
@@ -331,6 +347,7 @@ body.apps-tools-page {
     }
 }
 
+/* small phones: 2 columns */
 @media (max-width: 480px) {
     .apps-header {
         margin: 80px 0 30px;
@@ -387,6 +404,7 @@ body.apps-tools-page {
     }
 }
 
+/* tiny screens: single column */
 @media (max-width: 360px) {
     .games-grid {
         grid-template-columns: 1fr;
@@ -407,6 +425,7 @@ body.apps-tools-page {
     }
 }
 
+/* subcategory titles (e.g. "Neurodivergent Tools") */
 .subcategory-header {
     width: 100%;
     max-width: var(--container-max);
@@ -432,6 +451,7 @@ body.apps-tools-page {
     vertical-align: middle;
 }
 
+/* spacing inside category */
 .category-section .games-grid {
     margin-top: 0;
     margin-bottom: 40px;
