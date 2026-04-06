@@ -1,6 +1,7 @@
 ---
 title: "Halo: Understanding Memory Offsets"
 date: 2025-09-8
+last-updated: 2026-4-6
 categories: [ education, halo, modding ]
 tags: [ sapp, lua, halo, scripting, tutorial ]
 ---

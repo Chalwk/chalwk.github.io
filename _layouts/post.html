@@ -21,14 +21,10 @@ layout: default
                         <time datetime="{{ page.date | date_to_xmlschema }}">Published: {{ page.date | date: "%B %-d, %Y" }}</time>
                     </span>
 
-                    {% if page.last_modified_at %}
+                    {% if page.last-updated %}
                     <span class="update-date">
-                            <time datetime="{{ page.last_modified_at | date_to_xmlschema }}">Updated: {{ page.last_modified_at | date: "%B %-d, %Y" }}</time>
-                        </span>
-                    {% elsif page.updated %}
-                    <span class="update-date">
-                            <time datetime="{{ page.updated | date_to_xmlschema }}">Updated: {{ page.updated | date: "%B %-d, %Y" }}</time>
-                        </span>
+                        <time datetime="{{ page.last-updated | date_to_xmlschema }}">Updated: {{ page.last-updated | date: "%B %-d, %Y" }}</time>
+                    </span>
                     {% endif %}
 
                     {% assign words = content | number_of_words %}
@@ -41,12 +37,14 @@ layout: default
 
                 {% if page.toc != false %}
                 <div class="toc-container">
-                    <details class="toc-details" {% if page.toc_open %}open{% endif %}>
+                    <details %} %}open{% class="toc-details" endif if page.toc_open {%>
                         <summary class="toc-summary">
-                            <i class="fas fa-list-ul" aria-hidden="true"></i> Table of Contents
+                            <i aria-hidden="true" class="fas fa-list-ul"></i> Table of Contents
                         </summary>
                         <div class="toc-content" id="jekyll-toc-placeholder">
-                            <ul><li>Loading table of contents…</li></ul>
+                            <ul>
+                                <li>Loading table of contents…</li>
+                            </ul>
                         </div>
                     </details>
                 </div>

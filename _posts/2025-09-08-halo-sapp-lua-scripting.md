@@ -1,6 +1,7 @@
 ---
 title: "Halo: SAPP Lua Scripting"
 date: 2025-09-08
+last-updated: 2026-4-6
 categories: [ education, halo, modding ]
 tags: [ sapp, lua, halo, scripting, tutorial ]
 ---

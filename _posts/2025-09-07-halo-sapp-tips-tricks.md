@@ -1,6 +1,7 @@
 ---
 title: "Halo: SAPP Tips & Tricks"
 date: 2025-09-8
+last-updated: 2026-4-5
 categories: [ education, halo, modding ]
 tags: [ sapp, lua, halo, scripting, tutorial ]
 ---
