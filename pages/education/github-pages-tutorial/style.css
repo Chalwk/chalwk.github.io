@@ -18,6 +18,7 @@
     --github-6: #6f42c1;
 }
 
+/* ----- hero banner (top gradient area) ----- */
 .hero-banner {
     background: linear-gradient(135deg, var(--primary), #2d333b);
     color: white;
@@ -45,12 +46,14 @@
     margin-bottom: 1.5rem;
 }
 
+/* ----- main container that holds all sections ----- */
 .page-container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 1.5rem;
 }
 
+/* ----- individual content blocks (cards) ----- */
 .section {
     background-color: white;
     border-radius: 10px;
@@ -72,6 +75,7 @@
     display: inline-block;
 }
 
+/* ----- card grid (3 columns, responsive) ----- */
 .card-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -105,6 +109,7 @@
     padding: 1.5rem;
 }
 
+/* ----- special highlighted boxes (tips, notes) ----- */
 .interactive-element {
     background-color: var(--light);
     border-radius: 8px;
@@ -114,6 +119,7 @@
     font-family: 'Source Code Pro', monospace;
 }
 
+/* ----- code blocks (prism + own styling) ----- */
 .code-block {
     background: #0a101a;
     border-radius: 8px;
@@ -140,6 +146,7 @@
     border: 1px solid #e1e4e8;
 }
 
+/* ----- call to action button ----- */
 .page-btn {
     display: inline-block;
     background: var(--primary);
@@ -159,6 +166,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+/* ----- resource list (bullets with custom style) ----- */
 .resources-list {
     list-style-type: none;
 }
@@ -177,6 +185,7 @@
     left: 0;
 }
 
+/* ----- numbered step list (circle numbers) ----- */
 .step-list {
     counter-reset: step-counter;
     list-style-type: none;
@@ -206,6 +215,7 @@
     font-weight: bold;
 }
 
+/* ----- github icon ----- */
 .github-icon {
     display: inline-block;
     width: 20px;
@@ -242,6 +252,7 @@
     z-index: 1;
 }
 
+/* ----- note & warning boxes (colored borders) ----- */
 .note-box {
     background: #fff8e1;
     border-left: 4px solid var(--warning);
@@ -258,6 +269,7 @@
     border-radius: 0 5px 5px 0;
 }
 
+/* ----- responsive: stack cards on mobile, shrink title ----- */
 @media (max-width: 768px) {
     .page-title {
         font-size: 2.2rem;

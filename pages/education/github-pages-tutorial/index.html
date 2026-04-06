@@ -6,11 +6,13 @@ description: A step-by-step guide to hosting static websites for free using GitH
 
 <!-- Copyright (c) 2024-2026. Jericho Crosby (Chalwk) -->
 
+<!-- External styles & Prism for code highlighting -->
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
 
 <main>
+    <!-- Hero banner: main title + tagline -->
     <div class="hero-banner">
         <div class="hero-content">
             <h1 class="page-title">Creating a GitHub Pages Website</h1>
@@ -19,6 +21,7 @@ description: A step-by-step guide to hosting static websites for free using GitH
     </div>
 
     <div class="page-container">
+        <!-- SECTION: what is GitHub Pages? -->
         <section class="section page-section" id="what-is-github-pages">
             <h2>What is GitHub Pages?</h2>
             <p>GitHub Pages is a free static site hosting service provided by GitHub that takes HTML, CSS, and
@@ -37,6 +40,7 @@ description: A step-by-step guide to hosting static websites for free using GitH
                 </ul>
             </div>
 
+            <!-- 3 cards: types, limitations, perfect use cases -->
             <div class="card-grid">
                 <div class="card">
                     <div class="card-header">Types of GitHub Pages</div>
@@ -83,6 +87,7 @@ description: A step-by-step guide to hosting static websites for free using GitH
             </div>
         </section>
 
+        <!-- SECTION: prerequisites (account, knowledge, tools) -->
         <section class="section page-section" id="prerequisites">
             <h2>Prerequisites</h2>
             <p>Before you start, make sure you have these basics covered:</p>
@@ -134,6 +139,7 @@ description: A step-by-step guide to hosting static websites for free using GitH
             </div>
         </section>
 
+        <!-- SECTION: step-by-step guide (numbered steps) -->
         <section class="section page-section" id="step-by-step">
             <h2>Step-by-Step Guide</h2>
             <p>Follow these steps to create your first GitHub Pages site:</p>
@@ -298,6 +304,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 </li>
             </ol>
 
+            <!-- interactive tip with curl -->
             <div class="interactive-element">
                 <h3>Quick Test: Is Your Site Live?</h3>
                 <p>Copy and paste this command in your terminal (or use a web browser):</p>
@@ -309,6 +316,7 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
         </section>
 
+        <!-- SECTION: custom domain (buy, CNAME, DNS) -->
         <section class="section page-section" id="custom-domain">
             <h2>Using a Custom Domain</h2>
             <p>You can use your own domain name (like <code class="code-inline">yourdomain.com</code>) with GitHub
@@ -387,6 +395,7 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
         </section>
 
+        <!-- SECTION: troubleshooting (404, CSS/JS, updates) -->
         <section class="section page-section" id="troubleshooting">
             <h2>Common Issues & Troubleshooting</h2>
 
@@ -435,6 +444,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             </div>
 
+            <!-- debugging commands -->
             <div class="interactive-element">
                 <h3>Quick Debugging Commands</h3>
                 <p>Use these commands to check your site's status:</p>
@@ -456,6 +466,7 @@ openssl s_client -connect yourdomain.com:443</code></pre>
             </div>
         </section>
 
+        <!-- SECTION: resources + further learning + final CTA button -->
         <section class="section page-section" id="resources">
             <h2>Resources & Further Learning</h2>
 
@@ -515,6 +526,7 @@ openssl s_client -connect yourdomain.com:443</code></pre>
                 </div>
             </div>
 
+            <!-- next steps / advanced features -->
             <div class="interactive-element">
                 <h3>Next Steps</h3>
                 <p>Once you have a basic site, consider:</p>
@@ -544,6 +556,7 @@ openssl s_client -connect yourdomain.com:443</code></pre>
                 </div>
             </div>
 
+            <!-- call-to-action button -->
             <div style="text-align: center; margin: 2rem 0;">
                 <a class="page-btn" href="https://github.com/new" target="_blank">
                     <i class="fab fa-github"></i> Create Your GitHub Pages Site Now
