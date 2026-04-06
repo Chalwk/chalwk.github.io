@@ -10,6 +10,7 @@
     --panel-border: #d4b89c;
 }
 
+/* ---- Hero banner at top of page ---- */
 .hero-banner {
     background: linear-gradient(135deg, var(--primary), #9b7bb5);
     color: white;
@@ -30,12 +31,14 @@
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+/* ---- Main container for comics ---- */
 .page-container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 1.5rem;
 }
 
+/* ---- Grid that holds all comic cards ---- */
 .comics-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -43,6 +46,7 @@
     margin: 2rem 0;
 }
 
+/* ---- Each comic's title styling ---- */
 .comic-title {
     font-family: 'Source Code Pro', monospace;
     font-weight: 600;
@@ -53,6 +57,7 @@
     padding-bottom: 0.5rem;
 }
 
+/* ---- SVG comic itself ---- */
 .comic-svg {
     display: block;
     width: 100%;
@@ -64,6 +69,7 @@
     box-shadow: inset 0 0 0 1px #eee;
 }
 
+/* ---- Caption text below each comic ---- */
 .comic-caption {
     font-style: italic;
     margin-top: 1rem;
@@ -75,6 +81,7 @@
     border-left: 4px solid var(--secondary);
 }
 
+/* ---- Responsive stuff ---- */
 @media (max-width: 768px) {
     .page-title {
         font-size: 2.2rem;

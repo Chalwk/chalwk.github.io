@@ -1,6 +1,7 @@
 // Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
 
 (function () {
+    // --- Visual style constants ---
     const Style = {
         skin: '#f9d7b0',
         outline: '#8b5a2b',
@@ -15,6 +16,7 @@
         normalFont: 10,
     };
 
+    // wrap SVG inner markup with a background rectangle
     function svgContent(inner, bgColor = '#f0e9e0') {
         return `<svg class="comic-svg" viewBox="0 0 300 200" preserveAspectRatio="xMidYMid meet">
                 <rect width="300" height="200" fill="${bgColor}" rx="10" ry="10"/>
@@ -22,6 +24,7 @@
             </svg>`;
     }
 
+    // --- List of all comics (each has id, title, caption, background, and SVG drawing function) ---
     const comics = [
         {
             id: 'sensory-overload',
@@ -30,14 +33,12 @@
             bg: '#f0e9e0',
             svg: function () {
                 return svgContent(`
-
                     <line x1="20" y1="20" x2="70" y2="70" stroke="${Style.accentRed}" stroke-width="${Style.strokeWidth}" opacity="0.7"/>
                     <line x1="90" y1="30" x2="150" y2="80" stroke="${Style.accentRedLight}" stroke-width="${Style.strokeWidth}" opacity="0.7"/>
                     <line x1="200" y1="40" x2="250" y2="90" stroke="${Style.accentRed}" stroke-width="${Style.strokeWidth}" opacity="0.7"/>
                     <line x1="40" y1="120" x2="100" y2="170" stroke="${Style.accentRedLight}" stroke-width="${Style.strokeWidth}" opacity="0.7"/>
                     <line x1="130" y1="140" x2="190" y2="190" stroke="${Style.accentRed}" stroke-width="${Style.strokeWidth}" opacity="0.7"/>
                     <line x1="220" y1="130" x2="280" y2="180" stroke="${Style.accentRedLight}" stroke-width="${Style.strokeWidth}" opacity="0.7"/>
-
                     <circle cx="150" cy="100" r="${Style.headRadius}" fill="${Style.skin}" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
                     <line x1="150" y1="118" x2="150" y2="160" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
                     <line x1="150" y1="130" x2="120" y2="110" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
@@ -137,9 +138,7 @@
                     <line x1="150" y1="110" x2="180" y2="95" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
                     <line x1="150" y1="130" x2="120" y2="160" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
                     <line x1="150" y1="130" x2="180" y2="160" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
-
                     <rect x="50" y="20" width="80" height="50" fill="#ffdddd" stroke="#b34141" stroke-width="2" rx="5"/>
-
                     <line x1="50" y1="20" x2="130" y2="70" stroke="#b34141" stroke-width="2"/>
                     <text x="60" y="45" font-family="${Style.fontFamily}" font-size="11" fill="#b34141">SCHEDULE</text>
                     <text x="70" y="58" font-family="${Style.fontFamily}" font-size="8" fill="#b34141">CHANGED!</text>
@@ -159,7 +158,6 @@
                     <line x1="150" y1="110" x2="180" y2="95" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
                     <line x1="150" y1="140" x2="120" y2="170" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
                     <line x1="150" y1="140" x2="180" y2="170" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
-
                     <circle cx="150" cy="80" r="16" fill="#f0d0b0" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}" stroke-dasharray="3 2"/>
                     <line x1="150" y1="68" x2="150" y2="92" stroke="${Style.outline}" stroke-width="1.5" stroke-dasharray="2 2"/>
                     <path d="M140 90 Q150 100 160 90" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}" fill="none"/>
@@ -186,13 +184,11 @@
                         <line x1="70" y1="155" x2="230" y2="155" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
                         <line x1="120" y1="155" x2="120" y2="170" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
                         <line x1="180" y1="155" x2="180" y2="170" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
-
                         <circle cx="200" cy="140" r="15" fill="white" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
                         <circle cx="200" cy="140" r="8" fill="#d2a679" stroke="${Style.outline}" stroke-width="1"/>
                         <circle cx="196" cy="136" r="1.5" fill="white"/>
                         <circle cx="204" cy="136" r="1.5" fill="white"/>
                         <circle cx="200" cy="131" r="1.5" fill="white"/>
-
                         <circle cx="150" cy="70" r="${Style.headRadius}" fill="${Style.skin}" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
                         <circle cx="140" cy="65" r="4" fill="${Style.skin}" stroke="${Style.outline}" stroke-width="1.5"/>
                         <circle cx="160" cy="65" r="4" fill="${Style.skin}" stroke="${Style.outline}" stroke-width="1.5"/>
@@ -202,9 +198,7 @@
                         <line x1="150" y1="105" x2="180" y2="125" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
                         <line x1="150" y1="140" x2="120" y2="175" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
                         <line x1="150" y1="140" x2="180" y2="175" stroke="${Style.outline}" stroke-width="${Style.strokeWidth}"/>
-
                         ${weeklyIcons}
-
                         <text x="40" y="40" font-family="${Style.fontFamily}" font-size="12" fill="${Style.outline}">Same foods,</text>
                         <text x="40" y="55" font-family="${Style.fontFamily}" font-size="12" fill="${Style.outline}">every day 😊</text>
                     `, this.bg);
@@ -212,6 +206,7 @@
         }
     ];
 
+    // --- Render all comics into the grid like a boss ---
     const grid = document.getElementById('comics-grid');
     grid.innerHTML = '';
     comics.forEach(comic => {
