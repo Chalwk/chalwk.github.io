@@ -1,5 +1,6 @@
 /* Copyright (c) 2024-2026. Jericho Crosby (Chalwk) */
 
+/* main game panel */
 .knot-panel {
     background: var(--light);
     border: 1px solid var(--gray-light);
@@ -17,6 +18,7 @@
     color: var(--gray);
 }
 
+/* flex layout for game area */
 .knot-game-container {
     display: flex;
     flex-direction: column;
@@ -36,6 +38,7 @@
     position: relative;
 }
 
+/* stats bar (level, edges, crossings) */
 .canvas-stats-bar {
     display: flex;
     justify-content: space-around;
@@ -69,6 +72,7 @@
     font-size: 1.5rem;
 }
 
+/* colour coding stats */
 .level-value {
     color: #7ee7c7;
 }
@@ -81,6 +85,7 @@
     color: #ff6b6b;
 }
 
+/* SVG canvas */
 .svg-canvas {
     display: block;
     width: 100%;
@@ -90,6 +95,7 @@
     -webkit-user-select: none;
 }
 
+/* draggable nodes */
 .node {
     cursor: grab;
 }
@@ -108,6 +114,7 @@
     fill: #e6eef8;
 }
 
+/* edges - normal vs crossing (red) */
 .edge {
     stroke: rgba(255, 255, 255, 0.75);
     stroke-width: 3;
@@ -119,6 +126,7 @@
     stroke-width: 4;
 }
 
+/* win overlay modal */
 .win-overlay {
     position: absolute;
     top: 0;
@@ -161,6 +169,7 @@
     justify-content: center;
 }
 
+/* control buttons row */
 .knot-controls {
     display: flex;
     gap: 1rem;
@@ -168,6 +177,7 @@
     justify-content: center;
 }
 
+/* responsive tweaks for tablets/mobile */
 @media (max-width: 768px) {
     .knot-game-container {
         flex-direction: column !important;

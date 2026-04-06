@@ -20,6 +20,7 @@ description: Untangle the ropes by dragging the dots. Clear all red crossings to
             <div class="knot-game-container">
                 <div class="knot-game-area">
                     <div class="canvas-wrapper">
+                        <!-- stats row: level, edge count, crossing count -->
                         <div class="canvas-stats-bar">
                             <div class="canvas-stat-item">
                                 <div class="canvas-stat-label">Level</div>
@@ -35,9 +36,11 @@ description: Untangle the ropes by dragging the dots. Clear all red crossings to
                             </div>
                         </div>
 
+                        <!-- drawing area -->
                         <svg class="svg-canvas" id="svg" preserveAspectRatio="xMidYMid meet"
                              viewBox="0 0 1000 700"></svg>
 
+                        <!-- win overlay (hidden until solved) -->
                         <div class="win-overlay hidden" id="winOverlay">
                             <div class="win-card">
                                 <h2 class="win-title">Nice! Puzzle solved.</h2>
@@ -50,6 +53,7 @@ description: Untangle the ropes by dragging the dots. Clear all red crossings to
                         </div>
                     </div>
 
+                    <!-- bottom control buttons -->
                     <div class="knot-controls">
                         <button class="btn btn-secondary" id="resetBtn">
                             <i class="fas fa-undo"></i> Reset
