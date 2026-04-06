@@ -6,6 +6,7 @@
     box-sizing: border-box;
 }
 
+/* design tokens */
 :root {
     --primary: #2a6fa5;
     --primary-dark: #1e4e76;
@@ -37,16 +38,14 @@ body {
     margin: 0 auto;
 }
 
-.app-grid,
+/* page layout */
 .timetable-page {
+    margin: 1rem auto;
     display: grid;
     gap: 1.5rem;
 }
 
-.timetable-page {
-    margin: 1rem auto;
-}
-
+/* card-like panels */
 .panel {
     background: white;
     border-radius: var(--radius-lg);
@@ -77,6 +76,7 @@ body {
     font-size: 0.8rem;
 }
 
+/* sample data banner */
 .sample-banner {
     display: flex;
     align-items: center;
@@ -101,6 +101,7 @@ body {
     color: #b45f06;
 }
 
+/* live "current class" widget */
 .current-subject-container {
     background: linear-gradient(135deg, #e6f7ff 0%, #d4edff 100%);
     border-radius: var(--radius-lg);
@@ -133,6 +134,7 @@ body {
     margin-top: 0.5rem;
 }
 
+/* toolbar above table */
 .timetable-toolbar {
     display: flex;
     flex-wrap: wrap;
@@ -148,6 +150,7 @@ body {
     align-items: center;
 }
 
+/* scrollable table wrapper */
 .timetable-wrapper {
     overflow-x: auto;
     margin: 0 0 1rem;
@@ -162,14 +165,12 @@ body {
     font-size: 0.9rem;
 }
 
-.timetable-table td,
-.timetable-table th {
+.timetable-table td, .timetable-table th {
     user-select: none;
     -webkit-tap-highlight-color: transparent;
 }
 
-.timetable-table th,
-.timetable-table td {
+.timetable-table th, .timetable-table td {
     padding: 0.85rem 0.5rem;
     text-align: center;
     border: 1px solid var(--gray-light);
@@ -194,6 +195,7 @@ body {
     box-shadow: inset 0 0 0 1px var(--primary);
 }
 
+/* highlight current period & day */
 .timetable-table td.current-period-col,
 .timetable-table th.current-period-col {
     background-color: #fff3e0;
@@ -239,6 +241,7 @@ body {
     color: var(--error);
 }
 
+/* right-side tools panel */
 .config-section {
     display: grid;
     gap: 1.5rem;
@@ -302,6 +305,7 @@ label.btn {
     margin-top: 1rem;
 }
 
+/* modal overlay (edit period) */
 .modal {
     position: fixed;
     z-index: 1000;
@@ -391,6 +395,7 @@ label.btn {
     color: #333;
 }
 
+/* mobile tweaks */
 @media (max-width: 640px) {
     .current-subject-value {
         font-size: 1.4rem;

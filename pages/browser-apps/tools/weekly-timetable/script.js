@@ -1,6 +1,7 @@
 // Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
 
 (function () {
+    // ==========  constants & defaults  ==========
     const STORAGE_KEY = 'TimetableApp';
     const MAX_DAYS = 7;
     const DEFAULT_DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', "Friday"];
@@ -16,6 +17,7 @@
     const DEFAULT_STATE = createDefaultState();
     const LEGACY_DEFAULT_STATE = createLegacyDefaultState();
 
+    // DOM stuff
     const els = {
         tableHead: document.getElementById('tableHead'),
         tableBody: document.getElementById('tableBody'),
@@ -39,6 +41,7 @@
         modalClose: document.querySelector('.modal-close')
     };
 
+    // The main state object (days, periods, schedule grid)
     const state = {
         days: [],
         periods: [],
@@ -46,8 +49,9 @@
         customized: false
     };
 
-    let activePeriodIndex = null;
+    let activePeriodIndex = null;   // which period is being edited in modal
 
+    // ----- default data generators -----
     function createDefaultState() {
         const days = [...DEFAULT_DAYS];
         const periods = DEFAULT_PERIODS.map(period => ({...period}));
@@ -72,6 +76,7 @@
         return {days, periods, schedule, customized: false};
     }
 
+    // fill any empty cell with a reasonable default
     function getDefaultSubject(periodIndex, dayIndex) {
         const template = [
             ['Assembly', 'Math', 'English', 'Science', 'History', 'Art', 'PE'],
@@ -85,14 +90,16 @@
         return template[periodIndex]?.[dayIndex] ?? 'New Subject';
     }
 
+    // helpers for cloning defaults
     function cloneDefaultDays() {
         return [...DEFAULT_DAYS];
     }
 
     function cloneDefaultPeriods() {
-        return DEFAULT_PERIODS.map(period => ({...period}));
+        return DEFAULT_PERIODS.map(p => ({...p}));
     }
 
+    // ----- data sanitization (ensures everything is valid) -----
     function normalizeState(input) {
         let days = Array.isArray(input?.days) && input.days.length ? input.days.map(normalizeText) : cloneDefaultDays();
         let periods = Array.isArray(input?.periods) && input.periods.length ? input.periods.map(normalizePeriod) : cloneDefaultPeriods();
@@ -102,7 +109,6 @@
             days = days.slice(0, MAX_DAYS);
             schedule = schedule.map(row => row.slice(0, MAX_DAYS));
         }
-
         const customized = Boolean(input?.customized);
         return {days, periods, schedule, customized};
     }
@@ -136,6 +142,7 @@
         });
     }
 
+    // check if current data matches any of the built-in defaults (to decide if we show the banner)
     function matchesState(current, baseline) {
         return JSON.stringify({
             days: current.days,
@@ -152,13 +159,13 @@
         return matchesState(current, DEFAULT_STATE) || matchesState(current, LEGACY_DEFAULT_STATE);
     }
 
+    // ----- localStorage load/save -----
     function loadState() {
         const raw = localStorage.getItem(STORAGE_KEY);
         if (!raw) {
             applyState(DEFAULT_STATE, false);
             return false;
         }
-
         try {
             const parsed = JSON.parse(raw);
             const normalized = normalizeState(parsed);
@@ -176,10 +183,7 @@
         state.periods = nextState.periods.map(period => ({...period}));
         state.schedule = normalizeSchedule(nextState.schedule, state.periods.length, state.days.length);
         state.customized = Boolean(nextState.customized);
-
-        if (persist) {
-            saveState();
-        }
+        if (persist) saveState();
         renderAll();
     }
 
@@ -200,6 +204,7 @@
         saveState();
     }
 
+    // ----- editing actions -----
     function setDayName(index, value) {
         state.days[index] = normalizeText(value) || 'Day';
         markCustomized();
@@ -226,6 +231,7 @@
         renderHighlights();
     }
 
+    // row/column management
     function addDay() {
         if (state.days.length >= MAX_DAYS) {
             alert(`Cannot add more than ${MAX_DAYS} days.`);
@@ -297,6 +303,7 @@
         }
     }
 
+    // ----- modal for editing period -----
     function openPeriodEditor(periodIndex) {
         const period = state.periods[periodIndex];
         if (!period) return;
@@ -322,7 +329,6 @@
             alert('End time must be after start time. Please adjust.');
             return;
         }
-
         if (newName) setPeriodField(activePeriodIndex, 'name', newName);
         setPeriodField(activePeriodIndex, 'start', newStart);
         setPeriodField(activePeriodIndex, 'end', newEnd);
@@ -330,6 +336,7 @@
         renderAll();
     }
 
+    // ----- rendering the table -----
     function renderTimetable() {
         const headCells = ['<th>Period / Day</th>']
             .concat(state.days.map((day, index) => `
@@ -345,7 +352,6 @@
                 const subject = state.schedule[periodIndex]?.[dayIndex] ?? '—';
                 return `<td class="subject-cell" data-period-index="${periodIndex}" data-day-index="${dayIndex}">${escapeHtml(subject)}</td>`;
             }).join('');
-
             return `
                 <tr>
                     <td class="period-cell" data-period-index="${periodIndex}" data-period-edit="true">
@@ -368,6 +374,7 @@
         }
     }
 
+    // ----- live current class info (highlight & text) -----
     function renderCurrentSubject() {
         const info = getCurrentSubjectInfo();
         els.currentSubjectDisplay.textContent = info.subject;
@@ -375,21 +382,20 @@
     }
 
     function renderHighlights() {
+        // remove old highlight class
         const cells = els.timetableTable.querySelectorAll('.current-period-col');
         cells.forEach(cell => cell.classList.remove('current-period-col'));
 
         const now = new Date();
         let dayIndex = now.getDay();
         if (dayIndex === 0) dayIndex = -1;
-        else dayIndex = dayIndex - 1;
+        else dayIndex = dayIndex - 1;  // convert JS Sun=0 -> Mon=0 etc.
 
         const activePeriodIndex = getActivePeriodIndex(now);
-
         if (dayIndex < 0 || dayIndex >= state.days.length || activePeriodIndex === -1) return;
 
         const headers = els.tableHead.querySelectorAll('th');
         headers[dayIndex + 1]?.classList.add('current-period-col');
-
         const row = els.tableBody.querySelectorAll('tr')[activePeriodIndex];
         row?.querySelectorAll('td')[dayIndex + 1]?.classList.add('current-period-col');
     }
@@ -409,7 +415,6 @@
 
         const dayName = state.days[dayIndex];
         const activePeriodIndex = getActivePeriodIndex(now);
-
         if (activePeriodIndex === -1) {
             return {
                 subject: 'No class',
@@ -417,7 +422,6 @@
                 timeInfo: `${timeLabel} on ${dayName}`
             };
         }
-
         const activePeriod = state.periods[activePeriodIndex];
         const subject = state.schedule[activePeriodIndex]?.[dayIndex] ?? '—';
         return {
@@ -455,6 +459,7 @@
         renderHighlights();
     }
 
+    // ----- export / import JSON -----
     function exportData() {
         const blob = new Blob([JSON.stringify({
             days: state.days,
@@ -493,6 +498,7 @@
         reader.readAsText(file);
     }
 
+    // ----- helpers & event binding -----
     function escapeHtml(value) {
         return String(value ?? '')
             .replace(/&/g, '&amp;')
@@ -506,6 +512,7 @@
         return target.closest('.remove-day-icon') || target.closest('.remove-period-icon');
     }
 
+    // Wire up all buttons and table interactions
     els.addDayBtn.addEventListener('click', addDay);
     els.addPeriodBtn.addEventListener('click', addPeriod);
     els.resetDaysBtn.addEventListener('click', resetDays);
@@ -518,6 +525,7 @@
         event.target.value = '';
     });
 
+    // click on day header -> rename day
     els.tableHead.addEventListener('click', event => {
         if (isRemoveIconClick(event.target)) return;
         const header = event.target.closest('.day-header');
@@ -527,9 +535,9 @@
         if (nextValue !== null) setDayName(index, nextValue);
     });
 
+    // click on subject or period name (not remove icon)
     els.tableBody.addEventListener('click', event => {
         if (isRemoveIconClick(event.target)) return;
-
         const subjectCell = event.target.closest('.subject-cell');
         if (subjectCell) {
             const periodIndex = Number(subjectCell.dataset.periodIndex);
@@ -539,7 +547,6 @@
             if (nextValue !== null) setSubject(periodIndex, dayIndex, nextValue);
             return;
         }
-
         const periodCell = event.target.closest('.period-cell');
         if (periodCell && !event.target.closest('.remove-period-icon')) {
             const periodIndex = Number(periodCell.dataset.periodIndex);
@@ -547,6 +554,7 @@
         }
     });
 
+    // remove icons (trash can)
     els.timetableTable.addEventListener('click', event => {
         const removeDayIcon = event.target.closest('.remove-day-icon');
         if (removeDayIcon) {
@@ -561,6 +569,7 @@
         }
     });
 
+    // modal controls
     els.savePeriodBtn.addEventListener('click', savePeriodChanges);
     els.cancelPeriodBtn.addEventListener('click', closePeriodEditor);
     els.modalClose.addEventListener('click', closePeriodEditor);
@@ -568,7 +577,8 @@
         if (e.target === els.periodModal) closePeriodEditor();
     });
 
+    // bootstrap
     loadState();
     refreshClock();
-    setInterval(refreshClock, 30000);
+    setInterval(refreshClock, 30000); // update current class every 30 sec
 })();
