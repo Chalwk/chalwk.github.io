@@ -1,5 +1,6 @@
 /* Copyright (c) 2024-2026. Jericho Crosby (Chalwk) */
 
+/* Hero section w/ spider pattern bg */
 .hero-spider {
     padding: 8rem 0 4rem;
     background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
@@ -37,10 +38,12 @@
     margin-bottom: 2rem;
 }
 
+/* Tab content visibility */
 .tab-content {
     display: block !important;
 }
 
+/* Main content cards - white boxes with shadow */
 .content-card {
     background: white;
     border-radius: var(--radius-lg);
@@ -74,6 +77,7 @@
     font-size: 1.3rem;
 }
 
+/* Species grid - cards for each spider type */
 .species-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -118,6 +122,7 @@
     font-size: 0.85rem;
 }
 
+/* Favourites page - two column layout for detailed species profiles */
 .favourites-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
@@ -183,6 +188,7 @@
     vertical-align: middle;
 }
 
+/* Task lists - used in journal tab */
 .task-list {
     list-style: none;
     padding: 0;
@@ -206,6 +212,7 @@
     font-size: 1rem;
 }
 
+/* Research highlight box */
 .research-highlight {
     background: linear-gradient(135deg, #f8fafc, #e9ecef);
     border-radius: var(--radius);
@@ -225,6 +232,7 @@
     margin-bottom: 0.25rem;
 }
 
+/* Myth vs fact table */
 .myth-fact-table {
     width: 100%;
     border-collapse: collapse;
@@ -255,6 +263,7 @@
     color: #0d9488;
 }
 
+/* Species adjustment table */
 .species-table {
     width: 100%;
     border-collapse: collapse;
@@ -273,6 +282,7 @@
     border-bottom: 1px solid var(--gray-light);
 }
 
+/* Responsive tweaks for mobile */
 @media (max-width: 768px) {
     .hero-spider h1 {
         font-size: 2.2rem;
