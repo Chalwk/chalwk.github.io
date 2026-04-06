@@ -33,11 +33,11 @@ Before we begin, make sure you have the following tools on your local Windows ma
 |-------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------|
 | [BitVise SSH Client](https://www.bitvise.com/ssh-client-download)                               | Secure terminal access and file transfers (SFTP).                                                                 |
 | [TightVNC Viewer](https://www.tightvnc.com/download.php)                                        | Remote desktop connection to the VPS GUI (used before we upgrade to X2Go).                                        |
-| [HPC/CE Server Template](https://github.com/Chalwk/HALO-SCRIPT-PROJECTS/releases/tag/ReadyToGo) | Pre‑configured server files that work flawlessly with Wine. Download either `HPC_Server.zip` or `HCE_Server.zip`. |
+| [HPC/CE Server Template](https://github.com/Chalwk/HALO-SCRIPT-PROJECTS/releases/tag/ReadyToGo) | Pre-configured server files that work flawlessly with Wine. Download either `HPC_Server.zip` or `HCE_Server.zip`. |
 
 **Important notes before you start:**
 
-- **Security First** - We will create a non‑root user, disable password SSH login, use a firewall, and lock down the VNC
+- **Security First** - We will create a non-root user, disable password SSH login, use a firewall, and lock down the VNC
   server. Follow each step carefully.
 - **Cost** - The recommended VPS plan from Vultr is the **Shared CPU** `vc2-1c-2gb` (1 vCPU, 2GB RAM, 55GB SSD,
   2TB/month bandwidth) for **\$10/month**. Automatic backups are optional ($2 extra). You can destroy the VPS anytime to
@@ -93,7 +93,7 @@ We'll use password login only this one time. Then we'll switch to SSH key authen
    shown in your Vultr control panel (Overview tab) and accept it.
 8. Click **New Terminal Console** to open a terminal window.
 
-### Create a dedicated user (non‑root)
+### Create a dedicated user (non-root)
 
 It's a security best practice to run services under a regular user account.
 
@@ -114,7 +114,7 @@ grep sudo /etc/group
 
 ### Upload your SSH public key
 
-Now we'll set up key‑based authentication for the new user.
+Now we'll set up key-based authentication for the new user.
 
 ```bash
 # Create the .ssh folder and authorized_keys file for haloadmin
@@ -266,7 +266,7 @@ sudo apt install xfce4 xfce4-goodies tightvncserver -y
 
 # Start VNC to create its config files (this is temporary)
 vncserver
-# Set a VNC password (max 8 characters). Optionally create a view‑only password (choose 'n').
+# Set a VNC password (max 8 characters). Optionally create a view-only password (choose 'n').
 
 # Kill the temporary VNC instance
 vncserver -kill :1
@@ -297,7 +297,7 @@ chmod +x ~/.vnc/xstartup
 
 ---
 
-## Step 7: Create a Systemd Service for VNC (Auto‑start on boot)
+## Step 7: Create a Systemd Service for VNC (Auto-start on boot)
 
 We'll use a systemd service to start VNC automatically and keep it running. The `-localhost` flag ensures VNC only
 accepts connections from the local machine - we'll tunnel through SSH for security.
@@ -343,7 +343,7 @@ sudo systemctl start vncserver@1.service
 
 Because we used `-localhost`, you cannot connect directly to the VNC port. Instead, we create an SSH tunnel.
 
-1. In BitVise, go to the **C2S** (Client‑to‑Server) tab.
+1. In BitVise, go to the **C2S** (Client-to-Server) tab.
 2. Click **Add**.
 3. Set:
 
@@ -369,7 +369,7 @@ You should now see the XFCE desktop of your VPS.
 
 ## Step 9: Install Fail2ban
 
-Fail2ban protects against brute‑force attacks by temporarily blocking IPs that fail too many login attempts.
+Fail2ban protects against brute-force attacks by temporarily blocking IPs that fail too many login attempts.
 
 ```bash
 sudo apt install fail2ban -y
@@ -439,7 +439,7 @@ Save and exit. Then make the desktop file executable:
 chmod +x /home/haloadmin/Desktop/run.desktop
 ```
 
-**Using the shortcut:** Double‑click the icon on your VPS desktop. The first time, Wine will prompt you to install *
+**Using the shortcut:** Double-click the icon on your VPS desktop. The first time, Wine will prompt you to install *
 *Mono** - click **Install** and let it finish. After that, the server console window will open. You're now ready to host
 games!
 

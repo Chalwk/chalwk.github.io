@@ -40,7 +40,7 @@ When you need to understand netcode, packet loss, or the Halo 1 system link prot
 - **[Netcode (Wikipedia)](https://en.wikipedia.org/wiki/Netcode)** - General networking concepts (tickrate, latency,
   packet loss) useful for server sync debugging.
 - **[Exploring the Halo 1 System Link Protocol](https://hllmn.net/blog/2023-09-18_h1x-net/)** (hllmn.net, 2023) -
-  Low‑level reverse engineering of CE networking.
+  Low-level reverse engineering of CE networking.
 
 > **Tip:** Understanding how Halo handles network updates will save you hours of frustration when debugging weird
 > desyncs or script lag.
@@ -56,22 +56,22 @@ You have two main eras of tooling: the classic HEK suite and modern community re
 These are the original tools Bungie released for CE. They still work, but require some patience on modern Windows.
 
 - **[HEK on Nexus Mods](https://www.nexusmods.com/halo/mods/6)** - The full Halo Editing Kit installer.
-- **Sapien** - Scenario and map editor (in‑editor placement, scenario preview, radiosity).
-- **Guerilla** - Tag editor (view and edit structured tag fields - your go‑to for weapon tweaks).
-- **Tool** - Command‑line asset compiler (bitmap conversion, map build pipeline).
+- **Sapien** - Scenario and map editor (in-editor placement, scenario preview, radiosity).
+- **Guerilla** - Tag editor (view and edit structured tag fields - your go-to for weapon tweaks).
+- **Tool** - Command-line asset compiler (bitmap conversion, map build pipeline).
 - **Tag Test (`tag_test.exe`)** - Launch and debug maps locally without a full server.
 
-> **Warning:** Classic HEK tools are 32‑bit and may need compatibility settings (Windows 7 mode, admin rights). Some
+> **Warning:** Classic HEK tools are 32-bit and may need compatibility settings (Windows 7 mode, admin rights). Some
 > users report better stability with `dgVoodoo2` for DirectX 9 fallback.
 
 ### Modern & Community Toolchains
 
-These tools are cross‑platform, scriptable, and under active development.
+These tools are cross-platform, scriptable, and under active development.
 
-- **[Invader](https://invader.opencarnage.net/)** - Modern, cross‑platform toolkit for extracting, building, and
+- **[Invader](https://invader.opencarnage.net/)** - Modern, cross-platform toolkit for extracting, building, and
   modifying Halo maps.  
   GitHub: [SnowyMouse/invader](https://github.com/SnowyMouse/invader)
-- **[Assembly](https://github.com/XboxChaos/Assembly)** - Multi‑generation `.map` editor and patcher (XboxChaos).
+- **[Assembly](https://github.com/XboxChaos/Assembly)** - Multi-generation `.map` editor and patcher (XboxChaos).
 - **[MEK (Mozz Editing Kit)](https://github.com/Sigmmma/mek)** - Alternate editing suite with extractors and GUIs.
 
 > **Tip:** Use Invader if you need batch/CI workflows or want to avoid the classic HEK's quirks. Assembly is excellent
@@ -79,16 +79,16 @@ These tools are cross‑platform, scriptable, and under active development.
 
 ---
 
-## Client‑Side Mods & Scripting Platforms
+## Client-Side Mods & Scripting Platforms
 
 Enhance your local game or test scripts without a dedicated server.
 
-- **[Chimera](https://github.com/SnowyMouse/chimera)** - CE client modification with Lua support, quality‑of‑life
+- **[Chimera](https://github.com/SnowyMouse/chimera)** - CE client modification with Lua support, quality-of-life
   features, and modding APIs.
 - **[Balltze](https://github.com/MangoFizz/balltze)** - Plugin loader and mod platform for CE.  
   Documentation: [balltze.shadowmods.net](https://balltze.shadowmods.net/)
 
-> **Tip:** Run Chimera locally to prototype Lua scripts before deploying them to a SAPP‑powered server.
+> **Tip:** Run Chimera locally to prototype Lua scripts before deploying them to a SAPP-powered server.
 
 ---
 
@@ -125,12 +125,12 @@ If you are creating custom models or importing assets, these Blender addons are 
   precise radiosity builds.  
   *Best for: learning the original pipeline, building singleplayer scenarios.*
 
-- **Modern, scriptable workflow** - Reach for **Invader + Assembly + MEK** when you want cross‑platform support, batch
+- **Modern, scriptable workflow** - Reach for **Invader + Assembly + MEK** when you want cross-platform support, batch
   operations, or safer extraction.  
   *Best for: team projects, CI pipelines, or if you are tired of HEK crashes.*
 
-- **Client‑side scripting / testing** - Run **Chimera** locally to write and test Lua scripts. Once stable, deploy the
+- **Client-side scripting / testing** - Run **Chimera** locally to write and test Lua scripts. Once stable, deploy the
   same scripts on a **SAPP** server.  
-  *Best for: rapid prototyping and quality‑of‑life mods.*
+  *Best for: rapid prototyping and quality-of-life mods.*
 
 ---
