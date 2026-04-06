@@ -342,14 +342,17 @@ end
 
 **File:** `Using LuaJIT and ffi in SAPP.md`
 
-SAPP uses **LuaJIT**, a high-performance just-in-time compiler for Lua 5.1. This means most Lua 5.1 code works normally,
-but you also get advanced features like the `ffi` library to call C functions and manipulate memory directly.
+SAPP uses **LuaJIT**, a high-performance just-in-time compiler based on Lua 5.1. This means most Lua 5.1 code works
+normally, but LuaJIT also includes some features from newer Lua versions and its own extensions.
+
+In addition, you get advanced capabilities like the `ffi` library to call C functions and manipulate memory directly.
 
 ### 5.1 What LuaJIT Gives You
 
-- Full compatibility with **Lua 5.1**
-- `ffi` library - call C functions, define structs, work with raw memory
-- Better performance for math-heavy or iterative code
+* Full compatibility with **Lua 5.1**
+* Support for some **Lua 5.2+ features** (such as `goto`)
+* `ffi` library - call C functions, define structs, work with raw memory
+* Better performance for math-heavy or iterative code
 
 > **Note:** SAPP scripts run in a sandboxed environment. Some operating system APIs may be restricted, and unsafe memory
 > operations can crash the server. Proceed with caution.
@@ -368,8 +371,8 @@ function OnScriptLoad()
 end
 ```
 
-- `pcall` prevents crashes if `ffi` is blocked.
-- The output appears in the server console.
+* `pcall` prevents crashes if `ffi` is blocked.
+* The output appears in the server console.
 
 ### 5.3 Fully Functional Demo: Ticks Since Boot
 
@@ -413,11 +416,13 @@ end
 
 ### 5.4 Key Tips and Safety
 
-- Start with **safe, read-only operations**. Do not write to arbitrary memory addresses.
-- Avoid writing memory directly unless you know the exact structure and offset.
-- Remember that SAPP Lua is sandboxed; not all OS APIs or memory operations are available.
+* Start with **safe, read-only operations**. Do not write to arbitrary memory addresses.
+* Avoid writing memory directly unless you know the exact structure and offset.
+* Remember that SAPP Lua is sandboxed; not all OS APIs or memory operations are available.
+* Some Lua features available in LuaJIT (like `goto`) may not be recognized by all editors or plugins that assume strict
+  Lua 5.1 syntax.
 
-> **Tip:** Use FFI to read server performance counters, system time, or interact with external libraries - but always
+> **Tip:** Use FFI to read server performance counters, system time, or interact with external libraries, but always
 > test thoroughly on a non-production server first.
 
 ---
