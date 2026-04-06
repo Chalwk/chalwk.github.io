@@ -117,7 +117,7 @@ local function getPlayerVehicleObject(i)
     -- Ensure the player exists and is alive
     if not player_present(i) or not player_alive(i) then return end
 
-    -- Get dynamic player object address (contains runtime state like position, vehicle link)
+    -- Get dynamic player object address
     local dyn = get_dynamic_player(i)
     if dyn == 0 then return end
 
@@ -132,7 +132,7 @@ end
 
 -- Checks if any player is inside the given vehicle object
 local function isVehicleOccupied(vehicleObject)
-    -- Loop through all possible player slots (Halo supports up to 16 players)
+    -- Loop through all possible player slots
     for i = 1, 16 do
         -- Compare the vehicle this player is in with the target vehicle
         if getPlayerVehicleObject(i) == vehicleObject then
@@ -307,41 +307,43 @@ Scans the tag table for a tag whose path or name contains a given substring. Opt
 
 **Parameters:**
 
-- `substring` (string) - Text to search for (case-insensitive).
-- `class_filter` (string or nil) - Optional, e.g., `'weap'`, `'vehi'`. Pass `nil` to search all classes.
+* `substring` (string) - Text to search for (case-insensitive).
+* `class_filter` (string or nil) - Optional, e.g., `'weap'`, `'vehi'`. Pass `nil` to search all classes.
 
-**Returns:**  
+**Returns:**
 MetaIndex of the first matching tag, or `nil` if not found.
 
 **Code:**
 
 ```lua
-local base_tag_table = 0x40440000   -- Halo's tag table base address
+local base_tag_table = 0x40440000 -- Halo's tag table base address
 
 -- Searches tags by substring in name/path, optionally filtered by class.
 -- Returns meta index of first match, or nil if none found.
 local function findTagByNameSubstring(substring, class_filter)
     substring = substring:lower()
-    local tag_array = read_dword(base_tag_table)          -- pointer to first tag entry
-    local tag_count = read_dword(base_tag_table + 0xC)    -- total number of tags
+    local tag_array = read_dword(base_tag_table)       -- pointer to first tag entry
+    local tag_count = read_dword(base_tag_table + 0xC) -- total number of tags
 
     -- If a class filter is provided, get its class hash once
     local filter_hash = class_filter and read_dword(lookup_tag(class_filter, "")) or nil
 
     for i = 0, tag_count - 1 do
-        local tag = tag_array + 0x20 * i                  -- each tag entry is 32 bytes
-        local class_hash = read_dword(tag)                -- tag's class hash (e.g., 0x77656170 = "weap")
+        local tag = tag_array + 0x20 * i    -- each tag entry is 32 bytes
+        local class_hash = read_dword(tag)  -- tag's class hash (e.g., 0x77656170 = "weap")
 
         -- Apply class filter if specified
-        if not filter_hash or class_hash == filter_hash then
-            local name_ptr = read_dword(tag + 0x10)       -- pointer to tag name string
-            if name_ptr and name_ptr ~= 0 then
-                local name = read_string(name_ptr)
-                if name and name:lower():find(substring, 1, true) then
-                    return read_dword(tag + 0xC)          -- meta index of the tag
-                end
-            end
-        end
+        if filter_hash and class_hash ~= filter_hash then goto continue end
+
+        local name_ptr = read_dword(tag + 0x10) -- pointer to tag name string
+        if not name_ptr or name_ptr == 0 then goto continue end
+
+        local name = read_string(name_ptr)
+        if not name or not name:lower():find(substring, 1, true) then goto continue end
+
+        return read_dword(tag + 0xC) -- meta index of the tag
+
+        ::continue::
     end
     return nil
 end
@@ -367,10 +369,10 @@ local flag_meta = findTagByNameSubstring("flag", nil)
 
 **How it works:**
 
-- Iterates through every tag in the map's tag table.
-- Compares the tag's class hash against the optional `class_filter` (converted via `lookup_tag`).
-- Performs a simple substring search on the tag's full path/name (case-insensitive).
-- Returns the meta index (usable with `spawn_object`) of the first match.
+* Iterates through every tag in the map's tag table.
+* Compares the tag's class hash against the optional `class_filter` (converted via `lookup_tag`).
+* Performs a simple substring search on the tag's full path/name (case-insensitive).
+* Returns the meta index (usable with `spawn_object`) of the first match.
 
 **Note:** The search stops at the first match. If you need all matches, modify the function to collect results in a
 table.
@@ -530,15 +532,15 @@ local function getFlagData()
             if read_bit(tag_data + 0x308, 3) == 1 then
                 -- Byte at offset 0x2: 0 = flag, 4 = oddball
                 if read_byte(tag_data + 0x2) == 0 then
-                    local meta_id = read_dword(tag + 0xC)            -- meta index
-                    local name_ptr = read_dword(tag + 0x10)          -- pointer to tag name
-                    local tag_name = read_string(name_ptr)           -- e.g., "objects\weapons\multiplayer\flag\flag"
+                    local meta_id = read_dword(tag + 0xC)	    -- meta index
+                    local name_ptr = read_dword(tag + 0x10)	    -- pointer to tag name
+                    local tag_name = read_string(name_ptr)		-- e.g., "objects\weapons\multiplayer\flag\flag"
                     return meta_id, tag_name
                 end
             end
         end
     end
-    return nil, nil   -- no flag found on this map
+    return nil, nil -- no flag found on this map
 end
 ```
 
@@ -632,10 +634,13 @@ Checks if the player's currently held weapon is an objective - flag, oddball, or
 local function hasObjective(dyn_player, objective_type)
     objective_type = objective_type or "any"
     local weapon_obj = get_object_memory(read_dword(dyn_player + 0x118))
+    
     if not weapon_obj or weapon_obj == 0 then return false end
     local tag_data = read_dword(read_dword(0x40440000) + read_word(weapon_obj) * 0x20 + 0x14)
+    
     if read_bit(tag_data + 0x308, 3) ~= 1 then return false end
     local obj_byte = read_byte(tag_data + 2)
+    
     return (objective_type == "oddball" and obj_byte == 4) or
            (objective_type == "flag" and obj_byte == 0) or
            (objective_type == "any" and (obj_byte == 4 or obj_byte == 0))
