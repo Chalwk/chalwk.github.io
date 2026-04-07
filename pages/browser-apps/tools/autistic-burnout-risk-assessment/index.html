@@ -6,10 +6,11 @@ description: Autistic Burnout Risk Assessment
 
 <!-- Copyright (c) 2024-2026. Jericho Crosby (Chalwk) -->
 
-<link rel="stylesheet" href="style.css">
+<link href="style.css" rel="stylesheet">
 
 <main>
     <div class="container">
+        <!-- Emergency contact section - important for user safety -->
         <div class="emergency-contact">
             <h3>
                 <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -47,7 +48,9 @@ description: Autistic Burnout Risk Assessment
             <p>If you're outside New Zealand, please contact your local emergency number or local crisis services.</p>
         </div>
 
+        <!-- Main app grid: two columns on desktop, stacks on mobile -->
         <div class="app-grid" id="app">
+            <!-- Left column: Assessment questions -->
             <div class="card">
                 <h2>
                     <svg stroke="currentColor" viewBox="0 0 24 24"
@@ -58,6 +61,7 @@ description: Autistic Burnout Risk Assessment
                     Burnout Risk Assessment
                 </h2>
 
+                <!-- Each factor group is collapsible to keep the page tidy -->
                 <div class="factor-group">
                     <button class="collapse-toggle" data-target="energy-group">
                         <svg class="collapse-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round"
@@ -68,6 +72,7 @@ description: Autistic Burnout Risk Assessment
                         <h3>Energy & Fatigue</h3>
                     </button>
                     <div class="collapse-content" id="energy-group">
+                        <!-- Each question has a slider and a tooltip for extra context -->
                         <div class="question">
                             <div class="question-text">How would you rate your overall energy levels?
                                 <span class="tooltip">
@@ -365,6 +370,7 @@ description: Autistic Burnout Risk Assessment
                 </div>
             </div>
 
+            <!-- Right column: Results, risk meter, factor breakdown -->
             <div class="card">
                 <h2>
                     <svg stroke="currentColor" viewBox="0 0 24 24"
@@ -375,6 +381,7 @@ description: Autistic Burnout Risk Assessment
                     Your Burnout Risk
                 </h2>
 
+                <!-- Visual risk meter with gradient background -->
                 <div class="risk-meter">
                     <div class="risk-indicator" id="risk-indicator"></div>
                 </div>
@@ -429,6 +436,7 @@ description: Autistic Burnout Risk Assessment
                 </div>
             </div>
 
+            <!-- Full-width recommendations card (initially hidden) -->
             <div class="card full-width" id="recommendations-card">
                 <h2>
                     <svg stroke="currentColor" viewBox="0 0 24 24"
@@ -439,6 +447,7 @@ description: Autistic Burnout Risk Assessment
                     Personalized Recommendations
                 </h2>
 
+                <!-- Tabbed interface for recommendation categories -->
                 <div class="tab-container">
                     <div class="tabs">
                         <div class="tab active" data-tab="energy">Energy Management</div>
@@ -655,6 +664,7 @@ description: Autistic Burnout Risk Assessment
                 </div>
             </div>
 
+            <!-- Full-width history card for tracking past assessments -->
             <div class="card full-width">
                 <h2>
                     <svg stroke="currentColor" viewBox="0 0 24 24"
