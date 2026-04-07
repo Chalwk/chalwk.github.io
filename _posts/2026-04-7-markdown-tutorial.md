@@ -391,21 +391,50 @@ Blockquotes can contain headings, lists, code blocks, etc.
 **Result:**
 
 > ## A heading inside a quote
-> 
+>
 > - List item 1
 > - List item 2
 
 ### Citations
 
-Some parsers support `> [citation]` for references.
+Markdown does not have a native citation system, but you can create **clickable citations** using reference‑style links.
+This works in Jekyll, GitHub, and most Markdown processors.
+
+#### External Link
+
+Place a citation number in brackets `[1]` and define the URL at the bottom of your document. The number becomes a live
+link.
 
 ```markdown
-As John Doe said in his 2020 paper: "Markdown is great." [citation]
+According to the official Markdown guide, the syntax was designed for readability [1].
+
+[1]: https://www.markdownguide.org/getting-started/ "Markdown Guide: Getting Started"
 ```
 
 **Result:**
 
-As John Doe said in his 2020 paper: "Markdown is great." [citation]
+According to the official Markdown guide, the syntax was designed for readability [1].
+
+[1]: https://www.markdownguide.org/getting-started/ "Markdown Guide: Getting Started"
+
+#### Internal Link (to another section of this tutorial)
+
+You can also link a citation to a heading or a specific part of your document.
+
+```markdown
+For syntax highlighting examples, see the Code section [2].
+
+[2]: #code
+```
+
+**Result:**
+
+For syntax highlighting examples, see the Code section [2].
+
+[2]: #code
+
+> **Note:** This method creates a simple numbered link. If you need footnotes that jump back and forth (like academic
+> papers), use standard footnote syntax `[^1]` instead.
 
 ---
 
@@ -810,18 +839,6 @@ I often visit [Google] and [GitHub].
 ```
 
 **Result:** I often visit [Google] and [GitHub].
-
-### Image Links
-
-Already covered, but here's an example with reference-style:
-
-```markdown
-[![Logo][logo-image]][logo-link]
-
-[logo-image]: https://example.com/logo.png
-
-[logo-link]: https://example.com
-```
 
 ### Highlighting
 
