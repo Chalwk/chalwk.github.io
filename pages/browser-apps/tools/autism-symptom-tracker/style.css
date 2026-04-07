@@ -20,12 +20,14 @@
     line-height: 1.5;
 }
 
+/* Layout container */
 .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 16px;
 }
 
+/* Accessibility helpers */
 .sr-only {
     position: absolute !important;
     width: 1px;
@@ -57,12 +59,14 @@
     z-index: 100;
 }
 
+/* Header action buttons */
 .header-actions {
     display: flex;
     gap: 8px;
     align-items: center;
 }
 
+/* Main grid: left + right + bottom panels */
 .app-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -81,6 +85,7 @@
     }
 }
 
+/* Panel styling */
 .panel {
     background: var(--panel);
     border-radius: var(--radius);
@@ -110,6 +115,7 @@
     font-size: 0.9rem;
 }
 
+/* Search & controls */
 .controls-row {
     display: flex;
     gap: 12px;
@@ -140,6 +146,7 @@
     border-color: var(--accent);
 }
 
+/* Symptom list - two columns on larger screens */
 .symptom-list {
     display: grid;
     grid-template-columns: repeat(1, minmax(0, 1fr));
@@ -156,6 +163,7 @@
     }
 }
 
+/* Individual symptom card */
 .symptom {
     display: flex;
     gap: 12px;
@@ -213,6 +221,7 @@
     box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
 }
 
+/* Action rows */
 .actions-row {
     display: flex;
     gap: 12px;
@@ -226,6 +235,7 @@
     flex-wrap: wrap;
 }
 
+/* Analysis summary box */
 .result-summary {
     margin-bottom: 16px;
     color: var(--muted);
@@ -235,6 +245,7 @@
     border-left: 4px solid var(--accent);
 }
 
+/* Suggestion cards */
 .suggestions {
     display: flex;
     flex-direction: column;
@@ -324,6 +335,7 @@
     transition: all 0.2s ease;
 }
 
+/* Pattern insights panel */
 .pattern-insights {
     margin-top: 16px;
     padding: 16px;
@@ -346,6 +358,7 @@
     box-shadow: var(--shadow);
 }
 
+/* History list */
 .history-list {
     display: flex;
     flex-direction: column;
@@ -391,6 +404,7 @@
     min-width: 180px;
 }
 
+/* Charts area */
 .charts {
     display: flex;
     flex-direction: column;
@@ -420,6 +434,7 @@ canvas {
     background: #fff;
 }
 
+/* Modal dialogs */
 dialog {
     border: none;
     border-radius: 12px;
@@ -442,6 +457,7 @@ dialog {
     justify-content: flex-end;
 }
 
+/* Utility classes */
 .muted {
     color: var(--muted);
 }
@@ -458,6 +474,7 @@ dialog {
     gap: 12px;
 }
 
+/* Animations */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -473,6 +490,7 @@ dialog {
     animation: fadeIn 0.3s ease both;
 }
 
+/* Mobile / touch optimizations */
 @media (hover: none) {
     .symptom {
         padding: 18px;
@@ -525,6 +543,7 @@ dialog {
     pointer-events: none;
 }
 
+/* Focus outlines for accessibility */
 button:focus-visible,
 input:focus-visible,
 select:focus-visible {
@@ -547,6 +566,7 @@ dialog {
     z-index: 2000;
 }
 
+/* Details/summary element */
 details summary {
     cursor: pointer;
     padding: 10px;
@@ -569,6 +589,7 @@ details > p {
     margin-top: 0;
 }
 
+/* Button variants */
 .btn {
     background: var(--primary);
     color: white;
@@ -597,6 +618,7 @@ details > p {
     background: rgba(37, 99, 235, 0.1);
 }
 
+/* Panel headings use primary color */
 #symptom-heading,
 #results-heading,
 #history-heading {

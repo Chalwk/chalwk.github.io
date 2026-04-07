@@ -4,6 +4,7 @@
     const STORAGE_KEY = "autism-tracker-history-v3";
     const DEFAULT_MAX_HISTORY = 200;
 
+    // List of symptoms with tags
     const SYMPTOMS = [
         {id: "tired", label: "Tired / sleepy", tags: ["fatigue"]},
         {id: "poor-sleep", label: "Poor sleep last night", tags: ["fatigue"]},
@@ -53,6 +54,7 @@
         {id: "confused", label: "Confused / disoriented", tags: ["executive-function"]}
     ];
 
+    // Strategy database keyed by tag
     const TAGS = {
         "sensory": {
             name: "Sensory overload",
@@ -257,6 +259,7 @@
         }
     };
 
+    // DOM stuff
     const el = (sel, root = document) => root.querySelector(sel);
     const els = (sel, root = document) => Array.from(root.querySelectorAll(sel));
     const fmtDate = ts => new Date(ts).toLocaleString();
@@ -288,7 +291,7 @@
     const tagChart = el("#tag-chart");
     const symptomChart = el("#symptom-chart");
 
-
+    // --- Settings (localStorage) ------------------------------------------
     function loadSettings() {
         try {
             const raw = localStorage.getItem(`${STORAGE_KEY}-settings`);
@@ -311,6 +314,7 @@
         localStorage.setItem(`${STORAGE_KEY}-settings`, JSON.stringify(obj));
     }
 
+    // --- Symptom list rendering (with filter) -----------------------------
     function renderSymptomList(filter = "") {
         symptomListEl.innerHTML = "";
         const q = filter.trim().toLowerCase();
@@ -342,6 +346,7 @@
         updateSymptomSelectionVisuals();
     }
 
+    // Highlight selected symptoms visually
     function updateSymptomSelectionVisuals() {
         els("input[name='symptom']", symptomListEl).forEach(cb => {
             const symptomEl = cb.closest('.symptom');
@@ -353,6 +358,7 @@
         });
     }
 
+    // Gather selected symptoms with intensity weights
     function getSelectedSymptomsWithWeights() {
         return els("input[name='symptom']:checked", symptomListEl).map(cb => {
             const id = cb.value;
@@ -367,6 +373,7 @@
         return [...symptoms];
     }
 
+    // --- Analysis & suggestion engine (tag scoring) -----------------------
     function analyze(selected) {
         if (!selected || selected.length === 0) {
             resultSummary.textContent = "No symptoms selected. Choose items and press Analyze.";
@@ -378,6 +385,7 @@
         resultSummary.textContent = "Analyzing your selections...";
         suggestionsEl.innerHTML = '<div class="loading">Loading suggestions...</div>';
 
+        // Simulate async to feel responsive
         setTimeout(() => {
             const tagScore = {};
             selected.forEach((item) => {
@@ -434,6 +442,7 @@
         }, 600);
     }
 
+    // Pattern insights from saved history (co‑occurrence)
     function updatePatternInsights() {
         const history = loadHistory();
         if (history.length < 3) {
@@ -493,6 +502,7 @@
         });
     }
 
+    // --- History (localStorage) management --------------------------------
     function loadHistory() {
         try {
             const raw = localStorage.getItem(STORAGE_KEY);
@@ -518,6 +528,7 @@
         saveHistory(arr);
     }
 
+    // Render history list + delete buttons
     function renderHistory() {
         const arr = loadHistory();
         historyList.innerHTML = "";
@@ -564,6 +575,7 @@
         drawSymptomChart();
     }
 
+    // --- Export / Import --------------------------------------------------
     function exportCSV() {
         const arr = loadHistory();
         if (!arr.length) {
@@ -629,6 +641,7 @@
         reader.readAsText(file);
     }
 
+    // Helper: derive top tags from selected symptoms (for saving summary)
     function deriveSummaryTagsWeighted(selected) {
         const tagScore = {};
         selected.forEach((item) => {
@@ -641,6 +654,7 @@
         return Object.keys(tagScore).sort((a, b) => tagScore[b] - tagScore[a]);
     }
 
+    // --- Utilities --------------------------------------------------------
     function escapeHtml(s) {
         return String(s).replace(/[&<>"']/g, m => ({
             '&': '&amp;',
@@ -655,10 +669,7 @@
         return String(s).replace(/"/g, '""');
     }
 
-    function playSound(type) {
-        console.log(`Playing ${type} sound`);
-    }
-
+    // --- Canvas charts ----------------------------------------------------
     function drawTagChart() {
         const ctx = tagChart.getContext("2d");
         const history = loadHistory();
@@ -784,10 +795,12 @@
         });
     }
 
+    // --- Event binding & initialization -----------------------------------
     function wire() {
         renderSymptomList();
         renderHistory();
 
+        // Enable/disable intensity dropdowns when checkbox toggled
         symptomListEl.addEventListener("change", ev => {
             if (!ev.target || ev.target.name !== "symptom") return;
             const id = ev.target.value;
@@ -798,6 +811,7 @@
             updateSymptomSelectionVisuals();
         });
 
+        // Copy strategy text to clipboard
         suggestionsEl.addEventListener("click", ev => {
             const copyBtn = ev.target.closest("button.copy");
             if (copyBtn) {
