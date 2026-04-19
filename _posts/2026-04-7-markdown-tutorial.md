@@ -251,7 +251,7 @@ To add a paragraph inside a list item, indent the paragraph to the same level as
 
 ```markdown
 [README](../README.md)
-[/assets/images/avatar2.png](/assets/images/avatar2.png)
+[/assets/images/avatar.png](/assets/images/avatar.png)
 ```
 
 ### Internal Links (to headings)
@@ -311,15 +311,15 @@ Wrap a URL or email in angle brackets to turn it into a link.
 ### Basic Image
 
 ```markdown
-![Alt text](https://github.com/Chalwk/chalwk.github.io/blob/main/assets/images/avatar2.png)
+![Alt text](https://github.com/Chalwk/chalwk.github.io/blob/main/assets/images/avatar.png)
 ```
 
-**Result:** ![Alt text](/assets/images/avatar2.png)
+**Result:** ![Alt text](/assets/images/avatar.png)
 
 ### Image with Title (Tooltip)
 
 ```markdown
-![Chalwk Logo](/assets/images/avatar2.png "Chalwk logo")
+![Chalwk Logo](/assets/images/avatar.png "Chalwk logo")
 ```
 
 ### Resizing Images (HTML)
@@ -327,22 +327,22 @@ Wrap a URL or email in angle brackets to turn it into a link.
 Markdown itself doesn't support resizing, but you can use HTML.
 
 ```html
-<img src="/assets/images/avatar2.png" alt="Chalwk Logo" width="200">
+<img src="/assets/images/avatar.png" alt="Chalwk Logo" width="200">
 ```
 
 **Result:**  
-<img src="/assets/images/avatar2.png" alt="Chalwk Logo" width="200">
+<img src="/assets/images/avatar.png" alt="Chalwk Logo" width="200">
 
 ### Image Links
 
 Wrap an image in a link to make it clickable.
 
 ```markdown
-[![Chalwk Logo](/assets/images/avatar2.png)](https://chalwk.github.io/)
+[![Chalwk Logo](/assets/images/avatar.png)](https://chalwk.github.io/)
 ```
 
 **Result:** (Click the image)  
-[![Chalwk Logo](/assets/images/avatar2.png)](https://chalwk.github.io/)
+[![Chalwk Logo](/assets/images/avatar.png)](https://chalwk.github.io/)
 
 ---
 
