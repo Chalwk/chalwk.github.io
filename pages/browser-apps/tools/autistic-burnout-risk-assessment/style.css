@@ -425,7 +425,7 @@
     display: block;
 }
 
-/* ---------- Resources grid (NZ‑specific) ---------- */
+/* ---------- Resources grid (NZ-specific) ---------- */
 .resources-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));

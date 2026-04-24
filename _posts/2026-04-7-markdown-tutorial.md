@@ -397,7 +397,7 @@ Blockquotes can contain headings, lists, code blocks, etc.
 
 ### Citations
 
-Markdown does not have a native citation system, but you can create **clickable citations** using reference‑style links.
+Markdown does not have a native citation system, but you can create **clickable citations** using reference-style links.
 This works in Jekyll, GitHub, and most Markdown processors.
 
 #### External Link

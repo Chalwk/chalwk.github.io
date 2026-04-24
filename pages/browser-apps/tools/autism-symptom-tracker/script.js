@@ -442,7 +442,7 @@
         }, 600);
     }
 
-    // Pattern insights from saved history (co‑occurrence)
+    // Pattern insights from saved history (co-occurrence)
     function updatePatternInsights() {
         const history = loadHistory();
         if (history.length < 3) {
