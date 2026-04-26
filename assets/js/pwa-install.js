@@ -1,31 +1,70 @@
 // Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
 
-let deferredPrompt; // hang onto install event until user clicks our button
+(function () {
+    let deferredPrompt;
+    let installSupported = false; // becomes true when beforeinstallprompt fires
 
-window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault(); // don't show the browser's default popup yet
-    deferredPrompt = e; // stash it for later
-    const container = document.getElementById('pwa-install-container');
-    if (container) container.classList.add('visible'); // show install button
-});
-
-const installButton = document.getElementById('pwa-install-button');
-if (installButton) {
-    installButton.addEventListener('click', async () => {
-        if (!deferredPrompt) return; // nothing to install? bail out
-        deferredPrompt.prompt(); // now show the native install dialog
-        // wait to see if user accepted or dismissed
-        const {outcome} = await deferredPrompt.userChoice;
-        console.log(`User response to install prompt: ${outcome}`);
-        deferredPrompt = null; // cleanup, can only be used once
-        const container = document.getElementById('pwa-install-container');
-        if (container) container.classList.remove('visible'); // hide button again
+    // Listen for the native event (Chrome/Edge/Opera)
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        installSupported = true;
+        updateInstallUI();
     });
-}
 
-// once the app is actually installed, hide the button just in case
-window.addEventListener('appinstalled', () => {
-    const container = document.getElementById('pwa-install-container');
-    if (container) container.classList.remove('visible');
-    deferredPrompt = null;
-});
+    function updateInstallUI() {
+        const container = document.getElementById('pwa-install-container');
+        const button = document.getElementById('pwa-install-button');
+        if (!container || !button) return;
+
+        if (installSupported && deferredPrompt) {
+            // Native install prompt is available – wire it up
+            container.classList.add('visible');
+            button.textContent = 'Install App';
+            // Replace previous click listeners
+            const newButton = button.cloneNode(true);
+            button.parentNode.replaceChild(newButton, button);
+            newButton.addEventListener('click', async () => {
+                if (!deferredPrompt) return;
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log(`User response to install prompt: ${outcome}`);
+                deferredPrompt = null;
+                container.classList.remove('visible');
+            });
+        } else if (!installSupported) {
+            // Fallback for Firefox, Safari, etc.
+            container.classList.add('visible');
+            button.textContent = 'Install App';
+            const newButton = button.cloneNode(true);
+            button.parentNode.replaceChild(newButton, button);
+            newButton.addEventListener('click', () => {
+                alert(
+                    'To install this app:\n\n' +
+                    '• On mobile: Tap the browser menu (⋮ or ≡), then select "Add to Home Screen" or "Install".\n' +
+                    '• On desktop: Look for an install icon in the address bar or browser menu.'
+                );
+            });
+        } else {
+            // Prompt already shown or dismissed – hide the button
+            container.classList.remove('visible');
+        }
+    }
+
+    // Show fallback button early if 'beforeinstallprompt' hasn’t fired by DOM ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!installSupported) updateInstallUI();
+        });
+    } else {
+        if (!installSupported) updateInstallUI();
+    }
+
+    // Hide the button once the app is actually installed
+    window.addEventListener('appinstalled', () => {
+        const container = document.getElementById('pwa-install-container');
+        if (container) container.classList.remove('visible');
+        deferredPrompt = null;
+        installSupported = true; // not strictly needed
+    });
+})();

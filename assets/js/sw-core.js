@@ -35,10 +35,41 @@ self.addEventListener('activate', event => {
     );
 });
 
-// fetch: try cache first, fall back to network
+// Helper to check if a request is for the manifest
+function isManifestRequest(request) {
+    const url = new URL(request.url);
+    return url.pathname.endsWith('/manifest.json');
+}
+
+// Helper to return a new Response with the corrected content type
+function fixManifestResponse(response) {
+    const headers = new Headers(response.headers);
+    headers.set('Content-Type', 'application/manifest+json');
+    return new Response(response.body, {
+        status: response.status,
+        statusText: response.statusText,
+        headers: headers
+    });
+}
+
+// fetch: try cache first, fall back to network – with manifest MIME fix
 self.addEventListener('fetch', event => {
     event.respondWith(
         caches.match(event.request)
-            .then(response => response || fetch(event.request))
+            .then(cachedResponse => {
+                if (cachedResponse) {
+                    // Serve from cache, but fix MIME type if it's the manifest
+                    if (isManifestRequest(event.request)) {
+                        return fixManifestResponse(cachedResponse.clone());
+                    }
+                    return cachedResponse;
+                }
+                return fetch(event.request).then(networkResponse => {
+                    if (isManifestRequest(event.request)) {
+                        return fixManifestResponse(networkResponse);
+                    }
+                    return networkResponse;
+                });
+            })
     );
 });
