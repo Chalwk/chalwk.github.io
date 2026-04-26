@@ -22,8 +22,6 @@
       "purpose": "any maskable"
     }
   ],
-  "categories": [
-    "accessibility"
-  ],
+  "categories": ["productivity"],
   "lang": "en"
 }
