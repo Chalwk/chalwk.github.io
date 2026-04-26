@@ -336,6 +336,20 @@
     overflow: hidden;
 }
 
+/* ---- Disable mobile long-press highlight and callout ---- */
+.symbol,
+.phrase-item {
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.symbol img {
+    pointer-events: none;
+    -webkit-user-drag: none;
+}
+
 .symbol img,
 .symbol-emoji {
     max-width: 80%;

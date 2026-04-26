@@ -920,6 +920,13 @@
         closeSettingsMenu();
     }
 
+    // --- Prevent browser default long-press context menu and selection ---
+    boardWrap.addEventListener('contextmenu', (e) => e.preventDefault());
+    boardWrap.addEventListener('selectstart', (e) => e.preventDefault());
+
+    phraseDisplay.addEventListener('contextmenu', (e) => e.preventDefault());
+    phraseDisplay.addEventListener('selectstart', (e) => e.preventDefault());
+
     // --- event listeners ---
     speakBtn.addEventListener('click', speakPhrase);
     clearBtn.addEventListener('click', clearPhrase);
