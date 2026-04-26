@@ -6,7 +6,7 @@ const urlsToCache = [
     './index.html',
     './style.css',
     './script.js',
-    './manifest.json',
+    './manifest.webmanifest',
     './icons/icon-192x192.png',
     './icons/icon-512x512.png'
 ];
@@ -38,7 +38,7 @@ self.addEventListener('activate', event => {
 // Helper to check if a request is for the manifest
 function isManifestRequest(request) {
     const url = new URL(request.url);
-    return url.pathname.endsWith('/manifest.json');
+    return url.pathname.endsWith('/manifest.webmanifest');
 }
 
 // Helper to return a new Response with the corrected content type
