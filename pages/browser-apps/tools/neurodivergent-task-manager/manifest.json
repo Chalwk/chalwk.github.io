@@ -1,0 +1,27 @@
+{
+  "name": "Neurodivergent Task Manager",
+  "short_name": "NTM",
+  "description": "Task manager designed for neurodivergent individuals with visual timers, chunking, and gamification",
+  "start_url": "/pages/browser-apps/tools/neurodivergent-task-manager/",
+  "scope": "/pages/browser-apps/tools/neurodivergent-task-manager/",
+  "display": "standalone",
+  "background_color": "#4a86e8",
+  "theme_color": "#4a86e8",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["productivity"],
+  "lang": "en"
+}
