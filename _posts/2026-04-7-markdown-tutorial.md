@@ -174,7 +174,7 @@ Use `-`, `*`, or `+` followed by a space. Indent sub-items with 2 or 4 spaces.
 
 ### Ordered Lists
 
-Use numbers followed by a period (`.`). The actual numbers you type don't matter – Markdown will renumber them
+Use numbers followed by a period (`.`). The actual numbers you type don't matter - Markdown will renumber them
 sequentially.
 
 ```markdown

@@ -18,7 +18,7 @@
         if (!container || !button) return;
 
         if (installSupported && deferredPrompt) {
-            // Native install prompt is available – wire it up
+            // Native install prompt is available - wire it up
             container.classList.add('visible');
             button.textContent = 'Install App';
             // Replace previous click listeners
@@ -46,7 +46,7 @@
                 );
             });
         } else {
-            // Prompt already shown or dismissed – hide the button
+            // Prompt already shown or dismissed - hide the button
             container.classList.remove('visible');
         }
     }

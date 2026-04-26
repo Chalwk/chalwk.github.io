@@ -46,6 +46,12 @@
     const settingsToggle = document.getElementById('settingsToggle');
     const settingsMenu = document.getElementById('settingsMenu');
 
+    // Info modal elements
+    const infoToggle = document.getElementById('infoToggle');
+    const infoModal = document.getElementById('infoModal');
+    const closeInfoModal = document.getElementById('closeInfoModal');
+    const closeInfoBtn = document.getElementById('closeInfoBtn');
+
     // --- app state ---
     let symbols = [];         // all symbol objects
     let currentPhrase = [];   // symbols currently in phrase strip
@@ -370,6 +376,15 @@
             closeSettingsMenu();
         }
     });
+
+    // --- info modal ---
+    function openInfoModal() {
+        infoModal.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeInfoModalHandler() {
+        infoModal.setAttribute('aria-hidden', 'true');
+    }
 
     // --- categories modal ---
     function openCategoriesModal() {
@@ -989,6 +1004,11 @@
 
     settingsToggle.addEventListener('click', toggleSettingsMenu);
 
+    // Info modal listeners
+    infoToggle.addEventListener('click', openInfoModal);
+    closeInfoModal.addEventListener('click', closeInfoModalHandler);
+    closeInfoBtn.addEventListener('click', closeInfoModalHandler);
+
     if (globalSearch) {
         globalSearch.addEventListener('input', renderBoard);
     }
@@ -1000,7 +1020,8 @@
     });
 
     // just to satisfy file input change (no extra logic needed)
-    symbolImageFile.addEventListener('change', () => {});
+    symbolImageFile.addEventListener('change', () => {
+    });
 
     // keyboard shortcuts: 'e' toggles edit mode, Ctrl+Z undo, Escape closes settings menu
     boardWrap.addEventListener('keydown', (ev) => {

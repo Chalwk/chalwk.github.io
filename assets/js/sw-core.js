@@ -52,7 +52,7 @@ function fixManifestResponse(response) {
     });
 }
 
-// fetch: try cache first, fall back to network – with manifest MIME fix
+// fetch: try cache first, fall back to network - with manifest MIME fix
 self.addEventListener('fetch', event => {
     event.respondWith(
         caches.match(event.request)

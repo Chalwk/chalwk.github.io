@@ -12,7 +12,7 @@ pwa: true
 <main>
     <div class="container">
         <div class="app-container">
-            <!-- header: title, category filter, and settings cog -->
+            <!-- header: title, category filter, settings cog, and info button -->
             <div class="app-header">
                 <div class="header-left">
                     <h2>HearMeOut: AAC Communicator</h2>
@@ -63,6 +63,9 @@ pwa: true
                             </div>
                         </div>
                     </div>
+                    <button aria-label="Information" class="info-toggle" id="infoToggle" title="How to use">
+                        <i class="fas fa-info-circle"></i>
+                    </button>
                 </div>
             </div>
 
@@ -230,6 +233,49 @@ pwa: true
                 <button class="btn btn-secondary" id="closeSettingsBtn">
                     <i class="fas fa-times"></i> Close
                 </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: How to use info -->
+<div aria-hidden="true" aria-labelledby="infoModalTitle" aria-modal="true" class="modal" id="infoModal" role="dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="infoModalTitle">How to Use</h2>
+            <span aria-label="Close" class="close" id="closeInfoModal" role="button">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div class="info-content">
+                <ul>
+                    <li><strong>Tap a symbol</strong> - adds it to your phrase bar.</li>
+                    <li><strong>Long‑press a symbol</strong> (≈ 0.5s) - speaks the symbol text <em>without</em> adding it.</li>
+                    <li><strong>Phrase bar</strong> - drag items to reorder; tap an item to remove it.</li>
+                    <li><strong>Speak</strong> - reads the whole phrase aloud.</li>
+                    <li><strong>Clear</strong> - empties the phrase bar.</li>
+                    <li><strong>Search</strong> - filters symbols by text.</li>
+                    <li><strong>Category dropdown</strong> - filters by category (remember to set it back to <em>All</em> later).</li>
+                </ul>
+                <h3>Settings (⚙️ gear icon)</h3>
+                <ul>
+                    <li><strong>Add Symbol</strong> / <strong>Edit Mode</strong> - build your own board.</li>
+                    <li><strong>Save</strong> - commit changes to this device.</li>
+                    <li><strong>Export</strong> / <strong>Import</strong> - back up or share symbols &amp; settings.</li>
+                    <li><strong>Manage Categories</strong> - rename or delete categories (also merges categories from symbols).</li>
+                    <li><strong>Additional Settings</strong> - theme (light/dark/high‑contrast), speech volume, voice, and board grid size (auto‑responsive or fixed 3×4/4×6/6×8).</li>
+                </ul>
+                <h3>Keyboard shortcuts (when the board is focused)</h3>
+                <ul>
+                    <li><kbd>E</kbd> - toggle edit mode.</li>
+                    <li><kbd>Ctrl+Z</kbd> - undo last phrase change.</li>
+                    <li><kbd>Enter</kbd> or <kbd>Space</kbd> - add focused symbol.</li>
+                    <li><kbd>Escape</kbd> - close settings dropdown.</li>
+                </ul>
+                <div class="form-actions">
+                    <button class="btn btn-primary" id="closeInfoBtn">
+                        <i class="fas fa-check"></i> Got it
+                    </button>
+                </div>
             </div>
         </div>
     </div>

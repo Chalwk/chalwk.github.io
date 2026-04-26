@@ -116,6 +116,28 @@
     transform: scale(1.05);
 }
 
+/* info button next to settings */
+.info-toggle {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: all 0.2s ease;
+}
+
+.info-toggle:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: scale(1.05);
+}
+
 .settings-menu {
     display: none;
     position: absolute;
@@ -665,6 +687,35 @@
     margin-bottom: 0;
 }
 
+/* info modal content */
+.info-content ul {
+    padding-left: 1.5rem;
+    margin: 0.75rem 0;
+}
+
+.info-content li {
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+}
+
+.info-content h3 {
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+    color: var(--dark);
+    border-bottom: 2px solid var(--primary);
+    padding-bottom: 0.25rem;
+}
+
+.info-content kbd {
+    background: var(--light);
+    border: 1px solid var(--gray-light);
+    border-radius: 3px;
+    padding: 0.1em 0.4em;
+    font-size: 0.9em;
+    font-family: monospace;
+}
+
 /* tiny toast notifications */
 .toast {
     position: fixed;
@@ -899,6 +950,10 @@ body.clicked-outside .settings-dropdown.active .settings-menu {
     .settings-section {
         margin-bottom: 1rem;
         padding: 0.75rem;
+    }
+
+    .info-content {
+        font-size: 0.95rem;
     }
 }
 
