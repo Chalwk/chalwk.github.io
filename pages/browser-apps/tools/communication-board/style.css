@@ -290,27 +290,26 @@
     overflow: auto;
 }
 
-/* the main symbol grid - flexible but can be fixed */
-.communication-board {
+.board {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
     gap: 1rem;
 }
 
-.communication-board.fixed-grid {
+.board.fixed-grid {
     gap: 0.75rem;
     padding: 0.75rem;
 }
 
-.communication-board.grid-3x4 {
+.board.grid-3x4 {
     grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-.communication-board.grid-4x6 {
+.board.grid-4x6 {
     grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
-.communication-board.grid-6x8 {
+.board.grid-6x8 {
     grid-template-columns: repeat(6, minmax(0, 1fr));
 }
 
@@ -368,8 +367,7 @@
     letter-spacing: 0.01em;
 }
 
-/* fixed grid mode - makes tiles more square-ish */
-.communication-board.fixed-grid .symbol {
+.board.fixed-grid .symbol {
     display: grid;
     grid-template-rows: 1fr auto;
     align-items: center;
@@ -381,8 +379,8 @@
     min-height: 0;
 }
 
-.communication-board.fixed-grid .symbol img,
-.communication-board.fixed-grid .symbol-emoji {
+.board.fixed-grid .symbol img,
+.board.fixed-grid .symbol-emoji {
     max-width: 90%;
     max-height: 100%;
     width: auto;
@@ -392,12 +390,12 @@
     align-self: center;
 }
 
-.communication-board.fixed-grid .symbol-emoji {
+.board.fixed-grid .symbol-emoji {
     font-size: clamp(1.2rem, 6vw, 2rem);
     line-height: 1;
 }
 
-.communication-board.fixed-grid .symbol span:last-child {
+.board.fixed-grid .symbol span:last-child {
     font-size: clamp(0.6rem, 2vw, 0.8rem);
     -webkit-line-clamp: 2;
     align-self: end;
@@ -712,29 +710,29 @@ body.clicked-outside .settings-dropdown.active .settings-menu {
         overflow-y: auto;
     }
 
-    .communication-board {
+    .board {
         grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
         gap: 0.75rem;
     }
 
-    .communication-board.fixed-grid {
+    .board.fixed-grid {
         gap: 0.5rem;
         padding: 0.5rem;
     }
 
-    .communication-board.grid-6x8 {
+    .board.grid-6x8 {
         grid-template-columns: repeat(6, minmax(70px, 1fr));
     }
 
-    .communication-board.grid-6x8.fixed-grid .symbol {
+    .board.grid-6x8.fixed-grid .symbol {
         padding: 0.15rem;
     }
 
-    .communication-board.grid-6x8.fixed-grid .symbol-emoji {
+    .board.grid-6x8.fixed-grid .symbol-emoji {
         font-size: clamp(1rem, 5vw, 1.5rem);
     }
 
-    .communication-board.grid-6x8.fixed-grid .symbol span:last-child {
+    .board.grid-6x8.fixed-grid .symbol span:last-child {
         font-size: clamp(0.5rem, 1.8vw, 0.7rem);
     }
 
@@ -807,19 +805,19 @@ body.clicked-outside .settings-dropdown.active .settings-menu {
 
 /* even smaller screens - squish city */
 @media (max-width: 480px) {
-    .communication-board {
+    .board {
         grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
     }
 
-    .communication-board.grid-6x8 {
+    .board.grid-6x8 {
         grid-template-columns: repeat(6, minmax(60px, 1fr));
     }
 
-    .communication-board.grid-6x8.fixed-grid .symbol-emoji {
+    .board.grid-6x8.fixed-grid .symbol-emoji {
         font-size: clamp(0.9rem, 4vw, 1.3rem);
     }
 
-    .communication-board.grid-6x8.fixed-grid .symbol span:last-child {
+    .board.grid-6x8.fixed-grid .symbol span:last-child {
         font-size: clamp(0.45rem, 1.5vw, 0.6rem);
     }
 
@@ -842,7 +840,7 @@ body.clicked-outside .settings-dropdown.active .settings-menu {
         letter-spacing: 0.02em;
     }
 
-    .communication-board.fixed-grid .symbol span:last-child {
+    .board.fixed-grid .symbol span:last-child {
         font-weight: 800;
         letter-spacing: 0.02em;
     }
@@ -922,7 +920,7 @@ body.clicked-outside .settings-dropdown.active .settings-menu {
         border-radius: 0;
     }
 
-    .communication-board {
+    .board {
         grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
         gap: 0.5rem;
     }

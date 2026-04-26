@@ -2,7 +2,7 @@
 
 (() => {
     // --- DOM stuff ---
-    const communicationBoard = document.getElementById('communicationBoard');
+    const board = document.getElementById('board');
     const phraseDisplay = document.getElementById('phraseDisplay');
     const speakBtn = document.getElementById('speakBtn');
     const clearBtn = document.getElementById('clearBtn');
@@ -477,9 +477,9 @@
         speechSynthesis.speak(ut);
     }
 
-    // --- main board rendering (symbol grid) ---
+    // --- main board rendering ---
     function renderBoard() {
-        communicationBoard.innerHTML = '';
+        board.innerHTML = '';
         const searchValue = (globalSearch?.value || "").toLowerCase();
         const filtered = symbols.filter(s => {
             const categoryOk = settings.filterCategory === 'All' || s.category === settings.filterCategory;
@@ -539,7 +539,7 @@
                 }
             });
 
-            communicationBoard.appendChild(node);
+            board.appendChild(node);
         });
 
         renderCategorySelect();
@@ -732,7 +732,7 @@
         }
     }
 
-    // --- edit symbol modal (add/edit) ---
+    // --- edit symbol modal ---
     function openEditModal(symbol = null) {
         isEditMode = true;
         document.body.classList.add('edit-mode');
@@ -823,7 +823,7 @@
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'communication-board-export.json';
+        a.download = 'hear-me-out-export.json';
         a.click();
         URL.revokeObjectURL(url);
         closeSettingsMenu();
@@ -874,7 +874,6 @@
 
     // --- grid layout ---
     function applyGridSetting() {
-        const board = document.getElementById('communicationBoard');
         if (!board) return;
         board.classList.remove('grid-3x4', 'grid-4x6', 'grid-6x8');
         if (settings.gridSize === 'auto') {
@@ -997,7 +996,7 @@
     symbolImageFile.addEventListener('change', () => {
     });
 
-    // duplicate voice change listener (already handled above, but keep as is)
+    // todo: remove this
     settingsVoiceSelect.addEventListener('change', () => {
         const selectedVoice = settingsVoiceSelect.value;
         if (selectedVoice) {
@@ -1024,7 +1023,7 @@
         }
     });
 
-    // --- init everything ---
+    // --- init ---
     async function init() {
         loadSettings();
         await loadSymbols();
