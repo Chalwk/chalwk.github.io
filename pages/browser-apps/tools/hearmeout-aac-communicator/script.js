@@ -1000,20 +1000,7 @@
     });
 
     // just to satisfy file input change (no extra logic needed)
-    symbolImageFile.addEventListener('change', () => {
-    });
-
-    // todo: remove this
-    settingsVoiceSelect.addEventListener('change', () => {
-        const selectedVoice = settingsVoiceSelect.value;
-        if (selectedVoice) {
-            localStorage.setItem(LS.voiceKey, selectedVoice);
-            showToast(`Voice set to: ${selectedVoice}`);
-        } else {
-            localStorage.removeItem(LS.voiceKey);
-            showToast('Using default voice');
-        }
-    });
+    symbolImageFile.addEventListener('change', () => {});
 
     // keyboard shortcuts: 'e' toggles edit mode, Ctrl+Z undo, Escape closes settings menu
     boardWrap.addEventListener('keydown', (ev) => {
