@@ -41,9 +41,17 @@
             newButton.addEventListener('click', () => {
                 alert(
                     'To install this app:\n\n' +
-                    '• On mobile: Tap the browser menu (⋮ or ≡), then select "Add to Home Screen" or "Install".\n' +
+                    '• On mobile: Tap ⫶ or ☰, then select "Add to Home Screen" or "Install".\n' +
                     '• On desktop: Look for an install icon in the address bar or browser menu.'
                 );
+
+                newButton.addEventListener('click', () => {
+                    alert(
+                        'Install this app:\n\n' +
+                        'Mobile: Tap ⫶ or ☰ > "Add to Home Screen" or "Install".\n' +
+                        'Desktop: Click the install icon in your address bar or browser menu.'
+                    );
+                });
             });
         } else {
             // Prompt already shown or dismissed – hide the button
