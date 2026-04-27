@@ -9,7 +9,11 @@ main {
     height: 100%;
 }
 
-.container {
+.hmo-app-root {
+    width: 100%;
+    max-width: var(--container-max, 1200px);
+    margin: 0 auto;
+    padding: 0 1.5rem;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -188,7 +192,7 @@ main {
     cursor: pointer;
 }
 
-.main-content {
+.hmo-app-root .main-content {
     display: flex;
     flex-direction: column;
     flex: 1;
