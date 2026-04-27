@@ -356,7 +356,7 @@
 }
 
 .board-nav:active {
-    transform: translateY(-50%) scale(1);
+    transform: translateY(-50%) scale(1) !important;
 }
 
 .board-nav-prev {
