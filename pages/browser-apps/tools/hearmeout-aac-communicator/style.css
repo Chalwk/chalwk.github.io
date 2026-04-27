@@ -427,8 +427,7 @@ button:active {
     line-height: 1;
     display: block;
     white-space: nowrap;
-    margin-left: auto; /* horizontally center multi-emoji */
-    margin-right: auto; /* groups inside the symbol button */
+    text-align: center; /* perfectly centers 2+ emojis */
 }
 
 .symbol span:last-child {
