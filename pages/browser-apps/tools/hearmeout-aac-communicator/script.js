@@ -23,7 +23,6 @@
     const importFile = document.getElementById('importFile');
     const toast = document.getElementById('toast');
     const boardWrap = document.getElementById('boardWrap');
-    const globalSearch = document.getElementById('globalSearch');
     const categoryIndicator = document.getElementById('categoryIndicator');
     const manageCategoriesBtn = document.getElementById('manageCategoriesBtn');
     const categoriesModal = document.getElementById('categoriesModal');
@@ -527,9 +526,8 @@
 
     function renderBoard() {
         board.innerHTML = '';
-        const searchValue = (globalSearch?.value || '').toLowerCase();
         const currentCategory = categoriesOrdered[currentCategoryIndex] || '';
-        const filtered = symbols.filter(s => s.category === currentCategory && s.text.toLowerCase().includes(searchValue));
+        const filtered = symbols.filter(s => s.category === currentCategory);
 
         filtered.forEach(symbol => {
             const node = document.createElement('div');
@@ -953,8 +951,6 @@
     infoToggle.addEventListener('click', openInfoModal);
     closeInfoModal.addEventListener('click', closeInfoModalHandler);
     closeInfoBtn.addEventListener('click', closeInfoModalHandler);
-
-    globalSearch?.addEventListener('input', () => renderBoard());
 
     boardPrevBtn.addEventListener('click', () => {
         if (!categoriesOrdered.length) return;

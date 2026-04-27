@@ -21,7 +21,8 @@ pwa: true
                 <div class="header-controls">
                     <!-- gear dropdown with all the power tools: add/edit, save, import/export, categories, extra settings -->
                     <div class="settings-dropdown">
-                        <button aria-label="Settings" class="header-icon-btn settings-toggle" id="settingsToggle" title="Settings">
+                        <button aria-label="Settings" class="header-icon-btn settings-toggle" id="settingsToggle"
+                                title="Settings">
                             <i class="fas fa-cog"></i>
                         </button>
                         <div class="settings-menu" id="settingsMenu">
@@ -57,7 +58,8 @@ pwa: true
                             </div>
                         </div>
                     </div>
-                    <button aria-label="Information" class="header-icon-btn info-toggle" id="infoToggle" title="How to use">
+                    <button aria-label="Information" class="header-icon-btn info-toggle" id="infoToggle"
+                            title="How to use">
                         <i class="fas fa-info-circle"></i>
                     </button>
                 </div>
@@ -79,18 +81,15 @@ pwa: true
                     </div>
                 </div>
 
-                <!-- search bar to filter symbols within the current category -->
-                <div class="board-toolbar">
-                    <input aria-label="Search symbols" id="globalSearch" placeholder="Search symbols..." type="text">
-                </div>
-
                 <!-- board: arrows, category indicator (clickable for quick jump), and scrollable symbol grid -->
                 <div aria-label="board" class="board-container" id="boardWrap" tabindex="0">
                     <button aria-label="Previous category" class="board-nav board-nav-prev" id="boardPrevBtn"
                             type="button">
                         <i class="fas fa-chevron-left"></i>
                     </button>
-                    <div class="category-indicator" id="categoryIndicator" aria-live="polite" role="button" tabindex="0" title="Click to jump to another category">Category</div>
+                    <div aria-live="polite" class="category-indicator" id="categoryIndicator" role="button" tabindex="0"
+                         title="Click to jump to another category">Category
+                    </div>
                     <div class="category-dropdown" id="categoryDropdown" style="display: none;">
                         <div class="category-dropdown-header">Quick Jump</div>
                         <ul class="category-list" id="categoryList"></ul>
@@ -263,7 +262,6 @@ pwa: true
                     <li><strong>Phrase bar</strong> - drag items to reorder; tap an item to remove it.</li>
                     <li><strong>Speak</strong> - reads the whole phrase aloud.</li>
                     <li><strong>Clear</strong> - empties the phrase bar.</li>
-                    <li><strong>Search</strong> - filters symbols in the current category.</li>
                     <li><strong>Left / Right arrows</strong> - switch between category pages.</li>
                 </ul>
                 <h3>Settings (⚙️ gear icon)</h3>
