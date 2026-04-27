@@ -1,5 +1,20 @@
 /* Copyright (c) 2024-2026. Jericho Crosby (Chalwk) */
 
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+main {
+    height: 100%;
+}
+
+.container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
 :root {
     --primary: #4a86e8;
     --primary-rgb: 74, 134, 232;
@@ -30,6 +45,7 @@
 
 /* main app container - looks like a card */
 .app-container {
+    flex: 1; /* ← make it fill the remaining height */
     display: flex;
     flex-direction: column;
     background: var(--light);
