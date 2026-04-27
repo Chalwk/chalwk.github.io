@@ -19,7 +19,6 @@
     const symbolTextInput = document.getElementById('symbolText');
     const symbolColorInput = document.getElementById('symbolColor');
     const symbolCategoryInput = document.getElementById('symbolCategory');
-    const categorySelect = document.getElementById('categorySelect');
     const exportBtn = document.getElementById('exportBtn');
     const importFile = document.getElementById('importFile');
     const toast = document.getElementById('toast');
@@ -59,11 +58,14 @@
     let isEditMode = false;   // whether board is in edit mode
     let currentEditingSymbol = null;
     let settings = {
-        filterCategory: 'All',
         gridSize: 'auto',
         theme: 'auto',
         volume: 0.6
     };
+    // Pagination state
+    let categoriesOrdered = [];          // ordered list of category names
+    let currentCategoryIndex = 0;        // index into categoriesOrdered
+    let isAnimating = false;             // guards against rapid category changes
 
     // localStorage keys
     const LS = {
@@ -154,6 +156,7 @@
         const mergedCategories = [...new Set([...existingCategories, ...symbolCategories])];
         saveCategories(mergedCategories);
         updateCategorySelects();
+        refreshOrderedCategories();
     }
 
     function saveSettings() {
@@ -244,6 +247,14 @@
         localStorage.setItem(LS.categoriesKey, JSON.stringify(categories));
     }
 
+    function refreshOrderedCategories() {
+        categoriesOrdered = getCategories().slice(); // copy
+        // ensure index is valid
+        if (categoriesOrdered.length > 0 && currentCategoryIndex >= categoriesOrdered.length) {
+            currentCategoryIndex = 0;
+        }
+    }
+
     function addCategory(name) {
         if (!name || name.trim() === '') {
             showToast('Please enter a category name');
@@ -256,6 +267,7 @@
         }
         categories.push(name.trim());
         saveCategories(categories);
+        refreshOrderedCategories();
         updateCategorySelects();
         showToast(`Category "${name}" added`);
         return true;
@@ -283,6 +295,7 @@
             }
         });
         saveSymbols();
+        refreshOrderedCategories();
         updateCategorySelects();
         renderBoard();
         showToast(`Category renamed to "${newName}"`);
@@ -309,10 +322,7 @@
             categories.splice(index, 1);
             saveCategories(categories);
         }
-        if (settings.filterCategory === name) {
-            settings.filterCategory = 'All';
-            saveSettings();
-        }
+        refreshOrderedCategories();
         updateCategorySelects();
         renderBoard();
         showToast(`Category "${name}" deleted`);
@@ -328,7 +338,6 @@
             option.textContent = category;
             symbolCategoryInput.appendChild(option);
         });
-        renderCategorySelect();
     }
 
     // --- UI helpers ---
@@ -492,12 +501,31 @@
         speechSynthesis.speak(ut);
     }
 
+    // --- category navigation with animation ---
+    function animateCategoryChange(newIndex) {
+        if (isAnimating || categoriesOrdered.length === 0) return;
+        if (newIndex === currentCategoryIndex) return;
+        isAnimating = true;
+        board.style.transition = 'opacity 0.3s ease';
+        board.style.opacity = '0';
+
+        setTimeout(() => {
+            currentCategoryIndex = newIndex;
+            renderBoard();
+            board.style.opacity = '1';
+            setTimeout(() => {
+                isAnimating = false;
+            }, 300);
+        }, 300);
+    }
+
     // --- main board rendering ---
     function renderBoard() {
         board.innerHTML = '';
         const searchValue = (globalSearch?.value || "").toLowerCase();
+        const currentCategory = categoriesOrdered[currentCategoryIndex] || '';
         const filtered = symbols.filter(s => {
-            const categoryOk = settings.filterCategory === 'All' || s.category === settings.filterCategory;
+            const categoryOk = s.category === currentCategory;
             const searchOk = s.text.toLowerCase().includes(searchValue);
             return categoryOk && searchOk;
         });
@@ -557,23 +585,17 @@
             board.appendChild(node);
         });
 
-        renderCategorySelect();
         applyGridSetting();
+        updateArrowVisibility();
     }
 
-    // category filter dropdown
-    function renderCategorySelect() {
-        const categories = getCategories();
-        const cats = Array.from(new Set(['All', ...categories]));
-        categorySelect.innerHTML = '<option value="All">All Categories</option>';
-        cats.forEach(cat => {
-            const option = document.createElement('option');
-            option.style.color = symbols.find(s => s.category === cat)?.color || '#4a86e8';
-            option.value = cat;
-            option.textContent = cat;
-            if (settings.filterCategory === cat) option.selected = true;
-            categorySelect.appendChild(option);
-        });
+    function updateArrowVisibility() {
+        const prevBtn = document.getElementById('boardPrevBtn');
+        const nextBtn = document.getElementById('boardNextBtn');
+        if (!prevBtn || !nextBtn) return;
+        // allow wrapping; buttons always enabled
+        prevBtn.disabled = false;
+        nextBtn.disabled = false;
     }
 
     // --- phrase strip: display, drag/drop reorder, remove on click ---
@@ -801,6 +823,7 @@
             symbols.push({id: newId, text, image, color, category});
         }
         saveSymbols();
+        refreshOrderedCategories();
         renderBoard();
         closeEditModal();
     }
@@ -810,6 +833,7 @@
         if (!confirm('Delete this symbol?')) return;
         symbols = symbols.filter(s => s.id !== currentEditingSymbol.id);
         saveSymbols();
+        refreshOrderedCategories();
         renderBoard();
         closeEditModal();
     }
@@ -866,7 +890,6 @@
                         symbols.push(copy);
                     });
                     saveSymbols();
-                    renderBoard();
                     showToast('Imported symbols');
                 }
                 if (parsed.settings) {
@@ -875,9 +898,11 @@
                 }
                 if (parsed.categories && Array.isArray(parsed.categories)) {
                     saveCategories(parsed.categories);
-                    updateCategorySelects();
                     showToast('Imported categories');
                 }
+                refreshOrderedCategories();
+                currentCategoryIndex = 0;
+                renderBoard();
             } catch (err) {
                 alert('Import failed: invalid file');
             }
@@ -1010,13 +1035,22 @@
     closeInfoBtn.addEventListener('click', closeInfoModalHandler);
 
     if (globalSearch) {
-        globalSearch.addEventListener('input', renderBoard);
+        globalSearch.addEventListener('input', () => {
+            // search filters within current category only
+            renderBoard();
+        });
     }
 
-    categorySelect.addEventListener('change', () => {
-        settings.filterCategory = categorySelect.value;
-        saveSettings();
-        renderBoard();
+    // Category navigation arrows
+    document.getElementById('boardPrevBtn').addEventListener('click', () => {
+        if (categoriesOrdered.length === 0) return;
+        const newIndex = (currentCategoryIndex - 1 + categoriesOrdered.length) % categoriesOrdered.length;
+        animateCategoryChange(newIndex);
+    });
+    document.getElementById('boardNextBtn').addEventListener('click', () => {
+        if (categoriesOrdered.length === 0) return;
+        const newIndex = (currentCategoryIndex + 1) % categoriesOrdered.length;
+        animateCategoryChange(newIndex);
     });
 
     // just to satisfy file input change (no extra logic needed)
@@ -1042,6 +1076,14 @@
     async function init() {
         loadSettings();
         await loadSymbols();
+        refreshOrderedCategories();
+        // ensure at least one category page
+        if (categoriesOrdered.length === 0) {
+            // fallback: insert default categories if none exist
+            saveCategories([...defaultCategories]);
+            refreshOrderedCategories();
+        }
+        currentCategoryIndex = 0;
         loadTheme();
         updateCategorySelects();
         renderBoard();

@@ -12,16 +12,10 @@ pwa: true
 <main>
     <div class="container">
         <div class="app-container">
-            <!-- header: title, category filter, settings cog, and info button -->
+            <!-- header: title, settings cog, and info button -->
             <div class="app-header">
                 <div class="header-left">
                     <h2>HearMeOut: AAC Communicator</h2>
-                    <div class="header-sub">
-                        <label class="visually-hidden" for="categorySelect">Filter symbols by category</label>
-                        <select id="categorySelect" title="Filter by category">
-                            <option value="All">All Categories</option>
-                        </select>
-                    </div>
                 </div>
 
                 <div class="header-controls">
@@ -85,14 +79,21 @@ pwa: true
                     </div>
                 </div>
 
-                <!-- search bar to filter symbols on the board -->
+                <!-- search bar to filter symbols within the current category -->
                 <div class="board-toolbar">
                     <input aria-label="Search symbols" id="globalSearch" placeholder="Search symbols..." type="text">
                 </div>
 
-                <!-- the actual board symbols go here -->
+                <!--board symbols go here, one category visible with arrow navigation -->
                 <div aria-label="board" class="board-container" id="boardWrap" tabindex="0">
+                    <button aria-label="Previous category" class="board-nav board-nav-prev" id="boardPrevBtn"
+                            type="button">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
                     <div class="board" id="board" role="list"></div>
+                    <button aria-label="Next category" class="board-nav board-nav-next" id="boardNextBtn" type="button">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
                 </div>
             </div>
         </div>
@@ -249,20 +250,27 @@ pwa: true
             <div class="info-content">
                 <ul>
                     <li><strong>Tap a symbol</strong> - adds it to your phrase bar.</li>
-                    <li><strong>Long‑press a symbol</strong> (≈ 0.5s) - speaks the symbol text <em>without</em> adding it.</li>
+                    <li><strong>Long‑press a symbol</strong> (≈ 0.5s) - speaks the symbol text <em>without</em> adding
+                        it.
+                    </li>
                     <li><strong>Phrase bar</strong> - drag items to reorder; tap an item to remove it.</li>
                     <li><strong>Speak</strong> - reads the whole phrase aloud.</li>
                     <li><strong>Clear</strong> - empties the phrase bar.</li>
-                    <li><strong>Search</strong> - filters symbols by text.</li>
-                    <li><strong>Category dropdown</strong> - filters by category (remember to set it back to <em>All</em> later).</li>
+                    <li><strong>Search</strong> - filters symbols in the current category.</li>
+                    <li><strong>Left / Right arrows</strong> - switch between category pages.</li>
                 </ul>
                 <h3>Settings (⚙️ gear icon)</h3>
                 <ul>
                     <li><strong>Add Symbol</strong> / <strong>Edit Mode</strong> - build your own board.</li>
                     <li><strong>Save</strong> - commit changes to this device.</li>
-                    <li><strong>Export</strong> / <strong>Import</strong> - back up or share symbols &amp; settings.</li>
-                    <li><strong>Manage Categories</strong> - rename or delete categories (also merges categories from symbols).</li>
-                    <li><strong>Additional Settings</strong> - theme (light/dark/high‑contrast), speech volume, voice, and board grid size (auto‑responsive or fixed 3×4/4×6/6×8).</li>
+                    <li><strong>Export</strong> / <strong>Import</strong> - back up or share symbols &amp; settings.
+                    </li>
+                    <li><strong>Manage Categories</strong> - rename or delete categories (also merges categories from
+                        symbols).
+                    </li>
+                    <li><strong>Additional Settings</strong> - theme (light/dark/high‑contrast), speech volume, voice,
+                        and board grid size (auto‑responsive or fixed 3×4/4×6/6×8).
+                    </li>
                 </ul>
                 <h3>Keyboard shortcuts (when the board is focused)</h3>
                 <ul>
