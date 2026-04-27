@@ -316,7 +316,7 @@
 .board-nav {
     position: absolute;
     top: 50%;
-    transform: translateY(-50%);
+    margin-top: -28px;
     z-index: 10;
     background: rgba(255, 255, 255, 0.95);
     border: 2px solid var(--gray-light);
@@ -328,7 +328,7 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+    transition: background 0.2s, box-shadow 0.2s;
     box-shadow: var(--shadow);
 }
 
@@ -352,11 +352,6 @@
 .board-nav:hover {
     background: white;
     box-shadow: var(--shadow-lg);
-    transform: translateY(-50%) scale(1);
-}
-
-.board-nav:active {
-    transform: translateY(-50%) scale(1) !important;
 }
 
 .board-nav-prev {
