@@ -1,5 +1,5 @@
 // Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
-// noinspection CommaExpressionJS
+// noinspection CommaExpressionJS,ExceptionCaughtLocallyJS
 
 (() => {
     // --- DOM stuff ---
