@@ -24,8 +24,8 @@ More;➕;#ea4335;Needs & Wants
 Finished;✔️;#ea4335;Needs & Wants
 Toilet;🚽;#ea4335;Needs & Wants
 Pain;🤕;#ea4335;Needs & Wants
-Pee;🚽💧;#ea4335;Needs & Wants
-Poop;🚽💩;#ea4335;Needs & Wants
+Pee;💦;#ea4335;Needs & Wants
+Poop;💩;#ea4335;Needs & Wants
 Tired;😴;#ea4335;Needs & Wants
 Break;⏸️;#ea4335;Needs & Wants
 I don't want;🙅;#ea4335;Needs & Wants
