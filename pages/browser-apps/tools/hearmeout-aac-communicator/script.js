@@ -25,7 +25,6 @@
     const boardWrap = document.getElementById('boardWrap');
     const globalSearch = document.getElementById('globalSearch');
     const categoryIndicator = document.getElementById('categoryIndicator');
-
     const manageCategoriesBtn = document.getElementById('manageCategoriesBtn');
     const categoriesModal = document.getElementById('categoriesModal');
     const closeCategoriesModal = document.getElementById('closeCategoriesModal');
@@ -33,7 +32,6 @@
     const categoriesList = document.getElementById('categoriesList');
     const newCategoryName = document.getElementById('newCategoryName');
     const addCategoryBtn = document.getElementById('addCategoryBtn');
-
     const settingsModal = document.getElementById('settingsModal');
     const closeSettingsModal = document.getElementById('closeSettingsModal');
     const closeSettingsBtn = document.getElementById('closeSettingsBtn');
@@ -42,33 +40,31 @@
     const settingsVolumeSelect = document.getElementById('settingsVolumeSelect');
     const settingsVoiceSelect = document.getElementById('settingsVoiceSelect');
     const settingsGridSizeSelect = document.getElementById('settingsGridSizeSelect');
-
     const settingsToggle = document.getElementById('settingsToggle');
     const settingsMenu = document.getElementById('settingsMenu');
-
-    // Info modal elements
     const infoToggle = document.getElementById('infoToggle');
     const infoModal = document.getElementById('infoModal');
     const closeInfoModal = document.getElementById('closeInfoModal');
     const closeInfoBtn = document.getElementById('closeInfoBtn');
     const categoryDropdown = document.getElementById('categoryDropdown');
     const categoryList = document.getElementById('categoryList');
+    const boardPrevBtn = document.getElementById('boardPrevBtn');
+    const boardNextBtn = document.getElementById('boardNextBtn');
 
     // --- app state ---
-    let symbols = [];         // all symbol objects
-    let currentPhrase = [];   // symbols currently in phrase strip
-    let phraseHistory = [];   // undo stack
-    let isEditMode = false;   // whether board is in edit mode
+    let symbols = [];
+    let currentPhrase = [];
+    let phraseHistory = [];
+    let isEditMode = false;
     let currentEditingSymbol = null;
     let settings = {
         gridSize: 'auto',
         theme: 'auto',
         volume: 0.6
     };
-    // Pagination state
-    let categoriesOrdered = [];          // ordered list of category names
-    let currentCategoryIndex = 0;        // index into categoriesOrdered
-    let isAnimating = false;             // guards against rapid category changes
+    let categoriesOrdered = [];
+    let currentCategoryIndex = 0;
+    let isAnimating = false;
 
     // localStorage keys
     const LS = {
@@ -96,17 +92,11 @@
         'Descriptors'
     ];
 
-    // --- persistence helpers ---
-    function saveSymbols() {
+    function saveSymbols(silent = false) {
         localStorage.setItem(LS.symbolsKey, JSON.stringify(symbols));
-        showToast('Symbols saved');
+        if (!silent) showToast('Symbols saved');
     }
 
-    function saveSymbolsSilently() {
-        localStorage.setItem(LS.symbolsKey, JSON.stringify(symbols));
-    }
-
-    // load initial symbols from symbols.txt if nothing in localStorage
     async function loadSymbolsFromFile() {
         try {
             const response = await fetch('symbols.txt');
@@ -147,14 +137,13 @@
                 symbols = JSON.parse(raw);
             } catch {
                 symbols = await loadSymbolsFromFile();
-                saveSymbolsSilently();
+                saveSymbols(true);
             }
         } else {
             symbols = await loadSymbolsFromFile();
-            saveSymbolsSilently();
+            saveSymbols(true);
         }
 
-        // merge any new categories from symbols into the category list
         const symbolCategories = [...new Set(symbols.map(s => s.category))];
         const existingCategories = getCategories();
         const mergedCategories = [...new Set([...existingCategories, ...symbolCategories])];
@@ -165,7 +154,7 @@
 
     function saveSettings() {
         localStorage.setItem(LS.settingsKey, JSON.stringify(settings));
-        saveVolume(settings.volume);
+        localStorage.setItem(LS.volumeKey, settings.volume.toString());
     }
 
     function loadSettings() {
@@ -173,7 +162,7 @@
         if (raw) {
             try {
                 settings = Object.assign(settings, JSON.parse(raw));
-            } catch {
+            } catch { /* ignore */
             }
         }
         loadVolume();
@@ -181,50 +170,26 @@
 
     function loadVolume() {
         const savedVolume = localStorage.getItem(LS.volumeKey);
-        if (savedVolume) {
-            settings.volume = parseFloat(savedVolume);
-        } else {
-            settings.volume = 0.6;
-        }
+        settings.volume = savedVolume ? parseFloat(savedVolume) : 0.6;
     }
 
-    function saveVolume(volume) {
-        settings.volume = volume;
-        localStorage.setItem(LS.volumeKey, volume.toString());
-    }
-
-    // --- theme handling ---
     function applyTheme(theme) {
         document.body.classList.remove('theme-light', 'theme-dark', 'theme-high-contrast');
-        if (theme === 'auto') {
-            document.body.classList.add('theme-auto');
-        } else {
-            document.body.classList.add(`theme-${theme}`);
-        }
+        document.body.classList.add(theme === 'auto' ? 'theme-auto' : `theme-${theme}`);
         updateThemeColor(theme);
     }
 
     function updateThemeColor(theme) {
-        const themeColorMeta = document.querySelector('meta[name="theme-color"]');
-        if (!themeColorMeta) return;
-        const colors = {
-            light: '#4a86e8',
-            dark: '#1a1a1a',
-            'high-contrast': '#000000',
-            auto: '#4a86e8'
-        };
-        themeColorMeta.content = colors[theme] || colors.auto;
+        const meta = document.querySelector('meta[name="theme-color"]');
+        if (!meta) return;
+        const colors = {light: '#4a86e8', dark: '#1a1a1a', 'high-contrast': '#000000', auto: '#4a86e8'};
+        meta.content = colors[theme] || colors.auto;
     }
 
     function loadTheme() {
         const savedTheme = localStorage.getItem(LS.themeKey);
-        if (savedTheme) {
-            settings.theme = savedTheme;
-            applyTheme(savedTheme);
-        } else {
-            settings.theme = 'auto';
-            applyTheme('auto');
-        }
+        settings.theme = savedTheme || 'auto';
+        applyTheme(settings.theme);
     }
 
     function saveTheme(theme) {
@@ -234,12 +199,11 @@
         showToast(`Theme set to ${theme}`);
     }
 
-    // --- category CRUD ---
     function getCategories() {
-        const categoriesRaw = localStorage.getItem(LS.categoriesKey);
-        if (categoriesRaw) {
+        const raw = localStorage.getItem(LS.categoriesKey);
+        if (raw) {
             try {
-                return JSON.parse(categoriesRaw);
+                return JSON.parse(raw);
             } catch {
                 return [...defaultCategories];
             }
@@ -252,12 +216,10 @@
     }
 
     function refreshOrderedCategories() {
-        categoriesOrdered = getCategories().slice(); // copy
-        // ensure index is valid
+        categoriesOrdered = [...getCategories()];
         if (categoriesOrdered.length > 0 && currentCategoryIndex >= categoriesOrdered.length) {
             currentCategoryIndex = 0;
         }
-        // Keep the category indicator in sync
         updateCategoryIndicator();
         if (categoryDropdown && categoryDropdown.style.display !== 'none') {
             populateCategoryDropdown();
@@ -271,16 +233,17 @@
     }
 
     function addCategory(name) {
-        if (!name || name.trim() === '') {
+        name = name?.trim();
+        if (!name) {
             showToast('Please enter a category name');
             return false;
         }
         const categories = getCategories();
-        if (categories.includes(name.trim())) {
+        if (categories.includes(name)) {
             showToast('Category already exists');
             return false;
         }
-        categories.push(name.trim());
+        categories.push(name);
         saveCategories(categories);
         refreshOrderedCategories();
         updateCategorySelects();
@@ -289,25 +252,21 @@
     }
 
     function renameCategory(oldName, newName) {
-        if (!newName || newName.trim() === '') {
+        newName = newName?.trim();
+        if (!newName) {
             showToast('Please enter a category name');
             return false;
         }
         const categories = getCategories();
-        if (categories.includes(newName.trim()) && newName.trim() !== oldName) {
+        if (categories.includes(newName) && newName !== oldName) {
             showToast('Category already exists');
             return false;
         }
-        const index = categories.indexOf(oldName);
-        if (index !== -1) {
-            categories[index] = newName.trim();
-            saveCategories(categories);
-        }
-        // update symbols that used the old category
-        symbols.forEach(symbol => {
-            if (symbol.category === oldName) {
-                symbol.category = newName.trim();
-            }
+        const idx = categories.indexOf(oldName);
+        if (idx !== -1) categories[idx] = newName;
+        saveCategories(categories);
+        symbols.forEach(s => {
+            if (s.category === oldName) s.category = newName;
         });
         saveSymbols();
         refreshOrderedCategories();
@@ -319,24 +278,16 @@
 
     function deleteCategory(name) {
         if (!name) return false;
-        const symbolsInCategory = symbols.filter(s => s.category === name);
-        if (symbolsInCategory.length > 0) {
-            if (!confirm(`This category contains ${symbolsInCategory.length} symbol(s). Deleting it will move these symbols to "Basic Communication". Continue?`)) {
-                return false;
-            }
-            symbols.forEach(symbol => {
-                if (symbol.category === name) {
-                    symbol.category = 'Basic Communication';
-                }
-            });
-            saveSymbols();
-        }
+        const count = symbols.filter(s => s.category === name).length;
+        if (count > 0 && !confirm(`This category contains ${count} symbol(s). Deleting it will move them to "Basic Communication". Continue?`)) return false;
+        symbols.forEach(s => {
+            if (s.category === name) s.category = 'Basic Communication';
+        });
+        if (count > 0) saveSymbols();
         const categories = getCategories();
-        const index = categories.indexOf(name);
-        if (index !== -1) {
-            categories.splice(index, 1);
-            saveCategories(categories);
-        }
+        const idx = categories.indexOf(name);
+        if (idx !== -1) categories.splice(idx, 1);
+        saveCategories(categories);
         refreshOrderedCategories();
         updateCategorySelects();
         renderBoard();
@@ -347,22 +298,17 @@
     function updateCategorySelects() {
         const categories = getCategories();
         symbolCategoryInput.innerHTML = '';
-        categories.forEach(category => {
-            const option = document.createElement('option');
-            option.value = category;
-            option.textContent = category;
-            symbolCategoryInput.appendChild(option);
+        categories.forEach(cat => {
+            const opt = document.createElement('option');
+            opt.value = cat;
+            opt.textContent = cat;
+            symbolCategoryInput.appendChild(opt);
         });
     }
 
-    // --- category quick‑jump dropdown logic ---
     function toggleCategoryDropdown() {
         if (!categoryDropdown) return;
-        if (categoryDropdown.style.display === 'none') {
-            openCategoryDropdown();
-        } else {
-            closeCategoryDropdown();
-        }
+        categoryDropdown.style.display === 'none' ? openCategoryDropdown() : closeCategoryDropdown();
     }
 
     function openCategoryDropdown() {
@@ -372,8 +318,7 @@
     }
 
     function closeCategoryDropdown() {
-        if (!categoryDropdown) return;
-        categoryDropdown.style.display = 'none';
+        if (categoryDropdown) categoryDropdown.style.display = 'none';
     }
 
     function populateCategoryDropdown() {
@@ -383,9 +328,7 @@
             const li = document.createElement('li');
             li.textContent = cat;
             li.tabIndex = 0;
-            if (idx === currentCategoryIndex) {
-                li.classList.add('active');
-            }
+            if (idx === currentCategoryIndex) li.classList.add('active');
             li.addEventListener('click', (e) => {
                 e.stopPropagation();
                 if (idx !== currentCategoryIndex) {
@@ -405,16 +348,13 @@
         });
     }
 
-    // Close the dropdown if the user clicks outside of it
     document.addEventListener('click', (e) => {
-        if (categoryDropdown && categoryDropdown.style.display !== 'none') {
-            if (!categoryDropdown.contains(e.target) && e.target !== categoryIndicator) {
-                closeCategoryDropdown();
-            }
+        if (categoryDropdown && categoryDropdown.style.display !== 'none' &&
+            !categoryDropdown.contains(e.target) && e.target !== categoryIndicator) {
+            closeCategoryDropdown();
         }
     });
 
-    // Prevent the indicator click from propagating (so it doesn't close immediately)
     categoryIndicator.addEventListener('click', (e) => {
         e.stopPropagation();
         toggleCategoryDropdown();
@@ -426,7 +366,6 @@
         }
     });
 
-    // --- UI helpers ---
     function showToast(msg, timeout = 2200) {
         if (!toast || !msg) return;
         toast.textContent = msg;
@@ -434,9 +373,7 @@
         toast.style.visibility = 'visible';
         setTimeout(() => {
             toast.style.opacity = '0';
-            setTimeout(() => {
-                toast.style.visibility = 'hidden';
-            }, 300);
+            setTimeout(() => toast.style.visibility = 'hidden', 300);
         }, timeout);
     }
 
@@ -452,12 +389,10 @@
     }
 
     function isImageSource(str) {
-        if (!str) return false;
-        if (isUrl(str)) return true;
-        return !!str.startsWith('data:image/');
+        return !!str && (isUrl(str) || str.startsWith('data:image/'));
     }
 
-    // --- settings menu toggle (click-outside aware) ---
+    // --- settings menu toggle ---
     function toggleSettingsMenu() {
         settingsMenu.parentElement.classList.toggle('active');
     }
@@ -467,12 +402,9 @@
     }
 
     document.addEventListener('click', (e) => {
-        if (!settingsToggle.contains(e.target) && !settingsMenu.contains(e.target)) {
-            closeSettingsMenu();
-        }
+        if (!settingsToggle.contains(e.target) && !settingsMenu.contains(e.target)) closeSettingsMenu();
     });
 
-    // --- info modal ---
     function openInfoModal() {
         infoModal.setAttribute('aria-hidden', 'false');
     }
@@ -481,7 +413,6 @@
         infoModal.setAttribute('aria-hidden', 'true');
     }
 
-    // --- categories modal ---
     function openCategoriesModal() {
         categoriesModal.setAttribute('aria-hidden', 'false');
         renderCategoriesList();
@@ -496,39 +427,31 @@
     function renderCategoriesList() {
         const categories = getCategories();
         categoriesList.innerHTML = '';
-        categories.forEach(category => {
-            const categoryItem = document.createElement('div');
-            categoryItem.className = 'category-item';
-            categoryItem.innerHTML = `
-                <input type="text" value="${category}" class="category-name-input">
+        categories.forEach(cat => {
+            const div = document.createElement('div');
+            div.className = 'category-item';
+            div.innerHTML = `
+                <input type="text" value="${cat}" class="category-name-input">
                 <div class="category-actions">
-                    <button class="btn btn-secondary rename-category-btn" data-category="${category}">Rename</button>
-                    <button class="btn btn-danger delete-category-btn" data-category="${category}">Delete</button>
-                </div>
-            `;
-            categoriesList.appendChild(categoryItem);
+                    <button class="btn btn-secondary rename-category-btn" data-category="${cat}">Rename</button>
+                    <button class="btn btn-danger delete-category-btn" data-category="${cat}">Delete</button>
+                </div>`;
+            categoriesList.appendChild(div);
         });
-        document.querySelectorAll('.rename-category-btn').forEach(btn => {
+        categoriesList.querySelectorAll('.rename-category-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                const oldCategory = e.target.dataset.category;
+                const oldCat = e.target.dataset.category;
                 const input = e.target.closest('.category-item').querySelector('.category-name-input');
-                const newCategory = input.value.trim();
-                if (renameCategory(oldCategory, newCategory)) {
-                    renderCategoriesList();
-                }
+                if (renameCategory(oldCat, input.value.trim())) renderCategoriesList();
             });
         });
-        document.querySelectorAll('.delete-category-btn').forEach(btn => {
+        categoriesList.querySelectorAll('.delete-category-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                const category = e.target.dataset.category;
-                if (deleteCategory(category)) {
-                    renderCategoriesList();
-                }
+                if (deleteCategory(e.target.dataset.category)) renderCategoriesList();
             });
         });
     }
 
-    // --- settings modal & voice setup ---
     function openSettingsModal() {
         settingsModal.setAttribute('aria-hidden', 'false');
         settingsThemeSelect.value = settings.theme;
@@ -542,7 +465,7 @@
         settingsModal.setAttribute('aria-hidden', 'true');
     }
 
-    function populateSettingsVoices() {
+    function populateSettingsVoices(showAvailabilityToast = false) {
         const voices = speechSynthesis.getVoices();
         settingsVoiceSelect.innerHTML = '';
         const defaultOption = document.createElement('option');
@@ -550,24 +473,25 @@
         defaultOption.textContent = 'Default Voice';
         defaultOption.selected = !localStorage.getItem(LS.voiceKey);
         settingsVoiceSelect.appendChild(defaultOption);
+
         const stored = localStorage.getItem(LS.voiceKey);
         let foundStored = false;
         voices.forEach(v => {
-            const o = document.createElement('option');
-            o.value = v.name;
-            o.textContent = `${v.name} ${v.lang ? '(' + v.lang + ')' : ''}`;
+            const opt = document.createElement('option');
+            opt.value = v.name;
+            opt.textContent = `${v.name} ${v.lang ? '(' + v.lang + ')' : ''}`;
             if (stored && stored === v.name) {
-                o.selected = true;
+                opt.selected = true;
                 foundStored = true;
             }
-            settingsVoiceSelect.appendChild(o);
+            settingsVoiceSelect.appendChild(opt);
         });
         if (!foundStored && voices.length > 0 && stored) {
             localStorage.removeItem(LS.voiceKey);
+            if (showAvailabilityToast) showToast('Previous voice not available, using default');
         }
     }
 
-    // long-press to preview symbol speech
     function previewSpeak(symbol) {
         const text = symbol.text;
         if (!text || !('speechSynthesis' in window)) return;
@@ -580,21 +504,16 @@
             if (voice) ut.voice = voice;
         }
         ut.onerror = (event) => {
-            if (event.error !== 'interrupted') {
-                console.error('Speech synthesis error:', event);
-            }
+            if (event.error !== 'interrupted') console.error('Speech synthesis error:', event);
         };
         speechSynthesis.speak(ut);
     }
 
-    // --- category navigation with animation ---
     function animateCategoryChange(newIndex) {
-        if (isAnimating || categoriesOrdered.length === 0) return;
-        if (newIndex === currentCategoryIndex) return;
+        if (isAnimating || categoriesOrdered.length === 0 || newIndex === currentCategoryIndex) return;
         isAnimating = true;
         board.style.transition = 'opacity 0.15s ease';
         board.style.opacity = '0';
-
         setTimeout(() => {
             currentCategoryIndex = newIndex;
             updateCategoryIndicator();
@@ -606,16 +525,11 @@
         }, 150);
     }
 
-    // --- main board rendering ---
     function renderBoard() {
         board.innerHTML = '';
-        const searchValue = (globalSearch?.value || "").toLowerCase();
+        const searchValue = (globalSearch?.value || '').toLowerCase();
         const currentCategory = categoriesOrdered[currentCategoryIndex] || '';
-        const filtered = symbols.filter(s => {
-            const categoryOk = s.category === currentCategory;
-            const searchOk = s.text.toLowerCase().includes(searchValue);
-            return categoryOk && searchOk;
-        });
+        const filtered = symbols.filter(s => s.category === currentCategory && s.text.toLowerCase().includes(searchValue));
 
         filtered.forEach(symbol => {
             const node = document.createElement('div');
@@ -625,7 +539,6 @@
             node.style.backgroundColor = symbol.color || '#e8f0fe';
             if (isEditMode) node.classList.add('editing');
 
-            // display image or fallback emoji
             if (isImageSource(symbol.image)) {
                 node.innerHTML = `<img src="${symbol.image}" alt="${symbol.text}"><span>${symbol.text}</span>`;
             } else {
@@ -637,18 +550,14 @@
                 else addToPhrase(symbol);
             });
 
-            // long-press preview (pointer events)
             let pressTimer = null;
-
-            function startPressTimer() {
-                if (isEditMode) return;
-                pressTimer = setTimeout(() => previewSpeak(symbol), 550);
-            }
-
-            function clearPressTimer() {
+            const startPressTimer = () => {
+                if (!isEditMode) pressTimer = setTimeout(() => previewSpeak(symbol), 550);
+            };
+            const clearPressTimer = () => {
                 clearTimeout(pressTimer);
                 pressTimer = null;
-            }
+            };
 
             node.addEventListener('pointerdown', (e) => {
                 e.preventDefault();
@@ -661,12 +570,9 @@
             node.addEventListener('keydown', (ev) => {
                 if (ev.key === 'Enter' || ev.key === ' ') {
                     ev.preventDefault();
-                    if (isEditMode) openEditModal(symbol);
-                    else addToPhrase(symbol);
+                    isEditMode ? openEditModal(symbol) : addToPhrase(symbol);
                 }
-                if (ev.key === 'e') {
-                    if (isEditMode) openEditModal(symbol);
-                }
+                if (ev.key === 'e' && isEditMode) openEditModal(symbol);
             });
 
             board.appendChild(node);
@@ -677,19 +583,13 @@
     }
 
     function updateArrowVisibility() {
-        const prevBtn = document.getElementById('boardPrevBtn');
-        const nextBtn = document.getElementById('boardNextBtn');
-        if (!prevBtn || !nextBtn) return;
-        // allow wrapping; buttons always enabled
-        prevBtn.disabled = false;
-        nextBtn.disabled = false;
+        if (boardPrevBtn) boardPrevBtn.disabled = false;
+        if (boardNextBtn) boardNextBtn.disabled = false;
     }
 
-    // --- phrase strip: display, drag/drop reorder, remove on click ---
     function updatePhraseDisplay() {
         phraseDisplay.innerHTML = '';
         phraseDisplay.classList.remove('drag-active');
-
         if (currentPhrase.length === 0) {
             const el = document.createElement('span');
             el.className = 'empty-message';
@@ -703,7 +603,7 @@
             item.className = 'phrase-item';
             item.setAttribute('draggable', 'true');
             item.setAttribute('role', 'listitem');
-            item.dataset.index = index.toString();
+            item.dataset.index = index;
             item.title = 'Click to remove. Drag to reorder.';
 
             if (isImageSource(symbol.image)) {
@@ -712,22 +612,18 @@
                 item.innerHTML = `<span style="font-size:1.2rem; margin-right:6px;">${symbol.image}</span><span>${symbol.text}</span>`;
             }
 
-            // click to remove
             item.addEventListener('click', () => {
                 backupPhrase();
                 currentPhrase.splice(index, 1);
                 updatePhraseDisplay();
             });
 
-            // drag start
             item.addEventListener('dragstart', (e) => {
                 e.dataTransfer.setData('text/plain', index.toString());
                 e.dataTransfer.effectAllowed = 'move';
                 item.classList.add('dragging');
                 phraseDisplay.classList.add('drag-active');
-                setTimeout(() => {
-                    item.style.opacity = '0.4';
-                }, 0);
+                setTimeout(() => item.style.opacity = '0.4', 0);
             });
 
             item.addEventListener('dragend', () => {
@@ -741,31 +637,23 @@
             item.addEventListener('dragover', (e) => {
                 e.preventDefault();
                 e.dataTransfer.dropEffect = 'move';
-                document.querySelectorAll('.phrase-item').forEach(el => {
-                    el.classList.remove('drag-over');
-                });
-                const afterElement = getDragAfterElement(phraseDisplay, e.clientX);
-                if (afterElement) {
-                    afterElement.classList.add('drag-over');
-                }
+                document.querySelectorAll('.phrase-item').forEach(el => el.classList.remove('drag-over'));
+                const after = getDragAfterElement(phraseDisplay, e.clientX);
+                if (after) after.classList.add('drag-over');
             });
 
             item.addEventListener('dragenter', (e) => e.preventDefault());
             item.addEventListener('dragleave', (e) => {
-                if (!item.contains(e.relatedTarget)) {
-                    item.classList.remove('drag-over');
-                }
+                if (!item.contains(e.relatedTarget)) item.classList.remove('drag-over');
             });
 
             item.addEventListener('drop', (e) => {
                 e.preventDefault();
-                const fromIndex = parseInt(e.dataTransfer.getData('text/plain'), 10);
-                const toIndex = index;
-                if (!Number.isFinite(fromIndex)) return;
-                if (fromIndex === toIndex) return;
+                const fromIdx = parseInt(e.dataTransfer.getData('text/plain'), 10);
+                if (!Number.isFinite(fromIdx) || fromIdx === index) return;
                 backupPhrase();
-                const [moved] = currentPhrase.splice(fromIndex, 1);
-                currentPhrase.splice(toIndex, 0, moved);
+                const [moved] = currentPhrase.splice(fromIdx, 1);
+                currentPhrase.splice(index, 0, moved);
                 updatePhraseDisplay();
             });
 
@@ -773,34 +661,27 @@
         });
     }
 
-    // helper for drag reorder: find closest element based on mouse X
     function getDragAfterElement(container, x) {
         const draggableElements = [...container.querySelectorAll('.phrase-item:not(.dragging)')];
         return draggableElements.reduce((closest, child) => {
             const box = child.getBoundingClientRect();
             const offset = x - box.left - box.width / 2;
-            if (offset < 0 && offset > closest.offset) {
-                return {offset: offset, element: child};
-            } else {
-                return closest;
-            }
+            return offset < 0 && offset > closest.offset ? {offset, element: child} : closest;
         }, {offset: Number.NEGATIVE_INFINITY}).element;
     }
 
-    // --- undo support ---
     function backupPhrase() {
         phraseHistory.push(JSON.stringify(currentPhrase));
         if (phraseHistory.length > 30) phraseHistory.shift();
     }
 
     function undo() {
-        if (phraseHistory.length === 0) {
+        if (!phraseHistory.length) {
             showToast('Nothing to undo');
             return;
         }
-        const raw = phraseHistory.pop();
         try {
-            currentPhrase = JSON.parse(raw);
+            currentPhrase = JSON.parse(phraseHistory.pop());
             updatePhraseDisplay();
             showToast('Undo');
         } catch {
@@ -816,51 +697,49 @@
     }
 
     function clearPhrase() {
-        if (currentPhrase.length === 0) return;
+        if (!currentPhrase.length) return;
         backupPhrase();
         currentPhrase = [];
         updatePhraseDisplay();
     }
 
-    // speak the whole phrase using TTS
     function speakPhrase() {
-        if (currentPhrase.length === 0) return;
+        if (!currentPhrase.length) return;
         const phraseText = currentPhrase.map(s => s.text).join(' ');
-        if ('speechSynthesis' in window) {
-            speechSynthesis.cancel();
-            const utter = new SpeechSynthesisUtterance(phraseText);
-            utter.rate = 0.95;
-            utter.pitch = 1;
-            utter.volume = settings.volume;
-            const chosen = localStorage.getItem(LS.voiceKey);
-            if (chosen) {
-                const voices = speechSynthesis.getVoices();
-                const voice = voices.find(x => x.name === chosen);
-                if (voice) utter.voice = voice;
-            }
-            utter.onerror = (event) => {
-                if (event.error === 'interrupted') return;
-                console.error('Speech synthesis error:', event);
-                showToast('Speech error, trying without voice selection');
-                if (chosen) {
-                    localStorage.removeItem(LS.voiceKey);
-                    const fallbackUtter = new SpeechSynthesisUtterance(phraseText);
-                    fallbackUtter.rate = 0.95;
-                    fallbackUtter.volume = settings.volume;
-                    speechSynthesis.speak(fallbackUtter);
-                }
-            };
-            speechSynthesis.speak(utter);
-        } else {
+        if (!('speechSynthesis' in window)) {
             alert(phraseText);
+            return;
         }
+        speechSynthesis.cancel();
+        const ut = new SpeechSynthesisUtterance(phraseText);
+        ut.rate = 0.95;
+        ut.pitch = 1;
+        ut.volume = settings.volume;
+        const chosen = localStorage.getItem(LS.voiceKey);
+        if (chosen) {
+            const voice = speechSynthesis.getVoices().find(v => v.name === chosen);
+            if (voice) ut.voice = voice;
+        }
+        ut.onerror = (event) => {
+            if (event.error === 'interrupted') return;
+            console.error('Speech synthesis error:', event);
+            showToast('Speech error, trying without voice selection');
+            if (chosen) {
+                localStorage.removeItem(LS.voiceKey);
+                const fallback = new SpeechSynthesisUtterance(phraseText);
+                fallback.rate = 0.95;
+                fallback.volume = settings.volume;
+                speechSynthesis.speak(fallback);
+            }
+        };
+        speechSynthesis.speak(ut);
     }
 
     // --- edit symbol modal ---
     function openEditModal(symbol = null) {
         isEditMode = true;
         document.body.classList.add('edit-mode');
-        if (symbol && symbol.id) {
+        if (symbol?.id) {
             currentEditingSymbol = symbol;
             symbolTextInput.value = symbol.text || '';
             symbolImageInput.value = isUrl(symbol.image) ? symbol.image : (symbol.image || '');
@@ -893,20 +772,14 @@
             alert('Please enter text');
             return;
         }
-
-        // if user uploaded a file, convert to dataURL
-        if (symbolImageFile.files && symbolImageFile.files[0]) {
-            image = await fileToDataURL(symbolImageFile.files[0]);
-        }
+        if (symbolImageFile.files?.[0]) image = await fileToDataURL(symbolImageFile.files[0]);
         if (!image) image = text.charAt(0) || '?';
 
-        if (currentEditingSymbol && currentEditingSymbol.id) {
+        if (currentEditingSymbol?.id) {
             const idx = symbols.findIndex(s => s.id === currentEditingSymbol.id);
-            if (idx !== -1) {
-                symbols[idx] = Object.assign({}, symbols[idx], {text, image, color, category});
-            }
+            if (idx !== -1) symbols[idx] = {...symbols[idx], text, image, color, category};
         } else {
-            const newId = symbols.length > 0 ? Math.max(...symbols.map(s => s.id)) + 1 : 1;
+            const newId = symbols.length ? Math.max(...symbols.map(s => s.id)) + 1 : 1;
             symbols.push({id: newId, text, image, color, category});
         }
         saveSymbols();
@@ -916,7 +789,7 @@
     }
 
     function deleteSymbol() {
-        if (!currentEditingSymbol || !currentEditingSymbol.id) return;
+        if (!currentEditingSymbol?.id) return;
         if (!confirm('Delete this symbol?')) return;
         symbols = symbols.filter(s => s.id !== currentEditingSymbol.id);
         saveSymbols();
@@ -930,21 +803,16 @@
     }
 
     function fileToDataURL(file) {
-        return new Promise((res, rej) => {
-            const r = new FileReader();
-            r.onload = () => res(r.result);
-            r.onerror = () => rej(new Error('File read error'));
-            r.readAsDataURL(file);
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = () => reject(new Error('File read error'));
+            reader.readAsDataURL(file);
         });
     }
 
-    // --- export / import ---
     function exportJSON() {
-        const payload = {
-            symbols,
-            settings,
-            categories: getCategories()
-        };
+        const payload = {symbols, settings, categories: getCategories()};
         const blob = new Blob([JSON.stringify(payload, null, 2)], {type: 'application/json'});
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -968,19 +836,17 @@
                 const parsed = JSON.parse(reader.result);
                 if (parsed.symbols && Array.isArray(parsed.symbols)) {
                     const existingIds = new Set(symbols.map(s => s.id));
-                    let nextId = symbols.length > 0 ? Math.max(...symbols.map(s => s.id)) + 1 : 1;
+                    let nextId = symbols.length ? Math.max(...symbols.map(s => s.id)) + 1 : 1;
                     parsed.symbols.forEach(s => {
-                        const copy = Object.assign({}, s);
-                        if (!copy.id || existingIds.has(copy.id)) {
-                            copy.id = nextId++;
-                        }
+                        const copy = {...s};
+                        if (!copy.id || existingIds.has(copy.id)) copy.id = nextId++;
                         symbols.push(copy);
                     });
                     saveSymbols();
                     showToast('Imported symbols');
                 }
                 if (parsed.settings) {
-                    settings = Object.assign({}, settings, parsed.settings);
+                    settings = {...settings, ...parsed.settings};
                     saveSettings();
                 }
                 if (parsed.categories && Array.isArray(parsed.categories)) {
@@ -991,7 +857,7 @@
                 currentCategoryIndex = 0;
                 updateCategoryIndicator();
                 renderBoard();
-            } catch (err) {
+            } catch {
                 alert('Import failed: invalid file');
             }
         };
@@ -1000,7 +866,6 @@
         closeSettingsMenu();
     }
 
-    // --- grid layout ---
     function applyGridSetting() {
         if (!board) return;
         board.classList.remove('grid-3x4', 'grid-4x6', 'grid-6x8');
@@ -1008,35 +873,8 @@
             board.classList.remove('fixed-grid');
             board.style.gridTemplateColumns = '';
         } else {
-            board.classList.add('fixed-grid');
-            board.classList.add(`grid-${settings.gridSize}`);
+            board.classList.add('fixed-grid', `grid-${settings.gridSize}`);
             board.style.gridTemplateColumns = '';
-        }
-    }
-
-    function populateVoices() {
-        const voices = speechSynthesis.getVoices();
-        settingsVoiceSelect.innerHTML = '';
-        const defaultOption = document.createElement('option');
-        defaultOption.value = '';
-        defaultOption.textContent = 'Default Voice';
-        defaultOption.selected = !localStorage.getItem(LS.voiceKey);
-        settingsVoiceSelect.appendChild(defaultOption);
-        const stored = localStorage.getItem(LS.voiceKey);
-        let foundStored = false;
-        voices.forEach(v => {
-            const o = document.createElement('option');
-            o.value = v.name;
-            o.textContent = `${v.name} ${v.lang ? '(' + v.lang + ')' : ''}`;
-            if (stored && stored === v.name) {
-                o.selected = true;
-                foundStored = true;
-            }
-            settingsVoiceSelect.appendChild(o);
-        });
-        if (!foundStored && voices.length > 0 && stored) {
-            localStorage.removeItem(LS.voiceKey);
-            showToast('Previous voice not available, using default');
         }
     }
 
@@ -1048,14 +886,11 @@
         closeSettingsMenu();
     }
 
-    // --- Prevent browser default long-press context menu and selection ---
     boardWrap.addEventListener('contextmenu', (e) => e.preventDefault());
     boardWrap.addEventListener('selectstart', (e) => e.preventDefault());
-
     phraseDisplay.addEventListener('contextmenu', (e) => e.preventDefault());
     phraseDisplay.addEventListener('selectstart', (e) => e.preventDefault());
 
-    // --- event listeners ---
     speakBtn.addEventListener('click', speakPhrase);
     clearBtn.addEventListener('click', clearPhrase);
     editModeBtn.addEventListener('click', toggleEditMode);
@@ -1091,9 +926,7 @@
     closeSettingsModal.addEventListener('click', closeSettingsModalHandler);
     closeSettingsBtn.addEventListener('click', closeSettingsModalHandler);
 
-    settingsThemeSelect.addEventListener('change', () => {
-        saveTheme(settingsThemeSelect.value);
-    });
+    settingsThemeSelect.addEventListener('change', () => saveTheme(settingsThemeSelect.value));
     settingsVolumeSelect.addEventListener('change', () => {
         settings.volume = parseFloat(settingsVolumeSelect.value);
         saveSettings();
@@ -1105,10 +938,10 @@
         applyGridSetting();
     });
     settingsVoiceSelect.addEventListener('change', () => {
-        const selectedVoice = settingsVoiceSelect.value;
-        if (selectedVoice) {
-            localStorage.setItem(LS.voiceKey, selectedVoice);
-            showToast(`Voice set to: ${selectedVoice}`);
+        const selected = settingsVoiceSelect.value;
+        if (selected) {
+            localStorage.setItem(LS.voiceKey, selected);
+            showToast(`Voice set to: ${selected}`);
         } else {
             localStorage.removeItem(LS.voiceKey);
             showToast('Using default voice');
@@ -1117,37 +950,28 @@
 
     settingsToggle.addEventListener('click', toggleSettingsMenu);
 
-    // Info modal listeners
     infoToggle.addEventListener('click', openInfoModal);
     closeInfoModal.addEventListener('click', closeInfoModalHandler);
     closeInfoBtn.addEventListener('click', closeInfoModalHandler);
 
-    if (globalSearch) {
-        globalSearch.addEventListener('input', () => {
-            // search filters within current category only
-            renderBoard();
-        });
-    }
+    globalSearch?.addEventListener('input', () => renderBoard());
 
-    // Category navigation arrows
-    document.getElementById('boardPrevBtn').addEventListener('click', () => {
-        if (categoriesOrdered.length === 0) return;
-        const newIndex = (currentCategoryIndex - 1 + categoriesOrdered.length) % categoriesOrdered.length;
+    boardPrevBtn.addEventListener('click', () => {
+        if (!categoriesOrdered.length) return;
+        const newIdx = (currentCategoryIndex - 1 + categoriesOrdered.length) % categoriesOrdered.length;
         closeCategoryDropdown();
-        animateCategoryChange(newIndex);
+        animateCategoryChange(newIdx);
     });
-    document.getElementById('boardNextBtn').addEventListener('click', () => {
-        if (categoriesOrdered.length === 0) return;
-        const newIndex = (currentCategoryIndex + 1) % categoriesOrdered.length;
+    boardNextBtn.addEventListener('click', () => {
+        if (!categoriesOrdered.length) return;
+        const newIdx = (currentCategoryIndex + 1) % categoriesOrdered.length;
         closeCategoryDropdown();
-        animateCategoryChange(newIndex);
+        animateCategoryChange(newIdx);
     });
 
-    // just to satisfy file input change (no extra logic needed)
     symbolImageFile.addEventListener('change', () => {
     });
 
-    // keyboard shortcuts: 'e' toggles edit mode, Ctrl+Z undo, Escape closes settings menu
     boardWrap.addEventListener('keydown', (ev) => {
         if (ev.key === 'e') {
             toggleEditMode();
@@ -1163,14 +987,11 @@
         }
     });
 
-    // --- init ---
     async function init() {
         loadSettings();
         await loadSymbols();
         refreshOrderedCategories();
-        // ensure at least one category page
-        if (categoriesOrdered.length === 0) {
-            // fallback: insert default categories if none exist
+        if (!categoriesOrdered.length) {
             saveCategories([...defaultCategories]);
             refreshOrderedCategories();
         }
@@ -1185,14 +1006,12 @@
         function loadVoices() {
             const voices = speechSynthesis.getVoices();
             if (voices.length > 0) {
-                populateVoices();
-                populateSettingsVoices();
+                populateSettingsVoices(true);
             } else {
                 setTimeout(() => {
                     const retryVoices = speechSynthesis.getVoices();
                     if (retryVoices.length > 0) {
-                        populateVoices();
-                        populateSettingsVoices();
+                        populateSettingsVoices(true);
                     } else {
                         console.log('No voices available');
                         showToast('No TTS voices detected');
