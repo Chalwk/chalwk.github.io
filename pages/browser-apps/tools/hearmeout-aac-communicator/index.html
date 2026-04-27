@@ -21,7 +21,7 @@ pwa: true
                 <div class="header-controls">
                     <!-- gear dropdown with all the power tools: add/edit, save, import/export, categories, extra settings -->
                     <div class="settings-dropdown">
-                        <button aria-label="Settings" class="settings-toggle" id="settingsToggle" title="Settings">
+                        <button aria-label="Settings" class="header-icon-btn settings-toggle" id="settingsToggle" title="Settings">
                             <i class="fas fa-cog"></i>
                         </button>
                         <div class="settings-menu" id="settingsMenu">
@@ -57,7 +57,7 @@ pwa: true
                             </div>
                         </div>
                     </div>
-                    <button aria-label="Information" class="info-toggle" id="infoToggle" title="How to use">
+                    <button aria-label="Information" class="header-icon-btn info-toggle" id="infoToggle" title="How to use">
                         <i class="fas fa-info-circle"></i>
                     </button>
                 </div>
@@ -84,14 +84,16 @@ pwa: true
                     <input aria-label="Search symbols" id="globalSearch" placeholder="Search symbols..." type="text">
                 </div>
 
-                <!--board symbols go here, one category visible with arrow navigation -->
+                <!-- board: arrows, category indicator, and scrollable symbol grid -->
                 <div aria-label="board" class="board-container" id="boardWrap" tabindex="0">
                     <button aria-label="Previous category" class="board-nav board-nav-prev" id="boardPrevBtn"
                             type="button">
                         <i class="fas fa-chevron-left"></i>
                     </button>
                     <div class="category-indicator" id="categoryIndicator" aria-live="polite">Category</div>
-                    <div class="board" id="board" role="list"></div>
+                    <div class="board-scroll-wrapper">
+                        <div class="board" id="board" role="list"></div>
+                    </div>
                     <button aria-label="Next category" class="board-nav board-nav-next" id="boardNextBtn" type="button">
                         <i class="fas fa-chevron-right"></i>
                     </button>

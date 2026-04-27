@@ -516,7 +516,7 @@
         if (isAnimating || categoriesOrdered.length === 0) return;
         if (newIndex === currentCategoryIndex) return;
         isAnimating = true;
-        board.style.transition = 'opacity 0.3s ease';
+        board.style.transition = 'opacity 0.15s ease';
         board.style.opacity = '0';
 
         setTimeout(() => {
@@ -526,8 +526,8 @@
             board.style.opacity = '1';
             setTimeout(() => {
                 isAnimating = false;
-            }, 300);
-        }, 300);
+            }, 150);
+        }, 150);
     }
 
     // --- main board rendering ---
