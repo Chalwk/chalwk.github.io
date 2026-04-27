@@ -126,7 +126,6 @@ Today;📅;#ff9800;Time & Schedule
 Tomorrow;➡️;#ff9800;Time & Schedule
 Yesterday;⬅️;#ff9800;Time & Schedule
 Soon;🔜;#ff9800;Time & Schedule
-First/Then;1️⃣/2️⃣;#ff9800;Time & Schedule
 Change;🔄;#ff9800;Time & Schedule
 Morning;🌅;#ff9800;Time & Schedule
 Afternoon;🌞;#ff9800;Time & Schedule
