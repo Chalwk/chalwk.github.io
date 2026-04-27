@@ -89,7 +89,8 @@
         'Places',
         'Questions',
         'Sensory Needs',
-        'Time & Schedule'
+        'Time & Schedule',
+        'Descriptors'
     ];
 
     // --- persistence helpers ---

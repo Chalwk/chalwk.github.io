@@ -14,26 +14,29 @@ Love;❤️;#4a86e8;Basic Communication
 Good morning;🌅;#4a86e8;Basic Communication
 Good night;🌙;#4a86e8;Basic Communication
 Welcome;👐;#4a86e8;Basic Communication
+Again;🔁;#4a86e8;Basic Communication
+I don't know;🤷;#4a86e8;Basic Communication
 Help;🆘;#ea4335;Needs & Wants
 I want;👉;#ea4335;Needs & Wants
 I need;👐;#ea4335;Needs & Wants
 Stop;✋;#ea4335;Needs & Wants
 More;➕;#ea4335;Needs & Wants
 Finished;✔️;#ea4335;Needs & Wants
+Toilet;🚽;#ea4335;Needs & Wants
 Pain;🤕;#ea4335;Needs & Wants
+Pee;🚽💧;#ea4335;Needs & Wants
+Poop;🚽💩;#ea4335;Needs & Wants
 Tired;😴;#ea4335;Needs & Wants
 Break;⏸️;#ea4335;Needs & Wants
 I don't want;🙅;#ea4335;Needs & Wants
-I don't know;🤷;#ea4335;Needs & Wants
 Space;🚶;#ea4335;Needs & Wants
 Alone;🚪;#ea4335;Needs & Wants
 Too much;🔥;#ea4335;Needs & Wants
-Too loud;📢;#ea4335;Needs & Wants
-Too bright;💡;#ea4335;Needs & Wants
 Hungry;🍽️;#ea4335;Needs & Wants
 Thirsty;💧;#ea4335;Needs & Wants
 Cold;🥶;#ea4335;Needs & Wants
 Hot;🥵;#ea4335;Needs & Wants
+Something else;🤔;#ea4335;Needs & Wants
 Happy;😄;#fbbc04;Feelings & Emotions
 Sad;😢;#fbbc04;Feelings & Emotions
 Angry;😡;#fbbc04;Feelings & Emotions
@@ -52,6 +55,11 @@ Loved;💝;#fbbc04;Feelings & Emotions
 Brave;🦁;#fbbc04;Feelings & Emotions
 Bored;🥱;#fbbc04;Feelings & Emotions
 Curious;🤔;#fbbc04;Feelings & Emotions
+Embarrassed;😳;#fbbc04;Feelings & Emotions
+Disappointed;😞;#fbbc04;Feelings & Emotions
+Grateful;🙏;#fbbc04;Feelings & Emotions
+Hopeful;🤞;#fbbc04;Feelings & Emotions
+Shy;😰;#fbbc04;Feelings & Emotions
 Headphones;🎧;#9c27b0;Sensory Needs
 Quiet;🔇;#9c27b0;Sensory Needs
 Dark;🌙;#9c27b0;Sensory Needs
@@ -65,6 +73,11 @@ Soft;☁️;#9c27b0;Sensory Needs
 Loud;🔊;#9c27b0;Sensory Needs
 Bright;💡;#9c27b0;Sensory Needs
 Pressure;⏬;#9c27b0;Sensory Needs
+Chew;🦷;#9c27b0;Sensory Needs
+Swing;🎠;#9c27b0;Sensory Needs
+Too loud;📢;#9c27b0;Sensory Needs
+Too bright;💡;#9c27b0;Sensory Needs
+Texture;👆;#9c27b0;Sensory Needs
 Me;🙂;#00bcd4;People & Pronouns
 You;👤;#00bcd4;People & Pronouns
 Friend;🧑‍🤝‍🧑;#00bcd4;People & Pronouns
@@ -79,6 +92,12 @@ They;👥;#00bcd4;People & Pronouns
 He;👨;#00bcd4;People & Pronouns
 She;👩;#00bcd4;People & Pronouns
 We;👥;#00bcd4;People & Pronouns
+Brother;👦;#00bcd4;People & Pronouns
+Sister;👧;#00bcd4;People & Pronouns
+Grandma;👵;#00bcd4;People & Pronouns
+Grandpa;👴;#00bcd4;People & Pronouns
+Baby;👶;#00bcd4;People & Pronouns
+Pet;🐶;#00bcd4;People & Pronouns
 Eat;🍽️;#9c27b0;Common Actions
 Drink;🥤;#9c27b0;Common Actions
 Play;🎮;#9c27b0;Common Actions
@@ -98,9 +117,13 @@ Run;🏃;#9c27b0;Common Actions
 Jump;🦘;#9c27b0;Common Actions
 Sit;🪑;#9c27b0;Common Actions
 Stand;🧍;#9c27b0;Common Actions
+Open;📭;#9c27b0;Common Actions
+Close;🔒;#9c27b0;Common Actions
+Wash hands;🧼;#9c27b0;Common Actions
+Brush teeth;🦷;#9c27b0;Common Actions
 Home;🏠;#34a853;Places
 School;🏫;#34a853;Places
-Bathroom;🚽;#34a853;Places
+Bathroom;🚻;#34a853;Places
 Outside;🌳;#34a853;Places
 Shop;🛒;#34a853;Places
 Car;🚗;#34a853;Places
@@ -110,6 +133,11 @@ Quiet room;🚪;#34a853;Places
 Bedroom;🛏️;#34a853;Places
 Hospital;🏥;#34a853;Places
 Restaurant;🍽️;#34a853;Places
+Kitchen;🍳;#34a853;Places
+Playground;⚽;#34a853;Places
+Beach;🏖️;#34a853;Places
+Library;📚;#34a853;Places
+Bus stop;🚏;#34a853;Places
 What?;❓;#9b59b6;Questions
 Where?;🗺️;#9b59b6;Questions
 When?;🕒;#9b59b6;Questions
@@ -120,6 +148,9 @@ How long?;⏱️;#9b59b6;Questions
 What next?;➡️;#9b59b6;Questions
 How are you?;🙂;#9b59b6;Questions
 What is that?;❓;#9b59b6;Questions
+Which?;❔;#9b59b6;Questions
+How many?;🔢;#9b59b6;Questions
+Can I?;🤨;#9b59b6;Questions
 Now;⏰;#ff9800;Time & Schedule
 Later;⏲️;#ff9800;Time & Schedule
 Today;📅;#ff9800;Time & Schedule
@@ -131,16 +162,26 @@ Morning;🌅;#ff9800;Time & Schedule
 Afternoon;🌞;#ff9800;Time & Schedule
 Evening;🌆;#ff9800;Time & Schedule
 Night;🌙;#ff9800;Time & Schedule
+Next;➡️;#ff9800;Time & Schedule
+Last;🔚;#ff9800;Time & Schedule
+Week;🗓️;#ff9800;Time & Schedule
+Month;📅;#ff9800;Time & Schedule
 Water;💧;#e74c3c;Food & Drink
 Juice;🧃;#e74c3c;Food & Drink
 Snack;🍎;#e74c3c;Food & Drink
 Lunch;🥪;#e74c3c;Food & Drink
 Dinner;🍽️;#e74c3c;Food & Drink
 Safe food;⭐;#e74c3c;Food & Drink
-Texture;👆;#e74c3c;Food & Drink
 Breakfast;🍳;#e74c3c;Food & Drink
 Fruit;🍎;#e74c3c;Food & Drink
 Vegetable;🥦;#e74c3c;Food & Drink
+Milk;🥛;#e74c3c;Food & Drink
+Cereal;🥣;#e74c3c;Food & Drink
+Pizza;🍕;#e74c3c;Food & Drink
+Chicken;🍗;#e74c3c;Food & Drink
+Pasta;🍝;#e74c3c;Food & Drink
+Candy;🍬;#e74c3c;Food & Drink
+Ice cream;🍦;#e74c3c;Food & Drink
 Game;🎲;#2ecc71;Activities & Play
 Music;🎵;#2ecc71;Activities & Play
 Draw;🎨;#2ecc71;Activities & Play
@@ -150,6 +191,11 @@ Routine;📋;#2ecc71;Activities & Play
 Swim;🏊;#2ecc71;Activities & Play
 Dance;💃;#2ecc71;Activities & Play
 Sing;🎤;#2ecc71;Activities & Play
+Bubbles;🧼;#2ecc71;Activities & Play
+Ball;⚽;#2ecc71;Activities & Play
+Puzzle;🧩;#2ecc71;Activities & Play
+Bike;🚲;#2ecc71;Activities & Play
+iPad;📱;#2ecc71;Activities & Play
 Headache;🤕;#8e44ad;Body & Health
 Stomach ache;🤢;#8e44ad;Body & Health
 Medicine;💊;#8e44ad;Body & Health
@@ -157,3 +203,18 @@ Meltdown;🌪️;#8e44ad;Body & Health
 Shutdown;🔄;#8e44ad;Body & Health
 Allergy;🤧;#8e44ad;Body & Health
 Temperature;🌡️;#8e44ad;Body & Health
+Cough;😷;#8e44ad;Body & Health
+Itchy;🦟;#8e44ad;Body & Health
+Dizzy;💫;#8e44ad;Body & Health
+Big;👐;#f39c12;Descriptors
+Small;🐭;#f39c12;Descriptors
+Fast;⚡;#f39c12;Descriptors
+Slow;🐢;#f39c12;Descriptors
+Wet;💦;#f39c12;Descriptors
+Dry;☀️;#f39c12;Descriptors
+Clean;🧼;#f39c12;Descriptors
+Dirty;🟤;#f39c12;Descriptors
+Same;🔁;#f39c12;Descriptors
+Different;🔀;#f39c12;Descriptors
+All;💯;#f39c12;Descriptors
+None;🙅‍♂️;#f39c12;Descriptors
