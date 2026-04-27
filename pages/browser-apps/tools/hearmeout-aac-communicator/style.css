@@ -304,6 +304,7 @@ main {
     cursor: pointer;
     transition: background 0.2s, box-shadow 0.2s;
     box-shadow: var(--shadow);
+    -webkit-tap-highlight-color: transparent;
 }
 
 .category-indicator {
@@ -393,6 +394,11 @@ main {
 
 .board-nav-next {
     right: 5px;
+}
+
+.board-nav:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--primary);
 }
 
 button:active {
