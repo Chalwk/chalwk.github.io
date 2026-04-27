@@ -1,4 +1,5 @@
 // Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
+// noinspection CommaExpressionJS
 
 (() => {
     // --- DOM stuff ---
@@ -56,11 +57,7 @@
     let phraseHistory = [];
     let isEditMode = false;
     let currentEditingSymbol = null;
-    let settings = {
-        gridSize: 'auto',
-        theme: 'auto',
-        volume: 0.6
-    };
+    let settings = {gridSize: 'auto', theme: 'auto', volume: 0.6};
     let categoriesOrdered = [];
     let currentCategoryIndex = 0;
     let isAnimating = false;
@@ -76,19 +73,9 @@
     };
 
     const defaultCategories = [
-        'Activities & Play',
-        'Basic Communication',
-        'Body & Health',
-        'Common Actions',
-        'Feelings & Emotions',
-        'Food & Drink',
-        'Needs & Wants',
-        'People & Pronouns',
-        'Places',
-        'Questions',
-        'Sensory Needs',
-        'Time & Schedule',
-        'Descriptors'
+        'Activities & Play', 'Basic Communication', 'Body & Health', 'Common Actions',
+        'Feelings & Emotions', 'Food & Drink', 'Needs & Wants', 'People & Pronouns',
+        'Places', 'Questions', 'Sensory Needs', 'Time & Schedule', 'Descriptors'
     ];
 
     function saveSymbols(silent = false) {
@@ -99,49 +86,22 @@
     async function loadSymbolsFromFile() {
         try {
             const response = await fetch('symbols.txt');
-            if (!response.ok) {
-                showToast('Failed to load symbols.txt, using empty board');
-                return [];
-            }
+            if (!response.ok) throw new Error();
             const text = await response.text();
-            const lines = text.split('\n').filter(line => line.trim() !== '');
-            const newSymbols = [];
-            lines.forEach((line, index) => {
-                const parts = line.split(';').map(s => s.trim());
-                if (parts.length >= 4) {
-                    const [text, image, color, category] = parts;
-                    newSymbols.push({
-                        id: index + 1,
-                        text: text,
-                        image: image,
-                        color: color,
-                        category: category
-                    });
-                } else {
-                    console.warn('Skipping malformed line:', line);
-                }
-            });
-            return newSymbols;
-        } catch (error) {
-            console.error('Error loading symbols from file:', error);
-            showToast('Could not load symbols.txt, using empty board');
+            return text.split('\n').filter(l => l.trim()).map((line, i) => {
+                const [text, image, color, category] = line.split(';').map(s => s.trim());
+                return {id: i + 1, text, image, color, category};
+            }).filter(s => s.text && s.image && s.color && s.category);
+        } catch {
+            showToast('Failed to load symbols.txt, using empty board');
             return [];
         }
     }
 
     async function loadSymbols() {
         const raw = localStorage.getItem(LS.symbolsKey);
-        if (raw) {
-            try {
-                symbols = JSON.parse(raw);
-            } catch {
-                symbols = await loadSymbolsFromFile();
-                saveSymbols(true);
-            }
-        } else {
-            symbols = await loadSymbolsFromFile();
-            saveSymbols(true);
-        }
+        symbols = raw ? JSON.parse(raw) : await loadSymbolsFromFile();
+        if (!raw) saveSymbols(true);
 
         const symbolCategories = [...new Set(symbols.map(s => s.category))];
         const existingCategories = getCategories();
@@ -158,16 +118,7 @@
 
     function loadSettings() {
         const raw = localStorage.getItem(LS.settingsKey);
-        if (raw) {
-            try {
-                settings = Object.assign(settings, JSON.parse(raw));
-            } catch { /* ignore */
-            }
-        }
-        loadVolume();
-    }
-
-    function loadVolume() {
+        if (raw) Object.assign(settings, JSON.parse(raw));
         const savedVolume = localStorage.getItem(LS.volumeKey);
         settings.volume = savedVolume ? parseFloat(savedVolume) : 0.6;
     }
@@ -175,20 +126,13 @@
     function applyTheme(theme) {
         document.body.classList.remove('theme-light', 'theme-dark', 'theme-high-contrast');
         document.body.classList.add(theme === 'auto' ? 'theme-auto' : `theme-${theme}`);
-        updateThemeColor(theme);
-    }
-
-    function updateThemeColor(theme) {
         const meta = document.querySelector('meta[name="theme-color"]');
-        if (!meta) return;
-        const colors = {light: '#4a86e8', dark: '#1a1a1a', 'high-contrast': '#000000', auto: '#4a86e8'};
-        meta.content = colors[theme] || colors.auto;
-    }
-
-    function loadTheme() {
-        const savedTheme = localStorage.getItem(LS.themeKey);
-        settings.theme = savedTheme || 'auto';
-        applyTheme(settings.theme);
+        if (meta) meta.content = {
+            light: '#4a86e8',
+            dark: '#1a1a1a',
+            'high-contrast': '#000000',
+            auto: '#4a86e8'
+        }[theme] || '#4a86e8';
     }
 
     function saveTheme(theme) {
@@ -198,16 +142,14 @@
         showToast(`Theme set to ${theme}`);
     }
 
+    function loadTheme() {
+        settings.theme = localStorage.getItem(LS.themeKey) || 'auto';
+        applyTheme(settings.theme);
+    }
+
     function getCategories() {
         const raw = localStorage.getItem(LS.categoriesKey);
-        if (raw) {
-            try {
-                return JSON.parse(raw);
-            } catch {
-                return [...defaultCategories];
-            }
-        }
-        return [...defaultCategories];
+        return raw ? JSON.parse(raw) : [...defaultCategories];
     }
 
     function saveCategories(categories) {
@@ -216,32 +158,20 @@
 
     function refreshOrderedCategories() {
         categoriesOrdered = [...getCategories()];
-        if (categoriesOrdered.length > 0 && currentCategoryIndex >= categoriesOrdered.length) {
-            currentCategoryIndex = 0;
-        }
+        if (categoriesOrdered.length && currentCategoryIndex >= categoriesOrdered.length) currentCategoryIndex = 0;
         updateCategoryIndicator();
-        if (categoryDropdown && categoryDropdown.style.display !== 'none') {
-            populateCategoryDropdown();
-        }
+        if (categoryDropdown && categoryDropdown.style.display !== 'none') populateCategoryDropdown();
     }
 
     function updateCategoryIndicator() {
-        if (categoryIndicator && categoriesOrdered.length > 0) {
-            categoryIndicator.textContent = categoriesOrdered[currentCategoryIndex] || '';
-        }
+        if (categoryIndicator && categoriesOrdered.length) categoryIndicator.textContent = categoriesOrdered[currentCategoryIndex] || '';
     }
 
     function addCategory(name) {
         name = name?.trim();
-        if (!name) {
-            showToast('Please enter a category name');
-            return false;
-        }
+        if (!name) return showToast('Please enter a category name'), false;
         const categories = getCategories();
-        if (categories.includes(name)) {
-            showToast('Category already exists');
-            return false;
-        }
+        if (categories.includes(name)) return showToast('Category already exists'), false;
         categories.push(name);
         saveCategories(categories);
         refreshOrderedCategories();
@@ -252,15 +182,9 @@
 
     function renameCategory(oldName, newName) {
         newName = newName?.trim();
-        if (!newName) {
-            showToast('Please enter a category name');
-            return false;
-        }
+        if (!newName) return showToast('Please enter a category name'), false;
         const categories = getCategories();
-        if (categories.includes(newName) && newName !== oldName) {
-            showToast('Category already exists');
-            return false;
-        }
+        if (categories.includes(newName) && newName !== oldName) return showToast('Category already exists'), false;
         const idx = categories.indexOf(oldName);
         if (idx !== -1) categories[idx] = newName;
         saveCategories(categories);
@@ -299,8 +223,7 @@
         symbolCategoryInput.innerHTML = '';
         categories.forEach(cat => {
             const opt = document.createElement('option');
-            opt.value = cat;
-            opt.textContent = cat;
+            opt.value = opt.textContent = cat;
             symbolCategoryInput.appendChild(opt);
         });
     }
@@ -311,7 +234,6 @@
     }
 
     function openCategoryDropdown() {
-        if (!categoryDropdown) return;
         populateCategoryDropdown();
         categoryDropdown.style.display = 'block';
     }
@@ -328,41 +250,31 @@
             li.textContent = cat;
             li.tabIndex = 0;
             if (idx === currentCategoryIndex) li.classList.add('active');
-            li.addEventListener('click', (e) => {
+            li.addEventListener('click', e => {
                 e.stopPropagation();
                 if (idx !== currentCategoryIndex) {
                     closeCategoryDropdown();
                     animateCategoryChange(idx);
-                } else {
-                    closeCategoryDropdown();
-                }
+                } else closeCategoryDropdown();
             });
-            li.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    li.click();
-                }
+            li.addEventListener('keydown', e => {
+                if (e.key === 'Enter' || e.key === ' ') e.preventDefault(), li.click();
             });
             categoryList.appendChild(li);
         });
     }
 
-    document.addEventListener('click', (e) => {
-        if (categoryDropdown && categoryDropdown.style.display !== 'none' &&
-            !categoryDropdown.contains(e.target) && e.target !== categoryIndicator) {
-            closeCategoryDropdown();
-        }
+    document.addEventListener('click', e => {
+        //noinspection JSUnresolvedVariable
+        if (categoryDropdown?.style.display !== 'none' && !categoryDropdown.contains(e.target) && e.target !== categoryIndicator) closeCategoryDropdown();
     });
 
-    categoryIndicator.addEventListener('click', (e) => {
+    categoryIndicator.addEventListener('click', e => {
         e.stopPropagation();
         toggleCategoryDropdown();
     });
-    categoryIndicator.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            toggleCategoryDropdown();
-        }
+    categoryIndicator.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') e.preventDefault(), toggleCategoryDropdown();
     });
 
     function showToast(msg, timeout = 2200) {
@@ -377,21 +289,19 @@
     }
 
     function isUrl(str) {
-        if (!str) return false;
-        if (str.startsWith('data:')) return true;
-        try {
-            const u = new URL(str);
-            return u.protocol === 'http:' || u.protocol === 'https:';
-        } catch {
-            return false;
-        }
+        return str && (str.startsWith('data:') || (() => {
+            try {
+                return new URL(str).protocol === 'http:' || new URL(str).protocol === 'https:';
+            } catch {
+                return false;
+            }
+        })());
     }
 
     function isImageSource(str) {
-        return !!str && (isUrl(str) || str.startsWith('data:image/'));
+        return str && (isUrl(str) || str.startsWith('data:image/'));
     }
 
-    // --- settings menu toggle ---
     function toggleSettingsMenu() {
         settingsMenu.parentElement.classList.toggle('active');
     }
@@ -400,7 +310,7 @@
         settingsMenu.parentElement.classList.remove('active');
     }
 
-    document.addEventListener('click', (e) => {
+    document.addEventListener('click', e => {
         if (!settingsToggle.contains(e.target) && !settingsMenu.contains(e.target)) closeSettingsMenu();
     });
 
@@ -429,23 +339,18 @@
         categories.forEach(cat => {
             const div = document.createElement('div');
             div.className = 'category-item';
-            div.innerHTML = `
-                <input type="text" value="${cat}" class="category-name-input">
-                <div class="category-actions">
-                    <button class="btn btn-secondary rename-category-btn" data-category="${cat}">Rename</button>
-                    <button class="btn btn-danger delete-category-btn" data-category="${cat}">Delete</button>
-                </div>`;
+            div.innerHTML = `<input type="text" value="${cat}" class="category-name-input"><div class="category-actions"><button class="btn btn-secondary rename-category-btn" data-category="${cat}">Rename</button><button class="btn btn-danger delete-category-btn" data-category="${cat}">Delete</button></div>`;
             categoriesList.appendChild(div);
         });
         categoriesList.querySelectorAll('.rename-category-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
+            btn.addEventListener('click', e => {
                 const oldCat = e.target.dataset.category;
                 const input = e.target.closest('.category-item').querySelector('.category-name-input');
                 if (renameCategory(oldCat, input.value.trim())) renderCategoriesList();
             });
         });
         categoriesList.querySelectorAll('.delete-category-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
+            btn.addEventListener('click', e => {
                 if (deleteCategory(e.target.dataset.category)) renderCategoriesList();
             });
         });
@@ -479,37 +384,30 @@
             const opt = document.createElement('option');
             opt.value = v.name;
             opt.textContent = `${v.name} ${v.lang ? '(' + v.lang + ')' : ''}`;
-            if (stored && stored === v.name) {
-                opt.selected = true;
-                foundStored = true;
-            }
+            if (stored && stored === v.name) opt.selected = foundStored = true;
             settingsVoiceSelect.appendChild(opt);
         });
-        if (!foundStored && voices.length > 0 && stored) {
+        if (!foundStored && voices.length && stored) {
             localStorage.removeItem(LS.voiceKey);
             if (showAvailabilityToast) showToast('Previous voice not available, using default');
         }
     }
 
     function previewSpeak(symbol) {
-        const text = symbol.text;
-        if (!text || !('speechSynthesis' in window)) return;
+        if (!symbol.text || !('speechSynthesis' in window)) return;
         speechSynthesis.cancel();
-        const ut = new SpeechSynthesisUtterance(text);
+        const ut = new SpeechSynthesisUtterance(symbol.text);
         ut.volume = settings.volume;
         const chosen = localStorage.getItem(LS.voiceKey);
         if (chosen) {
             const voice = speechSynthesis.getVoices().find(v => v.name === chosen);
             if (voice) ut.voice = voice;
         }
-        ut.onerror = (event) => {
-            if (event.error !== 'interrupted') console.error('Speech synthesis error:', event);
-        };
         speechSynthesis.speak(ut);
     }
 
     function animateCategoryChange(newIndex) {
-        if (isAnimating || categoriesOrdered.length === 0 || newIndex === currentCategoryIndex) return;
+        if (isAnimating || !categoriesOrdered.length || newIndex === currentCategoryIndex) return;
         isAnimating = true;
         board.style.transition = 'opacity 0.15s ease';
         board.style.opacity = '0';
@@ -518,69 +416,39 @@
             updateCategoryIndicator();
             renderBoard();
             board.style.opacity = '1';
-            setTimeout(() => {
-                isAnimating = false;
-            }, 150);
+            setTimeout(() => isAnimating = false, 150);
         }, 150);
     }
 
     function renderBoard() {
         board.innerHTML = '';
-        const currentCategory = categoriesOrdered[currentCategoryIndex] || '';
-        const filtered = symbols.filter(s => s.category === currentCategory);
-
+        const filtered = symbols.filter(s => s.category === (categoriesOrdered[currentCategoryIndex] || ''));
         filtered.forEach(symbol => {
             const node = document.createElement('div');
-            node.className = 'symbol';
+            node.className = 'symbol' + (isEditMode ? ' editing' : '');
             node.setAttribute('role', 'listitem');
             node.setAttribute('tabindex', '0');
             node.style.backgroundColor = symbol.color || '#e8f0fe';
-            if (isEditMode) node.classList.add('editing');
+            node.innerHTML = isImageSource(symbol.image) ? `<img src="${symbol.image}" alt="${symbol.text}"><span>${symbol.text}</span>` : `<span class="symbol-emoji">${symbol.image}</span><span>${symbol.text}</span>`;
 
-            if (isImageSource(symbol.image)) {
-                node.innerHTML = `<img src="${symbol.image}" alt="${symbol.text}"><span>${symbol.text}</span>`;
-            } else {
-                node.innerHTML = `<span class="symbol-emoji">${symbol.image}</span><span>${symbol.text}</span>`;
-            }
-
-            node.addEventListener('click', () => {
-                if (isEditMode) openEditModal(symbol);
-                else addToPhrase(symbol);
-            });
+            node.addEventListener('click', () => isEditMode ? openEditModal(symbol) : addToPhrase(symbol));
 
             let pressTimer = null;
-            const startPressTimer = () => {
-                if (!isEditMode) pressTimer = setTimeout(() => previewSpeak(symbol), 550);
-            };
-            const clearPressTimer = () => {
-                clearTimeout(pressTimer);
-                pressTimer = null;
-            };
-
-            node.addEventListener('pointerdown', (e) => {
+            const clearPressTimer = () => clearTimeout(pressTimer);
+            node.addEventListener('pointerdown', e => {
                 e.preventDefault();
-                startPressTimer();
+                if (!isEditMode) pressTimer = setTimeout(() => previewSpeak(symbol), 550);
             }, {passive: false});
             node.addEventListener('pointerup', clearPressTimer);
             node.addEventListener('pointerleave', clearPressTimer);
             node.addEventListener('pointercancel', clearPressTimer);
-
-            node.addEventListener('keydown', (ev) => {
-                if (ev.key === 'Enter' || ev.key === ' ') {
-                    ev.preventDefault();
-                    isEditMode ? openEditModal(symbol) : addToPhrase(symbol);
-                }
+            node.addEventListener('keydown', ev => {
+                if (ev.key === 'Enter' || ev.key === ' ') ev.preventDefault(), isEditMode ? openEditModal(symbol) : addToPhrase(symbol);
                 if (ev.key === 'e' && isEditMode) openEditModal(symbol);
             });
-
             board.appendChild(node);
         });
-
         applyGridSetting();
-        updateArrowVisibility();
-    }
-
-    function updateArrowVisibility() {
         if (boardPrevBtn) boardPrevBtn.disabled = false;
         if (boardNextBtn) boardNextBtn.disabled = false;
     }
@@ -588,64 +456,49 @@
     function updatePhraseDisplay() {
         phraseDisplay.innerHTML = '';
         phraseDisplay.classList.remove('drag-active');
-        if (currentPhrase.length === 0) {
+        if (!currentPhrase.length) {
             const el = document.createElement('span');
             el.className = 'empty-message';
             el.textContent = 'Select symbols to build your phrase';
             phraseDisplay.appendChild(el);
             return;
         }
-
         currentPhrase.forEach((symbol, index) => {
             const item = document.createElement('div');
             item.className = 'phrase-item';
             item.setAttribute('draggable', 'true');
             item.setAttribute('role', 'listitem');
-            item.dataset.index = index;
+            item.dataset.index = String(index);
             item.title = 'Click to remove. Drag to reorder.';
-
-            if (isImageSource(symbol.image)) {
-                item.innerHTML = `<img src="${symbol.image}" alt="${symbol.text}"><span>${symbol.text}</span>`;
-            } else {
-                item.innerHTML = `<span style="font-size:1.2rem; margin-right:6px;">${symbol.image}</span><span>${symbol.text}</span>`;
-            }
-
+            item.innerHTML = isImageSource(symbol.image) ? `<img src="${symbol.image}" alt="${symbol.text}"><span>${symbol.text}</span>` : `<span style="font-size:1.2rem; margin-right:6px;">${symbol.image}</span><span>${symbol.text}</span>`;
             item.addEventListener('click', () => {
                 backupPhrase();
                 currentPhrase.splice(index, 1);
                 updatePhraseDisplay();
             });
-
-            item.addEventListener('dragstart', (e) => {
+            item.addEventListener('dragstart', e => {
                 e.dataTransfer.setData('text/plain', index.toString());
                 e.dataTransfer.effectAllowed = 'move';
                 item.classList.add('dragging');
                 phraseDisplay.classList.add('drag-active');
                 setTimeout(() => item.style.opacity = '0.4', 0);
             });
-
             item.addEventListener('dragend', () => {
-                document.querySelectorAll('.phrase-item').forEach(el => {
-                    el.classList.remove('dragging', 'drag-over', 'drag-placeholder');
-                    el.style.opacity = '';
-                });
+                document.querySelectorAll('.phrase-item').forEach(el => el.classList.remove('dragging', 'drag-over', 'drag-placeholder'));
                 phraseDisplay.classList.remove('drag-active');
             });
-
-            item.addEventListener('dragover', (e) => {
+            item.addEventListener('dragover', e => {
                 e.preventDefault();
                 e.dataTransfer.dropEffect = 'move';
                 document.querySelectorAll('.phrase-item').forEach(el => el.classList.remove('drag-over'));
                 const after = getDragAfterElement(phraseDisplay, e.clientX);
                 if (after) after.classList.add('drag-over');
             });
-
-            item.addEventListener('dragenter', (e) => e.preventDefault());
-            item.addEventListener('dragleave', (e) => {
+            item.addEventListener('dragenter', e => e.preventDefault());
+            item.addEventListener('dragleave', e => {
                 if (!item.contains(e.relatedTarget)) item.classList.remove('drag-over');
             });
-
-            item.addEventListener('drop', (e) => {
+            item.addEventListener('drop', e => {
                 e.preventDefault();
                 const fromIdx = parseInt(e.dataTransfer.getData('text/plain'), 10);
                 if (!Number.isFinite(fromIdx) || fromIdx === index) return;
@@ -654,7 +507,6 @@
                 currentPhrase.splice(index, 0, moved);
                 updatePhraseDisplay();
             });
-
             phraseDisplay.appendChild(item);
         });
     }
@@ -674,10 +526,7 @@
     }
 
     function undo() {
-        if (!phraseHistory.length) {
-            showToast('Nothing to undo');
-            return;
-        }
+        if (!phraseHistory.length) return showToast('Nothing to undo');
         try {
             currentPhrase = JSON.parse(phraseHistory.pop());
             updatePhraseDisplay();
@@ -688,26 +537,25 @@
     }
 
     function addToPhrase(symbol) {
-        if (!symbol) return;
-        backupPhrase();
-        currentPhrase.push(symbol);
-        updatePhraseDisplay();
+        if (symbol) {
+            backupPhrase();
+            currentPhrase.push(symbol);
+            updatePhraseDisplay();
+        }
     }
 
     function clearPhrase() {
-        if (!currentPhrase.length) return;
-        backupPhrase();
-        currentPhrase = [];
-        updatePhraseDisplay();
+        if (currentPhrase.length) {
+            backupPhrase();
+            currentPhrase = [];
+            updatePhraseDisplay();
+        }
     }
 
     function speakPhrase() {
         if (!currentPhrase.length) return;
         const phraseText = currentPhrase.map(s => s.text).join(' ');
-        if (!('speechSynthesis' in window)) {
-            alert(phraseText);
-            return;
-        }
+        if (!('speechSynthesis' in window)) return alert(phraseText);
         speechSynthesis.cancel();
         const ut = new SpeechSynthesisUtterance(phraseText);
         ut.rate = 0.95;
@@ -718,7 +566,7 @@
             const voice = speechSynthesis.getVoices().find(v => v.name === chosen);
             if (voice) ut.voice = voice;
         }
-        ut.onerror = (event) => {
+        ut.onerror = event => {
             if (event.error === 'interrupted') return;
             console.error('Speech synthesis error:', event);
             showToast('Speech error, trying without voice selection');
@@ -733,7 +581,6 @@
         speechSynthesis.speak(ut);
     }
 
-    // --- edit symbol modal ---
     function openEditModal(symbol = null) {
         isEditMode = true;
         document.body.classList.add('edit-mode');
@@ -765,11 +612,7 @@
         let image = symbolImageInput.value.trim();
         const color = symbolColorInput.value;
         const category = symbolCategoryInput.value || 'Basic Communication';
-
-        if (!text) {
-            alert('Please enter text');
-            return;
-        }
+        if (!text) return alert('Please enter text');
         if (symbolImageFile.files?.[0]) image = await fileToDataURL(symbolImageFile.files[0]);
         if (!image) image = text.charAt(0) || '?';
 
@@ -827,10 +670,7 @@
         const reader = new FileReader();
         reader.onload = () => {
             try {
-                if (typeof reader.result !== 'string') {
-                    alert('Import failed: invalid file content');
-                    return;
-                }
+                if (typeof reader.result !== 'string') throw new Error();
                 const parsed = JSON.parse(reader.result);
                 if (parsed.symbols && Array.isArray(parsed.symbols)) {
                     const existingIds = new Set(symbols.map(s => s.id));
@@ -867,13 +707,8 @@
     function applyGridSetting() {
         if (!board) return;
         board.classList.remove('grid-3x4', 'grid-4x6', 'grid-6x8');
-        if (settings.gridSize === 'auto') {
-            board.classList.remove('fixed-grid');
-            board.style.gridTemplateColumns = '';
-        } else {
-            board.classList.add('fixed-grid', `grid-${settings.gridSize}`);
-            board.style.gridTemplateColumns = '';
-        }
+        if (settings.gridSize === 'auto') board.classList.remove('fixed-grid');
+        else board.classList.add('fixed-grid', `grid-${settings.gridSize}`);
     }
 
     function toggleEditMode() {
@@ -884,10 +719,11 @@
         closeSettingsMenu();
     }
 
-    boardWrap.addEventListener('contextmenu', (e) => e.preventDefault());
-    boardWrap.addEventListener('selectstart', (e) => e.preventDefault());
-    phraseDisplay.addEventListener('contextmenu', (e) => e.preventDefault());
-    phraseDisplay.addEventListener('selectstart', (e) => e.preventDefault());
+    // Event listeners
+    boardWrap.addEventListener('contextmenu', e => e.preventDefault());
+    boardWrap.addEventListener('selectstart', e => e.preventDefault());
+    phraseDisplay.addEventListener('contextmenu', e => e.preventDefault());
+    phraseDisplay.addEventListener('selectstart', e => e.preventDefault());
 
     speakBtn.addEventListener('click', speakPhrase);
     clearBtn.addEventListener('click', clearPhrase);
@@ -913,11 +749,8 @@
             renderCategoriesList();
         }
     });
-    newCategoryName.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            addCategoryBtn.click();
-        }
+    newCategoryName.addEventListener('keypress', e => {
+        if (e.key === 'Enter') e.preventDefault(), addCategoryBtn.click();
     });
 
     openSettingsPanelBtn.addEventListener('click', openSettingsModal);
@@ -947,28 +780,24 @@
     });
 
     settingsToggle.addEventListener('click', toggleSettingsMenu);
-
     infoToggle.addEventListener('click', openInfoModal);
     closeInfoModal.addEventListener('click', closeInfoModalHandler);
     closeInfoBtn.addEventListener('click', closeInfoModalHandler);
 
     boardPrevBtn.addEventListener('click', () => {
-        if (!categoriesOrdered.length) return;
-        const newIdx = (currentCategoryIndex - 1 + categoriesOrdered.length) % categoriesOrdered.length;
-        closeCategoryDropdown();
-        animateCategoryChange(newIdx);
+        if (categoriesOrdered.length) {
+            closeCategoryDropdown();
+            animateCategoryChange((currentCategoryIndex - 1 + categoriesOrdered.length) % categoriesOrdered.length);
+        }
     });
     boardNextBtn.addEventListener('click', () => {
-        if (!categoriesOrdered.length) return;
-        const newIdx = (currentCategoryIndex + 1) % categoriesOrdered.length;
-        closeCategoryDropdown();
-        animateCategoryChange(newIdx);
+        if (categoriesOrdered.length) {
+            closeCategoryDropdown();
+            animateCategoryChange((currentCategoryIndex + 1) % categoriesOrdered.length);
+        }
     });
 
-    symbolImageFile.addEventListener('change', () => {
-    });
-
-    boardWrap.addEventListener('keydown', (ev) => {
+    boardWrap.addEventListener('keydown', ev => {
         if (ev.key === 'e') {
             toggleEditMode();
             closeSettingsMenu();
@@ -999,27 +828,14 @@
         updatePhraseDisplay();
         applyGridSetting();
 
-        function loadVoices() {
-            const voices = speechSynthesis.getVoices();
-            if (voices.length > 0) {
-                populateSettingsVoices(true);
-            } else {
-                setTimeout(() => {
-                    const retryVoices = speechSynthesis.getVoices();
-                    if (retryVoices.length > 0) {
-                        populateSettingsVoices(true);
-                    } else {
-                        console.log('No voices available');
-                        showToast('No TTS voices detected');
-                    }
-                }, 500);
-            }
-        }
-
+        const loadVoices = () => {
+            if (speechSynthesis.getVoices().length) populateSettingsVoices(true);
+            else setTimeout(() => {
+                if (speechSynthesis.getVoices().length) populateSettingsVoices(true); else showToast('No TTS voices detected');
+            }, 500);
+        };
         loadVoices();
-        if (speechSynthesis.onvoiceschanged !== undefined) {
-            speechSynthesis.onvoiceschanged = loadVoices;
-        }
+        if (speechSynthesis.onvoiceschanged !== undefined) speechSynthesis.onvoiceschanged = loadVoices;
         setTimeout(loadVoices, 1000);
     }
 
