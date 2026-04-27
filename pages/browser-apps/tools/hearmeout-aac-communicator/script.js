@@ -51,6 +51,8 @@
     const infoModal = document.getElementById('infoModal');
     const closeInfoModal = document.getElementById('closeInfoModal');
     const closeInfoBtn = document.getElementById('closeInfoBtn');
+    const categoryDropdown = document.getElementById('categoryDropdown');
+    const categoryList = document.getElementById('categoryList');
 
     // --- app state ---
     let symbols = [];         // all symbol objects
@@ -257,6 +259,9 @@
         }
         // Keep the category indicator in sync
         updateCategoryIndicator();
+        if (categoryDropdown && categoryDropdown.style.display !== 'none') {
+            populateCategoryDropdown();
+        }
     }
 
     function updateCategoryIndicator() {
@@ -349,6 +354,77 @@
             symbolCategoryInput.appendChild(option);
         });
     }
+
+    // --- category quick‑jump dropdown logic ---
+    function toggleCategoryDropdown() {
+        if (!categoryDropdown) return;
+        if (categoryDropdown.style.display === 'none') {
+            openCategoryDropdown();
+        } else {
+            closeCategoryDropdown();
+        }
+    }
+
+    function openCategoryDropdown() {
+        if (!categoryDropdown) return;
+        populateCategoryDropdown();
+        categoryDropdown.style.display = 'block';
+    }
+
+    function closeCategoryDropdown() {
+        if (!categoryDropdown) return;
+        categoryDropdown.style.display = 'none';
+    }
+
+    function populateCategoryDropdown() {
+        if (!categoryList) return;
+        categoryList.innerHTML = '';
+        categoriesOrdered.forEach((cat, idx) => {
+            const li = document.createElement('li');
+            li.textContent = cat;
+            li.tabIndex = 0;
+            if (idx === currentCategoryIndex) {
+                li.classList.add('active');
+            }
+            li.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (idx !== currentCategoryIndex) {
+                    closeCategoryDropdown();
+                    animateCategoryChange(idx);
+                } else {
+                    closeCategoryDropdown();
+                }
+            });
+            li.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    li.click();
+                }
+            });
+            categoryList.appendChild(li);
+        });
+    }
+
+    // Close the dropdown if the user clicks outside of it
+    document.addEventListener('click', (e) => {
+        if (categoryDropdown && categoryDropdown.style.display !== 'none') {
+            if (!categoryDropdown.contains(e.target) && e.target !== categoryIndicator) {
+                closeCategoryDropdown();
+            }
+        }
+    });
+
+    // Prevent the indicator click from propagating (so it doesn't close immediately)
+    categoryIndicator.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleCategoryDropdown();
+    });
+    categoryIndicator.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggleCategoryDropdown();
+        }
+    });
 
     // --- UI helpers ---
     function showToast(msg, timeout = 2200) {
@@ -1057,11 +1133,13 @@
     document.getElementById('boardPrevBtn').addEventListener('click', () => {
         if (categoriesOrdered.length === 0) return;
         const newIndex = (currentCategoryIndex - 1 + categoriesOrdered.length) % categoriesOrdered.length;
+        closeCategoryDropdown();
         animateCategoryChange(newIndex);
     });
     document.getElementById('boardNextBtn').addEventListener('click', () => {
         if (categoriesOrdered.length === 0) return;
         const newIndex = (currentCategoryIndex + 1) % categoriesOrdered.length;
+        closeCategoryDropdown();
         animateCategoryChange(newIndex);
     });
 
@@ -1081,6 +1159,7 @@
         }
         if (ev.key === 'Escape') {
             closeSettingsMenu();
+            closeCategoryDropdown();
         }
     });
 
