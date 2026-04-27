@@ -320,7 +320,7 @@ main {
     box-shadow: var(--shadow-sm);
     z-index: 5;
     white-space: nowrap;
-    border: 1px solid var(--gray-light);
+    border: 2px solid var(--primary);
     cursor: pointer;
     user-select: none;
 }
