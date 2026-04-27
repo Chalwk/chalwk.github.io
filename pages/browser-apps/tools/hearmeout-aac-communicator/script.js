@@ -24,6 +24,7 @@
     const toast = document.getElementById('toast');
     const boardWrap = document.getElementById('boardWrap');
     const globalSearch = document.getElementById('globalSearch');
+    const categoryIndicator = document.getElementById('categoryIndicator');
 
     const manageCategoriesBtn = document.getElementById('manageCategoriesBtn');
     const categoriesModal = document.getElementById('categoriesModal');
@@ -253,6 +254,14 @@
         // ensure index is valid
         if (categoriesOrdered.length > 0 && currentCategoryIndex >= categoriesOrdered.length) {
             currentCategoryIndex = 0;
+        }
+        // Keep the category indicator in sync
+        updateCategoryIndicator();
+    }
+
+    function updateCategoryIndicator() {
+        if (categoryIndicator && categoriesOrdered.length > 0) {
+            categoryIndicator.textContent = categoriesOrdered[currentCategoryIndex] || '';
         }
     }
 
@@ -512,6 +521,7 @@
 
         setTimeout(() => {
             currentCategoryIndex = newIndex;
+            updateCategoryIndicator();
             renderBoard();
             board.style.opacity = '1';
             setTimeout(() => {
@@ -903,6 +913,7 @@
                 }
                 refreshOrderedCategories();
                 currentCategoryIndex = 0;
+                updateCategoryIndicator();
                 renderBoard();
             } catch (err) {
                 alert('Import failed: invalid file');
@@ -1085,6 +1096,7 @@
             refreshOrderedCategories();
         }
         currentCategoryIndex = 0;
+        updateCategoryIndicator();
         loadTheme();
         updateCategorySelects();
         renderBoard();
