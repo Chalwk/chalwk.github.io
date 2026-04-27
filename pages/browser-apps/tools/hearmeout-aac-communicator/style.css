@@ -316,8 +316,7 @@ main {
 
 .board-nav {
     position: absolute;
-    top: 50%;
-    margin-top: -28px;
+    top: 20%;
     z-index: 10;
     background: rgba(255, 255, 255, 0.95);
     border: 2px solid var(--gray-light);
