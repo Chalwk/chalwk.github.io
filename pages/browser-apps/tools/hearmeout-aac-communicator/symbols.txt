@@ -5,7 +5,7 @@ No;👎;#4a86e8;Basic Communication
 Please;✨;#4a86e8;Basic Communication
 Thank you;🙏;#4a86e8;Basic Communication
 Sorry;🙇;#4a86e8;Basic Communication
-Okay;👌;#4a86e8;Basic Communication
+OK;👌;#4a86e8;Basic Communication
 Excuse me;🗣️;#4a86e8;Basic Communication
 Maybe;💭;#4a86e8;Basic Communication
 I understand;💡;#4a86e8;Basic Communication
@@ -79,7 +79,7 @@ Too loud;📢;#9c27b0;Sensory Needs
 Too bright;💡;#9c27b0;Sensory Needs
 Texture;👆;#9c27b0;Sensory Needs
 Me;🙂;#00bcd4;People & Pronouns
-You;👤;#00bcd4;People & Pronouns
+You;🫵;#00bcd4;People & Pronouns
 Friend;🧑‍🤝‍🧑;#00bcd4;People & Pronouns
 Family;👨‍👩‍👦;#00bcd4;People & Pronouns
 Teacher;👩‍🏫;#00bcd4;People & Pronouns
@@ -153,6 +153,7 @@ How many?;🔢;#9b59b6;Questions
 Can I?;🤨;#9b59b6;Questions
 Now;⏰;#ff9800;Time & Schedule
 Later;⏲️;#ff9800;Time & Schedule
+Time;⏰;#ff9800;Time & Schedule
 Today;📅;#ff9800;Time & Schedule
 Tomorrow;➡️;#ff9800;Time & Schedule
 Yesterday;⬅️;#ff9800;Time & Schedule
@@ -218,3 +219,5 @@ Same;🔁;#f39c12;Descriptors
 Different;🔀;#f39c12;Descriptors
 All;💯;#f39c12;Descriptors
 None;🙅‍♂️;#f39c12;Descriptors
+Down;⬇️;#f39c12;Descriptors
+Up;⬆️️;#f39c12;Descriptors
