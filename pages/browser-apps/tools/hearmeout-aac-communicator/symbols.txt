@@ -19,7 +19,7 @@ I don't know;🤷;#4a86e8;Basic Communication
 Help;🆘;#ea4335;Needs & Wants
 I want;👉;#ea4335;Needs & Wants
 I need;👐;#ea4335;Needs & Wants
-Stop;✋;#ea4335;Needs & Wants
+Stop;🛑;#ea4335;Needs & Wants
 More;➕;#ea4335;Needs & Wants
 Finished;✔️;#ea4335;Needs & Wants
 Toilet;🚽;#ea4335;Needs & Wants
@@ -65,7 +65,7 @@ Quiet;🔇;#9c27b0;Sensory Needs
 Dark;🌙;#9c27b0;Sensory Needs
 Weighted blanket;🛏️;#9c27b0;Sensory Needs
 Stim;🌀;#9c27b0;Sensory Needs
-Fidget;🔄;#9c27b0;Sensory Needs
+Fidget;߷;#9c27b0;Sensory Needs
 Hug;🤗;#9c27b0;Sensory Needs
 No touch;✋;#9c27b0;Sensory Needs
 Different clothes;👕;#9c27b0;Sensory Needs
@@ -75,7 +75,7 @@ Bright;💡;#9c27b0;Sensory Needs
 Pressure;⏬;#9c27b0;Sensory Needs
 Chew;🦷;#9c27b0;Sensory Needs
 Swing;🎠;#9c27b0;Sensory Needs
-Too loud;📢;#9c27b0;Sensory Needs
+Too loud;🗣;#9c27b0;Sensory Needs
 Too bright;💡;#9c27b0;Sensory Needs
 Texture;👆;#9c27b0;Sensory Needs
 Me;🙂;#00bcd4;People & Pronouns
@@ -93,7 +93,7 @@ He;👨;#00bcd4;People & Pronouns
 She;👩;#00bcd4;People & Pronouns
 We;👥;#00bcd4;People & Pronouns
 Brother;👦;#00bcd4;People & Pronouns
-Sister;👧;#00bcd4;People & Pronouns
+Sister;👩;#00bcd4;People & Pronouns
 Grandma;👵;#00bcd4;People & Pronouns
 Grandpa;👴;#00bcd4;People & Pronouns
 Baby;👶;#00bcd4;People & Pronouns
