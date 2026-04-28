@@ -8,7 +8,7 @@ Sorry;🙇;#4a86e8;Basic Communication
 OK;👌;#4a86e8;Basic Communication
 Excuse me;🗣️;#4a86e8;Basic Communication
 Maybe;💭;#4a86e8;Basic Communication
-I understand;💡;#4a86e8;Basic Communication
+I understand;✅;#4a86e8;Basic Communication
 I don't understand;❓;#4a86e8;Basic Communication
 Love;❤️;#4a86e8;Basic Communication
 Good morning;🌅;#4a86e8;Basic Communication
@@ -49,7 +49,6 @@ Need a break;☕;#ea4335;Needs & Wants
 Need space;↔️;#ea4335;Needs & Wants
 Change it;♻️;#ea4335;Needs & Wants
 Stop now;⏹️;#ea4335;Needs & Wants
-More please;🔂;#ea4335;Needs & Wants
 All done now;🏁;#ea4335;Needs & Wants
 Different one;≠;#ea4335;Needs & Wants
 Too much;💥;#ea4335;Needs & Wants
@@ -98,7 +97,7 @@ Soft;☁️;#9c27b0;Sensory Needs
 Loud;🔊;#9c27b0;Sensory Needs
 Bright;💡;#9c27b0;Sensory Needs
 Pressure;⏬;#9c27b0;Sensory Needs
-Chew;🦷;#9c27b0;Sensory Needs
+Chew;😬;#9c27b0;Sensory Needs
 Swing;🎠;#9c27b0;Sensory Needs
 Too loud;🗣;#9c27b0;Sensory Needs
 Too bright;💡;#9c27b0;Sensory Needs
@@ -111,7 +110,7 @@ Smells bother me;👃;#9c27b0;Sensory Needs
 Too noisy;🔉;#9c27b0;Sensory Needs
 Less noise;🔈;#9c27b0;Sensory Needs
 Me;🙂;#00bcd4;People & Pronouns
-You;🫵;#00bcd4;People & Pronouns
+You;👉;#00bcd4;People & Pronouns
 Friend;🧑‍🤝‍🧑;#00bcd4;People & Pronouns
 Family;👨‍👩‍👦;#00bcd4;People & Pronouns
 Teacher;👩‍🏫;#00bcd4;People & Pronouns
@@ -131,8 +130,8 @@ Grandpa;👴;#00bcd4;People & Pronouns
 Baby;👶;#00bcd4;People & Pronouns
 Pet;🐶;#00bcd4;People & Pronouns
 Nurse;💉;#00bcd4;People & Pronouns
-Caregiver;🫂;#00bcd4;People & Pronouns
-Everybody;🌐;#00bcd4;People & Pronouns
+Caregiver;⚕️;#00bcd4;People & Pronouns
+Everybody;🌍;#00bcd4;People & Pronouns
 Someone;🧑;#00bcd4;People & Pronouns
 Cousin;🔗;#00bcd4;People & Pronouns
 Aunt;👩‍🦰;#00bcd4;People & Pronouns
@@ -164,6 +163,7 @@ Brush teeth;🦷;#9c27b0;Common Actions
 Open it;🔓;#9c27b0;Common Actions
 Close it;🔐;#9c27b0;Common Actions
 Give;🎁;#9c27b0;Common Actions
+Light;💡;#9c27b0;Common Actions
 Take;🖐️;#9c27b0;Common Actions
 Make;🔨;#9c27b0;Common Actions
 Fix;🧰;#9c27b0;Common Actions
@@ -197,7 +197,7 @@ Airport;✈️;#34a853;Places
 Train station;🚉;#34a853;Places
 Farm;🚜;#34a853;Places
 Garden;🌻;#34a853;Places
-Dentist;🪥;#34a853;Places
+Dentist;🦷;#34a853;Places
 Pharmacy;⚕️;#34a853;Places
 Church;⛪;#34a853;Places
 What?;❓;#9b59b6;Questions
@@ -220,7 +220,7 @@ Which one?;🔘;#9b59b6;Questions
 How much?;💲;#9b59b6;Questions
 How many?;🔟;#9b59b6;Questions
 Can you help?;⛑️;#9b59b6;Questions
-Is it okay?;✅;#9b59b6;Questions
+Is it okay?;🚩;#9b59b6;Questions
 Now;⏰;#ff9800;Time & Schedule
 Later;⏲️;#ff9800;Time & Schedule
 Time;⏰;#ff9800;Time & Schedule
@@ -321,7 +321,7 @@ Itchy;🐜;#8e44ad;Body & Health
 Dizzy;🥴;#8e44ad;Body & Health
 Need doctor;🚑;#8e44ad;Body & Health
 Big;👐;#f39c12;Descriptors
-Small;🐭;#f39c12;Descriptors
+Small;🤏;#f39c12;Descriptors
 Fast;⚡;#f39c12;Descriptors
 Slow;🐢;#f39c12;Descriptors
 Wet;💦;#f39c12;Descriptors
@@ -335,15 +335,11 @@ None;🙅‍♂️;#f39c12;Descriptors
 Down;⬇️;#f39c12;Descriptors
 Up;⬆️;#f39c12;Descriptors
 Less;📉;#f39c12;Descriptors
-Same;➿;#f39c12;Descriptors
-Different;♾️;#f39c12;Descriptors
-All;🈵;#f39c12;Descriptors
-None;⛔;#f39c12;Descriptors
 Near;🧲;#f39c12;Descriptors
 Far;🏹;#f39c12;Descriptors
 New;🆕;#f39c12;Descriptors
 Old;🏚️;#f39c12;Descriptors
 Heavy;🏋️;#f39c12;Descriptors
-Light;🪶;#f39c12;Descriptors
+Light;☁️;#f39c12;Descriptors
 Easy;✌️;#f39c12;Descriptors
 Hard;💪;#f39c12;Descriptors
