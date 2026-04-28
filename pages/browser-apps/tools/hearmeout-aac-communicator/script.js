@@ -67,6 +67,7 @@
     let swipeStartX = 0;
     let swipeStartY = 0;
     let swipeStartTime = 0;
+    let horizontalSwipeLocked = false;
 
     // localStorage keys
     const LS = {
@@ -767,7 +768,7 @@
         return false;
     }
 
-    // Board swipe navigation using pointer events (more reliable than touch)
+    // Swipe navigation using pointer events
     function handleSwipePointerDown(e) {
         if (e.pointerType !== 'touch') return;
         if (swipeActivePointerId !== null) return;
@@ -775,6 +776,17 @@
         swipeStartX = e.clientX;
         swipeStartY = e.clientY;
         swipeStartTime = Date.now();
+        horizontalSwipeLocked = false;
+    }
+
+    function handleSwipePointerMove(e) {
+        if (e.pointerType !== 'touch' || e.pointerId !== swipeActivePointerId) return;
+        const dx = e.clientX - swipeStartX;
+        const dy = e.clientY - swipeStartY;
+        if (Math.abs(dx) > 25 && Math.abs(dx) > Math.abs(dy)) {
+            e.preventDefault();
+            horizontalSwipeLocked = true;
+        }
     }
 
     function handleSwipePointerUp(e) {
@@ -782,17 +794,13 @@
         const dx = e.clientX - swipeStartX;
         const dy = e.clientY - swipeStartY;
         const dt = Date.now() - swipeStartTime;
-
-        // Swipe thresholds: horizontal > 25px, vertical < 50px, within 300ms
         if (dt < 300 && Math.abs(dx) > 25 && Math.abs(dy) < 50) {
             if (dx > 0) {
-                // Swipe right -> previous category
                 if (categoriesOrdered.length) {
                     closeCategoryDropdown();
                     animateCategoryChange((currentCategoryIndex - 1 + categoriesOrdered.length) % categoriesOrdered.length);
                 }
             } else {
-                // Swipe left -> next category
                 if (categoriesOrdered.length) {
                     closeCategoryDropdown();
                     animateCategoryChange((currentCategoryIndex + 1) % categoriesOrdered.length);
@@ -812,6 +820,7 @@
         swipeStartX = 0;
         swipeStartY = 0;
         swipeStartTime = 0;
+        horizontalSwipeLocked = false;
     }
 
     // Event listeners
@@ -820,6 +829,7 @@
 
     // Swipe listeners
     boardWrap.addEventListener('pointerdown', handleSwipePointerDown);
+    boardWrap.addEventListener('pointermove', handleSwipePointerMove, { passive: false });
     boardWrap.addEventListener('pointerup', handleSwipePointerUp);
     boardWrap.addEventListener('pointercancel', handleSwipePointerCancel);
     boardWrap.addEventListener('pointerleave', handleSwipePointerCancel);
