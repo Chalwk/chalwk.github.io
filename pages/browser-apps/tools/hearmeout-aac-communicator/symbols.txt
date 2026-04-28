@@ -20,9 +20,19 @@ Yes please;🤝;#4a86e8;Basic Communication
 No thanks;❌;#4a86e8;Basic Communication
 My turn;🔃;#4a86e8;Basic Communication
 Your turn;↩️;#4a86e8;Basic Communication
-Speak louder;🗣️;#4a86e8;Basic Communication
+Speak louder;📢;#4a86e8;Basic Communication
 Please wait;⌛;#4a86e8;Basic Communication
 Tell me;👄;#4a86e8;Basic Communication
+Good afternoon;🌤️;#4a86e8;Basic Communication
+Good evening;🌆;#4a86e8;Basic Communication
+See you later;🤙;#4a86e8;Basic Communication
+Take care;💛;#4a86e8;Basic Communication
+I'm here;📍;#4a86e8;Basic Communication
+I'm ready;🆗;#4a86e8;Basic Communication
+I love you;💕;#4a86e8;Basic Communication
+I miss you;🥺;#4a86e8;Basic Communication
+My name is;👤;#4a86e8;Basic Communication
+
 Help;🆘;#ea4335;Needs & Wants
 I want;👉;#ea4335;Needs & Wants
 I need;👐;#ea4335;Needs & Wants
@@ -50,8 +60,14 @@ Need space;↔️;#ea4335;Needs & Wants
 Change it;♻️;#ea4335;Needs & Wants
 Stop now;⏹️;#ea4335;Needs & Wants
 All done now;🏁;#ea4335;Needs & Wants
-Different one;≠;#ea4335;Needs & Wants
 Too much;💥;#ea4335;Needs & Wants
+Hug;🤗;#ea4335;Needs & Wants
+Cuddle;🧸;#ea4335;Needs & Wants
+Rest;🛌;#ea4335;Needs & Wants
+Warm up;♨️;#ea4335;Needs & Wants
+Cool down;❄️;#ea4335;Needs & Wants
+Something different;🔄;#ea4335;Needs & Wants
+
 Happy;😄;#fbbc04;Feelings & Emotions
 Sad;😢;#fbbc04;Feelings & Emotions
 Angry;😡;#fbbc04;Feelings & Emotions
@@ -84,6 +100,12 @@ Safe;🛡️;#fbbc04;Feelings & Emotions
 Proud;🏆;#fbbc04;Feelings & Emotions
 Calm;🧘;#fbbc04;Feelings & Emotions
 Angry;🤬;#fbbc04;Feelings & Emotions
+Jealous;😒;#fbbc04;Feelings & Emotions
+Disgusted;🤮;#fbbc04;Feelings & Emotions
+Relieved;😅;#fbbc04;Feelings & Emotions
+Neutral;😐;#fbbc04;Feelings & Emotions
+Determined;😠;#fbbc04;Feelings & Emotions
+
 Headphones;🎧;#9c27b0;Sensory Needs
 Quiet;🔇;#9c27b0;Sensory Needs
 Dark;🌙;#9c27b0;Sensory Needs
@@ -109,6 +131,10 @@ Spin;🎡;#9c27b0;Sensory Needs
 Smells bother me;👃;#9c27b0;Sensory Needs
 Too noisy;🔉;#9c27b0;Sensory Needs
 Less noise;🔈;#9c27b0;Sensory Needs
+Weighted vest;🦺;#9c27b0;Sensory Needs
+Sensory bin;🧺;#9c27b0;Sensory Needs
+Tent;⛺;#9c27b0;Sensory Needs
+
 Me;🙂;#00bcd4;People & Pronouns
 You;👉;#00bcd4;People & Pronouns
 Friend;🧑‍🤝‍🧑;#00bcd4;People & Pronouns
@@ -137,6 +163,12 @@ Cousin;🔗;#00bcd4;People & Pronouns
 Aunt;👩‍🦰;#00bcd4;People & Pronouns
 Uncle;👨‍🦰;#00bcd4;People & Pronouns
 Older person;🧓;#00bcd4;People & Pronouns
+Student;🎓;#00bcd4;People & Pronouns
+Neighbour;🏡;#00bcd4;People & Pronouns
+Visitor;🚪;#00bcd4;People & Pronouns
+Animal;🐾;#00bcd4;People & Pronouns
+Stranger;🕵️;#00bcd4;People & Pronouns
+
 Eat;🍽️;#9c27b0;Common Actions
 Drink;🥤;#9c27b0;Common Actions
 Play;🎮;#9c27b0;Common Actions
@@ -172,6 +204,14 @@ Cut;✂️;#9c27b0;Common Actions
 Turn on;🔛;#9c27b0;Common Actions
 Turn off;🔌;#9c27b0;Common Actions
 Share;📤;#9c27b0;Common Actions
+Cook;🍳;#9c27b0;Common Actions
+Shower;🚿;#9c27b0;Common Actions
+Exercise;🏋️;#9c27b0;Common Actions
+Climb;🧗;#9c27b0;Common Actions
+Drive;🚗;#9c27b0;Common Actions
+Fly;✈️;#9c27b0;Common Actions
+Shop;🛒;#9c27b0;Common Actions
+
 Home;🏠;#34a853;Places
 School;🏫;#34a853;Places
 Bathroom;🚻;#34a853;Places
@@ -200,6 +240,13 @@ Garden;🌻;#34a853;Places
 Dentist;🦷;#34a853;Places
 Pharmacy;⚕️;#34a853;Places
 Church;⛪;#34a853;Places
+Mall;🏬;#34a853;Places
+Cinema;🎦;#34a853;Places
+Zoo;🐘;#34a853;Places
+Museum;🏛️;#34a853;Places
+Stadium;🏟️;#34a853;Places
+Hotel;🏨;#34a853;Places
+
 What?;❓;#9b59b6;Questions
 Where?;🗺️;#9b59b6;Questions
 When?;🕒;#9b59b6;Questions
@@ -209,7 +256,7 @@ Who?;👤;#9b59b6;Questions
 How long?;⏱️;#9b59b6;Questions
 What next?;➡️;#9b59b6;Questions
 How are you?;🙂;#9b59b6;Questions
-What is that?;❓;#9b59b6;Questions
+What is that?;❔;#9b59b6;Questions
 Which?;❔;#9b59b6;Questions
 How many?;🔢;#9b59b6;Questions
 Can I?;🤨;#9b59b6;Questions
@@ -221,6 +268,13 @@ How much?;💲;#9b59b6;Questions
 How many?;🔟;#9b59b6;Questions
 Can you help?;⛑️;#9b59b6;Questions
 Is it okay?;🚩;#9b59b6;Questions
+How come?;🤷;#9b59b6;Questions
+Really?;😲;#9b59b6;Questions
+What for?;🎯;#9b59b6;Questions
+What time?;⌚;#9b59b6;Questions
+Where to?;🧭;#9b59b6;Questions
+Who's there?;🚪;#9b59b6;Questions
+
 Now;⏰;#ff9800;Time & Schedule
 Later;⏲️;#ff9800;Time & Schedule
 Time;⏰;#ff9800;Time & Schedule
@@ -247,6 +301,11 @@ Next;⏭️;#ff9800;Time & Schedule
 Last;⏮️;#ff9800;Time & Schedule
 Minute;🕰️;#ff9800;Time & Schedule
 Hour;🕛;#ff9800;Time & Schedule
+Always;♾️;#ff9800;Time & Schedule
+Never;🚫;#ff9800;Time & Schedule
+Sometimes;🔀;#ff9800;Time & Schedule
+Day;☀️;#ff9800;Time & Schedule
+
 Water;💧;#e74c3c;Food & Drink
 Juice;🧃;#e74c3c;Food & Drink
 Snack;🍎;#e74c3c;Food & Drink
@@ -274,6 +333,18 @@ Fish;🐟;#e74c3c;Food & Drink
 Cake;🎂;#e74c3c;Food & Drink
 Salad;🥗;#e74c3c;Food & Drink
 Peanuts;🥜;#e74c3c;Food & Drink
+Cookie;🍪;#e74c3c;Food & Drink
+Chocolate;🍫;#e74c3c;Food & Drink
+Chips;🍟;#e74c3c;Food & Drink
+Popcorn;🍿;#e74c3c;Food & Drink
+Sandwich;🥙;#e74c3c;Food & Drink
+Ramen;🍲;#e74c3c;Food & Drink
+Hot dog;🌭;#e74c3c;Food & Drink
+Burger;🍔;#e74c3c;Food & Drink
+Taco;🌮;#e74c3c;Food & Drink
+Sushi;🍣;#e74c3c;Food & Drink
+Donut;🍩;#e74c3c;Food & Drink
+
 Game;🎲;#2ecc71;Activities & Play
 Music;🎵;#2ecc71;Activities & Play
 Draw;🎨;#2ecc71;Activities & Play
@@ -299,6 +370,15 @@ Adventure;🧭;#2ecc71;Activities & Play
 Story;📜;#2ecc71;Activities & Play
 Trampoline;🤸;#2ecc71;Activities & Play
 Skate;🛹;#2ecc71;Activities & Play
+Board game;♟️;#2ecc71;Activities & Play
+Cards;🃏;#2ecc71;Activities & Play
+Sensory play;🌀;#2ecc71;Activities & Play
+Science;🔬;#2ecc71;Activities & Play
+Cooking;🍳;#2ecc71;Activities & Play
+Gardening;🌱;#2ecc71;Activities & Play
+Reading;📖;#2ecc71;Activities & Play
+Pet care;🐶;#2ecc71;Activities & Play
+
 Headache;🤕;#8e44ad;Body & Health
 Stomach ache;🤢;#8e44ad;Body & Health
 Medicine;💊;#8e44ad;Body & Health
@@ -320,6 +400,12 @@ Cough;🤒;#8e44ad;Body & Health
 Itchy;🐜;#8e44ad;Body & Health
 Dizzy;🥴;#8e44ad;Body & Health
 Need doctor;🚑;#8e44ad;Body & Health
+Sore throat;😫;#8e44ad;Body & Health
+Broken bone;🦴;#8e44ad;Body & Health
+Bandage;🩹;#8e44ad;Body & Health
+Injection;💉;#8e44ad;Body & Health
+Cough drop;🍬;#8e44ad;Body & Health
+
 Big;👐;#f39c12;Descriptors
 Small;🤏;#f39c12;Descriptors
 Fast;⚡;#f39c12;Descriptors
@@ -343,3 +429,11 @@ Heavy;🏋️;#f39c12;Descriptors
 Light;☁️;#f39c12;Descriptors
 Easy;✌️;#f39c12;Descriptors
 Hard;💪;#f39c12;Descriptors
+Open;🔓;#f39c12;Descriptors
+Closed;🔒;#f39c12;Descriptors
+Loud;🔊;#f39c12;Descriptors
+Quiet;🔇;#f39c12;Descriptors
+Soft;☁️;#f39c12;Descriptors
+Rough;🧱;#f39c12;Descriptors
+Smooth;🧈;#f39c12;Descriptors
+Sticky;🍯;#f39c12;Descriptors
