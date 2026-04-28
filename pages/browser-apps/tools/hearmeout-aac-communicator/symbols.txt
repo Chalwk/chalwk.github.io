@@ -386,7 +386,6 @@ Allergy;🤧;#8e44ad;Body & Health
 Temperature;🌡️;#8e44ad;Body & Health
 Cough;😷;#8e44ad;Body & Health
 Itchy;🦟;#8e44ad;Body & Health
-Dizzy;💫;#8e44ad;Body & Health
 Headache;🤯;#8e44ad;Body & Health
 Medicine;🩺;#8e44ad;Body & Health
 Meltdown;🌋;#8e44ad;Body & Health
