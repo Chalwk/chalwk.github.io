@@ -32,6 +32,7 @@ I'm ready;🆗;#4a86e8;Basic Communication
 I love you;💕;#4a86e8;Basic Communication
 I miss you;🥺;#4a86e8;Basic Communication
 My name is;👤;#4a86e8;Basic Communication
+YOUR_NAME_HERE;📛;#4a86e8;Basic Communication
 
 Help;🆘;#ea4335;Needs & Wants
 I want;👉;#ea4335;Needs & Wants
@@ -364,6 +365,7 @@ Build;🧱;#2ecc71;Activities & Play
 Colour;🖍️;#2ecc71;Activities & Play
 Movie;🎬;#2ecc71;Activities & Play
 Computer;💻;#2ecc71;Activities & Play
+Console;🕹️;#2ecc71;Activities & Play
 Dance;🕺;#2ecc71;Activities & Play
 Sing;🎶;#2ecc71;Activities & Play
 Adventure;🧭;#2ecc71;Activities & Play
@@ -383,14 +385,12 @@ Headache;🤕;#8e44ad;Body & Health
 Stomach ache;🤢;#8e44ad;Body & Health
 Medicine;💊;#8e44ad;Body & Health
 Meltdown;🌪️;#8e44ad;Body & Health
-Shutdown;🔄;#8e44ad;Body & Health
 Allergy;🤧;#8e44ad;Body & Health
 Temperature;🌡️;#8e44ad;Body & Health
 Cough;😷;#8e44ad;Body & Health
 Itchy;🦟;#8e44ad;Body & Health
 Dizzy;💫;#8e44ad;Body & Health
 Headache;🤯;#8e44ad;Body & Health
-Stomach ache;🤮;#8e44ad;Body & Health
 Medicine;🩺;#8e44ad;Body & Health
 Meltdown;🌋;#8e44ad;Body & Health
 Shutdown;📴;#8e44ad;Body & Health
