@@ -52,8 +52,6 @@ Alone;🚪;#ea4335;Needs & Wants
 Too much;🔥;#ea4335;Needs & Wants
 Hungry;🍽️;#ea4335;Needs & Wants
 Thirsty;💧;#ea4335;Needs & Wants
-Cold;🥶;#ea4335;Needs & Wants
-Hot;🥵;#ea4335;Needs & Wants
 Something else;🤔;#ea4335;Needs & Wants
 Need help;🔔;#ea4335;Needs & Wants
 Need a break;☕;#ea4335;Needs & Wants
@@ -75,7 +73,6 @@ Angry;😡;#fbbc04;Feelings & Emotions
 Scared;😨;#fbbc04;Feelings & Emotions
 Excited;🤩;#fbbc04;Feelings & Emotions
 Calm;😌;#fbbc04;Feelings & Emotions
-Sick;🤢;#fbbc04;Feelings & Emotions
 Surprised;😲;#fbbc04;Feelings & Emotions
 Lonely;🥺;#fbbc04;Feelings & Emotions
 Overwhelmed;🌊;#fbbc04;Feelings & Emotions
@@ -135,6 +132,7 @@ Less noise;🔈;#9c27b0;Sensory Needs
 Weighted vest;🦺;#9c27b0;Sensory Needs
 Sensory bin;🧺;#9c27b0;Sensory Needs
 Tent;⛺;#9c27b0;Sensory Needs
+Light;💡;#9c27b0;Sensory Needs
 
 Me;🙂;#00bcd4;People & Pronouns
 You;👉;#00bcd4;People & Pronouns
@@ -196,7 +194,6 @@ Brush teeth;🦷;#9c27b0;Common Actions
 Open it;🔓;#9c27b0;Common Actions
 Close it;🔐;#9c27b0;Common Actions
 Give;🎁;#9c27b0;Common Actions
-Light;💡;#9c27b0;Common Actions
 Take;🖐️;#9c27b0;Common Actions
 Make;🔨;#9c27b0;Common Actions
 Fix;🧰;#9c27b0;Common Actions
@@ -405,6 +402,9 @@ Broken bone;🦴;#8e44ad;Body & Health
 Bandage;🩹;#8e44ad;Body & Health
 Injection;💉;#8e44ad;Body & Health
 Cough drop;🍬;#8e44ad;Body & Health
+Sick;🤢;#8e44ad;Body & Health
+Hot;🥵;#8e44ad;Body & Health
+Cold;🥶;#8e44ad;Body & Health
 
 Big;👐;#f39c12;Descriptors
 Small;🤏;#f39c12;Descriptors
