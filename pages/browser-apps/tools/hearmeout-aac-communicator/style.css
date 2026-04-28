@@ -283,6 +283,7 @@ main {
     position: relative;
     overflow: hidden;
     padding: 4.5rem 64px 1.5rem;
+    touch-action: pan-y;
 }
 
 .board-scroll-wrapper {

@@ -767,6 +767,7 @@
         return false;
     }
 
+    // Board swipe navigation using pointer events (more reliable than touch)
     function handleSwipePointerDown(e) {
         if (e.pointerType !== 'touch') return;
         if (swipeActivePointerId !== null) return;
