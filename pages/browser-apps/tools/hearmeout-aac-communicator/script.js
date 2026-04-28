@@ -61,6 +61,7 @@
     let categoriesOrdered = [];
     let currentCategoryIndex = 0;
     let isAnimating = false;
+    let touchStartX = 0, touchStartY = 0, touchStartTime = 0;
 
     // localStorage keys
     const LS = {
@@ -765,6 +766,8 @@
     // Event listeners
     boardWrap.addEventListener('contextmenu', e => e.preventDefault());
     boardWrap.addEventListener('selectstart', e => e.preventDefault());
+    boardWrap.addEventListener('touchstart', handleTouchStart, {passive: true});
+    boardWrap.addEventListener('touchend', handleTouchEnd, {passive: false});
     phraseDisplay.addEventListener('contextmenu', e => e.preventDefault());
     phraseDisplay.addEventListener('selectstart', e => e.preventDefault());
 
@@ -877,6 +880,44 @@
             }
         }
     });
+
+    function handleTouchStart(e) {
+        if (e.touches.length === 1) {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            touchStartTime = Date.now();
+        }
+    }
+
+    function handleTouchEnd(e) {
+        if (!touchStartX || !touchStartY) return;
+        const touchEndX = e.changedTouches[0].clientX;
+        const touchEndY = e.changedTouches[0].clientY;
+        const dx = touchEndX - touchStartX;
+        const dy = touchEndY - touchStartY;
+        const dt = Date.now() - touchStartTime;
+        const absDx = Math.abs(dx);
+        const absDy = Math.abs(dy);
+
+        // Swipe thresholds: horizontal > 50px, vertical < 30px, within 300ms
+        if (absDx > 50 && absDy < 30 && dt < 300) {
+            if (dx > 0) {
+                // Swipe right = previous category
+                if (categoriesOrdered.length) {
+                    closeCategoryDropdown();
+                    animateCategoryChange((currentCategoryIndex - 1 + categoriesOrdered.length) % categoriesOrdered.length);
+                }
+            } else {
+                // Swipe left = next category
+                if (categoriesOrdered.length) {
+                    closeCategoryDropdown();
+                    animateCategoryChange((currentCategoryIndex + 1) % categoriesOrdered.length);
+                }
+            }
+        }
+        // Reset touch coordinates
+        touchStartX = touchStartY = 0;
+    }
 
     async function init() {
         loadSettings();
