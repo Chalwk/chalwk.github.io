@@ -61,7 +61,12 @@
     let categoriesOrdered = [];
     let currentCategoryIndex = 0;
     let isAnimating = false;
-    let touchStartX = 0, touchStartY = 0, touchStartTime = 0;
+
+    // swipe state
+    let swipeActivePointerId = null;
+    let swipeStartX = 0;
+    let swipeStartY = 0;
+    let swipeStartTime = 0;
 
     // localStorage keys
     const LS = {
@@ -458,9 +463,8 @@
             let pressTimer = null;
             const clearPressTimer = () => clearTimeout(pressTimer);
             node.addEventListener('pointerdown', e => {
-                e.preventDefault();
                 if (!isEditMode) pressTimer = setTimeout(() => previewSpeak(symbol), 550);
-            }, {passive: false});
+            });
             node.addEventListener('pointerup', clearPressTimer);
             node.addEventListener('pointerleave', clearPressTimer);
             node.addEventListener('pointercancel', clearPressTimer);
@@ -763,11 +767,62 @@
         return false;
     }
 
+    function handleSwipePointerDown(e) {
+        if (e.pointerType !== 'touch') return;
+        if (swipeActivePointerId !== null) return;
+        swipeActivePointerId = e.pointerId;
+        swipeStartX = e.clientX;
+        swipeStartY = e.clientY;
+        swipeStartTime = Date.now();
+    }
+
+    function handleSwipePointerUp(e) {
+        if (e.pointerType !== 'touch' || e.pointerId !== swipeActivePointerId) return;
+        const dx = e.clientX - swipeStartX;
+        const dy = e.clientY - swipeStartY;
+        const dt = Date.now() - swipeStartTime;
+
+        // Swipe thresholds: horizontal > 25px, vertical < 50px, within 300ms
+        if (dt < 300 && Math.abs(dx) > 25 && Math.abs(dy) < 50) {
+            if (dx > 0) {
+                // Swipe right -> previous category
+                if (categoriesOrdered.length) {
+                    closeCategoryDropdown();
+                    animateCategoryChange((currentCategoryIndex - 1 + categoriesOrdered.length) % categoriesOrdered.length);
+                }
+            } else {
+                // Swipe left -> next category
+                if (categoriesOrdered.length) {
+                    closeCategoryDropdown();
+                    animateCategoryChange((currentCategoryIndex + 1) % categoriesOrdered.length);
+                }
+            }
+        }
+
+        resetSwipe();
+    }
+
+    function handleSwipePointerCancel(e) {
+        if (e.pointerId === swipeActivePointerId) resetSwipe();
+    }
+
+    function resetSwipe() {
+        swipeActivePointerId = null;
+        swipeStartX = 0;
+        swipeStartY = 0;
+        swipeStartTime = 0;
+    }
+
     // Event listeners
     boardWrap.addEventListener('contextmenu', e => e.preventDefault());
     boardWrap.addEventListener('selectstart', e => e.preventDefault());
-    boardWrap.addEventListener('touchstart', handleTouchStart, {passive: true});
-    boardWrap.addEventListener('touchend', handleTouchEnd, {passive: false});
+
+    // Swipe listeners
+    boardWrap.addEventListener('pointerdown', handleSwipePointerDown);
+    boardWrap.addEventListener('pointerup', handleSwipePointerUp);
+    boardWrap.addEventListener('pointercancel', handleSwipePointerCancel);
+    boardWrap.addEventListener('pointerleave', handleSwipePointerCancel);
+
     phraseDisplay.addEventListener('contextmenu', e => e.preventDefault());
     phraseDisplay.addEventListener('selectstart', e => e.preventDefault());
 
@@ -880,44 +935,6 @@
             }
         }
     });
-
-    function handleTouchStart(e) {
-        if (e.touches.length === 1) {
-            touchStartX = e.touches[0].clientX;
-            touchStartY = e.touches[0].clientY;
-            touchStartTime = Date.now();
-        }
-    }
-
-    function handleTouchEnd(e) {
-        if (!touchStartX || !touchStartY) return;
-        const touchEndX = e.changedTouches[0].clientX;
-        const touchEndY = e.changedTouches[0].clientY;
-        const dx = touchEndX - touchStartX;
-        const dy = touchEndY - touchStartY;
-        const dt = Date.now() - touchStartTime;
-        const absDx = Math.abs(dx);
-        const absDy = Math.abs(dy);
-
-        // Swipe thresholds: horizontal > 50px, vertical < 30px, within 300ms
-        if (absDx > 50 && absDy < 30 && dt < 300) {
-            if (dx > 0) {
-                // Swipe right = previous category
-                if (categoriesOrdered.length) {
-                    closeCategoryDropdown();
-                    animateCategoryChange((currentCategoryIndex - 1 + categoriesOrdered.length) % categoriesOrdered.length);
-                }
-            } else {
-                // Swipe left = next category
-                if (categoriesOrdered.length) {
-                    closeCategoryDropdown();
-                    animateCategoryChange((currentCategoryIndex + 1) % categoriesOrdered.length);
-                }
-            }
-        }
-        // Reset touch coordinates
-        touchStartX = touchStartY = 0;
-    }
 
     async function init() {
         loadSettings();
