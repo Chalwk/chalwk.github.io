@@ -292,10 +292,25 @@ main {
     touch-action: pan-y;
 }
 
-.board-nav {
+.board-nav-group {
     position: absolute;
-    top: 30%;
     z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    top: 30%;
+    transform: translateY(-50%);
+}
+
+.board-nav-prev-group {
+    left: 5px;
+}
+.board-nav-next-group {
+    right: 5px;
+}
+
+.board-nav {
     background: rgba(255, 255, 255, 0.95);
     border: 2px solid var(--gray-light);
     border-radius: 50%;
@@ -316,18 +331,35 @@ main {
     box-shadow: var(--shadow-lg);
 }
 
-.board-nav-prev {
-    left: 5px;
-}
-
-.board-nav-next {
-    right: 5px;
-}
-
 .board-nav:focus-visible {
     outline: none;
     box-shadow: 0 0 0 3px var(--primary);
 }
+
+.swipe-hint {
+    display: flex;
+    gap: 0.1rem;
+    font-size: 0.9rem;
+    line-height: 1;
+    user-select: none;
+}
+
+.swipe-hint .arrow {
+    display: inline-block;
+    font-family: monospace;
+}
+
+/* colour grades: left swipe - darkest on the left (arrow-1), lightest on the right (arrow-3) */
+.swipe-hint-left .arrow-1 { color: #000; }
+.swipe-hint-left .arrow-2 { color: #888; }
+.swipe-hint-left .arrow-3 { color: #ccc; }
+
+/* right swipe - darkest on the right (arrow-3), lightest on the left (arrow-1) */
+.swipe-hint-right .arrow-1 { color: #ccc; }
+.swipe-hint-right .arrow-2 { color: #888; }
+.swipe-hint-right .arrow-3 { color: #000; }
+
+/* --- end new styles --- */
 
 .category-indicator {
     position: absolute;

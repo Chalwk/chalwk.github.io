@@ -83,10 +83,30 @@ pwa: true
 
                 <!-- board: arrows, category indicator (clickable for quick jump), and scrollable symbol grid -->
                 <div aria-label="board" class="board-container" id="boardWrap" tabindex="0">
-                    <button aria-label="Previous category" class="board-nav board-nav-prev" id="boardPrevBtn"
-                            type="button">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
+                    <!-- Left navigation group -->
+                    <div class="board-nav-group board-nav-prev-group" id="boardPrevGroup">
+                        <button aria-label="Previous category" class="board-nav board-nav-prev" id="boardPrevBtn" type="button">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <div class="swipe-hint swipe-hint-left" aria-hidden="true">
+                            <span class="arrow arrow-1">&lt;</span>
+                            <span class="arrow arrow-2">&lt;</span>
+                            <span class="arrow arrow-3">&lt;</span>
+                        </div>
+                    </div>
+
+                    <!-- Right navigation group -->
+                    <div class="board-nav-group board-nav-next-group" id="boardNextGroup">
+                        <button aria-label="Next category" class="board-nav board-nav-next" id="boardNextBtn" type="button">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                        <div class="swipe-hint swipe-hint-right" aria-hidden="true">
+                            <span class="arrow arrow-1">&gt;</span>
+                            <span class="arrow arrow-2">&gt;</span>
+                            <span class="arrow arrow-3">&gt;</span>
+                        </div>
+                    </div>
+
                     <div aria-live="polite" class="category-indicator" id="categoryIndicator" role="button" tabindex="0"
                          title="Click to jump to another category">Category
                     </div>
@@ -97,9 +117,6 @@ pwa: true
                     <div class="board-scroll-wrapper">
                         <div class="board" id="board" role="list"></div>
                     </div>
-                    <button aria-label="Next category" class="board-nav board-nav-next" id="boardNextBtn" type="button">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
                 </div>
             </div>
         </div>
