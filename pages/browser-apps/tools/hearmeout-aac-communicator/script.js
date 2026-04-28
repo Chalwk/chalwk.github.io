@@ -61,8 +61,7 @@
     let categoriesOrdered = [];
     let currentCategoryIndex = 0;
     let isAnimating = false;
-    let swipeStartX = 0, swipeStartY = 0, swipeStartTime = 0;
-    let swipeActive = false;
+    let touchStartX = 0, touchStartY = 0, touchStartTime = 0;
 
     // localStorage keys
     const LS = {
@@ -767,12 +766,8 @@
     // Event listeners
     boardWrap.addEventListener('contextmenu', e => e.preventDefault());
     boardWrap.addEventListener('selectstart', e => e.preventDefault());
-
-    // Swipe navigation using pointer events (more reliable than touch events)
-    boardWrap.addEventListener('pointerdown', handlePointerDown);
-    boardWrap.addEventListener('pointerup', handlePointerUp);
-    boardWrap.addEventListener('pointercancel', handlePointerCancel);
-
+    boardWrap.addEventListener('touchstart', handleTouchStart, {passive: true});
+    boardWrap.addEventListener('touchend', handleTouchEnd, {passive: false});
     phraseDisplay.addEventListener('contextmenu', e => e.preventDefault());
     phraseDisplay.addEventListener('selectstart', e => e.preventDefault());
 
@@ -886,59 +881,42 @@
         }
     });
 
-    // --- Swipe handling with pointer events ---
-    function handlePointerDown(e) {
-        if (e.pointerType !== 'touch') return;
-        if (swipeActive) return;
-
-        swipeStartX = e.clientX;
-        swipeStartY = e.clientY;
-        swipeStartTime = Date.now();
-        swipeActive = true;
-
-        // Prevent the browser from interpreting the swipe as a page scroll
-        e.preventDefault();
+    function handleTouchStart(e) {
+        if (e.touches.length === 1) {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            touchStartTime = Date.now();
+        }
     }
 
-    function handlePointerUp(e) {
-        if (e.pointerType !== 'touch' || !swipeActive) {
-            cancelSwipe();
-            return;
-        }
-
-        const dx = e.clientX - swipeStartX;
-        const dy = e.clientY - swipeStartY;
-        const dt = Date.now() - swipeStartTime;
+    function handleTouchEnd(e) {
+        if (!touchStartX || !touchStartY) return;
+        const touchEndX = e.changedTouches[0].clientX;
+        const touchEndY = e.changedTouches[0].clientY;
+        const dx = touchEndX - touchStartX;
+        const dy = touchEndY - touchStartY;
+        const dt = Date.now() - touchStartTime;
         const absDx = Math.abs(dx);
         const absDy = Math.abs(dy);
 
-        // Tweaked thresholds: horizontal > 60px, vertical < 50px, within 400ms
-        if (absDx > 60 && absDy < 50 && dt < 400) {
+        // Swipe thresholds: horizontal > 50px, vertical < 30px, within 300ms
+        if (absDx > 50 && absDy < 30 && dt < 300) {
             if (dx > 0) {
-                // swipe right = previous category
+                // Swipe right = previous category
                 if (categoriesOrdered.length) {
                     closeCategoryDropdown();
                     animateCategoryChange((currentCategoryIndex - 1 + categoriesOrdered.length) % categoriesOrdered.length);
                 }
             } else {
-                // swipe left = next category
+                // Swipe left = next category
                 if (categoriesOrdered.length) {
                     closeCategoryDropdown();
                     animateCategoryChange((currentCategoryIndex + 1) % categoriesOrdered.length);
                 }
             }
         }
-        cancelSwipe();
-    }
-
-    function handlePointerCancel(e) {
-        if (e.pointerType === 'touch') cancelSwipe();
-    }
-
-    function cancelSwipe() {
-        swipeActive = false;
-        swipeStartX = swipeStartY = 0;
-        swipeStartTime = 0;
+        // Reset touch coordinates
+        touchStartX = touchStartY = 0;
     }
 
     async function init() {
