@@ -1,5 +1,7 @@
 /* Copyright (c) 2024-2026. Jericho Crosby (Chalwk) */
 
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
+
 html, body {
     height: 100%;
     margin: 0;
@@ -73,10 +75,12 @@ main {
 }
 
 .header-left h2 {
-    font-size: 1.2rem;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.4rem;
     margin: 0;
     color: white;
     font-weight: 600;
+    letter-spacing: 0.02em;
 }
 
 .header-sub {
@@ -428,6 +432,7 @@ button:active {
 }
 
 .symbol {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -439,8 +444,6 @@ button:active {
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     text-align: center;
-    position: relative;
-    outline: none;
     min-height: 100px;
     border: 2px solid var(--gray-light);
     box-shadow: var(--shadow-sm);
@@ -452,6 +455,24 @@ button:active {
     -webkit-user-select: none;
     -webkit-touch-callout: none;
     -webkit-tap-highlight-color: transparent;
+}
+
+.symbol-number {
+    position: absolute;
+    top: 2px;
+    left: 3px;
+    font-size: 0.65rem;
+    font-weight: bold;
+    line-height: 1;
+    color: rgba(0, 0, 0, 0.65);
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 50%;
+    width: 1.5em;
+    height: 1.5em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
 }
 
 .symbol img {

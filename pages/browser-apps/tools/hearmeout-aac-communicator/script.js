@@ -423,13 +423,34 @@
     function renderBoard() {
         board.innerHTML = '';
         const filtered = symbols.filter(s => s.category === (categoriesOrdered[currentCategoryIndex] || ''));
-        filtered.forEach(symbol => {
+        filtered.forEach((symbol, index) => {
             const node = document.createElement('div');
             node.className = 'symbol' + (isEditMode ? ' editing' : '');
             node.setAttribute('role', 'listitem');
             node.setAttribute('tabindex', '0');
             node.style.backgroundColor = symbol.color || '#e8f0fe';
-            node.innerHTML = isImageSource(symbol.image) ? `<img src="${symbol.image}" alt="${symbol.text}"><span>${symbol.text}</span>` : `<span class="symbol-emoji">${symbol.image}</span><span>${symbol.text}</span>`;
+
+            // tiny number badge (top-left)
+            const numSpan = document.createElement('span');
+            numSpan.className = 'symbol-number';
+            numSpan.textContent = String(index + 1);
+            node.appendChild(numSpan);
+
+            if (isImageSource(symbol.image)) {
+                const img = document.createElement('img');
+                img.src = symbol.image;
+                img.alt = symbol.text;
+                node.appendChild(img);
+            } else {
+                const emojiSpan = document.createElement('span');
+                emojiSpan.className = 'symbol-emoji';
+                emojiSpan.textContent = symbol.image;
+                node.appendChild(emojiSpan);
+            }
+
+            const textSpan = document.createElement('span');
+            textSpan.textContent = symbol.text;
+            node.appendChild(textSpan);
 
             node.addEventListener('click', () => isEditMode ? openEditModal(symbol) : addToPhrase(symbol));
 
@@ -719,6 +740,28 @@
         closeSettingsMenu();
     }
 
+    /** number-key navigation helper (card numbers start at 1) **/
+    function speakCardNumber(key, ctrlKey, altKey) {
+        const filtered = symbols.filter(s => s.category === (categoriesOrdered[currentCategoryIndex] || ''));
+        let cardIndex = -1;
+
+        // base offset: 0 = no modifier, 10 = Ctrl, 20 = Alt, 30 = Ctrl+Alt
+        let offset = 0;
+        if (ctrlKey && altKey) offset = 30;
+        else if (altKey) offset = 20;
+        else if (ctrlKey) offset = 10;
+
+        if (key === '0') cardIndex = 9 + offset; // card 10, 20, 30, 40
+        else if (key >= '1' && key <= '9') cardIndex = (parseInt(key, 10) - 1) + offset;
+
+        if (cardIndex >= 0 && cardIndex < filtered.length) {
+            const symbol = filtered[cardIndex];
+            previewSpeak(symbol);
+            return true;
+        }
+        return false;
+    }
+
     // Event listeners
     boardWrap.addEventListener('contextmenu', e => e.preventDefault());
     boardWrap.addEventListener('selectstart', e => e.preventDefault());
@@ -798,6 +841,19 @@
     });
 
     boardWrap.addEventListener('keydown', ev => {
+        // Arrow keys for category navigation
+        if (ev.key === 'ArrowLeft') {
+            ev.preventDefault();
+            boardPrevBtn.click();
+            return;
+        }
+        if (ev.key === 'ArrowRight') {
+            ev.preventDefault();
+            boardNextBtn.click();
+            return;
+        }
+
+        // existing shortcuts
         if (ev.key === 'e') {
             toggleEditMode();
             closeSettingsMenu();
@@ -809,6 +865,16 @@
         if (ev.key === 'Escape') {
             closeSettingsMenu();
             closeCategoryDropdown();
+        }
+
+        // number shortcuts to speak a card instantly
+        if (/^[0-9]$/.test(ev.key)) {
+            ev.preventDefault();
+            if (speakCardNumber(ev.key, ev.ctrlKey, ev.altKey)) {
+                // card spoken successfully
+            } else {
+                // out of range - no feedback to keep it quiet
+            }
         }
     });
 
