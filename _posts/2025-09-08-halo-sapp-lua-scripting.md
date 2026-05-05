@@ -852,6 +852,6 @@ Now that you have the basics and a full template, you can:
 - Use `timer()` for delayed or repeating actions.
 - Experiment with `get_var()` and `set_var()` to modify player properties (health, shields, weapons).
 - Explore the FFI library for advanced system integration.
-- Join the HSP community to share your scripts and get help.
+- Join the SPCLib community to share your scripts and get help.
 
 ---

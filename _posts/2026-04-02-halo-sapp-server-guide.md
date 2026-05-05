@@ -10,7 +10,7 @@ Running a Halo dedicated server with SAPP is easy when you have a pre-configured
 also be easy - if you understand how SAPP can separate global and instance-specific files.
 
 This guide starts with a **single-server instance** - exactly what you get in the pre-configured package from
-the [ReadyToGo releases](https://github.com/Chalwk/HALO-SCRIPT-PROJECTS/releases/tag/ReadyToGo). You will
+the [ReadyToGo releases](https://github.com/Chalwk/SPCLib/releases/tag/ReadyToGo). You will
 learn what every file and folder does, and how to launch your server. Then, without repeating file descriptions, you
 will learn how to **convert the single instance into a multi-server cluster** - adding more game modes on different
 ports while sharing admin settings, maps, and SAPP binaries.
