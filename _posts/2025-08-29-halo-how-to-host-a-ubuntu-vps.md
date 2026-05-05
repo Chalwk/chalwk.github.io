@@ -34,7 +34,7 @@ Before we begin, make sure you have the following tools on your local Windows ma
 |-------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------|
 | [BitVise SSH Client](https://www.bitvise.com/ssh-client-download)                               | Secure terminal access and file transfers (SFTP).                                                                 |
 | [TightVNC Viewer](https://www.tightvnc.com/download.php)                                        | Remote desktop connection to the VPS GUI (used before we upgrade to X2Go).                                        |
-| [HPC/CE Server Template](https://github.com/Chalwk/SPCLib/releases/tag/ReadyToGo) | Pre-configured server files that work flawlessly with Wine. Download either `HPC_Server.zip` or `HCE_Server.zip`. |
+| [HPC/CE Server Template](https://github.com/Chalwk/SPCLib/releases/tag/ReadyToGo) | Pre-configured server files that work flawlessly with Wine. Download either `SAPP_PC.zip` or `SAPP_CE.zip`. |
 
 **Important notes before you start:**
 
@@ -50,8 +50,8 @@ Before we begin, make sure you have the following tools on your local Windows ma
 ## Step 1: Download and Prepare the Server Template
 
 1. Visit the [ReadyToGo releases page](https://github.com/Chalwk/SPCLib/releases/tag/ReadyToGo).
-2. Download either `HPC_Server.zip` (for Halo PC) or `HCE_Server.zip` (for Halo Custom Edition).
-3. Extract the ZIP file on your local computer. You'll now have a folder named `HPC_Server` or `HCE_Server`.
+2. Download either `SAPP_PC.zip` (for Halo PC) or `SAPP_CE.zip` (for Halo Custom Edition).
+3. Extract the ZIP file on your local computer. You'll now have a folder named `SAPP_PC` or `SAPP_CE`.
    Keep it handy - we'll upload it to the VPS later.
 
 ---
@@ -385,7 +385,7 @@ No additional configuration is needed for basic protection.
 
 1. In BitVise, click the **New SFTP Window** button.
 2. Navigate to `/home/haloadmin/` on the VPS.
-3. On your local computer, locate the extracted `HPC_Server` or `HCE_Server` folder.
+3. On your local computer, locate the extracted `SAPP_PC` or `SAPP_CE` folder.
 4. Drag and drop the entire folder into the VPS `/home/haloadmin/` directory.
 
 This may take a few minutes depending on file size.
@@ -399,21 +399,21 @@ To make launching the server easy, we'll create a script and a desktop icon.
 First, create a launch script inside your server folder:
 
 ```bash
-nano /home/haloadmin/HCE_Server/run.sh
+nano /home/haloadmin/SAPP_CE/run.sh
 ```
 
 Paste the following (adjust the path and port if needed):
 
 ```bash
 #!/bin/bash
-cd "/home/haloadmin/HCE_Server"
+cd "/home/haloadmin/SAPP_CE"
 wineconsole haloceded.exe -path "cg/" -exec "cg/init.txt" -port 2302
 ```
 
 Save and exit. Make it executable:
 
 ```bash
-chmod +x /home/haloadmin/HCE_Server/run.sh
+chmod +x /home/haloadmin/SAPP_CE/run.sh
 ```
 
 Now create the desktop shortcut:
@@ -429,7 +429,7 @@ Paste:
 Version = 1.0
 Type = Application
 Name = RENAME_THIS
-Exec = /home/haloadmin/HCE_Server/run.sh
+Exec = /home/haloadmin/SAPP_CE/run.sh
 Icon = utilities-terminal
 Categories = Game;
 ```

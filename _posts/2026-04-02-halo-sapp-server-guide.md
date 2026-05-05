@@ -19,7 +19,7 @@ ports while sharing admin settings, maps, and SAPP binaries.
 
 ## What You Get in a Pre-Configured Package
 
-The ready-to-run archive (e.g., `HCE_Server.zip`) contains a complete, working SAPP server environment. Below is the
+The ready-to-run archive (e.g., `SAPP_CE.zip`) contains a complete, working SAPP server environment. Below is the
 exact folder structure you will see after extracting the zip file.
 
 ```
