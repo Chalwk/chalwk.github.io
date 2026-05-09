@@ -493,7 +493,7 @@
             const awakeningsCount = entry.awakenings ? entry.awakenings.length : 0;
             const nightmareIcon = entry.nightmares ? ' 🌙💭' : '';
             const traumaMark = entry.traumaNightmare ? ' (trauma)' : '';
-            const snippet = entry.notes ? `<div class="entry-note-preview"><i class="fas fa-pencil-alt"></i> ${entry.notes.substring(0, 50)}${entry.notes.length > 50 ? '…' : ''}</div>` : '';
+            const snippet = entry.notes ? `<div class="entry-note-preview"><i class="fas fa-pencil-alt"></i> ${entry.notes.substring(0, 50)}${entry.notes.length > 50 ? '...' : ''}</div>` : '';
 
             html += `
                 <div class="entry-card" data-id="${entry.id}">
