@@ -356,8 +356,8 @@ delete_object(object_id)
 Spawn an object by tag class and path or ID. Pass the object's x, y, and z coordinates.
 
 ```lua
-    local sniper = spawn_object("weap","weapons\\sniper rifle\\sniper rifle", x, y, z)
-    local sniper = spawn_object(tag_id, x, y, z)
+local sniper = spawn_object("weap","weapons\\sniper rifle\\sniper rifle", x, y, z)
+local sniper = spawn_object(tag_id, x, y, z)
 ```
 
 ### Accessing game tags directly
