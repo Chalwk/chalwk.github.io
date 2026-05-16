@@ -83,6 +83,66 @@ end
 
 ---
 
+## Global Variables
+
+Chimera exposes several read-only global variables that provide useful information about the current game state, your
+script's environment, and the Chimera version.
+
+* `build`: Chimera build number. **Negative** = alpha/pre-release; **positive** = public release.
+* `full_build`: If `build` is negative, contains the **next public release build number**; otherwise equals `build`.
+* `gametype`: Current gametype: `"ctf"`, `"slayer"`, `"oddball"`, `"king"`, or `"race"`. 
+* `local_player_index`: Local player index (0-15).
+* `map`: Currently loaded map name.
+* `map_is_protected`: `true` if the map uses protected tag data (e.g., `"h3mt-foundry"`).
+* `sandboxed`: `true` if the script is running in a sandboxed environment (see “Sandboxed Scripts”).
+* `script_name`: Filename for global scripts, or map name for map scripts.
+* `script_type`: `"global"` or `"map"`.
+* `server_type`: `"none"`, `"local"`, or `"dedicated"`.
+
+### Example: Using Global Variables
+
+Check if the script is running on a dedicated server, then output the map name:
+
+```lua
+if server_type == "dedicated" then
+    console_out("Running on dedicated server")
+end
+
+console_out("Map: " .. map)
+```
+
+### Example: Gametype-Specific Logic
+
+```lua
+function OnTick()
+    if gametype == "ctf" then
+        -- Show flag carrier info, etc.
+    elseif gametype == "slayer" then
+        -- Show kill/death stats
+    end
+end
+```
+
+### Example: Using `local_player_index` to Iterate Over Other Players
+
+Because `local_player_index` may be `nil` (if not yet assigned), always check it first.
+
+```lua
+function OnTick()
+    local local_idx = local_player_index
+    if not local_idx then return end  -- not ready yet
+
+    for i = 0, 15 do
+        if i ~= local_idx then
+            -- This player is not the local player and is connected
+            -- You could read their kills, deaths, team, etc.
+        end
+    end
+end
+```
+
+---
+
 ## Reading Player Data
 
 Everything interesting comes from reading memory offsets.
