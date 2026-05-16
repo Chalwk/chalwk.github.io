@@ -250,7 +250,7 @@ local weapon_id = get_object(read_dword(dynamic_player + 0x118))
 local weapon_name = get_object_name(weapon_id) -- returns "Weapon Name" (e.g. "Assault Rifle")
 ```
 
-### Enumerating Game Objects
+### Enumerating and Working with Game Objects
 
 To scan for all objects in the world (projectiles, vehicles, weapons, etc.), you need to read the global object table.
 
@@ -275,6 +275,17 @@ Use this function to delete objects from the game.
 
 ```lua
 delete_object(object_id)
+```
+
+---
+
+### Spawning an object
+
+Spawn an object by tag class and path or ID. Pass the object's x, y, and z coordinates.
+
+```lua
+    local sniper = spawn_object("weap","weapons\\sniper rifle\\sniper rifle", x, y, z)
+    local sniper = spawn_object(tag_id, x, y, z)
 ```
 
 ---
@@ -369,6 +380,54 @@ local function load_stats()
     return {kills=tonumber(kills), deaths=tonumber(deaths)}
 end
 ```
+
+---
+
+## Using Timers: `set_timer` and `stop_timer`
+
+Sometimes you need to run code after a delay, or repeat an action at a fixed interval without relying on `OnTick` and
+manual counters. Chimera provides two functions for this: `set_timer` and `stop_timer`.
+
+### `set_timer`
+
+Registers a repeating timer and returns a timer ID that you can later cancel with `stop_timer`.  
+The specified function will execute repeatedly at the given interval (in milliseconds) until either:
+
+- it returns `false`, or
+- you manually remove it with `stop_timer`.
+
+You can pass additional arguments to the callback (strings, numbers, booleans, or nil).
+
+**Syntax:**  
+`set_timer(interval_ms, "function_name", [arg1, arg2, ...])`
+
+**Returns:** a numeric timer ID.
+
+**Example:**
+
+```lua
+function show_message(text)
+    console_out(text)
+end
+
+-- Run every 2 seconds, passing a string argument
+local timer_id = set_timer(2000, "show_message", "Hello from the timer!")
+```
+
+### `stop_timer`
+
+Stops a running timer using its ID. If the timer no longer exists, an error will occur.
+
+**Syntax:**  
+`stop_timer(timer_id)`
+
+**Example:**
+
+```lua
+stop_timer(timer_id) -- Stop the timer created above
+```
+
+---
 
 ---
 
