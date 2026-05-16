@@ -147,7 +147,7 @@ function OnTick()
     if not local_idx then return end  -- not ready yet
 
     for i = 0, 15 do
-        if i ~= local_idx then
+        if i ~= local_idx and get_player(i) then
             -- This player is not the local player and is connected
             -- You could read their kills, deaths, team, etc.
         end
