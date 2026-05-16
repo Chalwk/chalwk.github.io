@@ -245,7 +245,7 @@ end
 
 ---
 
-## Script Management & Advanced Features (From the Official Chimera Readme)
+## Script Management & Advanced Features
 
 Now that you know how to write scripts, here's where to put them and how to get the most out of Chimera's scripting
 system.
@@ -262,8 +262,7 @@ Chimera looks for Lua scripts in two specific places, and treats them differentl
 
 By default, the chimera data folder will be located in `C:\Users\<user>\Documents\My Games\Halo CE\chimera`.
 
-If you want to reload all active scripts without restarting the game, type `chimera_lua_scripts_reload` in console (
-press `~`).
+To reload all scripts without restarting the game, type `chimera_lua_scripts_reload` in console (press `~`).
 
 ### Version Check Requirement
 
