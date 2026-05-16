@@ -258,7 +258,7 @@ end
 
 Player names are stored as a wide-character string (2 bytes per character, UTF-16). Because Halo names are limited to
 ASCII characters, each character's high byte is `0x00`. So you can read every other byte (the low bytes) and stop at a
-single `0x00` byte—that marks the null terminator.
+single `0x00` byte that marks the null terminator.
 
 ```lua
 local function get_player_name(id)
