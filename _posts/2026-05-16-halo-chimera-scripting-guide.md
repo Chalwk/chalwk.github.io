@@ -7,6 +7,9 @@ tags: [ chimera, lua, halo, scripting, tutorial ]
 
 # Chimera Scripting: A guide to making your own client mods
 
+This guide walks through the core scripting model and practical examples so you can build your own HUDs, gameplay
+tweaks, and quality-of-life mods using Chimera's event-driven Lua environment.
+
 ---
 
 ## The Basics: What Every Script Needs
