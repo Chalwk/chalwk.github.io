@@ -121,7 +121,7 @@ local shields_percent = math.floor(shields_raw * 100)
 
 ### Read integers (team, ping, kills, deaths)
 
-Use `read_byte()` for small values (0-255), `read_word()` for 16‑bit, and `read_dword()` for 32‑bit.
+Use `read_byte()` for small values (0-255), `read_word()` for 16-bit, and `read_dword()` for 32-bit.
 
 **Team** (0 = Red, 1 = Blue, from the player structure):
 
@@ -190,13 +190,13 @@ single `0x00` byte—that marks the null terminator.
 local function get_player_name(id)
     local obj = get_player(id)
     local addr = obj + 0x4
-    local bytes = {}
+    local name_chars = {}
     for i = 1, 12 do
         local b = read_byte(addr + (i-1)*2)
         if b == 0 then break end
-        bytes[#bytes+1] = string.char(b)
+        name_chars[#name_chars+1] = string.char(b)
     end
-    return table.concat(bytes)
+    return table.concat(name_chars)
 end
 ```
 
