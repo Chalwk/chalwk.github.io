@@ -86,12 +86,12 @@ end
 Chimera checks the `clua_version` variable against its own API version. The table below shows when a script is
 considered compatible.
 
-| clua_version on the script (compared to chimera.dll) | Example                 | Script supported? |
-|------------------------------------------------------|-------------------------|-------------------|
-| the same version                                     | 2.056 (script) vs 2.056 | Yes               |
-| a lower version; same major version                  | 2.04 (script) vs 2.056  | Yes               |
-| a higher version                                     | 2.06 (script) vs 2.056  | No                |
-| a lower version; different major version             | 1.5 (script) vs 2.056   | No                |
+| clua_version on the script (compared to chimera) | Example                 | Script supported? |
+|--------------------------------------------------|-------------------------|-------------------|
+| the same version                                 | 2.056 (script) vs 2.056 | Yes               |
+| a lower version; same major version              | 2.04 (script) vs 2.056  | Yes               |
+| a higher version                                 | 2.06 (script) vs 2.056  | No                |
+| a lower version; different major version         | 1.5 (script) vs 2.056   | No                |
 
 The current API version as of this guide is **2.056**.
 
