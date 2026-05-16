@@ -53,7 +53,7 @@ function OnPreCamera()
 end
 
 function OnCommand(cmd)
-    -- called when you type a command in the RCON console (press ~ key)
+    -- called when you type a command in the console (press ~ key)
 end
 
 function OnRconMessage(msg)
@@ -81,6 +81,20 @@ function OnScriptUnload()
 end
 ```
 
+## Version Compatibility and History
+
+Chimera checks the `clua_version` variable against its own API version. The table below shows when a script is
+considered compatible.
+
+| clua_version on the script (compared to chimera.dll) | Example                 | Script supported? |
+|------------------------------------------------------|-------------------------|-------------------|
+| the same version                                     | 2.056 (script) vs 2.056 | Yes               |
+| a lower version; same major version                  | 2.04 (script) vs 2.056  | Yes               |
+| a higher version                                     | 2.06 (script) vs 2.056  | No                |
+| a lower version; different major version             | 1.5 (script) vs 2.056   | No                |
+
+The current API version as of this guide is **2.056**.
+
 ---
 
 ## Global Variables
@@ -90,14 +104,14 @@ script's environment, and the Chimera version.
 
 * `build`: Chimera build number. **Negative** = alpha/pre-release; **positive** = public release.
 * `full_build`: If `build` is negative, contains the **next public release build number**; otherwise equals `build`.
-* `gametype`: Current gametype: `"ctf"`, `"slayer"`, `"oddball"`, `"king"`, or `"race"`. 
-* `local_player_index`: Local player index (0-15).
+* `gametype`: Current gametype: `"ctf"`, `"slayer"`, `"oddball"`, `"king"`, or `"race"`.
+* `local_player_index`: Local player index (0-15). May be `nil` until assigned after joining a server.
 * `map`: Currently loaded map name.
 * `map_is_protected`: `true` if the map uses protected tag data (e.g., `"h3mt-foundry"`).
 * `sandboxed`: `true` if the script is running in a sandboxed environment (see “Sandboxed Scripts”).
 * `script_name`: Filename for global scripts, or map name for map scripts.
 * `script_type`: `"global"` or `"map"`.
-* `server_type`: `"none"`, `"local"`, or `"dedicated"`.
+* `server_type`: `"none"` (single player), `"local"` (hosting), or `"dedicated"` (joined a server).
 
 ### Example: Using Global Variables
 
@@ -337,8 +351,6 @@ Use this function to delete objects from the game.
 delete_object(object_id)
 ```
 
----
-
 ### Spawning an object
 
 Spawn an object by tag class and path or ID. Pass the object's x, y, and z coordinates.
@@ -346,6 +358,17 @@ Spawn an object by tag class and path or ID. Pass the object's x, y, and z coord
 ```lua
     local sniper = spawn_object("weap","weapons\\sniper rifle\\sniper rifle", x, y, z)
     local sniper = spawn_object(tag_id, x, y, z)
+```
+
+### Accessing game tags directly
+
+`get_tag()` returns the address of a tag in the tag array. You can use either a numeric tag ID or a tag class and path.
+
+```lua
+local sniper_tag_id = get_tag("weap", "weapons\\sniper rifle\\sniper rifle")
+if sniper_tag_id then
+    -- read or write tag data
+end
 ```
 
 ---
@@ -393,7 +416,7 @@ every tick, you may fill the screen with garbage. Clear old messages first:
 execute_script("cls")
 ```
 
-Many scripts will benefit from an update interval to avoid spam. Here's a typical pattern from
+Many scripts will benefit from an update interval to avoid spam. Here's a typical pattern:
 
 ```lua
 local timer = 0
@@ -407,6 +430,14 @@ function OnTick()
     -- read data and update HUD
     execute_script("cls")
     hud_message("Speed: " .. kmh .. " km/h")
+end
+```
+
+You can also check if the console is open to avoid spamming players who are typing:
+
+```lua
+if not console_is_open() then
+    console_out("This message only appears when console is closed.")
 end
 ```
 
@@ -433,6 +464,9 @@ function OnTick()
     -- do your thing
 end
 ```
+
+**Important:** The `command` callback cannot intercept Chimera's own commands or the `rcon` command. Also, starting with
+API version 2.02, you must return `false` to deny (block) a command. Earlier scripts returned `true` to deny.
 
 Want arguments? Parse them:
 
@@ -474,6 +508,9 @@ local function load_stats()
     return {kills=tonumber(kills), deaths=tonumber(deaths)}
 end
 ```
+
+**Note:** Sandboxed scripts (map scripts) cannot use `io.*` functions. If you need file access in a map script, you must
+place the script in the global folder instead.
 
 ---
 
@@ -523,8 +560,6 @@ stop_timer(timer_id) -- Stop the timer created above
 
 ---
 
----
-
 ## Script Management & Advanced Features
 
 Now that you know how to write scripts, here's where to put them and how to get the most out of Chimera's scripting
@@ -535,19 +570,95 @@ system.
 Chimera looks for Lua scripts in two specific places, and treats them differently depending on where they live:
 
 * **Global Scripts**: Drop your `.lua` files in the main `chimera\lua\scripts\global` folder. These load when Chimera
-  starts up and stay active until you manually reload them. Great for tools or HUD mods you use all the time.
+  starts up and stay active until you manually reload them. Great for tools or HUD mods you use all the time. Global
+  scripts are **not sandboxed**.
 
 * **Map Scripts**: Put scripts into `chimera\lua\scripts\maps`. These only load when their associated map is active and
-  unload automatically when you leave. Perfect for map-specific features.
+  unload automatically when you leave. Perfect for map-specific features. Map scripts are **sandboxed** by default,
+  unless loaded from the scripts folder.
 
 By default, the chimera data folder will be located in `C:\Users\<user>\Documents\My Games\Halo CE\chimera`.
 
 To reload all scripts without restarting the game, type `chimera_lua_scripts_reload` in console (press `~`).
 
-### Version Check Requirement
+### Reading and Writing Memory (I/O Functions)
 
-We already mentioned `clua_version = 2.056` at the top of every script. This tells Chimera which version of the Lua API
-your script expects. It prevents compatibility issues if the API changes in future versions. Always include it.
+Chimera provides a full set of memory read/write functions. Use these to inspect or modify game state. Writing to
+read-only memory or invalid addresses may cause a segmentation fault (crash).
+
+| Read function                         | Write function                           | Description                                          |
+|---------------------------------------|------------------------------------------|------------------------------------------------------|
+| `read_i8` / `read_char`               | `write_i8` / `write_char`                | signed 8-bit integer                                 |
+| `read_u8` / `read_byte`               | `write_u8` / `write_byte`                | unsigned 8-bit integer                               |
+| `read_i16` / `read_short`             | `write_i16` / `write_short`              | signed 16-bit integer                                |
+| `read_u16` / `read_word`              | `write_u16` / `write_word`               | unsigned 16-bit integer                              |
+| `read_i32` / `read_int` / `read_long` | `write_i32` / `write_int` / `write_long` | signed 32-bit integer                                |
+| `read_u32` / `read_dword`             | `write_u32` / `write_dword`              | unsigned 32-bit integer                              |
+| `read_f32` / `read_float`             | `write_f32` / `write_float`              | single-precision float                               |
+| `read_f64` / `read_double`            | `write_f64` / `write_double`             | double-precision float                               |
+| `read_string8` / `read_string`        | `write_string8` / `write_string`         | null-terminated string (8-bit)                       |
+| `read_bit(address, bit)`              | `write_bit(address, bit, value)`         | read/write a single bit (value as number or boolean) |
+
+### Tick Rate and Tick Counter
+
+You can get or set the game's tick rate (the number of simulation updates per second). The default is 30. Setting it
+lower than 0.01 will clamp.
+
+```lua
+local current_rate = tick_rate()        -- get current tick rate
+tick_rate(60)                           -- set to 60 ticks per second
+```
+
+`ticks()` returns the number of ticks that have passed since the game started, as a decimal value (fractional ticks
+represent time between updates).
+
+```lua
+local elapsed = ticks()
+console_out("Ticks elapsed: " .. elapsed)
+```
+
+### Event Priorities
+
+When setting a callback with `set_callback`, you can specify a priority as the third argument. Priorities determine the
+order in which multiple scripts' callbacks run.
+
+- `"before"` - runs before default callbacks
+- `"default"` - normal priority (used if omitted)
+- `"after"` - runs after default callbacks
+- `"final"` - runs last; any return values are ignored (useful for monitoring)
+
+Example:
+
+```lua
+set_callback("tick", "OnTickEarly", "before")
+set_callback("tick", "OnTickMain", "default")
+set_callback("tick", "OnTickLate", "after")
+```
+
+If multiple scripts use the same priority, they run in script load order.
+
+### Advanced Event Details
+
+**`precamera`**  
+Called just before Halo reads camera data. You can modify camera position, orientation, and FOV by returning new values.
+
+```lua
+function OnPreCamera(x, y, z, fov, ox1, oy1, oz1, ox2, oy2, oz2)
+    -- modify values and return them
+    return x, y, z, fov, ox1, oy1, oz1, ox2, oy2, oz2
+end
+```
+
+**`rcon_message`**  
+Called when an RCON message is received. Return `false` to block the message.
+
+**`command`**  
+Called for any console command except Chimera internal commands and `rcon`. Return `false` to prevent the command from
+executing (and suppress error messages).
+
+**`unload`**  
+Called when the script is unloaded (e.g., map change or manual reload). Note that the map may have already changed by
+this point.
 
 ### Embedded Scripts (Advanced)
 
@@ -567,5 +678,3 @@ file. The hotkeys section lets you execute:
 
 For example, you could bind `F5` to `/compass` so players can toggle the compass without typing. Set this up in
 `chimera.ini` and your scripts can respond to single key presses instead of forcing players to type chat commands.
-
----
