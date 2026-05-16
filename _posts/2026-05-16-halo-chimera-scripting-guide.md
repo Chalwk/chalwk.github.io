@@ -200,6 +200,34 @@ local function get_player_name(id)
 end
 ```
 
+### Reading Player's Forward Vector (for Compass / Direction Warnings)
+
+The dynamic player structure contains a 3D forward vector (world-relative). Only X and Y are needed for yaw (horizontal
+facing).
+
+```lua
+local forward_x = read_float(dynamic_player + 0x230)
+local forward_y = read_float(dynamic_player + 0x234)
+local forward_z = read_float(dynamic_player + 0x238)
+```
+
+**Convert to cardinal or clock-face direction:**
+
+```lua
+local function yaw_to_cardinal(fx, fy)
+    local angle = (90 - math.deg(math.atan2(fy, fx))) % 360
+    local dirs = {"N", "NE", "E", "SE", "S", "SW", "W", "NW"}
+    local idx = math.floor((angle + 22.5) / 45) % 8 + 1
+    return dirs[idx]
+end
+
+local facing = yaw_to_cardinal(forward_x, forward_y)  -- "N", "NE", etc.
+```
+
+---
+
+## Working with Game Objects
+
 ### Get object name (e.g. weapon name)
 
 Gets the display name of an object (e.g. weapon, vehicle, equipment) by resolving its tag and extracting the tag path.
@@ -221,8 +249,6 @@ end
 local weapon_id = get_object(read_dword(dynamic_player + 0x118))
 local weapon_name = get_object_name(weapon_id) -- returns "Weapon Name" (e.g. "Assault Rifle")
 ```
-
----
 
 ### Enumerating Game Objects
 
@@ -253,33 +279,7 @@ delete_object(object_id)
 
 ---
 
-### Reading Player's Forward Vector (for Compass / Direction Warnings)
-
-The dynamic player structure contains a 3D forward vector (world-relative). Only X and Y are needed for yaw (horizontal
-facing).
-
-```lua
-local forward_x = read_float(dynamic_player + 0x230)
-local forward_y = read_float(dynamic_player + 0x234)
-local forward_z = read_float(dynamic_player + 0x238)
-```
-
-**Convert to cardinal or clock-face direction:**
-
-```lua
-local function yaw_to_cardinal(fx, fy)
-    local angle = (90 - math.deg(math.atan2(fy, fx))) % 360
-    local dirs = {"N", "NE", "E", "SE", "S", "SW", "W", "NW"}
-    local idx = math.floor((angle + 22.5) / 45) % 8 + 1
-    return dirs[idx]
-end
-
-local facing = yaw_to_cardinal(forward_x, forward_y)  -- "N", "NE", etc.
-```
-
----
-
-## Showing Stuff on Screen: `hud_message()`, `console_out()`
+## Displaying Information on Screen: `hud_message()`, `console_out()`
 
 The simplest way to talk to the player is `hud_message("your text")` or `console_out("your text")`. But if you call it
 every tick, you may fill the screen with garbage. Clear old messages first:
@@ -307,7 +307,7 @@ end
 
 ---
 
-## Handling Commands: Toggle Your Feature
+## Handling Commands and Toggles
 
 Need a way to turn a feature on/off? Do something like this:
 
@@ -347,7 +347,7 @@ end
 
 ---
 
-### Save persistent data example
+## Persistent Data Storage
 
 ```lua
 local SAVE_FILE = "my_data.txt" -- file will appear in Halo's root installation folder
