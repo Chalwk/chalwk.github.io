@@ -290,6 +290,40 @@ Spawn an object by tag class and path or ID. Pass the object's x, y, and z coord
 
 ---
 
+## Executing Console Commands and Scripts: `execute_script()`
+
+Chimera's `execute_script()` function lets you run any Halo console command or a full Lisp-formatted Halo script block
+directly from Lua. This is useful for changing settings, displaying information, triggering built-in game functionality,
+or executing custom Halo script logic at runtime.
+
+**Syntax:**  
+`execute_script("command or script")`
+
+**Examples:**
+
+```lua
+-- Show the current player list in the console
+execute_script("sv_players")
+
+-- Clear the console
+execute_script("cls")
+
+-- Change the map after 5 seconds
+function change_map()
+    execute_script("map bloodgulch ctf")
+    return false
+end
+set_timer(5000, "change_map")
+
+-- Display a message using Halo script syntax
+execute_script('(print "Welcome to the server!")')
+
+-- Execute a Halo script command directly
+execute_script("(object_teleport (player0) teleport_flag)")
+```
+
+---
+
 ## Displaying Information on Screen: `hud_message()`, `console_out()`
 
 The simplest way to talk to the player is `hud_message("your text")` or `console_out("your text")`. But if you call it
