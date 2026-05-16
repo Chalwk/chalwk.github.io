@@ -149,46 +149,6 @@ local weapon_name = get_object_name(weapon_id) -- returns "Weapon Name" (e.g. "A
 
 ---
 
-## Commonly used offsets CHEAT SHEET
-
-### Player object (`get_dynamic_player(id)`)
-
-| Offset | Type  | Meaning                                          |
-|--------|-------|--------------------------------------------------|
-| 0x5C   | float | X position                                       |
-| 0x60   | float | Y position                                       |
-| 0x64   | float | Z position                                       |
-| 0x68   | float | Velocity X                                       |
-| 0x6C   | float | Velocity Y                                       |
-| 0x70   | float | Velocity Z                                       |
-| 0xE0   | float | Health (0.0 = dead, 1.0 = full)                  |
-| 0xE4   | float | Shields (0.0 = none, 1.0 = full)                 |
-| 0x118  | dword | Current weapon object                            |
-| 0x11C  | dword | Vehicle object (0xFFFFFFFF = none)               |
-| 0x230  | float | Forward vector X                                 |
-| 0x234  | float | Forward vector Y                                 |
-| 0x238  | float | Forward vector Z                                 |
-| 0x50C  | float | Crouch factor (0 = standing, 1 = fully crouched) |
-
-### Weapon object
-
-| Offset | Type | Meaning      |
-|--------|------|--------------|
-| 0x2B6  | word | Ammo in clip |
-| 0x2B8  | word | Reserve ammo |
-
-### Player data table (`get_player(id)`)
-
-| Offset | Type   | Meaning                  |
-|--------|--------|--------------------------|
-| 0x4    | byte[] | Player name (Unicode)    |
-| 0x20   | byte   | Team (0 = red, 1 = blue) |
-| 0x9C   | word   | Kills this game          |
-| 0xAE   | word   | Deaths this game         |
-| 0xDC   | dword  | Ping (milliseconds)      |
-
----
-
 ## Showing Stuff on Screen: `hud_message()`, `console_out()`
 
 The simplest way to talk to the player is `hud_message("your text")` or `console_out("your text")`. But if you call it
