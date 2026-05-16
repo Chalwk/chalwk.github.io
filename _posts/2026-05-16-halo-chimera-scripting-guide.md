@@ -92,7 +92,7 @@ Everything interesting comes from reading memory offsets.
 ```lua
 -- Optionally pass a player ID (0-15) to either function:
 local dynamic_player = get_dynamic_player(id)
-local player = get_player(id)
+local static_player = get_player(id)
 ```
 
 `get_dynamic_player()` returns a pointer to the player's current object. Use this for position, velocity,
@@ -107,6 +107,77 @@ that exists independently of the live object (team, kills, deaths, ping, name).
 local x = read_float(dynamic_player + 0x5C)
 local y = read_float(dynamic_player + 0x60)
 local z = read_float(dynamic_player + 0x64)
+```
+
+Health and shields are also floats (0.0 = empty, 1.0 = full). To show as a percentage:
+
+```lua
+local health_raw = read_float(dynamic_player + 0xE0)  -- 0..1
+local shields_raw = read_float(dynamic_player + 0xE4) -- 0..1
+
+local health_percent = math.floor(health_raw * 100)
+local shields_percent = math.floor(shields_raw * 100)
+```
+
+### Read integers (team, ping, kills, deaths)
+
+Use `read_byte()` for small values (0-255), `read_word()` for 16‑bit, and `read_dword()` for 32‑bit.
+
+**Team** (0 = Red, 1 = Blue, from the player structure):
+
+```lua
+local team = read_byte(static_player + 0x20)
+local team_name = (team == 0) and "Red" or "Blue"
+```
+
+**Ping** (milliseconds, from player structure):
+
+```lua
+local ping = read_dword(static_player + 0xDC)
+```
+
+**Kills and deaths** (from player structure):
+
+```lua
+local kills = read_word(static_player + 0x9C)
+local deaths = read_word(static_player + 0xAE)
+```
+
+### Read velocity vector (dynamic player)
+
+Velocity is stored as three floats (world units per tick). Combine with a scaling factor to get km/h or mph.
+
+```lua
+local vx = read_float(dynamic_player + 0x68)
+local vy = read_float(dynamic_player + 0x6C)
+local vz = read_float(dynamic_player + 0x70)
+local speed = math.sqrt(vx*vx + vy*vy + vz*vz)
+local kmh = speed * 30 * 3.6   -- 30 ticks/sec, convert world units to km/h
+```
+
+### Check if player is in a vehicle
+
+Read the vehicle object ID from the dynamic player. If it's `0xFFFFFFFF`, the player is on foot.
+
+```lua
+local vehicle_id = read_dword(dynamic_player + 0x11C)
+if vehicle_id ~= 0xFFFFFFFF then
+    local vehicle = get_object(vehicle_id)
+    -- now you can read vehicle position, health, type, etc.
+end
+```
+
+### Read current weapon ammo (dynamic player weapon)
+
+First get the weapon object pointer from the dynamic player, then read ammo offsets.
+
+```lua
+local weapon_id = read_dword(dynamic_player + 0x118)
+local weapon_object = get_object(weapon_id)
+if weapon_object then
+    local clip = read_word(weapon + 0x2B6)      -- rounds in magazine
+    local reserve = read_word(weapon + 0x2B8)   -- total reserve ammo
+end
 ```
 
 ### Get player name
