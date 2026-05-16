@@ -678,3 +678,5 @@ file. The hotkeys section lets you execute:
 
 For example, you could bind `F5` to `/compass` so players can toggle the compass without typing. Set this up in
 `chimera.ini` and your scripts can respond to single key presses instead of forcing players to type chat commands.
+
+---
