@@ -111,8 +111,9 @@ local z = read_float(dynamic_player + 0x64)
 
 ### Get player name
 
-Player names are stored as a wide-character string (2 bytes per character, UTF-16-style), so you read every other byte
-until the null terminator.
+Player names are stored as a wide-character string (2 bytes per character, UTF-16). Because Halo names are limited to
+ASCII characters, each character's high byte is `0x00`. So you can read every other byte (the low bytes) and stop at a
+single `0x00` byte—that marks the null terminator.
 
 ```lua
 local function get_player_name(id)
@@ -130,12 +131,12 @@ end
 
 ### Get object name (e.g. weapon name)
 
-```lua
--- Gets the display name of an object (e.g. weapon, vehicle, equipment) by resolving its tag and extracting the tag path.
--- The function reads the object's tag ID, converts it to a tag pointer, reads the tag path string,
--- and then strips the directory path to return only the object name (e.g. "weapons\\assault_rifle" → "assault_rifle").
--- Returns "N/A" if the object is invalid, "???" if the tag cannot be resolved, or the raw path if parsing fails.
+Gets the display name of an object (e.g. weapon, vehicle, equipment) by resolving its tag and extracting the tag path.
+The function reads the object's tag ID, converts it to a tag pointer, reads the tag path string, and then strips the
+directory path to return only the object name (e.g. "weapons\\assault_rifle" → "assault_rifle"). Returns "N/A" if the
+object is invalid, "???" if the tag cannot be resolved, or the raw path if parsing fails.
 
+```lua
 local function get_object_name(obj)
 if not obj then return "N/A" end
 
@@ -165,7 +166,7 @@ Many scripts will benefit from an update interval to avoid spam. Here's a typica
 
 ```lua
 local timer = 0
-local interval = 15   -- ticks between updates
+local interval = 15 -- ticks between updates
 
 function OnTick()
     timer = timer + 1
