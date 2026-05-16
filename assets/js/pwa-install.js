@@ -51,7 +51,7 @@
         }
     }
 
-    // Show fallback button early if 'beforeinstallprompt' hasn’t fired by DOM ready
+    // Show fallback button early if 'beforeinstallprompt' hasn't fired by DOM ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => {
             if (!installSupported) updateInstallUI();

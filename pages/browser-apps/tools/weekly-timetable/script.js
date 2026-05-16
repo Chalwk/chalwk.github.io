@@ -349,7 +349,7 @@
 
         const bodyRows = state.periods.map((period, periodIndex) => {
             const cells = state.days.map((_, dayIndex) => {
-                const subject = state.schedule[periodIndex]?.[dayIndex] ?? '—';
+                const subject = state.schedule[periodIndex]?.[dayIndex] ?? '-';
                 return `<td class="subject-cell" data-period-index="${periodIndex}" data-day-index="${dayIndex}">${escapeHtml(subject)}</td>`;
             }).join('');
             return `
@@ -423,7 +423,7 @@
             };
         }
         const activePeriod = state.periods[activePeriodIndex];
-        const subject = state.schedule[activePeriodIndex]?.[dayIndex] ?? '—';
+        const subject = state.schedule[activePeriodIndex]?.[dayIndex] ?? '-';
         return {
             subject,
             period: `${activePeriod.name} • ${activePeriod.start}-${activePeriod.end}`,

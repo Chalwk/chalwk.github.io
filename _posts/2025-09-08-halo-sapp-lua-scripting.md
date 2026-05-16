@@ -782,7 +782,7 @@ end
 ## 7. Special Text Positioning Characters (`|l`, `|r`, `|c`, `|n`, `|t`)
 
 When sending private messages with `rprint()`, you can prefix your message with one of several special characters to
-reposition the text on the player’s screen. This only works if the player has the **HAC2 client** installed. Players
+reposition the text on the player's screen. This only works if the player has the **HAC2 client** installed. Players
 using **Chimera** (or vanilla Halo) will not see the repositioning effect; their messages will appear at default
 positions defined by the client.
 
@@ -840,7 +840,7 @@ regardless of what the script sends.
 
 > **Note:** Because HAC2 and Chimera handle text positioning differently, scripters should avoid relying solely on `|c`,
 `|l`, etc., for critical information. For maximum compatibility, consider sending plain messages and let players
-> configure their own client’s layout via `chimera.ini` if they use Chimera.
+> configure their own client's layout via `chimera.ini` if they use Chimera.
 
 ---
 
