@@ -6,9 +6,9 @@ categories: [ education, halo, modding ]
 tags: [ sapp, lua, halo, scripting, tutorial ]
 ---
 
-If you've ever wanted to level up your server scripting with SAPP (the powerful Halo PC/CE server mod), you're in the
-right place. This guide collects battle-tested Lua snippets that interact directly with Halo's memory - giving you fine
-control over player positions, vehicles, objectives, chat messages, and more.
+If you've ever wanted to level up your server scripting with SAPP, you're in the right place. This guide collects
+battle-tested Lua snippets that interact directly with Halo's memory - giving you fine control over player positions,
+vehicles, objectives, chat messages, and more.
 
 **Why these snippets matter:**  
 SAPP Lua scripts let you customize gameplay, enforce rules, build minigames, and manage your server. The functions below
