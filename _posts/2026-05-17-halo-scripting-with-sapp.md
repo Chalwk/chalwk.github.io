@@ -9,7 +9,7 @@ SAPP is a **server-side** extension for Halo PC/Custom Edition. It exposes a Lua
 hooks, command handling, player management, logging, and numerous under-the-hood features. **This guide focuses on its
 Lua API**, walks through the core scripting model and practical examples so you can build your Lua scripts.
 
-**Important:** <u>SAPP uses <strong>LuaJit</strong> based on <strong>Lua 5.2</strong>.</u>
+**Important:** <u>SAPP uses <strong>LuaJit</strong> based on <strong>Lua 5.1</strong>.</u>
 
 This guide assumes you have read:
 
@@ -270,7 +270,8 @@ m_per_tick  = wu_per_tick * WU_TO_M
 
 **Practical notes for PC/CE server operators**
 
-- Always read projectile initial velocities from the PC/CE tag files used by your server build rather than copying values
+- Always read projectile initial velocities from the PC/CE tag files used by your server build rather than copying
+  values
   from MCC or community posts. HEK tag values are authoritative for PC/CE.
 - Small differences across community builds, patches, or ports can change projectile timing. Test on the exact PC/CE
   executable and tagset your players use.
@@ -545,6 +546,255 @@ A true, large-scale **D**DoS attack will overwhelm SAPP's protections:
 **In short:** SAPP's protection is expertly tailored for the specific threats a Halo server faces. It is not a magic
 shield against a determined attacker with a large botnet. Enable all features (`packet_limit`, `antihalofp`, etc.) and
 consider them your essential first line of defense.
+
+---
+
+## Special Text Positioning Characters for HAC2 Users (`|l`, `|r`, `|c`, `|n`, `|t`)
+
+When sending private messages with `rprint()`, you can prefix your message with one of several special characters to
+reposition the text on the player's screen. This only works if the player has the **HAC2 client** installed. Players
+using **Chimera** (or vanilla Halo) will not see the repositioning effect; their messages will appear at default
+positions defined by the client.
+
+### Available Positioning Characters
+
+| Prefix  | Effect                                                |
+|---------|-------------------------------------------------------|
+| **\|l** | Left-align the message (default position).            |
+| **\|r** | Right-align the message.                              |
+| **\|c** | Center the message horizontally.                      |
+| **\|n** | Place the message at the “normal” (default) position. |
+| **\|t** | Tab the message                                       |
+
+These characters are stripped from the displayed message and only affect layout.
+
+#### Example
+
+```lua
+rprint("|cHello, welcome to my server")   -- Centers the message
+rprint("|rPlayer joined: " .. playerName) -- Right-aligns the message
+```
+
+> **Note:** Because HAC2 and Chimera handle text positioning differently, scripters should avoid relying solely on `|c`,
+`|l`, etc., for critical information. For maximum compatibility, consider sending plain messages and let players
+> configure their own client's layout via `chimera.ini` if they use Chimera.
+
+---
+
+## Advanced: Using LuaJIT and FFI in SAPP
+
+SAPP uses **LuaJIT**, a high-performance just-in-time compiler based on Lua 5.1. This means most Lua 5.1 code works
+normally, but LuaJIT also includes some features from newer Lua versions and its own extensions.
+
+In addition, you get advanced capabilities like the `ffi` library to call C functions and manipulate memory directly.
+
+### 1 What LuaJIT Gives You
+
+* Full compatibility with **Lua 5.1**
+* Support for some **Lua 5.2+ features** and LuaJIT extensions (such as `goto`, the `bit` library for bitwise
+  operations, `_ENV` environments, and performance helpers like `table.new` and `table.clear`)
+* `ffi` library - call C functions, define structs, work with raw memory
+* Better performance for math-heavy or iterative code
+
+> **Note:** SAPP scripts run in a sandboxed environment. Some operating system APIs may be restricted, and unsafe memory
+> operations can crash the server. Proceed with caution.
+
+### 2 Checking if `ffi` is Available
+
+You can test if your SAPP version exposes `ffi`:
+
+```lua
+function OnScriptLoad()
+    if pcall(function() require("ffi") end) then
+        print("ffi is available")
+    else
+        print("ffi is NOT available")
+    end
+end
+```
+
+* `pcall` prevents crashes if `ffi` is blocked.
+* The output appears in the server console.
+
+### 3 Fully Functional Demo: Ticks Since Boot
+
+Here is a real-world FFI example: calling `GetTickCount` from the Windows API to get milliseconds since system boot.
+
+```lua
+api_version = '1.12.0.0'
+
+local ffi = require("ffi")
+
+-- Declare the C function we want to call
+ffi.cdef[[
+    unsigned long GetTickCount(void);
+]]
+
+function OnScriptLoad()
+    -- Call the function and print result to the server console
+    local ticks = ffi.C.GetTickCount()
+    cprint(string.format("Ticks since boot: %d", ticks), 10) -- print in green
+    
+    register_callback(cb["EVENT_TICK"], "OnTick")
+end
+
+-- Print ticks every 10 seconds
+function OnTick()
+    if (os.clock() % 10) < 0.05 then
+        local ticks = ffi.C.GetTickCount()
+        cprint(string.format("Ticks since boot: %d", ticks), 10) -- print in green
+    end
+end
+```
+
+#### How It Works
+
+1. **`api_version`** - Required for SAPP 1.12.0.0 scripts.
+2. **`ffi.cdef`** - Declares the C function signature so LuaJIT knows how to call it.
+3. **`ffi.C.GetTickCount()`** - Calls the actual Windows API function.
+4. **`cprint`** - A SAPP built-in that prints colored text to the server console (color code 10 is green).
+5. **`OnTick`** - Runs every game tick (about 30 times per second). We use `os.clock()` to throttle the output to once
+   every 10 seconds.
+
+### 4 Key Tips and Safety
+
+* Start with **safe, read-only operations**. Do not write to arbitrary memory addresses.
+* Avoid writing memory directly unless you know the exact structure and offset.
+* Remember that SAPP Lua is sandboxed; not all OS APIs or memory operations are available.
+* Some Lua features available in LuaJIT (like `goto`) may not be recognized by all editors or plugins that assume strict
+  Lua 5.1 syntax.
+
+> **Tip:** Use FFI to read server performance counters, system time, or interact with external libraries, but always
+> test thoroughly on a non-production server first.
+
+### 5 Using `table.new`, `table.clear`, `_ENV`, and `bit`
+
+LuaJIT provides several performance-oriented extensions that can make your scripts faster and more memory-efficient.
+
+#### `table.new(narray, nhash)`
+
+Pre-allocates a table with space for `narray` array elements and `nhash` hash (key-value) slots. This avoids repeated
+resizing when you know the table size in advance.
+
+```lua
+local table_new = require("table.new")
+
+-- Create a table pre-sized for 10 array elements and 5 hash entries
+local my_table = table_new(10, 5)
+
+-- Add array elements (integer keys)
+my_table[1] = "a"
+my_table[2] = "b"
+
+-- Add hash entries (string keys)
+my_table.name = "LuaJIT"
+my_table.version = "2.1"
+
+-- Print numeric indices
+for i = 1, #my_table do
+    print("Index " .. i .. ": " .. tostring(my_table[i]))
+end
+
+-- Print named keys
+for k, v in pairs(my_table) do
+    if type(k) ~= "number" then
+        print("Key '" .. k .. "': " .. tostring(v))
+    end
+end
+```
+
+#### `table.clear(tab)`
+
+Clears all elements from a table without deallocating its memory. This is much faster than creating a new empty table
+when you need to reuse an existing one.
+
+```lua
+local table_clear = require("table.clear")
+
+local scores = { player1 = 5, player2 = 3, player3 = 8 }
+print("Before clear:", #scores)  -- No effect on array part, but hash cleared
+
+-- Clear the table (removes all key-value pairs)
+table_clear(scores)
+
+print("After clear:", next(scores))  -- nil (table is empty)
+```
+
+#### `_ENV` Environments
+
+LuaJIT supports `_ENV`, which lets you control the environment (global variable table) for a chunk of code. You can
+create sandboxes or restrict access to certain globals.
+
+```lua
+-- Create a custom environment that hides dangerous functions
+local sandbox_env = {
+    print = print,  -- allow print
+    math = math,    -- allow math library
+    -- "os" and "io" are intentionally omitted
+}
+
+-- Run a function with the custom environment
+local function run_in_sandbox(f)
+    local old_env = _ENV
+    _ENV = sandbox_env
+    local success, err = pcall(f)
+    _ENV = old_env
+    return success, err
+end
+
+-- This works because print is in the sandbox
+run_in_sandbox(function() print("Hello from sandbox") end)
+
+-- This will error because os.execute is not available
+run_in_sandbox(function() os.execute("format c:") end)  -- error: attempt to index a nil value (global 'os')
+```
+
+> **Warning:** Modifying `_ENV` globally affects all subsequent code. Use local `_ENV` overrides or restore the original
+> environment as shown above.
+
+#### `bit` Library - Bitwise Operations
+
+LuaJIT includes the `bit` library for fast bitwise operations (AND, OR, XOR, shifts, etc.). These are useful for
+packing/unpacking flags, working with network protocols, or interacting with C structures that use bit fields.
+
+```lua
+local bit = require("bit")
+
+local flags = 0
+
+-- Set bit 2 (value 4) and bit 5 (value 32)
+flags = bit.bor(flags, 4, 32)   -- flags = 36 (binary 100100)
+
+-- Check if bit 2 is set
+if bit.band(flags, 4) ~= 0 then
+    print("Bit 2 is set")
+end
+
+-- Clear bit 5
+flags = bit.band(flags, bit.bnot(32))   -- flags = 4
+
+-- Bit shifting examples
+local shifted = bit.lshift(1, 3)   -- 1 << 3 = 8
+print("1 << 3 =", shifted)
+
+local original = bit.rshift(8, 3)  -- 8 >> 3 = 1
+print("8 >> 3 =", original)
+
+-- Pack two 16-bit values into one 32-bit integer
+local high = 0xABCD
+local low  = 0x1234
+local packed = bit.bor(bit.lshift(high, 16), low)
+print(string.format("Packed: 0x%08X", packed))  -- 0xABCD1234
+
+-- Unpack again
+local high2 = bit.rshift(packed, 16)
+local low2  = bit.band(packed, 0xFFFF)
+print(string.format("Unpacked: 0x%04X, 0x%04X", high2, low2))
+```
+
+Combine these extensions with SAPP events for efficient, high-performance scripts. For example, pre-allocate tables for
+player data with `table.new`, clear them with `table.clear` between maps, use bitwise flags for player states, and
+sandbox admin commands with `_ENV` for extra safety.
 
 ---
 
