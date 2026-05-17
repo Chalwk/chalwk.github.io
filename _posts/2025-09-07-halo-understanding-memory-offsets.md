@@ -142,7 +142,7 @@ Use these with version detection. All values are hexadecimal. Missing addresses 
 | `banlist_path_address`        | `0x69B950` | `0x61FB80` | Path to the banlist file                       |
 | `broadcast_game_address`      | `0x5E4768` | `0x569EAC` | Determines broadcast type (PC/CE/Trial)        |
 | `broadcast_version_address`   | `0x5DF840` | `0x564B34` | Version that the server is broadcasting on     |
-| `camera_base`                 | `0x69C2F8` | `0x62075C` | Base address for per‑player camera data        |
+| `camera_base`                 | `0x69C2F8` | `0x62075C` | Base address for per-player camera data        |
 | `collideable_objects_pointer` | `0x744C34` | `0x6C6A14` | Pointer to the list of collideable objects     |
 | `color_patch`                 | `0x4828FE` | `0x45EB5E` | -                                              |
 | `computer_name_address`       | `0x62CD60` | `0x5B0D40` | Server computer (domain) name                  |
@@ -167,7 +167,7 @@ Use these with version detection. All values are hexadecimal. Missing addresses 
 | `map_pointer`                 | `0x63525C` | `0x5B927C` | Pointer to map data base address               |
 | `mapcycle_header`             | `0x614B4C` | `0x598A8C` | Header for mapcycle data                       |
 | `name_base`                   | `0x745D4A` | `0x6C7B6A` | -                                              |
-| `network_server_globals`      | `0x69B934` | `0x61FB64` | Server‑side network globals                    |
+| `network_server_globals`      | `0x69B934` | `0x61FB64` | Server-side network globals                    |
 | `network_struct`              | `0x745BA0` | `0x6C7980` | Main network structure for server/client       |
 | `obj_header_pointer`          | `0x744C18` | `0x6C69F0` | Pointer to the object header                   |
 | `oddball_globals`             | `0x639E58` | `0x5BDE78` | Oddball gametype global data                   |
