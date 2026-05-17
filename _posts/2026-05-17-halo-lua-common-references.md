@@ -46,17 +46,15 @@ end
 Uses squared distance to avoid expensive `math.sqrt` - ideal for per-tick checks.
 
 **Parameters:**  
-`x1, y1, z1`, `x2, y2, z2` (numbers) - Coordinates of the two points.  
+`px, py, pz`, `ox, oy, oz` (numbers) - Coordinates of the two points.  
 `radius` (number) - Distance threshold.
 
 **Returns:** `true` if within radius, `false` otherwise.
 
 ```lua
-function points_in_range(x1, y1, z1, x2, y2, z2, radius)
-    local dx = x1 - x2
-    local dy = y1 - y2
-    local dz = z1 - z2
-    return (dx * dx + dy * dy + dz * dz) <= (radius * radius)
+local function in_sphere(px, py, pz, ox, oy, oz, radius)
+    local dx, dy, dz = ox - px, oy - py, oz - pz
+    return (dx * dx + dy * dy + dz * dz) <= radius * radius
 end
 ```
 
