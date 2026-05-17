@@ -9,7 +9,7 @@ SAPP is a **server-side** extension for Halo PC/Custom Edition. It exposes a Lua
 hooks, command handling, player management, logging, and numerous under-the-hood features. **This guide focuses on its
 Lua API**, walks through the core scripting model and practical examples so you can build your Lua scripts.
 
-**Important:** SAPP uses **LuaJIT** based on **Lua 5.1.**
+**Important:** <u>SAPP uses <strong>LuaJit</strong> based on <strong>Lua 5.2</strong>.</u>
 
 This guide assumes you have read:
 

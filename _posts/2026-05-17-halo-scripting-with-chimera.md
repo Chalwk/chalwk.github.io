@@ -10,7 +10,7 @@ and dozens of quality-of-life fixes. **This guide focuses on its Lua API**, walk
 and practical examples so you can build your own HUDs, gameplay tweaks, and quality-of-life mods using Chimera's
 event-driven Lua environment.
 
-**Important:** Chimera's Lua API is based on Lua 5.5.
+**Important:** <u>Chimera's Lua API is based on <strong>Lua 5.5</strong>.</u>
 
 This guide assumes you have read:
 
