@@ -81,6 +81,8 @@ function OnScriptLoad(processid, game, persistent)
 end
 ```
 
+---
+
 ## Phasor Functions Reference
 
 ### General Functions
@@ -180,32 +182,1021 @@ timer has fired.
 
 ---
 
-## Practical Examples
+## Utility Functions Library
 
-### Example: Server-side speed hack protection
+The following functions are user‑defined Lua helpers that build on the Phasor API. They simplify common tasks such as
+player state queries, object manipulation, memory I/O, and gametype handling.  
+**Note:** Many functions rely on global variables like `gametype_base`, `map_pointer`, `ctf_globals`, etc. You must set
+these in `OnScriptLoad` based on the game version (PC or CE) using the offsets from the Common Lua References.
+
+### Player State & Info
+
+#### get_player_biped
+
+**Parameters:**  
+`id` - Player index (0‑based memory ID)
+
+**Returns:**  
+`object_struct` (table), `object_id` (number) - The player's biped object and its ID, or `nil` if dead/invalid.
+
+```lua
+local function get_player_biped(id)
+    local obj_id = getplayerobjectid(id)
+    if not obj_id or obj_id == 0 then return nil end
+    return getobject(obj_id), obj_id
+end
+```
+
+**Example:**
+
+```lua
+local obj, obj_id = get_player_biped(0)
+if obj then
+    print("Player 0 biped address: " .. tostring(obj))
+end
+```
+
+#### is_alive
+
+**Parameters:**  
+`id` - Player index (0‑based)
+
+**Returns:**  
+`boolean` - `true` if the player has a valid biped object.
+
+```lua
+local function is_alive(id)
+    if id == nil then return false end
+    return getplayerobjectid(id) ~= nil
+end
+```
+
+**Example:**
+
+```lua
+if is_alive(3) then
+    kill(3)
+end
+```
+
+#### get_player_pos
+
+**Parameters:**  
+`id` - Player index (0‑based)
+
+**Returns:**  
+`x`, `y`, `z` (numbers) - World coordinates compensating for crouch, or `nil` if the player is invalid.
+
+```lua
+local function get_player_pos(id)
+    local obj, obj_id = get_player_biped(id)
+    if not obj then return nil end
+
+    local x = readfloat(obj, 0x5C)
+    local y = readfloat(obj, 0x60)
+    local z = readfloat(obj, 0x64)
+    local crouch = readfloat(obj + 0x50C)
+
+    -- 0.65 is standing eye height, 0.35 is crouching adjustment
+    local z_offset = (crouch == 0) and 0.65 or 0.35 * crouch
+    return x, y, z + z_offset
+end
+```
+
+**Example:**
+
+```lua
+local x, y, z = get_player_pos(2)
+if x then
+    print(string.format("Player 2 position: %.2f, %.2f, %.2f", x, y, z))
+end
+```
+
+#### is_player_camouflaged
+
+**Parameters:**  
+`id` - Player index (0‑based)
+
+**Returns:**  
+`boolean` - `true` if the player is invisible (camo active).
+
+```lua
+local function is_player_camouflaged(id)
+    local obj = get_player_biped(id)
+    if not obj then return nil end
+    return readfloat(obj + 0x37C) == 1.0
+end
+```
+
+#### get_player_stats
+
+**Parameters:**  
+`id` - Player index (0‑based)
+
+**Returns:**  
+`table` or `nil` - Contains keys: `kills`, `deaths`, `assists`, `streaks`, `flag_captures`, `flag_returns`,
+`flag_grabs`.
+
+```lua
+local function get_player_stats(id)
+    local p = getplayer(id)
+    if not p then return nil end
+
+    return {
+        kills = readword(p + 0x9C),
+        deaths = readword(p + 0xAE),
+        assists = readword(p + 0xA4),
+        streaks = readword(p + 0x98),
+        flag_captures = readword(p + 0xC8),
+        flag_returns = readword(p + 0xC6),
+        flag_grabs = readword(p + 0xC4)
+    }
+end
+```
+
+**Example:**
+
+```lua
+local stats = get_player_stats(1)
+if stats then
+    say(string.format("Player has %d kills, %d deaths", stats.kills, stats.deaths))
+end
+```
+
+#### get_player_vehicle
+
+**Parameters:**  
+`id` - Player index (0‑based)
+
+**Returns:**  
+`number` - Vehicle object ID, or `nil` if not in a vehicle.
+
+```lua
+local function get_player_vehicle(id)
+    local obj, obj_id = get_player_biped(id)
+    if not obj then return nil end
+
+    local vehicle_id = readdword(obj + 0x11C)
+    if vehicle_id == 0xFFFFFFFF then return nil end
+
+    return vehicle_id
+end
+```
+
+#### is_in_vehicle
+
+**Parameters:**  
+`id` - Player index (0‑based)
+
+**Returns:**  
+`boolean` - `true` if the player is inside any vehicle.
+
+```lua
+local function is_in_vehicle(id)
+    return get_player_vehicle(id) ~= nil
+end
+```
+
+#### get_player_health
+
+**Parameters:**  
+`id` - Player index (0‑based)
+
+**Returns:**  
+`number` or `nil` - Health value between 0.0 and 1.0.
+
+```lua
+local function get_player_health(id)
+    local obj = get_player_biped(id)
+    if not obj then return nil end
+    return readfloat(obj + 0xE0)
+end
+```
+
+#### get_player_shields
+
+**Parameters:**  
+`id` - Player index (0‑based)
+
+**Returns:**  
+`number` or `nil` - Shields value (0.0 to ~3.0 with overshield).
+
+```lua
+local function get_player_shields(id)
+    local obj = get_player_biped(id)
+    if not obj then return nil end
+    return readfloat(obj + 0xE4)
+end
+```
+
+#### set_player_health
+
+**Parameters:**  
+`id` - Player index (0‑based)  
+`value` - Desired health (0.0 to 1.0)
+
+```lua
+local function set_player_health(id, value)
+    local obj = get_player_biped(id)
+    if obj then
+        writefloat(obj + 0xE0, value)
+    end
+end
+```
+
+#### set_player_shields
+
+**Parameters:**  
+`id` - Player index (0‑based)  
+`value` - Desired shields (0.0 to 3.0)
+
+```lua
+local function set_player_shields(id, value)
+    local obj = get_player_biped(id)
+    if obj then
+        writefloat(obj + 0xE4, value)
+    end
+end
+```
+
+#### get_player_ping
+
+**Parameters:**  
+`id` - Player index (0‑based)
+
+**Returns:**  
+`number` or `nil` - Ping in milliseconds.
+
+```lua
+local function get_player_ping(id)
+    local p = getplayer(id)
+    if not p then return nil end
+    return readword(p + 0xDC)
+end
+```
+
+#### get_player_weapon
+
+**Parameters:**  
+`id` - Player index (0‑based)  
+`slot` (optional) - Weapon slot 1‑4. If omitted, returns the current weapon (or vehicle weapon if in vehicle).
+
+**Returns:**  
+`number` - Weapon object ID, or `0xFFFFFFFF` if none.
+
+```lua
+local function get_player_weapon(id, slot)
+    local obj, obj_id = get_player_biped(id)
+    if not obj then return 0xFFFFFFFF end
+
+    -- If the player is in a vehicle, return the vehicle's weapon.
+    local vehicle_id = get_player_vehicle(id)
+    if vehicle_id then
+        local veh_obj = getobject(vehicle_id)
+        if veh_obj then
+            return readdword(veh_obj + 0x2F8)
+        end
+    end
+
+    if not slot then
+        return readdword(obj + 0x118) -- current weapon
+    end
+
+    if slot >= 1 and slot <= 4 then
+        return readdword(obj + 0x2F8 + (slot - 1) * 4)
+    end
+
+    return 0xFFFFFFFF
+end
+```
+
+#### get_players_by_expression
+
+**Parameters:**  
+`expression` - String (e.g., `"*"`, `"me"`, `"red"`, `"blue"`, `"random"`, `"nearest"`, `"farthest"`, colour name,
+wildcard name, or numeric ID 1‑16)  
+`self_id` (optional) - Player index used for `"me"`, `"random"` exclusion, and as reference for `"nearest"`/
+`"farthest"`.
+
+**Returns:**  
+`table` or `nil` - List of player indices (0‑based) matching the expression.
+
+```lua
+local function get_players_by_expression(expression, self_id)
+    -- Implementation as provided (full logic omitted for brevity)
+    -- ...
+end
+```
+
+**Example:**
+
+```lua
+local players = get_players_by_expression("red", nil)
+if players then
+    for _, id in ipairs(players) do
+        say(getname(id) .. " is on red team!")
+    end
+end
+```
+
+#### get_player_color
+
+**Parameters:**  
+`id` - Player index (0‑based)
+
+**Returns:**  
+`number` or `nil` - Colour index (0‑17) as seen by others.
+
+```lua
+local function get_player_color(id)
+    local p = getplayer(id)
+    if p then return readword(p + 0x60) end
+    return nil
+end
+```
+
+#### set_player_color
+
+**Parameters:**  
+`id` - Player index (0‑based)  
+`colour` - Colour index (0‑17) or colour name string (e.g., `"white"`, `"yellow"`). A respawn is usually required for
+the change to fully apply.
+
+```lua
+local function set_player_color(id, colour)
+    local p = getplayer(id)
+    if not p then return end
+
+    if type(colour) == "string" then
+        colour = player_colours[colour:lower()]
+    end
+    if not colour or type(colour) ~= "number" then return end
+
+    writebyte(p + 0x60, colour)
+end
+```
+
+#### get_player_object
+
+**Parameters:**  
+`id` - Player index (0‑based)
+
+**Returns:**  
+`object_struct`, `object_id` - Same as `get_player_biped`.
+
+```lua
+local function get_player_object(id)
+    return get_player_biped(id)
+end
+```
+
+#### get_player_vehicle_object
+
+**Parameters:**  
+`id` - Player index (0‑based)
+
+**Returns:**  
+`vehicle_struct`, `vehicle_id` - The vehicle object and its ID, or `nil` if not in a vehicle.
+
+```lua
+local function get_player_vehicle_object(id)
+    local obj, obj_id = get_player_object(id)
+    if not obj then return nil end
+    local veh_id = readdword(obj + 0x11C)
+    if veh_id == 0xFFFFFFFF then return nil end
+    local veh_obj = getobject(veh_id)
+    if not veh_obj then return nil end
+    return veh_obj, veh_id
+end
+```
+
+#### get_player_weapon_object
+
+**Parameters:**  
+`id` - Player index (0‑based)  
+`slot` (optional) - Same as `get_player_weapon`.
+
+**Returns:**  
+`weapon_struct`, `weapon_id` - The weapon object and its ID, or `nil`.
+
+```lua
+local function get_player_weapon_object(id, slot)
+    local weapon_id = get_player_weapon(id, slot)
+    if weapon_id == 0xFFFFFFFF then return nil end
+    local weapon_obj = getobject(weapon_id)
+    if not weapon_obj then return nil end
+    return weapon_obj, weapon_id
+end
+```
+
+#### get_player_speed
+
+**Parameters:**  
+`id` - Player index (0‑based)
+
+**Returns:**  
+`number` or `nil` - Current movement speed multiplier.
+
+```lua
+local function get_player_speed(id)
+    local p = getplayer(id)
+    if not p then return nil end
+    return readfloat(p + 0x6C)
+end
+```
+
+#### set_player_speed
+
+**Parameters:**  
+`id` - Player index (0‑based)  
+`speed` - Desired speed multiplier (capped to 999999 to avoid crashes).
+
+```lua
+local function set_player_speed(id, speed)
+    local p = getplayer(id)
+    if not p then return end
+    speed = tonumber(speed) or 1
+    if speed > 999999 then speed = 999999 end
+    writefloat(p + 0x6C, speed)
+end
+```
+
+### Object Utilities
+
+#### get_object_coords
+
+**Parameters:**  
+`object_id` - Object ID (e.g., from `getplayerobjectid`)
+
+**Returns:**  
+`x`, `y`, `z` - Coordinates of the object (if attached to a parent vehicle, returns parent's coordinates).
+
+```lua
+local function get_object_coords(object_id)
+    local obj = getobject(object_id)
+    if not obj then return nil end
+
+    local parent_id = readdword(obj + 0x11C)
+    if parent_id ~= 0xFFFFFFFF then
+        local parent_obj = getobject(parent_id)
+        if parent_obj then obj = parent_obj end
+    end
+
+    return readfloat(obj + 0x5C), readfloat(obj + 0x60), readfloat(obj + 0x64)
+end
+```
+
+#### get_object_tag
+
+**Parameters:**  
+`object_id` - Object ID
+
+**Returns:**  
+`tag_name`, `tag_class` - The tag name (e.g., `"vehicles\\ghost\\ghost_mp"`) and class (e.g., `"vehi"`), or `nil`.
+
+```lua
+local tag_lookup_cache
+local function get_object_tag(object_id)
+    if not object_id then return nil end
+    local obj = getobject(object_id)
+    if not obj then return nil end
+    local object_map_id = readdword(obj)
+
+    if not tag_lookup_cache then
+        -- Build cache from map (full implementation omitted for brevity)
+        -- ...
+    end
+
+    local entry = tag_lookup_cache[object_map_id]
+    if entry then return entry.name, entry.class end
+    return nil
+end
+```
+
+#### get_tag_id
+
+**Parameters:**  
+`tag_class` - String, e.g., `"weap"`  
+`tag_name` - String, e.g., `"weapons\\pistol\\pistol"`
+
+**Returns:**  
+`number` or `nil` - Tag map ID, or `nil` if not found.
+
+```lua
+local function get_tag_id(tag_class, tag_name)
+    -- Implementation as provided (full logic omitted for brevity)
+    -- ...
+end
+```
+
+#### get_object_type
+
+**Parameters:**  
+`object_id` - Object ID
+
+**Returns:**  
+`number` or `nil` - Type identifier (0=biped, 1=vehicle, 2=weapon, 3=equipment, etc.).
+
+```lua
+local function get_object_type(object_id)
+    local obj = getobject(object_id)
+    if not obj then return nil end
+    return readword(obj + 0xB4)
+end
+```
+
+#### upright_vehicle
+
+**Parameters:**  
+`vehicle_id` - Object ID of the vehicle
+
+**Effect:** Zeroes angular velocity and re‑enables physics to set the vehicle upright.
+
+```lua
+local function upright_vehicle(vehicle_id)
+    local obj = getobject(vehicle_id)
+    if not obj then return end
+    writefloat(obj + 0x8A, 2.3 * (10 ^ -41))
+    writefloat(obj + 0x8C, 2.3 * (10 ^ -41))
+    writefloat(obj + 0x90, 2.3 * (10 ^ -41))
+    writefloat(obj + 0x94, 2.3 * (10 ^ -41))
+    write_bit(obj + 0x10, 0, 0) -- noCollisions off
+    write_bit(obj + 0x10, 5, 0) -- ignorePhysics off
+end
+```
+
+#### upright_player_vehicle
+
+**Parameters:**  
+`player_id` - Player index (0‑based)
+
+**Effect:** Uprights the vehicle the player is currently riding (if any).
+
+```lua
+local function upright_player_vehicle(player_id)
+    local veh_id = get_player_vehicle(player_id)
+    if veh_id then
+        upright_vehicle(veh_id)
+    end
+end
+```
+
+### Memory Utilities
+
+The following helpers extend Phasor's memory functions with safer writes and convenient string/bit operations.
+
+#### read_string
+
+**Parameters:**  
+`address` - Starting memory address  
+`length` (optional) - Maximum bytes to read (default 256)  
+`reverse` (optional) - Reverse byte order (big‑endian)
+
+**Returns:**  
+`string` - Decoded ASCII string (null‑terminated).
+
+```lua
+local function read_string(address, length, reverse)
+    local t, i = {}, 0
+    local max = length or 256
+    while i < max do
+        local b = readbyte(address + i)
+        if b == 0 then break end
+        t[#t + 1] = char(b)
+        i = i + 1
+    end
+    if reverse then
+        local rev = {}
+        for j = #t, 1, -1 do
+            rev[#rev + 1] = t[j]
+        end
+        return concat(rev)
+    end
+    return concat(t)
+end
+```
+
+#### read_tag_name
+
+**Parameters:**  
+`address` - Memory location of a null‑terminated string (no length cap)
+
+**Returns:**  
+`string` - The tag name.
+
+```lua
+local function read_tag_name(address)
+    if not address or address == 0 then return "" end
+    return read_string(address)
+end
+```
+
+#### read_string_reverse
+
+**Parameters:**  
+`address` - Base address  
+`offset` - Offset from base  
+`length` - Number of bytes to read
+
+**Returns:**  
+`string` - Hexadecimal representation in reversed (big‑endian) order.
+
+```lua
+local function read_string_reverse(address, offset, length)
+    local hex = {}
+    for i = 0, length - 1 do
+        local b = readbyte(address + offset + i)
+        hex[#hex + 1] = format("%02X", b)
+    end
+    local result = ""
+    for i = #hex, 1, -1 do
+        result = result .. hex[i]
+    end
+    return result
+end
+```
+
+#### read_widestring
+
+**Parameters:**  
+`address` - Starting address of a UTF‑16LE string  
+`length` (optional) - Maximum bytes (default 256)
+
+**Returns:**  
+`string` - ASCII approximation (non‑ASCII characters ignored).
+
+```lua
+local function read_widestring(address, length)
+    length = length or 256
+    local chars = {}
+    local pos = 0
+    while pos < length do
+        local b1 = readbyte(address + pos)
+        if b1 == 0 then break end
+        local b2 = readbyte(address + pos + 1)
+        if b2 == 0 then
+            chars[#chars + 1] = char(b1)
+        else
+            chars[#chars + 1] = char(b1)
+        end
+        pos = pos + 2
+    end
+    return concat(chars)
+end
+```
+
+#### write_string
+
+**Parameters:**  
+`address` - Starting address  
+`str` - String to write  
+`offset` (optional) - Offset from `address`
+
+**Effect:** Writes null‑terminated ASCII string.
+
+```lua
+local function write_string(address, str, offset)
+    offset = offset or 0
+    local addr = address + offset
+    for i = 1, #str do
+        writebyte(addr + i - 1, str:byte(i))
+    end
+    writebyte(addr + #str, 0)
+end
+```
+
+#### write_widestring
+
+**Parameters:**  
+`address` - Starting address  
+`str` - ASCII string to write as UTF‑16LE  
+`offset` (optional) - Offset from `address`
+
+**Effect:** Writes null‑terminated wide string.
+
+```lua
+local function write_widestring(address, str, offset)
+    offset = offset or 0
+    local addr = address + offset
+    for i = 1, #str do
+        local byte = str:byte(i)
+        writebyte(addr + (i - 1) * 2, byte)
+        writebyte(addr + (i - 1) * 2 + 1, 0)
+    end
+    writeword(addr + #str * 2, 0)
+end
+```
+
+#### read_bit
+
+**Parameters:**  
+`address` - Memory address  
+`bit_index` - 0‑based bit position (0 = LSB)
+
+**Returns:**  
+`number` - 0 or 1.
+
+```lua
+local function read_bit(address, bit_index)
+    local byte_addr = address + floor(bit_index / 8)
+    local bit_pos = bit_index % 8
+    local val = readbyte(byte_addr)
+    return bit32.band(bit32.rshift(val, bit_pos), 1)
+end
+```
+
+#### write_bit
+
+**Parameters:**  
+`address` - Memory address  
+`bit_index` - 0‑based bit position  
+`value` - 0 or 1
+
+```lua
+local function write_bit(address, bit_index, value)
+    local byte_addr = address + floor(bit_index / 8)
+    local bit_pos = bit_index % 8
+    local old = readbyte(byte_addr)
+    if value == 1 then
+        writebyte(byte_addr, bit32.bor(old, bit32.lshift(1, bit_pos)))
+    else
+        writebyte(byte_addr, bit32.band(old, bit32.bnot(bit32.lshift(1, bit_pos))))
+    end
+end
+```
+
+#### safe_write_byte / safe_write_char / safe_write_short / safe_write_word / safe_write_int / safe_write_dword / safe_write_float
+
+These functions clamp values to the valid range of the target type before writing, preventing out‑of‑range crashes.
+
+**Example signature:**
+
+```lua
+local function safe_write_byte(address, offset, value)
+    if value then
+        address = address + offset
+    else
+        value = offset
+    end
+    value = math_min(math_max(value, 0), 0xFF)
+    writebyte(address, value)
+end
+```
+
+(Similar safe wrappers exist for `char`, `short`, `word`, `int`, `dword`, `float`.)
+
+### Game Time & State
+
+#### get_gametype_id
+
+**Parameters:** none
+
+**Returns:**  
+`number` - Gametype ID: 0=none, 1=CTF, 2=Slayer, 3=Oddball, 4=King, 5=Race.
+
+```lua
+local function get_gametype_id()
+    return readbyte(gametype_base + 0x30)
+end
+```
+
+#### get_scorelimit
+
+**Parameters:** none
+
+**Returns:**  
+`number` - Score limit of the current gametype.
+
+```lua
+local function get_scorelimit()
+    return readbyte(gametype_base + 0x58)
+end
+```
+
+#### set_scorelimit
+
+**Parameters:**  
+`score` - New score limit (0‑255)
+
+```lua
+local function set_scorelimit(score)
+    writebyte(gametype_base + 0x58, score)
+end
+```
+
+#### is_ffa
+
+**Parameters:** none
+
+**Returns:**  
+`boolean` - `true` if Free‑For‑All (team play disabled).
+
+```lua
+local function is_ffa()
+    return readbyte(gametype_base + 0x34) == 0
+end
+```
+
+#### get_team_name
+
+**Parameters:**  
+`id` - Player index (0‑based)
+
+**Returns:**  
+`string` - `"Red"` or `"Blue"`.
+
+```lua
+local function get_team_name(id)
+    local team_id = getteam(id)
+    return team_id == 0 and "Red" or "Blue"
+end
+```
+
+#### get_ctf_team_scores
+
+**Parameters:** none
+
+**Returns:**  
+`table` - `{ red_score, blue_score }`.
+
+```lua
+local function get_ctf_team_scores()
+    local scores = {}
+    for team = 0, 1 do
+        local current_score = readdword(ctf_globals + team * 4 + 0x10)
+        scores[team] = current_score
+    end
+    return scores
+end
+```
+
+#### get_gametype_name
+
+**Parameters:** none
+
+**Returns:**  
+`string` - Name of the current gametype (e.g., `"CTF"`, `"Slayer"`, etc.).
+
+```lua
+local function get_gametype_name()
+    local type = get_gametype_id()
+    return type == 1 and "CTF" or type == 2 and "Slayer"
+        or type == 3 and "Oddball" or type == 4 and "KOTH"
+        or type == 5 and "Race"
+end
+```
+
+#### get_score
+
+**Parameters:**  
+`player` - Player index (0‑based)
+
+**Returns:**  
+`number` - Player's score according to current gametype rules.
+
+```lua
+local function get_score(player)
+    -- Implementation as provided (full logic omitted for brevity)
+    -- ...
+end
+```
+
+#### get_game_time_remaining
+
+**Parameters:** none
+
+**Returns:**  
+`number` - Seconds remaining until game end, or 0 if time is up.
+
+```lua
+local function get_game_time_remaining()
+    local time_passed = readdword(readdword(gametime_base) + 0xC) / 30
+    local time_limit = readdword(gametype_base + 0x78) / 30
+    local remaining = time_limit - time_passed
+    return remaining > 0 and remaining or 0
+end
+```
+
+#### get_game_time_elapsed
+
+**Parameters:** none
+
+**Returns:**  
+`number` - Seconds elapsed since game start.
+
+```lua
+local function get_game_time_elapsed()
+    return readdword(readdword(gametime_base) + 0xC) / 30
+end
+```
+
+#### get_player_score
+
+**Parameters:**  
+`player_id` - Player index (0‑based)
+
+**Returns:**  
+`number` or `nil` - Gametype‑dependent player score.
+
+```lua
+local function get_player_score(player_id)
+    -- Implementation as provided (full logic omitted for brevity)
+    -- ...
+end
+```
+
+#### set_player_score
+
+**Parameters:**  
+`player_id` - Player index (0‑based)  
+`score` - New score value
+
+```lua
+local function set_player_score(player_id, score)
+    -- Implementation as provided (full logic omitted for brevity)
+    -- ...
+end
+```
+
+#### get_team_score
+
+**Parameters:**  
+`team` - 0 (red) or 1 (blue)
+
+**Returns:**  
+`number` - Team score for the current gametype.
+
+```lua
+local function get_team_score(team)
+    -- Implementation as provided (full logic omitted for brevity)
+    -- ...
+end
+```
+
+#### set_team_score
+
+**Parameters:**  
+`team` - 0 (red) or 1 (blue)  
+`score` - New team score
+
+```lua
+local function set_team_score(team, score)
+    -- Implementation as provided (full logic omitted for brevity)
+    -- ...
+end
+```
+
+### Miscellaneous
+
+#### get_body_part_position
+
+**Parameters:**  
+`biped_object` - Object struct from `get_player_object`  
+`body_part_offset` - Offset from the biped's unknown float block (e.g., `0x8C4` for right hand)
+
+**Returns:**  
+`x`, `y`, `z` - World position of the specified body part, or `nil`.
+
+```lua
+local function get_body_part_position(biped_object, body_part_offset)
+    if not biped_object then return nil end
+    local x = readfloat(biped_object, body_part_offset + 0x28)
+    local y = readfloat(biped_object, body_part_offset + 0x2C)
+    local z = readfloat(biped_object, body_part_offset + 0x30)
+    return x, y, z
+end
+```
+
+---
+
+## Event‑Driven Script Examples
+
+These snippets show how to use the Phasor event hooks together with the utility functions above.
+
+### Server‑side speed hack protection
 
 ```lua
 function GetRequiredVersion() return 200 end
 
 function OnPlayerSpawn(player, m_objectId)
-    setspeed(player, 1.0)  -- reset speed on spawn
+    set_player_speed(player, 1.0)  -- reset speed on spawn
 end
 
 function OnClientUpdate(player, m_objectId)
     local dyn = getplayerobjectid(player)
     if dyn == 0 then return nil end
-	
+    
     local obj = getobject(dyn)
     if not obj then return nil end
 
     local speed = readfloat(obj + 0x6C)
     if speed > 1.05 then
-        setspeed(player, 1.0)
+        set_player_speed(player, 1.0)
     end
 end
 ```
 
-### Example: Private message on join
+### Private message on join
 
 ```lua
 function OnPlayerJoin(player, team)
@@ -213,7 +1204,7 @@ function OnPlayerJoin(player, team)
 end
 ```
 
-### Example: Disable a certain weapon pickup
+### Disable a certain weapon pickup
 
 ```lua
 function OnObjectInteraction(player, m_ObjectId, tagType, tagName)
@@ -224,45 +1215,7 @@ function OnObjectInteraction(player, m_ObjectId, tagType, tagName)
 end
 ```
 
-### Check if Player is in a Vehicle
-
-```lua
-local function in_vehicle(player_index)
-    local dyn = getplayerobjectid(player_index)
-    if dyn == 0 then return false end
-
-    local obj = getobject(dyn)
-    if not obj then return false end
-
-    return readdword(obj + 0x11C) ~= 0xFFFFFFFF
-end
-```
-
-### Get Player’s World Position (Eye Level, Crouch-Aware)
-
-```lua
-local function get_player_position(player_index)
-    local dyn = getplayerobjectid(player_index)
-    if dyn == 0 then return nil end
-	
-    local obj = getobject(dyn)
-    if not obj then return nil end
-
-    local crouch = readfloat(obj + 0x50C) -- 0 = standing
-
-    local x = readfloat(obj + 0x5C)
-    local y = readfloat(obj + 0x60)
-    local z = readfloat(obj + 0x64)
-    
-    local z_offset = (crouch == 0) and 0.65 or 0.35 * crouch
-
-    return x, y, z + z_offset
-end
-```
-
-### Per-Player Cooldowns
-
-Prevent command spam with a simple cooldown table:
+### Per‑player command cooldowns
 
 ```lua
 local cooldowns = {}
@@ -271,62 +1224,18 @@ function OnServerCommand(player, command, environment)
     if command == "some_command" then
         local now = os.clock()
         if cooldowns[player] and now - cooldowns[player] < 3 then
-            say(player, "Please wait 3 seconds before using !spawn again.")
+            privatesay(player, "Please wait 3 seconds before using !spawn again.")
             return 1
         end
         cooldowns[player] = now
+        -- handle command here...
         return 1
     end
     return 0
 end
 ```
 
-### Get Player’s Aim Direction Vector
-
-```lua
-local function get_aim_vector(player_index)
-    local dyn = getplayerobjectid(player_index)
-    if dyn == 0 then return nil end
-	
-    local obj = getobject(dyn)
-    if not obj then return nil end
-	
-    local ax = readfloat(obj + 0x230)
-    local ay = readfloat(obj + 0x234)
-    local az = readfloat(obj + 0x238)
-
-    return ax, ay, az
-end
-```
-
-### Override Player’s Respawn Time
-
-```lua
-local function set_respawn_time(player_index, seconds)
-    seconds = seconds or 3
-    local static = getplayer(player_index)
-    if static then
-        writedword(static + 0x2C, seconds * 33)  -- 33 ticks/second
-    end
-end
-```
-
-### Get Tag Class and Name from Any Object
-
-```lua
-
-local base_tag_table = 0x40440000  -- Works on PC and CE
-local function get_tag_from_object(object)
-    if not object then return nil end
-    local tag_class = readbyte(object + 0xB4)
-    local tag_index = readword(object)  -- index in tag table
-    local tag_address = tag_index * 32 + base_tag_table + 0x38
-    local tag_name = readstring(readdword(tag_address))
-    return tag_class, tag_name
-end
-```
-
-### Check if Player is Holding Flag or Oddball
+### Check if player is holding flag or oddball
 
 ```lua
 local function has_objective(player_index)
@@ -345,12 +1254,41 @@ local function has_objective(player_index)
     local tag_data = readdword(readdword(base_tag_table) + readword(weapon_obj) * 0x20 + 0x14)
     if not tag_data then return false end
 
-    -- Check bit 3 of offset 0x308 (holds objective flag)
     local is_objective = (readbyte(tag_data + 0x308) >> 3) & 1
     if is_objective ~= 1 then return false end
 
     local obj_type = readbyte(tag_data + 2)
-    return obj_type == 0 or obj_type == 4  -- 0 = flag, 4 = oddball
+    
+    return (obj_type == 0 and "Flag") or (obj_type == 4 and "Oddball") or nil
+end
+
+function OnClientUpdate(id)
+    if is_alive(id) then
+        local flag_or_oddball = has_objective(id)
+        if flag_or_oddball then
+            say(getname(id) .. " has the " .. flag_or_oddball)
+        end
+    end
+end
+```
+
+### Override player's respawn time
+
+```lua
+local function set_respawn_time(player_index, seconds)
+    seconds = seconds or 3
+    local static = getplayer(player_index)
+    if static then
+        writedword(static + 0x2C, seconds * 33)  -- 33 ticks/second
+    end
+end
+```
+
+**Example:**
+
+```lua
+function OnPlayerKill(killer, victim, mode)
+    set_respawn_time(victim, 0) -- instant respawn
 end
 ```
 
