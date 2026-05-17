@@ -276,7 +276,7 @@ print(format("Plain text"))
 `true` if the first character is `/` or `\`, else `false`.
 
 ```lua
-local function is_command(str)
+local function is_chat_command(str)
     if not str then return false end
     local first = string.sub(str, 1, 1)
     return first == "/" or first == "\\"
@@ -286,8 +286,8 @@ end
 **Example:**
 
 ```lua
-is_command("/kick") --> true
-is_command("hello") --> false
+is_chat_command("/kick") --> true
+is_chat_command("hello") --> false
 ```
 
 ### Strip Leading Slashes or Backslashes
