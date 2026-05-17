@@ -192,9 +192,9 @@ Example using `console_out()`:
 
 ```lua
 function OnTick()
-	console_out("Chimera Rocks!")                     -- standard console output
-    console_out("Chimera Rocks!", 1.0, 0.35, 0.35)    -- w/RGB colors (red, green, blue)
-    console_out("Chimera Rocks!", 1, 1.0, 0.35, 0.35) -- w/ARGB colors (alpha, red, green, blue)
+	console_out("Chimera Rocks!")                       -- standard console output
+    console_out("Chimera Rocks!", 1.0, 0.35, 0.35)      -- w/RGB colors (red, green, blue)
+    console_out("Chimera Rocks!", 1, 1.0, 0.35, 0.35)   -- w/ARGB colors (alpha, red, green, blue)
 end
 ```
 
@@ -498,28 +498,49 @@ end
 
 ---
 
-## Reading the Tag Table
+## Reading the tag path of an object
 
-Chimera provides `get_tag(class, name)` which returns a tag ID, and `get_tag(tag_id)` which returns a pointer to the tag
-entry.
+Chimera provides two overloads of `get_tag`:
+
+* `get_tag(class, name)` - looks up a tag by its class and asset path, returning the **tag ID** (a number).
+* `get_tag(tag_id)` - converts a tag ID into a **pointer** to the tag entry, so you can read the tag's internal data.
+
+### Example 1: Getting a tag ID from class + name
 
 ```lua
--- Find the meta index (for spawning) of a vehicle
 local ghost_tag = get_tag("vehi", "vehicles\\ghost\\ghost_mp")
 if ghost_tag then
-    -- You can now spawn it (see below)
+    console_out("Ghost tag ID: " .. ghost_tag)
+else
+    console_out("Ghost tag not found!")
 end
+```
 
--- Get tag name from an object
+### Example 2: Reading the tag path from a spawned object
+
+Once you have an object, you can retrieve its tag path (e.g. `"vehicles\\ghost\\ghost_mp"`) by reading the tag pointer
+and then the string at offset `0x10`.
+
+```lua
 function get_tag_name(obj)
     if not obj then return nil end
-    local tag_id = read_dword(obj)
-    local tag_ptr = get_tag(tag_id)
+
+    local tag_id = read_dword(obj)        -- first dword of an object is its tag ID
+    local tag_ptr = get_tag(tag_id)       -- tag_id → tag pointer (2nd overload)
     if not tag_ptr then return nil end
+
     local name_ptr = read_dword(tag_ptr + 0x10)
     return read_string(name_ptr)
 end
+
+local ghost = spawn_object("vehi", "vehicles\\ghost\\ghost_mp", 0, 0, 0)
+local object = get_object(ghost)         -- get_object returns the raw object pointer
+if object then
+    console_out(get_tag_name(object))
+end
 ```
+
+---
 
 ---
 
