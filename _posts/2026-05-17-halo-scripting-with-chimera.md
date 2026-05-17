@@ -39,70 +39,20 @@ To reload all scripts without restarting the game, type `chimera_lua_scripts_rel
 
 ## Script Skeleton & Version Check
 
-Every Chimera script starts with a version check and a few callbacks. Here's a skeleton script:
+See [full blank script](https://github.com/Chalwk/SPCLib/blob/master/chimera/blank_script_template.md) for a complete
+example.
+
+Every Chimera Lua script **must** define `clua_version` and set it to the API-specific version (e.g. `2.056`). Without
+this, the script will not load.
 
 ```lua
-clua_version = 2.056   -- * required: tells Chimera which API version you expect
+clua_version = 2.056
 
-set_callback("command","OnCommand")
-set_callback("frame","OnFrame")
-set_callback("preframe","OnPreFrame")
-set_callback("map load","OnMapLoad")
-set_callback("map_preload","OnMapPreload")
-set_callback("precamera","OnPreCamera")
-set_callback("rcon_message","OnRconMessage")
-set_callback("spawn","OnSpawn")
-set_callback("prespawn","OnPreSpawn")
-set_callback("tick","OnTick")
-set_callback("pretick","OnPreTick")
-set_callback("unload","OnScriptUnload")
-
-function OnPreTick()
-    -- called just before the main tick update
-end
-
-function OnTick()
-    -- called ~30 times per second (main gameplay update loop)
-end
-
-function OnPreFrame()
-    -- called before rendering each frame
-end
-
-function OnFrame()
-    -- called after preframe, once per rendered frame
-end
-
-function OnPreCamera()
-    -- called right before camera calculations are applied
-end
-
-function OnCommand(cmd)
-    -- called when you type a command in the console (press ~ key)
-end
-
-function OnRconMessage(msg)
-    -- called when an incoming RCON message is received; return false to block it
-end
-
-function OnPreSpawn(player)
-    -- called before a player spawns
-end
-
-function OnSpawn(player)
-    -- called when a player finishes spawning
-end
-
-function OnMapPreload(map_name)
-    -- called before a map fully loads (early initialization point)
-end
+set_callback("map load", "OnMapLoad")
 
 function OnMapLoad()
-    -- called after the map has fully loaded (reset or init gameplay state here)
-end
-
-function OnScriptUnload()
-    -- called when the script is unloaded
+     -- Output the current map name
+    console_out("Map: (" .. map .. ")")
 end
 ```
 

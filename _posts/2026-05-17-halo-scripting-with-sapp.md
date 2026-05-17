@@ -21,7 +21,23 @@ This guide assumes you have read:
 
 ## Script Skeleton & Version Check
 
-See [this blank SAPP script](https://github.com/Chalwk/SPCLib/blob/master/sapp/blank_script_template.md)
+See [full blank script](https://github.com/Chalwk/SPCLib/blob/master/sapp/blank_script_template.md) for a complete
+example.
+
+Every SAPP Lua script **must** set `api_version` and define `OnScriptLoad()`. Without `OnScriptLoad()`, SAPP will not
+load the script.
+
+```lua
+api_version = "1.12.0.0"
+
+function OnScriptLoad() -- Required or script will not load
+    -- Register callbacks here
+end
+
+function OnScriptUnload() -- Optional, but recommended to avoid Lua errors on unload
+    -- Cleanup code (optional)
+end
+```
 
 ---
 
