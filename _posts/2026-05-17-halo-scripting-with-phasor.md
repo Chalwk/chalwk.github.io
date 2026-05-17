@@ -52,10 +52,10 @@ Phasor looks for Lua scripts in its `scripts` folder. Typical path: `./cg/script
 
 ## Script management commands
 
-- 'sv_script_load' '<script>' '[persistent]'
-- 'sv_script_unload' '<script>'
-- 'sv_script_reload' '[script]'
-- 'sv_script_list'
+- `sv_script_load` `[script]` `[persistent]`
+- `sv_script_unload` `[script]`
+- `sv_script_reload` `[script]`
+- `sv_script_list`
 
 ---
 
@@ -177,15 +177,6 @@ end
 
 **Callback signature:** `function callback(id, count, userdata1, userdata2, ...)` — `count` is the number of times the
 timer has fired.
-
-### Tokenization (String) Functions
-
-| Function                         | Description                                                                                         |
-|----------------------------------|-----------------------------------------------------------------------------------------------------|
-| `gettokencount(source, delim)`   | Returns the number of times `delim` appears in `source`.                                            |
-| `gettoken(source, delim, token)` | Returns the `token`-th substring when splitting `source` by `delim`. Tokens start at `0`.           |
-| `getcmdtokencount(source)`       | Returns the number of command-style tokens (space-separated, but spaces inside quotes are ignored). |
-| `getcmdtoken(source, token)`     | Returns the `token`-th command token. Tokens start at `0`.                                          |
 
 ---
 
