@@ -50,6 +50,15 @@ Phasor looks for Lua scripts in its `scripts` folder. Typical path: `./cg/script
 
 ---
 
+## Script management commands
+
+- 'sv_script_load' '<script>' '[persistent]'
+- 'sv_script_unload' '<script>'
+- 'sv_script_reload' '[script]'
+- 'sv_script_list'
+
+---
+
 ## Handling Game Version (PC vs CE)
 
 Because Phasor cannot scan signatures, you must use the `game` parameter to select the correct hardcoded addresses.
@@ -139,7 +148,7 @@ end
 | `getobject(m_objId)`                                                   | Converts an object ID into its memory address for reading/writing.                                                                                                                                                                                                                                                                                                                                                  |
 | `getplayerobjectid(player)`                                            | Returns the object ID of the player's biped (`0xFFFFFFFF` if dead/invalid).                                                                                                                                                                                                                                                                                                                                         |
 | `getobjectcoords(m_objectId)`                                          | Returns the (x, y, z) coordinates of an object. If a player is in a vehicle, returns the vehicle's coordinates.                                                                                                                                                                                                                                                                                                     |
-| `lookuptag(tagType, tag)`                                              | Returns the map ID of a tag given its type (e.g., `"weap"`) and full name (e.g., `"weapons\\pistol\\pistol"`).                                                                                                                                                                                                                                                                                                      |
+| `gettagid(tagType, tag)`                                               | Returns the map ID of a tag given its type (e.g., `"weap"`) and full name (e.g., `"weapons\\pistol\\pistol"`).                                                                                                                                                                                                                                                                                                      |
 | `createobject(tagType, tag, parentId, respawnTime, bRecycle, x, y, z)` | Creates a new object. Returns its object ID. Parameters: `tagType` (e.g., `"weap"`), `tag` (full tag name), `parentId` (object ID of parent, or `-1`), `respawnTime` (seconds; `0` = never, `-1` = gametype default), `bRecycle` (`true` = respawn, `false` = destroy), and `x,y,z` coordinates. For item collections (weapons, nades, powerups), `bRecycle` is ignored and `respawnTime` is the destruction delay. |
 | `destroyobject(m_objectId)`                                            | Deletes an object. **Ensure the object ID is valid** to avoid crashes.                                                                                                                                                                                                                                                                                                                                              |
 | `movobjcoords(m_objectId, x, y, z)`                                    | Teleports an object to absolute coordinates.                                                                                                                                                                                                                                                                                                                                                                        |
@@ -151,10 +160,13 @@ end
 
 ### Chat & Console Output
 
-| Function                  | Description                                               |
-|---------------------------|-----------------------------------------------------------|
-| `say(msg)`                | Broadcasts a message to all players. ASCII only.          |
-| `privatesay(player, msg)` | Sends a private message to a specific player. ASCII only. |
+| Function                  | Description                                                    |
+|---------------------------|----------------------------------------------------------------|
+| `say(msg)`                | Broadcasts a message to all players. ASCII only.               |
+| `privatesay(player, msg)` | Sends a private message to a specific player. ASCII only.      |
+| `respond(msg)`            | Sends a message to the server terminal.                        |
+| `hprint(msg)`             | Sends a message to the server terminal.                        |
+| `print(msg)`              | Sends a message to the server terminal.                        |
 
 ### Timer Functions
 

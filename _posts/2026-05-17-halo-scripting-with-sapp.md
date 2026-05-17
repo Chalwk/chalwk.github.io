@@ -24,8 +24,8 @@ This guide assumes you have read:
 See [full blank script](https://github.com/Chalwk/SPCLib/blob/master/sapp/blank_script_template.md) for a complete
 example.
 
-Every SAPP Lua script **must** set `api_version` and define `OnScriptLoad()`. Without `OnScriptLoad()`, SAPP will not
-load the script.
+Every SAPP Lua script **must** set `api_version` and define `OnScriptLoad()`. Without these, SAPP will not load the
+script.
 
 ```lua
 api_version = "1.12.0.0"
