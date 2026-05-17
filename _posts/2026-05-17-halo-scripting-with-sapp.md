@@ -132,4 +132,34 @@ For more information on signature scanning, see [this guide](2025-09-07-halo-und
 
 ---
 
+### math.atan2
+
+SAPP doesn't have `math.atan2` so here is a pure Lua implementation.
+
+```lua
+if not math.atan2 then
+    math.atan2 = function(y, x)
+        if x > 0 then
+            return math.atan(y / x)
+        elseif x < 0 then
+            return (y >= 0 and math.atan(y / x) + pi or math.atan(y / x) - pi)
+        else
+            if y > 0 then return pi / 2
+            elseif y < 0 then return -pi / 2
+            else return 0 end
+        end
+    end
+end
+```
+
+---
+
 THE REST OF THIS GUIDE IS STILL BEING WORKED ON
+
+THE REST OF THIS GUIDE IS STILL BEING WORKED ON
+
+THE REST OF THIS GUIDE IS STILL BEING WORKED ON
+
+THE REST OF THIS GUIDE IS STILL BEING WORKED ON
+
+---
