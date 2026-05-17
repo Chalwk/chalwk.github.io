@@ -503,7 +503,7 @@ end
 
 Follow these steps to find offsets efficiently:
 
-### 1. Start with Known Values
+### Start with Known Values
 
 Pick a value you can easily change in the game, such as:
 
@@ -513,7 +513,7 @@ Pick a value you can easily change in the game, such as:
 
 Search for that value in Cheat Engine.
 
-### 2. Use Cheat Engine's Scanning Features
+### Use Cheat Engine's Scanning Features
 
 - **First Scan**: Enter the known value and perform an initial scan.
 - **Next Scan**: Change the value in the game (e.g., take damage, fire a weapon), then scan for the new value.
@@ -522,12 +522,12 @@ Search for that value in Cheat Engine.
 > **Pro Tip**: Use exact value scans when possible. If the value is displayed as a number in the game (like 100 health),
 > scan as 4-byte integer.
 
-### 3. Verify the Address
+### Verify the Address
 
 Once you have a candidate address, change it in Cheat Engine and see if the game reflects the change. If it works, you
 have found the dynamic address.
 
-### 4. Pointer Scanning
+### Pointer Scanning
 
 Dynamic addresses change each time you restart the game. To find a stable base address and offset chain:
 
@@ -539,6 +539,11 @@ Dynamic addresses change each time you restart the game. To find a stable base a
 > **Warning**: Pointer scanning can generate thousands of results. Be patient and filter by reloading the game a few
 > times to see which pointers survive.
 
-### 5. Document Your Offsets
+### Document Your Offsets
 
 Keep a list of discovered offsets, their data types, and what they control. This saves time in future projects.
+
+## Acknowledgments
+
+Many of the addresses and offsets documented in this guide were discovered by **aLTis**, **Giraffe**, **Silentk**, *
+*SnowyMouse**, **Wizard**, and others. Many thanks to these people!
