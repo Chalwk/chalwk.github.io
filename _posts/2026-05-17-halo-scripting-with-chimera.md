@@ -10,27 +10,10 @@ and dozens of quality-of-life fixes. **This guide focuses on its Lua API**, walk
 and practical examples so you can build your own HUDs, gameplay tweaks, and quality-of-life mods using Chimera's
 event-driven Lua environment.
 
+**Important:** Chimera's Lua API is based on Lua 5.5.
+
 > This guide assumes you have read the [Common Reference](2026-09-07-halo-lua-common.md)
 > and [Memory Offsets Deep Dive](2025-09-07-halo-understanding-memory-offsets.md).
-
----
-
-## Chimera-Specific API Overview
-
-| Feature                   | Function / Global                                               |
-|---------------------------|-----------------------------------------------------------------|
-| **Lua version**           | Lua 5.5                                                         |
-| **Entry point**           | `clua_version = 2.056` (global var)                             |
-| **Callback registration** | `set_callback(event, func, priority)`                           |
-| **Global variables**      | `map`, `gametype`, `local_player_index`, `server_type`, `build` |
-| **Send console/HUD**      | `console_out(msg)`, `hud_message(msg)`                          |
-| **Execute script**        | `execute_script(cmd)`                                           |
-| **Get dynamic player**    | `get_dynamic_player(id)`                                        |
-| **Get static player**     | `get_player(id)`                                                |
-| **Memory read/write**     | `read_float(addr)`, `write_float(addr, val)`, etc.              |
-| **Signature scanning**    | Not available                                                   |
-| **Tick rate control**     | `tick_rate(fps)`, `ticks()`                                     |
-| **Timers**                | `set_timer(ms, "func", ...)`, `stop_timer(id)`                  |
 
 ---
 
