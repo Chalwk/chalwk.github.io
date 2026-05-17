@@ -184,7 +184,7 @@ timer has fired.
 
 ## Utility Functions Library
 
-The following functions are user‑defined Lua helpers that build on the Phasor API. They simplify common tasks such as
+The following functions are user-defined Lua helpers that build on the Phasor API. They simplify common tasks such as
 player state queries, object manipulation, memory I/O, and gametype handling.  
 **Note:** Many functions rely on global variables like `gametype_base`, `map_pointer`, `ctf_globals`, etc. You must set
 these in `OnScriptLoad` based on the game version (PC or CE) using the offsets from the Common Lua References.
@@ -194,7 +194,7 @@ these in `OnScriptLoad` based on the game version (PC or CE) using the offsets f
 #### get_player_biped
 
 **Parameters:**  
-`id` - Player index (0‑based memory ID)
+`id` - Player index (0-based memory ID)
 
 **Returns:**  
 `object_struct` (table), `object_id` (number) - The player's biped object and its ID, or `nil` if dead/invalid.
@@ -219,7 +219,7 @@ end
 #### is_alive
 
 **Parameters:**  
-`id` - Player index (0‑based)
+`id` - Player index (0-based)
 
 **Returns:**  
 `boolean` - `true` if the player has a valid biped object.
@@ -242,7 +242,7 @@ end
 #### get_player_pos
 
 **Parameters:**  
-`id` - Player index (0‑based)
+`id` - Player index (0-based)
 
 **Returns:**  
 `x`, `y`, `z` (numbers) - World coordinates compensating for crouch, or `nil` if the player is invalid.
@@ -275,7 +275,7 @@ end
 #### is_player_camouflaged
 
 **Parameters:**  
-`id` - Player index (0‑based)
+`id` - Player index (0-based)
 
 **Returns:**  
 `boolean` - `true` if the player is invisible (camo active).
@@ -291,7 +291,7 @@ end
 #### get_player_stats
 
 **Parameters:**  
-`id` - Player index (0‑based)
+`id` - Player index (0-based)
 
 **Returns:**  
 `table` or `nil` - Contains keys: `kills`, `deaths`, `assists`, `streaks`, `flag_captures`, `flag_returns`,
@@ -326,7 +326,7 @@ end
 #### get_player_vehicle
 
 **Parameters:**  
-`id` - Player index (0‑based)
+`id` - Player index (0-based)
 
 **Returns:**  
 `number` - Vehicle object ID, or `nil` if not in a vehicle.
@@ -346,7 +346,7 @@ end
 #### is_in_vehicle
 
 **Parameters:**  
-`id` - Player index (0‑based)
+`id` - Player index (0-based)
 
 **Returns:**  
 `boolean` - `true` if the player is inside any vehicle.
@@ -360,7 +360,7 @@ end
 #### get_player_health
 
 **Parameters:**  
-`id` - Player index (0‑based)
+`id` - Player index (0-based)
 
 **Returns:**  
 `number` or `nil` - Health value between 0.0 and 1.0.
@@ -376,7 +376,7 @@ end
 #### get_player_shields
 
 **Parameters:**  
-`id` - Player index (0‑based)
+`id` - Player index (0-based)
 
 **Returns:**  
 `number` or `nil` - Shields value (0.0 to ~3.0 with overshield).
@@ -392,7 +392,7 @@ end
 #### set_player_health
 
 **Parameters:**  
-`id` - Player index (0‑based)  
+`id` - Player index (0-based)  
 `value` - Desired health (0.0 to 1.0)
 
 ```lua
@@ -407,7 +407,7 @@ end
 #### set_player_shields
 
 **Parameters:**  
-`id` - Player index (0‑based)  
+`id` - Player index (0-based)  
 `value` - Desired shields (0.0 to 3.0)
 
 ```lua
@@ -422,7 +422,7 @@ end
 #### get_player_ping
 
 **Parameters:**  
-`id` - Player index (0‑based)
+`id` - Player index (0-based)
 
 **Returns:**  
 `number` or `nil` - Ping in milliseconds.
@@ -438,8 +438,8 @@ end
 #### get_player_weapon
 
 **Parameters:**  
-`id` - Player index (0‑based)  
-`slot` (optional) - Weapon slot 1‑4. If omitted, returns the current weapon (or vehicle weapon if in vehicle).
+`id` - Player index (0-based)  
+`slot` (optional) - Weapon slot 1-4. If omitted, returns the current weapon (or vehicle weapon if in vehicle).
 
 **Returns:**  
 `number` - Weapon object ID, or `0xFFFFFFFF` if none.
@@ -474,17 +474,125 @@ end
 
 **Parameters:**  
 `expression` - String (e.g., `"*"`, `"me"`, `"red"`, `"blue"`, `"random"`, `"nearest"`, `"farthest"`, colour name,
-wildcard name, or numeric ID 1‑16)  
+wildcard name, or numeric ID 1-16)  
 `self_id` (optional) - Player index used for `"me"`, `"random"` exclusion, and as reference for `"nearest"`/
 `"farthest"`.
 
 **Returns:**  
-`table` or `nil` - List of player indices (0‑based) matching the expression.
+`table` or `nil` - List of player indices (0-based) matching the expression.
 
 ```lua
 local function get_players_by_expression(expression, self_id)
-    -- Implementation as provided (full logic omitted for brevity)
-    -- ...
+    if not expression then return nil end
+
+    -- All players
+    if expression == "*" then
+        local t = {}
+        for i = 0, 15 do
+            if getplayer(i) then t[#t + 1] = i end
+        end
+        return #t > 0 and t or nil
+
+        -- Self
+    elseif expression == "me" then
+        if self_id and getplayer(self_id) then return { self_id } end
+        return nil
+
+        -- Red team
+    elseif expression == "red" then
+        local t = {}
+        for i = 0, 15 do
+            if getplayer(i) and getteam(i) == 0 then t[#t + 1] = i end
+        end
+        return #t > 0 and t or nil
+
+        -- Blue team
+    elseif expression == "blue" then
+        local t = {}
+        for i = 0, 15 do
+            if getplayer(i) and getteam(i) == 1 then t[#t + 1] = i end
+        end
+        return #t > 0 and t or nil
+
+        -- Random player
+    elseif expression == "random" or expression == "rand" then
+        local t = {}
+        for i = 0, 15 do
+            if getplayer(i) and i ~= self_id then t[#t + 1] = i end
+        end
+        if #t > 0 then return { t[random(#t)] } end
+        return nil
+
+        -- Nearest player to self
+    elseif expression == "nearest" or expression == "closest" then
+        if not self_id or not get_player_pos(self_id) then return nil end
+        local sx, sy, sz = get_player_pos(self_id)
+        local min_dist, closest = math_huge, nil
+        for i = 0, 15 do
+            if i ~= self_id and getplayer(i) then
+                local x, y, z = get_player_pos(i)
+                if x then
+                    local d = (x - sx) ^ 2 + (y - sy) ^ 2 + (z - sz) ^ 2
+                    if d < min_dist then
+                        min_dist = d
+                        closest = i
+                    end
+                end
+            end
+        end
+        return closest and { closest } or nil
+
+        -- Farthest player from self
+    elseif expression == "farthest" then
+        if not self_id or not get_player_pos(self_id) then return nil end
+        local sx, sy, sz = get_player_pos(self_id)
+        local max_dist, farthest = -1, nil
+        for i = 0, 15 do
+            if i ~= self_id and getplayer(i) then
+                local x, y, z = get_player_pos(i)
+                if x then
+                    local d = (x - sx) ^ 2 + (y - sy) ^ 2 + (z - sz) ^ 2
+                    if d > max_dist then
+                        max_dist, farthest = d, i
+                    end
+                end
+            end
+        end
+        return farthest and { farthest } or nil
+    else
+        -- Numeric ID (1-16)
+        local num = tonumber(expression)
+        if num and num >= 1 and num <= 16 then
+            local id = num - 1
+            if getplayer(id) then return { id } end
+            return nil
+        end
+
+        -- Player colour name (e.g. "white", "yellow", "green", "orange", "purple", etc.)
+        local colour_index = player_colours[expression]
+        if colour_index then
+            local t = {}
+            for i = 0, 15 do
+                local p = getplayer(i)
+                if p and readword(p + 0x60) == colour_index then
+                    t[#t + 1] = i
+                end
+            end
+            return #t > 0 and t or nil
+        end
+
+        -- Wildcard name matching (case-insensitive)
+        local t = {}
+        for i = 0, 15 do
+            if getplayer(i) then
+                local name = getname(i)
+                if wildcard_match(name, expression) then
+                    t[#t + 1] = i
+                end
+            end
+        end
+        return #t > 0 and t or nil
+    end
 end
 ```
 
@@ -502,10 +610,10 @@ end
 #### get_player_color
 
 **Parameters:**  
-`id` - Player index (0‑based)
+`id` - Player index (0-based)
 
 **Returns:**  
-`number` or `nil` - Colour index (0‑17) as seen by others.
+`number` or `nil` - Colour index (0-17) as seen by others.
 
 ```lua
 local function get_player_color(id)
@@ -518,8 +626,8 @@ end
 #### set_player_color
 
 **Parameters:**  
-`id` - Player index (0‑based)  
-`colour` - Colour index (0‑17) or colour name string (e.g., `"white"`, `"yellow"`). A respawn is usually required for
+`id` - Player index (0-based)  
+`colour` - Colour index (0-17) or colour name string (e.g., `"white"`, `"yellow"`). A respawn is usually required for
 the change to fully apply.
 
 ```lua
@@ -539,7 +647,7 @@ end
 #### get_player_object
 
 **Parameters:**  
-`id` - Player index (0‑based)
+`id` - Player index (0-based)
 
 **Returns:**  
 `object_struct`, `object_id` - Same as `get_player_biped`.
@@ -553,7 +661,7 @@ end
 #### get_player_vehicle_object
 
 **Parameters:**  
-`id` - Player index (0‑based)
+`id` - Player index (0-based)
 
 **Returns:**  
 `vehicle_struct`, `vehicle_id` - The vehicle object and its ID, or `nil` if not in a vehicle.
@@ -573,7 +681,7 @@ end
 #### get_player_weapon_object
 
 **Parameters:**  
-`id` - Player index (0‑based)  
+`id` - Player index (0-based)  
 `slot` (optional) - Same as `get_player_weapon`.
 
 **Returns:**  
@@ -592,7 +700,7 @@ end
 #### get_player_speed
 
 **Parameters:**  
-`id` - Player index (0‑based)
+`id` - Player index (0-based)
 
 **Returns:**  
 `number` or `nil` - Current movement speed multiplier.
@@ -608,7 +716,7 @@ end
 #### set_player_speed
 
 **Parameters:**  
-`id` - Player index (0‑based)  
+`id` - Player index (0-based)  
 `speed` - Desired speed multiplier (capped to 999999 to avoid crashes).
 
 ```lua
@@ -663,8 +771,24 @@ local function get_object_tag(object_id)
     local object_map_id = readdword(obj)
 
     if not tag_lookup_cache then
-        -- Build cache from map (full implementation omitted for brevity)
-        -- ...
+        local map_base = readdword(map_pointer)
+        if not map_base then return nil end
+
+        local map_tag_count = to_decimal(read_string_reverse(map_base + 0xC, 3))
+        if not map_tag_count then return nil end
+
+        local tag_table_base = map_base + 0x28
+        local tag_table_size = 0x20
+        tag_lookup_cache = {}
+
+        for i = 0, map_tag_count - 1 do
+            local base = tag_table_base + (tag_table_size * i)
+            local tag_id = to_decimal(read_string_reverse(base + 0xC, 3))
+            local tag_class = read_string(base, 4, true)
+            local tag_name_addr = to_decimal(read_string_reverse(base + 0x10, 3))
+            local tag_name = read_tag_name(tag_name_addr)
+            tag_lookup_cache[tag_id] = { name = tag_name, class = tag_class }
+        end
     end
 
     local entry = tag_lookup_cache[object_map_id]
@@ -684,8 +808,33 @@ end
 
 ```lua
 local function get_tag_id(tag_class, tag_name)
-    -- Implementation as provided (full logic omitted for brevity)
-    -- ...
+    if not tag_class or not tag_name then return nil end
+    -- ensure cache is built
+    if not tag_lookup_cache then
+        local map_base = readdword(map_pointer)
+        if not map_base then return nil end
+        local map_tag_count = to_decimal(read_string_reverse(map_base + 0xC, 3))
+        if not map_tag_count then return nil end
+
+        local tag_table_base = map_base + 0x28
+        local tag_table_size = 0x20
+        tag_lookup_cache = {}
+        for i = 0, map_tag_count - 1 do
+            local base = tag_table_base + (tag_table_size * i)
+            local tag_id = to_decimal(read_string_reverse(base + 0xC, 3))
+            local cls = read_string(base, 4, true)
+            local tname_addr = to_decimal(read_string_reverse(base + 0x10, 3))
+            local tname = read_tag_name(tname_addr)
+            tag_lookup_cache[tag_id] = { name = tname, class = cls }
+        end
+    end
+
+    for id, info in pairs(tag_lookup_cache) do
+        if info.class == tag_class and (info.name == tag_name or info.name:gsub("\\", "/") == tag_name:gsub("\\", "/")) then
+            return id
+        end
+    end
+    return nil
 end
 ```
 
@@ -710,7 +859,7 @@ end
 **Parameters:**  
 `vehicle_id` - Object ID of the vehicle
 
-**Effect:** Zeroes angular velocity and re‑enables physics to set the vehicle upright.
+**Effect:** Zeroes angular velocity and re-enables physics to set the vehicle upright.
 
 ```lua
 local function upright_vehicle(vehicle_id)
@@ -728,7 +877,7 @@ end
 #### upright_player_vehicle
 
 **Parameters:**  
-`player_id` - Player index (0‑based)
+`player_id` - Player index (0-based)
 
 **Effect:** Uprights the vehicle the player is currently riding (if any).
 
@@ -750,10 +899,10 @@ The following helpers extend Phasor's memory functions with safer writes and con
 **Parameters:**  
 `address` - Starting memory address  
 `length` (optional) - Maximum bytes to read (default 256)  
-`reverse` (optional) - Reverse byte order (big‑endian)
+`reverse` (optional) - Reverse byte order (big-endian)
 
 **Returns:**  
-`string` - Decoded ASCII string (null‑terminated).
+`string` - Decoded ASCII string (null-terminated).
 
 ```lua
 local function read_string(address, length, reverse)
@@ -779,7 +928,7 @@ end
 #### read_tag_name
 
 **Parameters:**  
-`address` - Memory location of a null‑terminated string (no length cap)
+`address` - Memory location of a null-terminated string (no length cap)
 
 **Returns:**  
 `string` - The tag name.
@@ -799,7 +948,7 @@ end
 `length` - Number of bytes to read
 
 **Returns:**  
-`string` - Hexadecimal representation in reversed (big‑endian) order.
+`string` - Hexadecimal representation in reversed (big-endian) order.
 
 ```lua
 local function read_string_reverse(address, offset, length)
@@ -819,11 +968,11 @@ end
 #### read_widestring
 
 **Parameters:**  
-`address` - Starting address of a UTF‑16LE string  
+`address` - Starting address of a UTF-16LE string  
 `length` (optional) - Maximum bytes (default 256)
 
 **Returns:**  
-`string` - ASCII approximation (non‑ASCII characters ignored).
+`string` - ASCII approximation (non-ASCII characters ignored).
 
 ```lua
 local function read_widestring(address, length)
@@ -852,7 +1001,7 @@ end
 `str` - String to write  
 `offset` (optional) - Offset from `address`
 
-**Effect:** Writes null‑terminated ASCII string.
+**Effect:** Writes null-terminated ASCII string.
 
 ```lua
 local function write_string(address, str, offset)
@@ -869,10 +1018,10 @@ end
 
 **Parameters:**  
 `address` - Starting address  
-`str` - ASCII string to write as UTF‑16LE  
+`str` - ASCII string to write as UTF-16LE  
 `offset` (optional) - Offset from `address`
 
-**Effect:** Writes null‑terminated wide string.
+**Effect:** Writes null-terminated wide string.
 
 ```lua
 local function write_widestring(address, str, offset)
@@ -891,7 +1040,7 @@ end
 
 **Parameters:**  
 `address` - Memory address  
-`bit_index` - 0‑based bit position (0 = LSB)
+`bit_index` - 0-based bit position (0 = LSB)
 
 **Returns:**  
 `number` - 0 or 1.
@@ -909,7 +1058,7 @@ end
 
 **Parameters:**  
 `address` - Memory address  
-`bit_index` - 0‑based bit position  
+`bit_index` - 0-based bit position  
 `value` - 0 or 1
 
 ```lua
@@ -927,7 +1076,7 @@ end
 
 #### safe_write_byte / safe_write_char / safe_write_short / safe_write_word / safe_write_int / safe_write_dword / safe_write_float
 
-These functions clamp values to the valid range of the target type before writing, preventing out‑of‑range crashes.
+These functions clamp values to the valid range of the target type before writing, preventing out-of-range crashes.
 
 **Example signature:**
 
@@ -976,7 +1125,7 @@ end
 #### set_scorelimit
 
 **Parameters:**  
-`score` - New score limit (0‑255)
+`score` - New score limit (0-255)
 
 ```lua
 local function set_scorelimit(score)
@@ -989,7 +1138,7 @@ end
 **Parameters:** none
 
 **Returns:**  
-`boolean` - `true` if Free‑For‑All (team play disabled).
+`boolean` - `true` if Free-For-All (team play disabled).
 
 ```lua
 local function is_ffa()
@@ -1000,7 +1149,7 @@ end
 #### get_team_name
 
 **Parameters:**  
-`id` - Player index (0‑based)
+`id` - Player index (0-based)
 
 **Returns:**  
 `string` - `"Red"` or `"Blue"`.
@@ -1049,15 +1198,46 @@ end
 #### get_score
 
 **Parameters:**  
-`player` - Player index (0‑based)
+`player` - Player index (0-based)
 
 **Returns:**  
 `number` - Player's score according to current gametype rules.
 
 ```lua
 local function get_score(player)
-    -- Implementation as provided (full logic omitted for brevity)
-    -- ...
+    local score = 0
+    local timed = false
+    local p = getplayer(player)
+    local game_type = get_gametype_id()
+    local team_play = is_ffa()
+
+    if game_type == 1 then
+        score = readword(p + 0xC8)
+    elseif game_type == 2 then
+        local kills = readword(p + 0x9C)
+        local suicides = 0
+        if not team_play then
+            suicides = readword(p + 0xB0)
+        else
+            suicides = readword(p + 0xAC)
+        end
+        score = kills - suicides
+    elseif game_type == 3 then
+        local oddball_type = readbyte(gametype_base + 0x8C)
+        if oddball_type == 0 or oddball_type == 1 then
+            timed = true
+            score = readdword(0x639E5C + player)
+        else
+            score = readword(p + 0xC8)
+        end
+    elseif game_type == 4 then
+        timed = true
+        score = readword(p + 0xC4)
+    elseif game_type == 5 then
+        score = readword(p + 0xC6)
+    end
+    if timed then score = floor(score / 30) end
+    return score
 end
 ```
 
@@ -1093,28 +1273,63 @@ end
 #### get_player_score
 
 **Parameters:**  
-`player_id` - Player index (0‑based)
+`player_id` - Player index (0-based)
 
 **Returns:**  
-`number` or `nil` - Gametype‑dependent player score.
+`number` or `nil` - Gametype-dependent player score.
 
 ```lua
 local function get_player_score(player_id)
-    -- Implementation as provided (full logic omitted for brevity)
-    -- ...
+    local p = getplayer(player_id)
+    if not p then return nil end
+    local gt = get_gametype_id()
+    if gt == 1 then -- ctf
+        return readshort(p + 0xC8)
+    elseif gt == 2 then -- slayer
+        return readint(slayer_globals + 0x40 + player_id * 4)
+    elseif gt == 3 then -- oddball
+        local oddball_game = readbyte(gametype_base + 0x8C)
+        if oddball_game == 0 or oddball_game == 1 then
+            return readint(oddball_globals + 0x84 + player_id * 4) / 30
+        else
+            return readint(oddball_globals + player_id * 4 + 0x104)
+        end
+    elseif gt == 4 then -- king
+        return readshort(p + 0xC4)
+    elseif gt == 5 then -- race
+        return readshort(p + 0xC6)
+    end
+    return 0
 end
 ```
 
 #### set_player_score
 
 **Parameters:**  
-`player_id` - Player index (0‑based)  
+`player_id` - Player index (0-based)  
 `score` - New score value
 
 ```lua
 local function set_player_score(player_id, score)
-    -- Implementation as provided (full logic omitted for brevity)
-    -- ...
+    local p = getplayer(player_id)
+    if not p then return end
+    local gt = get_gametype_id()
+    if gt == 1 then
+        writeshort(p + 0xC8, score)
+    elseif gt == 2 then
+        writeint(slayer_globals + 0x40 + player_id * 4, score)
+    elseif gt == 3 then
+        local oddball_game = readbyte(gametype_base + 0x8C)
+        if oddball_game == 0 or oddball_game == 1 then
+            writeint(oddball_globals + 0x84 + player_id * 4, score * 30)
+        else
+            writeint(oddball_globals + player_id * 4 + 0x104, score)
+        end
+    elseif gt == 4 then
+        writeshort(p + 0xC4, score)
+    elseif gt == 5 then
+        writeshort(p + 0xC6, score)
+    end
 end
 ```
 
@@ -1128,8 +1343,19 @@ end
 
 ```lua
 local function get_team_score(team)
-    -- Implementation as provided (full logic omitted for brevity)
-    -- ...
+    local gt = get_gametype_id()
+    if gt == 1 then -- ctf
+        return readint(ctf_globals + team * 4 + 0x10)
+    elseif gt == 2 then -- slayer
+        return readint(slayer_globals + team * 4)
+    elseif gt == 3 then -- oddball
+        return readint(oddball_globals + team * 4 + 0x4) / 30
+    elseif gt == 4 then -- king
+        return readint(koth_globals + team * 4) / 30
+    elseif gt == 5 then -- race
+        return readint(race_globals + team * 4 + 0x88) / 30
+    end
+    return 0
 end
 ```
 
@@ -1141,8 +1367,18 @@ end
 
 ```lua
 local function set_team_score(team, score)
-    -- Implementation as provided (full logic omitted for brevity)
-    -- ...
+    local gt = get_gametype_id()
+    if gt == 1 then
+        writeint(ctf_globals + team * 4 + 0x10, score)
+    elseif gt == 2 then
+        writeint(slayer_globals + team * 4, score)
+    elseif gt == 3 then
+        writeint(oddball_globals + team * 4 + 0x4, score * 30)
+    elseif gt == 4 then
+        writeint(koth_globals + team * 4, score * 30)
+    elseif gt == 5 then
+        writeint(race_globals + team * 4 + 0x88, score * 30)
+    end
 end
 ```
 
@@ -1169,11 +1405,11 @@ end
 
 ---
 
-## Event‑Driven Script Examples
+## Event-Driven Script Examples
 
 These snippets show how to use the Phasor event hooks together with the utility functions above.
 
-### Server‑side speed hack protection
+### Server-side speed hack protection
 
 ```lua
 function GetRequiredVersion() return 200 end
@@ -1215,7 +1451,7 @@ function OnObjectInteraction(player, m_ObjectId, tagType, tagName)
 end
 ```
 
-### Per‑player command cooldowns
+### Per-player command cooldowns
 
 ```lua
 local cooldowns = {}

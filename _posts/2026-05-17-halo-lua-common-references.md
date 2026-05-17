@@ -227,7 +227,7 @@ print(format_message(JOIN_MESSAGE, {name = "Chalwk"}))
 print(format_message(SCORE_MESSAGE, {name = "Chalwk", points = 150, minutes = 12}))
 ```
 
-#### Version 3: Case‑insensitive placeholders with fallback
+#### Version 3: Case-insensitive placeholders with fallback
 
 Matches placeholders like `$NAME`, `$Name`, or `$name` to a key in the `args` table by trying the original
 key, then lowercased, then uppercased. Missing placeholders are left unchanged.
@@ -440,7 +440,7 @@ find_char("hello world", "l") --> 3 4 10
 
 ### Wildcard Matching (`*` and `?`)
 
-Performs case‑insensitive wildcard matching with `*` (any sequence) and `?` (single character).
+Performs case-insensitive wildcard matching with `*` (any sequence) and `?` (single character).
 
 **Parameters:**
 
