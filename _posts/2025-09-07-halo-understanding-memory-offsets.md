@@ -545,5 +545,6 @@ Keep a list of discovered offsets, their data types, and what they control. This
 
 ## Acknowledgments
 
-Many of the addresses and offsets documented in this guide were discovered by **aLTis**, **Giraffe**, **Silentk**, *
-*SnowyMouse**, **Wizard**, and others. Many thanks to these people!
+Many of the addresses & offsets documented in this guide were discovered by [aLTis](https://github.com/aLTis94),
+Giraffe, Silentk, [SnowyMouse](https://github.com/SnowyMouse), [Wizard](https://github.com/th3w1zard1), and others. Many
+thanks to them!
