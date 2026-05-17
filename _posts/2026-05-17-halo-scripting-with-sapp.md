@@ -1376,3 +1376,9 @@ sandbox admin commands with `_ENV` for extra safety.
 - [Halo CE: The Xbox Experience - Open Carnage](https://opencarnage.net/index.php?%2Ftopic%2F5784-halo-ce-the-xbox-experience)
 
 ---
+
+## Complete Examples:
+
+See my [Phasor Script Archive](https://github.com/Chalwk/SPCLib/tree/master/sapp).
+
+---

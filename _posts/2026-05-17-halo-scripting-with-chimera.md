@@ -609,6 +609,8 @@ local function get_player_name(id)
 end
 ```
 
+---
+
 ## Complete Examples:
 
 See my [Chimera Script Archive](https://github.com/Chalwk/SPCLib/tree/master/chimera/global).
