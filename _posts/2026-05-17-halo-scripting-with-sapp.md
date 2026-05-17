@@ -25,31 +25,9 @@ See [this blank SAPP script](https://github.com/Chalwk/SPCLib/blob/master/sapp/b
 
 ---
 
-### Where to Put Your Scripts
+## Where to Put Your Scripts
 
 SAPP looks for Lua scripts in its `Lua` folder; By default, this is located in `./cg/sapp/lua`.
-
----
-
-## Signature Scanning
-
-Unlike Phasor or Chimera, SAPP can find memory addresses dynamically using byte patterns.
-This makes scripts **version-independent** (PC/CE) without hardcoded offsets.
-
-```lua
-local gametype_base
-
-function OnScriptLoad()
-    -- Signature for gametype base (works on both PC and CE)
-    gametype_base = read_dword(sig_scan("B9360000008BF3BF78545F00") + 0x8)
-end
-
-function get_score_limit()
-    return read_byte(gametype_base + 0x58)
-end
-```
-
-For more information on signature scanning, see [this guide](2025-09-07-halo-understanding-memory-offsets.md).
 
 ---
 
@@ -129,6 +107,59 @@ For more information on signature scanning, see [this guide](2025-09-07-halo-und
 | `write_vector3d(address, x, y, z)`                               | Writes three 32‑bit floats. Returns success.                                                                                               |
 | `read_string(address)`                                           | Reads a null‑terminated 8‑bit string.                                                                                                      |
 | `write_string(address, value)`                                   | Writes a null‑terminated 8‑bit string. Returns success.                                                                                    |
+
+---
+
+## Version-Independent Scripting: Signature Scanning and Game Version Detection
+
+### Signature Scanning
+
+Unlike Phasor or Chimera, SAPP can find memory addresses dynamically using byte patterns.
+This makes scripts **version-independent** (PC/CE) without hardcoded offsets.
+
+```lua
+local gametype_base
+function OnScriptLoad()
+    -- works on both PC and CE
+    gametype_base = read_dword(sig_scan("B9360000008BF3BF78545F00") + 0x8)
+end
+
+function get_score_limit()
+    return read_byte(gametype_base + 0x58)
+end
+```
+
+### Handling Game Version (`halo_type`)
+
+SAPP can detect whether the server is running for **PC** or **CE** using the global `halo_type` variable. This is
+essential when you need different memory offsets or behaviors for each version.
+
+#### Usage
+
+`halo_type` returns either `"PC"` or `"CE"`. Use it in conditional statements to assign version-specific addresses.
+
+#### Example: Version-Dependent Offset
+
+When combined with signature scanning, you can make your script fully version-independent. Scan for a base address, then
+adjust offsets based on `halo_type`:
+
+```lua
+local gametype_base, timelimit_address
+
+function OnScriptLoad()
+    local base_sig = sig_scan("B9360000008BF3BF78545F00")
+    local header_sig = sig_scan("A1????????8B480C894D00")
+    
+    if base_sig == 0 or header_sig == 0 then return end
+
+    gametype_base = read_dword(base_sig + 0x8)
+    gameinfo_header = read_dword(header_sig + 0x1)
+    timelimit_address = (halo_type == "PC" and 0x626630) or 0x5AA5B0
+end
+```
+
+For more information on memory offsets and signature scanning,
+see [this guide](2025-09-07-halo-understanding-memory-offsets.md).
 
 ---
 
