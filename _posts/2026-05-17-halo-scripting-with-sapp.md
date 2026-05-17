@@ -13,7 +13,7 @@ Lua API**, walks through the core scripting model and practical examples so you 
 
 This guide assumes you have read:
 
-- [Common Reference](2026-09-17-halo-lua-common.md)
+- [Common Lua Utility Functions](2026-05-17-halo-lua-utility-functions.md)
 - [Memory Offsets Deep Dive](2025-09-07-halo-understanding-memory-offsets.md). 
 - [SAPP Command Reference](2026-09-17-halo-sapp-command-reference.md).
 

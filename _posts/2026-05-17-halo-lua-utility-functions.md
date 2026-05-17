@@ -1,11 +1,12 @@
 ---
-title: "Halo Lua Scripting - Common Reference"
+title: "Halo Lua Scripting - Common Utility Functions"
 date: 2026-05-17
 categories: [ education, halo, modding ]
-tags: [ sapp, phasor, chimera, lua, scripting, memory ]
+tags: [ sapp, phasor, chimera, lua, scripting, utilities ]
 ---
 
-This document covers common Lua **utility functions** for Lua scripting across SAPP, Phasor and Chimera.
+This document collects **pure Lua utility functions** that work across SAPP, Phasor, and Chimera without relying on
+platform-specific APIs. They are safe to use in any Lua 5.1+ environment.
 
 > For platform-specific APIs, see the dedicated tutorials:
 > - [SAPP Scripting](2026-05-17-halo-scripting-with-sapp.md)
@@ -14,20 +15,63 @@ This document covers common Lua **utility functions** for Lua scripting across S
 
 ---
 
-# Common Lua Functions
+## Compatibility Note: `math.atan2`
 
-## Check if Two Points are Within a Radius (3D, squared distance)
+Some Lua environments may not expose `math.atan2`. Use this fallback to ensure, for example, that cardinal direction
+functions work
+everywhere:
 
 ```lua
-function points_in_range(x1,y1,z1, x2,y2,z2, radius)
-    local dx = x1 - x2
-    local dy = y1 - y2
-    local dz = z1 - z2
-    return (dx*dx + dy*dy + dz*dz) <= (radius*radius)
+if not math.atan2 then
+    local pi = math.pi
+    math.atan2 = function(y, x)
+        if x > 0 then
+            return math.atan(y / x)
+        elseif x < 0 then
+            return (y >= 0 and math.atan(y / x) + pi or math.atan(y / x) - pi)
+        else
+            if y > 0 then return pi / 2
+            elseif y < 0 then return -pi / 2
+            else return 0 end
+        end
+    end
 end
 ```
 
-## Convert Camera Direction to Cardinal Point (N, NE, E, ...)
+---
+
+## Utility Functions
+
+### Check if Two Points are Within a Radius (3D, squared distance)
+
+Uses squared distance to avoid expensive `math.sqrt` - ideal for per‑tick checks.
+
+**Parameters:**  
+`x1, y1, z1`, `x2, y2, z2` (numbers) - Coordinates of the two points.  
+`radius` (number) - Distance threshold.
+
+**Returns:** `true` if within radius, `false` otherwise.
+
+```lua
+function points_in_range(x1, y1, z1, x2, y2, z2, radius)
+    local dx = x1 - x2
+    local dy = y1 - y2
+    local dz = z1 - z2
+    return (dx * dx + dy * dy + dz * dz) <= (radius * radius)
+end
+```
+
+---
+
+### Convert Camera Direction to Cardinal Point (N, NE, E, ...)
+
+Converts a direction vector (e.g., from camera forward vector) into a compass point. Includes the `math.atan2` fallback
+shown above.
+
+**Parameters:**  
+`fx, fy` (numbers) - X and Y components of the direction vector.
+
+**Returns:** String like `"N"`, `"NE"`, `"E"`, etc.
 
 ```lua
 function direction_to_cardinal(fx, fy)
@@ -38,20 +82,40 @@ function direction_to_cardinal(fx, fy)
 end
 ```
 
-## Deep Copy a Table (handles nested tables and metatables)
+---
+
+### Deep Copy a Table (Handles Nested Tables and Metatables)
+
+Creates a fully independent copy of a table, including nested structures and metatables.
+
+**Warning:** Does not handle circular references (will cause infinite recursion).
+
+**Parameters:**  
+`orig` (any) - The value or table to copy.
+
+**Returns:** A deep copy.
 
 ```lua
 function deep_copy(orig)
     if type(orig) ~= "table" then return orig end
     local copy = {}
-    for k,v in pairs(orig) do
+    for k, v in pairs(orig) do
         copy[deep_copy(k)] = deep_copy(v)
     end
     return setmetatable(copy, deep_copy(getmetatable(orig)))
 end
 ```
 
-## Shuffle an Array (Fisher-Yates)
+---
+
+### Shuffle an Array (Fisher-Yates)
+
+Randomly shuffles an array‑style table in place. Every permutation is equally likely.
+
+**Parameters:**  
+`t` (table) - Table with sequential integer keys starting at 1.
+
+**Returns:** Nothing (modifies the table in place).
 
 ```lua
 function shuffle_array(t)
@@ -62,14 +126,129 @@ function shuffle_array(t)
 end
 ```
 
-## Get Number of Key-Value Pairs in Any Table
+**Note:** Call `math.randomseed(os.time())` once at script load for proper randomness.
+
+---
+
+### Get Number of Key-Value Pairs in Any Table
+
+Works for both array‑style and dictionary‑style tables (unlike Lua’s `#` operator).
+
+**Parameters:**  
+`t` (table) - Any table.
+
+**Returns:** Number of key‑value pairs.
 
 ```lua
 function table_length(t)
     local count = 0
-    for _ in pairs(t) do count = count + 1 end
+    for _ in pairs(t) do
+        count = count + 1
+    end
     return count
 end
+```
+
+---
+
+### Parse Command Arguments by Delimiter
+
+Splits a string into substrings based on a delimiter - useful for parsing chat commands or CSV data.
+
+**Parameters:**  
+`input` (string) - The string to split.  
+`delimiter` (string) - The delimiter character (e.g., `" "`, `","`).
+
+**Returns:** An array‑like table of substrings.
+
+```lua
+function parse_args(input, delimiter)
+    local result = {}
+    for substring in input:gmatch("([^" .. delimiter .. "]+)") do
+        result[#result + 1] = substring
+    end
+    return result
+end
+```
+
+**Example:**  
+`parse_args("/give weapon sniper", " ")` → `{"/give", "weapon", "sniper"}`
+
+---
+
+### Format Messages - Three Approaches
+
+#### Version 1: Classic `string.format` style
+
+Define message templates as constants and use a wrapper that behaves like `string.format`.
+
+```lua
+local HELLO_MESSAGE = "Hello world!"
+local PLAYER_JOINED = "Player %s has joined the game."
+local PLAYER_SCORE = "%s scored %d points in %d minutes."
+
+local function format_message(message, ...)
+    if select('#', ...) > 0 then
+        return message:format(...)
+    end
+    return message
+end
+
+-- Usage:
+print(format_message(HELLO_MESSAGE))
+print(format_message(PLAYER_JOINED, "Chalwk"))
+print(format_message(PLAYER_SCORE, "Chalwk", 150, 12))
+```
+
+#### Version 2: Placeholder-based (named variables)
+
+Use named placeholders like `$name` and replace from a table.
+
+```lua
+local SCORE_MESSAGE = "$name scored $points points in $minutes minutes."
+local JOIN_MESSAGE = "Player $name has joined the server."
+
+local function format_message(message, vars)
+    return (message:gsub("%$(%w+)", function(key)
+        return vars[key] or "$" .. key
+    end))
+end
+
+-- Usage:
+print(format_message(JOIN_MESSAGE, {name = "Chalwk"}))
+print(format_message(SCORE_MESSAGE, {name = "Chalwk", points = 150, minutes = 12}))
+```
+
+#### Version 3: Case‑insensitive placeholders with fallback
+
+This version matches placeholders like `$NAME`, `$Name`, or `$name` to a key in the `args` table by trying the original
+key, then lowercased, then uppercased. Missing placeholders are left unchanged.
+
+```lua
+local function format(template, args)
+    if not args then return template end
+    return (template:gsub("%$([%w_]+)", function(key)
+        local value = args[key] or args[key:lower()] or args[key:upper()]
+        return value ~= nil and tostring(value) or "$" .. key
+    end))
+end
+```
+
+**Usage examples:**
+
+```lua
+print(format("Hello $name, you have $points points!", {name = "Chalwk", points = 42}))
+-- → "Hello Chalwk, you have 42 points!"
+
+print(format("Welcome $NAME", {name = "Chalwk"}))
+-- → "Welcome Chalwk"  (matches because $NAME -> args["name"]:upper())
+
+print(format("Score: $score", {}))
+-- → "Score: $score"
+
+-- No args table → returns template unchanged
+print(format("Plain text"))
+-- → "Plain text"
 ```
 
 ---

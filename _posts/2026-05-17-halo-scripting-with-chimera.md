@@ -12,8 +12,10 @@ event-driven Lua environment.
 
 **Important:** Chimera's Lua API is based on Lua 5.5.
 
-> This guide assumes you have read the [Common Reference](2026-09-17-halo-lua-common.md)
-> and [Memory Offsets Deep Dive](2025-09-07-halo-understanding-memory-offsets.md).
+This guide assumes you have read:
+
+- [Common Lua Utility Functions](2026-05-17-halo-lua-utility-functions.md)
+- [Memory Offsets Deep Dive](2025-09-07-halo-understanding-memory-offsets.md).
 
 ---
 
@@ -237,7 +239,7 @@ script's environment, and the Chimera version.
 | `build`              | Chimera build number. **Negative** = alpha/pre-release; **positive** = public release.               |
 | `full_build`         | If `build` is negative, contains the **next public release build number**; otherwise equals `build`. |
 | `gametype`           | Current gametype: `"ctf"`, `"slayer"`, `"oddball"`, `"king"`, or `"race"`.                           |
-| `local_player_index` | Local player index (0–15). May be `nil` until assigned after joining a server.                       |
+| `local_player_index` | Local player index (0-15). May be `nil` until assigned after joining a server.                       |
 | `map`                | Currently loaded map name.                                                                           |
 | `map_is_protected`   | `true` if the map uses protected tag data (e.g., `"h3mt-foundry"`).                                  |
 | `sandboxed`          | `true` if the script is running in a sandboxed environment (see “Sandboxed Scripts”).                |
