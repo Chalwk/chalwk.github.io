@@ -62,6 +62,160 @@ Here are three tools commonly used in the Halo PC/CE modding community:
 
 ---
 
+## Advanced Memory Discovery - Signatures and Version-Specific Addresses
+
+### Signature Scanning (SAPP Only)
+
+Offsets can change between game versions or builds. **Signature scanning** (also called pattern scanning) lets you
+locate code or data without relying on hardcoded addresses. **Only SAPP** provides a built-in `sig_scan(pattern)`
+function that returns a memory address. Chimera and Phasor do **not** expose signature scanning to Lua scripts.
+
+A signature is a string of bytes with wildcards (`??`) where values may vary (e.g., memory addresses). Example:  
+`"F3ABA1????????BA????????C740??????????E8????????668B0D"`
+
+#### Generating Signatures with Specialized Tools
+
+| Tool             | Plugin / Method                      | Output                                                                                         |
+|------------------|--------------------------------------|------------------------------------------------------------------------------------------------|
+| **IDA Pro**      | SigMaker (e.g., `IDA_SigMaker.dll`)  | Right-click on assembly → generate AOB signature; copy from output window.                     |
+| **Ghidra**       | MakeSig script                       | Right-click a function → “Generate Signature” → copy pattern.                                  |
+| **Cheat Engine** | Array of bytes scan + Auto Assembler | Find the instruction in memory disassembler → use `aobscan` or generate AOB from context menu. |
+
+#### Using a Signature in SAPP
+
+The address returned by `sig_scan` points to the **start** of the matched byte sequence. You often need to add an *
+*offset** to reach the actual data pointer.
+
+```lua
+-- Signature found at: F3 ABA1 [?? ?? ?? ??] BA ...
+-- The 4-byte network_struct pointer is located 3 bytes after the signature start
+local ptr = sig_scan("F3ABA1????????BA????????C740??????????E8????????668B0D")
+if ptr then
+    network_struct = read_dword(ptr + 3)
+end
+```
+
+#### Verifying a Signature
+
+Before using a signature in a script, test it in **Cheat Engine**:
+
+1. Attach to the game process.
+2. Open **Memory View** → **Search** → **Array of bytes**.
+3. Paste the signature (with `??` for wildcards).
+4. Confirm it finds **exactly one** unique result. If it finds none or many, adjust the pattern length or add more
+   unique bytes.
+
+---
+
+### Version Detection for Chimera and Phasor (Hardcoded Addresses)
+
+Because Chimera and Phasor cannot scan signatures, scripts detect the game version (`"PC"` for Halo PC or `"CE"` for
+Custom Edition) and load the correct hardcoded addresses.
+
+**SAPP** - `halo_type` global:
+
+```lua
+local timelimit_address
+function OnScriptLoad()
+    timelimit_address = (halo_type == "PC" and 0x626630) or 0x5AA5B0
+end
+```
+
+**Phasor** - `game` parameter in `OnScriptLoad`:
+
+```lua
+local timelimit_address
+function OnScriptLoad(processid, game, persistent)
+    timelimit_address = (game == "PC" and 0x626630) or 0x5AA5B0
+end
+```
+
+**Chimera** - Does not support version detection.
+
+#### Known Common Pointer Addresses for PC and CE
+
+Use these with version detection. All values are hexadecimal.
+
+| Pointer Name           | PC Address | CE Address |
+|------------------------|------------|------------|
+| `oddball_globals`      | `0x639E18` | `0x5BDEB8` |
+| `slayer_globals`       | `0x63A0E8` | `0x5BE108` |
+| `name_base`            | `0x745D4A` | `0x6C7B6A` |
+| `specs_addr`           | `0x662D04` | `0x5E6E63` |
+| `hashcheck_addr`       | `0x59C280` | `0x530130` |
+| `versioncheck_addr`    | `0x5152E7` | `0x4CB587` |
+| `map_pointer`          | `0x63525C` | `0x5B927C` |
+| `gametype_base`        | `0x671340` | `0x5F5498` |
+| `gametime_base`        | `0x671420` | `0x5F55BC` |
+| `machine_pointer`      | `0x745BA0` | `0x6C7980` |
+| `network_struct`       | `0x745BA0` | `0x6C7980` |
+| `timelimit_address`    | `0x626630` | `0x5AA5B0` |
+| `special_chars`        | `0x517D6B` | `0x4CE0CD` |
+| `gametype_patch`       | `0x481F3C` | `0x45E50C` |
+| `devmode_patch1`       | `0x4A4DBF` | `0x47DF0C` |
+| `devmode_patch2`       | `0x4A4E7F` | `0x47DFBC` |
+| `hash_duplicate_patch` | `0x59C516` | `0x5302E6` |
+| `ctf_globals`          | `0x639B98` | `0x5BDBB8` |
+| `koth_globals`         | `0x639BD0` | `0x5BDBF0` |
+| `race_globals`         | `0x639FA0` | `0x5BDFC0` |
+| `race_locs`            | `0x670F40` | `0x5F5098` |
+| `stats_globals`        | `0x639898` | `0x5BD8B8` |
+
+---
+
+### SAPP-Only Signatures
+
+SAPP scripts can avoid hardcoded addresses entirely by using the following pre-computed signatures. These work on both
+PC and CE.
+
+| Pointer Name                | SAPP Signature (with offset)                                                                     |
+|-----------------------------|--------------------------------------------------------------------------------------------------|
+| `stats_globals`             | `read_dword(sig_scan("33C0BF??????00F3AB881D") + 0x3)`                                           |
+| `ctf_globals`               | `read_dword(sig_scan("C6000083C0303D??????00") + 8)`                                             |
+| `slayer_globals`            | `read_dword(sig_scan("5733C0B910000000BFE8E05B00F3ABB910000000") + 19)`                          |
+| `oddball_globals`           | `read_dword(sig_scan("BF??????00F3ABB951000000") + 0x1)`                                         |
+| `koth_globals`              | `read_dword(sig_scan("BF??????00F3ABB96B000000") + 0x1)`                                         |
+| `race_globals`              | `read_dword(sig_scan("BF??????00F3ABB952000000") + 0x1)`                                         |
+| `gametype_base`             | `read_dword(sig_scan("B9360000008BF3BF78545F00") + 0x8)`                                         |
+| `network_struct`            | `read_dword(sig_scan("F3ABA1????????BA????????C740??????????E8????????668B0D") + 3)`             |
+| `player_header_pointer`     | `read_dword(sig_scan("DDD8A1??????008944244835") + 0x3)`                                         |
+| `object_header_pointer`     | `read_dword(sig_scan("8B0D????????8B513425FFFF00008D") + 2)`                                     |
+| `banlist_header`            | `read_dword(sig_scan("A3??????00A1??????0033DB3BC3") + 1)`                                       |
+| `gameinfo_header`           | `read_dword(sig_scan("A1????????8B480C894D00") + 0x1)`                                           |
+| `broadcast_version_address` | `read_dword(sig_scan("751768??????0068??????00BA") + 0x3)`                                       |
+| `broadcast_game_address`    | `read_dword(sig_scan("CCCCBA??????002BD08A08") + 0x3)`                                           |
+| `server_ip_argument`        | `read_dword(sig_scan("BA??????008BC72BD78A08880C024084C975F68B442404") + 0x1)`                   |
+| `server_port_address`       | `read_dword(sig_scan("668B0D??????000BF2C605") + 0x3)`                                           |
+| `server_path_address`       | `read_dword(sig_scan("0000BE??????005657C605") + 0x3)`                                           |
+| `computer_name_address`     | `read_dword(sig_scan("68??????0068??????0068000401006A00") + 0x1)`                               |
+| `profile_path_address`      | `read_dword(sig_scan("68??????008D54245468") + 0x1)`                                             |
+| `map_name_address`          | `read_dword(sig_scan("66A3??????00890D??????00C3") + 0x2)`                                       |
+| `hardware_info_address`     | `read_dword(sig_scan("BE??????008BC68B4DF064890D000000005F5E5B8BE55DC36A0C") + 0x1)`             |
+| `map_name_address2`         | `read_dword(sig_scan("B8??????00E8??????0032C983F813") + 0x1)`                                   |
+| `server_password_address`   | `read_dword(sig_scan("F3ABA3??????00A3??????00A2??????00C705") + 0x3)`                           |
+| `logfile_path_address`      | `read_dword(sig_scan("740ABB????5C00E8????0300") + 0x3)` - CE only                               |
+| `banlist_path_address`      | `read_dword(sig_scan("68??????00E8??????0083C41068") + 0x1)`                                     |
+| `banlist_path_address2`     | `read_dword(sig_scan("CCCCC605??????0000E8??????0085C0") + 0x4)`                                 |
+| `rcon_password_address`     | `read_dword(sig_scan("7740BA??????008D9B000000008A01") + 0x3)`                                   |
+| `rcon_failed_address`       | `read_dword(sig_scan("B8????????E8??000000A1????????55") + 1)`                                   |
+| `kill_message_address`      | `read_dword(sig_scan("8B42348A8C28D500000084C9") + 3)`                                           |
+| `color_patch1`              | `read_dword(sig_scan("741F8B482085C9750C"))`                                                     |
+| `color_patch2`              | `read_dword(sig_scan("EB1F8B482085C9750C"))`                                                     |
+| `nonslayer_score_patch`     | `sig_scan("8B??3883C404????74??57FFD0") + 0x8`                                                   |
+| `slayer_score_patch`        | `sig_scan("74178B94242808000052518B8C24280800005157FFD083C4108B8424240800003BF8530F94C383FFFF")` |
+
+---
+
+### Summary
+
+- **SAPP** can use either version-detected hardcoded addresses **or** automatic signatures via `sig_scan`.
+- **Phasor** and **Chimera** must rely on version detection and the pointer table above (no signature scanning
+  available).
+- When writing cross-platform scripts, always check for the existence of `sig_scan` (e.g.,
+  `if sig_scan then ... else ... end`) or use version detection to select the correct hardcoded addresses.
+
+---
+
 ## Resources
 
 To get started with finding and using offsets, explore these resources:
