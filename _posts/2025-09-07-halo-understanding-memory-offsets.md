@@ -271,16 +271,16 @@ Chimera & SAPP: `local dyn = get_dynamic_player()`
 
 Chimera & SAPP: `local static_p = get_player(id)`
 
-| Offset  | Type    | Description                          | Example Use                                                                          |
-|---------|---------|--------------------------------------|--------------------------------------------------------------------------------------|
-| `0x4`   | wchar[] | Player name (UTF-16, max 12 chars)   | See Chimera [get_player_name()](2026-05-16-halo-chimera-scripting-guide.md)) example |
-| `0x20`  | byte    | Team (0 = Red, 1 = Blue)             | `local team = read_byte(static_p + 0x20)`                                            |
-| `0x9C`  | word    | Kill count                           | `local kills = read_word(static_p + 0x9C)`                                           |
-| `0xAE`  | word    | Death count                          | `local deaths = read_word(static_p + 0xAE)`                                          |
-| `0xDC`  | dword   | Ping in milliseconds                 |                                                                                      |
-| `0xF8`  | float   | World X (alternate position storage) |                                                                                      |
-| `0xFC`  | float   | World Y                              |                                                                                      |
-| `0x100` | float   | World Z                              |                                                                                      |
+| Offset  | Type    | Description                          | Example Use                                                                               |
+|---------|---------|--------------------------------------|-------------------------------------------------------------------------------------------|
+| `0x4`   | wchar[] | Player name (UTF-16, max 12 chars)   | See Chimera [get_player_name()](2025-09-07-halo-understanding-memory-offsets.md)) example |
+| `0x20`  | byte    | Team (0 = Red, 1 = Blue)             | `local team = read_byte(static_p + 0x20)`                                                 |
+| `0x9C`  | word    | Kill count                           | `local kills = read_word(static_p + 0x9C)`                                                |
+| `0xAE`  | word    | Death count                          | `local deaths = read_word(static_p + 0xAE)`                                               |
+| `0xDC`  | dword   | Ping in milliseconds                 |                                                                                           |
+| `0xF8`  | float   | World X (alternate position storage) |                                                                                           |
+| `0xFC`  | float   | World Y                              |                                                                                           |
+| `0x100` | float   | World Z                              |                                                                                           |
 
 ### Weapon Object
 

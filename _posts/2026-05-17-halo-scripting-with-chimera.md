@@ -643,8 +643,3 @@ end
 See my [Chimera Script Archive](https://github.com/Chalwk/SPCLib/tree/master/chimera/global).
 
 ---
-
-## Further Reading
-
-- [Common Reference](2026-09-07-halo-lua-common.md) - memory offsets, geometry, utilities.
-- [Memory Offsets Deep Dive](2025-09-07-halo-understanding-memory-offsets.md)
