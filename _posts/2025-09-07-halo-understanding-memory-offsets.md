@@ -134,32 +134,62 @@ end
 
 #### Known Common Pointer Addresses for PC and CE
 
-Use these with version detection. All values are hexadecimal.
+Use these with version detection. All values are hexadecimal. Missing addresses are marked with `-`.
 
-| Pointer Name           | PC Address | CE Address |
-|------------------------|------------|------------|
-| `oddball_globals`      | `0x639E18` | `0x5BDEB8` |
-| `slayer_globals`       | `0x63A0E8` | `0x5BE108` |
-| `name_base`            | `0x745D4A` | `0x6C7B6A` |
-| `specs_addr`           | `0x662D04` | `0x5E6E63` |
-| `hashcheck_addr`       | `0x59C280` | `0x530130` |
-| `versioncheck_addr`    | `0x5152E7` | `0x4CB587` |
-| `map_pointer`          | `0x63525C` | `0x5B927C` |
-| `gametype_base`        | `0x671340` | `0x5F5498` |
-| `gametime_base`        | `0x671420` | `0x5F55BC` |
-| `machine_pointer`      | `0x745BA0` | `0x6C7980` |
-| `network_struct`       | `0x745BA0` | `0x6C7980` |
-| `timelimit_address`    | `0x626630` | `0x5AA5B0` |
-| `special_chars`        | `0x517D6B` | `0x4CE0CD` |
-| `gametype_patch`       | `0x481F3C` | `0x45E50C` |
-| `devmode_patch1`       | `0x4A4DBF` | `0x47DF0C` |
-| `devmode_patch2`       | `0x4A4E7F` | `0x47DFBC` |
-| `hash_duplicate_patch` | `0x59C516` | `0x5302E6` |
-| `ctf_globals`          | `0x639B98` | `0x5BDBB8` |
-| `koth_globals`         | `0x639BD0` | `0x5BDBF0` |
-| `race_globals`         | `0x639FA0` | `0x5BDFC0` |
-| `race_locs`            | `0x670F40` | `0x5F5098` |
-| `stats_globals`        | `0x639898` | `0x5BD8B8` |
+| Pointer Name                  | PC Address | CE Address | Description                                    |
+|-------------------------------|------------|------------|------------------------------------------------|
+| `banlist_header`              | `0x641280` | `0x5C52A0` | Header for the banlist structure               |
+| `banlist_path_address`        | `0x69B950` | `0x61FB80` | Path to the banlist file                       |
+| `broadcast_game_address`      | `0x5E4768` | `0x569EAC` | Determines broadcast type (PC/CE/Trial)        |
+| `broadcast_version_address`   | `0x5DF840` | `0x564B34` | Version that the server is broadcasting on     |
+| `camera_base`                 | `0x69C2F8` | `0x62075C` | Base address for per‑player camera data        |
+| `collideable_objects_pointer` | `0x744C34` | `0x6C6A14` | Pointer to the list of collideable objects     |
+| `color_patch`                 | `0x4828FE` | `0x45EB5E` | -                                              |
+| `computer_name_address`       | `0x62CD60` | `0x5B0D40` | Server computer (domain) name                  |
+| `computer_specs_address`      | `0x662D04` | `0x5E6E5C` | Server hardware information (CPU speed, brand) |
+| `ctf_globals`                 | `0x639B98` | `0x5BDBB8` | CTF gametype global data structure             |
+| `devmode_patch1`              | `0x4A4DBF` | `0x47DF0C` | -                                              |
+| `devmode_patch2`              | `0x4A4E7F` | `0x47DFBC` | -                                              |
+| `flags_pointer`               | `0x6A590C` | `-`        | -                                              |
+| `game_globals`                | `-`        | `0x61CFE0` | Global game data                               |
+| `gametime_base`               | `0x671420` | `0x5F55BC` | Header for game time information               |
+| `gametype_base`               | `0x671340` | `0x5F5498` | Base address for current gametype settings     |
+| `gametype_patch`              | `0x481F3C` | `0x45E50C` | -                                              |
+| `hash_duplicate_patch`        | `0x59C516` | `0x5302E6` | -                                              |
+| `hash_table_base`             | `0x6A2AE4` | `0x5AFB34` | Base of hash table (CD key validation)         |
+| `hashcheck_patch`             | `0x59C280` | `0x530130` | Patch for hash (CD key) check                  |
+| `init_file_address`           | `0x8EB38`  | `0x8EB26`  | -                                              |
+| `koth_globals`                | `0x639BD0` | `0x5BDBF0` | King of the Hill gametype global data          |
+| `machine_pointer`             | `0x745BA0` | `0x6C7980` | Pointer to network machine information         |
+| `map_header_base`             | `0x630E74` | `0x6E2CA4` | Base address of the loaded map header          |
+| `map_name_address`            | `0x63BC78` | `0x5BFC98` | Map display name (e.g., "Bloodgulch")          |
+| `map_name_address2`           | `0x698F21` | `0x61D151` | Map file name (e.g., "bloodgulch")             |
+| `map_pointer`                 | `0x63525C` | `0x5B927C` | Pointer to map data base address               |
+| `mapcycle_header`             | `0x614B4C` | `0x598A8C` | Header for mapcycle data                       |
+| `name_base`                   | `0x745D4A` | `0x6C7B6A` | -                                              |
+| `network_server_globals`      | `0x69B934` | `0x61FB64` | Server‑side network globals                    |
+| `network_struct`              | `0x745BA0` | `0x6C7980` | Main network structure for server/client       |
+| `obj_header_pointer`          | `0x744C18` | `0x6C69F0` | Pointer to the object header                   |
+| `oddball_globals`             | `0x639E58` | `0x5BDE78` | Oddball gametype global data                   |
+| `player_globals`              | `-`        | `0x6E1478` | Player global data structure                   |
+| `player_header_pointer`       | `0x75ECE4` | `0x6E1480` | Pointer to the player header                   |
+| `profile_path_address`        | `0x635610` | `0x5B9630` | Path to the profile directory                  |
+| `public_value_address`        | `0x6164C0` | `0x59A424` | -                                              |
+| `race_globals`                | `0x639FA0` | `0x5BDFC0` | Race gametype global data                      |
+| `race_locs`                   | `0x670F40` | `0x5F5098` | Race checkpoint locations                      |
+| `rcon_password_address`       | `0x69BA5C` | `0x61FC8C` | Current RCON password for the server           |
+| `server_password_address`     | `0x69B93C` | `0x61FB6C` | Current server password (null if none)         |
+| `server_path_address`         | `0x62C390` | `0x5B0670` | Path to the server's haloded.exe               |
+| `server_port_address`         | `0x625230` | `0x5A91A0` | Port that the server is broadcasting on        |
+| `servername_patch`            | `0x517D6B` | `0x4CE0CD` | Patch for server name                          |
+| `slayer_globals`              | `0x63A0E8` | `0x5BE108` | Slayer gametype global data                    |
+| `sockaddr_pointer`            | `0x6A1F08` | `0x626388` | -                                              |
+| `special_chars_patch`         | `0x517D6B` | `0x4CE0CD` | -                                              |
+| `stats_globals`               | `0x639898` | `0x5BD8B8` | Player statistics data                         |
+| `stats_header`                | `0x639720` | `0x5BD740` | Header for statistics (decal locations, etc.)  |
+| `timelimit_address`           | `0x626630` | `0x5AA5B0` | Game's time limit value (in ticks)             |
+| `version_info_address`        | `0x5E02C0` | `0x565104` | Version information string for Halo            |
+| `versioncheck_patch`          | `0x5152E7` | `0x4CB587` | Patch for version check                        |
 
 ---
 
@@ -170,39 +200,39 @@ PC and CE.
 
 | Pointer Name                | SAPP Signature (with offset)                                                                     |
 |-----------------------------|--------------------------------------------------------------------------------------------------|
-| `stats_globals`             | `read_dword(sig_scan("33C0BF??????00F3AB881D") + 0x3)`                                           |
-| `ctf_globals`               | `read_dword(sig_scan("C6000083C0303D??????00") + 8)`                                             |
-| `slayer_globals`            | `read_dword(sig_scan("5733C0B910000000BFE8E05B00F3ABB910000000") + 19)`                          |
-| `oddball_globals`           | `read_dword(sig_scan("BF??????00F3ABB951000000") + 0x1)`                                         |
-| `koth_globals`              | `read_dword(sig_scan("BF??????00F3ABB96B000000") + 0x1)`                                         |
-| `race_globals`              | `read_dword(sig_scan("BF??????00F3ABB952000000") + 0x1)`                                         |
-| `gametype_base`             | `read_dword(sig_scan("B9360000008BF3BF78545F00") + 0x8)`                                         |
-| `network_struct`            | `read_dword(sig_scan("F3ABA1????????BA????????C740??????????E8????????668B0D") + 3)`             |
-| `player_header_pointer`     | `read_dword(sig_scan("DDD8A1??????008944244835") + 0x3)`                                         |
-| `object_header_pointer`     | `read_dword(sig_scan("8B0D????????8B513425FFFF00008D") + 2)`                                     |
 | `banlist_header`            | `read_dword(sig_scan("A3??????00A1??????0033DB3BC3") + 1)`                                       |
-| `gameinfo_header`           | `read_dword(sig_scan("A1????????8B480C894D00") + 0x1)`                                           |
-| `broadcast_version_address` | `read_dword(sig_scan("751768??????0068??????00BA") + 0x3)`                                       |
-| `broadcast_game_address`    | `read_dword(sig_scan("CCCCBA??????002BD08A08") + 0x3)`                                           |
-| `server_ip_argument`        | `read_dword(sig_scan("BA??????008BC72BD78A08880C024084C975F68B442404") + 0x1)`                   |
-| `server_port_address`       | `read_dword(sig_scan("668B0D??????000BF2C605") + 0x3)`                                           |
-| `server_path_address`       | `read_dword(sig_scan("0000BE??????005657C605") + 0x3)`                                           |
-| `computer_name_address`     | `read_dword(sig_scan("68??????0068??????0068000401006A00") + 0x1)`                               |
-| `profile_path_address`      | `read_dword(sig_scan("68??????008D54245468") + 0x1)`                                             |
-| `map_name_address`          | `read_dword(sig_scan("66A3??????00890D??????00C3") + 0x2)`                                       |
-| `hardware_info_address`     | `read_dword(sig_scan("BE??????008BC68B4DF064890D000000005F5E5B8BE55DC36A0C") + 0x1)`             |
-| `map_name_address2`         | `read_dword(sig_scan("B8??????00E8??????0032C983F813") + 0x1)`                                   |
-| `server_password_address`   | `read_dword(sig_scan("F3ABA3??????00A3??????00A2??????00C705") + 0x3)`                           |
-| `logfile_path_address`      | `read_dword(sig_scan("740ABB????5C00E8????0300") + 0x3)` - CE only                               |
 | `banlist_path_address`      | `read_dword(sig_scan("68??????00E8??????0083C41068") + 0x1)`                                     |
 | `banlist_path_address2`     | `read_dword(sig_scan("CCCCC605??????0000E8??????0085C0") + 0x4)`                                 |
-| `rcon_password_address`     | `read_dword(sig_scan("7740BA??????008D9B000000008A01") + 0x3)`                                   |
-| `rcon_failed_address`       | `read_dword(sig_scan("B8????????E8??000000A1????????55") + 1)`                                   |
-| `kill_message_address`      | `read_dword(sig_scan("8B42348A8C28D500000084C9") + 3)`                                           |
+| `broadcast_game_address`    | `read_dword(sig_scan("CCCCBA??????002BD08A08") + 0x3)`                                           |
+| `broadcast_version_address` | `read_dword(sig_scan("751768??????0068??????00BA") + 0x3)`                                       |
 | `color_patch1`              | `read_dword(sig_scan("741F8B482085C9750C"))`                                                     |
 | `color_patch2`              | `read_dword(sig_scan("EB1F8B482085C9750C"))`                                                     |
+| `computer_name_address`     | `read_dword(sig_scan("68??????0068??????0068000401006A00") + 0x1)`                               |
+| `ctf_globals`               | `read_dword(sig_scan("C6000083C0303D??????00") + 8)`                                             |
+| `gameinfo_header`           | `read_dword(sig_scan("A1????????8B480C894D00") + 0x1)`                                           |
+| `gametype_base`             | `read_dword(sig_scan("B9360000008BF3BF78545F00") + 0x8)`                                         |
+| `hardware_info_address`     | `read_dword(sig_scan("BE??????008BC68B4DF064890D000000005F5E5B8BE55DC36A0C") + 0x1)`             |
+| `kill_message_address`      | `read_dword(sig_scan("8B42348A8C28D500000084C9") + 3)`                                           |
+| `koth_globals`              | `read_dword(sig_scan("BF??????00F3ABB96B000000") + 0x1)`                                         |
+| `logfile_path_address`      | `read_dword(sig_scan("740ABB????5C00E8????0300") + 0x3)` - CE only                               |
+| `map_name_address`          | `read_dword(sig_scan("66A3??????00890D??????00C3") + 0x2)`                                       |
+| `map_name_address2`         | `read_dword(sig_scan("B8??????00E8??????0032C983F813") + 0x1)`                                   |
+| `network_struct`            | `read_dword(sig_scan("F3ABA1????????BA????????C740??????????E8????????668B0D") + 3)`             |
 | `nonslayer_score_patch`     | `sig_scan("8B??3883C404????74??57FFD0") + 0x8`                                                   |
+| `object_header_pointer`     | `read_dword(sig_scan("8B0D????????8B513425FFFF00008D") + 2)`                                     |
+| `oddball_globals`           | `read_dword(sig_scan("BF??????00F3ABB951000000") + 0x1)`                                         |
+| `player_header_pointer`     | `read_dword(sig_scan("DDD8A1??????008944244835") + 0x3)`                                         |
+| `profile_path_address`      | `read_dword(sig_scan("68??????008D54245468") + 0x1)`                                             |
+| `race_globals`              | `read_dword(sig_scan("BF??????00F3ABB952000000") + 0x1)`                                         |
+| `rcon_failed_address`       | `read_dword(sig_scan("B8????????E8??000000A1????????55") + 1)`                                   |
+| `rcon_password_address`     | `read_dword(sig_scan("7740BA??????008D9B000000008A01") + 0x3)`                                   |
+| `server_ip_argument`        | `read_dword(sig_scan("BA??????008BC72BD78A08880C024084C975F68B442404") + 0x1)`                   |
+| `server_password_address`   | `read_dword(sig_scan("F3ABA3??????00A3??????00A2??????00C705") + 0x3)`                           |
+| `server_path_address`       | `read_dword(sig_scan("0000BE??????005657C605") + 0x3)`                                           |
+| `server_port_address`       | `read_dword(sig_scan("668B0D??????000BF2C605") + 0x3)`                                           |
+| `slayer_globals`            | `read_dword(sig_scan("5733C0B910000000BFE8E05B00F3ABB910000000") + 19)`                          |
 | `slayer_score_patch`        | `sig_scan("74178B94242808000052518B8C24280800005157FFD083C4108B8424240800003BF8530F94C383FFFF")` |
+| `stats_globals`             | `read_dword(sig_scan("33C0BF??????00F3AB881D") + 0x3)`                                           |
 
 ---
 
