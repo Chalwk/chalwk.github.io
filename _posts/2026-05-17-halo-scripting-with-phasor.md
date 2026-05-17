@@ -31,13 +31,13 @@ function GetRequiredVersion()  -- Required or script will not load
     return 200
 end
 
-function OnScriptLoad(processId, game, persistent)  -- Required or script will not load
+function OnScriptLoad(processId, game, persistent) -- Required or script will not load
     -- processId  : number (the process ID of the server)
     -- game       : number (the game being played: "PC", "CE")
     -- persistent : boolean (true if script is persistent)
 end
 
-function OnScriptUnload()  -- Optional, but recommended to avoid Lua errors on unload
+function OnScriptUnload() -- Optional, but recommended to avoid Lua errors on unload
     -- Cleanup code (optional)
 end
 ```
