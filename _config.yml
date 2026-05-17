@@ -45,6 +45,11 @@ plugins:
   - jekyll-seo-tag           # meta tags + open graph
   - jekyll-sitemap           # generate sitemap.xml
   - jekyll-last-modified-at  # show when file last changed (see _posts)
+  - jekyll-relative-links
+
+relative_links:
+  enabled: true
+  collections: true
 
 # ------------------------------------------------------------
 # Default front matter for posts/pages (saves typing)
