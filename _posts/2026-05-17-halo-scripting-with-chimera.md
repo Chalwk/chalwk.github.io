@@ -39,7 +39,7 @@ To reload all scripts without restarting the game, type `chimera_lua_scripts_rel
 
 ## Script Skeleton & Version Check
 
-See [full blank script](https://github.com/Chalwk/SPCLib/blob/master/chimera/blank_script_template.md) for a complete
+See [full blank script](https://github.com/Chalwk/SPCLib/blob/master/chimera/blank_script_template.lua) for a complete
 example.
 
 Every Chimera Lua script **must** define `clua_version` and set it to the API-specific version (e.g. `2.056`). Without

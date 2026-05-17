@@ -20,7 +20,7 @@ This guide assumes you have read:
 
 ## Script Skeleton & Version Check
 
-See [full blank script](https://github.com/Chalwk/SPCLib/blob/master/phasor/blank_script_template.md) for a complete
+See [full blank script](https://github.com/Chalwk/SPCLib/blob/master/phasor/blank_script_template.lua) for a complete
 example.
 
 Every Phasor Lua script **must** define `GetRequiredVersion()` and return `200`, and define `OnScriptLoad()`.  
