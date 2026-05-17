@@ -180,6 +180,24 @@ end
 **Callback signature:** `function callback(id, count, userdata1, userdata2, ...)` — `count` is the number of times the
 timer has fired.
 
+**Example:**
+
+```lua
+-- registertimer: call function after delay (ms), can repeat
+function my_callback(id, count, msg)
+    hprintf("Timer " .. id .. " fired " .. count .. " times. Msg: " .. msg)
+    if count >= 3 then
+        return 0  -- stop after 3 times
+    end
+    return 1  -- repeat
+end
+
+local timer_id = registertimer(1000, "my_callback", "Hello Timer")
+
+-- removetimer: stop timer early (e.g., on script unload)
+removetimer(timer_id)
+```
+
 ---
 
 ## Utility Functions Library
@@ -373,6 +391,16 @@ local function get_player_health(id)
 end
 ```
 
+**Example:**
+
+```lua
+local health = get_player_health(3)
+if health and health < 0.3 then
+    set_player_health(3, 1.0) -- full heal
+    privatesay(3, "You have been healed!")
+end
+```
+
 #### get_player_shields
 
 **Parameters:**  
@@ -433,6 +461,13 @@ local function get_player_ping(id)
     if not p then return nil end
     return readword(p + 0xDC)
 end
+```
+
+**Example:**
+
+```lua
+local ping = get_player_ping(0)
+hprintf(string.format("%s ping: %d ms", getname(0), ping))
 ```
 
 #### get_player_weapon
@@ -1257,6 +1292,14 @@ local function get_game_time_remaining()
 end
 ```
 
+**Example:**
+
+```lua
+local remaining = get_game_time_remaining()
+local elapsed = get_game_time_elapsed()
+hprintf(string.format("Time remaining: %ds, elapsed: %ds", remaining, elapsed))
+```
+
 #### get_game_time_elapsed
 
 **Parameters:** none
@@ -1268,6 +1311,14 @@ end
 local function get_game_time_elapsed()
     return readdword(readdword(gametime_base) + 0xC) / 30
 end
+```
+
+**Example:**
+
+```lua
+local elapsed = get_game_time_elapsed()
+local remaining = get_game_time_remaining()
+hprintf(string.format("Time elapsed: %ds, remaining: %ds", elapsed, remaining))
 ```
 
 #### get_player_score
@@ -1400,6 +1451,16 @@ local function get_body_part_position(biped_object, body_part_offset)
     local y = readfloat(biped_object, body_part_offset + 0x2C)
     local z = readfloat(biped_object, body_part_offset + 0x30)
     return x, y, z
+end
+```
+
+**Example:**
+
+```lua
+local biped_obj, _ = get_player_object(0)
+if biped_obj then
+    local hand_x, hand_y, hand_z = get_body_part_position(biped_obj, 0x8C4)  -- right hand
+    hprintf(string.format("Right hand position: %.2f, %.2f, %.2f", hand_x, hand_y, hand_z))
 end
 ```
 
