@@ -373,7 +373,7 @@ stop_timer(timer_id) -- Stop the timer created above
 
 ---
 
-### Deleting Objects
+## Deleting Objects
 
 Use this function to delete objects from the game.
 
@@ -542,8 +542,6 @@ end
 
 ---
 
----
-
 ## Enumerating Objects
 
 To scan for all objects in the world (projectiles, vehicles, weapons, etc.), you need to read the global object table.
@@ -639,7 +637,7 @@ end
 
 ---
 
-### Get player name
+## Get player name
 
 Player names are stored as a wide-character string (2 bytes per character, UTF-16). Because Halo names are limited to
 ASCII characters, each character's high byte is `0x00`. So you can read every other byte (the low bytes) and stop at a
