@@ -8,10 +8,11 @@ tags: [ sapp, phasor, chimera, lua, scripting, utilities ]
 This document collects **pure Lua utility functions** that work across SAPP, Phasor, and Chimera without relying on
 platform-specific APIs. They are safe to use in any Lua 5.1+ environment.
 
-> For platform-specific APIs, see the dedicated tutorials:
-> - [SAPP Scripting](2026-05-17-halo-scripting-with-sapp.md)
-> - [Phasor Scripting](2026-05-17-halo-scripting-with-phasor.md)
-> - [Chimera Scripting](2026-05-17-halo-scripting-with-chimera.md)
+For platform-specific APIs, see the dedicated tutorials:
+
+- [SAPP Scripting](2026-05-17-halo-scripting-with-sapp.md)
+- [Phasor Scripting](2026-05-17-halo-scripting-with-phasor.md)
+- [Chimera Scripting](2026-05-17-halo-scripting-with-chimera.md)
 
 ---
 
@@ -39,47 +40,7 @@ end
 
 ---
 
-## Utility Functions
-
-### Check if Two Points are Within a Radius (3D, squared distance)
-
-Uses squared distance to avoid expensive `math.sqrt` - ideal for per-tick checks.
-
-**Parameters:**  
-`px, py, pz`, `ox, oy, oz` (numbers) - Coordinates of the two points.  
-`radius` (number) - Distance threshold.
-
-**Returns:** `true` if within radius, `false` otherwise.
-
-```lua
-local function in_sphere(px, py, pz, ox, oy, oz, radius)
-    local dx, dy, dz = ox - px, oy - py, oz - pz
-    return (dx * dx + dy * dy + dz * dz) <= radius * radius
-end
-```
-
----
-
-### Convert Camera Direction to Cardinal Point (N, NE, E, ...)
-
-Converts a direction vector (e.g., from camera forward vector) into a compass point. Includes the `math.atan2` fallback
-shown above.
-
-**Parameters:**  
-`fx, fy` (numbers) - X and Y components of the direction vector.
-
-**Returns:** String like `"N"`, `"NE"`, `"E"`, etc.
-
-```lua
-function direction_to_cardinal(fx, fy)
-    local angle = (90 - math.deg(math.atan2(fy, fx))) % 360
-    local dirs = {"N", "NE", "E", "SE", "S", "SW", "W", "NW"}
-    local idx = math.floor((angle + 22.5) / 45) % 8 + 1
-    return dirs[idx]
-end
-```
-
----
+## Table Utilities
 
 ### Deep Copy a Table (Handles Nested Tables and Metatables)
 
@@ -90,7 +51,8 @@ Creates a fully independent copy of a table, including nested structures and met
 **Parameters:**  
 `orig` (any) - The value or table to copy.
 
-**Returns:** A deep copy.
+**Returns:**  
+A deep copy of the input.
 
 ```lua
 function deep_copy(orig)
@@ -103,7 +65,14 @@ function deep_copy(orig)
 end
 ```
 
----
+**Example:**
+
+```lua
+local original = {a = 1, b = {c = 2}}
+local copy = deep_copy(original)
+copy.b.c = 3
+-- original.b.c remains 2
+```
 
 ### Shuffle an Array (Fisher-Yates)
 
@@ -112,7 +81,8 @@ Randomly shuffles an array-style table in place. Every permutation is equally li
 **Parameters:**  
 `t` (table) - Table with sequential integer keys starting at 1.
 
-**Returns:** Nothing (modifies the table in place).
+**Returns:**  
+`nil` (modifies the table in place).
 
 ```lua
 function shuffle_array(t)
@@ -123,9 +93,15 @@ function shuffle_array(t)
 end
 ```
 
-**Note:** Call `math.randomseed(os.time())` once at script load for proper randomness.
+**Example:**
 
----
+```lua
+local my_array = {10, 20, 30, 40}
+shuffle_array(my_array)
+-- my_array is now e.g. {30, 10, 40, 20}
+```
+
+**Note:** Call `math.randomseed(os.time())` once at script load for proper randomness.
 
 ### Get Number of Key-Value Pairs in Any Table
 
@@ -134,7 +110,8 @@ Works for both array-style and dictionary-style tables (unlike Lua's `#` operato
 **Parameters:**  
 `t` (table) - Any table.
 
-**Returns:** Number of key-value pairs.
+**Returns:**  
+The number of key-value pairs (number).
 
 ```lua
 function table_length(t)
@@ -146,17 +123,28 @@ function table_length(t)
 end
 ```
 
+**Example:**
+
+```lua
+local t = {10, 20, name = "Chalwk", 30}
+print(table_length(t))  --> 4 (three numeric + one string key)
+```
+
 ---
+
+## String Utilities
 
 ### Parse Command Arguments by Delimiter
 
 Splits a string into substrings based on a delimiter - useful for parsing chat commands or CSV data.
 
-**Parameters:**  
-`input` (string) - The string to split.  
-`delimiter` (string) - The delimiter character (e.g., `" "`, `","`).
+**Parameters:**
 
-**Returns:** An array-like table of substrings.
+- `input` (string) - The string to split.
+- `delimiter` (string) - The delimiter character (e.g., `" "`, `","`).
+
+**Returns:**  
+An array-like table of substrings.
 
 ```lua
 function parse_args(input, delimiter)
@@ -168,16 +156,25 @@ function parse_args(input, delimiter)
 end
 ```
 
-**Example:**  
-`parse_args("/give weapon sniper", " ")` → `{"/give", "weapon", "sniper"}`
+**Example:**
 
----
+```lua
+parse_args("/give weapon sniper", " ") --> {"/give", "weapon", "sniper"}
+```
 
 ### Format Messages - Three Approaches
 
 #### Version 1: Classic `string.format` style
 
 Define message templates as constants and use a wrapper that behaves like `string.format`.
+
+**Parameters:**
+
+- `message` (string) - Template string.
+- `...` (any) - Values to substitute.
+
+**Returns:**  
+Formatted message (string).
 
 ```lua
 local HELLO_MESSAGE = "Hello world!"
@@ -190,8 +187,11 @@ local function format_message(message, ...)
     end
     return message
 end
+```
 
--- Usage:
+**Example:**
+
+```lua
 print(format_message(HELLO_MESSAGE))
 print(format_message(PLAYER_JOINED, "Chalwk"))
 print(format_message(PLAYER_SCORE, "Chalwk", 150, 12))
@@ -200,6 +200,14 @@ print(format_message(PLAYER_SCORE, "Chalwk", 150, 12))
 #### Version 2: Placeholder-based (named variables)
 
 Use named placeholders like `$name` and replace from a table.
+
+**Parameters:**
+
+- `message` (string) - Template with `$name` placeholders.
+- `vars` (table) - Key-value pairs for substitution.
+
+**Returns:**  
+Formatted message (string).
 
 ```lua
 local SCORE_MESSAGE = "$name scored $points points in $minutes minutes."
@@ -210,16 +218,27 @@ local function format_message(message, vars)
         return vars[key] or "$" .. key
     end))
 end
+```
 
--- Usage:
+**Example:**
+
+```lua
 print(format_message(JOIN_MESSAGE, {name = "Chalwk"}))
 print(format_message(SCORE_MESSAGE, {name = "Chalwk", points = 150, minutes = 12}))
 ```
 
-#### Version 3: Case-insensitive placeholders with fallback
+#### Version 3: Case‑insensitive placeholders with fallback
 
-This version matches placeholders like `$NAME`, `$Name`, or `$name` to a key in the `args` table by trying the original
+Matches placeholders like `$NAME`, `$Name`, or `$name` to a key in the `args` table by trying the original
 key, then lowercased, then uppercased. Missing placeholders are left unchanged.
+
+**Parameters:**
+
+- `template` (string) - Template with `$placeholder` markers.
+- `args` (table) - Lookup table for placeholder values (optional).
+
+**Returns:**  
+Formatted string (string).
 
 ```lua
 local function format(template, args)
@@ -231,7 +250,7 @@ local function format(template, args)
 end
 ```
 
-**Usage examples:**
+**Examples:**
 
 ```lua
 print(format("Hello $name, you have $points points!", {name = "Chalwk", points = 42}))
@@ -248,44 +267,63 @@ print(format("Plain text"))
 -- → "Plain text"
 ```
 
----
+### Check if a String Starts with a Command Prefix
 
-### String Utilities
+**Parameters:**  
+`str` (string) - Input string.
 
-#### Check if a String Starts with a Command Prefix
+**Returns:**  
+`true` if the first character is `/` or `\`, else `false`.
 
 ```lua
---- Checks if a string begins with '/' or '\' (typical command prefix).
--- @param str (string)
--- @return boolean
 local function is_command(str)
     if not str then return false end
-    local first = sub(str, 1, 1)
+    local first = string.sub(str, 1, 1)
     return first == "/" or first == "\\"
 end
 ```
 
-#### Strip Leading Slashes or Backslashes
+**Example:**
 
 ```lua
---- Strips leading slash(es) or backslash(es) from a string.
--- @param msg (string) raw input
--- @return string cleaned string
+is_command("/kick") --> true
+is_command("hello") --> false
+```
+
+### Strip Leading Slashes or Backslashes
+
+**Parameters:**  
+`msg` (string) - Raw input.
+
+**Returns:**  
+Cleaned string without leading `/` or `\`.
+
+```lua
 local function strip_prefix(msg)
     if not msg then return "" end
-    return gsub(msg, "^[\\/]+", "")
+    return string.gsub(msg, "^[\\/]+", "")
 end
 ```
 
-#### Split String by Multiple Delimiters
+**Example:**
+
+```lua
+strip_prefix("//give") --> "give"
+```
+
+### Split String by Multiple Delimiters
 
 Splits a string by any of the given delimiter strings. Longer delimiters take precedence.
 
+**Parameters:**
+
+- `str` (string) - The string to split.
+- `...` (string) - Delimiter strings.
+
+**Returns:**  
+Array of substrings (table).
+
 ```lua
---- Splits a string by any of the given delimiter strings.
--- @param str (string) the string to split
--- @param ... delimiter strings
--- @return table array of substrings
 local function split_string(str, ...)
     local delims = { ... }
     if #delims == 0 then return { str } end
@@ -295,7 +333,7 @@ local function split_string(str, ...)
         if d == "" then
             local chars = {}
             for i = 1, #str do
-                chars[#chars + 1] = sub(str, i, i)
+                chars[#chars + 1] = string.sub(str, i, i)
             end
             return chars
         end
@@ -307,13 +345,13 @@ local function split_string(str, ...)
     -- Escape magic characters in each delimiter for Lua pattern
     local escaped = {}
     for _, d in ipairs(delims) do
-        escaped[#escaped + 1] = gsub(d, "([%^%$%(%)%%%.%[%]%*%+%-%?])", "%%%1")
+        escaped[#escaped + 1] = string.gsub(d, "([%^%$%(%)%%%.%[%]%*%+%-%?])", "%%%1")
     end
     local sep_pattern = table.concat(escaped, "|")
 
     -- Split using the complement of the delimiter pattern
     local tokens = {}
-    for token in gmatch(str, "([^" .. sep_pattern .. "]+)") do
+    for token in string.gmatch(str, "([^" .. sep_pattern .. "]+)") do
         tokens[#tokens + 1] = token
     end
 
@@ -321,7 +359,7 @@ local function split_string(str, ...)
     for i = 1, #tokens do
         local token = tokens[i]
         for _, d in ipairs(delims) do
-            token = gsub(token, gsub(d, "([%^%$%(%)%%%.%[%]%*%+%-%?])", "%%%1"), "")
+            token = string.gsub(token, string.gsub(d, "([%^%$%(%)%%%.%[%]%*%+%-%?])", "%%%1"), "")
         end
         tokens[i] = token
     end
@@ -330,13 +368,23 @@ local function split_string(str, ...)
 end
 ```
 
-#### Tokenize Command Line Arguments (Respect Quotes)
+**Example:**
 
 ```lua
---- Tokenizes a string like command line arguments, respecting double quotes.
--- e.g., tokenize_cmd_string('say "hello world" foo') -> {"say", "hello world", "foo"}
--- @param str (string)
--- @return table array of tokens
+split_string("a,b;c", ",", ";") --> {"a", "b", "c"}
+```
+
+### Tokenize Command Line Arguments (Respect Quotes)
+
+Tokenizes a string like command line arguments, respecting double quotes.
+
+**Parameters:**  
+`str` (string) - Input string.
+
+**Returns:**  
+Array of tokens (table).
+
+```lua
 local function tokenize_cmd_string(str)
     local tokens = {}
     str = str:gsub("^%s*(.-)%s*$", "%1") .. " " -- trim and add sentinel
@@ -356,32 +404,54 @@ local function tokenize_cmd_string(str)
 end
 ```
 
-#### Find All Indices of a Character in a String
+**Example:**
 
 ```lua
---- Returns all indices where a character appears in a string.
--- @param str (string)
--- @param char (string) single character to search
--- @return number ... index list
+tokenize_cmd_string('say "hello world" foo') --> {"say", "hello world", "foo"}
+```
+
+### Find All Indices of a Character in a String
+
+**Parameters:**
+
+- `str` (string) - The string to search.
+- `character` (string) - Single character to find.
+
+**Returns:**  
+One or more indices where the character appears.
+
+```lua
 local function find_char(str, character)
     local indices = {}
     for i = 1, #str do
-        if sub(str, i, i) == character then
+        if string.sub(str, i, i) == character then
             indices[#indices + 1] = i
         end
     end
-    return unpack(indices)
+    return table.unpack(indices)
 end
 ```
 
-#### Wildcard Matching (`*` and `?`)
+**Example:**
 
 ```lua
---- Performs case-insensitive wildcard matching with '*' and '?'.
--- @param str (string) the string to test
--- @param pattern (string) wildcard pattern (e.g., "Hel*o?")
--- @param case_sensitive (boolean) optional, default false
--- @return boolean match result
+find_char("hello world", "l") --> 3 4 10
+```
+
+### Wildcard Matching (`*` and `?`)
+
+Performs case‑insensitive wildcard matching with `*` (any sequence) and `?` (single character).
+
+**Parameters:**
+
+- `str` (string) - The string to test.
+- `pattern` (string) - Wildcard pattern (e.g., `"Hel*o?"`).
+- `case_sensitive` (boolean, optional) - Default `false`.
+
+**Returns:**  
+`true` if the string matches the pattern, `false` otherwise.
+
+```lua
 local function wildcard_match(str, pattern, case_sensitive)
     if not case_sensitive then
         str = str:lower()
@@ -390,11 +460,11 @@ local function wildcard_match(str, pattern, case_sensitive)
 
     -- Quick shortcut: handle leading/trailing '?' by substituting them with
     -- the actual character from str (non-standard but kept for compatibility)
-    if sub(pattern, 1, 1) == "?" then
-        pattern = gsub(pattern, "?", sub(str, 1, 1), 1)
+    if string.sub(pattern, 1, 1) == "?" then
+        pattern = string.gsub(pattern, "?", string.sub(str, 1, 1), 1)
     end
-    if sub(pattern, -1) == "?" then
-        pattern = gsub(pattern, "?", sub(str, -1), 1)
+    if string.sub(pattern, -1) == "?" then
+        pattern = string.gsub(pattern, "?", string.sub(str, -1), 1)
     end
 
     -- No wildcards -> simple equality check
@@ -403,10 +473,10 @@ local function wildcard_match(str, pattern, case_sensitive)
     end
 
     -- Quick mismatch checks
-    if sub(pattern, 1, 1) ~= sub(str, 1, 1) and sub(pattern, 1, 1) ~= "*" then
+    if string.sub(pattern, 1, 1) ~= string.sub(str, 1, 1) and string.sub(pattern, 1, 1) ~= "*" then
         return false
     end
-    if sub(pattern, -1) ~= sub(str, -1) and sub(pattern, -1) ~= "*" then
+    if string.sub(pattern, -1) ~= string.sub(str, -1) and string.sub(pattern, -1) ~= "*" then
         return false
     end
 
@@ -415,7 +485,7 @@ local function wildcard_match(str, pattern, case_sensitive)
     local plen = #pattern
     local cur = ""
     for i = 1, plen do
-        local c = sub(pattern, i, i)
+        local c = string.sub(pattern, i, i)
         if c == "*" then
             if cur ~= "" then
                 subpatterns[#subpatterns + 1] = cur
@@ -441,8 +511,8 @@ local function wildcard_match(str, pattern, case_sensitive)
             -- Check if subp matches the current slice (with '?' wildcard)
             local match = true
             for j = 1, sublen do
-                local pc = sub(subp, j, j)
-                if pc ~= "?" and pc ~= sub(str, ts + j - 1, ts + j - 1) then
+                local pc = string.sub(subp, j, j)
+                if pc ~= "?" and pc ~= string.sub(str, ts + j - 1, ts + j - 1) then
                     match = false
                     break
                 end
@@ -461,23 +531,33 @@ local function wildcard_match(str, pattern, case_sensitive)
 end
 ```
 
+**Example:**
+
+```lua
+wildcard_match("hello", "he?lo") --> true
+wildcard_match("test123", "test*") --> true
+```
+
 ---
 
-### Time Utilities
+## Time Utilities
 
-#### Convert Duration String to Seconds
+### Convert Duration String to Seconds
 
 Supports `s` (seconds), `m` (minutes), `h` (hours), `d` (days).
 
+**Parameters:**  
+`time_string` (string) - Human-readable duration, e.g. `"5m30s"`, `"2h"`, `"1d12h"`.
+
+**Returns:**  
+Total seconds (number), or `-1` if invalid.
+
 ```lua
---- Converts a time-duration string (e.g., "5m30s", "2h", "1d12h") to seconds.
--- @param time_string (string) human-readable duration
--- @return number total seconds, or -1 if invalid
 local function word_to_time(time_string)
     if not time_string then return -1 end
     local s, num = 0, ""
     for i = 1, #time_string do
-        local c = sub(time_string, i, i)
+        local c = string.sub(time_string, i, i)
         if tonumber(c) then
             num = num .. c
         else
@@ -498,12 +578,22 @@ local function word_to_time(time_string)
 end
 ```
 
-#### Convert Seconds to Human-Readable String
+**Example:**
 
 ```lua
---- Converts a number of seconds to a human-readable string like "5m 30s".
--- @param s (number) total seconds
--- @return string formatted time or "-1" if invalid
+word_to_time("1m30s") --> 90
+word_to_time("2d")   --> 172800
+```
+
+### Convert Seconds to Human-Readable String
+
+**Parameters:**  
+`s` (number) - Total seconds.
+
+**Returns:**  
+Formatted time like `"5m 30s"`, or `"-1"` if invalid.
+
+```lua
 local function time_to_word(s)
     if s == -1 or not tonumber(s) then return "-1" end
     s = tonumber(s)
@@ -524,12 +614,21 @@ local function time_to_word(s)
 end
 ```
 
-#### Format Duration as `HH:MM:SS`
+**Example:**
 
 ```lua
---- Formats a duration given in seconds as a "HH:MM:SS" string.
--- @param seconds (number) total seconds
--- @return string formatted time (e.g., "01:30:45")
+time_to_word(3665) --> "1h 1m 5s"
+```
+
+### Format Duration as `HH:MM:SS`
+
+**Parameters:**  
+`seconds` (number) - Total seconds.
+
+**Returns:**  
+Formatted time, e.g. `"01:30:45"`.
+
+```lua
 local function format_duration(seconds)
     seconds = tonumber(seconds) or 0
     local h = math.floor(seconds / 3600)
@@ -539,22 +638,30 @@ local function format_duration(seconds)
 end
 ```
 
+**Example:**
+
+```lua
+format_duration(125) --> "00:02:05"
+```
+
 ---
 
-### IP / Network Utilities
+## IP / Network Utilities
 
 These functions help validate, convert, and match IPv4 addresses using wildcards, CIDR, or ranges.
 
-#### Validate and Normalize an IPv4 Address
+### Validate and Normalize an IPv4 Address
+
+**Parameters:**  
+`ip` (string) - IP string (supports wildcards, CIDR, ranges).
+
+**Returns:**  
+Normalized IP (string) or `false` if invalid.
 
 ```lua
---- Validates an IPv4 address (supports wildcards, CIDR, and ranges).
--- Normalizes 1.2.*.* to 1.2.0.0/16, etc. Returns formatted string or false.
--- @param ip (string) IP string
--- @return string|boolean normalized IP, or false if invalid
 local function validate_ipv4(ip)
     if not ip then return false end
-    ip = gsub(gsub(ip, "[%s]*", ""), "x+", "*")
+    ip = string.gsub(string.gsub(ip, "[%s]*", ""), "x+", "*")
     local a, b, c, slash, d, finish = ip:match("^([^%.]+)%.([^%.]*)%.?([^%./]*)%.?(/?)([^%.]*)()")
     a = a == "" and "*" or a:match("[%d%*]+")
     b = b == "" and "*" or b:match("[%d%*]+")
@@ -588,12 +695,21 @@ local function validate_ipv4(ip)
 end
 ```
 
-#### Convert IPv4 to 32-bit Integer
+**Example:**
 
 ```lua
---- Converts a dotted IPv4 address to a 32-bit integer.
--- @param ip_addr (string) IPv4 address
--- @return number|nil IP as 32-bit unsigned integer, or nil on error
+validate_ipv4("192.168.*.*") --> "192.168.0.0/16"
+```
+
+### Convert IPv4 to 32-bit Integer
+
+**Parameters:**  
+`ip_addr` (string) - Dotted IPv4 address.
+
+**Returns:**  
+IP as 32-bit unsigned integer (number), or `nil` on error.
+
+```lua
 local function ip_to_long(ip_addr)
     local a, b, c, d = ip_addr:match("^(%d+)%.(%d+)%.(%d+)%.(%d+)$")
     if not a then return nil end
@@ -603,12 +719,21 @@ local function ip_to_long(ip_addr)
 end
 ```
 
-#### Convert Integer to Dotted IPv4
+**Example:**
 
 ```lua
---- Converts a 32-bit integer to a dotted IPv4 address.
--- @param addr (number) 32-bit unsigned integer
--- @return string IPv4 dotted notation
+ip_to_long("192.168.1.1") --> 3232235777
+```
+
+### Convert Integer to Dotted IPv4
+
+**Parameters:**  
+`addr` (number) - 32-bit unsigned integer.
+
+**Returns:**  
+Dotted IPv4 address (string).
+
+```lua
 local function long_to_ip(addr)
     local a = bit32.rshift(bit32.band(addr, 0xFF000000), 24)
     local b = bit32.rshift(bit32.band(addr, 0x00FF0000), 16)
@@ -618,7 +743,19 @@ local function long_to_ip(addr)
 end
 ```
 
-#### Convert Wildcard Notation to CIDR
+**Example:**
+
+```lua
+long_to_ip(3232235777) --> "192.168.1.1"
+```
+
+### Convert Wildcard Notation to CIDR
+
+**Parameters:**  
+`addr` (string) - Wildcard IP, e.g. `"10.*.*.*"`.
+
+**Returns:**  
+CIDR notation (string).
 
 ```lua
 local function wildcard_to_cidr(addr)
@@ -636,15 +773,25 @@ local function wildcard_to_cidr(addr)
 end
 ```
 
-#### Check if an IP Matches a Network Definition
+**Example:**
+
+```lua
+wildcard_to_cidr("10.*.*.*") --> "10.0.0.0/8"
+```
+
+### Check if an IP Matches a Network Definition
 
 Supports CIDR (`192.168.1.0/24`), wildcards (`10.*.*.*`), and ranges (`10.0.0.1-10.0.0.255`).
 
+**Parameters:**
+
+- `network` (string) - Network pattern.
+- `ip` (string) - IP address to test.
+
+**Returns:**  
+`true` if the IP matches the network, `false` otherwise.
+
 ```lua
---- Checks whether an IP address matches a network definition (CIDR, wildcard, range).
--- @param network (string) network pattern
--- @param ip (string) IP address to test
--- @return string|boolean matched network string, or false
 local function ip_matches_network(network, ip)
     network = validate_ipv4(network)
     if not ip then return network end
@@ -679,30 +826,97 @@ local function ip_matches_network(network, ip)
 end
 ```
 
----
-
-### Math Utilities
-
-#### Check if a Point Lies Within a Circle (2D)
+**Example:**
 
 ```lua
---- Checks if a point (px, py) lies within a circle on the XY plane.
--- @param px, py (number) point coordinates
--- @param cx, cy (number) circle center
--- @param radius (number) circle radius
--- @return boolean
+ip_matches_network("192.168.1.0/24", "192.168.1.100") --> true
+```
+
+---
+
+## Math & Geometry Utilities
+
+### Check if Two Points are Within a Radius (3D, squared distance)
+
+Uses squared distance to avoid expensive `math.sqrt` - ideal for per-tick checks.
+
+**Parameters:**
+
+- `px, py, pz` (number) - Coordinates of first point.
+- `ox, oy, oz` (number) - Coordinates of second point.
+- `radius` (number) - Distance threshold.
+
+**Returns:**  
+`true` if within radius, `false` otherwise.
+
+```lua
+local function in_sphere(px, py, pz, ox, oy, oz, radius)
+    local dx, dy, dz = ox - px, oy - py, oz - pz
+    return (dx * dx + dy * dy + dz * dz) <= radius * radius
+end
+```
+
+**Example:**
+
+```lua
+in_sphere(0,0,0, 3,4,0, 5) --> true  (distance = 5)
+```
+
+### Check if a Point Lies Within a Circle (2D)
+
+**Parameters:**
+
+- `px, py` (number) - Point coordinates.
+- `cx, cy` (number) - Circle centre.
+- `radius` (number) - Circle radius.
+
+**Returns:**  
+`true` if inside, `false` otherwise.
+
+```lua
 local function check_in_circle(px, py, cx, cy, radius)
     return (px - cx) ^ 2 + (py - cy) ^ 2 <= radius ^ 2
 end
 ```
 
-#### Round a Number to a Specified Decimal Place
+### Convert Camera Direction to Cardinal Point (N, NE, E, ...)
+
+Converts a direction vector (e.g., from camera forward vector) into a compass point. Requires `math.atan2` (see
+compatibility note above).
+
+**Parameters:**  
+`fx, fy` (number) - X and Y components of the direction vector.
+
+**Returns:**  
+Cardinal direction: `"N"`, `"NE"`, `"E"`, etc.
 
 ```lua
---- Rounds a number to a specified number of decimal places.
--- @param val (number)
--- @param decimal (number) number of decimal places (optional)
--- @return number rounded value
+function direction_to_cardinal(fx, fy)
+    local angle = (90 - math.deg(math.atan2(fy, fx))) % 360
+    local dirs = {"N", "NE", "E", "SE", "S", "SW", "W", "NW"}
+    local idx = math.floor((angle + 22.5) / 45) % 8 + 1
+    return dirs[idx]
+end
+```
+
+**Example:**
+
+```lua
+direction_to_cardinal(0, 1)  --> "N"
+direction_to_cardinal(1, 0)  --> "E"
+```
+
+### Round a Number to a Specified Decimal Place
+
+**Parameters:**
+
+- `val` (number) - Value to round.
+- `decimal` (number, optional) - Number of decimal places.
+
+**Returns:**  
+Rounded value (number).
+
+```lua
 local function round(val, decimal)
     if decimal then
         return math.floor((val * 10 ^ decimal) + 0.5) / (10 ^ decimal)
@@ -711,15 +925,31 @@ local function round(val, decimal)
 end
 ```
 
-#### Convert Hexadecimal String to Decimal
+**Example:**
 
 ```lua
---- Converts a hexadecimal string to a number.
--- @param hex (string) hexadecimal representation
--- @return number|nil decimal value, or nil on failure
+round(3.14159, 2) --> 3.14
+round(3.14159)    --> 3
+```
+
+### Convert Hexadecimal String to Decimal
+
+**Parameters:**  
+`hex` (string) - Hexadecimal representation, e.g. `"FF"`.
+
+**Returns:**  
+Decimal value (number) or `nil` on failure.
+
+```lua
 local function to_decimal(hex)
     return tonumber(hex, 16)
 end
+```
+
+**Example:**
+
+```lua
+to_decimal("FF") --> 255
 ```
 
 ---
