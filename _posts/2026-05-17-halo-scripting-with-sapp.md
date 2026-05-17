@@ -14,8 +14,8 @@ Lua API**, walks through the core scripting model and practical examples so you 
 This guide assumes you have read:
 
 - [Common Lua References](2026-05-17-halo-lua-common-references.md)
-- [Memory Offsets Deep Dive](2025-09-07-halo-understanding-memory-offsets.md). 
-- [SAPP Command Reference](2026-09-17-halo-sapp-command-reference.md).
+- [Memory Offsets Deep Dive](2025-09-07-halo-understanding-memory-offsets.md).
+- [SAPP Command Reference](2026-05-17-halo-sapp-command-reference.md)
 
 ---
 
