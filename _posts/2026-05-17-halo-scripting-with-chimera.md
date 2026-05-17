@@ -242,7 +242,7 @@ script's environment, and the Chimera version.
 | `local_player_index` | Local player index (0-15). May be `nil` until assigned after joining a server.                       |
 | `map`                | Currently loaded map name.                                                                           |
 | `map_is_protected`   | `true` if the map uses protected tag data (e.g., `"h3mt-foundry"`).                                  |
-| `sandboxed`          | `true` if the script is running in a sandboxed environment (see “Sandboxed Scripts”).                |
+| `sandboxed`          | `true` if the script is running in a sandboxed environment (see "Sandboxed Scripts").                |
 | `script_name`        | Filename for global scripts, or map name for map scripts.                                            |
 | `script_type`        | `"global"` or `"map"`.                                                                               |
 | `server_type`        | `"none"` (single player), `"local"` (hosting), or `"dedicated"` (joined a server).                   |

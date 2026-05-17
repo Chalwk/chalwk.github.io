@@ -560,7 +560,7 @@ function OnScriptLoad()
 end
 
 -- Use the cached values elsewhere (e.g., spawning the flag)
-function OnPlayerDeath(player_index)
+function OnPlayerDeath(player_id)
     if flag_meta then
         -- Respawn flag at custom position
 		spawn_object("", "", 100, 100, 100, 0, flag_meta)
@@ -906,8 +906,8 @@ function OnScriptLoad()
 end
 
 -- Or bind to a chat command for on-demand debugging
-function OnChat(player_index, player_name, message)
-    if message == "!scanobjects" and has_admin(player_index) then
+function OnChat(player_id, player_name, message)
+    if message == "!scanobjects" and has_admin(player_id) then
         scanMapObjects()
         return false  -- prevent command from being broadcast
     end
@@ -1035,7 +1035,7 @@ local gametype_base, score_limit
 
 function OnScriptLoad()
     gametype_base = read_dword(sig_scan("B9360000008BF3BF78545F00") + 0x8)
-    register_callback(cb['EVENT_GAME_START'], "OnStart")
+    register_callback(cb.EVENT_GAME_START, "OnStart")
     OnStart() -- in case script is loaded mid-game
 end
 

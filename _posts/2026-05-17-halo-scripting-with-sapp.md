@@ -49,16 +49,16 @@ SAPP looks for Lua scripts in its `Lua` folder; By default, this is located in `
 |------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|
 | `add_var(name, type)`                                            | Creates a new custom event variable. `type`: 0=global string, 1=global int, 2=global float, 3=player string, 4=player int, 5=player float. |
 | `assign_weapon(objectID, playerIndex)`                           | Assigns a weapon object to a player. Returns `true` on success.                                                                            |
-| `camo(playerIndex, duration)`                                    | Applies active camouflage to a player for `duration` ticks (30 ticks/sec). Does nothing if already camo’d.                                 |
+| `camo(playerIndex, duration)`                                    | Applies active camouflage to a player for `duration` ticks (30 ticks/sec). Does nothing if already camo'd.                                 |
 | `cprint(message, [color])`                                       | Outputs a message to the server console. Optional `color` value.                                                                           |
 | `del_var(name)`                                                  | Deletes a custom event variable.                                                                                                           |
 | `destroy_object(objectID)`                                       | Deletes an object. Deleting critical objects (flags, oddballs, etc.) may crash the server.                                                 |
-| `drop_weapon(playerIndex)`                                       | Removes the player’s current weapon and throws it to the ground.                                                                           |
+| `drop_weapon(playerIndex)`                                       | Removes the player's current weapon and throws it to the ground.                                                                           |
 | `enter_vehicle(vehicleID, playerIndex, seat)`                    | Forces a player into a vehicle seat (e.g., `"1"` for driver). Returns success boolean.                                                     |
 | `execute_command(command, [playerIndex], [echo])`                | Executes a server command, optionally on behalf of a player. If `echo` is `true`, raises `EVENT_ECHO` with output.                         |
-| `execute_command_sequence(sequence, [playerIndex], [echo])`      | Executes a semicolon‑separated sequence of commands.                                                                                       |
+| `execute_command_sequence(sequence, [playerIndex], [echo])`      | Executes a semicolon-separated sequence of commands.                                                                                       |
 | `exit_vehicle(playerIndex)`                                      | Forces a player to exit any vehicle they are in.                                                                                           |
-| `get_dynamic_player(playerIndex)`                                | Returns the memory address of a player’s object (0 if not alive).                                                                          |
+| `get_dynamic_player(playerIndex)`                                | Returns the memory address of a player's object (0 if not alive).                                                                          |
 | `get_object_memory(objectID)`                                    | Returns the memory address of an object from its object ID (0 if invalid).                                                                 |
 | `get_player(playerIndex)`                                        | Returns the static memory address of the player table entry.                                                                               |
 | `get_var(playerIndex, variableName)`                             | Retrieves an event or custom variable. Use `playerIndex=0` for global variables.                                                           |
@@ -71,42 +71,42 @@ SAPP looks for Lua scripts in its `Lua` folder; By default, this is located in `
 | `powerup_interact(objectID, playerIndex)`                        | Assigns a powerup object to a player. Returns success boolean.                                                                             |
 | `rand([min, max])`                                               | Returns a cryptographically secure random number. `min` inclusive, `max` exclusive. Defaults: min=0, max=2^37.                             |
 | `register_callback(callback, functionName)`                      | Registers a Lua function for an event callback (see `cb` table). Overwrites any previous callback.                                         |
-| `rprint(playerIndex, message)`                                   | Sends a message to a player’s console.                                                                                                     |
+| `rprint(playerIndex, message)`                                   | Sends a message to a player's console.                                                                                                     |
 | `say(playerIndex, message)`                                      | Sends a chat message to a specific player.                                                                                                 |
 | `say_all(message)`                                               | Sends a chat message to all players on the server.                                                                                         |
 | `set_var(playerIndex, variableName, value, [copiedPlayerIndex])` | Sets an event variable to `value`. Returns `false` if variable does not exist.                                                             |
-| `sig_scan(signature)`                                            | Scans Halo’s executable for a byte signature (e.g., `"83EC??568BF0A0????????84C00F84"`). Returns address or 0.                             |
+| `sig_scan(signature)`                                            | Scans Halo's executable for a byte signature (e.g., `"83EC??568BF0A0????????84C00F84"`). Returns address or 0.                             |
 | `spawn_object(tagType, tagPath, [x, y, z, rotation, tagID])`     | Spawns an object at coordinates. If `tagID` given, `tagType`/`tagPath` are ignored. Returns object ID.                                     |
 | `spawn_object_location(tagType, tagPath, locationName, [tagID])` | Spawns an object at a named location (defined via `loc_add`). Returns object ID.                                                           |
 | `sync_ammo(objectID)`                                            | Syncs loaded and unloaded ammo of a weapon object.                                                                                         |
 | `timer(milliseconds, functionName, [args...])`                   | Creates a timer that calls a function after a delay. If the function returns `true`, the timer repeats.                                    |
-| `to_player_index(tableIndex)`                                    | Converts Halo internal player table index (0‑15) to SAPP player index (1‑16).                                                              |
-| `to_real_index(playerIndex)`                                     | Converts SAPP player index (1‑16) to Halo internal table index (0‑15).                                                                     |
+| `to_player_index(tableIndex)`                                    | Converts Halo internal player table index (0-15) to SAPP player index (1-16).                                                              |
+| `to_real_index(playerIndex)`                                     | Converts SAPP player index (1-16) to Halo internal table index (0-15).                                                                     |
 | `unregister_callback(callback)`                                  | Unregisters an event callback previously set with `register_callback`.                                                                     |
 | `safe_read(enabled)`                                             | Enables/disables safe memory reading (prevents segfaults at performance cost).                                                             |
-| `safe_write(enabled)`                                            | Enables/disables safe memory writing (allows modifying read‑only memory, but can crash game if misused).                                   |
+| `safe_write(enabled)`                                            | Enables/disables safe memory writing (allows modifying read-only memory, but can crash game if misused).                                   |
 | `read_bit(address, bit)`                                         | Reads a bit (0 or 1) from a byte at `address`.                                                                                             |
 | `write_bit(address, bit, value)`                                 | Writes a bit to a byte at `address`. Returns success (segfaults without safe mode).                                                        |
-| `read_byte(address)`                                             | Reads an unsigned 8‑bit byte (0‑255).                                                                                                      |
-| `write_byte(address, value)`                                     | Writes an unsigned 8‑bit byte. Returns success.                                                                                            |
-| `read_char(address)`                                             | Reads a signed 8‑bit byte (-128 to 127).                                                                                                   |
-| `write_char(address, value)`                                     | Writes a signed 8‑bit byte. Returns success.                                                                                               |
-| `read_word(address)`                                             | Reads an unsigned 16‑bit integer (0‑65535).                                                                                                |
-| `write_word(address, value)`                                     | Writes an unsigned 16‑bit integer. Returns success.                                                                                        |
-| `read_short(address)`                                            | Reads a signed 16‑bit integer (-32768 to 32767).                                                                                           |
-| `write_short(address, value)`                                    | Writes a signed 16‑bit integer. Returns success.                                                                                           |
-| `read_dword(address)`                                            | Reads an unsigned 32‑bit integer (0‑4294967295).                                                                                           |
-| `write_dword(address, value)`                                    | Writes an unsigned 32‑bit integer. Returns success.                                                                                        |
-| `read_int(address)`                                              | Reads a signed 32‑bit integer (-2147483648 to 2147483647).                                                                                 |
-| `write_int(address, value)`                                      | Writes a signed 32‑bit integer. Returns success.                                                                                           |
-| `read_float(address)`                                            | Reads a 32‑bit floating point number.                                                                                                      |
-| `write_float(address, value)`                                    | Writes a 32‑bit floating point number. Returns success.                                                                                    |
-| `read_double(address)`                                           | Reads a 64‑bit double‑precision float.                                                                                                     |
-| `write_double(address, value)`                                   | Writes a 64‑bit double‑precision float. Returns success.                                                                                   |
-| `read_vector3d(address)`                                         | Reads three 32‑bit floats as X, Y, Z. Returns `x, y, z`.                                                                                   |
-| `write_vector3d(address, x, y, z)`                               | Writes three 32‑bit floats. Returns success.                                                                                               |
-| `read_string(address)`                                           | Reads a null‑terminated 8‑bit string.                                                                                                      |
-| `write_string(address, value)`                                   | Writes a null‑terminated 8‑bit string. Returns success.                                                                                    |
+| `read_byte(address)`                                             | Reads an unsigned 8-bit byte (0-255).                                                                                                      |
+| `write_byte(address, value)`                                     | Writes an unsigned 8-bit byte. Returns success.                                                                                            |
+| `read_char(address)`                                             | Reads a signed 8-bit byte (-128 to 127).                                                                                                   |
+| `write_char(address, value)`                                     | Writes a signed 8-bit byte. Returns success.                                                                                               |
+| `read_word(address)`                                             | Reads an unsigned 16-bit integer (0-65535).                                                                                                |
+| `write_word(address, value)`                                     | Writes an unsigned 16-bit integer. Returns success.                                                                                        |
+| `read_short(address)`                                            | Reads a signed 16-bit integer (-32768 to 32767).                                                                                           |
+| `write_short(address, value)`                                    | Writes a signed 16-bit integer. Returns success.                                                                                           |
+| `read_dword(address)`                                            | Reads an unsigned 32-bit integer (0-4294967295).                                                                                           |
+| `write_dword(address, value)`                                    | Writes an unsigned 32-bit integer. Returns success.                                                                                        |
+| `read_int(address)`                                              | Reads a signed 32-bit integer (-2147483648 to 2147483647).                                                                                 |
+| `write_int(address, value)`                                      | Writes a signed 32-bit integer. Returns success.                                                                                           |
+| `read_float(address)`                                            | Reads a 32-bit floating point number.                                                                                                      |
+| `write_float(address, value)`                                    | Writes a 32-bit floating point number. Returns success.                                                                                    |
+| `read_double(address)`                                           | Reads a 64-bit double-precision float.                                                                                                     |
+| `write_double(address, value)`                                   | Writes a 64-bit double-precision float. Returns success.                                                                                   |
+| `read_vector3d(address)`                                         | Reads three 32-bit floats as X, Y, Z. Returns `x, y, z`.                                                                                   |
+| `write_vector3d(address, x, y, z)`                               | Writes three 32-bit floats. Returns success.                                                                                               |
+| `read_string(address)`                                           | Reads a null-terminated 8-bit string.                                                                                                      |
+| `write_string(address, value)`                                   | Writes a null-terminated 8-bit string. Returns success.                                                                                    |
 
 ---
 
@@ -237,6 +237,526 @@ Understanding Halo's simulation model helps you write accurate movement, project
 
 ---
 
+## Utility Functions
+
+These functions read and write Halo's memory directly. They give you fine control over players, vehicles, weapons, and
+game state.
+
+> **Warning:** Always test memory operations on a non-production server first. Incorrect offsets can crash the game.
+
+### Send Message to All Except a Specific Player
+
+Sends a chat message to every connected player except one.
+
+**Parameters:**
+
+- `message` (string) - The message to send.
+- `exclude_player_id` (number) - Player index (1-16) to skip.
+
+```lua
+local function send_exclude(message, exclude_player_id)
+    for i = 1, 16 do
+        if player_present(i) and i ~= exclude_player_id then
+            say(i, message)
+        end
+    end
+end
+```
+
+**Use case:** Announce "Player X found the secret" without revealing it to X.
+
+### Check if Player is in a Vehicle
+
+Quickly tests whether a player is riding in any vehicle.
+
+**Parameters:**
+
+- `dyn_player` (number) - Dynamic player memory address (from `get_dynamic_player`).
+
+**Returns:** `true` if in a vehicle, `false` otherwise.
+
+```lua
+local function in_vehicle(dyn_player)
+    return read_dword(dyn_player + 0x11C) ~= 0xFFFFFFFF
+end
+```
+
+**Note:** `0xFFFFFFFF` means "no vehicle". This check is extremely fast - ideal for per-tick logic.
+
+### Get the Vehicle Object a Player is In
+
+Returns the memory address of the vehicle the player is currently occupying, or `nil` if none.
+
+**Parameters:**
+
+- `player_id` (number) - Player index (1-16).
+
+**Returns:** Vehicle object address, or `nil`.
+
+```lua
+local function get_player_vehicle_object(player_id)
+    if not player_present(player_id) or not player_alive(player_id) then return nil end
+
+    local dyn = get_dynamic_player(player_id)
+    if dyn == 0 then return nil end
+
+    local vehicle_id = read_dword(dyn + 0x11C)
+    if vehicle_id == 0xFFFFFFFF then return nil end
+
+    return get_object_memory(vehicle_id)
+end
+```
+
+### Check if a Vehicle is Occupied by Any Player
+
+**Parameters:**
+
+- `vehicle_object` (number) - Memory address of the vehicle.
+
+**Returns:** `true` if at least one player is inside.
+
+```lua
+local function is_vehicle_occupied(vehicle_object)
+    for i = 1, 16 do
+        if get_player_vehicle_object(i) == vehicle_object then
+            return true
+        end
+    end
+    return false
+end
+```
+
+**Example:** Eject any player who enters a reserved vehicle.
+
+### Check if Player is Invisible
+
+Detects active camouflage or script-based invisibility.
+
+**Parameters:**
+
+- `player_id` (number) - Player index (1-16).
+
+**Returns:** `true` if invisible, `false` otherwise.
+
+```lua
+local function is_player_invisible(player_id)
+    local dyn = get_dynamic_player(player_id)
+    if dyn == 0 then return false end
+
+    return read_float(dyn + 0x37C) == 1
+end
+```
+
+### Clear Player's Console / Chat Buffer
+
+Prints many blank lines to hide previous messages.
+
+**Parameters:**
+
+- `player_id` (number) - Player index.
+
+```lua
+local function clear_console(player_id)
+    for _ = 1, 25 do
+        rprint(player_id, " ")
+    end
+end
+```
+
+### Spawn or Teleport Player with Position and Rotation
+
+Writes position and forward vector directly to a player's dynamic object.
+
+**Parameters:**
+
+- `dyn_player` (number) - Dynamic player address.
+- `px, py, pz` (numbers) - Target coordinates.
+- `p_rad` (number) - Facing direction in radians.
+- `z_offset` (number, optional) - Vertical lift, defaults to `0.3`.
+
+```lua
+local function teleport_player(dyn_player, px, py, pz, p_rad, z_offset)
+    z_offset = z_offset or 0.3
+    write_vector3d(dyn_player + 0x5C, px, py, pz + z_offset)
+    write_vector3d(dyn_player + 0x74, math.cos(p_rad), math.sin(p_rad), 0)
+end
+```
+
+**Explanation:** Offset `0x5C` is the object's position; `0x74` is the forward vector (direction).
+
+### Get Player's World Position (Adjusted for Crouch/Vehicle)
+
+Returns the player's actual eye-level position, accounting for vehicles and crouching.
+
+**Parameters:**
+
+- `dyn_player` (number) - Dynamic player address.
+
+**Returns:** `x, y, z` or `nil` if invalid state.
+
+```lua
+local function get_player_position(dyn_player)
+    local crouch = read_float(dyn_player + 0x50C)          -- 0 = standing
+    local vehicle_id = read_dword(dyn_player + 0x11C)
+    local vehicle_obj = get_object_memory(vehicle_id)
+
+    local x, y, z
+    if vehicle_id == 0xFFFFFFFF then
+        x, y, z = read_vector3d(dyn_player + 0x5C)         -- feet position
+    elseif vehicle_obj and vehicle_obj ~= 0 then
+        x, y, z = read_vector3d(vehicle_obj + 0x5C)        -- vehicle origin
+    end
+
+    local z_offset = (crouch == 0) and 0.65 or 0.35 * crouch
+
+    return x, y, z + z_offset
+end
+```
+
+### Get Player's Aim / Camera Direction Vector
+
+**Parameters:**
+
+- `dyn_player` (number) - Dynamic player address.
+
+**Returns:** `aim_x, aim_y, aim_z` (the camera's facing direction).
+
+```lua
+local function get_aim_vector(dyn_player)
+    local ax = read_float(dyn_player + 0x230)
+    local ay = read_float(dyn_player + 0x234)
+    local az = read_float(dyn_player + 0x238)
+    return ax, ay, az
+end
+```
+
+### Vanish a Player (Move Off-Map)
+
+Moves a player far off-map so others cannot see them. Must be called every tick to stay hidden.
+
+**Parameters:**
+
+- `player_id` (number) - Player index.
+
+```lua
+local function vanish_player(player_id)
+    local static = get_player(player_id)
+    if not static then return end
+    
+    local dyn = get_dynamic_player(player_id)
+    if dyn == 0 then return end
+
+    local x, y, z = get_player_position(dyn)   -- uses function above
+    if not x then return end
+
+    write_float(static + 0xF8, x - 1000)       -- X offset in static table
+    write_float(static + 0xFC, y - 1000)       -- Y offset
+    write_float(static + 0x100, z - 1000)      -- Z offset
+end
+```
+
+**Usage:** Call from `OnTick` for each vanished player.
+
+### Override Player's Respawn Time
+
+Writes directly to the static player table to change respawn delay.
+
+**Parameters:**
+
+- `player_id` (number) - Player index (1-16).
+- `respawn_time` (number, optional) - Seconds until respawn, defaults to `3`.
+
+```lua
+local function set_respawn_time(player_id, respawn_time)
+    respawn_time = respawn_time or 3
+    local static = get_player(player_id)
+    if static then
+        write_dword(static + 0x2C, respawn_time * 33)   -- 33 ticks/second
+    end
+end
+```
+
+### Get Score Limit of Current Game
+
+Reads the score limit (kills, captures, points) from the active game type.
+
+**Returns:** Score limit as a number.
+
+```lua
+local gametype_base
+function OnScriptLoad()
+    gametype_base = read_dword(sig_scan("B9360000008BF3BF78545F00") + 0x8)
+    register_callback(cb.EVENT_GAME_START, "OnStart")
+    OnStart() -- in case script loads mid-game
+end
+
+function OnStart()
+    if get_var(0, '$gt') == "n/a" then return end
+    local score_limit = read_byte(gametype_base + 0x58)
+    cprint("Score limit: " .. score_limit, 10)
+end
+```
+
+### Get Server Base Directory and Config Path
+
+Dynamically locate your Halo server folder - no hardcoded paths.
+
+```lua
+local function get_base_dir(folder)
+    folder = folder or ""
+    local exe_path = read_string(read_dword(sig_scan('0000BE??????005657C605') + 0x3))
+    local base_path = exe_path:match("(.*\\)")
+    return base_path .. folder
+end
+
+local function get_config_path()
+    return read_string(read_dword(sig_scan('68??????008D54245468') + 0x1))
+end
+```
+
+**Examples:**
+
+```lua
+local base = get_base_dir()        -- "C:\YourHaloServer\"
+local maps = get_base_dir("maps")  -- "C:\YourHaloServer\maps"
+local sapp_cg = get_config_path()  -- "C:\YourHaloServer\cg\sapp"
+```
+
+---
+
+## Vehicle & Weapon Functions
+
+### Get Tag Class and Name from any Object
+
+**Parameters:**
+
+- `object` (number) - Memory address of the object (vehicle, weapon, etc.).
+
+**Returns:** `tag_class` (byte), `tag_name` (string).
+
+```lua
+local function get_tag_from_object(object)
+    local tag_class = read_byte(object + 0xB4)
+    local tag_index = read_word(object)                     -- tag index in table
+    local tag_address = tag_index * 32 + 0x40440038         -- base tag table + 0x38
+    local tag_name = read_string(read_dword(tag_address))
+    return tag_class, tag_name
+end
+```
+
+**Example - OnVehicleEnter:**
+
+```lua
+function OnVehicleEnter(player_id)
+    local dyn = get_dynamic_player(player_id)
+    if dyn == 0 then return end
+    
+    local vehicle_id = read_dword(dyn + 0x11C)
+    if vehicle_id == 0xFFFFFFFF then return end
+
+    local vehicle_obj = get_object_memory(vehicle_id)
+    if vehicle_obj == 0 then return end
+
+    local class, name = get_tag_from_object(vehicle_obj)
+    cprint(class .. " " .. name, 11) -- print vehicle name to the SAPP terminal 
+end
+```
+
+### Check if Player is Holding Flag or Oddball
+
+**Parameters:**
+
+- `dyn_player` (number) - Dynamic player address.
+- `objective_type` (string, optional) - `"oddball"`, `"flag"`, or `"any"` (default `"any"`).
+
+**Returns:** `true` if holding the specified objective.
+
+```lua
+local function has_objective(dyn_player, objective_type)
+    objective_type = objective_type or "any"
+    local weapon_obj = get_object_memory(read_dword(dyn_player + 0x118))
+    if not weapon_obj or weapon_obj == 0 then return false end
+    local tag_data = read_dword(read_dword(0x40440000) + read_word(weapon_obj) * 0x20 + 0x14)
+    if read_bit(tag_data + 0x308, 3) ~= 1 then return false end
+    local obj_byte = read_byte(tag_data + 2)
+    return (objective_type == "oddball" and obj_byte == 4) or
+           (objective_type == "flag" and obj_byte == 0) or
+           (objective_type == "any" and (obj_byte == 4 or obj_byte == 0))
+end
+```
+
+### Get Player's Full Inventory (Weapons, Ammo, Grenades)
+
+Returns a table of all weapon slots (1-4) with detailed stats. Empty slots are omitted.
+
+**Parameters:**
+
+- `dyn_player` (number) - Dynamic player address.
+
+**Returns:** Table where each key is a slot number, and each value is a table with fields:
+`id, ammo, clip, ammo2, clip2, heat, frags, plasmas`.
+
+```lua
+local function get_inventory(dyn_player)
+    local inv = {}
+    for slot = 0, 3 do
+        local weapon_id = read_dword(dyn_player + 0x2F8 + slot * 4)
+        local weapon_obj = get_object_memory(weapon_id)
+        if weapon_obj and weapon_obj ~= 0 then
+            inv[slot + 1] = {
+                id = read_dword(weapon_obj),
+                ammo = read_word(weapon_obj + 0x2B6),
+                clip = read_word(weapon_obj + 0x2B8),
+                ammo2 = read_word(weapon_obj + 0x2C6),
+                clip2 = read_word(weapon_obj + 0x2C8),
+                heat = read_float(weapon_obj + 0x240),
+                frags = read_byte(dyn_player + 0x31E),
+                plasmas = read_byte(dyn_player + 0x31F)
+            }
+        end
+    end
+    return inv
+end
+```
+
+### Get Current Weapon Slot Index
+
+**Parameters:**
+
+- `dyn_player` (number) - Dynamic player address.
+
+**Returns:** Slot number (0-3).
+
+```lua
+local function get_weapon_slot(dyn_player)
+    return read_byte(dyn_player + 0x2F2)
+end
+```
+
+---
+
+## Tag & Map Data Helpers
+
+### Find Tag by Substring in Name or Path
+
+Scans the tag table for a tag whose name contains a given substring (case-insensitive). Optionally filter by class.
+
+**Parameters:**
+
+- `substring` (string) - Text to search for.
+- `class_filter` (string or nil) - Optional, e.g., `"weap"`, `"vehi"`. Pass `nil` for all classes.
+
+**Returns:** Meta index of the first matching tag, or `nil`.
+
+```lua
+local base_tag_table = 0x40440000
+
+local function find_tag_by_substring(substring, class_filter)
+    substring = substring:lower()
+    local tag_array = read_dword(base_tag_table)
+    local tag_count = read_dword(base_tag_table + 0xC)
+    local filter_hash = class_filter and read_dword(lookup_tag(class_filter, "")) or nil
+
+    for i = 0, tag_count - 1 do
+        local tag = tag_array + 0x20 * i
+        local class_hash = read_dword(tag)
+        if filter_hash and class_hash ~= filter_hash then goto continue end
+        local name_ptr = read_dword(tag + 0x10)
+        if name_ptr and name_ptr ~= 0 then
+            local name = read_string(name_ptr)
+            if name and name:lower():find(substring, 1, true) then
+                return read_dword(tag + 0xC)   -- meta index
+            end
+        end
+        ::continue::
+    end
+    return nil
+end
+```
+
+**Example:**
+
+```lua
+local rocket_meta = find_tag_by_substring("rocket", "weap")
+if rocket_meta then
+    spawn_object("", "", 100, 100, 100, 0, rocket_meta)
+end
+```
+
+### Get Flag Object Meta ID and Tag Name
+
+Detects the flag (objective) tag on the current map.
+
+**Returns:** `meta_id, tag_name` or `nil, nil` if no flag exists.
+
+```lua
+local function get_flag_data()
+    local tag_array = read_dword(base_tag_table)
+    local tag_count = read_dword(base_tag_table + 0xC)
+    for i = 0, tag_count - 1 do
+        local tag = tag_array + 0x20 * i
+        if read_dword(tag) == 0x77656170 then   -- "weap" class hash
+            local tag_data = read_dword(tag + 0x14)
+            if read_bit(tag_data + 0x308, 3) == 1 and read_byte(tag_data + 2) == 0 then
+                local meta = read_dword(tag + 0xC)
+                local name_ptr = read_dword(tag + 0x10)
+                local name = read_string(name_ptr)
+                return meta, name
+            end
+        end
+    end
+    return nil, nil
+end
+```
+
+### Get Tag Data Memory Address by Class and Name
+
+Wrapper around `lookup_tag` that returns the tag's data address.
+
+**Parameters:**
+
+- `class` (string) - Tag class, e.g., `"weap"`.
+- `name` (string) - Tag path, e.g., `"weapons\\pistol\\pistol"`.
+
+**Returns:** Memory address of the tag data, or `nil`.
+
+```lua
+local function get_tag_data(class, name)
+    local tag = lookup_tag(class, name)
+    return tag and read_dword(tag + 0xC) or nil
+end
+```
+
+### Debug: Scan and Print All Weapons, Vehicles, Equipment
+
+Prints tag information for every weapon, vehicle, and equipment on the map. Useful during development.
+
+```lua
+local function scan_map_objects()
+    local tag_array = read_dword(base_tag_table)
+    local tag_count = read_dword(base_tag_table + 0xC)
+    local function class_name(hash)
+        if hash == 0x76656869 then return "vehi"
+        elseif hash == 0x77656170 then return "weap"
+        elseif hash == 1701931376 then return "eqip"
+        else return nil end
+    end
+    for i = 0, tag_count - 1 do
+        local tag = tag_array + 0x20 * i
+        local class = read_dword(tag)
+        local name_str = class_name(class)
+        if name_str then
+            local name_ptr = read_dword(tag + 0x10)
+            local name = (name_ptr ~= 0) and read_string(name_ptr) or "<no-name>"
+            local meta = read_dword(tag + 0xC)
+            cprint(string.format("%s meta=%u name=%s", name_str, meta, name), 12)
+        end
+    end
+end
+```
+
+---
+
 ## Startup Hang Max Idle Fix
 
 Add this line to your SAPP `init.txt` (the one in the SAPP folder):
@@ -326,35 +846,35 @@ local WEAPONS = {
 }
 
 -- Function to assign weapons to a player
-local function assignWeapons(playerId)
+local function assign_weapon(player_id)
     -- Delete the player's inventory first:
-    execute_command('wdel ' .. playerId)
+    execute_command('wdel ' .. player_id)
 
     -- Assign primary and secondary weapons immediately
     local primary_weapon = spawn_object('weap', WEAPONS[1], 0, 0, 0)
     local secondary_weapon = spawn_object('weap', WEAPONS[2], 0, 0, 0)
     
-    assign_weapon(primary_weapon, playerId)
-    assign_weapon(secondary_weapon, playerId)
+    assign_weapon(primary_weapon, player_id)
+    assign_weapon(secondary_weapon, player_id)
 
     local tertiary_weapon = spawn_object('weap', WEAPONS[3], 0, 0, 0)
     local quaternary_weapon = spawn_object('weap', WEAPONS[4], 0, 0, 0)
     
     -- Assign tertiary and quaternary weapons with a delay
-    timer(250, "assign_weapon", tertiary_weapon, playerId)
-    timer(500, "assign_weapon", quaternary_weapon, playerId)
+    timer(250, "assign_weapon", tertiary_weapon, player_id)
+    timer(500, "assign_weapon", quaternary_weapon, player_id)
     
     -- Technical note: 
     -- SAPP's "assign_weapon" function will fail silently/safely if the player is dead.
 end
 
 function OnScriptLoad()
-    register_callback(cb['EVENT_SPAWN'], 'OnSpawn')
+    register_callback(cb.EVENT_SPAWN, "OnSpawn")
 end
 
 -- Assign weapons when the player spawns:
-function OnSpawn(playerId)
-    assignWeapons(playerId)    
+function OnSpawn(player_id)
+    assign_weapons(player_id)    
 end
 
 function OnScriptUnload() end
@@ -594,7 +1114,7 @@ positions defined by the client.
 | **\|l** | Left-align the message (default position).            |
 | **\|r** | Right-align the message.                              |
 | **\|c** | Center the message horizontally.                      |
-| **\|n** | Place the message at the “normal” (default) position. |
+| **\|n** | Place the message at the "normal" (default) position. |
 | **\|t** | Tab the message                                       |
 
 These characters are stripped from the displayed message and only affect layout.
@@ -666,7 +1186,7 @@ function OnScriptLoad()
     local ticks = ffi.C.GetTickCount()
     cprint(string.format("Ticks since boot: %d", ticks), 10) -- print in green
     
-    register_callback(cb["EVENT_TICK"], "OnTick")
+    register_callback(cb.EVENT_TICK, "OnTick")
 end
 
 -- Print ticks every 10 seconds
@@ -839,4 +1359,4 @@ sandbox admin commands with `_ENV` for extra safety.
 - [(HEK) Halo Editing Kit for Halo (CE) Custom Edition](https://www.halomaps.org/hce/detail.cfm?fid=411)
 - [Halo CE: The Xbox Experience - Open Carnage](https://opencarnage.net/index.php?%2Ftopic%2F5784-halo-ce-the-xbox-experience)
 
---- 
+---

@@ -509,7 +509,7 @@
             const timeStr = entry.time ? ` · ${entry.time}` : '';
             const durationStr = entry.duration ? ` · ${entry.duration} min` : '';
             const intensity = entry.intensity ? `🔥 ${entry.intensity}/10` : '';
-            const voiceSnippet = entry.voice ? `“${entry.voice.substring(0, 60)}${entry.voice.length > 60 ? '...' : ''}”` : null;
+            const voiceSnippet = entry.voice ? `"${entry.voice.substring(0, 60)}${entry.voice.length > 60 ? '...' : ''}"` : null;
 
             const hallTypes = entry.hallucinationTypes ? entry.hallucinationTypes.join(', ') : '';
             const moodEp = entry.moodEpisode ? ` · mood: ${entry.moodEpisode}` : '';
@@ -599,7 +599,7 @@
                         const voiceDiv = document.getElementById(`voice-${id}`);
                         const textSpan = voiceDiv.querySelector('.voice-text');
                         if (textSpan) {
-                            textSpan.textContent = `“${entry.voice}”`;
+                            textSpan.textContent = `"${entry.voice}"`;
                             btn.remove();
                         }
                     } else if (field === 'notes' && entry.notes) {

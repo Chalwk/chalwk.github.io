@@ -78,7 +78,7 @@ A signature is a string of bytes with wildcards (`??`) where values may vary (e.
 | Tool             | Plugin / Method                      | Output                                                                                         |
 |------------------|--------------------------------------|------------------------------------------------------------------------------------------------|
 | **IDA Pro**      | SigMaker (e.g., `IDA_SigMaker.dll`)  | Right-click on assembly → generate AOB signature; copy from output window.                     |
-| **Ghidra**       | MakeSig script                       | Right-click a function → “Generate Signature” → copy pattern.                                  |
+| **Ghidra**       | MakeSig script                       | Right-click a function → "Generate Signature" → copy pattern.                                  |
 | **Cheat Engine** | Array of bytes scan + Auto Assembler | Find the instruction in memory disassembler → use `aobscan` or generate AOB from context menu. |
 
 #### Using a Signature in SAPP
@@ -356,7 +356,7 @@ end
 ### Get Player Name (UTF-16 to ASCII) - Chimera Only, use get_var("$name") for SAPP
 
 ```lua
-function get_player_name(player_index)
+function get_player_name(player_id)
     local addr = static + 0x4
     local chars = {}
     for i = 1, 12 do
@@ -409,8 +409,8 @@ end
 ### Get Player Team Name
 
 ```lua
-function get_team_name(player_index)
-    local static = get_player(player_index)
+function get_team_name(player_id)
+    local static = get_player(player_id)
     if not static then return "None" end
     local team = read_byte(static + 0x20)
     return (team == 0) and "Red" or "Blue"
@@ -420,8 +420,8 @@ end
 ### Calculate Kill/Death Ratio
 
 ```lua
-function get_kd_ratio(player_index)
-    local static = get_player(player_index)
+function get_kd_ratio(player_id)
+    local static = get_player(player_id)
     if not static then return 0 end
     local kills = read_word(static + 0x9C)
     local deaths = read_word(static + 0xAE)
