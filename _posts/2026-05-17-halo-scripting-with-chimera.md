@@ -12,7 +12,7 @@ event-driven Lua environment.
 
 **Important:** Chimera's Lua API is based on Lua 5.5.
 
-> This guide assumes you have read the [Common Reference](2026-09-07-halo-lua-common.md)
+> This guide assumes you have read the [Common Reference](2026-09-17-halo-lua-common.md)
 > and [Memory Offsets Deep Dive](2025-09-07-halo-understanding-memory-offsets.md).
 
 ---
@@ -429,7 +429,7 @@ execute_script("(object_teleport (player0) teleport_flag)")
 
 ## Reading Player Data
 
-Because Chimera is client-side, you can read **any** player’s data (the server sends it to you),
+Because Chimera is client-side, you can read **any** player's data (the server sends it to you),
 but you can only **write** to memory for your own local player (writing to others will desync or crash).
 
 ### Get the player object
@@ -594,7 +594,7 @@ end
 
 ## Spawning Objects (Client-Side Spawning)
 
-Chimera’s `spawn_object` takes either a tag ID or a class+name.
+Chimera's `spawn_object` takes either a tag ID or a class+name.
 
 ```lua
 -- By tag ID
