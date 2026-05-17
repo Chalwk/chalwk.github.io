@@ -1,5 +1,5 @@
 ---
-title: "Halo Lua Scripting - Common Utility Functions"
+title: "Halo Lua - Common References"
 date: 2026-05-17
 categories: [ education, halo, modding ]
 tags: [ sapp, phasor, chimera, lua, scripting, utilities ]
@@ -18,8 +18,7 @@ platform-specific APIs. They are safe to use in any Lua 5.1+ environment.
 ## Compatibility Note: `math.atan2`
 
 Some Lua environments may not expose `math.atan2`. Use this fallback to ensure, for example, that cardinal direction
-functions work
-everywhere:
+functions work everywhere:
 
 ```lua
 if not math.atan2 then
@@ -44,7 +43,7 @@ end
 
 ### Check if Two Points are Within a Radius (3D, squared distance)
 
-Uses squared distance to avoid expensive `math.sqrt` - ideal for per‑tick checks.
+Uses squared distance to avoid expensive `math.sqrt` - ideal for per-tick checks.
 
 **Parameters:**  
 `x1, y1, z1`, `x2, y2, z2` (numbers) - Coordinates of the two points.  
@@ -110,7 +109,7 @@ end
 
 ### Shuffle an Array (Fisher-Yates)
 
-Randomly shuffles an array‑style table in place. Every permutation is equally likely.
+Randomly shuffles an array-style table in place. Every permutation is equally likely.
 
 **Parameters:**  
 `t` (table) - Table with sequential integer keys starting at 1.
@@ -132,12 +131,12 @@ end
 
 ### Get Number of Key-Value Pairs in Any Table
 
-Works for both array‑style and dictionary‑style tables (unlike Lua’s `#` operator).
+Works for both array-style and dictionary-style tables (unlike Lua's `#` operator).
 
 **Parameters:**  
 `t` (table) - Any table.
 
-**Returns:** Number of key‑value pairs.
+**Returns:** Number of key-value pairs.
 
 ```lua
 function table_length(t)
@@ -159,7 +158,7 @@ Splits a string into substrings based on a delimiter - useful for parsing chat c
 `input` (string) - The string to split.  
 `delimiter` (string) - The delimiter character (e.g., `" "`, `","`).
 
-**Returns:** An array‑like table of substrings.
+**Returns:** An array-like table of substrings.
 
 ```lua
 function parse_args(input, delimiter)
@@ -219,7 +218,7 @@ print(format_message(JOIN_MESSAGE, {name = "Chalwk"}))
 print(format_message(SCORE_MESSAGE, {name = "Chalwk", points = 150, minutes = 12}))
 ```
 
-#### Version 3: Case‑insensitive placeholders with fallback
+#### Version 3: Case-insensitive placeholders with fallback
 
 This version matches placeholders like `$NAME`, `$Name`, or `$name` to a key in the `args` table by trying the original
 key, then lowercased, then uppercased. Missing placeholders are left unchanged.
@@ -252,3 +251,87 @@ print(format("Plain text"))
 ```
 
 ---
+
+## Performance Best Practices
+
+The following tips help you write efficient Lua scripts that run smoothly with SAPP, Phasor and Chimera. They are
+especially important for code that executes frequently, such as per-tick callbacks.
+
+### Localize Heavily Used Globals
+
+Cache frequently used globals into local variables at the top of your script or function. For example:
+
+```lua
+local table_insert = table.insert
+local math_random = math.random
+local string_sub = string.sub
+```
+
+Local variable access is faster than global table lookups. This small optimisation adds up in hot code paths that run
+many times per second.
+
+### Be GC-Aware - Control Collection During Quiet Moments
+
+Lua's garbage collector can cause small pauses when it runs. If you need to force collection, use `collectgarbage()`
+tactically - for example, during round end or idle periods. Use this sparingly and measure the impact first. In most
+cases, letting the collector run automatically is fine.
+
+### Minimize Garbage - Reuse Tables / Object Pools
+
+Creating many small temporary tables each tick increases garbage collector churn and can cause frame hitches. Reuse
+tables with a simple pool instead of allocating new ones repeatedly.
+
+**Simple pool pattern:**
+
+```lua
+local pool = {}
+
+local function new_table()
+    return table.remove(pool) or {}
+end
+
+local function free_table(t)
+    for k in pairs(t) do t[k] = nil end
+    pool[#pool + 1] = t
+end
+```
+
+Use `new_table()` to obtain a table and `free_table(t)` to return it to the pool when you are done.
+
+### Avoid Heavy Work Inside Callbacks - Batch and Defer
+
+If an event fires often, such as `OnTick` or `OnClientUpdate`, do the minimum work inside the callback. Push heavy
+processing to a timer or queue that runs at a lower frequency, for example every 200 milliseconds.
+
+**Pattern:**
+
+1. The callback pushes a lightweight record (e.g., a player ID and timestamp) into a table.
+2. A separate timer, running every 200 ms, drains that table and performs the expensive operations.
+
+This keeps the fast path lean and prevents frame rate drops.
+
+### Timer Functions for Delayed/Repeating Work
+
+Each platform provides its own timer function for scheduling work after a delay. Use these to defer non-critical tasks
+or run periodic checks without blocking the main game loop.
+
+- **SAPP:** `timer(ms, callback, ...)`
+- **Chimera:** `set_timer(ms, callback, ...)`
+- **Phasor:** `registertimer(ms, callback, ...)`
+
+If the callback returns `true`, it repeats every `ms` milliseconds. The following example uses SAPP syntax:
+
+```lua
+function OnPlayerJoin(player_id)
+    timer(5000, "PostJoinTask", player_id)
+end
+
+function PostJoinTask(player_id)
+    -- do something after 5 seconds
+end
+```
+
+Adapt the function name to match your target platform.
+
+---
+

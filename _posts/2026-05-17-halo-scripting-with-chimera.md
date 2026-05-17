@@ -14,7 +14,7 @@ event-driven Lua environment.
 
 This guide assumes you have read:
 
-- [Common Lua Utility Functions](2026-05-17-halo-lua-utility-functions.md)
+- [Common Lua References](2026-05-17-halo-lua-common-references.md)
 - [Memory Offsets Deep Dive](2025-09-07-halo-understanding-memory-offsets.md).
 
 ---
