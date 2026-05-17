@@ -160,13 +160,13 @@ end
 
 ### Chat & Console Output
 
-| Function                  | Description                                                    |
-|---------------------------|----------------------------------------------------------------|
-| `say(msg)`                | Broadcasts a message to all players. ASCII only.               |
-| `privatesay(player, msg)` | Sends a private message to a specific player. ASCII only.      |
-| `respond(msg)`            | Sends a message to the server terminal.                        |
-| `hprint(msg)`             | Sends a message to the server terminal.                        |
-| `print(msg)`              | Sends a message to the server terminal.                        |
+| Function                  | Description                                   |
+|---------------------------|-----------------------------------------------|
+| `say(msg)`                | Broadcasts a message to all players.          |
+| `privatesay(player, msg)` | Sends a private message to a specific player. |
+| `respond(msg)`            | Sends a message to the server terminal.       |
+| `hprint(msg)`             | Sends a message to the server terminal.       |
+| `print(msg)`              | Sends a message to the server terminal.       |
 
 ### Timer Functions
 
@@ -353,3 +353,5 @@ local function has_objective(player_index)
     return obj_type == 0 or obj_type == 4  -- 0 = flag, 4 = oddball
 end
 ```
+
+---
