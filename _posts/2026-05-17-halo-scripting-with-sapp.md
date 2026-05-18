@@ -882,51 +882,56 @@ This prevents the default 60-second idle/mapcycle behavior that commonly shows u
 ## Timing & Movement Reference
 
 **Core tick rate**  
-Halo PC / CE simulates at **30 ticks per second**. Tick duration = `1 / 30 = 0.033333... s` (approx 33.333 ms).
+Halo simulates at **30 ticks per second**.
 
-**World unit conversion**  
-**1 World Unit (WU) = 10 feet = 3.048 meters.** Waypoints shown in-game are expressed in meters, so multiply WU by *
-*3.048** to get metres.
+* 1 Tick = `1/30 = 0.033333... s`
+* ≈ **33.333 ms per tick**
 
-**How to compute distances per tick**
+**World unit conversion**
 
-- Tick seconds = `1 / 30`.
-- Distance per tick (WU) = `velocity_wu_per_s * (1 / 30)`.
-- Distance per tick (m) = `velocity_wu_per_s * (1 / 30) * 3.048`.
+* **1 World Unit (WU) = 10 feet = 3.048 meters**
+* meters = `WU × 3.048`
 
-**Where to get projectile speeds (CE PC)**  
-Projectile speed values for CE are stored in the projectile tag (HEK / Custom Edition). Look up the projectile tag's
-initial velocity field using HEK tools (Tool / Guerilla / Sapien).
+**Distance per tick**  
+If you have a scalar speed **`speed_wu`** (the magnitude of the velocity vector, in world units per second), then:
 
-**Why first-tick distance matters**  
-CE simulates motion on discrete ticks. A projectile with initial velocity `V` (WU/s) will travel `V / 30` WU in its
-first tick. That often determines the range at which a projectile *feels* instant.
+* Distance moved in one tick (WU): `speed_wu / 30`
+* Distance moved in one tick (meters): `(speed_wu / 30) × 3.048`
 
-**Scripter quick formulas**
+Example: A player moving at 15 WU/s travels `15 / 30 = 0.5` WU per tick, which is `0.5 × 3.048 = 1.524` meters.
+
+**Distance Calculations**
 
 ```lua
--- CE constants
-TICK_RATE = 30               -- ticks per second (CE)
-TICK_SEC  = 1 / TICK_RATE    -- seconds per tick (~0.033333)
-WU_TO_M = 3.048              -- metres per world unit
+local function distance_3d(x1, y1, z1, x2, y2, z2)
+    local dx = x2 - x1
+    local dy = y2 - y1
+    local dz = z2 - z1
+    return math.sqrt(dx*dx + dy*dy + dz*dz)
+end
 
--- Given initial projectile velocity (from the CE projectile tag) in WU/s:
-initial_wu_s = read_from_projectile_tag
-
--- distance travelled in one tick
-wu_per_tick = initial_wu_s * TICK_SEC
-m_per_tick  = wu_per_tick * WU_TO_M
+-- Convert World Units → Meters:
+local WU_TO_M = 3.048
+local function distance_meters(x, y, z, target)
+    local wu = distance_3d(x, y, z, target[1], target[2], target[3])
+    return wu * WU_TO_M
+end
 ```
 
-**Practical notes for PC/CE server operators**
+### Example Usage (Player → Map Location)
 
-- Always read projectile initial velocities from the PC/CE tag files used by your server build rather than copying
-  values
-  from MCC or community posts. HEK tag values are authoritative for PC/CE.
-- Small differences across community builds, patches, or ports can change projectile timing. Test on the exact PC/CE
-  executable and tagset your players use.
-- To measure first-tick travel for a weapon, use the projectile tag initial velocity, divide by 30, and convert to
-  metres with `* 3.048`.
+```lua
+local px, py, pz = read_vector3d(dynamic_player + 0x5C)
+local loc = {0, 0, 0} -- arbitrary location on map (world units)
+local distance_wu = distance_3d(px, py, pz, loc[1], loc[2], loc[3])
+local distance_m = distance_wu * 3.048
+```
+
+Or, directly in meters:
+
+```lua
+local dist_m = distance_meters(px, py, pz, loc)
+```
 
 ---
 
