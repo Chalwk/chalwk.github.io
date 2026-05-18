@@ -251,7 +251,7 @@ PC and CE.
 To get started with finding and using offsets, explore these resources:
 
 - [How To Find Offsets, Entity Addresses & Pointers](https://www.youtube.com/watch?v=YaFlh2pIKAg)
-  A video tutorial that walks through locating offsets using Cheet Engine.
+  A video tutorial that walks through locating offsets using Cheat Engine.
 
 - [Finding Offsets /w Cheat Engine - UnKnoWnCheaTs](https://www.unknowncheats.me/forum/general-programming-and-reversing/200702-finding-offsets-using-cheat-engine.html)
   A comprehensive written guide on using Cheat Engine for offset discovery.
