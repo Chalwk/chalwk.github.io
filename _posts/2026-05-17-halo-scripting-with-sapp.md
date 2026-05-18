@@ -24,8 +24,8 @@ This guide assumes you have read:
 See [full blank script](https://github.com/Chalwk/SPCLib/blob/master/sapp/blank_script_template.lua) for a complete
 example.
 
-Every SAPP Lua script **must** set `api_version` and define `OnScriptLoad()`. Without these, SAPP will not load the
-script.
+Every SAPP Lua script must define both `api_version` and `OnScriptLoad()`. Set `api_version` to match your server's SAPP
+API version (for example: `"1.12.0.0"`). Without these definitions, SAPP will not load the script.
 
 ```lua
 api_version = "1.12.0.0"
@@ -123,6 +123,33 @@ SAPP looks for Lua scripts in its `Lua` folder; By default, this is located in `
 | `write_vector3d(address, x, y, z)`                               | Writes three 32-bit floats. Returns success.                                                                                               |
 | `read_string(address)`                                           | Reads a null-terminated 8-bit string.                                                                                                      |
 | `write_string(address, value)`                                   | Writes a null-terminated 8-bit string. Returns success.                                                                                    |
+
+---
+
+## Displaying Information on Screen
+
+The simplest way to send messages directly to players is using `say()`, `say_all()`, or `rprint()`.
+
+- **`say(id, message)`** - Send chat message to a **specific player** (visible in the in-game chat area).
+- **`say_all(message)`** - Sends chat message to **every player** on the server.
+- **`rprint(id, message)`** - Send chat message to **player's console** (the text area you see when pressing `~`).
+
+> **Note:** `say()` and `say_all()` messages appear in the player's chat box, while `rprint()` goes to the RCON console.
+> For server-side console output, use `cprint()` - see
+> the [Console Color Tutorial](#sapp-console-color-tutorial-cprint--set_ccolor).
+
+### Examples
+
+```lua
+-- Send a private welcome message to a specific player (e.g., when they join)
+say(player_id, "Welcome to the server, " .. get_var(player_id, "$name") .. "!")
+
+-- Announce a server event to everyone
+say_all("The flag has been captured! Next round in 10 seconds.")
+
+-- Show a player their current score in the console (e.g., when they type /myscore)
+rprint(player_id, "Your current score is: " .. get_var(player_id, "$score"))
+```
 
 ---
 

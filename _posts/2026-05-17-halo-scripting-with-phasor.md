@@ -23,8 +23,8 @@ This guide assumes you have read:
 See [full blank script](https://github.com/Chalwk/SPCLib/blob/master/phasor/blank_script_template.lua) for a complete
 example.
 
-Every Phasor Lua script **must** define `GetRequiredVersion()` and return `200`, and define `OnScriptLoad()`.  
-Without these, Phasor will not load the script.
+Every Phasor Lua script must define both `GetRequiredVersion()` and `OnScriptLoad()`.
+`GetRequiredVersion()` must return `200`. Without these definitions, Phasor will not load the script.
 
 ```lua
 function GetRequiredVersion()  -- Required or script will not load
