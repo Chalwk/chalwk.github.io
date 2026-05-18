@@ -32,9 +32,18 @@ permalink: /blog/
                         </a>
                     </h2>
                     <div class="post-meta">
-                        <span class="post-date">
-                            {{ post.date | date: "%B %-d, %Y" }}
+                        <span class="publish-date">
+                            <time datetime="{{ post.date | date_to_xmlschema }}">
+                                Published: {{ post.date | date: "%B %-d, %Y" }}
+                            </time>
                         </span>
+                        {% if post.last-updated %}
+                        <span class="update-date">
+                            <time datetime="{{ post.last-updated | date_to_xmlschema }}">
+                                Updated: {{ post.last-updated | date: "%B %-d, %Y" }}
+                            </time>
+                        </span>
+                        {% endif %}
                     </div>
                     <p class="post-excerpt">
                         {{ post.excerpt | strip_html | truncatewords: 30 }}
