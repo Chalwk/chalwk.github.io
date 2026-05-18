@@ -268,13 +268,13 @@ Example 1: Using `to_real_index`
 
 ```lua
 function OnTick()
-	for i = 1, 16 do
-		if player_present(i) then
-			local real = to_real_index(id)
-			local checkpoint_addr = 0x500000 + (real * 4)
-			local checkpoint = read_dword(checkpoint_addr)
-		end
-	end
+    for i = 1, 16 do
+        if player_present(i) then
+            local real = to_real_index(i)
+            local checkpoint_addr = 0x500000 + (real * 4)
+            local checkpoint = read_dword(checkpoint_addr)
+        end
+    end
 end
 ```
 
