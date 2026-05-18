@@ -31,7 +31,12 @@ API version (for example: `"1.12.0.0"`). Without these definitions, SAPP will no
 api_version = "1.12.0.0"
 
 function OnScriptLoad() -- Required or script will not load
-    -- Register callbacks here
+    -- Register callbacks here (see more in full blank script)
+    register_callback(cb.EVENT_JOIN, "OnJoin")
+end
+
+function OnPlayerJoin(PlayerIndex)
+    say(PlayerIndex, "Hello, World!")
 end
 
 function OnScriptUnload() -- Optional, but recommended to avoid Lua errors on unload
@@ -250,27 +255,16 @@ SAPP uses player indices 1 through 16 for its API functions such as `get_var()`,
 `player_alive()`. Halo internally uses real indices 0 through 15 for memory tables and arrays. The two conversion
 functions let you switch between them.
 
-1. `to_player_index(player_id)`
-   Converts a Halo internal index (0-15) to a SAPP index (1-16).
-   Use this when you have a real index from a low-level loop or memory scan and need to call SAPP functions.
-
-2. `to_real_index(player_index)`
+1. `to_real_index(player_index)`
    Converts a SAPP index (1-16) to a Halo internal index (0-15).
    Use this when you have a SAPP player index from an event or API call and need to index into a zero-based memory
    array.
 
-Example 1: Using `to_player_index`
+2. `to_player_index(player_id)`
+   Converts a Halo internal index (0-15) to a SAPP index (1-16).
+   Use this when you have a real index from a low-level loop or memory scan and need to call SAPP functions.
 
-```lua
-for real = 0, 15 do
-	local player = to_player_index(real)
-	if player_present(player) then
-		say(player, "You are visible")
-	end
-end
-```
-
-Example 2: Using `to_real_index`
+Example 1: Using `to_real_index`
 
 ```lua
 function OnTick()
@@ -281,6 +275,15 @@ function OnTick()
 			local checkpoint = read_dword(checkpoint_addr)
 		end
 	end
+end
+```
+
+Example 2: Using `to_player_index`
+
+```lua
+for real = 0, 15 do
+	local player = to_player_index(real)
+	-- ...
 end
 ```
 
