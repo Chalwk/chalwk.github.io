@@ -866,7 +866,7 @@ max_idle 1
 
 This prevents the default 60-second idle/mapcycle behavior that commonly shows up as a 60-second "hang" on boot.
 
-- **SAPP docs - `max_idle` behavior:** Sets how many seconds of server idle before SAPP restarts the mapcycle. Default
+- `max_idle` behavior:** Sets how many seconds of server idle before SAPP restarts the mapcycle. Default
   is 60 seconds. Changing it to `1` makes that restart happen almost immediately.
 - **Where to put it:** Some Halo servers use two `init.txt` files (one for the dedicated server, another for SAPP). Put
   `max_idle 1` in the SAPP `init.txt` to avoid the 60-second delay.
