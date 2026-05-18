@@ -49,8 +49,6 @@ SAPP looks for Lua scripts in its `Lua` folder; By default, this is located in `
 
 ## Lua Scripting Management
 
-Commands for controlling Lua scripts (see also Configuration Commands).
-
 | Command    | Level | Usage                                         | Description                                      |
 |------------|-------|-----------------------------------------------|--------------------------------------------------|
 | lua        | 4     | `lua [enabled]`                               | Enable Lua scripting. Default: false.            |
