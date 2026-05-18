@@ -167,17 +167,17 @@ rprint(player_id, "Your current score is: " .. get_var(player_id, "$score"))
 
 ---
 
-## Version-Independent Scripting: Signature Scanning and Game Version Detection
+## Signature Scanning and Game Version Detection
 
 ### Signature Scanning
 
-Unlike Phasor or Chimera, SAPP can find memory addresses dynamically using byte patterns.
-This makes scripts **version-independent** (PC/CE) without hardcoded offsets.
+SAPP can resolve memory addresses dynamically using byte patterns (signature scanning), making scripts *
+*version-independent (PC/CE)** without relying on hardcoded addresses.
 
 ```lua
 local gametype_base
 function OnScriptLoad()
-    -- works on both PC and CE
+    -- Works on both PC and CE
     gametype_base = read_dword(sig_scan("B9360000008BF3BF78545F00") + 0x8)
 end
 
@@ -186,23 +186,18 @@ function get_score_limit()
 end
 ```
 
+---
+
 ### Handling Game Version (`halo_type`)
 
-SAPP can detect whether the server is running for **PC** or **CE** using the global `halo_type` variable. This is
-essential when you need different memory offsets or behaviors for each version.
+SAPP exposes the global `halo_type` to indicate the running game version. It returns a **case-sensitive string**: `"PC"`
+or `"CE"`.
 
-#### Usage
-
-`halo_type` returns either `"PC"` or `"CE"`. Use it in conditional statements to assign version-specific addresses.
-
-#### Example: Version-Dependent Offset
-
-When combined with signature scanning, you can make your script fully version-independent. Scan for a base address, then
-adjust offsets based on `halo_type`:
+This is mainly useful as a **fallback when a reliable signature cannot be found** for a memory address. In those cases,
+you can use version-specific fixed addresses instead of dynamic scanning.
 
 ```lua
 local gametype_base, timelimit_address
-
 function OnScriptLoad()
     local base_sig = sig_scan("B9360000008BF3BF78545F00")
     local header_sig = sig_scan("A1????????8B480C894D00")
@@ -211,6 +206,8 @@ function OnScriptLoad()
 
     gametype_base = read_dword(base_sig + 0x8)
     gameinfo_header = read_dword(header_sig + 0x1)
+
+    -- Fallback: no reliable signature exists for timelimit, so use version-specific address
     timelimit_address = (halo_type == "PC" and 0x626630) or 0x5AA5B0
 end
 ```
@@ -246,6 +243,53 @@ end
 
 SAPP exposes convenience functions like `player_present()`, `player_alive()`, and `to_player_index()`. Use them instead
 of custom checks to avoid edge-case bugs with slot indices and spectators.
+
+---
+
+## Converting Player Indices: to_player_index vs to_real_index
+
+SAPP uses player indices 1 through 16 for its API functions such as `get_var()`, `say()`, `player_present()`, and
+`player_alive()`. Halo internally uses real indices 0 through 15 for memory tables and arrays. The two conversion
+functions let you switch between them.
+
+1. `to_player_index(player_id)`
+   Converts a Halo internal index (0-15) to a SAPP index (1-16).
+   Use this when you have a real index from a low-level loop or memory scan and need to call SAPP functions.
+
+2. `to_real_index(player_index)`
+   Converts a SAPP index (1-16) to a Halo internal index (0-15).
+   Use this when you have a SAPP player index from an event or API call and need to index into a zero-based memory
+   array.
+
+Example 1: Using `to_player_index`
+
+```lua
+for real = 0, 15 do
+	local player = to_player_index(real)
+	if player_present(player) then
+		say(player, "You are visible")
+	end
+end
+```
+
+Example 2: Using `to_real_index`
+
+```lua
+function OnTick()
+	for i = 1, 16 do
+		if player_present(i) then
+			local real = to_real_index(id)
+			local checkpoint_addr = 0x500000 + (real * 4)
+			local checkpoint = read_dword(checkpoint_addr)
+		end
+	end
+end
+```
+
+Rule of thumb:
+
+- SAPP API calls (`say`, `get_var`, `kill`, `rprint`, `player_present`), use SAPP indices (1-16)
+- Direct memory reads/writes that use player slots (arrays of size 16), convert to real indices (0-15) first
 
 ---
 
