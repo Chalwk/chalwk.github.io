@@ -229,18 +229,6 @@ Add custom fields to Halo's query response.
 | query_del  | 4     | `query_del <index or name>` | Remove a query entry.                    |
 | query_list | 4     | `query_list`                | List custom query entries.               |
 
-## Lua Scripting Management
-
-Commands for controlling Lua scripts (see also Configuration Commands).
-
-| Command    | Level | Usage                                         | Description                                      |
-|------------|-------|-----------------------------------------------|--------------------------------------------------|
-| lua        | 4     | `lua [enabled]`                               | Enable Lua scripting. Default: false.            |
-| lua_api_v  | 4     | `lua_api_v`                                   | Display current Lua API version.                 |
-| lua_call   | 4     | `lua_call <script> <function> [arguments...]` | Call a function in a loaded Lua script.          |
-| lua_load   | 4     | `lua_load <script>`                           | Load a Lua script and call `OnScriptLoad()`.     |
-| lua_unload | 4     | `lua_unload <script>`                         | Unload a Lua script and call `OnScriptUnload()`. |
-
 ## Custom Variables
 
 Create and manage custom event variables.
