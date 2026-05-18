@@ -35,7 +35,7 @@ function OnScriptLoad() -- Required or script will not load
     register_callback(cb.EVENT_JOIN, "OnJoin")
 end
 
-function OnPlayerJoin(PlayerIndex)
+function OnJoin(PlayerIndex)
     say(PlayerIndex, "Hello, World!")
 end
 
@@ -281,9 +281,29 @@ end
 Example 2: Using `to_player_index`
 
 ```lua
-for real = 0, 15 do
-	local player = to_player_index(real)
-	-- ...
+function OnTick()
+    local tick_id = read_dword(tick_counter_address) -- current server tick
+    for i = 1, 16 do
+        local dyn = get_dynamic_player(i)
+		if dyn == 0 or not player_alive(i) then goto next end
+    
+		for j = 0, 3 do
+		    
+			local struct = dyn + 0x430 + (j * 0x10)
+			local damager_time = read_dword(struct)
+			
+			if damager_time == tick_id then
+				local internal_idx = read_word(struct + 0xC)
+				if internal_idx == 0xFFFF then goto next end
+			
+                local damager = to_player_index(internal_idx)
+                if player_present(damager) then
+                    say(damager, "You damaged a teammate!")
+                end
+            end
+		end
+		::next::
+    end
 end
 ```
 

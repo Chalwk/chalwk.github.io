@@ -233,6 +233,8 @@ PC and CE.
 | `slayer_globals`            | `read_dword(sig_scan("5733C0B910000000BFE8E05B00F3ABB910000000") + 19)`                          |
 | `slayer_score_patch`        | `sig_scan("74178B94242808000052518B8C24280800005157FFD083C4108B8424240800003BF8530F94C383FFFF")` |
 | `stats_globals`             | `read_dword(sig_scan("33C0BF??????00F3AB881D") + 0x3)`                                           |
+| `tick_counter_sig`          | `sig_scan("8B2D????????807D0000C644240600")`                                                     |
+| `tick_counter_address`      | `read_dword(read_dword(tick_counter_sig + 2)) + 0xC`                                             |
 
 ---
 
