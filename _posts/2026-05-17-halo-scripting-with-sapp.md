@@ -282,7 +282,7 @@ Example 2: Using `to_player_index`
 
 ```lua
 function OnTick()
-    local tick_id = read_dword(tick_counter_address) -- current server tick
+    local tick_id = read_dword(tick_counter_address)
     for i = 1, 16 do
         local dyn = get_dynamic_player(i)
 		if dyn == 0 or not player_alive(i) then goto next end
