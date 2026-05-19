@@ -1495,6 +1495,6 @@ sandbox admin commands with `_ENV` for extra safety.
 
 ## Complete Examples:
 
-See my [Phasor Script Archive](https://github.com/Chalwk/SPCLib/tree/master/sapp).
+See my [SAPP Script Archive](https://github.com/Chalwk/SPCLib/tree/master/sapp).
 
 ---
