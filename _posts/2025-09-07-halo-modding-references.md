@@ -18,33 +18,43 @@ Let us dive in.
 
 Start here for official docs, forums, and map repositories.
 
-- **[SAPP docs (official)](https://halo-sapp.readthedocs.io/en/latest/scripting/index.html)** - Complete Lua API,
-  events, commands, and examples for SAPP server extension.
-- **[Phasor (legacy)](https://phasor.halonet.net/)** - Legacy server extension and docs; useful for older scripts and
+- [SAPP docs (official)](https://github.com/Chalwk/SPCLib/blob/master/docs/SAPP%20Documentation%20Revision%202.4.pdf) -
+  Complete Lua API, events, commands, and examples for SAPP server extension.
+- [Scripting with SAPP](https://chalwk.github.io/blog/2026/05/17/halo-scripting-with-sapp) - Comprehensive guide to
+  server-side Lua scripting using SAPP's Lua API, including signature scanning, global variables, and core functions.
+- [Scripting with Phasor](https://chalwk.github.io/blog/2026/05/17/halo-scripting-with-phasor) - Server-side Lua
+  scripting with Phasor, covering version handling and hardcoded addresses.
+- [SAPP Command Reference](https://chalwk.github.io/blog/2026/05/17/halo-sapp-command-reference) - Complete reference
+  for SAPP server configuration commands, admin levels, and usage.
+- [Common Lua References](https://chalwk.github.io/blog/2026/05/17/halo-lua-common-references) - A practical reference
+  collection of common Lua patterns, utilities, and scripting helpers used across Halo server and client scripting
+  environments.
+- [Phasor (legacy)](https://phasor.halonet.net/) - Legacy server extension and docs; useful for older scripts and
   historical examples.
-- **[Phasor V1 Docs](http://phasor.halonet.net/archive/docs/05x.html)** - Documentation for Phasor V1.
-- **[Phasor V2 Docs](http://phasor.halonet.net/archive/docs/200.html)** - Documentation for Phasor V2.
-- **[Halopedia - Halo: Combat Evolved](https://www.halopedia.org/Halo:_Combat_Evolved)** - Canonical game behavior, tag
+- [Phasor V1 Docs](http://phasor.halonet.net/archive/docs/05x.html) - Documentation for Phasor V1.
+- [Phasor V2 Docs](http://phasor.halonet.net/archive/docs/200.html) - Documentation for Phasor V2.
+- [Halopedia - Halo: Combat Evolved](https://www.halopedia.org/Halo:_Combat_Evolved) - Canonical game behavior, tag
   structure, and weapon overviews.
-- **[Halopedia - Weapons category](https://www.halopedia.org/Halo:_Combat_Evolved#Weapons)** - Full list of weapons in
-  Halo.
-- **[OpenCarnage](https://opencarnage.net/)** - Forums, HEK help, scripts, and CE community discussions.
-- **[Elite Game Servers - SAPP overview](https://www.elitegameservers.net/sapp/)** - Practical SAPP usage notes and
+- [Halopedia - Weapons category](https://www.halopedia.org/Halo:_Combat_Evolved#Weapons) - Full list of weapons in Halo.
+- [OpenCarnage](https://opencarnage.net/) - Forums, HEK help, scripts, and CE community discussions.
+- [Elite Game Servers - SAPP overview](https://www.elitegameservers.net/sapp/) - Practical SAPP usage notes and
   examples.
-- **[HAC2 Map Repo](https://maps.halonet.net/)** - Custom maps for PC & CE.
-- **[HaloMaps.org](https://www.halomaps.org/hce/)** - Another large archive of custom maps.
+- [HAC2 Map Repo](https://maps.halonet.net/) - Custom maps for PC & CE.
+- [HaloMaps.org](https://www.halomaps.org/hce/) - Another large archive of custom maps.
 
 ## Deep Dives & Networking
 
-When you need to understand netcode, packet loss, or the Halo 1 system link protocol:
+When you need to understand netcode, packet loss, memory offsets, or the Halo 1 system link protocol:
 
 - **[Netcode (Wikipedia)](https://en.wikipedia.org/wiki/Netcode)** - General networking concepts (tickrate, latency,
   packet loss) useful for server sync debugging.
 - **[Exploring the Halo 1 System Link Protocol](https://hllmn.net/blog/2023-09-18_h1x-net/)** (hllmn.net, 2023) -
   Low-level reverse engineering of CE networking.
+- **[Understanding Memory Offsets](https://chalwk.github.io/blog/2025/09/08/halo-understanding-memory-offsets)** -
+  Foundational guide to memory addresses, offsets, signature scanning, and tools for finding offsets in Halo PC/CE.
 
-> **Tip:** Understanding how Halo handles network updates will save you hours of frustration when debugging weird
-> desyncs or script lag.
+> **Tip:** Understanding how Halo handles network updates and memory layout will save you hours of frustration when
+> debugging weird desyncs, script lag, or signature scanning.
 
 ---
 
@@ -86,6 +96,8 @@ Enhance your local game or test scripts without a dedicated server.
 
 - **[Chimera](https://github.com/SnowyMouse/chimera)** - CE client modification with Lua support, quality-of-life
   features, and modding APIs.
+- **[Scripting with Chimera](https://chalwk.github.io/blog/2026/05/17/halo-scripting-with-chimera)** - Client-side Lua
+  scripting with Chimera, including event callbacks, script placement, and version compatibility.
 - **[Balltze](https://github.com/MangoFizz/balltze)** - Plugin loader and mod platform for CE.  
   Documentation: [balltze.shadowmods.net](https://balltze.shadowmods.net/)
 
@@ -133,5 +145,3 @@ If you are creating custom models or importing assets, these Blender addons are 
 - **Client-side scripting / testing** - Run **Chimera** locally to write and test Lua scripts. Once stable, deploy the
   same scripts on a **SAPP** server.  
   *Best for: rapid prototyping and quality-of-life mods.*
-
----
