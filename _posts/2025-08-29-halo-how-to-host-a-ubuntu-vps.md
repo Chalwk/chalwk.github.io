@@ -6,9 +6,8 @@ categories: [ education, halo, modding ]
 tags: [ sapp, lua, halo, scripting, tutorial ]
 ---
 
-Welcome to the definitive guide for setting up a **Halo PC/CE dedicated server** on a Linux VPS. Whether you're a
-seasoned Halo veteran or a budding server admin, this walkthrough will take you from a fresh Ubuntu 22.04 LTS instance
-to a fully functional, secure, and remotely manageable Halo server.
+This guide walks you through setting up a **Halo** server on a Linux VPS, from a fresh Ubuntu 22.04 LTS installation to
+a fully functional, secure, and remotely manageable server.
 
 We'll use **Wine** to run the Windows-based Halo dedicated server executable, **TightVNC** (or the optional **X2Go**)
 for a graphical interface, and **BitVise SSH Client** for secure remote access. Along the way, we'll harden the server
@@ -49,7 +48,8 @@ Before we begin, make sure you have the following tools on your local Windows ma
 
 ## Step 1: Download and Prepare the Server Template
 
-1. [SAPP server templates](https://github.com/Chalwk/SPCLib/releases/tag/sapp-server-templates) or the [Phasor server templates](https://github.com/Chalwk/SPCLib/releases/tag/phasor-server-templates).
+1. [SAPP server templates](https://github.com/Chalwk/SPCLib/releases/tag/sapp-server-templates) or
+   the [Phasor server templates](https://github.com/Chalwk/SPCLib/releases/tag/phasor-server-templates).
 2. Download the appropriate archive:
     - From **sapp-server-templates**: `SAPP_PC.zip` (for Halo PC) or `SAPP_CE.zip` (for Halo Custom Edition).
     - From **phasor-server-templates**: `Phasor_PC` or `Phasor_CE` (both are ready-to-run).
