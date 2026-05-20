@@ -52,7 +52,7 @@ clua_version = 2.056
 set_callback("map load", "OnMapLoad")
 
 function OnMapLoad()
-     -- Output the current map name
+    -- Output the current map name
     console_out("Map: (" .. map .. ")")
 end
 ```
@@ -145,9 +145,9 @@ Example using `console_out()`:
 
 ```lua
 function OnTick()
-	console_out("Chimera Rocks!")                       -- standard console output
-    console_out("Chimera Rocks!", 1.0, 0.35, 0.35)      -- w/RGB colors (red, green, blue)
-    console_out("Chimera Rocks!", 1, 1.0, 0.35, 0.35)   -- w/ARGB colors (alpha, red, green, blue)
+	console_out("Chimera Rocks!")				      -- standard console output
+	console_out("Chimera Rocks!", 1.0, 0.35, 0.35)	  -- w/RGB colors (red, green, blue)
+	console_out("Chimera Rocks!", 1, 1.0, 0.35, 0.35) -- w/ARGB colors (alpha, red, green, blue)
 end
 ```
 
@@ -204,28 +204,28 @@ Example - only run on dedicated server:
 function OnTick()
     if server_type == "dedicated" then
         console_out("Running on dedicated server. Map: (" .. map .. ")")
-        
+
         --
         -- Gametype-specific logic:
         --
         if gametype == "ctf" then
-        -- Show flag carrier info, etc.
+            -- Show flag carrier info, etc.
         elseif gametype == "slayer" then
-        -- Show kill/death stats
+            -- Show kill/death stats
         end
-    
+
         --
         -- Using local_player_index to iterate over other players:
         --
         local local_idx = local_player_index
-        if not local_idx then return end  -- not ready yet
-        
-		for i = 0, 15 do
-			if i ~= local_idx and get_player(i) then
-			-- This player is not the local player and is connected
-			-- You could read their kills, deaths, team, etc.
-			end
-		end
+        if not local_idx then return end -- not ready yet
+
+        for i = 0, 15 do
+            if i ~= local_idx and get_player(i) then
+                -- This player is not the local player and is connected
+                -- You could read their kills, deaths, team, etc.
+            end
+        end
     end
 end
 ```
@@ -389,7 +389,6 @@ but you can only **write** to memory for your own local player (writing to other
 
 ```lua
 -- Optionally pass a player ID (0-15) to either function. If no ID is passed, the local player is used.
-
 local dynamic_player = get_dynamic_player(id)
 local static_player = get_player(id)
 ```
@@ -429,20 +428,20 @@ Example: zoom in when holding a sniper
 -- ox1,oy1,oz1: camera look-at point (forward vector)
 -- ox2,oy2,oz2: up vector
 function OnPreCamera(x, y, z, fov, ox1, oy1, oz1, ox2, oy2, oz2)
-	local dyn = get_dynamic_player(idx)
-	if dyn == 0 then return end
+    local dyn = get_dynamic_player(idx)
+    if dyn == 0 then return end
 
-	local weapon_id = read_dword(dyn + 0x118)
-	if weapon_id ~= 0xFFFFFFFF then
-		local weapon = get_object(weapon_id)
-		if weapon then
-			local tag = get_tag(read_dword(weapon))
-			local weapon_name = read_string(read_dword(tag + 0x10)):lower()
-			if weapon_name:find("sniper") then
-				fov = 20  -- zoom
-			end
-		end
-	end
+    local weapon_id = read_dword(dyn + 0x118)
+    if weapon_id ~= 0xFFFFFFFF then
+        local weapon = get_object(weapon_id)
+        if weapon then
+            local tag = get_tag(read_dword(weapon))
+            local weapon_name = read_string(read_dword(tag + 0x10)):lower()
+            if weapon_name:find("sniper") then
+                fov = 20 -- zoom
+            end
+        end
+    end
     return x, y, z, fov, ox1, oy1, oz1, ox2, oy2, oz2
 end
 ```
