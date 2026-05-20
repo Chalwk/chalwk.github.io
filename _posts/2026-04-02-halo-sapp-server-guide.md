@@ -9,17 +9,25 @@ tags: [ sapp, lua, halo, scripting, tutorial ]
 Running a Halo dedicated server with SAPP is easy when you have a pre-configured package. Running *multiple* servers can
 also be easy - if you understand how SAPP can separate global and instance-specific files.
 
-This guide starts with a **single-server instance** - exactly what you get in the pre-configured package from
-the [ReadyToGo releases](https://github.com/Chalwk/SPCLib/releases/tag/ReadyToGo). You will
-learn what every file and folder does, and how to launch your server. Then, without repeating file descriptions, you
-will learn how to **convert the single instance into a multi-server cluster** - adding more game modes on different
-ports while sharing admin settings, maps, and SAPP binaries.
+This guide starts with a **single-server instance**, exactly what you get in the pre-configured package from
+the [SAPP Server Templates](https://github.com/Chalwk/SPCLib/releases/tag/sapp-server-templates) release,
+which provides two ready-to-use packages:
+
+- **`SAPP_PC.zip`** – For Halo: PC (Retail version)
+- **`SAPP_CE.zip`** – For Halo: Custom Edition (CE)
+
+Choose the package that matches the version of Halo you are running.
+
+You will learn what every file and folder does, and how to launch your server. Then, without repeating file
+descriptions, you will learn how to **convert the single instance into a multi-server cluster** - adding more game modes
+on different ports while sharing admin settings, maps, and SAPP binaries.
 
 ---
 
 ## What You Get in a Pre-Configured Package
 
-The ready-to-run archive (e.g., `SAPP_CE.zip`) contains a complete, working SAPP server environment. Below is the
+The ready-to-run archive (either `SAPP_PC.zip` or `SAPP_CE.zip`) contains a complete, working SAPP server environment.
+Below is the
 exact folder structure you will see after extracting the zip file.
 
 ```
@@ -63,9 +71,10 @@ locations.txt                            # Named teleport locations
 users.txt                                # Name/password based admins
 ```
 
-> **Note:** The package contains **one** server instance (the `cg` folder). If you want to run multiple servers (
-> different game modes on different ports), you will expand this structure -
-> see [Converting to Multi-Server](#converting-a-single-server-package-to-multi-server).
+> **Note:** The package you download will be either `SAPP_PC.zip` (for Halo PC Retail) or `SAPP_CE.zip` (for Halo Custom
+> Edition). Choose the one that matches the version of Halo you are running. Both packages have the same folder
+> structure and work identically, the only difference is the server executable (`haloded.exe` for PC vs `haloceded.exe` for
+> CE).
 
 ---
 
@@ -179,7 +188,9 @@ set port=2302
 set root=%~dp0
 set path=%root%\cg\
 set exec=%path%\init.txt
-"%root%\haloceded.exe" -path %path% -exec %exec% -port %port%
+
+rem Use haloded.exe for PC Retail, haloceded.exe for CE
+"%root%\haloded.exe" -path %path% -exec %exec% -port %port%
 ```
 
 - `%~dp0` expands to the folder where the script is located (makes it portable).
@@ -244,7 +255,9 @@ set port=2303                    # Different port (2302 is used by the first ser
 set root=%~dp0
 set path=%root%\cg\gun_game
 set exec=%path%\init.txt
-"%root%\haloceded.exe" -path %path% -exec %exec% -port %port%
+
+rem Use haloded.exe for PC Retail, haloceded.exe for CE
+"%root%\haloded.exe" -path %path% -exec %exec% -port %port%
 ```
 
 On Linux, copy `run.sh` to `run_gun_game.sh` and change the `PORT` variable accordingly.

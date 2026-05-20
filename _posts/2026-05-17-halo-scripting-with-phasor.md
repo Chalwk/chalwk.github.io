@@ -178,7 +178,7 @@ end
 | `registertimer(delay, callback, ...)` | Creates a timer that calls `callback` after `delay` milliseconds. The callback can return `1` to repeat or `0` to stop. Extra arguments are passed to the callback as userdata. Returns a timer ID. |
 | `removetimer(id)`                     | Stops and removes a timer created by `registertimer`.                                                                                                                                               |
 
-**Callback signature:** `function callback(id, count, userdata1, userdata2, ...)` — `count` is the number of times the
+**Callback signature:** `function callback(id, count, userdata1, userdata2, ...)`, `count` is the number of times the
 timer has fired.
 
 **Example:**
