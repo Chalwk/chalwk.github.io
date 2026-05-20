@@ -1,7 +1,7 @@
 ---
 title: "Scripting with Chimera - Client-Side Lua"
 date: 2026-05-17
-last-updated: 2026-5-17
+last-updated: 2026-5-20
 categories: [ education, halo, modding ]
 tags: [ chimera, lua, scripting, client ]
 ---
