@@ -281,7 +281,7 @@ end
 
 Example 2: Using `to_player_index`<br>
 See [Memory Offsets Deep Dive](2025-09-07-halo-understanding-memory-offsets.md) for tick counter address.<br>
-Credits to [SnowyMouse](https://github.com/SnowyMouse) for most of this snippet.
+Credits to [SnowyMouse](https://github.com/SnowyMouse) for most of *this* snippet:
 
 ```lua
 function OnTick()
