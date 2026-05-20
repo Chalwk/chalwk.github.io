@@ -1,6 +1,6 @@
 ---
 title: "Halo: How to host a Linux VPS (Ubuntu 22.04)"
-date: 2025-08-29
+date: 2025-8-29
 last-updated: 2026-5-20
 categories: [ education, halo, modding ]
 tags: [ sapp, lua, halo, scripting, tutorial ]

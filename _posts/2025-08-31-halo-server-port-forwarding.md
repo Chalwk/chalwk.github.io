@@ -1,7 +1,7 @@
 ---
 title: "Halo: Server Port Forwarding"
-date: 2025-09-1
-last-updated: 2026-04-05
+date: 2025-9-1
+last-updated: 2026-5-5
 categories: [ education, halo, modding ]
 tags: [ sapp, phasor, halo, server, port-forwarding, tutorial ]
 ---

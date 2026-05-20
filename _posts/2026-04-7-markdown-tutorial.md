@@ -1,7 +1,7 @@
 ---
 title: "Comprehensive Markdown Tutorial"
-date: 2026-04-07
-last-updated: 2026-04-07
+date: 2026-4-07
+last-updated: 2026-4-07
 categories: [ tutorial, documentation, web ]
 tags: [ markdown, syntax, advanced, formatting ]
 ---
