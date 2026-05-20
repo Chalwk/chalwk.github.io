@@ -484,8 +484,3 @@ You'll now have a much smoother desktop experience.
 > ```
 
 ---
-
-## Wrapping Up
-
-From here, you can customize your server settings, install mods, and manage the server via the graphical desktop or
-directly from the terminal. Enjoy hosting!
