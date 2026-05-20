@@ -145,9 +145,9 @@ Example using `console_out()`:
 
 ```lua
 function OnTick()
-	console_out("Chimera Rocks!")				      -- standard console output
-	console_out("Chimera Rocks!", 1.0, 0.35, 0.35)	  -- w/RGB colors (red, green, blue)
-	console_out("Chimera Rocks!", 1, 1.0, 0.35, 0.35) -- w/ARGB colors (alpha, red, green, blue)
+    console_out("Chimera Rocks!")                     -- standard console output
+    console_out("Chimera Rocks!", 1.0, 0.35, 0.35)    -- w/RGB colors (red, green, blue)
+    console_out("Chimera Rocks!", 1, 1.0, 0.35, 0.35) -- w/ARGB colors (alpha, red, green, blue)
 end
 ```
 
