@@ -36,9 +36,9 @@ Modded or rebuilt maps can change the list entirely.
 ```text
 Butcher, Caboose, Crazy, Cupid, Darling, Dasher, Disco, Donut, Dopey,
 Ghost, Goat, Grumpy, Hambone, Hollywood, Howard, Jack, Killer, King,
-New001, Noodle, Penguin, Pirate, Prancer, Saucy, Shadow, Sleepy, Snake,
-Sneak, Stompy, Stumpy, The Bear, The Big L, Tooth, Walla Walla, Weasel,
-Whicker, Wheezy, Whisp, Wilshire
+Noodle, Penguin, Pirate, Prancer, Saucy, Shadow, Sleepy, Snake, Sneak,
+Stompy, Stumpy, The Bear, The Big L, Tooth, Walla Walla, Weasel, Whicker,
+Wheezy, Whisp, Wilshire
 ```
 
 These names are not normally used during standard single-instance gameplay. Instead, they exist as fallback identities
