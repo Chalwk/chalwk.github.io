@@ -29,8 +29,15 @@ permalink: /blog/
                     <div class="filter-buttons" id="category-buttons"></div>
                 </div>
                 <div class="filter-section" id="tags-filter">
-                    <span class="filter-label">Tags:</span>
-                    <div class="filter-buttons" id="tag-buttons"></div>
+                    <span class="filter-label">
+                        Tags:
+                        <button class="toggle-tags-btn" id="toggleTagsBtn" aria-label="Toggle tags">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                    </span>
+                    <div id="tagsCollapsible" class="tags-collapsible">
+                        <div class="filter-buttons" id="tag-buttons"></div>
+                    </div>
                 </div>
                 <button class="clear-filters-btn" id="clear-filters">Clear Filters</button>
             </div>
@@ -155,12 +162,50 @@ permalink: /blog/
         color: var(--darker);
         min-width: 85px;
         font-size: 0.9rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    /* toggle tags button */
+    .toggle-tags-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--primary);
+        font-size: 0.9rem;
+        transition: transform 0.2s, color 0.2s;
+        padding: 0;
+        width: 24px;
+        height: 24px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+    }
+
+    .toggle-tags-btn:hover {
+        background: rgba(30, 136, 229, 0.1);
+        color: var(--primary-dark);
+    }
+
+    .toggle-tags-btn:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(30, 136, 229, 0.3);
+    }
+
+    .tags-collapsible {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        width: 100%;
     }
 
     .filter-buttons {
         display: flex;
         flex-wrap: wrap;
         gap: 0.5rem;
+        padding: 0.25rem 0;
     }
 
     .filter-btn {
@@ -484,6 +529,11 @@ permalink: /blog/
         const resultsContainer = document.getElementById('search-results');
         const clearFiltersBtn = document.getElementById('clear-filters');
 
+        // ----- Toggle Tags Collapsible (hidden by default) -----
+        const tagsCollapsible = document.getElementById('tagsCollapsible');
+        const toggleTagsBtn = document.getElementById('toggleTagsBtn');
+        const chevronIcon = toggleTagsBtn.querySelector('i');
+
         if (!originalList) {
             paginatedContainer.innerHTML = '<p>No blog posts found.</p>';
             return;
@@ -506,6 +556,9 @@ permalink: /blog/
         const POSTS_PER_PAGE = 5;
         let currentPage = 1;
         let totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE);
+
+        // ----- Tags Collapsible State -----
+        let isTagsExpanded = false; // start collapsed
 
         // Update totalPages and clamp currentPage
         function updatePaginationMetadata() {
@@ -743,6 +796,52 @@ permalink: /blog/
         document.querySelectorAll('.filterable-badge').forEach(badge => {
             badge.addEventListener('click', handleBadgeClick);
         });
+
+        // Initially, tags are collapsed
+        tagsCollapsible.style.maxHeight = '0';
+        chevronIcon.classList.remove('fa-chevron-up');
+        chevronIcon.classList.add('fa-chevron-down');
+
+        function adjustTagsCollapsibleHeight() {
+            if (isTagsExpanded) {
+                // Set to scrollHeight for smooth transition
+                tagsCollapsible.style.maxHeight = tagsCollapsible.scrollHeight + 'px';
+            } else {
+                tagsCollapsible.style.maxHeight = '0';
+            }
+        }
+
+        function toggleTags() {
+            isTagsExpanded = !isTagsExpanded;
+            if (isTagsExpanded) {
+                // Expand: set maxHeight to scrollHeight
+                tagsCollapsible.style.maxHeight = tagsCollapsible.scrollHeight + 'px';
+                chevronIcon.classList.remove('fa-chevron-down');
+                chevronIcon.classList.add('fa-chevron-up');
+            } else {
+                // Collapse
+                tagsCollapsible.style.maxHeight = '0';
+                chevronIcon.classList.remove('fa-chevron-up');
+                chevronIcon.classList.add('fa-chevron-down');
+            }
+        }
+
+        toggleTagsBtn.addEventListener('click', toggleTags);
+
+        // On window resize, if expanded, recalculate scrollHeight
+        window.addEventListener('resize', function () {
+            if (isTagsExpanded) {
+                tagsCollapsible.style.maxHeight = tagsCollapsible.scrollHeight + 'px';
+            }
+        });
+
+        setTimeout(() => {
+            if (!isTagsExpanded) {
+                tagsCollapsible.style.maxHeight = '0';
+            } else {
+                tagsCollapsible.style.maxHeight = tagsCollapsible.scrollHeight + 'px';
+            }
+        }, 50);
 
         // ----- Pagination URL Hash Handling -----
         function getCurrentPageFromHash() {
