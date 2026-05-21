@@ -2,8 +2,8 @@
 title: "Halo: Server Port Forwarding"
 date: 2025-9-1
 last-updated: 2026-5-5
-categories: [ education, halo, modding ]
-tags: [ sapp, phasor, halo, server, port-forwarding, tutorial ]
+categories: [ education, halo, server ]
+tags: [ sapp, phasor, halo, server, port-forwarding, tutorial, networking ]
 ---
 
 So you have set up your Halo PC or Custom Edition server with SAPP or Phasor. It works perfectly on your local network,

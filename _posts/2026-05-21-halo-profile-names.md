@@ -3,7 +3,7 @@ title: "Halo Profile Names"
 date: 2026-05-21
 last-updated: 2026-05-21
 categories: [ education, halo ]
-tags: [ client ]
+tags: [ client, profile, networking, placeholder ]
 ---
 
 ## The default Halo profile name: `New001`

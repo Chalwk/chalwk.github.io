@@ -3,7 +3,7 @@ title: "Scripting with Phasor - Server-Side Lua"
 date: 2026-5-17
 last-updated: 2026-5-17
 categories: [ education, halo, modding ]
-tags: [ phasor, lua, scripting, server ]
+tags: [ phasor, lua, scripting, server, tutorial ]
 ---
 
 Phasor is a **server-side** extension for Halo PC/Custom Edition. It exposes a Lua Scripting API, anti-cheat tools,

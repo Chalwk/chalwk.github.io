@@ -3,7 +3,7 @@ title: "Comprehensive Markdown Tutorial"
 date: 2026-4-07
 last-updated: 2026-4-07
 categories: [ tutorial, documentation, web ]
-tags: [ markdown, syntax, advanced, formatting ]
+tags: [ markdown, formatting, reference ]
 ---
 
 # Comprehensive Markdown Tutorial

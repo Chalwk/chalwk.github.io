@@ -3,7 +3,7 @@ title: "Halo: Modding References & Tools"
 date: 2025-9-8
 last-updated: 2026-5-20
 categories: [ education, halo, modding ]
-tags: [ sapp, lua, halo, scripting, tutorial ]
+tags: [ hek, tools, sapp, lua, scripting, tutorial, reference ]
 ---
 
 Whether you are tweaking weapon stats, building custom multiplayer maps, or writing Lua scripts

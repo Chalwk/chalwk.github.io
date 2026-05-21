@@ -3,7 +3,7 @@ title: "Halo Lua - Common References"
 date: 2026-5-17
 last-updated: 2026-5-17
 categories: [ education, halo, modding ]
-tags: [ sapp, phasor, chimera, lua, scripting, utilities ]
+tags: [ sapp, phasor, chimera, lua, scripting, utilities, reference ]
 ---
 
 This document collects **pure Lua utility functions** that work across SAPP, Phasor, and Chimera without relying on

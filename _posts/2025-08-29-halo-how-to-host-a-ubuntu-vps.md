@@ -2,8 +2,8 @@
 title: "Halo: How to host a Linux VPS (Ubuntu 22.04)"
 date: 2025-8-29
 last-updated: 2026-5-20
-categories: [ education, halo, modding ]
-tags: [ sapp, lua, halo, scripting, tutorial ]
+categories: [ education, halo, vps, linux, server ]
+tags: [ ubuntu, wine, vnc, ssh, hosting, tutorial ]
 ---
 
 This guide walks you through setting up a **Halo** server on a Linux VPS, from a fresh Ubuntu 22.04 LTS installation to

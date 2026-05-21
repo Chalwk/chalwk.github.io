@@ -3,7 +3,7 @@ title: "Scripting with SAPP - Server-Side Lua"
 date: 2026-5-17
 last-updated: 2026-5-19
 categories: [ education, halo, modding ]
-tags: [ sapp, lua, scripting, server ]
+tags: [ sapp, lua, scripting, server, tutorial ]
 ---
 
 SAPP is a **server-side** extension for Halo PC/Custom Edition. It exposes a Lua Scripting API, anti-cheat tools, event

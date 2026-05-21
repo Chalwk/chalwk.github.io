@@ -22,10 +22,24 @@ permalink: /blog/
                 <div class="search-results" id="search-results" style="display: none;"></div>
             </div>
 
-            <!-- original post list -->
-            <ul class="post-list">
+            <!-- Category & Tag Filter Bar -->
+            <div class="filter-bar">
+                <div class="filter-section" id="categories-filter">
+                    <span class="filter-label">Categories:</span>
+                    <div class="filter-buttons" id="category-buttons"></div>
+                </div>
+                <div class="filter-section" id="tags-filter">
+                    <span class="filter-label">Tags:</span>
+                    <div class="filter-buttons" id="tag-buttons"></div>
+                </div>
+                <button class="clear-filters-btn" id="clear-filters">Clear Filters</button>
+            </div>
+
+            <!-- original post list (hidden, used as data source) -->
+            <ul class="post-list original-posts">
                 {% for post in site.posts %}
-                <li class="post-item">
+                <li class="post-item" data-categories="{{ post.categories | join: ',' }}"
+                    data-tags="{{ post.tags | join: ',' }}">
                     <h2 class="post-title">
                         <a href="{{ post.url | relative_url }}">
                             {{ post.title }}
@@ -48,6 +62,27 @@ permalink: /blog/
                     <p class="post-excerpt">
                         {{ post.excerpt | strip_html | truncatewords: 30 }}
                     </p>
+                    <!-- Categories and Tags Display -->
+                    <div class="post-categories-tags">
+                        {% if post.categories.size > 0 %}
+                        <div class="post-categories">
+                            <i class="fas fa-folder-open"></i> Categories:
+                            {% for cat in post.categories %}
+                            <span class="category-badge filterable-badge" data-filter-type="category"
+                                  data-filter-value="{{ cat }}">{{ cat }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        {% if post.tags.size > 0 %}
+                        <div class="post-tags">
+                            <i class="fas fa-tags"></i> Tags:
+                            {% for tag in post.tags %}
+                            <span class="tag-badge filterable-badge" data-filter-type="tag"
+                                  data-filter-value="{{ tag }}">{{ tag }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
                 </li>
                 {% endfor %}
             </ul>
@@ -98,6 +133,108 @@ permalink: /blog/
         z-index: 100;
     }
 
+    /* filter Bar stuff */
+    .filter-bar {
+        background: rgba(30, 136, 229, 0.03);
+        border: 1px solid var(--gray-light);
+        border-radius: var(--radius);
+        padding: 1rem 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .filter-section {
+        margin-bottom: 1rem;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .filter-label {
+        font-weight: 600;
+        color: var(--darker);
+        min-width: 85px;
+        font-size: 0.9rem;
+    }
+
+    .filter-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .filter-btn {
+        background: transparent;
+        border: 1px solid var(--gray-light);
+        color: var(--dark);
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .filter-btn:hover {
+        background: var(--primary);
+        border-color: var(--primary);
+        color: white;
+    }
+
+    .filter-btn.active {
+        background: var(--primary);
+        border-color: var(--primary);
+        color: white;
+    }
+
+    .clear-filters-btn {
+        background: transparent;
+        border: 1px solid var(--gray-light);
+        color: var(--dark);
+        padding: 0.35rem 1rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: var(--transition);
+        margin-top: 0.5rem;
+    }
+
+    .clear-filters-btn:hover {
+        background: #ef4444;
+        border-color: #ef4444;
+        color: white;
+    }
+
+    /* category/tag badges on posts */
+    .post-categories-tags {
+        margin-top: 1rem;
+        font-size: 0.85rem;
+    }
+
+    .post-categories, .post-tags {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+    }
+
+    .category-badge, .tag-badge {
+        display: inline-block;
+        background: rgba(30, 136, 229, 0.1);
+        color: var(--primary);
+        padding: 0.2rem 0.6rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .category-badge:hover, .tag-badge:hover {
+        background: var(--primary);
+        color: white;
+    }
+
     .search-result-item {
         padding: 1rem;
         border-bottom: 1px solid var(--gray-light);
@@ -144,201 +281,7 @@ permalink: /blog/
         text-align: center;
         color: var(--gray);
     }
-</style>
 
-<script src="https://cdn.jsdelivr.net/npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // ----- Pagination setup -----
-        const POSTS_PER_PAGE = 5;
-        const originalList = document.querySelector('.post-list');
-        if (!originalList) {
-            document.getElementById('paginated-post-list').innerHTML = '<p>No blog posts found.</p>';
-            return;
-        }
-        const allPosts = Array.from(originalList.querySelectorAll('.post-item'));
-        originalList.style.display = 'none'; // hide original list, we'll show paginated one
-        if (allPosts.length === 0) {
-            document.getElementById('paginated-post-list').innerHTML = '<p>No blog posts found.</p>';
-            return;
-        }
-        const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
-
-        // read current page from URL hash like #page-3
-        function getCurrentPageFromHash() {
-            const hash = window.location.hash;
-            const match = hash.match(/page-(\d+)/);
-            if (match && match[1]) {
-                let page = parseInt(match[1], 10);
-                if (isNaN(page)) page = 1;
-                if (page < 1) page = 1;
-                if (page > totalPages) page = totalPages;
-                return page;
-            }
-            return 1;
-        }
-
-        let currentPage = getCurrentPageFromHash();
-
-        // render posts for given page
-        function renderPage(page) {
-            const start = (page - 1) * POSTS_PER_PAGE;
-            const end = start + POSTS_PER_PAGE;
-            const postsToShow = allPosts.slice(start, end);
-            const container = document.getElementById('paginated-post-list');
-            container.innerHTML = '';
-            if (postsToShow.length === 0) {
-                container.innerHTML = '<p>No posts on this page.</p>';
-                return;
-            }
-            const newList = document.createElement('ul');
-            newList.className = 'post-list';
-            postsToShow.forEach(post => {
-                const clonedItem = post.cloneNode(true);
-                newList.appendChild(clonedItem);
-            });
-            container.appendChild(newList);
-        }
-
-        // render pagination buttons
-        function renderPagination() {
-            const controlsContainer = document.getElementById('pagination-controls');
-            controlsContainer.innerHTML = '';
-            if (totalPages <= 1) return;
-            const nav = document.createElement('nav');
-            nav.setAttribute('aria-label', 'Blog pagination');
-            nav.className = 'pagination-nav';
-            const prevDisabled = currentPage === 1;
-            const nextDisabled = currentPage === totalPages;
-            const prevBtn = document.createElement('button');
-            prevBtn.innerHTML = '&laquo; Prev';
-            prevBtn.className = 'pagination-btn prev-btn';
-            if (prevDisabled) {
-                prevBtn.disabled = true;
-                prevBtn.setAttribute('aria-disabled', 'true');
-            } else {
-                prevBtn.addEventListener('click', () => {
-                    if (currentPage > 1) {
-                        setPage(currentPage - 1);
-                        window.scrollTo({top: 0, behavior: 'smooth'});
-                    }
-                });
-            }
-            const nextBtn = document.createElement('button');
-            nextBtn.innerHTML = 'Next &raquo;';
-            nextBtn.className = 'pagination-btn next-btn';
-            if (nextDisabled) {
-                nextBtn.disabled = true;
-                nextBtn.setAttribute('aria-disabled', 'true');
-            } else {
-                nextBtn.addEventListener('click', () => {
-                    if (currentPage < totalPages) {
-                        setPage(currentPage + 1);
-                        window.scrollTo({top: 0, behavior: 'smooth'});
-                    }
-                });
-            }
-            const pageNumbersDiv = document.createElement('div');
-            pageNumbersDiv.className = 'pagination-numbers';
-            let startPage = Math.max(1, currentPage - 2);
-            let endPage = Math.min(totalPages, currentPage + 2);
-            if (endPage - startPage < 4) {
-                if (startPage === 1) endPage = Math.min(totalPages, startPage + 4);
-                if (endPage === totalPages) startPage = Math.max(1, endPage - 4);
-            }
-            for (let i = startPage; i <= endPage; i++) {
-                const pageBtn = document.createElement('button');
-                pageBtn.textContent = String(i);
-                pageBtn.className = 'pagination-number';
-                if (i === currentPage) {
-                    pageBtn.classList.add('active');
-                    pageBtn.setAttribute('aria-current', 'page');
-                }
-                pageBtn.addEventListener('click', (function (pageNum) {
-                    return function () {
-                        setPage(pageNum);
-                    };
-                })(i));
-                pageNumbersDiv.appendChild(pageBtn);
-            }
-            nav.appendChild(prevBtn);
-            nav.appendChild(pageNumbersDiv);
-            nav.appendChild(nextBtn);
-            controlsContainer.appendChild(nav);
-        }
-
-        function setPage(page) {
-            if (page < 1) page = 1;
-            if (page > totalPages) page = totalPages;
-            if (page === currentPage) return;
-            currentPage = page;
-            renderPage(currentPage);
-            renderPagination();
-            history.pushState(null, null, '#page-' + currentPage);
-        }
-
-        // listen to hash changes (e.g., back/forward)
-        window.addEventListener('hashchange', function () {
-            const newPage = getCurrentPageFromHash();
-            if (newPage !== currentPage) {
-                currentPage = newPage;
-                renderPage(currentPage);
-                renderPagination();
-            }
-        });
-        
-        // initial render
-        renderPage(currentPage);
-        renderPagination();
-        if (!window.location.hash) {
-            history.replaceState(null, null, '#page-1');
-        }
-
-        // ----- Live search using SimpleJekyllSearch -----
-        const searchInput = document.getElementById('search-input');
-        const resultsContainer = document.getElementById('search-results');
-        const paginatedContainer = document.getElementById('paginated-post-list');
-        const paginationControls = document.getElementById('pagination-controls');
-
-        resultsContainer.style.display = 'none';
-
-        SimpleJekyllSearch({
-            searchInput: searchInput,
-            resultsContainer: resultsContainer,
-            json: '{{ site.baseurl }}/search.json',
-            searchResultTemplate: `
-                <div class="search-result-item">
-                    <div class="search-result-title">
-                        <a href="{url}">{title}</a>
-                    </div>
-                    <div class="search-result-date">{date}</div>
-                    <div class="search-result-excerpt">{excerpt}</div>
-                </div>
-            `,
-            noResultsText: '<div class="no-results">No posts found. Try a different keyword.</div>',
-            limit: 10,
-            fuzzy: false
-        });
-
-        // show/hide search results vs normal paginated view
-        searchInput.addEventListener('input', function () {
-            const query = this.value.trim();
-            if (query === '') {
-                paginatedContainer.style.display = 'block';
-                paginationControls.style.display = 'flex';
-                resultsContainer.style.display = 'none';
-                renderPage(currentPage);
-                renderPagination();
-            } else {
-                paginatedContainer.style.display = 'none';
-                paginationControls.style.display = 'none';
-                resultsContainer.style.display = 'block';
-            }
-        });
-    });
-</script>
-
-<style>
     /* card + post styling */
     .about-card {
         border: 2px solid var(--gray-light);
@@ -492,6 +435,15 @@ permalink: /blog/
         .post-list a {
             font-size: 1.4rem;
         }
+
+        .filter-bar {
+            padding: 0.75rem 1rem;
+        }
+
+        .filter-section {
+            flex-direction: column;
+            align-items: flex-start;
+        }
     }
 
     @media (max-width: 480px) {
@@ -520,3 +472,361 @@ permalink: /blog/
         }
     }
 </style>
+
+<script src="https://cdn.jsdelivr.net/npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // ----- DOM Stuff -----
+        const originalList = document.querySelector('.original-posts');
+        const paginatedContainer = document.getElementById('paginated-post-list');
+        const paginationControls = document.getElementById('pagination-controls');
+        const searchInput = document.getElementById('search-input');
+        const resultsContainer = document.getElementById('search-results');
+        const clearFiltersBtn = document.getElementById('clear-filters');
+
+        if (!originalList) {
+            paginatedContainer.innerHTML = '<p>No blog posts found.</p>';
+            return;
+        }
+
+        // Store original post items and their metadata
+        const allPosts = Array.from(originalList.querySelectorAll('.post-item'));
+        originalList.style.display = 'none'; // hide original list
+
+        if (allPosts.length === 0) {
+            paginatedContainer.innerHTML = '<p>No blog posts found.</p>';
+            return;
+        }
+
+        // ----- Filter State -----
+        let activeFilter = null; // { type: 'category' or 'tag', value: string }
+        let filteredPosts = [...allPosts];
+
+        // ----- Pagination Setup -----
+        const POSTS_PER_PAGE = 5;
+        let currentPage = 1;
+        let totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE);
+
+        // Update totalPages and clamp currentPage
+        function updatePaginationMetadata() {
+            totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE);
+            if (currentPage > totalPages) currentPage = totalPages || 1;
+            if (currentPage < 1) currentPage = 1;
+        }
+
+        // Render current page of filtered posts
+        function renderPage() {
+            const start = (currentPage - 1) * POSTS_PER_PAGE;
+            const end = start + POSTS_PER_PAGE;
+            const postsToShow = filteredPosts.slice(start, end);
+
+            paginatedContainer.innerHTML = '';
+            if (postsToShow.length === 0) {
+                paginatedContainer.innerHTML = '<p>No posts match your filters.</p>';
+                return;
+            }
+
+            const newList = document.createElement('ul');
+            newList.className = 'post-list';
+            postsToShow.forEach(post => {
+                const clonedItem = post.cloneNode(true);
+                newList.appendChild(clonedItem);
+            });
+            paginatedContainer.appendChild(newList);
+
+            // Re-attach click handlers to filterable badges inside cloned items
+            document.querySelectorAll('.filterable-badge').forEach(badge => {
+                badge.removeEventListener('click', handleBadgeClick);
+                badge.addEventListener('click', handleBadgeClick);
+            });
+        }
+
+        // Render pagination buttons
+        function renderPagination() {
+            paginationControls.innerHTML = '';
+            if (totalPages <= 1) return;
+
+            const nav = document.createElement('nav');
+            nav.setAttribute('aria-label', 'Blog pagination');
+            nav.className = 'pagination-nav';
+
+            const prevDisabled = currentPage === 1;
+            const nextDisabled = currentPage === totalPages;
+
+            const prevBtn = document.createElement('button');
+            prevBtn.innerHTML = '&laquo; Prev';
+            prevBtn.className = 'pagination-btn prev-btn';
+            if (prevDisabled) {
+                prevBtn.disabled = true;
+                prevBtn.setAttribute('aria-disabled', 'true');
+            } else {
+                prevBtn.addEventListener('click', () => {
+                    if (currentPage > 1) {
+                        setPage(currentPage - 1);
+                        window.scrollTo({top: 0, behavior: 'smooth'});
+                    }
+                });
+            }
+
+            const nextBtn = document.createElement('button');
+            nextBtn.innerHTML = 'Next &raquo;';
+            nextBtn.className = 'pagination-btn next-btn';
+            if (nextDisabled) {
+                nextBtn.disabled = true;
+                nextBtn.setAttribute('aria-disabled', 'true');
+            } else {
+                nextBtn.addEventListener('click', () => {
+                    if (currentPage < totalPages) {
+                        setPage(currentPage + 1);
+                        window.scrollTo({top: 0, behavior: 'smooth'});
+                    }
+                });
+            }
+
+            const pageNumbersDiv = document.createElement('div');
+            pageNumbersDiv.className = 'pagination-numbers';
+            let startPage = Math.max(1, currentPage - 2);
+            let endPage = Math.min(totalPages, currentPage + 2);
+            if (endPage - startPage < 4) {
+                if (startPage === 1) endPage = Math.min(totalPages, startPage + 4);
+                if (endPage === totalPages) startPage = Math.max(1, endPage - 4);
+            }
+            for (let i = startPage; i <= endPage; i++) {
+                const pageBtn = document.createElement('button');
+                pageBtn.textContent = String(i);
+                pageBtn.className = 'pagination-number';
+                if (i === currentPage) {
+                    pageBtn.classList.add('active');
+                    pageBtn.setAttribute('aria-current', 'page');
+                }
+                pageBtn.addEventListener('click', (function (pageNum) {
+                    return function () {
+                        setPage(pageNum);
+                    };
+                })(i));
+                pageNumbersDiv.appendChild(pageBtn);
+            }
+
+            nav.appendChild(prevBtn);
+            nav.appendChild(pageNumbersDiv);
+            nav.appendChild(nextBtn);
+            paginationControls.appendChild(nav);
+        }
+
+        function setPage(page) {
+            if (page < 1) page = 1;
+            if (page > totalPages) page = totalPages;
+            if (page === currentPage) return;
+            currentPage = page;
+            renderPage();
+            renderPagination();
+            history.pushState(null, null, '#page-' + currentPage);
+        }
+
+        // ----- Filter Logic -----
+        function applyFilter(type, value) {
+            activeFilter = {type, value};
+            filteredPosts = allPosts.filter(post => {
+                const categories = (post.dataset.categories || '').split(',').filter(c => c.trim());
+                const tags = (post.dataset.tags || '').split(',').filter(t => t.trim());
+                if (type === 'category') {
+                    return categories.includes(value);
+                } else if (type === 'tag') {
+                    return tags.includes(value);
+                }
+                return true;
+            });
+
+            // Reset pagination
+            currentPage = 1;
+            updatePaginationMetadata();
+            renderPage();
+            renderPagination();
+
+            // Update active state on filter buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                if (btn.dataset.filterType === type && btn.dataset.filterValue === value) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            // Clear search input and hide search results
+            if (searchInput.value.trim() !== '') {
+                searchInput.value = '';
+                resultsContainer.style.display = 'none';
+                paginatedContainer.style.display = 'block';
+                paginationControls.style.display = 'flex';
+            }
+        }
+
+        function clearFilters() {
+            activeFilter = null;
+            filteredPosts = [...allPosts];
+            currentPage = 1;
+            updatePaginationMetadata();
+            renderPage();
+            renderPagination();
+
+            // Remove active class from all filter buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Clear search if needed
+            if (searchInput.value.trim() !== '') {
+                searchInput.value = '';
+                resultsContainer.style.display = 'none';
+                paginatedContainer.style.display = 'block';
+                paginationControls.style.display = 'flex';
+            }
+        }
+
+        function handleBadgeClick(e) {
+            const badge = e.currentTarget;
+            const filterType = badge.dataset.filterType;
+            const filterValue = badge.dataset.filterValue;
+            if (filterType && filterValue) {
+                applyFilter(filterType, filterValue);
+            }
+        }
+
+        // ----- Build Filter UI (Categories & Tags) -----
+        const categoriesSet = new Set();
+        const tagsSet = new Set();
+
+        allPosts.forEach(post => {
+            const categories = (post.dataset.categories || '').split(',').filter(c => c.trim());
+            const tags = (post.dataset.tags || '').split(',').filter(t => t.trim());
+            categories.forEach(c => categoriesSet.add(c));
+            tags.forEach(t => tagsSet.add(t));
+        });
+
+        const categoryContainer = document.getElementById('category-buttons');
+        const tagContainer = document.getElementById('tag-buttons');
+
+        // Sort alphabetically
+        const sortedCategories = Array.from(categoriesSet).sort();
+        const sortedTags = Array.from(tagsSet).sort();
+
+        sortedCategories.forEach(cat => {
+            const btn = document.createElement('button');
+            btn.textContent = cat;
+            btn.className = 'filter-btn';
+            btn.dataset.filterType = 'category';
+            btn.dataset.filterValue = cat;
+            btn.addEventListener('click', () => applyFilter('category', cat));
+            categoryContainer.appendChild(btn);
+        });
+
+        sortedTags.forEach(tag => {
+            const btn = document.createElement('button');
+            btn.textContent = tag;
+            btn.className = 'filter-btn';
+            btn.dataset.filterType = 'tag';
+            btn.dataset.filterValue = tag;
+            btn.addEventListener('click', () => applyFilter('tag', tag));
+            tagContainer.appendChild(btn);
+        });
+
+        if (sortedCategories.length === 0) {
+            categoryContainer.innerHTML = '<span class="no-filters">No categories</span>';
+        }
+        if (sortedTags.length === 0) {
+            tagContainer.innerHTML = '<span class="no-filters">No tags</span>';
+        }
+
+        clearFiltersBtn.addEventListener('click', clearFilters);
+
+        // Attach badge click handlers
+        document.querySelectorAll('.filterable-badge').forEach(badge => {
+            badge.addEventListener('click', handleBadgeClick);
+        });
+
+        // ----- Pagination URL Hash Handling -----
+        function getCurrentPageFromHash() {
+            const hash = window.location.hash;
+            const match = hash.match(/page-(\d+)/);
+            if (match && match[1]) {
+                let page = parseInt(match[1], 10);
+                if (isNaN(page)) page = 1;
+                if (page < 1) page = 1;
+                if (page > totalPages) page = totalPages;
+                return page;
+            }
+            return 1;
+        }
+
+        function syncPageFromHash() {
+            const newPage = getCurrentPageFromHash();
+            if (newPage !== currentPage) {
+                currentPage = newPage;
+                renderPage();
+                renderPagination();
+            }
+        }
+
+        window.addEventListener('hashchange', syncPageFromHash);
+
+        // Initial render
+        updatePaginationMetadata();
+        currentPage = getCurrentPageFromHash();
+        renderPage();
+        renderPagination();
+        if (!window.location.hash) {
+            history.replaceState(null, null, '#page-1');
+        }
+
+        // ----- Live search -----
+        resultsContainer.style.display = 'none';
+
+        SimpleJekyllSearch({
+            searchInput: searchInput,
+            resultsContainer: resultsContainer,
+            json: '{{ site.baseurl }}/search.json',
+            searchResultTemplate: `
+                <div class="search-result-item">
+                    <div class="search-result-title">
+                        <a href="{url}">{title}</a>
+                    </div>
+                    <div class="search-result-date">{date}</div>
+                    <div class="search-result-excerpt">{excerpt}</div>
+                </div>
+            `,
+            noResultsText: '<div class="no-results">No posts found. Try a different keyword.</div>',
+            limit: 10,
+            fuzzy: false
+        });
+
+        // Show/hide search results vs normal paginated view, and clear filters on search
+        searchInput.addEventListener('input', function () {
+            const query = this.value.trim();
+            if (query === '') {
+                // If search cleared, restore filtered or all posts
+                paginatedContainer.style.display = 'block';
+                paginationControls.style.display = 'flex';
+                resultsContainer.style.display = 'none';
+                if (activeFilter) {
+                    // Re-apply current filter (which may have been cleared? no, keep filter)
+                    applyFilter(activeFilter.type, activeFilter.value);
+                } else {
+                    // No active filter, show all posts
+                    filteredPosts = [...allPosts];
+                    updatePaginationMetadata();
+                    currentPage = getCurrentPageFromHash();
+                    renderPage();
+                    renderPagination();
+                }
+            } else {
+                // User is searching: clear any active filter
+                if (activeFilter) {
+                    clearFilters();
+                }
+                paginatedContainer.style.display = 'none';
+                paginationControls.style.display = 'none';
+                resultsContainer.style.display = 'block';
+            }
+        });
+    });
+</script>

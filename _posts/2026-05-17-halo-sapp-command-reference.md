@@ -3,7 +3,7 @@ title: "Halo: SAPP Command Reference"
 date: 2026-5-17
 last-updated: 2026-5-17
 categories: [ education, halo, modding ]
-tags: [ sapp, commands ]
+tags: [ sapp, commands, reference, server ]
 ---
 
 # Configuration Commands

@@ -2,8 +2,8 @@
 title: "Halo: SAPP Server Guide"
 date: 2026-4-3
 last-updated: 2026-5-21
-categories: [ education, halo, modding ]
-tags: [ sapp, lua, halo, scripting, tutorial ]
+categories: [ education, halo, modding, server ]
+tags: [ sapp, lua, scripting, hosting, multi-server, tutorial ]
 ---
 
 Running a Halo dedicated server with SAPP is easy when you have a pre-configured package. Running *multiple* servers can

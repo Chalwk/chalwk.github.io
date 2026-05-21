@@ -3,7 +3,7 @@ title: "Halo: Understanding Memory Offsets"
 date: 2025-9-8
 last-updated: 2026-5-19
 categories: [ education, halo, modding ]
-tags: [ sapp, chimera, lua, halo, scripting, tutorial ]
+tags: [ sapp, chimera, lua, memory, offsets, scripting, tutorial ]
 ---
 
 If you are diving into Halo PC or Custom Edition modding, you will quickly encounter the need to manipulate game
