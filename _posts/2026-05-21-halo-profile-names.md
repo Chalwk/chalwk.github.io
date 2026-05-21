@@ -28,6 +28,11 @@ Halo PC and Halo CE also contain a built-in list of fallback multiplayer names c
 
 These names are embedded in the game's `globals.globals` tag and ship with the stock multiplayer maps.
 
+Because every stock multiplayer map contains this tag, the default pool is normally identical across the retail Halo PC
+and Halo Custom Edition multiplayer maps.
+
+Modded or rebuilt maps can change the list entirely.
+
 ```text
 Butcher, Caboose, Crazy, Cupid, Darling, Dasher, Disco, Donut, Dopey,
 Ghost, Goat, Grumpy, Hambone, Hollywood, Howard, Jack, Killer, King,
@@ -68,16 +73,5 @@ This behavior can occur in:
 * Local dedicated server testing environments
 
 The assigned placeholder name is temporary and only exists for that running session.
-
----
-
-## Where the placeholder names are stored
-
-The placeholder pool is stored in the map's `globals.globals` tag.
-
-Because every stock multiplayer map contains this tag, the default pool is normally identical across the retail Halo PC
-and Halo Custom Edition multiplayer maps.
-
-Modded or rebuilt maps can change the list entirely.
 
 ---
