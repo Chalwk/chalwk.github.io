@@ -87,36 +87,36 @@ Available to all players.
 
 ## General Commands (Admin Moderation)
 
-| Command       | Level | Usage                                          | Description                                                                 |
-|---------------|-------|------------------------------------------------|-----------------------------------------------------------------------------|
-| afks          | 0     | `afks`                                         | List AFK players.                                                           |
-| b             | 3     | `b <player_expr> [reason] [time]`              | Kick and ban a player, announce to server.                                  |
-| balance_teams | 2     | `balance_teams`                                | Balance teams based on stats.                                               |
-| bans          | 3     | `bans`                                         | Alias for `sv_banlist`.                                                     |
-| beep          | 4     | `beep [Hz] [ms]`                               | Play a beep on the host machine.                                            |
-| cpu           | 4     | `cpu`                                          | Display CPU load, memory usage, OS info.                                    |
-| d             | 4     | `d <player_expr>`                              | Show detailed player info (health, shield, coords, weapons, vehicle, etc.). |
-| files         | 4     | `files`                                        | Locate all SAPP `.txt` files.                                               |
-| **ipban**     | 3     | `ipban <player_expr> [time] [reason]`          | Temporarily IP‑ban a player (`0` or no time = indefinite).                  |
-| ipbans        | 3     | `ipbans`                                       | List all IP bans with indices.                                              |
-| iprangeban    | 3     | `iprangeban <name> <IP range> [reason] [time]` | Ban an IP range using CIDR (e.g., `192.168.1.0/24`).                        |
-| ipunban       | 3     | `ipunban <index>`                              | Unban an IP by index.                                                       |
-| inf           | 3     | `inf <player_expr>`                            | Show player's CD‑key hash, IP address, and index.                           |
-| k             | 2     | `k <player_expr> [reason]`                     | Kick a player and announce to server.                                       |
-| kdr           | 0     | `kdr <player_expr>`                            | Display player's kill/death ratio.                                          |
-| log_note      | 4     | `log_note [message]`                           | Write a note to SAPP's log.                                                 |
-| map           | 3     | `map <map> <gametype>`                         | Alias for `sv_map`.                                                         |
-| maplist       | 3     | `maplist`                                      | List maps in three columns (like `sv_maplist`).                             |
-| mute          | 2     | `mute <player_expr> [time]`                    | IP‑ban player from chat (no time = indefinite).                             |
-| mutes         | 2     | `mutes`                                        | List active mutes.                                                          |
-| unmute        | 2     | `unmute <index>`                               | Remove a mute.                                                              |
-| pl            | 2     | `pl`                                           | Alias for `sv_players`.                                                     |
-| skips         | 0     | `skips`                                        | List players who voted to skip the game.                                    |
-| teamup        | 2     | `teamup`                                       | Group clan members together.                                                |
-| textban       | 2     | `textban <player_expr> [time]`                 | CD‑key ban from chat (no time = indefinite).                                |
-| textbans      | 2     | `textbans`                                     | List active textbans.                                                       |
-| textunban     | 2     | `textunban <index>`                            | Remove a textban.                                                           |
-| uptime        | 0     | `uptime`                                       | Show server and OS uptime.                                                  |
+| Command       | Level | Usage                                          | Description                                                                                                                                                                                              |
+|---------------|-------|------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| afks          | 0     | `afks`                                         | List AFK players.                                                                                                                                                                                        |
+| b             | 3     | `b <player_expr> [reason] [time]`              | Kick and ban a player, announce to server. **Avoid using this command where possible:** many players use cracked clients with shared CD keys, which can result in innocent players being banned as well. |
+| balance_teams | 2     | `balance_teams`                                | Balance teams based on stats.                                                                                                                                                                            |
+| bans          | 3     | `bans`                                         | Alias for `sv_banlist`.                                                                                                                                                                                  |
+| beep          | 4     | `beep [Hz] [ms]`                               | Play a beep on the host machine.                                                                                                                                                                         |
+| cpu           | 4     | `cpu`                                          | Display CPU load, memory usage, OS info.                                                                                                                                                                 |
+| d             | 4     | `d <player_expr>`                              | Show detailed player info (health, shield, coords, weapons, vehicle, etc.).                                                                                                                              |
+| files         | 4     | `files`                                        | Locate all SAPP `.txt` files.                                                                                                                                                                            |
+| ipban         | 3     | `ipban <player_expr> [time] [reason]`          | Temporarily IP‑ban a player (`0` or no time = indefinite).                                                                                                                                               |
+| ipbans        | 3     | `ipbans`                                       | List all IP bans with indices.                                                                                                                                                                           |
+| iprangeban    | 3     | `iprangeban <name> <IP range> [reason] [time]` | Ban an IP range using CIDR (e.g., `192.168.1.0/24`).                                                                                                                                                     |
+| ipunban       | 3     | `ipunban <index>`                              | Unban an IP by index.                                                                                                                                                                                    |
+| inf           | 3     | `inf <player_expr>`                            | Show player's CD‑key hash, IP address, and index.                                                                                                                                                        |
+| k             | 2     | `k <player_expr> [reason]`                     | Kick a player and announce to server.                                                                                                                                                                    |
+| kdr           | 0     | `kdr <player_expr>`                            | Display player's kill/death ratio.                                                                                                                                                                       |
+| log_note      | 4     | `log_note [message]`                           | Write a note to SAPP's log.                                                                                                                                                                              |
+| map           | 3     | `map <map> <gametype>`                         | Alias for `sv_map`.                                                                                                                                                                                      |
+| maplist       | 3     | `maplist`                                      | List maps in three columns (like `sv_maplist`).                                                                                                                                                          |
+| mute          | 2     | `mute <player_expr> [time]`                    | IP‑ban player from chat (no time = indefinite).                                                                                                                                                          |
+| mutes         | 2     | `mutes`                                        | List active mutes.                                                                                                                                                                                       |
+| unmute        | 2     | `unmute <index>`                               | Remove a mute.                                                                                                                                                                                           |
+| pl            | 2     | `pl`                                           | Alias for `sv_players`.                                                                                                                                                                                  |
+| skips         | 0     | `skips`                                        | List players who voted to skip the game.                                                                                                                                                                 |
+| teamup        | 2     | `teamup`                                       | Group clan members together.                                                                                                                                                                             |
+| textban       | 2     | `textban <player_expr> [time]`                 | CD‑key ban from chat (no time = indefinite).                                                                                                                                                             |
+| textbans      | 2     | `textbans`                                     | List active textbans.                                                                                                                                                                                    |
+| textunban     | 2     | `textunban <index>`                            | Remove a textban.                                                                                                                                                                                        |
+| uptime        | 0     | `uptime`                                       | Show server and OS uptime.                                                                                                                                                                               |
 
 ---
 
