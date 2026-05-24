@@ -90,30 +90,30 @@ Available to all players.
 | Command       | Level | Usage                                          | Description                                                                                                                                                                      |
 |---------------|-------|------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | afks          | 0     | `afks`                                         | List AFK players.                                                                                                                                                                |
-| b             | 3     | `b <player_expr> [reason] [time]`              | Hash-ban a player. **Avoid using this command where possible:** many players use cracked clients with shared CD keys, which can result in innocent players being banned as well. |
+| b             | 3     | `b <player_id> [reason] [time]`                | Hash-ban a player. **Avoid using this command where possible:** many players use cracked clients with shared CD keys, which can result in innocent players being banned as well. |
 | balance_teams | 2     | `balance_teams`                                | Balance teams based on stats.                                                                                                                                                    |
 | bans          | 3     | `bans`                                         | Alias for `sv_banlist`.                                                                                                                                                          |
 | beep          | 4     | `beep [Hz] [ms]`                               | Play a beep on the host machine.                                                                                                                                                 |
 | cpu           | 4     | `cpu`                                          | Display CPU load, memory usage, OS info.                                                                                                                                         |
-| d             | 4     | `d <player_expr>`                              | Show detailed player info (health, shield, coords, weapons, vehicle, etc.).                                                                                                      |
+| d             | 4     | `d <player_id>`                                | Show detailed player info (health, shield, coords, weapons, vehicle, etc.).                                                                                                      |
 | files         | 4     | `files`                                        | Locate all SAPP `.txt` files.                                                                                                                                                    |
-| ipban         | 3     | `ipban <player_expr> [time] [reason]`          | IP‑ban a player (`0` or no time = indefinite).                                                                                                                                   |
+| ipban         | 3     | `ipban <player_id> [time] [reason]`            | IP‑ban a player (`0` or no time = indefinite).                                                                                                                                   |
 | ipbans        | 3     | `ipbans`                                       | List all IP bans with indices.                                                                                                                                                   |
 | iprangeban    | 3     | `iprangeban <name> <IP range> [reason] [time]` | Ban an IP range using CIDR (e.g., `192.168.1.0/24`).                                                                                                                             |
 | ipunban       | 3     | `ipunban <index>`                              | Unban an IP by index.                                                                                                                                                            |
-| inf           | 3     | `inf <player_expr>`                            | Show player's CD‑key hash, IP address, and index.                                                                                                                                |
-| k             | 2     | `k <player_expr> [reason]`                     | Kick a player and announce to server.                                                                                                                                            |
-| kdr           | 0     | `kdr <player_expr>`                            | Display player's kill/death ratio.                                                                                                                                               |
+| inf           | 3     | `inf <player_id>`                              | Show player's CD‑key hash, IP address, and index.                                                                                                                                |
+| k             | 2     | `k <player_id> [reason]`                       | Kick a player and announce to server.                                                                                                                                            |
+| kdr           | 0     | `kdr <player_id>`                              | Display player's kill/death ratio.                                                                                                                                               |
 | log_note      | 4     | `log_note [message]`                           | Write a note to SAPP's log.                                                                                                                                                      |
 | map           | 3     | `map <map> <gametype>`                         | Alias for `sv_map`.                                                                                                                                                              |
 | maplist       | 3     | `maplist`                                      | List maps in three columns (like `sv_maplist`).                                                                                                                                  |
-| mute          | 2     | `mute <player_expr> [time]`                    | IP‑ban player from chat (no time = indefinite).                                                                                                                                  |
+| mute          | 2     | `mute <player_id> [time]`                      | IP‑ban player from chat (no time = indefinite).                                                                                                                                  |
 | mutes         | 2     | `mutes`                                        | List active mutes.                                                                                                                                                               |
 | unmute        | 2     | `unmute <index>`                               | Remove a mute.                                                                                                                                                                   |
 | pl            | 2     | `pl`                                           | Alias for `sv_players`.                                                                                                                                                          |
 | skips         | 0     | `skips`                                        | List players who voted to skip the game.                                                                                                                                         |
 | teamup        | 2     | `teamup`                                       | Group clan members together.                                                                                                                                                     |
-| textban       | 2     | `textban <player_expr> [time]`                 | CD‑key ban from chat (no time = indefinite).                                                                                                                                     |
+| textban       | 2     | `textban <player_id> [time]`                   | CD‑key ban from chat (no time = indefinite).                                                                                                                                     |
 | textbans      | 2     | `textbans`                                     | List active textbans.                                                                                                                                                            |
 | textunban     | 2     | `textunban <index>`                            | Remove a textban.                                                                                                                                                                |
 | uptime        | 0     | `uptime`                                       | Show server and OS uptime.                                                                                                                                                       |
@@ -126,13 +126,13 @@ Used to configure server behaviour. Settings lost on reload unless placed in `in
 
 | Command               | Level | Usage                                            | Description                                                                         |
 |-----------------------|-------|--------------------------------------------------|-------------------------------------------------------------------------------------|
-| admin_prefix          | 4     | `admin_prefix <prefix>`                          | Prefix for admin messages via `say`. Default: `**ADMIN**`.                          |
+| admin_prefix          | 4     | `admin_prefix <prefix>`                          | Prefix for admin messages via `say`. Default: `**SAPP**`.                           |
 | adminadd_samelevel    | 4     | `adminadd_samelevel [0-2]`                       | Allow admins to add V1 admins: `0`=no, `1`=lower, `2`=lower/equal. Default: `0`.    |
 | adminban              | 4     | `adminban [0-2]`                                 | Admin ban permissions: `0`=any, `1`=no higher, `2`=only lower. Default: `0`.        |
 | admindel_samelevel    | 4     | `admindel_samelevel [0-2]`                       | Allow admins to delete V1 admins: `0`=no, `1`=lower, `2`=lower/equal. Default: `0`. |
 | afk_kick              | 4     | `afk_kick [seconds]`                             | Auto‑kick AFK players after given seconds (`0`=disabled).                           |
 | aimbot_ban            | 4     | `aimbot_ban [length] [type]`                     | Auto kick/ban aimbotters. Type: `0`=CD hash,`1`=IP,`2`=both,`3`=kick. Default: `0`. |
-| alias                 | 4     | `alias <player_expr>`                            | Search for aliases in `aliases.txt`.                                                |
+| alias                 | 4     | `alias <player_id>`                              | Search for aliases in `aliases.txt`.                                                |
 | anticamp              | 4     | `anticamp [time] [distance]`                     | Raise `event_camp` if player kills while camping. Disabled by default.              |
 | anticaps              | 4     | `anticaps [enabled]`                             | Prevent excessive capital letters. Default: `false`.                                |
 | anticheat             | 4     | `anticheat [enabled]`                            | Require anticheat client. Must be set in `init.txt`. Default: `false`.              |
@@ -256,18 +256,18 @@ Create your own commands (stored in `commands.txt`). Format:
 
 ### CD‑Key Based Admins
 
-| Command    | Level | Usage                                                   | Description                                               |
-|------------|-------|---------------------------------------------------------|-----------------------------------------------------------|
-| adminadd   | 0     | `adminadd <player_expr> <level> [allowed IP ranges...]` | Add a CD‑key based admin (requires `adminadd_samelevel`). |
-| adminlevel | 0     | `adminlevel <index> <level>`                            | Set new level for a CD‑key admin.                         |
-| admindel   | 0     | `admindel <index>`                                      | Remove a CD‑key admin (requires `admindel_samelevel`).    |
-| admins     | 4     | `admins`                                                | List CD‑key based admins.                                 |
+| Command    | Level | Usage                                                 | Description                                               |
+|------------|-------|-------------------------------------------------------|-----------------------------------------------------------|
+| adminadd   | 0     | `adminadd <player_id> <level> [allowed IP ranges...]` | Add a CD‑key based admin (requires `adminadd_samelevel`). |
+| adminlevel | 0     | `adminlevel <index> <level>`                          | Set new level for a CD‑key admin.                         |
+| admindel   | 0     | `admindel <index>`                                    | Remove a CD‑key admin (requires `admindel_samelevel`).    |
+| admins     | 4     | `admins`                                              | List CD‑key based admins.                                 |
 
 ### Name and Password Based Admins
 
 | Command            | Level | Usage                                           | Description                                                 |
 |--------------------|-------|-------------------------------------------------|-------------------------------------------------------------|
-| admin_add          | 4     | `admin_add <player_expr> <password> <level>`    | Add name/password admin (player must be online).            |
+| admin_add          | 4     | `admin_add <player_id> <password> <level>`      | Add name/password admin (player must be online).            |
 | admin_add_manually | 4     | `admin_add_manually <name> <password> <level>`  | Add name/password admin without player being present.       |
 | admin_change_pw    | 4     | `admin_change_pw <index> <password>`            | Change password of name/password admin.                     |
 | admin_change_level | 4     | `admin_change_level <index> <level>`            | Change level of name/password admin.                        |
@@ -284,58 +284,58 @@ Directly modify player attributes. Cannot be used when `scrim_mode` is enabled.
 
 | Command              | Usage                                                        | Description                                                                     |
 |----------------------|--------------------------------------------------------------|---------------------------------------------------------------------------------|
-| ammo                 | `ammo <player_expr> [int_expr] [weapon]`                     | Change unloaded ammo (`0`=current,`1`-`4`=weapon slots,`5`=all).                |
+| ammo                 | `ammo <player_id> [int_expr] [weapon]`                       | Change unloaded ammo (`0`=current,`1`-`4`=weapon slots,`5`=all).                |
 | area_add_cuboid      | `area_add_cuboid <name> <a_x> <a_y> <a_z> <b_x> <b_y> <b_z>` | Add a rectangular area.                                                         |
 | area_add_sphere      | `area_add_sphere <name> <x> <y> <z> <r>`                     | Add a spherical area.                                                           |
 | area_del             | `area_del <name>`                                            | Remove an area.                                                                 |
 | area_list            | `area_list`                                                  | List areas for loaded map.                                                      |
 | area_listall         | `area_listall`                                               | List areas for all maps.                                                        |
-| assist               | `assist <player_expr> [int_expr]`                            | Change player's assist count.                                                   |
-| battery              | `battery <player_expr> [decimal_expr] [weapon]`              | Change weapon battery (weapon index as in `ammo`).                              |
-| boost                | `boost <player_expr>`                                        | Move player to location they are looking at.                                    |
-| camo                 | `camo <player_expr> [time]`                                  | Apply active camouflage for time (seconds). No effect if already camo.          |
-| color                | `color <player_expr> [index]`                                | Change player's FFA colour.                                                     |
-| coord                | `coord <player_expr>`                                        | Return player's coordinates.                                                    |
-| deaths               | `deaths <player_expr> [amount]`                              | Change player's death count.                                                    |
+| assist               | `assist <player_id> [int_expr]`                              | Change player's assist count.                                                   |
+| battery              | `battery <player_id> [decimal_expr] [weapon]`                | Change weapon battery (weapon index as in `ammo`).                              |
+| boost                | `boost <player_id>`                                          | Move player to location they are looking at.                                    |
+| camo                 | `camo <player_id> [time]`                                    | Apply active camouflage for time (seconds). No effect if already camo.          |
+| color                | `color <player_id> [index]`                                  | Change player's FFA colour.                                                     |
+| coord                | `coord <player_id>`                                          | Return player's coordinates.                                                    |
+| deaths               | `deaths <player_id> [amount]`                                | Change player's death count.                                                    |
 | disable_all_objects  | `disable_all_objects <team> <disable>`                       | Disable all objects for a team.                                                 |
 | disable_all_vehicles | `disable_all_vehicles <team> <disable>`                      | Disable all vehicles for a team.                                                |
 | disable_object       | `disable_object <tag_path> [team]`                           | Disable an object, optionally for a specific team.                              |
 | disabled_objects     | `disabled_objects`                                           | List all disabled objects.                                                      |
 | enable_object        | `enable_object <index or tag_path>`                          | Enable a disabled object by index or tag path.                                  |
 | gamespeed            | `gamespeed [speed]`                                          | Change ticks per second (default `30`). Requires anticheat/HAC2 for sync.       |
-| god                  | `god <player_expr>`                                          | Enable invulnerability (use `ungod` to remove).                                 |
+| god                  | `god <player_id>`                                            | Enable invulnerability (use `ungod` to remove).                                 |
 | gravity              | `gravity [float]`                                            | Set server gravity (default `0.003656` units/tick²). Requires anticheat.        |
-| hp                   | `hp <player_expr> [decimal_expr]`                            | Get or set player health (decimal).                                             |
-| kill                 | `kill <player_expr>`                                         | Kill the player.                                                                |
-| kills                | `kills <player_expr> [int_expr]`                             | Get or set player's kill count.                                                 |
-| lag                  | `lag <player_expr>`                                          | Prevent player from moving (use `unlag` to remove).                             |
+| hp                   | `hp <player_id> [decimal_expr]`                              | Get or set player health (decimal).                                             |
+| kill                 | `kill <player_id>`                                           | Kill the player.                                                                |
+| kills                | `kills <player_id> [int_expr]`                               | Get or set player's kill count.                                                 |
+| lag                  | `lag <player_id>`                                            | Prevent player from moving (use `unlag` to remove).                             |
 | loc_add              | `loc_add <location_name> [x] [y] [z]`                        | Add a location at player's position or given coordinates.                       |
 | loc_del              | `loc_del <location_name>`                                    | Delete a location.                                                              |
 | loc_list             | `loc_list`                                                   | List locations for current map.                                                 |
 | loc_listall          | `loc_listall`                                                | List locations for all maps.                                                    |
-| m                    | `m <player_expr> <x> <y> <z>`                                | Teleport player relative to their current position.                             |
-| mag                  | `mag <player_expr> [int_expr] [weapon]`                      | Get or edit loaded ammo (weapon index as in `ammo`).                            |
-| nades                | `nades <player_expr> [int_expr] [type]`                      | Get or edit grenade count (`1`=primary,`2`=secondary). Values >7 may not sync.  |
-| s                    | `s <player_expr> [decimal_expr]`                             | Get or edit player speed.                                                       |
-| score                | `score <player_expr> [int_expr]`                             | Get or edit player's score.                                                     |
-| sh                   | `sh <player_expr> [decimal_expr]`                            | Get or edit player's shield (decimal).                                          |
+| m                    | `m <player_id> <x> <y> <z>`                                  | Teleport player relative to their current position.                             |
+| mag                  | `mag <player_id> [int_expr] [weapon]`                        | Get or edit loaded ammo (weapon index as in `ammo`).                            |
+| nades                | `nades <player_id> [int_expr] [type]`                        | Get or edit grenade count (`1`=primary,`2`=secondary). Values >7 may not sync.  |
+| s                    | `s <player_id> [decimal_expr]`                               | Get or edit player speed.                                                       |
+| score                | `score <player_id> [int_expr]`                               | Get or edit player's score.                                                     |
+| sh                   | `sh <player_id> [decimal_expr]`                              | Get or edit player's shield (decimal).                                          |
 | spawn                | `spawn <type> <tag_path> [player_number] [rotation]`         | Spawn object at player's location.                                              |
 | spawn                | `spawn <type> <tag_path> [location_name] [rotation]`         | Spawn object at named location.                                                 |
 | spawn                | `spawn <type> <tag_path> [<x> <y> <z>] [rotation]`           | Spawn object at coordinates. Rotation in radians.                               |
-| st                   | `st <player_expr> [red/blue]`                                | Change player's team. If team name provided, only switches if on opposite team. |
-| t                    | `t <player_expr> <location_name>`                            | Teleport player to named location.                                              |
-| t                    | `t <player_expr> <x> <y> <z>`                                | Teleport player to coordinates.                                                 |
+| st                   | `st <player_id> [red/blue]`                                  | Change player's team. If team name provided, only switches if on opposite team. |
+| t                    | `t <player_id> <location_name>`                              | Teleport player to named location.                                              |
+| t                    | `t <player_id> <x> <y> <z>`                                  | Teleport player to coordinates.                                                 |
 | team_score           | `team_score [red/blue/both] [int_expr]`                      | Get or edit team score(s).                                                      |
-| tp                   | `tp <player_expr> <player_number>`                           | Move one player to another player.                                              |
-| ungod                | `ungod <player_expr>`                                        | Remove god mode.                                                                |
-| unlag                | `unlag <player_expr>`                                        | Remove `lag` effect.                                                            |
-| vdel                 | `vdel <player_expr>`                                         | Delete all vehicle(s) assigned to player via `spawn`.                           |
+| tp                   | `tp <player_id> <player_number>`                             | Move one player to another player.                                              |
+| ungod                | `ungod <player_id>`                                          | Remove god mode.                                                                |
+| unlag                | `unlag <player_id>`                                          | Remove `lag` effect.                                                            |
+| vdel                 | `vdel <player_id>`                                           | Delete all vehicle(s) assigned to player via `spawn`.                           |
 | vdel_all             | `vdel_all`                                                   | Delete all vehicles spawned with SAPP.                                          |
-| venter               | `venter <player_expr> [seat]`                                | Force player into a previously spawned vehicle (seat index, `1`=driver).        |
-| vexit                | `vexit <player_expr>`                                        | Force player to exit all vehicles.                                              |
-| wadd                 | `wadd <player_expr>`                                         | Add previously spawned weapon to player's inventory.                            |
-| wdel                 | `wdel <player_expr> <weapon>`                                | Remove weapon from inventory (`0`=current,`1`-`4`=slots,`5`=all).               |
-| wdrop                | `wdrop <player_expr>`                                        | Drop player's currently held weapon.                                            |
+| venter               | `venter <player_id> [seat]`                                  | Force player into a previously spawned vehicle (seat index, `1`=driver).        |
+| vexit                | `vexit <player_id>`                                          | Force player to exit all vehicles.                                              |
+| wadd                 | `wadd <player_id>`                                           | Add previously spawned weapon to player's inventory.                            |
+| wdel                 | `wdel <player_id> <weapon>`                                  | Remove weapon from inventory (`0`=current,`1`-`4`=slots,`5`=all).               |
+| wdrop                | `wdrop <player_id>`                                          | Drop player's currently held weapon.                                            |
 
 ---
 
