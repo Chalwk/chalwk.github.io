@@ -119,7 +119,7 @@
     font-family: 'Source Code Pro', monospace;
 }
 
-/* ----- code blocks (prism + own styling) ----- */
+/* ----- code blocks (prism) ----- */
 .code-block {
     background: #0a101a;
     border-radius: 8px;
@@ -166,7 +166,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* ----- resource list (bullets with custom style) ----- */
+/* ----- resource list ----- */
 .resources-list {
     list-style-type: none;
 }
