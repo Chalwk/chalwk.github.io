@@ -13,8 +13,8 @@ This guide starts with a **single-server instance**, exactly what you get in the
 the [SAPP Server Templates](https://github.com/Chalwk/SPCLib/releases/tag/sapp-server-templates) release,
 which provides two ready-to-use packages:
 
-- **`SAPP_PC.zip`** – For Halo: PC (Retail version)
-- **`SAPP_CE.zip`** – For Halo: Custom Edition (CE)
+- **`SAPP_PC.zip`** - For Halo: PC (Retail version)
+- **`SAPP_CE.zip`** - For Halo: Custom Edition (CE)
 
 Choose the package that matches the version of Halo you are running.
 

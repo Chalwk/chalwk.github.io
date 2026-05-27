@@ -12,7 +12,7 @@ tags: [ sapp, commands, reference, server ]
 |---------|----------|------------------------------------------------------------------|
 | load    | `load`   | Load SAPP (requires `strings.dll` enabled, `sapp.dll` present).  |
 | reload  | `reload` | Reload SAPP configuration and scripts (faster than unload+load). |
-| unload  | `unload` | Unload SAPP – reverts to stock. Console/cron only.               |
+| unload  | `unload` | Unload SAPP - reverts to stock. Console/cron only.               |
 
 ---
 
@@ -69,7 +69,7 @@ Available to all players.
 | Command   | Level | Usage                                | Description                                                                                     |
 |-----------|-------|--------------------------------------|-------------------------------------------------------------------------------------------------|
 | about     | -1    | `about`                              | Display current SAPP version.                                                                   |
-| afk       | 0     | `afk`                                | Mark player as AFK – disables future respawns.                                                  |
+| afk       | 0     | `afk`                                | Mark player as AFK - disables future respawns.                                                  |
 | clead     | -1    | `clead [ping]`                       | Set player lead at a certain ping (requires `no_lead` enabled, `lead` disabled). Default: 0 ms. |
 | info      | -1    | `info`                               | Show server name, player count, current map, scrim mode status.                                 |
 | lead      | -1    | `lead [enabled]`                     | Toggle leading when no‑lead mode is enabled. Default: `false`.                                  |
