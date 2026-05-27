@@ -64,17 +64,17 @@ exact folder structure you will see after extracting the zip file.
 │       ... (all standard maps)
 │
 └───sapp                                 # GLOBAL shared configuration
-admins.txt                               # CD-key based admins
-areas.txt                                # Custom map areas
-ipbans.txt                               # IP ban list
-locations.txt                            # Named teleport locations
-users.txt                                # Name/password based admins
+    admins.txt                           # Name/password based admins (V2)
+    areas.txt                            # Custom map areas
+    ipbans.txt                           # IP ban list
+    locations.txt                        # Named teleport locations
+    users.txt                            # CD-key based admins (V1)
 ```
 
 > **Note:** The package you download will be either `SAPP_PC.zip` (for Halo PC Retail) or `SAPP_CE.zip` (for Halo Custom
 > Edition). Choose the one that matches the version of Halo you are running. Both packages have the same folder
-> structure and work identically, the only difference is the server executable (`haloded.exe` for PC vs `haloceded.exe` for
-> CE).
+> structure and work identically, the only difference is the server executable (`haloded.exe` for PC vs `haloceded.exe`
+> for CE).
 
 ---
 
@@ -107,15 +107,13 @@ users.txt                                # Name/password based admins
 These files are read from the root `sapp\` folder and are **shared across every server instance** of the same platform.
 This gives you unified administration.
 
-- **`admins.txt`** - CD-key based administrators (V1 admins). Format: one CD-key hash per line, optionally with an admin
-  level and IP ranges.  
-  *Example:* `0123456789abcdef0123456789abcdef 4`
-  If you add an admin here, they are admin on *all* servers.
-
-- **`users.txt`** - Name-and-password based administrators (V2 admins). Each line contains a name, an MD5-hashed
+- **`admins.txt`** - Name-and-password based administrators (V2 admins). Each line contains a name, an MD5-hashed
   password, and a level.  
   *Example:* `AdminName 5f4dcc3b5aa765d61d8327deb882cf99 4`  
   Shared across all servers - log in once, manage everywhere.
+
+- **`users.txt`** - CD-key based administrators (V1 admins). Format: one CD-key hash per line, optionally with IP range.  
+  *Example:* `0123456789abcdef0123456789abcdef 4`  
 
 - **`ipbans.txt`** - Permanent IP bans (CIDR ranges supported). A ban added on one server blocks the player on all
   servers of the same platform.
@@ -177,8 +175,9 @@ Contains all `.map` files. Shared across all server instances. Add new maps here
    Open `cg\init.txt` and change `sv_name "your_server_name_here"` to your desired server name.
 
 3. **Launch the server**
-    - On Windows: double-click `run.bat`.
-    - On Linux / macOS with Wine: make `run.sh` executable (`chmod +x run.sh`) and run `./run.sh`.
+
+- On Windows: double-click `run.bat`.
+- On Linux / macOS with Wine: make `run.sh` executable (`chmod +x run.sh`) and run `./run.sh`.
 
 The batch script (`run.bat`) contains:
 
