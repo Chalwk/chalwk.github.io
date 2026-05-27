@@ -252,7 +252,7 @@ Create your own commands (stored in `commands.txt`). Format:
 
 ---
 
-## Admin Management Commands
+## Admin Management Commands (`users.txt`)
 
 ### CD‑Key Based Admins
 
@@ -263,7 +263,7 @@ Create your own commands (stored in `commands.txt`). Format:
 | admindel   | 0     | `admindel <index>`                                    | Remove a CD‑key admin (requires `admindel_samelevel`).    |
 | admins     | 4     | `admins`                                              | List CD‑key based admins.                                 |
 
-### Name and Password Based Admins
+### Name and Password Based Admins (`admins.txt`)
 
 | Command            | Level | Usage                                           | Description                                                 |
 |--------------------|-------|-------------------------------------------------|-------------------------------------------------------------|
