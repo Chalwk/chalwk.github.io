@@ -113,6 +113,13 @@ a:hover {
     padding: var(--section-padding);
 }
 
+.social-share {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 0;
+}
+
 /* buttons */
 .btn {
     display: inline-flex;

@@ -9,7 +9,7 @@ url: https://chalwk.github.io
 baseurl: ""
 locale: en_NZ
 timezone: Pacific/Auckland
-mobile_initial_scale: 0.65   # makes mobile view a bit zoomed out
+mobile_initial_scale: 0.65
 
 # ------------------------------------------------------------
 # Build behaviour - speed & style
@@ -33,9 +33,10 @@ social:
   links:
     - https://github.com/Chalwk
     - https://www.twitch.tv/chalwk
-    - https://discord.com/channels/@me/707058110396760094   # my discord id
+    - https://discord.gg/D76H7RVPC9
+    - CHALWK.DEV@GMAIL.COM
 
-image: /assets/images/avatar.png   # profile pic for cards
+image: /assets/images/avatar.png
 
 # ------------------------------------------------------------
 # Plugins - extra features
@@ -61,7 +62,7 @@ defaults:
     values:
       layout: post
       author: "Jericho Crosby"
-      permalink: /blog/:year/:month/:day/:title/   # clean blog URLs
+      permalink: /blog/:year/:month/:day/:title/
       toc: true
   - scope:
       path: ""
@@ -71,7 +72,7 @@ defaults:
       toc: true
 
 # ------------------------------------------------------------
-# PWA (Progressive Web App) icons & offline urls
+# PWA (Progressive Web App) icons & offline URLs
 # ------------------------------------------------------------
 default_icons:
   - src: "icons/icon-192x192.png"
@@ -85,7 +86,7 @@ default_icons:
 
 default_categories: [ "accessibility", "games" ]
 
-default_urls:   # files to cache for offline PWA
+default_urls: # files to cache for offline PWA
   - "./"
   - "./index.html"
   - "./style.css"
