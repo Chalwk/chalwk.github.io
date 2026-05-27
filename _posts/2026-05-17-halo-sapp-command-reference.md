@@ -18,7 +18,7 @@ tags: [ sapp, commands, reference, server ]
 
 ## Stock Halo Commands (Vanilla)
 
-These are Halo's built‑in server commands. SAPP enhances or overrides some.
+These are Halo's built-in server commands. SAPP enhances or overrides some.
 
 | Command                    | Usage                                  | Description                                                         |
 |----------------------------|----------------------------------------|---------------------------------------------------------------------|
@@ -31,28 +31,28 @@ These are Halo's built‑in server commands. SAPP enhances or overrides some.
 | sv_friendly_fire           | `sv_friendly_fire [0-3]`               | 0=default,1=off,2=shield only,3=on.                                 |
 | sv_gamelist                | `sv_gamelist`                          | List game variants in `savegames` folder.                           |
 | sv_kick                    | `sv_kick <player>`                     | Remove a player.                                                    |
-| sv_log_echo_chat           | `sv_log_echo_chat [enabled]`           | Echo chat to non‑SAPP log (CE only).                                |
-| sv_log_enabled             | `sv_log_enabled [enabled]`             | Enable non‑SAPP server log (CE only).                               |
+| sv_log_echo_chat           | `sv_log_echo_chat [enabled]`           | Echo chat to non-SAPP log (CE only).                                |
+| sv_log_enabled             | `sv_log_enabled [enabled]`             | Enable non-SAPP server log (CE only).                               |
 | sv_log_file                | `sv_log_file [path]`                   | Set log file path (CE only). Default: `haloserver.log`.             |
-| sv_log_note                | `sv_log_note [string]`                 | Write note to non‑SAPP log (CE only).                               |
+| sv_log_note                | `sv_log_note [string]`                 | Write note to non-SAPP log (CE only).                               |
 | sv_log_rotation_threshold  | `sv_log_rotation_threshold [KiB]`      | Set log rotation size (CE only). Default: `4096`.                   |
 | sv_map                     | `sv_map <map> <game variant>`          | Change map and/or game variant.                                     |
 | sv_map_next                | `sv_map_next`                          | End current game, load next.                                        |
 | sv_map_reset               | `sv_map_reset`                         | Reset game (scores, kills, objects).                                |
-| sv_mapcycle                | `sv_mapcycle`                          | Display non‑SAPP map cycle.                                         |
-| sv_mapcycle_add            | `sv_mapcycle_add <map> <game variant>` | Add entry to non‑SAPP map cycle.                                    |
-| sv_mapcycle_begin          | `sv_mapcycle_begin`                    | Start non‑SAPP map cycle from beginning.                            |
-| sv_mapcycle_del            | `sv_mapcycle_del <#>`                  | Remove entry from non‑SAPP map cycle.                               |
+| sv_mapcycle                | `sv_mapcycle`                          | Display non-SAPP map cycle.                                         |
+| sv_mapcycle_add            | `sv_mapcycle_add <map> <game variant>` | Add entry to non-SAPP map cycle.                                    |
+| sv_mapcycle_begin          | `sv_mapcycle_begin`                    | Start non-SAPP map cycle from beginning.                            |
+| sv_mapcycle_del            | `sv_mapcycle_del <#>`                  | Remove entry from non-SAPP map cycle.                               |
 | sv_mapcycle_timeout        | `sv_mapcycle_timeout [time]`           | Set time between games (seconds). Default: `10`.                    |
 | sv_maplist                 | `sv_maplist`                           | Display all loaded maps.                                            |
-| sv_maxplayers              | `sv_maxplayers [players]`              | Get/set max players (1‑16). Default: `16`.                          |
+| sv_maxplayers              | `sv_maxplayers [players]`              | Get/set max players (1-16). Default: `16`.                          |
 | sv_modt                    | `sv_modt [modt.txt]`                   | Set path for server modt (CE only).                                 |
 | sv_name                    | `sv_name [name]`                       | Get/set server name (max 63 chars). Default: `"Halo"`.              |
 | sv_password                | `sv_password [password]`               | Get/set join password (max 8 chars).                                |
 | sv_players                 | `sv_players`                           | List players with indices, team, ping, score, betrayals, TK timer.  |
 | sv_public                  | `sv_public [public]`                   | Set server visibility to master server. Default: `true`.            |
 | sv_rcron_password          | `sv_rcron_password [password]`         | Set cron password (max 8 chars).                                    |
-| sv_single_flag_force_reset | `sv_single_flag_force_reset [enabled]` | Allow flag reset while held in single‑flag games. Default: `false`. |
+| sv_single_flag_force_reset | `sv_single_flag_force_reset [enabled]` | Allow flag reset while held in single-flag games. Default: `false`. |
 | sv_status                  | `sv_status`                            | Display current map, player count, max players.                     |
 | sv_timelimit               | `sv_timelimit [minutes]`               | Set time limit (`0`=indefinite, `-1`=use variant).                  |
 | sv_tk_ban                  | `sv_tk_ban [bans]`                     | Team kills required for ban. Default: `4`.                          |
@@ -72,7 +72,7 @@ Available to all players.
 | afk       | 0     | `afk`                                | Mark player as AFK - disables future respawns.                                                  |
 | clead     | -1    | `clead [ping]`                       | Set player lead at a certain ping (requires `no_lead` enabled, `lead` disabled). Default: 0 ms. |
 | info      | -1    | `info`                               | Show server name, player count, current map, scrim mode status.                                 |
-| lead      | -1    | `lead [enabled]`                     | Toggle leading when no‑lead mode is enabled. Default: `false`.                                  |
+| lead      | -1    | `lead [enabled]`                     | Toggle leading when no-lead mode is enabled. Default: `false`.                                  |
 | list      | -1    | `list ['generic'/'player'/'custom']` | List commands available to the player.                                                          |
 | login     | -1    | `login <password>`                   | Log into a V2 (name/password) admin account.                                                    |
 | report    | -1    | `report [message]`                   | Send a report (requires anticheat).                                                             |
@@ -97,23 +97,23 @@ Available to all players.
 | cpu           | 4     | `cpu`                                          | Display CPU load, memory usage, OS info.                                                                                                                                         |
 | d             | 4     | `d <player_id>`                                | Show detailed player info (health, shield, coords, weapons, vehicle, etc.).                                                                                                      |
 | files         | 4     | `files`                                        | Locate all SAPP `.txt` files.                                                                                                                                                    |
-| ipban         | 3     | `ipban <player_id> [time] [reason]`            | IP‑ban a player (`0` or no time = indefinite).                                                                                                                                   |
+| ipban         | 3     | `ipban <player_id> [time] [reason]`            | IP-ban a player (`0` or no time = indefinite).                                                                                                                                   |
 | ipbans        | 3     | `ipbans`                                       | List all IP bans with indices.                                                                                                                                                   |
 | iprangeban    | 3     | `iprangeban <name> <IP range> [reason] [time]` | Ban an IP range using CIDR (e.g., `192.168.1.0/24`).                                                                                                                             |
 | ipunban       | 3     | `ipunban <index>`                              | Unban an IP by index.                                                                                                                                                            |
-| inf           | 3     | `inf <player_id>`                              | Show player's CD‑key hash, IP address, and index.                                                                                                                                |
+| inf           | 3     | `inf <player_id>`                              | Show player's CD-key hash, IP address, and index.                                                                                                                                |
 | k             | 2     | `k <player_id> [reason]`                       | Kick a player and announce to server.                                                                                                                                            |
 | kdr           | 0     | `kdr <player_id>`                              | Display player's kill/death ratio.                                                                                                                                               |
 | log_note      | 4     | `log_note [message]`                           | Write a note to SAPP's log.                                                                                                                                                      |
 | map           | 3     | `map <map> <gametype>`                         | Alias for `sv_map`.                                                                                                                                                              |
 | maplist       | 3     | `maplist`                                      | List maps in three columns (like `sv_maplist`).                                                                                                                                  |
-| mute          | 2     | `mute <player_id> [time]`                      | IP‑ban player from chat (no time = indefinite).                                                                                                                                  |
+| mute          | 2     | `mute <player_id> [time]`                      | IP-ban player from chat (no time = indefinite).                                                                                                                                  |
 | mutes         | 2     | `mutes`                                        | List active mutes.                                                                                                                                                               |
 | unmute        | 2     | `unmute <index>`                               | Remove a mute.                                                                                                                                                                   |
 | pl            | 2     | `pl`                                           | Alias for `sv_players`.                                                                                                                                                          |
 | skips         | 0     | `skips`                                        | List players who voted to skip the game.                                                                                                                                         |
 | teamup        | 2     | `teamup`                                       | Group clan members together.                                                                                                                                                     |
-| textban       | 2     | `textban <player_id> [time]`                   | CD‑key ban from chat (no time = indefinite).                                                                                                                                     |
+| textban       | 2     | `textban <player_id> [time]`                   | CD-key ban from chat (no time = indefinite).                                                                                                                                     |
 | textbans      | 2     | `textbans`                                     | List active textbans.                                                                                                                                                            |
 | textunban     | 2     | `textunban <index>`                            | Remove a textban.                                                                                                                                                                |
 | uptime        | 0     | `uptime`                                       | Show server and OS uptime.                                                                                                                                                       |
@@ -130,18 +130,18 @@ Used to configure server behaviour. Settings lost on reload unless placed in `in
 | adminadd_samelevel    | 4     | `adminadd_samelevel [0-2]`                       | Allow admins to add V1 admins: `0`=no, `1`=lower, `2`=lower/equal. Default: `0`.    |
 | adminban              | 4     | `adminban [0-2]`                                 | Admin ban permissions: `0`=any, `1`=no higher, `2`=only lower. Default: `0`.        |
 | admindel_samelevel    | 4     | `admindel_samelevel [0-2]`                       | Allow admins to delete V1 admins: `0`=no, `1`=lower, `2`=lower/equal. Default: `0`. |
-| afk_kick              | 4     | `afk_kick [seconds]`                             | Auto‑kick AFK players after given seconds (`0`=disabled).                           |
+| afk_kick              | 4     | `afk_kick [seconds]`                             | Auto-kick AFK players after given seconds (`0`=disabled).                           |
 | aimbot_ban            | 4     | `aimbot_ban [length] [type]`                     | Auto kick/ban aimbotters. Type: `0`=CD hash,`1`=IP,`2`=both,`3`=kick. Default: `0`. |
 | alias                 | 4     | `alias <player_id>`                              | Search for aliases in `aliases.txt`.                                                |
 | anticamp              | 4     | `anticamp [time] [distance]`                     | Raise `event_camp` if player kills while camping. Disabled by default.              |
 | anticaps              | 4     | `anticaps [enabled]`                             | Prevent excessive capital letters. Default: `false`.                                |
 | anticheat             | 4     | `anticheat [enabled]`                            | Require anticheat client. Must be set in `init.txt`. Default: `false`.              |
 | antiglitch            | 4     | `antiglitch [enabled]`                           | Kill players who leave map BSP. Default: `false`.                                   |
-| antihalofp            | 4     | `antihalofp [enabled]`                           | IP ban (5 min) for too‑frequent join attempts. Default: `false`.                    |
-| antilagspawn          | 4     | `antilagspawn [enable]`                          | Prevent lag‑spawning. Default: `false`.                                             |
-| antispam              | 4     | `antispam [type]`                                | Auto mute spammers: `0`=disabled,`1`=CD‑key,`2`=IP. Default: `0`.                   |
+| antihalofp            | 4     | `antihalofp [enabled]`                           | IP ban (5 min) for too-frequent join attempts. Default: `false`.                    |
+| antilagspawn          | 4     | `antilagspawn [enable]`                          | Prevent lag-spawning. Default: `false`.                                             |
+| antispam              | 4     | `antispam [type]`                                | Auto mute spammers: `0`=disabled,`1`=CD-key,`2`=IP. Default: `0`.                   |
 | antiwarp              | 4     | `antivarp [warp_num]`                            | Raise `event_warp` after given warps. `0`=disabled.                                 |
-| auto_update           | 4     | `auto_update [enabled]`                          | Auto‑update SAPP when available. Default: `true`.                                   |
+| auto_update           | 4     | `auto_update [enabled]`                          | Auto-update SAPP when available. Default: `true`.                                   |
 | network_thread        | 4     | `network_thread [enabled]`                       | Disable to stop SAPP server list, map download, anticheat. Default: `true`.         |
 | block_tc              | 4     | `block_tc [enabled]`                             | Block team changing. Default: `false`.                                              |
 | chat_console_echo     | 4     | `chat_console_echo [enabled]`                    | Output chat to console. Default: `false`.                                           |
@@ -150,7 +150,7 @@ Used to configure server behaviour. Settings lost on reload unless placed in `in
 | collect_alaises       | 4     | `collect_alaises [enabled] [valid CD keys only]` | Collect aliases into `alias.txt`. Default: `false`.                                 |
 | console_input         | 4     | `console_input [enabled]`                        | Allow console to accept input. Default: `true`.                                     |
 | custom_sleep          | 4     | `custom_sleep [ms]`                              | Modify Halo thread sleep per cycle (ms). Default: `8`.                              |
-| disable_timer_offsets | 4     | `disable_timer_offsets [enabled]`                | Use fixed Xbox‑style spawn timers. Default: `false`.                                |
+| disable_timer_offsets | 4     | `disable_timer_offsets [enabled]`                | Use fixed Xbox-style spawn timers. Default: `false`.                                |
 | dns                   | 4     | `dns [url]`                                      | Master server address for broadcasting.                                             |
 | full_ipban            | 4     | `full_ipban [enabled]`                           | Block all traffic from banned IPs (may reduce performance). Default: `false`.       |
 | hide_admin            | 4     | `hide_admin [enabled]`                           | Hide admin names when using kick/ban commands. Default: `false`.                    |
@@ -169,8 +169,8 @@ Used to configure server behaviour. Settings lost on reload unless placed in `in
 | max_votes             | 4     | `max_votes [count]`                              | Maximum displayed votes per round. Default: `5`.                                    |
 | motd                  | 4     | `motd [string]`                                  | Set the server Message of the Day.                                                  |
 | msg_prefix            | 4     | `msg_prefix <string>`                            | Prefix used in server messages. Default: `**SAPP**`.                                |
-| mtv                   | 4     | `mtv [enabled]`                                  | Enable multi‑team vehicles (requires anticheat/HAC2). Default: `false`.             |
-| no_lead               | 4     | `no_lead [enabled]`                              | Enable no‑lead mode (ping compensation). Default: `false`.                          |
+| mtv                   | 4     | `mtv [enabled]`                                  | Enable multi-team vehicles (requires anticheat/HAC2). Default: `false`.             |
+| no_lead               | 4     | `no_lead [enabled]`                              | Enable no-lead mode (ping compensation). Default: `false`.                          |
 | packet_limit          | 4     | `packet_limit [amount]`                          | Max packets per second from an IP. Default: `1000`.                                 |
 | ping_kick             | 4     | `ping_kick [ping]`                               | Kick players with ping exceeding this value (ms). `0`=disabled.                     |
 | reload_gametypes      | 4     | `reload_gametypes`                               | Reload game variants from `savegames` folder.                                       |
@@ -254,14 +254,14 @@ Create your own commands (stored in `commands.txt`). Format:
 
 ## Admin Management Commands (`users.txt`)
 
-### CD‑Key Based Admins
+### CD-Key Based Admins
 
 | Command    | Level | Usage                                                 | Description                                               |
 |------------|-------|-------------------------------------------------------|-----------------------------------------------------------|
-| adminadd   | 0     | `adminadd <player_id> <level> [allowed IP ranges...]` | Add a CD‑key based admin (requires `adminadd_samelevel`). |
-| adminlevel | 0     | `adminlevel <index> <level>`                          | Set new level for a CD‑key admin.                         |
-| admindel   | 0     | `admindel <index>`                                    | Remove a CD‑key admin (requires `admindel_samelevel`).    |
-| admins     | 4     | `admins`                                              | List CD‑key based admins.                                 |
+| adminadd   | 0     | `adminadd <player_id> <level> [allowed IP ranges...]` | Add a CD-key based admin (requires `adminadd_samelevel`). |
+| adminlevel | 0     | `adminlevel <index> <level>`                          | Set new level for a CD-key admin.                         |
+| admindel   | 0     | `admindel <index>`                                    | Remove a CD-key admin (requires `admindel_samelevel`).    |
+| admins     | 4     | `admins`                                              | List CD-key based admins.                                 |
 
 ### Name and Password Based Admins (`admins.txt`)
 
@@ -273,7 +273,7 @@ Create your own commands (stored in `commands.txt`). Format:
 | admin_change_level | 4     | `admin_change_level <index> <level>`            | Change level of name/password admin.                        |
 | admin_del          | 4     | `admin_del <index>`                             | Delete name/password admin.                                 |
 | admin_list         | 4     | `admin_list`                                    | List name/password admins.                                  |
-| change_password    | 0     | `change_password <old password> <new password>` | Change password of currently logged‑in name/password admin. |
+| change_password    | 0     | `change_password <old password> <new password>` | Change password of currently logged-in name/password admin. |
 | login              | -1    | `login <password>`                              | Log into name/password admin account (see Player Commands). |
 
 ---
