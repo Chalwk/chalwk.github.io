@@ -6,13 +6,16 @@ categories: [ programming ]
 tags: [ programming, guide ]
 ---
 
-When someone asks me where to get started, I always preface my advice with this:
+## Getting started mindset
+
+**When someone asks me where to get started, I always preface my advice with this:**
 
 > Only commit yourself to the programming journey if you are genuinely interested. People who truly enjoy it are more
 > willing to put in the effort required to troubleshoot problems and debug their code. Those who pursue it without real
 > interest (for the sake of it) often become frustrated quickly and struggle to make meaningful progress. Motivation
-> plays
-> a major role in success; the less motivated you are, the less rewarding the results will be.
+> plays a major role in success; the less motivated you are, the less rewarding the results will be.
+
+## Choosing your direction
 
 Next, decide what type of programmer you want to become. Do you want to work in web development, game development,
 mobile apps, systems programming, artificial intelligence and machine learning, embedded systems, cybersecurity,
@@ -105,9 +108,11 @@ out builds muscle memory and familiarity. When you let a machine generate the an
 makes the knowledge stick. Use AI to explain a concept or to help you understand an error message, but do not outsource
 the act of writing. Your fingers need to do the work. That is how it becomes second nature.
 
+## Closing thoughts
+
 There is no single correct way into this field. Some people go to university, some go through coding bootcamps, and many
-are entirely self-taught (myself included). All of these paths can work. The common ingredient among those who succeed is
-that they kept building, kept breaking things, and kept fixing them.
+are entirely self-taught (myself included). All of these paths can work. The common ingredient among those who succeed
+is that they kept building, kept breaking things, and kept fixing them.
 
 If you are genuinely curious, pick your destination and start walking. The road is long, but it is full of interesting
 problems. And honestly, there is nothing quite like the feeling of making a machine do exactly what you told it to.
