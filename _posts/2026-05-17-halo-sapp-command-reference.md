@@ -263,16 +263,15 @@ the server.
 To reduce abuse, you can optionally restrict CD-key admins to specific IP ranges.
 For example, adding an IP range such as `192.168.1.100/24` limits admin access to players connecting from that subnet.
 
+You can validate whether a hash is publicly known using
+the [Hash Checker tool](https://chalwk.github.io/SPCLib/tools/hash-checker).
+
 | Command    | Level | Usage                                                 | Description                                                                                                                       |
 |------------|-------|-------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
 | adminadd   | 0     | `adminadd <player_id> <level> [allowed IP ranges...]` | Add a CD-key based admin using the player's current CD-key hash. Optional IP ranges can restrict where the admin may log in from. |
 | adminlevel | 0     | `adminlevel <index> <level>`                          | Set new level for a CD-key admin.                                                                                                 |
 | admindel   | 0     | `admindel <index>`                                    | Remove a CD-key admin (requires `admindel_samelevel`).                                                                            |
 | admins     | 4     | `admins`                                              | List CD-key based admins.                                                                                                         |
-
-You can validate whether a hash is publicly known using the Hash Checker tool:
-
-`https://chalwk.github.io/SPCLib/tools/hash-checker`
 
 ### Name and Password Based Admins (`admins.txt`)
 
