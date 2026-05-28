@@ -1,8 +1,6 @@
 # Copyright (c) 2024-2026 Jericho Crosby (Chalwk)
 
-# ------------------------------------------------------------
-# Site settings - the basics
-# ------------------------------------------------------------
+# Site settings
 title: Jericho Crosby (Chalwk)
 description: Autistic developer, gamer, and advocate - building tools, mods, and games.
 url: https://chalwk.github.io
@@ -11,9 +9,7 @@ locale: en_NZ
 timezone: Pacific/Auckland
 site_scale: 0.65
 
-# ------------------------------------------------------------
-# Build behaviour - speed & style
-# ------------------------------------------------------------
+# Build behaviour
 incremental: true        # faster rebuilds
 plugins_cache: true
 highlighter: rouge       # syntax highlighting
@@ -21,12 +17,12 @@ markdown: kramdown
 sass:
   style: compressed     # smaller CSS
 
-# ------------------------------------------------------------
 # SEO & social (used by jekyll-seo-tag)
-# ------------------------------------------------------------
 author:
   name: Jericho Crosby
   url: https://github.com/Chalwk
+
+image: /assets/images/avatar.png
 
 social:
   name: Jericho Crosby
@@ -36,15 +32,10 @@ social:
     - https://discord.gg/D76H7RVPC9
     - CHALWK.DEV@GMAIL.COM
 
-image: /assets/images/avatar.png
-
-# ------------------------------------------------------------
-# Plugins - extra features
-# ------------------------------------------------------------
 plugins:
   - jekyll-toc               # table of contents
   - jekyll-seo-tag           # meta tags + open graph
-  - jekyll-sitemap           # generate sitemap.xml
+  - jekyll-sitemap           # sitemap.xml
   - jekyll-last-modified-at  # show when file last changed (see _posts)
   - jekyll-relative-links
 
@@ -52,9 +43,7 @@ relative_links:
   enabled: true
   collections: true
 
-# ------------------------------------------------------------
 # Default front matter for posts/pages (saves typing)
-# ------------------------------------------------------------
 defaults:
   - scope:
       path: ""
@@ -71,9 +60,9 @@ defaults:
       layout: default
       toc: true
 
-# ------------------------------------------------------------
-# PWA (Progressive Web App) icons & offline URLs
-# ------------------------------------------------------------
+# -------------------------------
+# PWA (Progressive Web App) stuff
+# -------------------------------
 default_icons:
   - src: "icons/icon-192x192.png"
     sizes: "192x192"
