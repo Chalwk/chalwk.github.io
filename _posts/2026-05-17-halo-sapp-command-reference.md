@@ -260,8 +260,8 @@ CD-key admins are stored in `users.txt` and authenticate using a player's Halo C
 If a CD-key hash is cracked, anyone using that CD-key can automatically receive the assigned admin level when joining
 the server.
 
-To reduce abuse, you can optionally restrict CD-key admins to specific IP ranges.
-For example, adding an IP range such as `192.168.1.100/24` limits admin access to players connecting from that subnet.
+To reduce abuse, you can optionally restrict CD-key admins to specific IP ranges. For example, adding an IP range such
+as `192.168.1.100/24` limits admin access to players connecting from that subnet.
 
 You can validate whether a hash is publicly known using
 the [Hash Checker tool](https://chalwk.github.io/SPCLib/tools/hash-checker).
