@@ -265,16 +265,19 @@ Create your own commands (stored in `commands.txt`). Format:
 
 ### Name and Password Based Admins (`admins.txt`)
 
-| Command            | Level | Usage                                           | Description                                                 |
-|--------------------|-------|-------------------------------------------------|-------------------------------------------------------------|
-| admin_add          | 4     | `admin_add <player_id> <password> <level>`      | Add name/password admin (player must be online).            |
-| admin_add_manually | 4     | `admin_add_manually <name> <password> <level>`  | Add name/password admin without player being present.       |
-| admin_change_pw    | 4     | `admin_change_pw <index> <password>`            | Change password of name/password admin.                     |
-| admin_change_level | 4     | `admin_change_level <index> <level>`            | Change level of name/password admin.                        |
-| admin_del          | 4     | `admin_del <index>`                             | Delete name/password admin.                                 |
-| admin_list         | 4     | `admin_list`                                    | List name/password admins.                                  |
-| change_password    | 0     | `change_password <old password> <new password>` | Change password of currently logged-in name/password admin. |
-| login              | -1    | `login <password>`                              | Log into name/password admin account (see Player Commands). |
+Name/password admins authenticate using their current in-game name and assigned password.
+When using `admin_add`, the player's current username is saved to `admins.txt`.
+
+| Command            | Level | Usage                                           | Description                                                                              |
+|--------------------|-------|-------------------------------------------------|------------------------------------------------------------------------------------------|
+| admin_add          | 4     | `admin_add <player_id> <password> <level>`      | Add name/password admin using the player's current in-game name (player must be online). |
+| admin_add_manually | 4     | `admin_add_manually <name> <password> <level>`  | Add name/password admin without player being present.                                    |
+| admin_change_pw    | 4     | `admin_change_pw <index> <password>`            | Change password of name/password admin.                                                  |
+| admin_change_level | 4     | `admin_change_level <index> <level>`            | Change level of name/password admin.                                                     |
+| admin_del          | 4     | `admin_del <index>`                             | Delete name/password admin.                                                              |
+| admin_list         | 4     | `admin_list`                                    | List name/password admins.                                                               |
+| change_password    | 0     | `change_password <old password> <new password>` | Change password of currently logged-in name/password admin.                              |
+| login              | -1    | `login <password>`                              | Log into a name/password admin account using the assigned admin name.                    |
 
 ---
 
