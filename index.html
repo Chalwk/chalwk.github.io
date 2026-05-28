@@ -6,11 +6,10 @@ description: Jericho's hybrid portfolio + playground + blog
 
 <!-- Copyright (c) 2024-2026. Jericho Crosby (Chalwk) -->
 
-<link href="{{ site.baseurl }}/assets/css/index.css" rel="stylesheet">
+<link href="{{ '/assets/css/index.css' | relative_url }}" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
 
-<!-- Hero section: intro with name and GitHub button -->
 <section class="hero">
     <div class="container">
         <div class="hero-content">
@@ -21,8 +20,8 @@ description: Jericho's hybrid portfolio + playground + blog
                 </h1>
                 <p class="hero-subtitle">♾️ Autistic Developer · Gamer · Advocate ♾️</p>
                 <div class="hero-buttons">
-                    <a class="btn" href="https://github.com/Chalwk" target="_blank"><i class="fab fa-github"></i> GitHub
-                        Profile</a>
+                    <a class="btn" href="{{ site.social.links[0] }}" target="_blank"><i class="fab fa-github"></i>
+                        GitHub Profile</a>
                 </div>
             </div>
         </div>
@@ -39,15 +38,14 @@ description: Jericho's hybrid portfolio + playground + blog
                     experience building, breaking, and fixing code - from low-level scripting to full-stack prototypes.
                     Comfortable across Windows, headless environments, CLI, and Linux servers. I develop tools, mods,
                     bots, and web/mobile apps, sometimes live-coding from scratch on <a
-                            href="https://www.twitch.tv/chalwk" target="_blank">Twitch</a>.</p>
+                            href="{{ site.social.links[1] }}" target="_blank">Twitch</a>.</p>
                 <p>Goal: create fun, useful, and interesting things for people to enjoy or learn from.</p>
                 <p><strong>This site is my hybrid portfolio + playground + blog</strong> - you'll find my Git projects,
                     PWA web apps, tools, and educational content (including a blog with tutorials and articles).</p>
                 <p><em>"There's nothing quite like being able to say at the end of the day, I made this. This is my
                     world."</em></p>
             </div>
-            <div class="about-image"><img alt="Jericho Crosby" class="profile-img"
-                                          src="{{ site.baseurl }}/assets/images/avatar.png"></div>
+            <img alt="Jericho Crosby" class="profile-img" src="{{ site.image | relative_url }}">
         </div>
 
         <!-- what I'm up to -->
@@ -69,7 +67,7 @@ description: Jericho's hybrid portfolio + playground + blog
                             </div>
                         </div>
                         <div class="focus-item"><i class="fas fa-helicopter"></i>
-                            <div><strong>Running <a href="https://chalwk.github.io/CPAS/" target="_blank">Coastal Peaks
+                            <div><strong>Running <a href="{{ site.baseurl }}/CPAS" target="_blank">Coastal Peaks
                                 Air Service (CPAS)</a></strong> - Virtual charter & HEMS in MSFS (South Island, NZ).
                             </div>
                         </div>
@@ -79,29 +77,31 @@ description: Jericho's hybrid portfolio + playground + blog
                     <h3 class="column-heading">Featured Projects</h3>
                     <div class="current-focus" style="gap:1rem;">
                         <div class="focus-item"><i class="fas fa-server"></i>
-                            <div><strong><a href="https://github.com/Chalwk/SPCLib/" target="_blank">SPCLib</a></strong>
+                            <div><strong><a href="{{ site.social.links[1] }}/SPCLib/"
+                                            target="_blank">SPCLib</a></strong>
                                 - is the largest public archive of Lua scripts and resources for the SAPP and Phasor
                                 dedicated server extensions, and the Chimera client-side mod, for Halo: PC/CE. Join us
-                                on <a href="https://discord.gg/D76H7RVPC9" target="_blank">Discord</a>.
+                                on <a href="{{ site.social.links[2] }}" target="_blank">Discord</a>.
                             </div>
                         </div>
                         <div class="focus-item"><i class="fab fa-discord"></i>
-                            <div><strong><a href="https://github.com/Chalwk/HaloDiscordBot" target="_blank">HaloDiscordBot</a></strong>
+                            <div><strong><a href="{{ site.social.links[1] }}/HaloDiscordBot" target="_blank">HaloDiscordBot</a></strong>
                                 - Discord-Halo integration.
                             </div>
                         </div>
                         <div class="focus-item"><i class="fas fa-cube"></i>
-                            <div><strong><a href="https://github.com/Chalwk/JeriCraftDocs" target="_blank">JeriCraft</a></strong>
-                                - Medieval SMP/RPG Factions server (Minecraft).
+                            <div><strong><a href="{{ site.social.links[1] }}/JeriCraftDocs"
+                                            target="_blank">JeriCraft</a></strong> - Medieval SMP/RPG Factions server
+                                (Minecraft).
                             </div>
                         </div>
                         <div class="focus-item"><i class="fas fa-cards"></i>
-                            <div><strong><a href="https://github.com/chalwk/PokemonTCGCollectionManager/"
+                            <div><strong><a href="{{ site.social.links[1] }}/PokemonTCGCollectionManager/"
                                             target="_blank">Pokémon TCG Collection Manager</a></strong> - Windows
                                 desktop app to manage/track your Pokémon TCG collection.
                             </div>
                         </div>
-                        <div class="btn-left"><a class="btn" href="https://github.com/Chalwk?tab=repositories"
+                        <div class="btn-left"><a class="btn" href="{{ site.social.links[1] }}/?tab=repositories"
                                                  target="_blank"><i class="fab fa-github"></i> See More Projects on
                             GitHub</a></div>
                     </div>
@@ -139,7 +139,7 @@ description: Jericho's hybrid portfolio + playground + blog
                     or modded servers.
                 </li>
                 <li class="service-item"><i class="fas fa-code"></i> <strong>Halo PC/CE modding (SAPP/Phasor):</strong>
-                    maintainer of the <a href="https://github.com/Chalwk/SPCLib/" target="_blank">SPCLib</a> repository
+                    maintainer of the <a href="{{ site.social.links[1] }}/SPCLib/" target="_blank">SPCLib</a> repository
                     - a large public Lua script archive. Provide custom scripts,
                     gamemodes, and server enhancements for SAPP and legacy Phasor.
                 </li>
