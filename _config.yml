@@ -23,14 +23,13 @@ author:
   url: https://github.com/Chalwk
 
 image: /assets/images/avatar.png
+favicon: favicon.ico
 
-social:
-  name: Jericho Crosby
-  links:
-    - https://github.com/Chalwk
-    - https://www.twitch.tv/chalwk
-    - https://discord.gg/D76H7RVPC9
-    - CHALWK.DEV@GMAIL.COM
+links:
+  CPAS: https://chalwk.github.io/CPAS
+  SPCLibDiscord: https://discord.gg/D76H7RVPC9
+  Twitch: https://www.twitch.tv/chalwk
+  Email: CHALWK.DEV@GMAIL.COM
 
 plugins:
   - jekyll-toc               # table of contents
