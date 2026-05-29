@@ -19,8 +19,12 @@ site_scale: 0.65                # UI scaling tweak for layout
 # ------------------------------------------------------------------------------
 incremental: true               # speeds up rebuilds during dev
 plugins_cache: true             # cache plugins for faster builds
-# highlighter: rouge              # syntax highlighting engine
+
+# highlighter:                  # syntax highlighting engine
 markdown: kramdown              # markdown processor
+kramdown:
+  syntax_highlighter: nil
+
 sass:
   style: compressed             # minify CSS output
 
