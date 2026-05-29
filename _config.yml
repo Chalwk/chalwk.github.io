@@ -12,7 +12,6 @@ url: https://chalwk.github.io   # production domain (GitHub Pages)
 baseurl: ""                     # not hosting in a subfolder, so I'll leave this empty
 locale: en_NZ
 timezone: Pacific/Auckland
-
 site_scale: 0.65                # UI scaling tweak for layout
 
 # ------------------------------------------------------------------------------
@@ -20,10 +19,8 @@ site_scale: 0.65                # UI scaling tweak for layout
 # ------------------------------------------------------------------------------
 incremental: true               # speeds up rebuilds during dev
 plugins_cache: true             # cache plugins for faster builds
-
-highlighter: rouge              # syntax highlighting engine
+# highlighter: rouge              # syntax highlighting engine
 markdown: kramdown              # markdown processor
-
 sass:
   style: compressed             # minify CSS output
 
