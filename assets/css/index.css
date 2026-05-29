@@ -41,14 +41,18 @@ img {
     height: auto;
 }
 
-/* hero section - gradient background with subtle pattern */
 .hero {
-    padding: 6rem 0 2rem;
+    padding: 4rem 0 2rem;
     background: linear-gradient(135deg, #1e88e5, #42a5f5, #0d47a1);
     color: white;
     text-align: center;
     position: relative;
     overflow: hidden;
+    max-width: 1200px;
+    margin: 0 auto;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    width: calc(100% - 2rem);
 }
 
 .hero::before {
@@ -62,6 +66,7 @@ img {
     radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.15) 0%, transparent 20%),
     repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.05) 0px, rgba(255, 255, 255, 0.05) 2px, transparent 2px, transparent 8px);
     pointer-events: none;
+    border-radius: var(--radius-lg);
 }
 
 .hero h1 {
@@ -368,6 +373,11 @@ img {
 }
 
 @media (max-width: 768px) {
+    .hero {
+        width: calc(100% - 2rem);
+        padding: 2rem 0;
+    }
+
     .hero h1 {
         font-size: 2.5rem;
     }
@@ -430,6 +440,10 @@ img {
 
     .hero-subtitle {
         font-size: 0.95rem;
+    }
+
+    .hero {
+        padding: 1.5rem 0;
     }
 
     .about-card {
