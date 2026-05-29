@@ -7,6 +7,7 @@ description: Jericho's hybrid portfolio + playground + blog
 <!-- Copyright (c) 2024-2026. Jericho Crosby (Chalwk) -->
 
 <link href="{{ site.baseurl }}/assets/css/index.css" rel="stylesheet">
+<link href="{{ site.baseurl }}/assets/css/index.css" rel="stylesheet">
 
 <section class="hero">
     <div class="container">
@@ -29,7 +30,6 @@ description: Jericho's hybrid portfolio + playground + blog
 <section class="section" id="about">
     <div class="container">
 
-        <!-- Bio -->
         <div class="about-panel">
             <div class="about-text">
                 <p>I'm Jericho, a <strong>self-taught independent developer</strong> with over a decade of
@@ -46,89 +46,59 @@ description: Jericho's hybrid portfolio + playground + blog
             <div class="about-image"><img alt="Jericho Crosby" class="profile-img" src="{{ site.image }}"></div>
         </div>
 
-        <!-- what I'm up to -->
         <div class="about-card">
-            <div class="about-columns">
-                <div class="about-column">
-                    <h3 class="column-heading">What I'm up to</h3>
-                    <div class="current-focus">
-                        <div class="focus-item"><i class="fas fa-gamepad"></i>
-                            <div><strong>Building games</strong> with <strong>LÖVE</strong>, <strong>Solar2D</strong>,
-                                and <strong>LibGDX</strong></div>
-                        </div>
-                        <div class="focus-item"><i class="fas fa-cogs"></i>
-                            <div><strong>Modding worlds</strong> in <em>Minecraft</em>, <em>Halo</em>, <em>Roblox</em>,
-                                and <em>Garry's Mod</em></div>
-                        </div>
-                        <div class="focus-item"><i class="fas fa-tools"></i>
-                            <div><strong>Building community tools</strong> Discord bots, PWAs, & mobile apps
-                            </div>
-                        </div>
-                    </div>
+            <h3 class="column-heading">What I'm up to</h3>
+            <div class="current-focus">
+                <div class="focus-item"><i class="fas fa-gamepad"></i>
+                    <div><strong>Building games</strong> with <strong>LÖVE</strong>, <strong>Solar2D</strong>,
+                        and <strong>LibGDX</strong></div>
                 </div>
-                <div class="about-column" id="tools">
-                    <h3 class="column-heading">Featured Projects</h3>
-                    <div class="current-focus" style="gap:1rem;">
-                        <div class="focus-item"><i class="fas fa-server"></i>
-                            <div><strong>SPCLib</strong> is the largest public archive of Lua scripts and resources for
-                                the SAPP and Phasor dedicated server extensions, and the Chimera client-side mod, for
-                                Halo: PC (retail) and Halo: Custom Edition.
-                                <br><br>
-                                <a href="{{ site.author.url }}/SPCLib/" target="_blank">GitHub</a> ·
-                                <a href="{{ site.links.SPCLib_Discord }}" target="_blank">Discord</a> ·
-                                <a href="{{ '/SPCLib/' | relative_url }}" target="_blank">Site</a>
-                            </div>
-                        </div>
-                        <div class="focus-item"><i class="fab fa-discord"></i>
-                            <div><strong>HaloDiscordBot</strong> is a Discord bot that connects Halo servers with
-                                Discord, relaying chat, player activity, and server events in real time.
-                                <br><br>
-                                <a href="{{ site.author.url }}/HaloDiscordBot/" target="_blank">GitHub</a>
-                            </div>
-                        </div>
-                        <div class="focus-item"><i class="fas fa-crosshairs"></i>
-                            <div><strong>Liberty Gaming - Halo CE</strong> is a Halo: Custom Edition community.
-                                <br><br>
-                                <a href="{{ site.author.url }}/liberty-ce/" target="_blank">GitHub</a> ·
-                                <a href="{{ site.links.Liberty_Discord }}" target="_blank">Discord</a> ·
-                                <a href="{{ '/liberty-ce/' | relative_url }}" target="_blank">Site</a>
-                            </div>
-                        </div>
-                        <div class="focus-item"><i class="fas fa-helicopter"></i>
-                            <div><strong>Coastal Peaks Air Service (CPAS)</strong> is a virtual charter airline and
-                                HEMS operation for Microsoft Flight Simulator.
-                                <br><br>
-                                <a href="{{ site.author.url }}/CPAS/" target="_blank">GitHub</a> ·
-                                <a href="{{ site.links.CPAS_Discord }}" target="_blank">Discord</a> ·
-                                <a href="{{ '/CPAS/' | relative_url }}" target="_blank">Site</a>
-                            </div>
-                        </div>
-                        <div class="focus-item"><i class="fas fa-cube"></i>
-                            <div><strong>JeriCraft</strong> is a medieval-themed SMP/RPG factions server for Minecraft:
-                                Java Edition.
-                                <br><br>
-                                <a href="{{ site.author.url }}/JeriCraftDocs/" target="_blank">GitHub</a>
-                            </div>
-                        </div>
-                        <div class="focus-item"><i class="fas fa-clone"></i>
-                            <div><strong>Pokémon TCG Collection Manager</strong> is a desktop app for managing and
-                                tracking Pokémon TCG collections.
-                                <br><br>
-                                <a href="{{ site.author.url }}/PokemonTCGCollectionManager/" target="_blank">GitHub</a>
-                            </div>
-                        </div>
-
-                        <!--SEE MORE BUTTON-->
-                        <div class="btn-left">
-                            <a class="btn" href="{{ site.author.url }}/?tab=repositories"
-                               target="_blank"> <i class="fab fa-github"></i> See More Projects on GitHub</a>
-                        </div>
+                <div class="focus-item"><i class="fas fa-cogs"></i>
+                    <div><strong>Modding worlds</strong> in <em>Minecraft</em>, <em>Halo</em>, <em>Roblox</em>,
+                        and <em>Garry's Mod</em></div>
+                </div>
+                <div class="focus-item"><i class="fas fa-tools"></i>
+                    <div><strong>Building community tools</strong> Discord bots, PWAs, & mobile apps
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- skills -->
+        <div class="about-card">
+            <h3 class="column-heading">Featured Projects</h3>
+            <ul class="services-grid">
+                <li class="service-item"><i class="fas fa-server"></i> <strong>SPCLib</strong> is the largest public
+                    archive of Lua scripts and resources for the SAPP and Phasor dedicated server extensions, and the
+                    Chimera client-side mod, for Halo: PC (retail) and Halo: Custom Edition.<br><br> <a
+                            href="{{ site.author.url }}/SPCLib/" target="_blank">GitHub</a> · <a
+                            href="{{ site.links.SPCLib_Discord }}" target="_blank">Discord</a> · <a
+                            href="{{ '/SPCLib/' | relative_url }}" target="_blank">Site</a></li>
+                <li class="service-item"><i class="fab fa-discord"></i> <strong>HaloDiscordBot</strong> is a Discord bot
+                    that connects Halo servers with Discord, relaying chat, player activity, and server events in real
+                    time.<br><br> <a href="{{ site.author.url }}/HaloDiscordBot/" target="_blank">GitHub</a></li>
+                <li class="service-item"><i class="fas fa-cube"></i> <strong>JeriCraft</strong> is a medieval-themed,
+                    SMP/RPG, Factions server on Minecraft (Java Edition).<br><br> <a
+                            href="{{ site.author.url }}/JeriCraftDocs/" target="_blank">GitHub</a></li>
+                <li class="service-item"><i class="fas fa-clone"></i> <strong>Pokémon TCG Collection Manager</strong> is
+                    a desktop app to manage & track your Pokémon TCG collection.<br><br> <a
+                            href="{{ site.author.url }}/PokemonTCGCollectionManager/" target="_blank">GitHub</a></li>
+                <li class="service-item"><i class="fas fa-helicopter"></i> <strong>Coastal Peaks Air Service
+                    (CPAS)</strong> is a Virtual Charter (VC) & HEMS in MSFS.<br><br> <a
+                        href="{{ site.author.url }}/CPAS/" target="_blank">GitHub</a> · <a
+                        href="{{ site.links.CPAS_Discord }}" target="_blank">Discord</a> · <a
+                        href="{{ '/CPAS/' | relative_url }}" target="_blank">Site</a></li>
+                <li class="service-item"><i class="fas fa-crosshairs"></i> <strong>Liberty Gaming - Halo CE</strong> is
+                    a Halo: Custom Edition community.<br><br> <a href="{{ site.author.url }}/liberty-ce/"
+                                                                 target="_blank">GitHub</a> · <a
+                            href="{{ site.links.Liberty_Discord }}" target="_blank">Discord</a> · <a
+                            href="{{ '/liberty-ce/' | relative_url }}" target="_blank">Site</a></li>
+            </ul>
+            <div class="btn-left">
+                <a class="btn" href="{{ site.author.url }}/?tab=repositories" target="_blank">
+                    <i class="fab fa-github"></i> See More Projects on GitHub</a>
+            </div>
+        </div>
+
         <div class="about-card" style="margin-top: 0;">
             <h3 class="column-heading" style="margin-top:0;">What I'm good at</h3>
             <p class="service-intro">I build and debug everything from simple sites to complex game mods:</p>

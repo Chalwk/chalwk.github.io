@@ -1,6 +1,5 @@
 /* Copyright (c) 2024-2026. Jericho Crosby (Chalwk) */
 
-/* design tokens - keeps things consistent */
 :root {
     --primary: #1e88e5;
     --secondary: #42a5f5;
@@ -315,7 +314,7 @@ img {
 }
 
 .btn-left {
-    margin-top: 0.1rem;
+    margin-top: 1.0rem;
 }
 
 /* skills section - three columns of tags */
