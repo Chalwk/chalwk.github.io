@@ -304,14 +304,6 @@ img {
     text-align: center;
 }
 
-.service-intro {
-    font-size: 1.2rem;
-    line-height: 1.8;
-    color: var(--dark);
-    font-weight: 400;
-    margin-bottom: 0.5rem;
-}
-
 .contact-text {
     font-size: 1.2rem;
     margin-top: 2rem;
