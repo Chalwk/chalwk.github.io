@@ -9,16 +9,16 @@ if %DO_CLEAN%==1 (
     call bundle exec jekyll clean || exit /b
 )
 
-echo Starting Jekyll server on 0.0.0.0:4000 with live reload...
+echo Starting Jekyll server on 127.0.0.1:4000 with live reload...
 
 REM Foreground mode (run in current terminal, no new window)
 if /i "%~1"=="fg" (
-    bundle exec jekyll serve --livereload --host 0.0.0.0
+    bundle exec jekyll serve --livereload --host 127.0.0.1
     exit /b
 )
 
 REM Default: detached window
-start cmd /k "cd /d "%~dp0" && bundle exec jekyll serve --livereload --host 0.0.0.0"
+start cmd /k "cd /d "%~dp0" && bundle exec jekyll serve --livereload --host 127.0.0.1"
 
 REM Wait for port 4000 to be ready (max 30 seconds)
 echo Waiting for server to start...

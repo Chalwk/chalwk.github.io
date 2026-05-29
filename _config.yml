@@ -1,49 +1,75 @@
+# ------------------------------------------------------------------------------
 # Copyright (c) 2024-2026 Jericho Crosby (Chalwk)
+# ------------------------------------------------------------------------------
 
-# Site settings
+# ------------------------------------------------------------------------------
+# Site identity / basic info
+# ------------------------------------------------------------------------------
 title: Jericho Crosby (Chalwk)
 description: Autistic developer, gamer, and advocate - building tools, mods, and games.
-url: https://chalwk.github.io
-baseurl: ""
+
+url: https://chalwk.github.io   # production domain (GitHub Pages)
+baseurl: ""                     # not hosting in a subfolder, so I'll leave this empty
 locale: en_NZ
 timezone: Pacific/Auckland
-site_scale: 0.65
 
-# Build behaviour
-incremental: true        # faster rebuilds
-plugins_cache: true
-highlighter: rouge       # syntax highlighting
-markdown: kramdown
+site_scale: 0.65                # UI scaling tweak for layout
+
+# ------------------------------------------------------------------------------
+# Build behaviour (performance + markdown rendering)
+# ------------------------------------------------------------------------------
+incremental: true               # speeds up rebuilds during dev
+plugins_cache: true             # cache plugins for faster builds
+
+highlighter: rouge              # syntax highlighting engine
+markdown: kramdown              # markdown processor
+
 sass:
-  style: compressed     # smaller CSS
+  style: compressed             # minify CSS output
 
-# SEO & social (used by jekyll-seo-tag)
+# ------------------------------------------------------------------------------
+# SEO / social metadata (used by jekyll-seo-tag)
+# ------------------------------------------------------------------------------
 author:
   name: Jericho Crosby
   url: https://github.com/Chalwk
 
-image: /assets/images/avatar.png
-favicon: favicon.ico
+image: /assets/images/avatar.png  # default social preview image
+favicon: favicon.ico              # browser tab icon
 
+# ------------------------------------------------------------------------------
+# External links used across layouts/components
+# ------------------------------------------------------------------------------
 links:
-  CPAS: https://chalwk.github.io/CPAS
-  SPCLibDiscord: https://discord.gg/D76H7RVPC9
+  CPAS_Discord: https://discord.gg/NsndXgYfxQ
+  SPCLib_Discord: https://discord.gg/D76H7RVPC9
+  Liberty_Discord: https://discord.gg/invite/aQXhJy8UTT
   Twitch: https://www.twitch.tv/chalwk
   Email: CHALWK.DEV@GMAIL.COM
 
+# ------------------------------------------------------------------------------
+# Jekyll plugins
+# ------------------------------------------------------------------------------
 plugins:
-  - jekyll-toc               # table of contents
-  - jekyll-seo-tag           # meta tags + open graph
-  - jekyll-sitemap           # sitemap.xml
-  - jekyll-last-modified-at  # show when file last changed (see _posts)
-  - jekyll-relative-links
+  - jekyll-toc                # auto table of contents generation
+  - jekyll-seo-tag            # SEO tags + OpenGraph metadata
+  - jekyll-sitemap            # auto sitemap.xml generation
+  - jekyll-last-modified-at   # shows last updated timestamps
+  - jekyll-relative-links     # helps resolve internal links safely
 
+# ------------------------------------------------------------------------------
+# Relative link handling
+# ------------------------------------------------------------------------------
 relative_links:
   enabled: true
   collections: true
 
-# Default front matter for posts/pages (saves typing)
+# ------------------------------------------------------------------------------
+# Default front matter (for the sake of DRY)
+# ------------------------------------------------------------------------------
 defaults:
+
+  # Blog posts
   - scope:
       path: ""
       type: posts
@@ -52,6 +78,8 @@ defaults:
       author: "Jericho Crosby"
       permalink: /blog/:year/:month/:day/:title/
       toc: true
+
+  # Static pages
   - scope:
       path: ""
       type: pages
@@ -59,22 +87,26 @@ defaults:
       layout: default
       toc: true
 
-# -------------------------------
-# PWA (Progressive Web App) stuff
-# -------------------------------
+# ------------------------------------------------------------------------------
+# PWA (Progressive Web App) settings
+# ------------------------------------------------------------------------------
 default_icons:
   - src: "icons/icon-192x192.png"
     sizes: "192x192"
     type: "image/png"
     purpose: "any maskable"
+
   - src: "icons/icon-512x512.png"
     sizes: "512x512"
     type: "image/png"
     purpose: "any maskable"
 
-default_categories: [ "accessibility", "games" ]
+default_categories:
+  - accessibility
+  - games
 
-default_urls: # files to cache for offline PWA
+# Files cached for offline support (service worker / PWA behaviour)
+default_urls:
   - "./"
   - "./index.html"
   - "./style.css"

@@ -18,7 +18,8 @@ description: Jericho's hybrid portfolio + playground + blog
                 </h1>
                 <p class="hero-subtitle">♾️ Autistic Developer · Gamer · Advocate ♾️</p>
                 <div class="hero-buttons">
-                    <a class="btn" href="{{ author.url }}/" target="_blank"><i class="fab fa-github"></i> GitHub Profile</a>
+                    <a class="btn" href="{{site.author.url}}/" target="_blank"><i class="fab fa-github"></i> GitHub
+                        Profile</a>
                 </div>
             </div>
         </div>
@@ -63,44 +64,65 @@ description: Jericho's hybrid portfolio + playground + blog
                             <div><strong>Building community tools</strong> Discord bots, PWAs, & mobile apps
                             </div>
                         </div>
-                        <div class="focus-item"><i class="fas fa-helicopter"></i>
-                            <div><strong>Running <a href="{{ site.links.CPAS }}/" target="_blank">Coastal Peaks
-                                Air Service (CPAS)</a></strong> - Virtual charter & HEMS in MSFS (South Island, NZ).
-                            </div>
-                        </div>
                     </div>
                 </div>
                 <div class="about-column" id="tools">
                     <h3 class="column-heading">Featured Projects</h3>
                     <div class="current-focus" style="gap:1rem;">
                         <div class="focus-item"><i class="fas fa-server"></i>
-                            <div><strong><a href="{{ author.url }}/SPCLib/" target="_blank">SPCLib</a></strong>
-                                - is the largest public archive of Lua scripts and resources for the SAPP and Phasor
-                                dedicated server extensions, and the Chimera client-side mod, for Halo: PC/CE. Join us
-                                on <a href="{{ site.links.SPCLibDiscord }}/" target="_blank">Discord</a>.
+                            <div><strong>SPCLib</strong> is the largest public archive of Lua scripts and resources for
+                                the SAPP and Phasor dedicated server extensions, and the Chimera client-side mod, for
+                                Halo: PC (retail) and Halo: Custom Edition.
+                                <br><br>
+                                <a href="{{ site.author.url }}/SPCLib/" target="_blank">GitHub</a> ·
+                                <a href="{{ site.links.SPCLib_Discord }}/" target="_blank">Discord</a> ·
+                                <a href="{{ '/SPCLib/' | relative_url }}" target="_blank">Site</a>
                             </div>
                         </div>
                         <div class="focus-item"><i class="fab fa-discord"></i>
-                            <div><strong><a href="{{ author.url }}/HaloDiscordBot/"
-                                            target="_blank">HaloDiscordBot</a></strong>
-                                - Discord-Halo integration.
+                            <div><strong>HaloDiscordBot</strong> is a Discord bot that connects Halo servers with
+                                Discord, relaying chat, player activity, and server events in real time.
+                                <br><br>
+                                <a href="{{ site.author.url }}/HaloDiscordBot/" target="_blank">GitHub</a>
+                            </div>
+                        </div>
+                        <div class="focus-item"><i class="fas fa-crosshairs"></i>
+                            <div><strong>Liberty Gaming - Halo CE</strong> is a Halo: Custom Edition community.
+                                <br><br>
+                                <a href="{{ site.author.url }}/liberty-ce/" target="_blank">GitHub</a> ·
+                                <a href="{{ site.links.Liberty_Discord }}/" target="_blank">Discord</a> ·
+                                <a href="{{ '/liberty-ce/' | relative_url }}" target="_blank">Site</a>
+                            </div>
+                        </div>
+                        <div class="focus-item"><i class="fas fa-helicopter"></i>
+                            <div><strong>Coastal Peaks Air Service (CPAS)</strong> is a virtual charter airline and
+                                HEMS operation for Microsoft Flight Simulator.
+                                <br><br>
+                                <a href="{{ site.author.url }}/CPAS/" target="_blank">GitHub</a> ·
+                                <a href="{{ site.links.CPAS_Discord }}/" target="_blank">Discord</a> ·
+                                <a href="{{ '/CPAS/' | relative_url }}" target="_blank">Site</a>
                             </div>
                         </div>
                         <div class="focus-item"><i class="fas fa-cube"></i>
-                            <div><strong><a href="{{ author.url }}/JeriCraftDocs/"
-                                            target="_blank">JeriCraft</a></strong> - Medieval SMP/RPG Factions server
-                                (Minecraft).
+                            <div><strong>JeriCraft</strong> is a medieval-themed SMP/RPG factions server for Minecraft:
+                                Java Edition.
+                                <br><br>
+                                <a href="{{ site.author.url }}/JeriCraftDocs/" target="_blank">GitHub</a>
                             </div>
                         </div>
-                        <div class="focus-item"><i class="fas fa-cards"></i>
-                            <div><strong><a href="{{ author.url }}/PokemonTCGCollectionManager/"
-                                            target="_blank">Pokémon TCG Collection Manager</a></strong> - Windows
-                                desktop app to manage/track your Pokémon TCG collection.
+                        <div class="focus-item"><i class="fas fa-clone"></i>
+                            <div><strong>Pokémon TCG Collection Manager</strong> is a desktop app for managing and
+                                tracking Pokémon TCG collections.
+                                <br><br>
+                                <a href="{{ site.author.url }}/PokemonTCGCollectionManager/" target="_blank">GitHub</a>
                             </div>
                         </div>
-                        <div class="btn-left"><a class="btn" href="{{ author.url }}/?tab=repositories"
-                                                 target="_blank"><i class="fab fa-github"></i> See More Projects on
-                            GitHub</a></div>
+
+                        <!--SEE MORE BUTTON-->
+                        <div class="btn-left">
+                            <a class="btn" href="{{ site.author.url }}/?tab=repositories"
+                               target="_blank"> <i class="fab fa-github"></i> See More Projects on GitHub</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -136,7 +158,7 @@ description: Jericho's hybrid portfolio + playground + blog
                     or modded servers.
                 </li>
                 <li class="service-item"><i class="fas fa-code"></i> <strong>Halo PC/CE modding (SAPP/Phasor):</strong>
-                    maintainer of the <a href="{{ author.url }}/SPCLib/" target="_blank">SPCLib</a> repository
+                    maintainer of the <a href="{{ site.author.url }}/SPCLib/" target="_blank">SPCLib</a> repository
                     - a large public Lua script archive. Provide custom scripts,
                     gamemodes, and server enhancements for SAPP and legacy Phasor.
                 </li>
