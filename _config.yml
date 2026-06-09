@@ -6,7 +6,7 @@
 # Site identity / basic info
 # ------------------------------------------------------------------------------
 title: Jericho Crosby (Chalwk)
-description: Autistic developer, gamer, and advocate - building tools, mods, and games.
+description: Autistic programmer, gamer, and advocate - building tools, mods, and games.
 
 url: https://chalwk.github.io   # production domain (GitHub Pages)
 baseurl: ""                     # not hosting in a subfolder, so I'll leave this empty

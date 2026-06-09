@@ -2,7 +2,7 @@
 
 ## Jericho (Chalwk)
 
-**Autistic Developer · Gamer · Advocate**
+**Autistic Programmer · Gamer · Advocate**
 
   <img src="assets/images/avatar.png" alt="Avatar" width="250">
 
