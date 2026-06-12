@@ -49,5 +49,6 @@
 
 <!-- PWA manifest -->
 {% if page.pwa %}
-<link href="{{ '/manifest.webmanifest' | relative_url }}" rel="manifest">
+  {% assign manifest_url = page.url | append: 'manifest.webmanifest' | relative_url %}
+  <link href="{{ manifest_url }}" rel="manifest">
 {% endif %}
