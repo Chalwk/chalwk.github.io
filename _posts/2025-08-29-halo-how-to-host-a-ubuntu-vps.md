@@ -411,7 +411,7 @@ Replace `SAPP_CE` with the name of your actual server folder (`SAPP_PC`, `Phasor
 > **If the `run.sh` script is missing**, or if you need to change the **port**, **folder structure**, or any other
 > setting, you can create or edit it using **nano**.
 
-To edit the script:
+To edit (or create) the script, use:
 ```bash
 nano /home/haloadmin/SAPP_CE/run.sh
 ```
