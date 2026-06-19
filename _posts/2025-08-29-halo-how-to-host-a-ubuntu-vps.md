@@ -420,7 +420,7 @@ After making your changes, save and exit.
 
 The template's `run.sh` looks like this (adjustments may be needed if you change the **port** or **folder structure**):
 
-```bash
+```ini
 #!/bin/bash
 
 # Set server port
