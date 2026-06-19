@@ -255,7 +255,7 @@ sudo apt install --install-recommends winehq-stable -y
 wine --version
 ```
 
-You should see a version number like `wine-7.0.x` or higher.
+You should see a version number like `wine-11.0` or higher.
 
 ---
 
@@ -394,29 +394,41 @@ This may take a few minutes depending on file size.
 
 ---
 
-## Step 11: Create a Desktop Shortcut for Your Server
+## Step 11: Set Up the Launch Script and Desktop Shortcut
 
-To make launching the server easy, we'll create a script and a desktop icon.  
-**Adjust the folder name and paths to match the server you chose** (e.g., `SAPP_CE`, `Phasor_PC`, etc.).
+Your server template (e.g., `SAPP_PC.zip`, `SAPP_CE.zip`, `Phasor_PC`, or `Phasor_CE`) already includes a ready-to-use
+`run.sh` script. All you need to do is make it executable and create a desktop shortcut to launch it with a single
+click.
 
-First, create a launch script inside your server folder:
-
-```bash
-nano /home/haloadmin/SAPP_CE/run.sh
-```
-
-Paste the following (adjust the path and port if needed):
-
-```bash
-#!/bin/bash
-cd "/home/haloadmin/SAPP_CE"
-wineconsole haloceded.exe -path "cg/" -exec "cg/init.txt" -port 2302
-```
-
-Save and exit. Make it executable:
+Make the existing `run.sh` executable:
 
 ```bash
 chmod +x /home/haloadmin/SAPP_CE/run.sh
+```
+
+Replace `SAPP_CE` with the name of your actual server folder (`SAPP_PC`, `Phasor_CE`, etc.).
+
+---
+
+### (Optional) Review the `run.sh` contents
+
+The template's `run.sh` looks like this (adjustments may be needed if you change the **port** or **folder structure**):
+
+```bash
+#!/bin/bash
+
+# Set server port
+PORT=2302
+
+# Get the script directory
+ROOT="$(dirname "$(realpath "$0")")"
+
+# Set paths
+CG_PATH="$ROOT/cg"
+INIT_FILE="$CG_PATH/init.txt"
+
+# Launch Server
+wine "$ROOT/haloceded.exe" -path "$CG_PATH" -exec "$INIT_FILE" -port $PORT
 ```
 
 Now create the desktop shortcut:
@@ -443,44 +455,8 @@ Save and exit. Then make the desktop file executable:
 chmod +x /home/haloadmin/Desktop/run.desktop
 ```
 
-**Using the shortcut:** Double-click the icon on your VPS desktop. The first time, Wine will prompt you to install *
-*Mono** - click **Install** and let it finish. After that, the server console window will open. You're now ready to host
-games!
-
----
-
-## Step 12: (Optional, Recommended) Upgrade to X2Go
-
-TightVNC works but can be laggy. **X2Go** uses a more efficient protocol, giving you a faster and more responsive remote
-desktop. It also allows you to disconnect and reconnect to your session.
-
-### On the VPS (via SSH):
-
-```bash
-sudo apt install x2goserver x2goserver-xsession -y
-```
-
-### On your Windows PC:
-
-1. Download and install the [X2Go Client](https://wiki.x2go.org/doku.php/doc:installation:x2goclient).
-2. Open the X2Go Client and create a new session:
-
-- **Session Name:** `Halo Server`
-- **Host:** Your VPS IP address
-- **Login:** `haloadmin`
-- **SSH Port:** `22992` (or your custom port)
-- **Session Type:** `XFCE`
-
-3. Click **OK** to save.
-4. Select the session and click **Session** → **Start**.
-
-You'll now have a much smoother desktop experience.
-
-> **Note:** X2Go uses your existing SSH connection for tunneling. Once you confirm it works, you can stop and disable
-> VNC if you prefer:
-> ```bash
-> sudo systemctl stop vncserver@1.service
-> sudo systemctl disable vncserver@1.service
-> ```
+**Using the shortcut:** Double-click the icon on your VPS desktop.
+The first time, Wine will prompt you to install **Mono** - click **Install** and let it finish. After that, the server
+console window will open. You're now ready to host games!
 
 ---
