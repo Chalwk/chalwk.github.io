@@ -1,7 +1,7 @@
 ---
 title: "Halo: How to host a Linux VPS (Ubuntu 22.04)"
 date: 2025-8-29
-last-updated: 2026-5-20
+last-updated: 2026-6-20
 categories: [ education, halo, vps, linux, server ]
 tags: [ ubuntu, wine, vnc, ssh, hosting, tutorial ]
 ---
@@ -396,11 +396,11 @@ This may take a few minutes depending on file size.
 
 ## Step 11: Set Up the Launch Script and Desktop Shortcut
 
-Your server template (e.g., `SAPP_PC.zip`, `SAPP_CE.zip`, `Phasor_PC`, or `Phasor_CE`) already includes a ready-to-use
+Your server template (e.g., `SAPP_PC.zip`, `SAPP_CE.zip`, `Phasor_PC`, or `Phasor_CE`) already includes a ready-to-use  
 `run.sh` script. All you need to do is make it executable and create a desktop shortcut to launch it with a single
 click.
 
-Make the existing `run.sh` executable:
+First, make the existing `run.sh` executable:
 
 ```bash
 chmod +x /home/haloadmin/SAPP_CE/run.sh
@@ -408,9 +408,15 @@ chmod +x /home/haloadmin/SAPP_CE/run.sh
 
 Replace `SAPP_CE` with the name of your actual server folder (`SAPP_PC`, `Phasor_CE`, etc.).
 
----
+> **If the `run.sh` script is missing**, or if you need to change the **port**, **folder structure**, or any other
+> setting, you can create or edit it using **nano**.
 
-### (Optional) Review the `run.sh` contents
+To edit the script:
+```bash
+nano /home/haloadmin/SAPP_CE/run.sh
+```
+
+After making your changes, save and exit.
 
 The template's `run.sh` looks like this (adjustments may be needed if you change the **port** or **folder structure**):
 
@@ -437,7 +443,7 @@ Now create the desktop shortcut:
 nano /home/haloadmin/Desktop/run.desktop
 ```
 
-Paste:
+Paste the following:
 
 ```ini
 [Desktop Entry]
@@ -449,14 +455,14 @@ Icon = utilities-terminal
 Categories = Game;
 ```
 
-Save and exit. Then make the desktop file executable:
+Save and Exit. Next, make the desktop file executable:
 
 ```bash
 chmod +x /home/haloadmin/Desktop/run.desktop
 ```
 
-**Using the shortcut:** Double-click the icon on your VPS desktop.
-The first time, Wine will prompt you to install **Mono** - click **Install** and let it finish. After that, the server
+**Using the shortcut:** Double-click the icon on your VPS desktop.  
+The first time, Wine will prompt you to install **Mono** – click **Install** and let it finish. After that, the server
 console window will open. You're now ready to host games!
 
 ---
