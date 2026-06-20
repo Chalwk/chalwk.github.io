@@ -227,9 +227,12 @@ sudo ufw delete Y
 
 ---
 
-## Step 5: Install Wine
+## Step 5: Install Wine and Configure a 32-bit Prefix
 
-With the server secured, it's time to install Wine. Run these commands in the SSH terminal:
+With the server secured, it's time to install Wine. We'll set up a 32-bit prefix from the start so Halo's 32-bit server
+runs without issues.
+
+Run these commands in the SSH terminal:
 
 ```bash
 # Enable 32-bit architecture
@@ -245,17 +248,33 @@ sudo wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/ubuntu/
 # Update the package list
 sudo apt update
 
-# Install system upgrades (recommended)
+# Install system upgrades
 sudo apt upgrade -y
 
-# Install Wine (stable)
-sudo apt install --install-recommends winehq-stable -y
+# Install Wine (stable) and the 32-bit components together
+sudo apt install --install-recommends winehq-stable wine32 wine32-preloader -y
 
 # Verify the installation
 wine --version
 ```
 
 You should see a version number like `wine-11.0` or higher.
+
+Now create a **32-bit** Wine prefix. The Halo server is 32-bit and will fail with a 64-bit prefix, so we force the
+architecture from the very first Wine command:
+
+```bash
+# Set the architecture and prefix location
+export WINEARCH=win32
+export WINEPREFIX=/home/haloadmin/.wine
+
+# Create and initialise the 32-bit prefix
+winecfg
+```
+
+If a configuration window appears, just click **OK** to let it finish creating the prefix.  
+If you are in an SSH terminal without a graphical display, `winecfg` will exit with display-related errors, but **the
+prefix is still created** - those errors are safe to ignore.
 
 ---
 
@@ -412,6 +431,7 @@ Replace `SAPP_CE` with the name of your actual server folder (`SAPP_PC`, `Phasor
 > setting, you can create or edit it using **nano**.
 
 To edit (or create) the script, use:
+
 ```bash
 nano /home/haloadmin/SAPP_CE/run.sh
 ```
@@ -420,8 +440,12 @@ After making your changes, save and exit.
 
 The template's `run.sh` looks like this (adjustments may be needed if you change the **port** or **folder structure**):
 
-```ini
+```bash
 #!/bin/bash
+
+# Force 32-bit Wine prefix
+export WINEARCH=win32
+export WINEPREFIX=/home/haloadmin/.wine
 
 # Set server port
 PORT=2302
@@ -452,6 +476,7 @@ Type = Application
 Name = RENAME_THIS
 Exec = /home/haloadmin/SAPP_CE/run.sh
 Icon = utilities-terminal
+Terminal = true
 Categories = Game;
 ```
 
@@ -462,7 +487,5 @@ chmod +x /home/haloadmin/Desktop/run.desktop
 ```
 
 **Using the shortcut:** Double-click the icon on your VPS desktop.  
-The first time, Wine will prompt you to install **Mono** – click **Install** and let it finish. After that, the server
+The first time, Wine will prompt you to install **Mono** - click **Install** and let it finish. After that, the server
 console window will open. You're now ready to host games!
-
----
