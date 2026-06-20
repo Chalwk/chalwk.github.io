@@ -82,15 +82,23 @@ We'll use password login only this one time. Then we'll switch to SSH key authen
 4. Go to the **Client key manager** (from the Login tab).
 5. Click **Generate New**:
 
-- **Algorithm:** `ed25519` (recommended).
-- Leave passphrase blank unless you want to type it each time you log in.
-- Click **Generate**.
+   - **Algorithm:** `ed25519` (recommended).
+   - Leave passphrase blank unless you want to type it each time you log in.
+   - Click **Generate**.
 
 6. Highlight your new key and click **Export**:
 
-- Select **Export Public Key**.
-- Select **OpenSSH format**.
-- Click **Export** and save the file somewhere safe, e.g., `C:\Users\YourUsername\Desktop\halo-server-key.pub`.
+   - **Export Public Key**:
+      - Select **OpenSSH format**.
+      - Click **Export** and save the file somewhere safe, e.g.,
+        `C:\Users\YourUsername\Desktop\bitvise-ssh-public-key.pub`.
+   - **Export Private Key** (for backup or sharing):
+      - Select **Export Private Key**.
+      - Choose **Bitvise format (text)**
+      - Click **Export** and save the private key file, e.g.,
+        `C:\Users\YourUsername\Desktop\bitvise-ssh-private-key.bkp`.
+      - **Important:** This private key is your identity. Keep it secure; only share it with people you trust
+        completely, and never upload it to any public location.
 
 7. Back on the **Login** tab, log in as `root`. If you see a host key warning, verify the fingerprint matches the one
    shown in your Vultr control panel (Overview tab) and accept it.
@@ -146,9 +154,9 @@ Close the terminal console.
 2. Log out of the root session.
 3. Log in as `haloadmin`:
 
-- **Initial Method** = `publickey`
-- **Client key** = the key you generated (Global 1)
-- Click **Log In**
+   - **Initial Method** = `publickey`
+   - **Client key** = the key you generated (Global 1)
+   - Click **Log In**
 
 4. Once logged in, open a new terminal console. Your prompt should now show `haloadmin@your-server-name`.
 
@@ -375,18 +383,18 @@ Because we used `-localhost`, you cannot connect directly to the VNC port. Inste
 2. Click **Add**.
 3. Set:
 
-- **Listen Interface:** `127.0.0.1`
-- **Listen Port:** `5901`
-- **Destination Host:** `127.0.0.1`
-- **Destination Port:** `5901`
+   - **Listen Interface:** `127.0.0.1`
+   - **Listen Port:** `5901`
+   - **Destination Host:** `127.0.0.1`
+   - **Destination Port:** `5901`
 
 4. Click **OK** to save the rule.
 
 Now open **TightVNC Viewer** on your local machine:
 
-- **VNC Server:** `127.0.0.1:5901`
-- Enter the VNC password you set in Step 6.
-- Click **Connect**.
+  - **VNC Server:** `127.0.0.1:5901`
+  - Enter the VNC password you set in Step 6.
+  - Click **Connect**.
 
 You should now see the XFCE desktop of your VPS.
 
