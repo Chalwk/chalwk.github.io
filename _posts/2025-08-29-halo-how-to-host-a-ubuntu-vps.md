@@ -182,7 +182,8 @@ Save and exit (`CTRL+S`, `CTRL+X`).
 
 **Do NOT restart SSH yet.** We must first open the new SSH port in the firewall and allow the Halo server port.
 
-> **Note:** If you need to allow a port range, use the `start:end/protocol` format (for example `sudo ufw allow 2010:2315/udp comment 'Halo Server Ports'`).
+> **Note:** If you need to allow a port range, use the `start:end/protocol` format (for example
+`sudo ufw allow 2010:2315/udp comment 'Halo Server Ports'`).
 
 ```bash
 # Allow the custom SSH port
@@ -496,3 +497,77 @@ chmod +x /home/haloadmin/Desktop/run.desktop
 **Using the shortcut:** Double-click the icon on your VPS desktop.  
 The first time, Wine will prompt you to install **Mono** - click **Install** and let it finish. After that, the server
 console window will open. You're now ready to host games!
+
+---
+
+## Optional: Changing Passwords
+
+This section covers how to change all passwords you created during the setup, except for the Vultr instance password
+(the one you used to initially log in as `root`). If you ever need to update your credentials, follow these steps.
+
+**Which passwords are covered?**
+
+- The `haloadmin` user password (used for `sudo` and local login).
+- The VNC password (used to connect to the remote desktop).
+- (Optional) The SSH key passphrase, if you chose to set one during key generation.
+
+---
+
+### Change the haloadmin User Password
+
+1. Open a terminal session in BitVise (as `haloadmin`).
+2. Run the `passwd` command:
+   ```bash
+   passwd
+   ```
+3. You will be prompted for:
+    - Your current password.
+    - The new password (type it twice to confirm).
+4. After a successful change, the password for `haloadmin` is updated immediately.
+
+> **Note:** This password is used when you run `sudo` commands and if you ever need to log in locally on the VPS
+> console.
+
+---
+
+### Change the VNC Password
+
+The VNC password is stored in the user's home directory and is managed with the `vncpasswd` tool.
+
+1. In your SSH terminal, stop the VNC service first (otherwise the password file is locked):
+   ```bash
+   sudo systemctl stop vncserver@1.service
+   ```
+2. Run the VNC password utility:
+   ```bash
+   vncpasswd
+   ```
+3. Enter your new password when prompted (maximum 8 characters). You may also set a view‑only password,
+   but you can skip it by typing `n`.
+4. After the password is saved, restart the VNC service:
+   ```bash
+   sudo systemctl start vncserver@1.service
+   ```
+5. The new password will be required the next time you connect through your SSH tunnel.
+
+---
+
+### (Optional) Change Your SSH Key Passphrase
+
+If you followed the guide and left the passphrase blank, you can ignore this section. If you did set a passphrase and
+want to change it, use the `ssh-keygen` command on your **local Windows machine** (where your private key is stored).
+
+1. Open a Command Prompt or PowerShell window.
+2. Navigate to the folder containing your private key (e.g., `C:\Users\YourUsername\.ssh\`).
+3. Run:
+   ```bash
+   ssh-keygen -p -f your-private-key-file
+   ```
+   Replace `your-private-key-file` with the actual filename (e.g., `id_ed25519` or the key you exported).
+4. You will be asked for:
+    - The old passphrase (if any).
+    - The new passphrase (type it twice to confirm).
+5. The key is updated in place. You do not need to upload a new public key to the server because the key pair itself
+   remains unchanged; only the encryption of the private key changes.
+
+---
