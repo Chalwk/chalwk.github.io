@@ -182,6 +182,8 @@ Save and exit (`CTRL+S`, `CTRL+X`).
 
 **Do NOT restart SSH yet.** We must first open the new SSH port in the firewall and allow the Halo server port.
 
+> **Note:** If you need to allow a port range, use the `start:end/protocol` format (for example `sudo ufw allow 2010:2315/udp comment 'Halo Server Ports'`).
+
 ```bash
 # Allow the custom SSH port
 sudo ufw allow 22992/tcp comment 'Custom SSH Port'
@@ -408,9 +410,9 @@ No additional configuration is needed for basic protection.
 ## Step 10: Upload Server Files via SFTP
 
 1. In BitVise, click the **New SFTP Window** button.
-2. Navigate to `/home/haloadmin/` on the VPS.
+2. Navigate to `/home/haloadmin/desktop/` on the VPS.
 3. On your local computer, locate the extracted server folder (e.g., `SAPP_PC`, `SAPP_CE`, `Phasor_PC`, or `Phasor_CE`).
-4. Drag and drop the entire folder into the VPS `/home/haloadmin/` directory.
+4. Drag and drop the entire folder into the VPS `/home/haloadmin/desktop/` directory.
 
 This may take a few minutes depending on file size.
 
@@ -425,7 +427,7 @@ click.
 First, make the existing `run.sh` executable:
 
 ```bash
-chmod +x /home/haloadmin/SAPP_CE/run.sh
+chmod +x /home/haloadmin/desktop/SAPP_CE/run.sh
 ```
 
 Replace `SAPP_CE` with the name of your actual server folder (`SAPP_PC`, `Phasor_CE`, etc.).
@@ -436,7 +438,7 @@ Replace `SAPP_CE` with the name of your actual server folder (`SAPP_PC`, `Phasor
 To edit (or create) the script, use:
 
 ```bash
-nano /home/haloadmin/SAPP_CE/run.sh
+nano /home/haloadmin/desktop/SAPP_CE/run.sh
 ```
 
 After making your changes, save and exit.
@@ -477,7 +479,7 @@ Paste the following:
 Version=1.0
 Type=Application
 Name=RENAME_THIS
-Exec=/home/haloadmin/SAPP_CE/run.sh
+Exec=/home/haloadmin/desktop/SAPP_CE/run.sh
 Icon=utilities-terminal
 Terminal=true
 Categories=Game;
