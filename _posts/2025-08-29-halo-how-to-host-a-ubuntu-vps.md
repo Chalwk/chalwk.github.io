@@ -457,6 +457,7 @@ PORT=2302
 
 # Get the script directory
 ROOT="$(dirname "$(realpath "$0")")"
+cd "$ROOT"
 
 # Set paths
 CG_PATH="$ROOT/cg"
@@ -480,6 +481,7 @@ Version=1.0
 Type=Application
 Name=RENAME_THIS
 Exec=/home/haloadmin/Desktop/SAPP_CE/run.sh
+Path=/home/haloadmin/Desktop/SAPP_CE
 Icon=utilities-terminal
 Terminal=true
 Categories=Game;
