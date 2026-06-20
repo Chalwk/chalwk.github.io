@@ -167,10 +167,13 @@ First, edit the SSH configuration file:
 sudo nano /etc/ssh/sshd_config
 ```
 
-Find and change (or add) these lines:
+Find and change these lines:
+
+> Important: **Remove** the `#` symbol from each line first.
+> Change port to a custom port (e.g., 22992)
 
 ```
-Port 22992                     # Change to a custom port (e.g., 22992)
+Port 22992
 PermitRootLogin no
 PasswordAuthentication no
 ```
@@ -334,21 +337,21 @@ Paste the following, **replacing `haloadmin` with your actual username**:
 
 ```ini
 [Unit]
-Description = TightVNC Remote Desktop Service
-After = syslog.target network.target
+Description=TightVNC Remote Desktop Service
+After=syslog.target network.target
 
 [Service]
-Type = forking
-User = haloadmin
-Group = haloadmin
-WorkingDirectory = /home/haloadmin
-PIDFile = /home/haloadmin/.vnc/%H:%i.pid
-ExecStartPre = -/usr/bin/vncserver -kill :%i > /dev/null 2>&1
-ExecStart = /usr/bin/vncserver -depth 24 -geometry 1280x720 -localhost :%i
-ExecStop = /usr/bin/vncserver -kill :%i
+Type=forking
+User=haloadmin
+Group=haloadmin
+WorkingDirectory=/home/haloadmin
+PIDFile=/home/haloadmin/.vnc/%H:%i.pid
+ExecStartPre=-/usr/bin/vncserver -kill :%i > /dev/null 2>&1
+ExecStart=/usr/bin/vncserver -depth 24 -geometry 1280x720 -localhost :%i
+ExecStop=/usr/bin/vncserver -kill :%i
 
 [Install]
-WantedBy = multi-user.target
+WantedBy=multi-user.target
 ```
 
 Save and exit. Then reload systemd and enable the service:
@@ -471,13 +474,13 @@ Paste the following:
 
 ```ini
 [Desktop Entry]
-Version = 1.0
-Type = Application
-Name = RENAME_THIS
-Exec = /home/haloadmin/SAPP_CE/run.sh
-Icon = utilities-terminal
-Terminal = true
-Categories = Game;
+Version=1.0
+Type=Application
+Name=RENAME_THIS
+Exec=/home/haloadmin/SAPP_CE/run.sh
+Icon=utilities-terminal
+Terminal=true
+Categories=Game;
 ```
 
 Save and Exit. Next, make the desktop file executable:
