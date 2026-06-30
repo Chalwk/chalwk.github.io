@@ -151,13 +151,13 @@ function OnTick()
 end
 ```
 
-Example using `draw_text()` (with RGBA values and screen bounds):
+Example using `draw_text()` (with RGBA values and width/height):
 
 ```lua
 function OnPreFrame()
     draw_text(
         "Hello, World!",
-        0, 460, 640, 480, -- left, top, right, bottom
+        0, 460, 640, 480, -- left, top, width, height
         "small",          -- font: small, large, ticker
         "right",          -- alignment: left, center, right
         1.0,              -- alpha
@@ -171,7 +171,7 @@ end
 `draw_text()` draws text inside a rectangular screen region:
 
 ```lua
-draw_text(text, left, top, right, bottom, font, align, a, r, g, b)
+draw_text(text, left, top, width, height, font, align, a, r, g, b)
 ```
 
 Supported fonts: `"small"`, `"large"`, `"ticker"`
