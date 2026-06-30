@@ -273,7 +273,7 @@ canvas {
         grid-template-columns: 2fr 1fr;
     }
 
-    .app-grid > section:last-child {
+    .app-grid>section:last-child {
         grid-column: 1 / -1;
     }
 }

@@ -17,7 +17,7 @@ const helpBtn = document.getElementById('helpBtn');
 let wordlist = [];
 let allowedSet = new Set(); // valid guesses
 let secret = '';
-let board = Array.from({length: MAX_GUESSES}, () => Array.from({length: WORD_LENGTH}, () => ''));
+let board = Array.from({ length: MAX_GUESSES }, () => Array.from({ length: WORD_LENGTH }, () => ''));
 let row = 0;
 let col = 0;
 let finished = false;
@@ -54,7 +54,7 @@ async function loadWords() {
 // start fresh game
 function newGame() {
     secret = wordlist[Math.floor(Math.random() * wordlist.length)];
-    board = Array.from({length: MAX_GUESSES}, () => Array.from({length: WORD_LENGTH}, () => ''));
+    board = Array.from({ length: MAX_GUESSES }, () => Array.from({ length: WORD_LENGTH }, () => ''));
     row = 0;
     col = 0;
     finished = false;
@@ -233,10 +233,10 @@ function pulseRow(r) {
     const rowEl = gridEl.querySelector(`.row[data-row="${r}"]`);
     if (!rowEl) return;
     rowEl.animate([
-        {transform: 'translateY(0)'},
-        {transform: 'translateY(-8px)'},
-        {transform: 'translateY(0)'}
-    ], {duration: 320, easing: 'ease'});
+        { transform: 'translateY(0)' },
+        { transform: 'translateY(-8px)' },
+        { transform: 'translateY(0)' }
+    ], { duration: 320, easing: 'ease' });
 }
 
 // shake row for invalid word
@@ -244,17 +244,17 @@ function shakeRow(r) {
     const rowEl = gridEl.querySelector(`.row[data-row="${r}"]`);
     if (!rowEl) return;
     rowEl.animate([
-        {transform: 'translateX(0)'},
-        {transform: 'translateX(-10px)'},
-        {transform: 'translateX(10px)'},
-        {transform: 'translateX(0)'}
-    ], {duration: 320, easing: 'ease'});
+        { transform: 'translateX(0)' },
+        { transform: 'translateX(-10px)' },
+        { transform: 'translateX(10px)' },
+        { transform: 'translateX(0)' }
+    ], { duration: 320, easing: 'ease' });
 }
 
 // update keyboard state (only upgrade to higher priority status)
 function upgradeKeyState(letter, status) {
     const prev = keyboardState[letter] || null;
-    const ranking = {'correct': 3, 'present': 2, 'absent': 1, null: 0};
+    const ranking = { 'correct': 3, 'present': 2, 'absent': 1, null: 0 };
     if (ranking[status] > ranking[prev]) {
         keyboardState[letter] = status;
     }
@@ -350,9 +350,9 @@ const STATS_KEY = 'blunder_stats_v1';
 function getStats() {
     try {
         const raw = localStorage.getItem(STATS_KEY);
-        return raw ? JSON.parse(raw) : {played: 0, win: 0, loss: 0, dist: {}};
+        return raw ? JSON.parse(raw) : { played: 0, win: 0, loss: 0, dist: {} };
     } catch (e) {
-        return {played: 0, win: 0, loss: 0, dist: {}};
+        return { played: 0, win: 0, loss: 0, dist: {} };
     }
 }
 

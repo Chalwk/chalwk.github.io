@@ -65,10 +65,10 @@
         for (const cls of charsPerClass) {
             const ch = pickRandom(cls);
             const pos = Math.floor(Math.random() * result.length);
-            replacements.push({pos, ch});
+            replacements.push({ pos, ch });
         }
 
-        replacements.forEach(({pos, ch}) => {
+        replacements.forEach(({ pos, ch }) => {
             result[pos] = ch;
         });
 
@@ -162,15 +162,15 @@
         if (seconds < 1) return 'instantly';
 
         const intervals = [
-            {label: 'century', seconds: 3153600000},
-            {label: 'decade', seconds: 315360000},
-            {label: 'year', seconds: 31536000},
-            {label: 'month', seconds: 2592000},
-            {label: 'week', seconds: 604800},
-            {label: 'day', seconds: 86400},
-            {label: 'hour', seconds: 3600},
-            {label: 'minute', seconds: 60},
-            {label: 'second', seconds: 1}
+            { label: 'century', seconds: 3153600000 },
+            { label: 'decade', seconds: 315360000 },
+            { label: 'year', seconds: 31536000 },
+            { label: 'month', seconds: 2592000 },
+            { label: 'week', seconds: 604800 },
+            { label: 'day', seconds: 86400 },
+            { label: 'hour', seconds: 3600 },
+            { label: 'minute', seconds: 60 },
+            { label: 'second', seconds: 1 }
         ];
 
         for (const interval of intervals) {
@@ -185,7 +185,7 @@
     function getStrengthLabel(score) {
         const labels = ['Very Weak', 'Weak', 'Fair', 'Strong', 'Very Strong'];
         const colors = ['#ef4444', '#f97316', '#eab308', '#22c55e', '#16a34a'];
-        return {label: labels[score] || '-', score, color: colors[score] || '#6b7280'};
+        return { label: labels[score] || '-', score, color: colors[score] || '#6b7280' };
     }
 
     function analyzePasswordWithZxcvbn(password, opts) {
@@ -324,7 +324,7 @@
                 darkMode: parsed.darkMode || false
             };
         } catch (e) {
-            return {darkMode: false};
+            return { darkMode: false };
         }
     }
 
@@ -371,7 +371,7 @@
         darkModeCheck.addEventListener('change', (e) => {
             document.body.classList.toggle('dark-mode', e.target.checked);
             const settings = loadSettings();
-            saveSettings({...settings, darkMode: e.target.checked});
+            saveSettings({ ...settings, darkMode: e.target.checked });
         });
 
         const settings = loadSettings();

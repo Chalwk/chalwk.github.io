@@ -3,16 +3,16 @@
 (() => {
     const STORAGE_KEY = "social-script-builder-v1";
     const STEP_TYPES = {
-        statement: {name: "I Say", color: "step-type-statement"},
-        question: {name: "They Might Say", color: "step-type-question"},
-        action: {name: "Action I Take", color: "step-type-action"},
-        reminder: {name: "Reminder to Self", color: "step-type-reminder"},
-        transition: {name: "Transition", color: "step-type-transition"},
-        observation: {name: "Observation", color: "step-type-observation"},
-        validation: {name: "Validation", color: "step-type-validation"},
-        boundary: {name: "Boundary", color: "step-type-boundary"},
-        followup: {name: "Follow-up", color: "step-type-followup"},
-        closure: {name: "Closure", color: "step-type-closure"}
+        statement: { name: "I Say", color: "step-type-statement" },
+        question: { name: "They Might Say", color: "step-type-question" },
+        action: { name: "Action I Take", color: "step-type-action" },
+        reminder: { name: "Reminder to Self", color: "step-type-reminder" },
+        transition: { name: "Transition", color: "step-type-transition" },
+        observation: { name: "Observation", color: "step-type-observation" },
+        validation: { name: "Validation", color: "step-type-validation" },
+        boundary: { name: "Boundary", color: "step-type-boundary" },
+        followup: { name: "Follow-up", color: "step-type-followup" },
+        closure: { name: "Closure", color: "step-type-closure" }
     };
 
     const PREMADE_SCRIPTS = [
@@ -21,18 +21,18 @@
             title: "Greeting Someone",
             description: "Meeting someone new or greeting familiar people",
             steps: [
-                {id: "g1", type: "statement", text: "Hi [Name]! It's good to see you.", order: 0},
-                {id: "g2", type: "question", text: "Hi [Name], it's good to see you too.", order: 1},
-                {id: "g3", type: "statement", text: "How have you been since we last talked?", order: 2},
-                {id: "g4", type: "question", text: "I've been doing well, thanks! How about you?", order: 3},
-                {id: "g5", type: "statement", text: "I'm doing well too, thank you.", order: 4},
+                { id: "g1", type: "statement", text: "Hi [Name]! It's good to see you.", order: 0 },
+                { id: "g2", type: "question", text: "Hi [Name], it's good to see you too.", order: 1 },
+                { id: "g3", type: "statement", text: "How have you been since we last talked?", order: 2 },
+                { id: "g4", type: "question", text: "I've been doing well, thanks! How about you?", order: 3 },
+                { id: "g5", type: "statement", text: "I'm doing well too, thank you.", order: 4 },
                 {
                     id: "g6",
                     type: "reminder",
                     text: "If eye contact feels hard, I'll smile at their forehead or shoulder",
                     order: 5
                 },
-                {id: "g7", type: "reminder", text: "Taking one deep breath before speaking calms my nerves", order: 6}
+                { id: "g7", type: "reminder", text: "Taking one deep breath before speaking calms my nerves", order: 6 }
             ]
         },
         {
@@ -40,12 +40,12 @@
             title: "Introducing Myself",
             description: "Meeting someone for the first time",
             steps: [
-                {id: "i1", type: "statement", text: "Hello, I'm Jay. It's nice to meet you.", order: 0},
-                {id: "i2", type: "question", text: "Hi Jay, I'm [Name]. Nice to meet you too.", order: 1},
-                {id: "i3", type: "statement", text: "I enjoy [hobby].", order: 2},
-                {id: "i4", type: "question", text: "What do you do in your free time?", order: 3},
-                {id: "i5", type: "statement", text: "I like to [activity]. What about you?", order: 4},
-                {id: "i6", type: "reminder", text: "I'll write 3 bullet points about myself beforehand", order: 5},
+                { id: "i1", type: "statement", text: "Hello, I'm Jay. It's nice to meet you.", order: 0 },
+                { id: "i2", type: "question", text: "Hi Jay, I'm [Name]. Nice to meet you too.", order: 1 },
+                { id: "i3", type: "statement", text: "I enjoy [hobby].", order: 2 },
+                { id: "i4", type: "question", text: "What do you do in your free time?", order: 3 },
+                { id: "i5", type: "statement", text: "I like to [activity]. What about you?", order: 4 },
+                { id: "i6", type: "reminder", text: "I'll write 3 bullet points about myself beforehand", order: 5 },
                 {
                     id: "i7",
                     type: "reminder",
@@ -59,12 +59,12 @@
             title: "Asking for Help/Clarification",
             description: "Confused by instructions or missing information",
             steps: [
-                {id: "h1", type: "statement", text: "Excuse me, could you please explain that again?", order: 0},
-                {id: "h2", type: "question", text: "Sure, [clarified version]", order: 1},
-                {id: "h3", type: "statement", text: "Thank you - I understand now.", order: 2},
-                {id: "h4", type: "question", text: "I'm busy right now.", order: 3},
-                {id: "h5", type: "statement", text: "No problem. When would be a good time?", order: 4},
-                {id: "h6", type: "reminder", text: "Keep a notepad ready for written explanations", order: 5},
+                { id: "h1", type: "statement", text: "Excuse me, could you please explain that again?", order: 0 },
+                { id: "h2", type: "question", text: "Sure, [clarified version]", order: 1 },
+                { id: "h3", type: "statement", text: "Thank you - I understand now.", order: 2 },
+                { id: "h4", type: "question", text: "I'm busy right now.", order: 3 },
+                { id: "h5", type: "statement", text: "No problem. When would be a good time?", order: 4 },
+                { id: "h6", type: "reminder", text: "Keep a notepad ready for written explanations", order: 5 },
                 {
                     id: "h7",
                     type: "reminder",
@@ -90,11 +90,11 @@
                     text: "Example: 'I feel uncomfortable with hugs. Could we wave instead?'",
                     order: 1
                 },
-                {id: "b3", type: "question", text: "Sorry! I didn't realize.", order: 2},
-                {id: "b4", type: "statement", text: "Thank you for understanding.", order: 3},
-                {id: "b5", type: "question", text: "You're too sensitive.", order: 4},
-                {id: "b6", type: "statement", text: "This is important for my wellbeing.", order: 5},
-                {id: "b7", type: "reminder", text: "Pre-identify 3 non-negotiable boundaries", order: 6},
+                { id: "b3", type: "question", text: "Sorry! I didn't realize.", order: 2 },
+                { id: "b4", type: "statement", text: "Thank you for understanding.", order: 3 },
+                { id: "b5", type: "question", text: "You're too sensitive.", order: 4 },
+                { id: "b6", type: "statement", text: "This is important for my wellbeing.", order: 5 },
+                { id: "b7", type: "reminder", text: "Pre-identify 3 non-negotiable boundaries", order: 6 },
                 {
                     id: "b8",
                     type: "reminder",
@@ -464,7 +464,7 @@
         }
 
         const dataStr = JSON.stringify(currentScript, null, 2);
-        const dataBlob = new Blob([dataStr], {type: "application/json"});
+        const dataBlob = new Blob([dataStr], { type: "application/json" });
 
         const url = URL.createObjectURL(dataBlob);
         const link = document.createElement("a");

@@ -70,7 +70,7 @@
 
         const toggle = () => {
             checkbox.checked = !checkbox.checked;
-            checkbox.dispatchEvent(new Event('change', {bubbles: true}));
+            checkbox.dispatchEvent(new Event('change', { bubbles: true }));
         };
 
         header.addEventListener('click', (e) => {
@@ -279,7 +279,7 @@
     function exportData() {
         const entries = loadEntries();
         const dataStr = JSON.stringify(entries, null, 2);
-        const blob = new Blob([dataStr], {type: 'application/json'});
+        const blob = new Blob([dataStr], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;

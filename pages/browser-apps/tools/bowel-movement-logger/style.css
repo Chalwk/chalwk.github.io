@@ -236,7 +236,8 @@
     background: rgba(74, 111, 165, 0.03);
 }
 
-.type-1, .type-2 {
+.type-1,
+.type-2 {
     background-color: rgba(231, 76, 60, 0.05);
 }
 
@@ -244,7 +245,9 @@
     background-color: rgba(46, 204, 113, 0.05);
 }
 
-.type-4, .type-5, .type-6 {
+.type-4,
+.type-5,
+.type-6 {
     background-color: rgba(230, 126, 34, 0.05);
 }
 
@@ -257,7 +260,8 @@
     font-family: var(--font-mono);
 }
 
-.type-1 .type-badge, .type-2 .type-badge {
+.type-1 .type-badge,
+.type-2 .type-badge {
     background-color: var(--danger);
     color: white;
 }
@@ -267,7 +271,9 @@
     color: white;
 }
 
-.type-4 .type-badge, .type-5 .type-badge, .type-6 .type-badge {
+.type-4 .type-badge,
+.type-5 .type-badge,
+.type-6 .type-badge {
     background-color: var(--warning);
     color: white;
 }
@@ -421,6 +427,7 @@
         transform: translateY(-20px);
         opacity: 0;
     }
+
     to {
         transform: translateY(0);
         opacity: 1;

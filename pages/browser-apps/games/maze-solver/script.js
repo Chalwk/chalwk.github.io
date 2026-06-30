@@ -11,8 +11,8 @@ const sizeSelect = document.getElementById("size-select");
 
 let mazeSize = parseInt(sizeSelect.value, 10);
 let maze = [];
-let player = {x: 0, y: 0};
-let end = {x: 0, y: 0};
+let player = { x: 0, y: 0 };
+let end = { x: 0, y: 0 };
 let moves = 0;
 let timer = null;
 let timeSeconds = 0;
@@ -39,19 +39,19 @@ function shuffle(arr) {
 
 // generate maze using randomized Prim's algorithm (with extra passage carving)
 function generateMaze(size) {
-    const grid = Array.from({length: size}, () => Array(size).fill(1));
+    const grid = Array.from({ length: size }, () => Array(size).fill(1));
     // start at a random odd cell
     const startX = Math.floor(Math.random() * (size - 1)) | 1;
     const startY = Math.floor(Math.random() * (size - 1)) | 1;
 
     grid[startY][startX] = 0;
     const frontier = [];
-    const directions = [{x: 0, y: -2}, {x: 2, y: 0}, {x: 0, y: 2}, {x: -2, y: 0}];
+    const directions = [{ x: 0, y: -2 }, { x: 2, y: 0 }, { x: 0, y: 2 }, { x: -2, y: 0 }];
 
     for (const d of directions) {
         const nx = startX + d.x, ny = startY + d.y;
         if (nx > 0 && nx < size - 1 && ny > 0 && ny < size - 1) {
-            frontier.push({x: nx, y: ny, px: startX + d.x / 2, py: startY + d.y / 2});
+            frontier.push({ x: nx, y: ny, px: startX + d.x / 2, py: startY + d.y / 2 });
         }
     }
 
@@ -60,7 +60,7 @@ function generateMaze(size) {
         const cell = frontier[randomIndex];
         frontier.splice(randomIndex, 1);
 
-        const {x, y, px, py} = cell;
+        const { x, y, px, py } = cell;
         if (grid[y][x] === 1) {
             grid[y][x] = 0;
             grid[py][px] = 0;
@@ -68,7 +68,7 @@ function generateMaze(size) {
             for (const d of directions) {
                 const nx = x + d.x, ny = y + d.y;
                 if (nx > 0 && nx < size - 1 && ny > 0 && ny < size - 1 && grid[ny][nx] === 1) {
-                    frontier.push({x: nx, y: ny, px: x + d.x / 2, py: y + d.y / 2});
+                    frontier.push({ x: nx, y: ny, px: x + d.x / 2, py: y + d.y / 2 });
                 }
             }
         }
@@ -87,7 +87,7 @@ function generateMaze(size) {
 
         if (grid[y][x] === 1) {
             let pathNeighbors = 0;
-            const neighbors = [{x: 0, y: -1}, {x: 1, y: 0}, {x: 0, y: 1}, {x: -1, y: 0}];
+            const neighbors = [{ x: 0, y: -1 }, { x: 1, y: 0 }, { x: 0, y: 1 }, { x: -1, y: 0 }];
 
             for (const n of neighbors) {
                 const nx = x + n.x, ny = y + n.y;
@@ -248,12 +248,12 @@ function resetTimer() {
 // BFS to find shortest path from player to goal (used for hint)
 function findShortestPath() {
     const q = [];
-    const visited = Array.from({length: mazeSize}, () => Array(mazeSize).fill(false));
-    const parent = Array.from({length: mazeSize}, () => Array(mazeSize).fill(null));
+    const visited = Array.from({ length: mazeSize }, () => Array(mazeSize).fill(false));
+    const parent = Array.from({ length: mazeSize }, () => Array(mazeSize).fill(null));
 
-    q.push({x: player.x, y: player.y});
+    q.push({ x: player.x, y: player.y });
     visited[player.y][player.x] = true;
-    const dirs = [{x: 0, y: -1}, {x: 1, y: 0}, {x: 0, y: 1}, {x: -1, y: 0}];
+    const dirs = [{ x: 0, y: -1 }, { x: 1, y: 0 }, { x: 0, y: 1 }, { x: -1, y: 0 }];
 
     while (q.length) {
         const cur = q.shift();
@@ -267,12 +267,12 @@ function findShortestPath() {
 
             visited[ny][nx] = true;
             parent[ny][nx] = cur;
-            q.push({x: nx, y: ny});
+            q.push({ x: nx, y: ny });
         }
     }
 
     const path = [];
-    let cur = {x: end.x, y: end.y};
+    let cur = { x: end.x, y: end.y };
 
     if (!parent[cur.y][cur.x] && !(cur.x === player.x && cur.y === player.y)) {
         return [];
@@ -310,8 +310,8 @@ hintBtn.addEventListener("click", () => {
 function initMaze(size) {
     mazeSize = size;
     maze = generateMaze(mazeSize);
-    player = {x: 1, y: 0};
-    end = {x: mazeSize - 2, y: mazeSize - 1};
+    player = { x: 1, y: 0 };
+    end = { x: mazeSize - 2, y: mazeSize - 1 };
     moves = 0;
     gameCompleted = false;
     resetTimer();

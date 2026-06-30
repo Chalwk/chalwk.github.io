@@ -480,6 +480,7 @@ dialog {
         opacity: 0;
         transform: translateY(8px);
     }
+
     to {
         opacity: 1;
         transform: none;
@@ -580,7 +581,7 @@ details[open] summary {
     border-bottom-right-radius: 0;
 }
 
-details > p {
+details>p {
     padding: 15px;
     background: var(--surface-2);
     border-top: none;

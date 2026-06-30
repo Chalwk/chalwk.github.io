@@ -54,7 +54,7 @@
         const month = parseInt(parts[1], 10);
         const day = parseInt(parts[2], 10);
         if (isNaN(year) || isNaN(month) || isNaN(day)) return null;
-        return {year, month, day};
+        return { year, month, day };
     }
 
     function getTodayString() {
@@ -95,7 +95,7 @@
             years--;
             months += 12;
         }
-        return {years, months, days};
+        return { years, months, days };
     }
 
     function formatNumber(n) {

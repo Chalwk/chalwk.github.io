@@ -1,7 +1,8 @@
 ---
 layout: default
 title: Autism Symptom & Emotion Tracker
-description: Comprehensive autism symptom and emotion tracker with coping strategies, pattern recognition, and data visualization.
+description: Comprehensive autism symptom and emotion tracker with coping strategies, pattern recognition, and data
+visualization.
 pwa: true
 ---
 
@@ -26,7 +27,7 @@ pwa: true
 
                 <div class="controls-row">
                     <label class="search-wrap" for="search">
-                        <input aria-label="Filter symptoms" id="search" placeholder="Filter symptoms or tags"/>
+                        <input aria-label="Filter symptoms" id="search" placeholder="Filter symptoms or tags" />
                     </label>
                     <div class="controls-cta">
                         <button class="btn btn-secondary" id="clear-btn" title="Clear selections">Clear</button>
@@ -43,7 +44,7 @@ pwa: true
                     <div class="actions-row">
                         <button class="btn primary" id="analyze-btn" type="button">Analyze</button>
                         <button class="btn btn-secondary" id="save-btn" title="Save entry to local history"
-                                type="button">Save
+                            type="button">Save
                             entry
                         </button>
                     </div>
@@ -113,7 +114,7 @@ pwa: true
                         <div class="chart-wrap">
                             <h3 class="chart-title">Symptom patterns</h3>
                             <canvas aria-label="Symptom frequency chart" height="160" id="symptom-chart"
-                                    width="400"></canvas>
+                                width="400"></canvas>
                         </div>
                     </div>
                 </div>
@@ -129,16 +130,16 @@ pwa: true
 
         <label class="field">
             <span>Max history entries</span>
-            <input id="max-history" max="10000" min="5" type="number"/>
+            <input id="max-history" max="10000" min="5" type="number" />
         </label>
 
         <label class="checkbox">
-            <input id="enable-notifications" type="checkbox"/>
+            <input id="enable-notifications" type="checkbox" />
             <span>Enable reminder notifications</span>
         </label>
 
         <label class="checkbox">
-            <input id="enable-sounds" type="checkbox"/>
+            <input id="enable-sounds" type="checkbox" />
             <span>Enable interface sounds</span>
         </label>
 
@@ -164,6 +165,6 @@ pwa: true
 </dialog>
 
 <!-- Hidden file input for JSON import -->
-<input accept="application/json" id="file-input" style="display:none" type="file"/>
+<input accept="application/json" id="file-input" style="display:none" type="file" />
 
 <script src="script.js"></script>

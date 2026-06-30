@@ -25,7 +25,7 @@
     margin-bottom: 0.5rem;
 }
 
-.game-instructions > div {
+.game-instructions>div {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 0.5rem;

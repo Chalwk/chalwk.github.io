@@ -28,9 +28,9 @@ const now = () => performance.now();
 function loadStats() {
     try {
         const raw = localStorage.getItem(CONFIG.storageKey);
-        return raw ? JSON.parse(raw) : {best: 0, played: 0};
+        return raw ? JSON.parse(raw) : { best: 0, played: 0 };
     } catch {
-        return {best: 0, played: 0};
+        return { best: 0, played: 0 };
     }
 }
 
@@ -121,8 +121,8 @@ class Grid {
 // ---------- SNAKE (position, direction, growth) ----------
 class Snake {
     constructor(startX, startY) {
-        this.segs = [{x: startX, y: startY}];
-        this.dir = {x: 1, y: 0};
+        this.segs = [{ x: startX, y: startY }];
+        this.dir = { x: 1, y: 0 };
         this.buffer = [];           // queued direction changes
         this.growBy = 0;
         this.alive = true;
@@ -139,13 +139,13 @@ class Snake {
             if (this.dir.x === -dx && this.dir.y === -dy) return;
             if (this.dir.x === dx && this.dir.y === dy) return;
         }
-        this.buffer.push({x: dx, y: dy});
+        this.buffer.push({ x: dx, y: dy });
         if (this.buffer.length > 2) this.buffer.shift();
     }
 
     step() {
         if (this.buffer.length) this.dir = this.buffer.shift();
-        const newHead = {x: this.segs[0].x + this.dir.x, y: this.segs[0].y + this.dir.y};
+        const newHead = { x: this.segs[0].x + this.dir.x, y: this.segs[0].y + this.dir.y };
         this.segs.unshift(newHead);
         if (this.growBy > 0) {
             this.growBy--;
@@ -413,7 +413,7 @@ class Game {
                 || this.entities.powerups.some(p => p.x === x && p.y === y)
                 || this.snake.segs.some(s => s.x === x && s.y === y)
                 || this.entities.portals.some(p => p.x === x && p.y === y);
-            if (!blocked) return {x, y};
+            if (!blocked) return { x, y };
         }
         return null;
     }
@@ -421,7 +421,7 @@ class Game {
     spawnFood(special = false) {
         const p = this.randomEmptyCell();
         if (!p) return;
-        const food = {x: p.x, y: p.y, points: special ? 50 : 10, golden: special};
+        const food = { x: p.x, y: p.y, points: special ? 50 : 10, golden: special };
         this.entities.food.push(food);
     }
 
@@ -437,8 +437,8 @@ class Game {
         const a = this.randomEmptyCell();
         const b = this.randomEmptyCell();
         if (!a || !b) return;
-        this.entities.portals.push({x: a.x, y: a.y, id: 1});
-        this.entities.portals.push({x: b.x, y: b.y, id: 2});
+        this.entities.portals.push({ x: a.x, y: a.y, id: 1 });
+        this.entities.portals.push({ x: b.x, y: b.y, id: 2 });
     }
 
     // apply powerup effect, set timers for duration

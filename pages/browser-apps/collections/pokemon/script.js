@@ -234,7 +234,7 @@
 
         updateModalContent();
         modal.style.display = 'flex';
-        history.pushState({modal: true}, '');
+        history.pushState({ modal: true }, '');
     };
 
     window.closeModal = (skipHistoryBack = false) => {
@@ -387,7 +387,7 @@
     // Parse search string into conditions: holo, stage, hp, rarity, name tokens
     const parseSearchTokens = (term) => {
         const tokens = term.toLowerCase().split(/\s+/).filter(t => t);
-        const conditions = {holo: null, stage: null, hp: null, rarity: null, nameTokens: []};
+        const conditions = { holo: null, stage: null, hp: null, rarity: null, nameTokens: [] };
         const keywords = new Set(['holo', 'stage', 'hp', 'rarity']);
         let i = 0;
         while (i < tokens.length) {
@@ -467,7 +467,7 @@
 
             if (data.ENERGY) {
                 data.ENERGY.forEach(entry => {
-                    const {name, count, holo, setPart, rarity} = entry;
+                    const { name, count, holo, setPart, rarity } = entry;
                     energies.push({
                         name, count: parseInt(count, 10), holo: holo === true || holo === 'true',
                         url: buildUrlFromPart(setPart), rarity
@@ -477,7 +477,7 @@
 
             if (data.SUPPORTER) {
                 data.SUPPORTER.forEach(entry => {
-                    const {name, count, holo, setPart, rarity} = entry;
+                    const { name, count, holo, setPart, rarity } = entry;
                     supporters.push({
                         name, count: parseInt(count, 10), holo: holo === true || holo === 'true',
                         url: buildUrlFromPart(setPart), rarity
@@ -487,7 +487,7 @@
 
             if (data.ITEM) {
                 data.ITEM.forEach(entry => {
-                    const {name, count, holo, setPart, rarity} = entry;
+                    const { name, count, holo, setPart, rarity } = entry;
                     items.push({
                         name, count: parseInt(count, 10), holo: holo === true || holo === 'true',
                         url: buildUrlFromPart(setPart), rarity
@@ -497,7 +497,7 @@
 
             if (data.TOOL) {
                 data.TOOL.forEach(entry => {
-                    const {name, count, holo, setPart, rarity} = entry;
+                    const { name, count, holo, setPart, rarity } = entry;
                     tools.push({
                         name, count: parseInt(count, 10), holo: holo === true || holo === 'true',
                         url: buildUrlFromPart(setPart), rarity

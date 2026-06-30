@@ -19,7 +19,9 @@ pwa: true
 
                 <div class="disclaimer">
                     <i class="fas fa-circle-info"></i>
-                    <span>This tool helps you monitor sleep patterns and their connection to mental health. All data stays <strong>only on your device</strong>. You can share reports with your care team if you wish.</span>
+                    <span>This tool helps you monitor sleep patterns and their connection to mental health. All data
+                        stays <strong>only on your device</strong>. You can share reports with your care team if you
+                        wish.</span>
                 </div>
 
                 <div class="sleep-tracker-layout">
@@ -65,16 +67,17 @@ pwa: true
                                 <i class="fas fa-chevron-right collapse-icon" id="difficultyIcon"></i>
                                 <span><i class="fas fa-exclamation-triangle"></i> Sleep difficulty</span>
                                 <label for="hadDifficulty"></label><input id="hadDifficulty" style="display: none;"
-                                                                          type="checkbox">
+                                    type="checkbox">
                             </div>
                             <div class="collapse-content" id="difficultyFields" style="display: none;">
                                 <div class="input-group">
                                     <label class="input-label" for="difficultyLevel">
-                                        <span><i class="fas fa-gauge-high"></i> difficulty falling asleep (1=easy, 10=very hard)</span>
+                                        <span><i class="fas fa-gauge-high"></i> difficulty falling asleep (1=easy,
+                                            10=very hard)</span>
                                     </label>
                                     <div class="intensity-wrapper">
                                         <input class="intensity-slider" id="difficultyLevel" max="10" min="1"
-                                               type="range" value="5">
+                                            type="range" value="5">
                                         <span class="intensity-value" id="difficultyDisplay">5</span>
                                     </div>
                                 </div>
@@ -82,8 +85,7 @@ pwa: true
                                     <label class="input-label" for="difficultyReason">
                                         <span><i class="fas fa-question-circle"></i> why? (optional)</span>
                                         <input class="text-input" id="difficultyReason"
-                                               placeholder="e.g. racing mind, pain..."
-                                               type="text">
+                                            placeholder="e.g. racing mind, pain..." type="text">
                                     </label>
                                 </div>
                             </div>
@@ -94,7 +96,7 @@ pwa: true
                                 <i class="fas fa-chevron-right collapse-icon" id="wakeEventsIcon"></i>
                                 <span><i class="fas fa-clock"></i> Wake events</span>
                                 <label for="hadWakeEvents"></label><input id="hadWakeEvents" style="display: none;"
-                                                                          type="checkbox">
+                                    type="checkbox">
                             </div>
                             <div class="collapse-content" id="wakeEventsFields" style="display: none;">
                                 <div class="wake-events-container" id="wakeEventsContainer"></div>
@@ -109,7 +111,7 @@ pwa: true
                                 <i class="fas fa-chevron-right collapse-icon" id="symptomsIcon"></i>
                                 <span><i class="fas fa-brain"></i> Nighttime symptoms</span>
                                 <label for="hadSymptoms"></label><input id="hadSymptoms" style="display: none;"
-                                                                        type="checkbox">
+                                    type="checkbox">
                             </div>
                             <div class="collapse-content" id="symptomsFields" style="display: none;">
                                 <div class="checkbox-group">
@@ -123,7 +125,7 @@ pwa: true
                                         <input id="nightmares" type="checkbox"> <i class="fas fa-dragon"></i> nightmares
                                     </label>
                                     <div id="traumaNightmareContainer"
-                                         style="margin-left: 1.5rem; margin-top: 0.3rem; display: none;">
+                                        style="margin-left: 1.5rem; margin-top: 0.3rem; display: none;">
                                         <label class="checkbox-label">
                                             <input id="traumaNightmare" type="checkbox"> trauma-related nightmare
                                         </label>
@@ -149,31 +151,28 @@ pwa: true
                                 <i class="fas fa-chevron-right collapse-icon" id="morningIcon"></i>
                                 <span><i class="fas fa-sun"></i> Morning routine & mood</span>
                                 <label for="hadMorning"></label><input id="hadMorning" style="display: none;"
-                                                                       type="checkbox">
+                                    type="checkbox">
                             </div>
                             <div class="collapse-content" id="morningFields" style="display: none;">
                                 <div class="input-group">
                                     <label class="input-label" for="mood">
                                         <span><i class="fas fa-smile"></i> mood when waking up</span>
                                         <input class="text-input" id="mood"
-                                               placeholder="e.g. refreshed, tired, anxious..."
-                                               type="text">
+                                            placeholder="e.g. refreshed, tired, anxious..." type="text">
                                     </label>
                                 </div>
                                 <div class="input-group">
                                     <label class="input-label" for="preRoutine">
                                         <span><i class="fas fa-moon"></i> pre-bedtime routine</span>
                                         <textarea class="notes-textarea" id="preRoutine"
-                                                  placeholder="e.g. read, screen time, meditation..."
-                                                  rows="2"></textarea>
+                                            placeholder="e.g. read, screen time, meditation..." rows="2"></textarea>
                                     </label>
                                 </div>
                                 <div class="input-group">
                                     <label class="input-label" for="postRoutine">
                                         <span><i class="fas fa-sun"></i> wake-up routine</span>
                                         <textarea class="notes-textarea" id="postRoutine"
-                                                  placeholder="e.g. stretched, coffee, exercise..."
-                                                  rows="2"></textarea>
+                                            placeholder="e.g. stretched, coffee, exercise..." rows="2"></textarea>
                                     </label>
                                 </div>
                             </div>
@@ -184,7 +183,7 @@ pwa: true
                                 <i class="fas fa-chevron-right collapse-icon" id="additionalIcon"></i>
                                 <span><i class="fas fa-cloud-sun"></i> Lifestyle & environment</span>
                                 <label for="hadAdditional"></label><input id="hadAdditional" style="display: none;"
-                                                                          type="checkbox">
+                                    type="checkbox">
                             </div>
                             <div class="collapse-content" id="additionalFields" style="display: none;">
                                 <div class="checkbox-group">
@@ -212,12 +211,13 @@ pwa: true
                             <label class="input-label" for="notes">
                                 <span><i class="fas fa-pen"></i> private notes</span>
                                 <textarea class="notes-textarea" id="notes" placeholder="anything else..."
-                                          rows="2"></textarea>
+                                    rows="2"></textarea>
                             </label>
                         </div>
 
                         <div class="button-group">
-                            <button class="btn btn-primary" id="addEntryBtn"><i class="fas fa-plus-circle"></i> <span>log this night</span>
+                            <button class="btn btn-primary" id="addEntryBtn"><i class="fas fa-plus-circle"></i>
+                                <span>log this night</span>
                             </button>
                             <button class="btn btn-secondary" id="clearFormBtn"><i class="fas fa-undo-alt"></i> clear
                                 form
@@ -257,7 +257,8 @@ pwa: true
                             </div>
                         </div>
 
-                        <h4 style="margin: 0 0 0.75rem 0; display: flex; gap:0.5rem;"><i class="fas fa-history"></i>Recent nights</h4>
+                        <h4 style="margin: 0 0 0.75rem 0; display: flex; gap:0.5rem;"><i
+                                class="fas fa-history"></i>Recent nights</h4>
                         <div class="entries-list" id="entriesList">
                             <div class="empty-message">No entries yet. Use the form to start.</div>
                         </div>
@@ -283,7 +284,8 @@ pwa: true
         </div>
         <button class="btn btn-primary" id="generateSummaryBtn">Generate</button>
         <div id="summaryOutput"
-             style="margin-top: 15px; max-height: 300px; overflow-y: auto; background: #f5f5f5; padding: 10px; border-radius: 4px; white-space: pre-wrap; font-family: monospace;"></div>
+            style="margin-top: 15px; max-height: 300px; overflow-y: auto; background: #f5f5f5; padding: 10px; border-radius: 4px; white-space: pre-wrap; font-family: monospace;">
+        </div>
         <button class="btn btn-secondary" disabled id="copySummaryBtn" style="margin-top: 10px;">Copy to clipboard
         </button>
     </div>

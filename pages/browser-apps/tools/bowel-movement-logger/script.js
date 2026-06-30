@@ -3,21 +3,21 @@
 let bowelMovementData = [];
 
 const sampleData = [
-    {id: 1, date: "2025-10-05", time: "08:30", type: "3", notes: "Normal movement"},
-    {id: 2, date: "2025-10-07", time: "09:15", type: "4", notes: "Slightly loose"},
-    {id: 3, date: "2025-10-09", time: "10:00", type: "2", notes: "Hard, constipated"},
-    {id: 4, date: "2025-10-11", time: "08:00 / 14:30", type: "3/4", notes: "Two movements, one normal one loose"},
-    {id: 5, date: "2025-10-13", time: "07:45", type: "3", notes: ""},
-    {id: 6, date: "2025-10-15", time: "09:00", type: "5", notes: "Loose"},
-    {id: 7, date: "2025-10-17", time: "08:30", type: "3", notes: "Normal"},
-    {id: 8, date: "2025-10-19", time: "10:15", type: "4", notes: "Soft"},
-    {id: 9, date: "2025-10-21", time: "08:45", type: "3", notes: "Normal"},
-    {id: 10, date: "2025-10-23", time: "09:30", type: "4", notes: "Slightly soft"},
-    {id: 11, date: "2025-10-25", time: "08:00", type: "3", notes: ""},
-    {id: 12, date: "2025-10-27", time: "11:00", type: "2-3", notes: "Between type 2 and 3"},
-    {id: 13, date: "2025-10-29", time: "08:30", type: "3", notes: "Regular"},
-    {id: 14, date: "2025-11-01", time: "09:15", type: "4", notes: "Morning movement"},
-    {id: 15, date: "2025-11-03", time: "08:45 / 16:00", type: "3/5", notes: "Two movements, second one loose"}
+    { id: 1, date: "2025-10-05", time: "08:30", type: "3", notes: "Normal movement" },
+    { id: 2, date: "2025-10-07", time: "09:15", type: "4", notes: "Slightly loose" },
+    { id: 3, date: "2025-10-09", time: "10:00", type: "2", notes: "Hard, constipated" },
+    { id: 4, date: "2025-10-11", time: "08:00 / 14:30", type: "3/4", notes: "Two movements, one normal one loose" },
+    { id: 5, date: "2025-10-13", time: "07:45", type: "3", notes: "" },
+    { id: 6, date: "2025-10-15", time: "09:00", type: "5", notes: "Loose" },
+    { id: 7, date: "2025-10-17", time: "08:30", type: "3", notes: "Normal" },
+    { id: 8, date: "2025-10-19", time: "10:15", type: "4", notes: "Soft" },
+    { id: 9, date: "2025-10-21", time: "08:45", type: "3", notes: "Normal" },
+    { id: 10, date: "2025-10-23", time: "09:30", type: "4", notes: "Slightly soft" },
+    { id: 11, date: "2025-10-25", time: "08:00", type: "3", notes: "" },
+    { id: 12, date: "2025-10-27", time: "11:00", type: "2-3", notes: "Between type 2 and 3" },
+    { id: 13, date: "2025-10-29", time: "08:30", type: "3", notes: "Regular" },
+    { id: 14, date: "2025-11-01", time: "09:15", type: "4", notes: "Morning movement" },
+    { id: 15, date: "2025-11-03", time: "08:45 / 16:00", type: "3/5", notes: "Two movements, second one loose" }
 ];
 
 let isUsingSampleData = false;
@@ -186,7 +186,7 @@ function normalizeAllDates() {
 function formatDateForDisplay(dateString) {
     const date = new Date(dateString);
     if (isNaN(date)) return dateString;
-    const options = {weekday: 'short', month: 'short', day: 'numeric'};
+    const options = { weekday: 'short', month: 'short', day: 'numeric' };
     return date.toLocaleDateString('en-US', options);
 }
 
@@ -329,7 +329,7 @@ function getRecencyWeights(events, decayFactor = 0.95) {
 }
 
 function calculatePoissonProbabilities(avgEventsPerDay) {
-    if (avgEventsPerDay <= 0) return {p24: 0, p48: 0, p72: 0};
+    if (avgEventsPerDay <= 0) return { p24: 0, p48: 0, p72: 0 };
 
     const lambda = avgEventsPerDay;
     const p24 = 1 - Math.exp(-lambda * 1);
@@ -344,7 +344,7 @@ function calculatePoissonProbabilities(avgEventsPerDay) {
 }
 
 function analyzeDayOfWeekPattern(events) {
-    const dayCounts = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0};
+    const dayCounts = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
 
     events.forEach(event => {
         const day = event.datetime.getDay();
@@ -389,7 +389,7 @@ function analyzeTimeOfDayPattern(events) {
 }
 
 function detectOutliers(intervals) {
-    if (intervals.length < 3) return {outliers: [], cleanedIntervals: intervals};
+    if (intervals.length < 3) return { outliers: [], cleanedIntervals: intervals };
 
     const sorted = [...intervals].sort((a, b) => a - b);
     const q1 = sorted[Math.floor(sorted.length * 0.25)];
@@ -402,16 +402,16 @@ function detectOutliers(intervals) {
     const outliers = intervals.filter(interval => interval < lowerBound || interval > upperBound);
     const cleanedIntervals = intervals.filter(interval => interval >= lowerBound && interval <= upperBound);
 
-    return {outliers, cleanedIntervals};
+    return { outliers, cleanedIntervals };
 }
 
 function detectTrend(events) {
-    if (events.length < 4) return {trend: 'insufficient data', slope: 0};
+    if (events.length < 4) return { trend: 'insufficient data', slope: 0 };
 
     const timestamps = events.map((e, i) => i);
     const intervals = calculateEventIntervals(events);
 
-    if (intervals.length === 0) return {trend: 'insufficient data', slope: 0};
+    if (intervals.length === 0) return { trend: 'insufficient data', slope: 0 };
 
     const n = intervals.length;
     const sumX = timestamps.slice(0, n).reduce((a, b) => a + b, 0);
@@ -426,7 +426,7 @@ function detectTrend(events) {
     else if (slope < -0.1) trend = 'decreasing';
     else trend = 'stable';
 
-    return {trend, slope};
+    return { trend, slope };
 }
 
 function groupEventsByDate(events) {
@@ -468,7 +468,7 @@ function calculateEnhancedPrediction() {
             avgFrequency: 0,
             daysSinceLast: calculateDaysSinceLast(events),
             predictionText: events.length === 0 ? 'No data available' : 'Need more data',
-            probabilities: {p24: 0, p48: 0, p72: 0},
+            probabilities: { p24: 0, p48: 0, p72: 0 },
             patterns: {},
             stats: {}
         };
@@ -484,7 +484,7 @@ function calculateEnhancedPrediction() {
             avgFrequency: 0,
             daysSinceLast: 0,
             predictionText: 'Need more data (only one day recorded)',
-            probabilities: {p24: 0.3, p48: 0.5, p72: 0.7},
+            probabilities: { p24: 0.3, p48: 0.5, p72: 0.7 },
             patterns: {},
             stats: {}
         };
@@ -498,7 +498,7 @@ function calculateEnhancedPrediction() {
     const recencyWeights = getRecencyWeights(events);
     const weightedMeanInterval = calculateWeightedMean(intervalsInDays, recencyWeights);
 
-    const {outliers, cleanedIntervals} = detectOutliers(intervalsInDays);
+    const { outliers, cleanedIntervals } = detectOutliers(intervalsInDays);
     const outlierAdjustedMean = cleanedIntervals.length > 0 ?
         cleanedIntervals.reduce((a, b) => a + b, 0) / cleanedIntervals.length :
         weightedMeanInterval;
@@ -610,13 +610,13 @@ function updateEnhancedPredictionDisplay(prediction) {
                 <span title="Next 72 hours">72h: ${Math.round(prediction.probabilities.p72 * 100)}%</span>
             </div>
             ${prediction.patterns.dayOfWeek ?
-            `<div class="prediction-pattern">
+                `<div class="prediction-pattern">
                     Most active: ${prediction.patterns.dayOfWeek.mostActiveDay}
                     ${prediction.patterns.trend.trend !== 'insufficient data' ?
-                `<span class="trend-indicator ${prediction.patterns.trend.trend === 'increasing' ? 'trend-up' :
-                    prediction.patterns.trend.trend === 'decreasing' ? 'trend-down' : 'trend-stable'}">
+                    `<span class="trend-indicator ${prediction.patterns.trend.trend === 'increasing' ? 'trend-up' :
+                        prediction.patterns.trend.trend === 'decreasing' ? 'trend-down' : 'trend-stable'}">
                           ${prediction.patterns.trend.trend === 'increasing' ? '↗' :
-                    prediction.patterns.trend.trend === 'decreasing' ? '↘' : '→'}
+                        prediction.patterns.trend.trend === 'decreasing' ? '↘' : '→'}
                         </span>` : ''}
                 </div>` : ''}
         `;
@@ -962,7 +962,7 @@ function loadData() {
 
 function exportData() {
     const dataStr = JSON.stringify(bowelMovementData, null, 2);
-    const dataBlob = new Blob([dataStr], {type: 'application/json'});
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
     const url = URL.createObjectURL(dataBlob);
 
     const a = document.createElement('a');
@@ -1061,7 +1061,7 @@ function populateMonthFilter() {
         const date = new Date(month + '-01');
         const option = document.createElement('option');
         option.value = month;
-        option.textContent = date.toLocaleDateString('en-US', {year: 'numeric', month: 'long'});
+        option.textContent = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
         monthFilter.appendChild(option);
     });
 }
@@ -1200,7 +1200,7 @@ function renderAnalytics() {
                 <p><strong>Current Trend:</strong>
                     <span class="trend-indicator">
                         ${prediction.patterns.trend.trend === 'increasing' ? '📈 Increasing' :
-                prediction.patterns.trend.trend === 'decreasing' ? '📉 Decreasing' : '➡️ Stable'}
+                    prediction.patterns.trend.trend === 'decreasing' ? '📉 Decreasing' : '➡️ Stable'}
                     </span>
                 </p>
                 <p><strong>Slope:</strong> ${prediction.patterns.trend.slope.toFixed(3)}</p>
@@ -1239,7 +1239,7 @@ function renderAnalytics() {
     if (outlierInfoElement) {
         const intervals = calculateEventIntervals(events);
         const intervalsInDays = intervals.map(h => h / 24);
-        const {outliers} = detectOutliers(intervalsInDays);
+        const { outliers } = detectOutliers(intervalsInDays);
 
         if (outliers.length > 0) {
             outlierInfoElement.innerHTML = `

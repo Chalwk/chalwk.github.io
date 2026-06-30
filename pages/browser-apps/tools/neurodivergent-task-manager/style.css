@@ -121,12 +121,12 @@
     transition: var(--transition);
 }
 
-.step-checkbox:checked + .checkmark {
+.step-checkbox:checked+.checkmark {
     background-color: var(--success);
     border-color: var(--success);
 }
 
-.step-checkbox:checked + .checkmark::after {
+.step-checkbox:checked+.checkmark::after {
     content: "✓";
     color: white;
     font-size: 12px;

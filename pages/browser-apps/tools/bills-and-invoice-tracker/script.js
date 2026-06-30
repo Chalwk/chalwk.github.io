@@ -22,7 +22,7 @@ function loadData() {
             affordabilityItems: parsed.affordabilityItems || defaultData.affordabilityItems
         };
     }
-    return {...defaultData};
+    return { ...defaultData };
 }
 
 function saveData() {
@@ -39,7 +39,7 @@ function saveData() {
     localStorage.setItem('billsTrackerData', JSON.stringify(dataToSave));
 }
 
-let {incomeStreams, weeklyBills, biWeeklyBills, monthlyBills, invoices, affordabilityItems} = loadData();
+let { incomeStreams, weeklyBills, biWeeklyBills, monthlyBills, invoices, affordabilityItems } = loadData();
 
 const weeklyIncomeEl = document.getElementById('weekly-income');
 const weeklyExpensesEl = document.getElementById('weekly-expenses');
@@ -110,7 +110,7 @@ function calculateTotalWeeklyIncome() {
         }
     });
 
-    return {recurring: total, oneOff: oneOffTotal};
+    return { recurring: total, oneOff: oneOffTotal };
 }
 
 function attachIncomeEventListeners() {
@@ -377,14 +377,14 @@ function renderInvoices() {
 
             <div class="invoice-payments">
                 ${invoice.payments.length > 0 ?
-            invoice.payments.map(payment => `
+                invoice.payments.map(payment => `
                         <div class="payment-row">
                             <span>${formatDate(payment.date)}</span>
                             <span>$${payment.amount.toFixed(2)}</span>
                         </div>
                     `).join('') :
-            '<p>No payments recorded</p>'
-        }
+                '<p>No payments recorded</p>'
+            }
             </div>
 
             <div class="actions" style="margin-top: 15px;">
@@ -482,8 +482,8 @@ function renderIncomeStreams() {
                 <button class="btn btn-warning btn-sm edit-income" data-id="${income.id}">Edit</button>
                 <button class="btn btn-danger btn-sm delete-income" data-id="${income.id}">Delete</button>
                 ${income.isOneOff && income.amount > 0 ?
-            `<button class="btn btn-info btn-sm spend-oneoff" data-id="${income.id}">Spend</button>` :
-            ''}
+                `<button class="btn btn-info btn-sm spend-oneoff" data-id="${income.id}">Spend</button>` :
+                ''}
             </td>
         `;
 
@@ -546,8 +546,8 @@ function renderAffordabilityItems() {
             <td>${displayTimeframe}</td>
             <td class="${item.analyzed ? 'affordable' : 'not-analyzed'}">
                 ${item.analyzed ?
-            (weeklyNeeded <= remainingBalance ? 'Affordable ✓' : 'Not Affordable ✗') :
-            'Not Analyzed'}
+                (weeklyNeeded <= remainingBalance ? 'Affordable ✓' : 'Not Affordable ✗') :
+                'Not Analyzed'}
             </td>
             <td class="actions">
                 <button class="btn btn-info btn-sm analyze-item" data-id="${item.id}">Analyze</button>
@@ -586,7 +586,7 @@ function renderAffordabilityItems() {
 }
 
 function formatDate(dateString) {
-    const options = {day: 'numeric', month: 'short', year: 'numeric'};
+    const options = { day: 'numeric', month: 'short', year: 'numeric' };
     return new Date(dateString).toLocaleDateString('en-US', options);
 }
 
@@ -704,18 +704,18 @@ function saveBill(e) {
             if (frequency === "Bi-weekly") {
                 const index = biWeeklyBills.findIndex(b => b.id === parseInt(id));
                 if (index !== -1) {
-                    biWeeklyBills[index] = {...biWeeklyBills[index], ...billData};
+                    biWeeklyBills[index] = { ...biWeeklyBills[index], ...billData };
                 }
             } else {
                 const index = weeklyBills.findIndex(b => b.id === parseInt(id));
                 if (index !== -1) {
-                    weeklyBills[index] = {...weeklyBills[index], ...billData};
+                    weeklyBills[index] = { ...weeklyBills[index], ...billData };
                 }
             }
         } else {
             const index = monthlyBills.findIndex(b => b.id === parseInt(id));
             if (index !== -1) {
-                monthlyBills[index] = {...monthlyBills[index], ...billData};
+                monthlyBills[index] = { ...monthlyBills[index], ...billData };
             }
         }
     } else {
@@ -1083,7 +1083,7 @@ function exportData() {
     };
 
     const dataStr = JSON.stringify(data, null, 2);
-    const dataBlob = new Blob([dataStr], {type: 'application/json'});
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
 
     const link = document.createElement('a');
     link.href = URL.createObjectURL(dataBlob);

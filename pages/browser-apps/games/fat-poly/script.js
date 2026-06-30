@@ -2,7 +2,7 @@
 
 (() => {
     const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d', {alpha: false});
+    const ctx = canvas.getContext('2d', { alpha: false });
     let W = 800, H = 600, DPR = Math.max(1, window.devicePixelRatio || 1);
     let audioEnabled = true;
     let running = false;
@@ -93,10 +93,10 @@
             this.speed = 280;
             this.vx = 0;
             this.vy = 0;
-            this.target = {x: this.x, y: this.y};
+            this.target = { x: this.x, y: this.y };
             this.color = '#ffffff';
             this.health = 100;
-            this.moveKeys = {up: false, down: false, left: false, right: false};
+            this.moveKeys = { up: false, down: false, left: false, right: false };
         }
 
         update(dt) {
@@ -773,7 +773,7 @@
     }
 
     const orbs = [];
-    for (let i = 0; i < 12; i++) orbs.push({x: rand(0, 1), y: rand(0, 1), s: rand(40, 160), v: rand(0.02, 0.08)});
+    for (let i = 0; i < 12; i++) orbs.push({ x: rand(0, 1), y: rand(0, 1), s: rand(40, 160), v: rand(0.02, 0.08) });
 
     function drawBackgroundOrbs(now) {
         for (const o of orbs) {

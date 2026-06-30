@@ -404,7 +404,7 @@ function setupExport() {
         };
 
         const dataStr = JSON.stringify(dataToExport, null, 2);
-        const dataBlob = new Blob([dataStr], {type: 'application/json'});
+        const dataBlob = new Blob([dataStr], { type: 'application/json' });
 
         const url = URL.createObjectURL(dataBlob);
         const link = document.createElement('a');

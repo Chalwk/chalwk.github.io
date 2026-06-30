@@ -71,7 +71,7 @@
             const density = 0.6 + difficulty * 1.2 + rng() * 0.6;
             const gapMin = 220 - difficulty * 80 - rng() * 60;
             const gapMax = gapMin + 160 + rng() * 280;
-            segs.push({theme, density, gapMin: Math.round(gapMin), gapMax: Math.round(gapMax)});
+            segs.push({ theme, density, gapMin: Math.round(gapMin), gapMax: Math.round(gapMax) });
         }
         return segs;
     }
@@ -111,18 +111,18 @@
         if (type === 'spike') {
             const h = 56 + Math.round(rng() * 48);
             const w = 26 + Math.round(rng() * 18);
-            return {type: 'spike', x, y: 0, w, h, pass: false};
+            return { type: 'spike', x, y: 0, w, h, pass: false };
         }
         if (type === 'barrel') {
             const w = 46 + Math.round(rng() * 38);
             const h = 38 + Math.round(rng() * 20);
-            return {type: 'barrel', x, w, h, pass: false};
+            return { type: 'barrel', x, w, h, pass: false };
         }
         if (type === 'drone') {
             const w = 60;
             const h = 40;
             const ybase = groundY - player.h - 80 - Math.round(rng() * 120);
-            return {type: 'drone', x, w, h, y: ybase, osc: rng() * Math.PI * 2, pass: false};
+            return { type: 'drone', x, w, h, y: ybase, osc: rng() * Math.PI * 2, pass: false };
         }
         return createObstacle('spike', x);
     }
@@ -403,17 +403,17 @@
     }
 
     function checkSpikeCollision(player, spike) {
-        const spikeTop = {x: spike.x + spike.w * 0.5, y: spike.y + spike.h * 0.05};
-        const spikeLeft = {x: spike.x + spike.w * 0.25, y: spike.y + spike.h * 0.3};
-        const spikeRight = {x: spike.x + spike.w * 0.75, y: spike.y + spike.h * 0.3};
-        const spikeBaseLeft = {x: spike.x, y: spike.y + spike.h};
-        const spikeBaseRight = {x: spike.x + spike.w, y: spike.y + spike.h};
+        const spikeTop = { x: spike.x + spike.w * 0.5, y: spike.y + spike.h * 0.05 };
+        const spikeLeft = { x: spike.x + spike.w * 0.25, y: spike.y + spike.h * 0.3 };
+        const spikeRight = { x: spike.x + spike.w * 0.75, y: spike.y + spike.h * 0.3 };
+        const spikeBaseLeft = { x: spike.x, y: spike.y + spike.h };
+        const spikeBaseRight = { x: spike.x + spike.w, y: spike.y + spike.h };
 
         const playerCorners = [
-            {x: player.x, y: player.y},
-            {x: player.x + player.w, y: player.y},
-            {x: player.x, y: player.y + player.h},
-            {x: player.x + player.w, y: player.y + player.h}
+            { x: player.x, y: player.y },
+            { x: player.x + player.w, y: player.y },
+            { x: player.x, y: player.y + player.h },
+            { x: player.x + player.w, y: player.y + player.h }
         ];
 
         for (let corner of playerCorners) {

@@ -37,7 +37,9 @@
     gap: 0.5rem;
 }
 
-.category-edit, .category-delete, .category-toggle {
+.category-edit,
+.category-delete,
+.category-toggle {
     background: none;
     border: none;
     color: var(--gray);
@@ -130,7 +132,8 @@
     gap: 0.5rem;
 }
 
-.grocery-edit, .grocery-delete {
+.grocery-edit,
+.grocery-delete {
     background: none;
     border: none;
     color: var(--gray);
@@ -247,6 +250,7 @@
         transform: translateX(100%);
         opacity: 0;
     }
+
     to {
         transform: translateX(0);
         opacity: 1;
@@ -307,8 +311,8 @@
         align-items: stretch;
     }
 
-    .controls > .btn,
-    .controls > .dropdown {
+    .controls>.btn,
+    .controls>.dropdown {
         width: 100%;
     }
 

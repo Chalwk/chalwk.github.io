@@ -15,8 +15,9 @@ pwa: true
         <div class="emergency-contact">
             <h3>
                 <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                     stroke-width="2" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                    stroke-width="2" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z">
+                    </path>
                     <line x1="12" x2="12" y1="9" y2="13"></line>
                     <line x1="12" x2="12.01" y1="17" y2="17"></line>
                 </svg>
@@ -54,10 +55,10 @@ pwa: true
             <!-- Left column: Assessment questions -->
             <div class="card">
                 <h2>
-                    <svg stroke="currentColor" viewBox="0 0 24 24"
-                         xmlns="http://www.w3.org/2000/svg">
-                        <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-                              stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+                    <svg stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
                     </svg>
                     Burnout Risk Assessment
                 </h2>
@@ -66,8 +67,8 @@ pwa: true
                 <div class="factor-group">
                     <button class="collapse-toggle" data-target="energy-group">
                         <svg class="collapse-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round"
-                             stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"
-                             xmlns="http://www.w3.org/2000/svg">
+                            stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"
+                            xmlns="http://www.w3.org/2000/svg">
                             <polyline points="6 9 12 15 18 9"></polyline>
                         </svg>
                         <h3>Energy & Fatigue</h3>
@@ -78,7 +79,8 @@ pwa: true
                             <div class="question-text">How would you rate your overall energy levels?
                                 <span class="tooltip">
                                     <span class="info-icon">?</span>
-                                    <span class="tooltiptext">Consider your physical and mental energy throughout the day, not just at specific times</span>
+                                    <span class="tooltiptext">Consider your physical and mental energy throughout the
+                                        day, not just at specific times</span>
                                 </span>
                             </div>
                             <div class="question-description">0 = Consistently high energy, 3 = Neutral/Average, 5 =
@@ -86,7 +88,7 @@ pwa: true
                             </div>
                             <div class="slider-container">
                                 <label for="energy-level"></label><input class="slider" id="energy-level" max="5"
-                                                                         min="0" type="range" value="3">
+                                    min="0" type="range" value="3">
                                 <span class="slider-value" id="energy-value">3</span>
                             </div>
                         </div>
@@ -97,7 +99,7 @@ pwa: true
                             </div>
                             <div class="slider-container">
                                 <label for="sleep-quality"></label><input class="slider" id="sleep-quality" max="5"
-                                                                          min="0" type="range" value="3">
+                                    min="0" type="range" value="3">
                                 <span class="slider-value" id="sleep-value">3</span>
                             </div>
                         </div>
@@ -108,7 +110,7 @@ pwa: true
                             </div>
                             <div class="slider-container">
                                 <label for="routine-difficulty"></label><input class="slider" id="routine-difficulty"
-                                                                               max="5" min="0" type="range" value="3">
+                                    max="5" min="0" type="range" value="3">
                                 <span class="slider-value" id="routine-value">3</span>
                             </div>
                         </div>
@@ -121,7 +123,7 @@ pwa: true
                             </div>
                             <div class="slider-container">
                                 <label for="stimulant-use"></label><input class="slider" id="stimulant-use" max="5"
-                                                                          min="0" type="range" value="3">
+                                    min="0" type="range" value="3">
                                 <span class="slider-value" id="stimulant-value">3</span>
                             </div>
                         </div>
@@ -131,8 +133,8 @@ pwa: true
                 <div class="factor-group">
                     <button class="collapse-toggle" data-target="sensory-group">
                         <svg class="collapse-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round"
-                             stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"
-                             xmlns="http://www.w3.org/2000/svg">
+                            stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"
+                            xmlns="http://www.w3.org/2000/svg">
                             <polyline points="6 9 12 15 18 9"></polyline>
                         </svg>
                         <h3>Sensory Sensitivity</h3>
@@ -145,7 +147,7 @@ pwa: true
                             </div>
                             <div class="slider-container">
                                 <label for="sensory-overload"></label><input class="slider" id="sensory-overload"
-                                                                             max="5" min="0" type="range" value="3">
+                                    max="5" min="0" type="range" value="3">
                                 <span class="slider-value" id="sensory-value">3</span>
                             </div>
                         </div>
@@ -156,7 +158,7 @@ pwa: true
                             </div>
                             <div class="slider-container">
                                 <label for="sensory-avoidance"></label><input class="slider" id="sensory-avoidance"
-                                                                              max="5" min="0" type="range" value="3">
+                                    max="5" min="0" type="range" value="3">
                                 <span class="slider-value" id="avoidance-value">3</span>
                             </div>
                         </div>
@@ -167,7 +169,7 @@ pwa: true
                             </div>
                             <div class="slider-container">
                                 <label for="tactile-sensitivity"></label><input class="slider" id="tactile-sensitivity"
-                                                                                max="5" min="0" type="range" value="3">
+                                    max="5" min="0" type="range" value="3">
                                 <span class="slider-value" id="tactile-value">3</span>
                             </div>
                         </div>
@@ -180,7 +182,7 @@ pwa: true
                             </div>
                             <div class="slider-container">
                                 <label for="sensory-tools"></label><input class="slider" id="sensory-tools" max="5"
-                                                                          min="0" type="range" value="3">
+                                    min="0" type="range" value="3">
                                 <span class="slider-value" id="tools-value">3</span>
                             </div>
                         </div>
@@ -190,8 +192,8 @@ pwa: true
                 <div class="factor-group">
                     <button class="collapse-toggle" data-target="executive-group">
                         <svg class="collapse-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round"
-                             stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"
-                             xmlns="http://www.w3.org/2000/svg">
+                            stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"
+                            xmlns="http://www.w3.org/2000/svg">
                             <polyline points="6 9 12 15 18 9"></polyline>
                         </svg>
                         <h3>Executive Function</h3>
@@ -204,7 +206,7 @@ pwa: true
                             </div>
                             <div class="slider-container">
                                 <label for="task-initiation"></label><input class="slider" id="task-initiation" max="5"
-                                                                            min="0" type="range" value="3">
+                                    min="0" type="range" value="3">
                                 <span class="slider-value" id="task-value">3</span>
                             </div>
                         </div>
@@ -216,7 +218,7 @@ pwa: true
                             </div>
                             <div class="slider-container">
                                 <label for="planning-difficulty"></label><input class="slider" id="planning-difficulty"
-                                                                                max="5" min="0" type="range" value="3">
+                                    max="5" min="0" type="range" value="3">
                                 <span class="slider-value" id="planning-value">3</span>
                             </div>
                         </div>
@@ -227,7 +229,7 @@ pwa: true
                             </div>
                             <div class="slider-container">
                                 <label for="memory-issues"></label><input class="slider" id="memory-issues" max="5"
-                                                                          min="0" type="range" value="3">
+                                    min="0" type="range" value="3">
                                 <span class="slider-value" id="memory-value">3</span>
                             </div>
                         </div>
@@ -238,7 +240,7 @@ pwa: true
                             </div>
                             <div class="slider-container">
                                 <label for="decision-fatigue"></label><input class="slider" id="decision-fatigue"
-                                                                             max="5" min="0" type="range" value="3">
+                                    max="5" min="0" type="range" value="3">
                                 <span class="slider-value" id="decision-value">3</span>
                             </div>
                         </div>
@@ -248,8 +250,8 @@ pwa: true
                 <div class="factor-group">
                     <button class="collapse-toggle" data-target="social-group">
                         <svg class="collapse-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round"
-                             stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"
-                             xmlns="http://www.w3.org/2000/svg">
+                            stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"
+                            xmlns="http://www.w3.org/2000/svg">
                             <polyline points="6 9 12 15 18 9"></polyline>
                         </svg>
                         <h3>Social Demands</h3>
@@ -262,7 +264,7 @@ pwa: true
                             </div>
                             <div class="slider-container">
                                 <label for="social-drain"></label><input class="slider" id="social-drain" max="5"
-                                                                         min="0" type="range" value="3">
+                                    min="0" type="range" value="3">
                                 <span class="slider-value" id="social-value">3</span>
                             </div>
                         </div>
@@ -273,7 +275,7 @@ pwa: true
                             </div>
                             <div class="slider-container">
                                 <label for="masking-level"></label><input class="slider" id="masking-level" max="5"
-                                                                          min="0" type="range" value="3">
+                                    min="0" type="range" value="3">
                                 <span class="slider-value" id="masking-value">3</span>
                             </div>
                         </div>
@@ -284,9 +286,7 @@ pwa: true
                             </div>
                             <div class="slider-container">
                                 <label for="communication-difficulty"></label><input class="slider"
-                                                                                     id="communication-difficulty"
-                                                                                     max="5" min="0" type="range"
-                                                                                     value="3">
+                                    id="communication-difficulty" max="5" min="0" type="range" value="3">
                                 <span class="slider-value" id="communication-value">3</span>
                             </div>
                         </div>
@@ -297,7 +297,7 @@ pwa: true
                             </div>
                             <div class="slider-container">
                                 <label for="social-isolation"></label><input class="slider" id="social-isolation"
-                                                                             max="5" min="0" type="range" value="3">
+                                    max="5" min="0" type="range" value="3">
                                 <span class="slider-value" id="isolation-value">3</span>
                             </div>
                         </div>
@@ -307,8 +307,8 @@ pwa: true
                 <div class="factor-group">
                     <button class="collapse-toggle" data-target="emotional-group">
                         <svg class="collapse-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round"
-                             stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"
-                             xmlns="http://www.w3.org/2000/svg">
+                            stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"
+                            xmlns="http://www.w3.org/2000/svg">
                             <polyline points="6 9 12 15 18 9"></polyline>
                         </svg>
                         <h3>Emotional State</h3>
@@ -321,8 +321,7 @@ pwa: true
                             </div>
                             <div class="slider-container">
                                 <label for="emotional-reactivity"></label><input class="slider"
-                                                                                 id="emotional-reactivity" max="5"
-                                                                                 min="0" type="range" value="3">
+                                    id="emotional-reactivity" max="5" min="0" type="range" value="3">
                                 <span class="slider-value" id="emotional-value">3</span>
                             </div>
                         </div>
@@ -333,7 +332,7 @@ pwa: true
                             </div>
                             <div class="slider-container">
                                 <label for="emotional-numbness"></label><input class="slider" id="emotional-numbness"
-                                                                               max="5" min="0" type="range" value="3">
+                                    max="5" min="0" type="range" value="3">
                                 <span class="slider-value" id="numbness-value">3</span>
                             </div>
                         </div>
@@ -344,7 +343,7 @@ pwa: true
                             </div>
                             <div class="slider-container">
                                 <label for="meltdown-frequency"></label><input class="slider" id="meltdown-frequency"
-                                                                               max="5" min="0" type="range" value="3">
+                                    max="5" min="0" type="range" value="3">
                                 <span class="slider-value" id="meltdown-value">3</span>
                             </div>
                         </div>
@@ -356,7 +355,7 @@ pwa: true
                             </div>
                             <div class="slider-container">
                                 <label for="hopelessness"></label><input class="slider" id="hopelessness" max="5"
-                                                                         min="0" type="range" value="3">
+                                    min="0" type="range" value="3">
                                 <span class="slider-value" id="hopelessness-value">3</span>
                             </div>
                         </div>
@@ -374,10 +373,10 @@ pwa: true
             <!-- Right column: Results, risk meter, factor breakdown -->
             <div class="card">
                 <h2>
-                    <svg stroke="currentColor" viewBox="0 0 24 24"
-                         xmlns="http://www.w3.org/2000/svg">
-                        <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                              stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+                    <svg stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
                     </svg>
                     Your Burnout Risk
                 </h2>
@@ -440,10 +439,10 @@ pwa: true
             <!-- Full-width recommendations card (initially hidden) -->
             <div class="card full-width" id="recommendations-card">
                 <h2>
-                    <svg stroke="currentColor" viewBox="0 0 24 24"
-                         xmlns="http://www.w3.org/2000/svg">
-                        <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-                              stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+                    <svg stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
                     </svg>
                     Personalized Recommendations
                 </h2>
@@ -462,7 +461,8 @@ pwa: true
                     <div class="tab-content active" id="energy-tab">
                         <ul class="recommendations-list">
                             <li>Schedule regular rest breaks throughout your day, even when you feel you don't need them
-                                <span class="priority-badge priority-high">High Priority</span></li>
+                                <span class="priority-badge priority-high">High Priority</span>
+                            </li>
                             <li>Practice saying "no" to non-essential demands on your time and energy <span
                                     class="priority-badge priority-medium">Medium Priority</span></li>
                             <li>Create a wind-down routine to help your body recognize it's time to rest <span
@@ -570,7 +570,8 @@ pwa: true
                                 <h4>Altogether Autism</h4>
                                 <p>New Zealand-based organisation providing autism-specific information, resources, and
                                     personalised consultations.</p>
-                                <a class="resource-link" href="https://www.altogetherautism.org.nz" target="_blank">Visit
+                                <a class="resource-link" href="https://www.altogetherautism.org.nz"
+                                    target="_blank">Visit
                                     Website</a>
                             </div>
                             <div class="resource-card">
@@ -620,8 +621,8 @@ pwa: true
                                 <h4>I am Autistic: An interactive and informative guide to autism</h4>
                                 <p>Author: Chanelle Moriah</p>
                                 <a class="resource-link"
-                                   href="https://aotearoabooks.co.nz/i-am-autistic-an-interactive-and-informative-guide-to-autism-by-someone-diagnosed-with-it/"
-                                   target="_blank">View Book</a>
+                                    href="https://aotearoabooks.co.nz/i-am-autistic-an-interactive-and-informative-guide-to-autism-by-someone-diagnosed-with-it/"
+                                    target="_blank">View Book</a>
                             </div>
                         </div>
 
@@ -631,28 +632,28 @@ pwa: true
                                 <h4>Ministry of Education - Special Education</h4>
                                 <p>Information and support for students requiring special education.</p>
                                 <a class="resource-link"
-                                   href="https://www.education.govt.nz/school/student-support/special-education/"
-                                   target="_blank">Visit Website</a>
+                                    href="https://www.education.govt.nz/school/student-support/special-education/"
+                                    target="_blank">Visit Website</a>
                             </div>
                             <div class="resource-card">
                                 <h4>Work and Income - Disability Allowance</h4>
                                 <p>NZ government support allowance for disabled individuals.</p>
                                 <a class="resource-link"
-                                   href="https://www.workandincome.govt.nz/products/a-z-benefits/disability-allowance.html"
-                                   target="_blank">Visit Website</a>
+                                    href="https://www.workandincome.govt.nz/products/a-z-benefits/disability-allowance.html"
+                                    target="_blank">Visit Website</a>
                             </div>
                             <div class="resource-card">
                                 <h4>Health Navigator NZ - Autism Spectrum Disorder</h4>
                                 <p>Provides accessible health information about autism.</p>
                                 <a class="resource-link"
-                                   href="https://www.healthnavigator.org.nz/health-a-z/a/autism-spectrum-disorder/"
-                                   target="_blank">Visit Website</a>
+                                    href="https://www.healthnavigator.org.nz/health-a-z/a/autism-spectrum-disorder/"
+                                    target="_blank">Visit Website</a>
                             </div>
                             <div class="resource-card">
                                 <h4>KidsHealth NZ - Autism Spectrum Disorder</h4>
                                 <p>Child-focused information and resources about autism.</p>
                                 <a class="resource-link" href="https://www.kidshealth.org.nz/autism-spectrum-disorder"
-                                   target="_blank">Visit Website</a>
+                                    target="_blank">Visit Website</a>
                             </div>
                             <div class="resource-card">
                                 <h4>Te Kete Ipurangi (TKI)</h4>
@@ -668,10 +669,9 @@ pwa: true
             <!-- Full-width history card for tracking past assessments -->
             <div class="card full-width">
                 <h2>
-                    <svg stroke="currentColor" viewBox="0 0 24 24"
-                         xmlns="http://www.w3.org/2000/svg">
+                    <svg stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round"
-                              stroke-linejoin="round" stroke-width="2"/>
+                            stroke-linejoin="round" stroke-width="2" />
                     </svg>
                     Assessment History & Trends
                 </h2>

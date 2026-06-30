@@ -6,11 +6,12 @@ Facebook Activity Cleaner - Chrome Console Script
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Facebook Activity Cleaner</title>
 
-    <link href="../../../../assets/css/core.css" rel="stylesheet"/>
+    <link href="../../../../assets/css/core.css" rel="stylesheet" />
     <script src="../../../../assets/js/nav-menu.js"></script>
 
     <style>
@@ -253,67 +254,72 @@ Facebook Activity Cleaner - Chrome Console Script
     </style>
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
-          rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
+        rel="stylesheet">
 </head>
+
 <body>
 
-<header class="header"></header>
+    <header class="header"></header>
 
-<main>
-    <div class="chrome-script-container">
-        <div class="script-card">
-            <div class="script-header">
-                <h1>Facebook Activity Cleaner</h1>
-                <p class="script-description">
-                    A Chrome console script that automatically deletes your Facebook activity logs. Works with Group
-                    activity,
-                    Comments, Posts, and any activity that has the three-dot menu with a "Delete Your Activity" option.
-                    This script runs directly in your browser's developer console and automates the cleanup process.
-                </p>
-            </div>
-
-            <div class="warning">
-                <h4><i class="fas fa-exclamation-triangle"></i> Critical Warning</h4>
-                <p>This script performs irreversible actions. Once you delete an activity item, it cannot be recovered.
-                    The script will automatically delete ALL items from your activity history that match the three-dot
-                    menu pattern.
-                    Use with extreme caution and only on accounts you own.</p>
-            </div>
-
-            <div class="config-options">
-                <h4>Script Configuration</h4>
-                <p>Customize these values in the script below before running:</p>
-
-                <div class="config-item">
-                    <label for="intervalInput">Interval Between Deletes (ms):</label>
-                    <input id="intervalInput" max="10000" min="100" type="number" value="100">
-                    <small>Time to wait between each delete operation. Default: 100ms</small>
+    <main>
+        <div class="chrome-script-container">
+            <div class="script-card">
+                <div class="script-header">
+                    <h1>Facebook Activity Cleaner</h1>
+                    <p class="script-description">
+                        A Chrome console script that automatically deletes your Facebook activity logs. Works with Group
+                        activity,
+                        Comments, Posts, and any activity that has the three-dot menu with a "Delete Your Activity"
+                        option.
+                        This script runs directly in your browser's developer console and automates the cleanup process.
+                    </p>
                 </div>
 
-                <div class="config-item">
-                    <label for="scrollAmountInput">Scroll Amount (pixels):</label>
-                    <input id="scrollAmountInput" max="2000" min="100" type="number" value="500">
-                    <small>How much to scroll when no items are found. Default: 500px</small>
+                <div class="warning">
+                    <h4><i class="fas fa-exclamation-triangle"></i> Critical Warning</h4>
+                    <p>This script performs irreversible actions. Once you delete an activity item, it cannot be
+                        recovered.
+                        The script will automatically delete ALL items from your activity history that match the
+                        three-dot
+                        menu pattern.
+                        Use with extreme caution and only on accounts you own.</p>
                 </div>
 
-                <div class="config-item">
-                    <label for="batchSizeInput">Process Batch Size:</label>
-                    <input id="batchSizeInput" max="10" min="1" type="number" value="1">
-                    <small>Number of items to process at once. Default: 1 (recommended for stability)</small>
-                </div>
+                <div class="config-options">
+                    <h4>Script Configuration</h4>
+                    <p>Customize these values in the script below before running:</p>
 
-                <button class="copy-button" id="updateScriptBtn"
+                    <div class="config-item">
+                        <label for="intervalInput">Interval Between Deletes (ms):</label>
+                        <input id="intervalInput" max="10000" min="100" type="number" value="100">
+                        <small>Time to wait between each delete operation. Default: 100ms</small>
+                    </div>
+
+                    <div class="config-item">
+                        <label for="scrollAmountInput">Scroll Amount (pixels):</label>
+                        <input id="scrollAmountInput" max="2000" min="100" type="number" value="500">
+                        <small>How much to scroll when no items are found. Default: 500px</small>
+                    </div>
+
+                    <div class="config-item">
+                        <label for="batchSizeInput">Process Batch Size:</label>
+                        <input id="batchSizeInput" max="10" min="1" type="number" value="1">
+                        <small>Number of items to process at once. Default: 1 (recommended for stability)</small>
+                    </div>
+
+                    <button class="copy-button" id="updateScriptBtn"
                         style="position: relative; top: 0; right: 0; margin-top: 1rem;">
-                    <i class="fas fa-sync-alt"></i> Update Script with Values
-                </button>
-            </div>
+                        <i class="fas fa-sync-alt"></i> Update Script with Values
+                    </button>
+                </div>
 
-            <div class="script-code-container">
-                <button class="copy-button" id="copyScriptBtn">
-                    <i class="far fa-copy"></i> Copy Script
-                </button>
-                <pre class="script-code" id="scriptCode"><code id="scriptContent">(async function() {
+                <div class="script-code-container">
+                    <button class="copy-button" id="copyScriptBtn">
+                        <i class="far fa-copy"></i> Copy Script
+                    </button>
+                    <pre class="script-code" id="scriptCode"><code id="scriptContent">(async function() {
     const CONFIG = {
         INTERVAL_BETWEEN_DELETES: 100,
         MENU_WAIT_TIME: 100,
@@ -556,148 +562,158 @@ Facebook Activity Cleaner - Chrome Console Script
         console.log('📜 No more items found');
     }
 })();</code></pre>
-            </div>
+                </div>
 
-            <div class="instructions">
-                <h3>How to Use This Script</h3>
-                <ol>
-                    <li><strong>Navigate to Facebook Activity Log:</strong> Go to your <a
-                            href="https://www.facebook.com/your_activity" target="_blank">Facebook Activity Log</a> (you
-                        must be signed in).
-                    </li>
-                    <li><strong>Select Activity Type:</strong> Navigate to any activity section that has three-dot menus
-                        (e.g., Groups, Comments, Posts).
-                    </li>
-                    <li><strong>Open Developer Console:</strong> Press <code>F12</code> or <code>Ctrl+Shift+I</code>
-                        (Windows/Linux) / <code>Cmd+Option+I</code> (Mac) to open Developer Tools.
-                    </li>
-                    <li><strong>Switch to Console Tab:</strong> Click on the "Console" tab in the Developer Tools panel.
-                    </li>
-                    <li><strong>Paste and Run:</strong> Copy the script above, paste it into the console, and press
-                        <code>Enter</code> to execute.
-                    </li>
-                    <li><strong>Monitor Progress:</strong> Watch the console for deletion counts and watch the browser
-                        as it automatically removes items.
-                    </li>
-                    <li><strong>Stop the Script:</strong> To stop execution, type <code>stopScript()</code> in the
-                        console and press Enter.
-                    </li>
-                </ol>
-            </div>
+                <div class="instructions">
+                    <h3>How to Use This Script</h3>
+                    <ol>
+                        <li><strong>Navigate to Facebook Activity Log:</strong> Go to your <a
+                                href="https://www.facebook.com/your_activity" target="_blank">Facebook Activity Log</a>
+                            (you
+                            must be signed in).
+                        </li>
+                        <li><strong>Select Activity Type:</strong> Navigate to any activity section that has three-dot
+                            menus
+                            (e.g., Groups, Comments, Posts).
+                        </li>
+                        <li><strong>Open Developer Console:</strong> Press <code>F12</code> or <code>Ctrl+Shift+I</code>
+                            (Windows/Linux) / <code>Cmd+Option+I</code> (Mac) to open Developer Tools.
+                        </li>
+                        <li><strong>Switch to Console Tab:</strong> Click on the "Console" tab in the Developer Tools
+                            panel.
+                        </li>
+                        <li><strong>Paste and Run:</strong> Copy the script above, paste it into the console, and press
+                            <code>Enter</code> to execute.
+                        </li>
+                        <li><strong>Monitor Progress:</strong> Watch the console for deletion counts and watch the
+                            browser
+                            as it automatically removes items.
+                        </li>
+                        <li><strong>Stop the Script:</strong> To stop execution, type <code>stopScript()</code> in the
+                            console and press Enter.
+                        </li>
+                    </ol>
+                </div>
 
-            <div class="usage-note">
-                <h4><i class="fas fa-lightbulb"></i> Usage Notes</h4>
-                <ul>
-                    <li>Keep the Facebook tab active and visible while the script runs</li>
-                    <li>Works on any Facebook activity log with three-dot menus and "Delete Your Activity" option</li>
-                    <li>The script automatically scrolls and loads more items as needed</li>
-                    <li>It stops when it reaches the bottom of the page or after 5 empty scrolls</li>
-                    <li>If Facebook changes their HTML, you might need to update the selectors</li>
-                    <li>For thousands of items, this will take time (e.g., 1000 items at 100ms each = ~1.7 minutes)</li>
-                </ul>
-            </div>
+                <div class="usage-note">
+                    <h4><i class="fas fa-lightbulb"></i> Usage Notes</h4>
+                    <ul>
+                        <li>Keep the Facebook tab active and visible while the script runs</li>
+                        <li>Works on any Facebook activity log with three-dot menus and "Delete Your Activity" option
+                        </li>
+                        <li>The script automatically scrolls and loads more items as needed</li>
+                        <li>It stops when it reaches the bottom of the page or after 5 empty scrolls</li>
+                        <li>If Facebook changes their HTML, you might need to update the selectors</li>
+                        <li>For thousands of items, this will take time (e.g., 1000 items at 100ms each = ~1.7 minutes)
+                        </li>
+                    </ul>
+                </div>
 
-            <div class="instructions">
-                <h3>Configuration Tips</h3>
-                <p>You can modify these variables in the script:</p>
-                <ul>
-                    <li><code>INTERVAL_BETWEEN_DELETES</code> - Time between each deletion (milliseconds). Default is
-                        100ms.
-                        <ul>
-                            <li>Too fast may trigger Facebook's rate limiting</li>
-                            <li>May cause temporary blocks or CAPTCHA verification</li>
-                            <li>100ms is faster but may risk detection</li>
-                        </ul>
-                    </li>
-                    <li><code>SCROLL_AMOUNT</code> - How much to scroll when no items are found (pixels)</li>
-                    <li><code>PROCESS_BATCH_SIZE</code> - Number of items to process at once (1 recommended)</li>
-                    <li><code>MAX_EMPTY_SCROLLS</code> - Stop after this many scrolls without finding items</li>
-                </ul>
-                <p><strong>Note:</strong> Facebook may temporarily block actions if the script runs too fast. If this
-                    happens, increase the interval time.</p>
-            </div>
+                <div class="instructions">
+                    <h3>Configuration Tips</h3>
+                    <p>You can modify these variables in the script:</p>
+                    <ul>
+                        <li><code>INTERVAL_BETWEEN_DELETES</code> - Time between each deletion (milliseconds). Default
+                            is
+                            100ms.
+                            <ul>
+                                <li>Too fast may trigger Facebook's rate limiting</li>
+                                <li>May cause temporary blocks or CAPTCHA verification</li>
+                                <li>100ms is faster but may risk detection</li>
+                            </ul>
+                        </li>
+                        <li><code>SCROLL_AMOUNT</code> - How much to scroll when no items are found (pixels)</li>
+                        <li><code>PROCESS_BATCH_SIZE</code> - Number of items to process at once (1 recommended)</li>
+                        <li><code>MAX_EMPTY_SCROLLS</code> - Stop after this many scrolls without finding items</li>
+                    </ul>
+                    <p><strong>Note:</strong> Facebook may temporarily block actions if the script runs too fast. If
+                        this
+                        happens, increase the interval time.</p>
+                </div>
 
-            <div class="warning">
-                <h4><i class="fas fa-exclamation-circle"></i> Important</h4>
-                <p>This script is designed for educational purposes and personal use only. Only use it on your own
-                    Facebook account.
-                    Facebook may detect automated activity and temporarily restrict your account. Use responsibly and at
-                    your own risk.</p>
+                <div class="warning">
+                    <h4><i class="fas fa-exclamation-circle"></i> Important</h4>
+                    <p>This script is designed for educational purposes and personal use only. Only use it on your own
+                        Facebook account.
+                        Facebook may detect automated activity and temporarily restrict your account. Use responsibly
+                        and at
+                        your own risk.</p>
+                </div>
             </div>
         </div>
-    </div>
-</main>
+    </main>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const copyButton = document.getElementById('copyScriptBtn');
-        const updateButton = document.getElementById('updateScriptBtn');
-        const scriptContent = document.getElementById('scriptContent');
-        const intervalInput = document.getElementById('intervalInput');
-        const scrollAmountInput = document.getElementById('scrollAmountInput');
-        const batchSizeInput = document.getElementById('batchSizeInput');
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const copyButton = document.getElementById('copyScriptBtn');
+            const updateButton = document.getElementById('updateScriptBtn');
+            const scriptContent = document.getElementById('scriptContent');
+            const intervalInput = document.getElementById('intervalInput');
+            const scrollAmountInput = document.getElementById('scrollAmountInput');
+            const batchSizeInput = document.getElementById('batchSizeInput');
 
-        let currentScriptCode = scriptContent.textContent;
+            let currentScriptCode = scriptContent.textContent;
 
-        function updateScriptWithValues() {
-            const interval = parseInt(intervalInput.value) || 100;
-            const scrollAmount = parseInt(scrollAmountInput.value) || 500;
-            const batchSize = parseInt(batchSizeInput.value) || 1;
+            function updateScriptWithValues() {
+                const interval = parseInt(intervalInput.value) || 100;
+                const scrollAmount = parseInt(scrollAmountInput.value) || 500;
+                const batchSize = parseInt(batchSizeInput.value) || 1;
 
-            let newScript = currentScriptCode;
-            newScript = newScript.replace(/INTERVAL_BETWEEN_DELETES:\s*\d+/, `INTERVAL_BETWEEN_DELETES: ${interval}`);
-            newScript = newScript.replace(/SCROLL_AMOUNT:\s*\d+/, `SCROLL_AMOUNT: ${scrollAmount}`);
-            newScript = newScript.replace(/PROCESS_BATCH_SIZE:\s*\d+/, `PROCESS_BATCH_SIZE: ${batchSize}`);
+                let newScript = currentScriptCode;
+                newScript = newScript.replace(/INTERVAL_BETWEEN_DELETES:\s*\d+/, `INTERVAL_BETWEEN_DELETES: ${interval}`);
+                newScript = newScript.replace(/SCROLL_AMOUNT:\s*\d+/, `SCROLL_AMOUNT: ${scrollAmount}`);
+                newScript = newScript.replace(/PROCESS_BATCH_SIZE:\s*\d+/, `PROCESS_BATCH_SIZE: ${batchSize}`);
 
-            scriptContent.textContent = newScript;
-            currentScriptCode = newScript;
+                scriptContent.textContent = newScript;
+                currentScriptCode = newScript;
 
-            updateLineNumbers();
+                updateLineNumbers();
 
-            const originalText = updateButton.innerHTML;
-            updateButton.innerHTML = '<i class="fas fa-check"></i> Updated!';
-            updateButton.className = 'copy-button success';
+                const originalText = updateButton.innerHTML;
+                updateButton.innerHTML = '<i class="fas fa-check"></i> Updated!';
+                updateButton.className = 'copy-button success';
 
-            setTimeout(() => {
-                updateButton.innerHTML = originalText;
-                updateButton.className = 'copy-button';
-            }, 2000);
-        }
-
-        function updateLineNumbers() {
-            const codeElement = document.querySelector('.script-code');
-            const lines = codeElement.textContent.split('\n');
-            codeElement.innerHTML = lines.map(line =>
-                `<span class="script-code-line">${line}</span>`
-            ).join('\n');
-        }
-
-        updateButton.addEventListener('click', updateScriptWithValues);
-
-        copyButton.addEventListener('click', async function () {
-            const originalText = copyButton.innerHTML;
-            const originalClass = copyButton.className;
-
-            try {
-                await navigator.clipboard.writeText(currentScriptCode);
-
-                copyButton.innerHTML = '<i class="fas fa-check"></i> Copied!';
-                copyButton.className = 'copy-button success';
-            } catch (err) {
-                console.error('Failed to copy text: ', err);
-
-                copyButton.innerHTML = '<i class="fas fa-times"></i> Failed to copy';
-                copyButton.className = 'copy-button error';
+                setTimeout(() => {
+                    updateButton.innerHTML = originalText;
+                    updateButton.className = 'copy-button';
+                }, 2000);
             }
 
-            setTimeout(() => {
-                copyButton.innerHTML = originalText;
-                copyButton.className = originalClass;
-            }, 2000);
-        });
+            function updateLineNumbers() {
+                const codeElement = document.querySelector('.script-code');
+                const lines = codeElement.textContent.split('\n');
+                codeElement.innerHTML = lines.map(line =>
+                    `<span class="script-code-line">${line}</span>`
+                ).join('\n');
+            }
 
-        updateLineNumbers();
-    });
-</script>
+            updateButton.addEventListener('click', updateScriptWithValues);
+
+            copyButton.addEventListener('click', async function () {
+                const originalText = copyButton.innerHTML;
+                const originalClass = copyButton.className;
+
+                try {
+                    await navigator.clipboard.writeText(currentScriptCode);
+
+                    copyButton.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    copyButton.className = 'copy-button success';
+                } catch (err) {
+                    console.error('Failed to copy text: ', err);
+
+                    copyButton.innerHTML = '<i class="fas fa-times"></i> Failed to copy';
+                    copyButton.className = 'copy-button error';
+                }
+
+                setTimeout(() => {
+                    copyButton.innerHTML = originalText;
+                    copyButton.className = originalClass;
+                }, 2000);
+            });
+
+            updateLineNumbers();
+        });
+    </script>
 </body>
+
 </html>

@@ -105,7 +105,7 @@ function calculateRisk() {
         alert(`Please answer all ${unansweredCount} remaining question${unansweredCount !== 1 ? 's' : ''} before calculating your risk.`);
         sliders.forEach(slider => {
             if (!answeredSliders.has(slider.id)) {
-                slider.scrollIntoView({behavior: 'smooth', block: 'center'});
+                slider.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 slider.focus();
             }
         });
@@ -235,17 +235,17 @@ function calculateRisk() {
 
     // Update priority badges on recommendation tabs based on highest factor scores
     updatePriorityRecommendations(energyFactor, sensoryFactor, executiveFactor, socialFactor, emotionFactor);
-    factorBreakdown.scrollIntoView({behavior: 'smooth', block: 'start'});
+    factorBreakdown.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 // Dynamically mark which recommendation tabs are highest priority
 function updatePriorityRecommendations(energy, sensory, executive, social, emotion) {
     const factors = [
-        {name: 'energy', score: energy, label: 'Energy Management'},
-        {name: 'sensory', score: sensory, label: 'Sensory Processing'},
-        {name: 'executive', score: executive, label: 'Executive Function'},
-        {name: 'social', score: social, label: 'Social Interaction'},
-        {name: 'emotion', score: emotion, label: 'Emotional Regulation'}
+        { name: 'energy', score: energy, label: 'Energy Management' },
+        { name: 'sensory', score: sensory, label: 'Sensory Processing' },
+        { name: 'executive', score: executive, label: 'Executive Function' },
+        { name: 'social', score: social, label: 'Social Interaction' },
+        { name: 'emotion', score: emotion, label: 'Emotional Regulation' }
     ];
     factors.sort((a, b) => b.score - a.score);
 
@@ -316,7 +316,7 @@ recommendationsBtn.addEventListener('click', () => {
         return;
     }
     recommendationsCard.style.display = 'block';
-    recommendationsCard.scrollIntoView({behavior: 'smooth'});
+    recommendationsCard.scrollIntoView({ behavior: 'smooth' });
 });
 
 // Clear all saved history
@@ -343,7 +343,7 @@ function exportData() {
         csv += `${date},${assessment.score},${assessment.factors.energy},${assessment.factors.sensory},${assessment.factors.executive},${assessment.factors.social},${assessment.factors.emotion},${assessment.answeredQuestions || sliders.length}\n`;
     });
 
-    const blob = new Blob([csv], {type: 'text/csv'});
+    const blob = new Blob([csv], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -367,7 +367,7 @@ function renderHistory() {
 
     history.forEach((assessment, index) => {
         const date = new Date(assessment.date).toLocaleDateString();
-        const time = new Date(assessment.date).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+        const time = new Date(assessment.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
         let riskClass = '';
         let riskLevelText = '';

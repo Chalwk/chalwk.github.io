@@ -2,7 +2,8 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
 
-html, body {
+html,
+body {
     height: 100%;
     margin: 0;
 }
@@ -306,6 +307,7 @@ main {
 .board-nav-prev-group {
     left: 5px;
 }
+
 .board-nav-next-group {
     right: 5px;
 }
@@ -350,14 +352,30 @@ main {
 }
 
 /* colour grades: left swipe - darkest on the left (arrow-1), lightest on the right (arrow-3) */
-.swipe-hint-left .arrow-1 { color: #000; }
-.swipe-hint-left .arrow-2 { color: #888; }
-.swipe-hint-left .arrow-3 { color: #ccc; }
+.swipe-hint-left .arrow-1 {
+    color: #000;
+}
+
+.swipe-hint-left .arrow-2 {
+    color: #888;
+}
+
+.swipe-hint-left .arrow-3 {
+    color: #ccc;
+}
 
 /* right swipe - darkest on the right (arrow-3), lightest on the left (arrow-1) */
-.swipe-hint-right .arrow-1 { color: #ccc; }
-.swipe-hint-right .arrow-2 { color: #888; }
-.swipe-hint-right .arrow-3 { color: #000; }
+.swipe-hint-right .arrow-1 {
+    color: #ccc;
+}
+
+.swipe-hint-right .arrow-2 {
+    color: #888;
+}
+
+.swipe-hint-right .arrow-3 {
+    color: #000;
+}
 
 /* --- end new styles --- */
 
@@ -708,7 +726,9 @@ button:active {
     color: var(--dark);
 }
 
-.form-group input[type="text"], .form-group select, .form-group input[type="color"] {
+.form-group input[type="text"],
+.form-group select,
+.form-group input[type="color"] {
     padding: 0.75rem;
     border-radius: var(--radius);
     border: 1px solid var(--gray-light);
@@ -719,7 +739,8 @@ button:active {
     font-family: inherit;
 }
 
-.form-group input[type="text"]:focus, .form-group select:focus {
+.form-group input[type="text"]:focus,
+.form-group select:focus {
     outline: none;
     border-color: var(--primary);
     box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.1);
@@ -1013,7 +1034,8 @@ body.clicked-outside .settings-dropdown.active .settings-menu {
         min-height: 90px;
     }
 
-    .symbol span:last-child, .board.fixed-grid .symbol span:last-child {
+    .symbol span:last-child,
+    .board.fixed-grid .symbol span:last-child {
         font-weight: 800;
         letter-spacing: 0.02em;
     }
@@ -1032,7 +1054,7 @@ body.clicked-outside .settings-dropdown.active .settings-menu {
         gap: 1rem;
     }
 
-    .form-actions > div {
+    .form-actions>div {
         width: 100%;
         justify-content: space-between;
     }
@@ -1073,13 +1095,19 @@ body.clicked-outside .settings-dropdown.active .settings-menu {
     }
 }
 
-.symbol:focus, .phrase-item:focus {
+.symbol:focus,
+.phrase-item:focus {
     outline: 2px solid var(--primary);
     outline-offset: 2px;
 }
 
 @media print {
-    .app-header, .phrase-bar, .floating-btn, .settings-dropdown, .board-toolbar {
+
+    .app-header,
+    .phrase-bar,
+    .floating-btn,
+    .settings-dropdown,
+    .board-toolbar {
         display: none !important;
     }
 

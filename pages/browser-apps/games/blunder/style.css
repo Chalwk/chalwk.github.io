@@ -125,9 +125,11 @@
     0% {
         transform: rotateX(0deg);
     }
+
     50% {
         transform: rotateX(90deg) scale(1.02);
     }
+
     100% {
         transform: rotateX(0deg);
     }
@@ -246,7 +248,8 @@
     margin-bottom: 1rem;
 }
 
-.modal-content p, .modal-content li {
+.modal-content p,
+.modal-content li {
     color: var(--gray);
     margin-bottom: 0.75rem;
 }

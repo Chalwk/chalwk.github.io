@@ -105,7 +105,7 @@ function makeAIMove() {
             if (smallBoardWinners[b]) continue;
             for (let c = 0; c < 9; c++) {
                 if (board[b][c] === '') {
-                    availableMoves.push({board: b, cell: c});
+                    availableMoves.push({ board: b, cell: c });
                 }
             }
         }
@@ -115,14 +115,14 @@ function makeAIMove() {
                 if (smallBoardWinners[b]) continue;
                 for (let c = 0; c < 9; c++) {
                     if (board[b][c] === '') {
-                        availableMoves.push({board: b, cell: c});
+                        availableMoves.push({ board: b, cell: c });
                     }
                 }
             }
         } else {
             for (let c = 0; c < 9; c++) {
                 if (board[nextBoard][c] === '') {
-                    availableMoves.push({board: nextBoard, cell: c});
+                    availableMoves.push({ board: nextBoard, cell: c });
                 }
             }
         }

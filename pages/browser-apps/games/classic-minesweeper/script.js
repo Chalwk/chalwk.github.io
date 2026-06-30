@@ -35,9 +35,9 @@
 
     // preset difficulties
     const presets = {
-        beginner: {rows: 9, cols: 9, mines: 10},
-        intermediate: {rows: 16, cols: 16, mines: 40},
-        expert: {rows: 16, cols: 30, mines: 99}
+        beginner: { rows: 9, cols: 9, mines: 10 },
+        intermediate: { rows: 16, cols: 16, mines: 40 },
+        expert: { rows: 16, cols: 30, mines: 99 }
     };
 
     // helpers
@@ -54,7 +54,7 @@
         rows = r;
         cols = c;
         mines = m;
-        board = Array.from({length: rows}, () => Array.from({length: cols}, () => ({
+        board = Array.from({ length: rows }, () => Array.from({ length: cols }, () => ({
             isMine: false, revealed: false, flagged: false, question: false, adjacent: 0
         })));
         started = false;

@@ -543,20 +543,20 @@ function updateStats() {
 
 function updateAchievements() {
     const achievements = [
-        {id: 'achievement-1', condition: userStats.tasksCompleted >= 1},
-        {id: 'achievement-2', condition: userStats.streak >= 3},
-        {id: 'achievement-3', condition: userStats.tasksCompleted >= 10},
-        {id: 'achievement-4', condition: timerUses >= 5},
-        {id: 'achievement-5', condition: userStats.tasksCompleted >= 25},
-        {id: 'achievement-6', condition: userStats.streak >= 7},
+        { id: 'achievement-1', condition: userStats.tasksCompleted >= 1 },
+        { id: 'achievement-2', condition: userStats.streak >= 3 },
+        { id: 'achievement-3', condition: userStats.tasksCompleted >= 10 },
+        { id: 'achievement-4', condition: timerUses >= 5 },
+        { id: 'achievement-5', condition: userStats.tasksCompleted >= 25 },
+        { id: 'achievement-6', condition: userStats.streak >= 7 },
         {
             id: 'achievement-7',
             condition: completedTasksList.reduce((total, task) => total + task.steps.filter(step => step.completed).length, 0) >= 50
         },
-        {id: 'achievement-8', condition: completedTasksList.filter(task => task.priority === 'high').length >= 5}
+        { id: 'achievement-8', condition: completedTasksList.filter(task => task.priority === 'high').length >= 5 }
     ];
 
-    achievements.forEach(({id, condition}) => {
+    achievements.forEach(({ id, condition }) => {
         if (condition) unlockAchievement(id);
     });
 }

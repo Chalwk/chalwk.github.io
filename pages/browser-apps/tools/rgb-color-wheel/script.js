@@ -19,7 +19,7 @@
         h = Math.round(60 * h);
         if (h < 0) h += 360;
         const s = max === 0 ? 0 : d / max;
-        return {h, s: +(s * 100).toFixed(2), v: +(max * 100).toFixed(2)};
+        return { h, s: +(s * 100).toFixed(2), v: +(max * 100).toFixed(2) };
     }
 
     function hsvToRgb(h, s, v) {
@@ -34,7 +34,7 @@
         else if (h < 180) [r1, g1, b1] = [0, c, x];
         else if (h < 240) [r1, g1, b1] = [0, x, c];
         else if (h < 300) [r1, g1, b1] = [x, 0, c];
-        else [r1, g1, b1] = [c, 0, x];
+        else[r1, g1, b1] = [c, 0, x];
         return {
             r: Math.round((r1 + m) * 255),
             g: Math.round((g1 + m) * 255),
@@ -58,7 +58,7 @@
             h = Math.round(60 * h);
             if (h < 0) h += 360;
         }
-        return {h, s: +(s * 100).toFixed(2), l: +(l * 100).toFixed(2)};
+        return { h, s: +(s * 100).toFixed(2), l: +(l * 100).toFixed(2) };
     }
 
     function hslToRgb(h, s, l) {
@@ -73,12 +73,12 @@
         else if (h < 180) [r1, g1, b1] = [0, c, x];
         else if (h < 240) [r1, g1, b1] = [0, x, c];
         else if (h < 300) [r1, g1, b1] = [x, 0, c];
-        else [r1, g1, b1] = [c, 0, x];
-        return {r: Math.round((r1 + m) * 255), g: Math.round((g1 + m) * 255), b: Math.round((b1 + m) * 255)};
+        else[r1, g1, b1] = [c, 0, x];
+        return { r: Math.round((r1 + m) * 255), g: Math.round((g1 + m) * 255), b: Math.round((b1 + m) * 255) };
     }
 
     function rgbToCmyk(r, g, b) {
-        if (r === 0 && g === 0 && b === 0) return {c: 0, m: 0, y: 0, k: 100};
+        if (r === 0 && g === 0 && b === 0) return { c: 0, m: 0, y: 0, k: 100 };
         const rd = r / 255, gd = g / 255, bd = b / 255;
         const k = 1 - Math.max(rd, gd, bd);
         const c = (1 - rd - k) / (1 - k);
@@ -100,7 +100,7 @@
         const r = Math.round(255 * (1 - c) * (1 - k));
         const g = Math.round(255 * (1 - m) * (1 - k));
         const b = Math.round(255 * (1 - y) * (1 - k));
-        return {r, g, b};
+        return { r, g, b };
     }
 
     function rgbToHex(r, g, b) {
@@ -119,7 +119,7 @@
     }
 
     const canvas = document.getElementById('colorWheel');
-    const ctx = canvas.getContext('2d', {alpha: false});
+    const ctx = canvas.getContext('2d', { alpha: false });
     const picker = document.getElementById('picker');
     const preview = document.getElementById('preview-swatch');
     const hexEl = document.getElementById('hex');
@@ -135,7 +135,7 @@
     const exportPaletteBtn = document.getElementById('exportPalette');
 
     let mode = 'rgb';
-    let current = {r: 255, g: 0, b: 0, a: 1};
+    let current = { r: 255, g: 0, b: 0, a: 1 };
     let userPalette = [];
 
     const presets = [
@@ -263,17 +263,17 @@
             const px = Math.floor(x * dpr);
             const py = Math.floor(y * dpr);
             const data = ctx.getImageData(px, py, 1, 1).data;
-            return {r: data[0], g: data[1], b: data[2], a: data[3] / 255};
+            return { r: data[0], g: data[1], b: data[2], a: data[3] / 255 };
         } catch (e) {
             const angle = (Math.atan2(dy, dx) * 180 / Math.PI + 360) % 360;
             const sat = clamp(d / r, 0, 1);
             const rgb = hsvToRgb(angle, sat * 100, 100);
-            return {r: rgb.r, g: rgb.g, b: rgb.b, a: 1};
+            return { r: rgb.r, g: rgb.g, b: rgb.b, a: 1 };
         }
     }
 
     function updateUI() {
-        const {r, g, b} = current;
+        const { r, g, b } = current;
         preview.style.background = `rgb(${r}, ${g}, ${b})`;
         const hex = rgbToHex(r, g, b);
         hexEl.textContent = hex;
@@ -298,7 +298,7 @@
     function updateSliderValues() {
         if (Object.keys(sliderElements).length === 0) return;
 
-        const rgb = {r: current.r, g: current.g, b: current.b};
+        const rgb = { r: current.r, g: current.g, b: current.b };
         const hsv = rgbToHsv(rgb.r, rgb.g, rgb.b);
         const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
         const cmyk = rgbToCmyk(rgb.r, rgb.g, rgb.b);
@@ -329,25 +329,25 @@
 
     const sliderDefinitions = {
         rgb: [
-            {id: 'r', label: 'R', min: 0, max: 255},
-            {id: 'g', label: 'G', min: 0, max: 255},
-            {id: 'b', label: 'B', min: 0, max: 255}
+            { id: 'r', label: 'R', min: 0, max: 255 },
+            { id: 'g', label: 'G', min: 0, max: 255 },
+            { id: 'b', label: 'B', min: 0, max: 255 }
         ],
         hsv: [
-            {id: 'h', label: 'H', min: 0, max: 360},
-            {id: 's', label: 'S', min: 0, max: 100},
-            {id: 'v', label: 'V', min: 0, max: 100}
+            { id: 'h', label: 'H', min: 0, max: 360 },
+            { id: 's', label: 'S', min: 0, max: 100 },
+            { id: 'v', label: 'V', min: 0, max: 100 }
         ],
         hsl: [
-            {id: 'h', label: 'H', min: 0, max: 360},
-            {id: 's', label: 'S', min: 0, max: 100},
-            {id: 'l', label: 'L', min: 0, max: 100}
+            { id: 'h', label: 'H', min: 0, max: 360 },
+            { id: 's', label: 'S', min: 0, max: 100 },
+            { id: 'l', label: 'L', min: 0, max: 100 }
         ],
         cmyk: [
-            {id: 'c', label: 'C', min: 0, max: 100},
-            {id: 'm', label: 'M', min: 0, max: 100},
-            {id: 'y', label: 'Y', min: 0, max: 100},
-            {id: 'k', label: 'K', min: 0, max: 100}
+            { id: 'c', label: 'C', min: 0, max: 100 },
+            { id: 'm', label: 'M', min: 0, max: 100 },
+            { id: 'y', label: 'Y', min: 0, max: 100 },
+            { id: 'k', label: 'K', min: 0, max: 100 }
         ]
     };
 
@@ -358,7 +358,7 @@
         slidersContainer.innerHTML = '';
         sliderElements = {};
 
-        const rgb = {r: current.r, g: current.g, b: current.b};
+        const rgb = { r: current.r, g: current.g, b: current.b };
         const hsv = rgbToHsv(rgb.r, rgb.g, rgb.b);
         const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
         const cmyk = rgbToCmyk(rgb.r, rgb.g, rgb.b);
@@ -395,7 +395,7 @@
                 document.addEventListener('mousemove', onSliderInput);
                 document.addEventListener('mouseup', () => {
                     document.removeEventListener('mousemove', onSliderInput);
-                }, {once: true});
+                }, { once: true });
             });
 
             rangeWrap.appendChild(input);
@@ -411,7 +411,7 @@
             row.appendChild(valueDisplay);
             slidersContainer.appendChild(row);
 
-            sliderElements[def.id] = {input, valueDisplay};
+            sliderElements[def.id] = { input, valueDisplay };
         });
     }
 
@@ -470,7 +470,7 @@
         isPointerDown = true;
         pickFromEvent(e);
         window.addEventListener('pointermove', onPointerMove);
-        window.addEventListener('pointerup', onPointerUp, {once: true});
+        window.addEventListener('pointerup', onPointerUp, { once: true });
     }
 
     function onPointerMove(e) {
@@ -545,7 +545,7 @@
 
         try {
             const data = JSON.stringify(userPalette, null, 2);
-            const blob = new Blob([data], {type: 'application/json'});
+            const blob = new Blob([data], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;

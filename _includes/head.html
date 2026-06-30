@@ -6,11 +6,11 @@
 
 <!-- Title -->
 <title>
-    {% if page.title %}
-    {{ page.title }} | {{ site.title }}
-    {% else %}
-    {{ site.title }}
-    {% endif %}
+  {% if page.title %}
+  {{ page.title }} | {{ site.title }}
+  {% else %}
+  {{ site.title }}
+  {% endif %}
 </title>
 
 <meta content="{{ page.description | default: site.description }}" name="description">
@@ -43,12 +43,14 @@
 <link href="{{ site.baseurl }}/assets/css/core.css" rel="stylesheet">
 <link href="{{ site.baseurl }}/assets/css/syntax.css" rel="stylesheet">
 
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700& family=Source+Code+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+<link
+  href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700& family=Source+Code+Pro:wght@400;500;600&display=swap"
+  rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
 
 <!-- PWA manifest -->
 {% if page.pwa %}
-  {% assign manifest_url = page.url | append: 'manifest.webmanifest' | relative_url %}
-  <link href="{{ manifest_url }}" rel="manifest">
+{% assign manifest_url = page.url | append: 'manifest.webmanifest' | relative_url %}
+<link href="{{ manifest_url }}" rel="manifest">
 {% endif %}

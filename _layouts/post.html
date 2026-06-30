@@ -20,21 +20,22 @@ layout: default
                 <!-- publish/update dates + reading time -->
                 <div class="post-meta">
                     <span class="publish-date">
-                        <time datetime="{{ page.date | date_to_xmlschema }}">Published: {{ page.date | date: "%B %-d, %Y" }}</time>
+                        <time datetime="{{ page.date | date_to_xmlschema }}">Published: {{ page.date | date: "%B %-d,
+                            %Y" }}</time>
                     </span>
 
                     {% if page.last-updated %}
                     <span class="update-date">
-                        <time datetime="{{ page.last-updated | date_to_xmlschema }}">Updated: {{ page.last-updated | date: "%B %-d, %Y" }}</time>
+                        <time datetime="{{ page.last-updated | date_to_xmlschema }}">Updated: {{ page.last-updated |
+                            date: "%B %-d, %Y" }}</time>
                     </span>
                     {% endif %}
 
                     {% assign words = content | number_of_words %}
                     {% assign reading_time = words | divided_by: 200 %}
-                    {% if reading_time < 1 %}{% assign reading_time = 1 %}{% endif %}
-                    <span class="reading-time">
+                    {% if reading_time < 1 %}{% assign reading_time=1 %}{% endif %} <span class="reading-time">
                         ~ {{ reading_time }} min read
-                    </span>
+                        </span>
                 </div>
 
                 <!-- table of contents (collapsible) -->
@@ -45,7 +46,9 @@ layout: default
                             <i class="fas fa-list-ul" aria-hidden="true"></i> Table of Contents
                         </summary>
                         <div class="toc-content" id="jekyll-toc-placeholder">
-                            <ul><li>Loading table of contents...</li></ul>
+                            <ul>
+                                <li>Loading table of contents...</li>
+                            </ul>
                         </div>
                     </details>
                 </div>
@@ -343,7 +346,8 @@ layout: default
 
     .code-block-wrapper pre::-webkit-scrollbar-track,
     .post-content pre::-webkit-scrollbar-track {
-        background: #2d2d2d; /* dark track like code block bg */
+        background: #2d2d2d;
+        /* dark track like code block bg */
         border-radius: 10px;
     }
 
@@ -359,6 +363,7 @@ layout: default
         background: #1e88e5;
         cursor: pointer;
     }
+
     .code-block-wrapper pre:hover,
     .post-content pre:hover {
         scrollbar-color: #1e88e5 #2d2d2d;
@@ -510,7 +515,7 @@ layout: default
                     tocPlaceholder.innerHTML = '<p><em>No headings found</em></p>';
                 } else {
                     let toc = document.createElement('ul');
-                    let stack = [{level: 1, list: toc}];
+                    let stack = [{ level: 1, list: toc }];
                     headings.forEach((heading, idx) => {
                         if (!heading.id) heading.id = 'toc-heading-' + idx;
                         const level = parseInt(heading.tagName[1], 10);
@@ -527,7 +532,7 @@ layout: default
                             if (lastLi && lastLi.tagName === 'LI') {
                                 lastLi.appendChild(newUl);
                                 parentList = newUl;
-                                stack.push({level: level, list: newUl});
+                                stack.push({ level: level, list: newUl });
                             }
                         }
                         parentList.appendChild(item);

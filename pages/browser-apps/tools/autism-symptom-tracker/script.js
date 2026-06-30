@@ -6,52 +6,52 @@
 
     // List of symptoms with tags
     const SYMPTOMS = [
-        {id: "tired", label: "Tired / sleepy", tags: ["fatigue"]},
-        {id: "poor-sleep", label: "Poor sleep last night", tags: ["fatigue"]},
-        {id: "hungry", label: "Hungry", tags: ["basic-needs"]},
-        {id: "loss-appetite", label: "Loss of appetite", tags: ["basic-needs"]},
-        {id: "dehydration", label: "Thirst / dehydrated", tags: ["basic-needs", "physiological"]},
-        {id: "overwhelmed", label: "Feeling overwhelmed", tags: ["sensory", "stress"]},
-        {id: "sensory-noise", label: "Too much noise / loud", tags: ["sensory"]},
-        {id: "sensory-light", label: "Bright lights / visual clutter", tags: ["sensory"]},
-        {id: "sensory-smell", label: "Sensitive to smells", tags: ["sensory"]},
-        {id: "hot-sweaty", label: "Hot / sweaty", tags: ["sensory", "physiological"]},
-        {id: "cold", label: "Feeling cold / chills", tags: ["sensory", "physiological"]},
-        {id: "stomach", label: "Stomach pain / nausea", tags: ["physiological"]},
-        {id: "headache", label: "Headache / migraine", tags: ["physiological"]},
-        {id: "irritable", label: "Irritable / short temper", tags: ["stress", "overload"]},
-        {id: "shutdown", label: "Shutting down / blanking out", tags: ["shutdown", "overload"]},
-        {id: "meltdown", label: "Meltdown / intense distress", tags: ["meltdown", "overload"]},
-        {id: "low-focus", label: "Trouble focusing", tags: ["executive-function", "fatigue"]},
-        {id: "slow-thoughts", label: "Slow thoughts / fuzzy", tags: ["fatigue", "executive-function"]},
-        {id: "sensory-touch", label: "Touch causes discomfort", tags: ["sensory"]},
-        {id: "ruminating", label: "Ruminating / stuck thoughts", tags: ["anxiety"]},
-        {id: "panic", label: "Panic / racing heart", tags: ["anxiety", "physiological"]},
-        {id: "withdrawn", label: "Wanting to withdraw / hide", tags: ["shutdown", "stress"]},
-        {id: "overstimulation", label: "Overstimulated after social time", tags: ["sensory", "social-fatigue"]},
+        { id: "tired", label: "Tired / sleepy", tags: ["fatigue"] },
+        { id: "poor-sleep", label: "Poor sleep last night", tags: ["fatigue"] },
+        { id: "hungry", label: "Hungry", tags: ["basic-needs"] },
+        { id: "loss-appetite", label: "Loss of appetite", tags: ["basic-needs"] },
+        { id: "dehydration", label: "Thirst / dehydrated", tags: ["basic-needs", "physiological"] },
+        { id: "overwhelmed", label: "Feeling overwhelmed", tags: ["sensory", "stress"] },
+        { id: "sensory-noise", label: "Too much noise / loud", tags: ["sensory"] },
+        { id: "sensory-light", label: "Bright lights / visual clutter", tags: ["sensory"] },
+        { id: "sensory-smell", label: "Sensitive to smells", tags: ["sensory"] },
+        { id: "hot-sweaty", label: "Hot / sweaty", tags: ["sensory", "physiological"] },
+        { id: "cold", label: "Feeling cold / chills", tags: ["sensory", "physiological"] },
+        { id: "stomach", label: "Stomach pain / nausea", tags: ["physiological"] },
+        { id: "headache", label: "Headache / migraine", tags: ["physiological"] },
+        { id: "irritable", label: "Irritable / short temper", tags: ["stress", "overload"] },
+        { id: "shutdown", label: "Shutting down / blanking out", tags: ["shutdown", "overload"] },
+        { id: "meltdown", label: "Meltdown / intense distress", tags: ["meltdown", "overload"] },
+        { id: "low-focus", label: "Trouble focusing", tags: ["executive-function", "fatigue"] },
+        { id: "slow-thoughts", label: "Slow thoughts / fuzzy", tags: ["fatigue", "executive-function"] },
+        { id: "sensory-touch", label: "Touch causes discomfort", tags: ["sensory"] },
+        { id: "ruminating", label: "Ruminating / stuck thoughts", tags: ["anxiety"] },
+        { id: "panic", label: "Panic / racing heart", tags: ["anxiety", "physiological"] },
+        { id: "withdrawn", label: "Wanting to withdraw / hide", tags: ["shutdown", "stress"] },
+        { id: "overstimulation", label: "Overstimulated after social time", tags: ["sensory", "social-fatigue"] },
         {
             id: "verbal-communication",
             label: "Difficulty with verbal communication",
             tags: ["shutdown", "social-fatigue"]
         },
-        {id: "eye-contact", label: "Avoiding eye contact", tags: ["social-fatigue"]},
-        {id: "stimming", label: "Increased stimming", tags: ["self-regulation"]},
-        {id: "repetitive-behaviors", label: "Increased repetitive behaviors", tags: ["self-regulation"]},
-        {id: "special-interests", label: "Focused on special interests", tags: ["self-regulation", "positive"]},
-        {id: "time-blindness", label: "Time blindness / losing track of time", tags: ["executive-function"]},
-        {id: "task-initiation", label: "Difficulty starting tasks", tags: ["executive-function"]},
-        {id: "transitions", label: "Difficulty with transitions", tags: ["executive-function"]},
-        {id: "interoception", label: "Trouble sensing bodily needs", tags: ["interoception"]},
-        {id: "proprioception", label: "Seeking or avoiding physical pressure", tags: ["proprioception"]},
-        {id: "happy", label: "Happy / content", tags: ["positive"]},
-        {id: "calm", label: "Calm / regulated", tags: ["positive", "regulated"]},
-        {id: "excited", label: "Excited / energetic", tags: ["positive", "high-arousal"]},
-        {id: "anxious", label: "Anxious / worried", tags: ["anxiety", "stress"]},
-        {id: "frustrated", label: "Frustrated / annoyed", tags: ["stress", "irritable"]},
-        {id: "angry", label: "Angry / upset", tags: ["stress", "meltdown"]},
-        {id: "sad", label: "Sad / low mood", tags: ["withdrawn"]},
-        {id: "numb", label: "Numb / disconnected", tags: ["shutdown"]},
-        {id: "confused", label: "Confused / disoriented", tags: ["executive-function"]}
+        { id: "eye-contact", label: "Avoiding eye contact", tags: ["social-fatigue"] },
+        { id: "stimming", label: "Increased stimming", tags: ["self-regulation"] },
+        { id: "repetitive-behaviors", label: "Increased repetitive behaviors", tags: ["self-regulation"] },
+        { id: "special-interests", label: "Focused on special interests", tags: ["self-regulation", "positive"] },
+        { id: "time-blindness", label: "Time blindness / losing track of time", tags: ["executive-function"] },
+        { id: "task-initiation", label: "Difficulty starting tasks", tags: ["executive-function"] },
+        { id: "transitions", label: "Difficulty with transitions", tags: ["executive-function"] },
+        { id: "interoception", label: "Trouble sensing bodily needs", tags: ["interoception"] },
+        { id: "proprioception", label: "Seeking or avoiding physical pressure", tags: ["proprioception"] },
+        { id: "happy", label: "Happy / content", tags: ["positive"] },
+        { id: "calm", label: "Calm / regulated", tags: ["positive", "regulated"] },
+        { id: "excited", label: "Excited / energetic", tags: ["positive", "high-arousal"] },
+        { id: "anxious", label: "Anxious / worried", tags: ["anxiety", "stress"] },
+        { id: "frustrated", label: "Frustrated / annoyed", tags: ["stress", "irritable"] },
+        { id: "angry", label: "Angry / upset", tags: ["stress", "meltdown"] },
+        { id: "sad", label: "Sad / low mood", tags: ["withdrawn"] },
+        { id: "numb", label: "Numb / disconnected", tags: ["shutdown"] },
+        { id: "confused", label: "Confused / disoriented", tags: ["executive-function"] }
     ];
 
     // Strategy database keyed by tag
@@ -364,7 +364,7 @@
             const id = cb.value;
             const select = el(`#intensity-${id}`, symptomListEl);
             const weight = select ? Number(select.value) : 1;
-            return {id, weight};
+            return { id, weight };
         });
     }
 
@@ -404,7 +404,7 @@
                 return {
                     tag,
                     score: tagScore[tag],
-                    info: TAGS[tag] || {name: tag, strategies: [], explanation: ""},
+                    info: TAGS[tag] || { name: tag, strategies: [], explanation: "" },
                     percent: totalScore ? Math.round((tagScore[tag] / totalScore) * 100) : 0
                 };
             }).sort((a, b) => b.score - a.score);
@@ -430,9 +430,9 @@
           </ul>
           <div class="taglist">
             ${SYMPTOMS.filter(s => s.tags && s.tags.includes(entry.tag))
-                    .slice(0, 8)
-                    .map(s => `<span class="tag" data-sym="${escapeHtml(s.id)}">${escapeHtml(s.label)}</span>`)
-                    .join("")}
+                        .slice(0, 8)
+                        .map(s => `<span class="tag" data-sym="${escapeHtml(s.id)}">${escapeHtml(s.label)}</span>`)
+                        .join("")}
           </div>
         `;
                 suggestionsEl.appendChild(card);
@@ -608,7 +608,7 @@
     }
 
     function downloadBlob(content, filename, type) {
-        const blob = new Blob([content], {type});
+        const blob = new Blob([content], { type });
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;

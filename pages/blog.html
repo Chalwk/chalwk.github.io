@@ -17,9 +17,8 @@ description: Blog Landing page
             <!-- Search box for filtering posts -->
             <div class="blog-search">
                 <label for="search-input">Search blog posts</label>
-                <input autocomplete="off" id="search-input"
-                       placeholder="🔍 Search posts by title or content..."
-                       type="text">
+                <input autocomplete="off" id="search-input" placeholder="🔍 Search posts by title or content..."
+                    type="text">
                 <div class="search-results" id="search-results" style="display: none;"></div>
             </div>
 
@@ -75,7 +74,7 @@ description: Blog Landing page
                             <i class="fas fa-folder-open"></i> Categories:
                             {% for cat in post.categories %}
                             <span class="category-badge filterable-badge" data-filter-type="category"
-                                  data-filter-value="{{ cat }}">{{ cat }}</span>
+                                data-filter-value="{{ cat }}">{{ cat }}</span>
                             {% endfor %}
                         </div>
                         {% endif %}
@@ -84,7 +83,7 @@ description: Blog Landing page
                             <i class="fas fa-tags"></i> Tags:
                             {% for tag in post.tags %}
                             <span class="tag-badge filterable-badge" data-filter-type="tag"
-                                  data-filter-value="{{ tag }}">{{ tag }}</span>
+                                data-filter-value="{{ tag }}">{{ tag }}</span>
                             {% endfor %}
                         </div>
                         {% endif %}
@@ -254,7 +253,8 @@ description: Blog Landing page
         font-size: 0.85rem;
     }
 
-    .post-categories, .post-tags {
+    .post-categories,
+    .post-tags {
         display: flex;
         flex-wrap: wrap;
         align-items: center;
@@ -262,7 +262,8 @@ description: Blog Landing page
         margin-top: 0.5rem;
     }
 
-    .category-badge, .tag-badge {
+    .category-badge,
+    .tag-badge {
         display: inline-block;
         background: rgba(30, 136, 229, 0.1);
         color: var(--primary);
@@ -274,7 +275,8 @@ description: Blog Landing page
         transition: var(--transition);
     }
 
-    .category-badge:hover, .tag-badge:hover {
+    .category-badge:hover,
+    .tag-badge:hover {
         background: var(--primary);
         color: white;
     }
@@ -615,7 +617,7 @@ description: Blog Landing page
                 prevBtn.addEventListener('click', () => {
                     if (currentPage > 1) {
                         setPage(currentPage - 1);
-                        window.scrollTo({top: 0, behavior: 'smooth'});
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
                     }
                 });
             }
@@ -630,7 +632,7 @@ description: Blog Landing page
                 nextBtn.addEventListener('click', () => {
                     if (currentPage < totalPages) {
                         setPage(currentPage + 1);
-                        window.scrollTo({top: 0, behavior: 'smooth'});
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
                     }
                 });
             }
@@ -677,7 +679,7 @@ description: Blog Landing page
 
         // ----- Filter Logic -----
         function applyFilter(type, value) {
-            activeFilter = {type, value};
+            activeFilter = { type, value };
             filteredPosts = allPosts.filter(post => {
                 const categories = (post.dataset.categories || '').split(',').filter(c => c.trim());
                 const tags = (post.dataset.tags || '').split(',').filter(t => t.trim());

@@ -57,7 +57,7 @@
     let phraseHistory = [];
     let isEditMode = false;
     let currentEditingSymbol = null;
-    let settings = {gridSize: 'auto', theme: 'auto', volume: 0.6};
+    let settings = { gridSize: 'auto', theme: 'auto', volume: 0.6 };
     let categoriesOrdered = [];
     let currentCategoryIndex = 0;
     let isAnimating = false;
@@ -97,7 +97,7 @@
             const text = await response.text();
             return text.split('\n').filter(l => l.trim()).map((line, i) => {
                 const [text, image, color, category] = line.split(';').map(s => s.trim());
-                return {id: i + 1, text, image, color, category};
+                return { id: i + 1, text, image, color, category };
             }).filter(s => s.text && s.image && s.color && s.category);
         } catch {
             showToast('Failed to load symbols.txt, using empty board');
@@ -543,8 +543,8 @@
         return draggableElements.reduce((closest, child) => {
             const box = child.getBoundingClientRect();
             const offset = x - box.left - box.width / 2;
-            return offset < 0 && offset > closest.offset ? {offset, element: child} : closest;
-        }, {offset: Number.NEGATIVE_INFINITY}).element;
+            return offset < 0 && offset > closest.offset ? { offset, element: child } : closest;
+        }, { offset: Number.NEGATIVE_INFINITY }).element;
     }
 
     function backupPhrase() {
@@ -645,10 +645,10 @@
 
         if (currentEditingSymbol?.id) {
             const idx = symbols.findIndex(s => s.id === currentEditingSymbol.id);
-            if (idx !== -1) symbols[idx] = {...symbols[idx], text, image, color, category};
+            if (idx !== -1) symbols[idx] = { ...symbols[idx], text, image, color, category };
         } else {
             const newId = symbols.length ? Math.max(...symbols.map(s => s.id)) + 1 : 1;
-            symbols.push({id: newId, text, image, color, category});
+            symbols.push({ id: newId, text, image, color, category });
         }
         saveSymbols();
         refreshOrderedCategories();
@@ -680,8 +680,8 @@
     }
 
     function exportJSON() {
-        const payload = {symbols, settings, categories: getCategories()};
-        const blob = new Blob([JSON.stringify(payload, null, 2)], {type: 'application/json'});
+        const payload = { symbols, settings, categories: getCategories() };
+        const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
@@ -703,7 +703,7 @@
                     const existingIds = new Set(symbols.map(s => s.id));
                     let nextId = symbols.length ? Math.max(...symbols.map(s => s.id)) + 1 : 1;
                     parsed.symbols.forEach(s => {
-                        const copy = {...s};
+                        const copy = { ...s };
                         if (!copy.id || existingIds.has(copy.id)) copy.id = nextId++;
                         symbols.push(copy);
                     });
@@ -711,7 +711,7 @@
                     showToast('Imported symbols');
                 }
                 if (parsed.settings) {
-                    settings = {...settings, ...parsed.settings};
+                    settings = { ...settings, ...parsed.settings };
                     saveSettings();
                 }
                 if (parsed.categories && Array.isArray(parsed.categories)) {

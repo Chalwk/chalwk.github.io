@@ -67,7 +67,7 @@
         const basePositions = [];
         for (let i = 0; i < nodeCount; i++) {
             const a = (i / nodeCount) * Math.PI * 2;
-            basePositions.push({x: cx + Math.cos(a) * r, y: cy + Math.sin(a) * r});
+            basePositions.push({ x: cx + Math.cos(a) * r, y: cy + Math.sin(a) * r });
         }
 
         // helper: does edge (i,j) cross any existing edge?
@@ -83,7 +83,7 @@
 
         // start with cycle edges (outer polygon)
         const edges = [];
-        for (let i = 0; i < nodeCount; i++) edges.push({a: i, b: (i + 1) % nodeCount});
+        for (let i = 0; i < nodeCount; i++) edges.push({ a: i, b: (i + 1) % nodeCount });
 
         // randomly add extra edges if they don't cause crossings (keeps puzzles solvable)
         for (let attempts = 0; attempts < nodeCount * 6 && edges.length < maxEdges; attempts++) {
@@ -92,12 +92,12 @@
             if (a === b) continue;
             if (edges.some(e => (e.a === a && e.b === b) || (e.a === b && e.b === a))) continue;
             if (crossesExisting(a, b)) continue;
-            edges.push({a, b});
+            edges.push({ a, b });
         }
 
         // shuffle node positions (this creates the tangled look)
-        const permuted = shuffleArray(basePositions.map((p, i) => ({...p, id: i})))
-            .map((p, idx) => ({x: p.x, y: p.y, id: idx, baseIndex: p.id}));
+        const permuted = shuffleArray(basePositions.map((p, i) => ({ ...p, id: i })))
+            .map((p, idx) => ({ x: p.x, y: p.y, id: idx, baseIndex: p.id }));
         const nodes = permuted.map((p, i) => ({
             id: i,
             x: p.x, y: p.y,
@@ -105,7 +105,7 @@
             radius: 12
         }));
 
-        return {nodes, edges};
+        return { nodes, edges };
     }
 
     function shuffleArray(arr) {
@@ -120,8 +120,8 @@
     // --- drawing & interaction ---
     function buildScene(spec) {
         clearSvg();
-        state.nodes = spec.nodes.map(n => ({...n}));
-        state.edges = spec.edges.map(e => ({a: e.a, b: e.b}));
+        state.nodes = spec.nodes.map(n => ({ ...n }));
+        state.edges = spec.edges.map(e => ({ a: e.a, b: e.b }));
 
         // draw edges first (so they're behind nodes)
         for (const e of state.edges) {
@@ -137,7 +137,7 @@
 
         // draw nodes (draggable circles with labels)
         for (const n of state.nodes) {
-            const g = makeSvg('g', {class: 'node', cursor: 'grab'});
+            const g = makeSvg('g', { class: 'node', cursor: 'grab' });
             const circle = makeSvg('circle', {
                 cx: n.x,
                 cy: n.y,
@@ -146,7 +146,7 @@
                 fill: 'white',
                 opacity: 0.95
             });
-            const inner = makeSvg('circle', {cx: n.x, cy: n.y, r: 6, fill: 'url(#grad)'});
+            const inner = makeSvg('circle', { cx: n.x, cy: n.y, r: 6, fill: 'url(#grad)' });
             const label = makeSvg('text', {
                 x: n.x,
                 y: n.y + 4,
@@ -176,9 +176,9 @@
     function addDefs() {
         if (svg.querySelector('defs')) return;
         const defs = makeSvg('defs', {});
-        const grad = makeSvg('radialGradient', {id: 'grad'});
-        grad.appendChild(makeSvg('stop', {offset: '0%', 'stop-color': '#ffffff', 'stop-opacity': '1'}));
-        grad.appendChild(makeSvg('stop', {offset: '100%', 'stop-color': '#6ea8fe', 'stop-opacity': '1'}));
+        const grad = makeSvg('radialGradient', { id: 'grad' });
+        grad.appendChild(makeSvg('stop', { offset: '0%', 'stop-color': '#ffffff', 'stop-opacity': '1' }));
+        grad.appendChild(makeSvg('stop', { offset: '100%', 'stop-color': '#6ea8fe', 'stop-opacity': '1' }));
         defs.appendChild(grad);
         svg.appendChild(defs);
     }
@@ -186,7 +186,7 @@
     // drag & drop for nodes (mouse + touch)
     function attachPointerHandlers(el, node) {
         let dragging = false;
-        let offset = {x: 0, y: 0};
+        let offset = { x: 0, y: 0 };
 
         function pt(e) {
             const p = svg.createSVGPoint();
@@ -194,7 +194,7 @@
             p.y = e.clientY;
             const ctm = svg.getScreenCTM().inverse();
             const loc = p.matrixTransform(ctm);
-            return {x: loc.x, y: loc.y};
+            return { x: loc.x, y: loc.y };
         }
 
         function onDown(e) {
@@ -244,9 +244,9 @@
         }
 
         el.addEventListener('mousedown', onDown);
-        el.addEventListener('touchstart', onDown, {passive: false});
+        el.addEventListener('touchstart', onDown, { passive: false });
         document.addEventListener('mousemove', onMove);
-        document.addEventListener('touchmove', onMove, {passive: false});
+        document.addEventListener('touchmove', onMove, { passive: false });
         document.addEventListener('mouseup', onUp);
         document.addEventListener('touchend', onUp);
     }
@@ -335,7 +335,7 @@
 
     shuffleBtn.addEventListener('click', () => {
         // randomly swap node positions (keep the same graph structure)
-        const positions = state.nodes.map(n => ({x: n.x, y: n.y}));
+        const positions = state.nodes.map(n => ({ x: n.x, y: n.y }));
         const shuffled = shuffleArray(positions);
         state.nodes.forEach((n, i) => {
             n.x = shuffled[i].x;

@@ -27,8 +27,8 @@
             title: "The Birthday Surprise",
             text: "Leo saved his allowance for months. He wanted to buy his mother a beautiful brooch she had seen in the antique shop. The day before her birthday, he walked to the store with his pocket full of coins and notes. The brooch was still there, glowing under the glass. The shopkeeper smiled and wrapped it in soft paper. On the morning of the birthday, Leo placed the small package beside her breakfast plate. When his mother opened it, her eyes filled with tears. She hugged him tightly and whispered that it was the best gift ever.",
             questions: [
-                {q: "What did Leo want to buy?", opts: ["A necklace", "A brooch", "A ring", "A watch"], correct: 1},
-                {q: "Where did he buy it?", opts: ["A mall", "An antique shop", "A market", "Online"], correct: 1},
+                { q: "What did Leo want to buy?", opts: ["A necklace", "A brooch", "A ring", "A watch"], correct: 1 },
+                { q: "Where did he buy it?", opts: ["A mall", "An antique shop", "A market", "Online"], correct: 1 },
                 {
                     q: "How did his mother react?",
                     opts: ["She was surprised but quiet", "She cried and hugged him", "She asked for the receipt", "She put it away"],
@@ -40,13 +40,13 @@
             title: "Mountain Hike",
             text: "Three friends - Mia, Carlos, and Jin - decided to hike the Eagle Peak trail. They started at sunrise, carrying water and sandwiches. The path was steep, but the views got better with every step. After two hours they reached a rocky outcrop. Below them lay a valley covered in mist, and above, an eagle circled. They rested, ate their lunch, and took photos. On the way down, Carlos slipped and twisted his ankle. Mia and Jin helped him hobble slowly. They reached the car just as it began to rain. Despite the pain, Carlos grinned and said, 'We'll be back next month.'",
             questions: [
-                {q: "How many friends went hiking?", opts: ["Two", "Three", "Four", "Five"], correct: 1},
+                { q: "How many friends went hiking?", opts: ["Two", "Three", "Four", "Five"], correct: 1 },
                 {
                     q: "What happened to Carlos?",
                     opts: ["He got lost", "He twisted his ankle", "He ran out of water", "He saw a bear"],
                     correct: 1
                 },
-                {q: "What did they see above them?", opts: ["A hawk", "A plane", "An eagle", "Clouds"], correct: 2}
+                { q: "What did they see above them?", opts: ["A hawk", "A plane", "An eagle", "Clouds"], correct: 2 }
             ]
         },
         {
@@ -84,7 +84,7 @@
                     opts: ["She saw a poster", "Sam called her", "The puppy ran home", "A neighbor told her"],
                     correct: 0
                 },
-                {q: "What was the puppy's name?", opts: ["Sam", "Buster", "Lily", "Tag"], correct: 1}
+                { q: "What was the puppy's name?", opts: ["Sam", "Buster", "Lily", "Tag"], correct: 1 }
             ]
         },
         {
@@ -101,7 +101,7 @@
                     opts: ["More vinegar", "Baking soda", "Dish soap", "Salt"],
                     correct: 2
                 },
-                {q: "What place did Priya win?", opts: ["First", "Second", "Third", "Honorable mention"], correct: 1}
+                { q: "What place did Priya win?", opts: ["First", "Second", "Third", "Honorable mention"], correct: 1 }
             ]
         },
         {

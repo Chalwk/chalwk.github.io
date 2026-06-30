@@ -6,13 +6,13 @@
     const MAX_DAYS = 7;
     const DEFAULT_DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', "Friday"];
     const DEFAULT_PERIODS = [
-        {name: 'Period 1', start: '09:00', end: '10:00'},
-        {name: 'Period 2', start: '10:00', end: '11:00'},
-        {name: 'Break', start: '11:00', end: '11:20'},
-        {name: 'Period 3', start: '11:20', end: '12:20'},
-        {name: 'Lunch', start: '12:20', end: '13:00'},
-        {name: 'Period 4', start: '13:00', end: '14:00'},
-        {name: 'Period 5', start: '14:00', end: '15:00'}
+        { name: 'Period 1', start: '09:00', end: '10:00' },
+        { name: 'Period 2', start: '10:00', end: '11:00' },
+        { name: 'Break', start: '11:00', end: '11:20' },
+        { name: 'Period 3', start: '11:20', end: '12:20' },
+        { name: 'Lunch', start: '12:20', end: '13:00' },
+        { name: 'Period 4', start: '13:00', end: '14:00' },
+        { name: 'Period 5', start: '14:00', end: '15:00' }
     ];
     const DEFAULT_STATE = createDefaultState();
     const LEGACY_DEFAULT_STATE = createLegacyDefaultState();
@@ -54,16 +54,16 @@
     // ----- default data generators -----
     function createDefaultState() {
         const days = [...DEFAULT_DAYS];
-        const periods = DEFAULT_PERIODS.map(period => ({...period}));
+        const periods = DEFAULT_PERIODS.map(period => ({ ...period }));
         const schedule = periods.map((_, periodIndex) =>
             days.map((_, dayIndex) => getDefaultSubject(periodIndex, dayIndex))
         );
-        return {days, periods, schedule, customized: false};
+        return { days, periods, schedule, customized: false };
     }
 
     function createLegacyDefaultState() {
         const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-        const periods = DEFAULT_PERIODS.map(period => ({...period}));
+        const periods = DEFAULT_PERIODS.map(period => ({ ...period }));
         const schedule = [
             ['Math', 'English', 'Science', 'History', 'Art'],
             ['Physics', 'Literature', 'Biology', 'Geography', 'Music'],
@@ -73,7 +73,7 @@
             ['Workshop', 'Study', 'Sports', 'Debate', 'Drawing'],
             ['Review', 'Tutorial', 'Lab', 'Seminar', 'Free']
         ];
-        return {days, periods, schedule, customized: false};
+        return { days, periods, schedule, customized: false };
     }
 
     // fill any empty cell with a reasonable default
@@ -96,7 +96,7 @@
     }
 
     function cloneDefaultPeriods() {
-        return DEFAULT_PERIODS.map(p => ({...p}));
+        return DEFAULT_PERIODS.map(p => ({ ...p }));
     }
 
     // ----- data sanitization (ensures everything is valid) -----
@@ -110,7 +110,7 @@
             schedule = schedule.map(row => row.slice(0, MAX_DAYS));
         }
         const customized = Boolean(input?.customized);
-        return {days, periods, schedule, customized};
+        return { days, periods, schedule, customized };
     }
 
     function normalizeText(value) {
@@ -131,9 +131,9 @@
     }
 
     function normalizeSchedule(schedule, periodCount, dayCount) {
-        return Array.from({length: periodCount}, (_, periodIndex) => {
+        return Array.from({ length: periodCount }, (_, periodIndex) => {
             const sourceRow = Array.isArray(schedule?.[periodIndex]) ? schedule[periodIndex] : [];
-            return Array.from({length: dayCount}, (_, dayIndex) => {
+            return Array.from({ length: dayCount }, (_, dayIndex) => {
                 const cell = sourceRow[dayIndex];
                 return normalizeText(cell) || (periodIndex < DEFAULT_PERIODS.length && dayIndex < DEFAULT_DAYS.length
                     ? getDefaultSubject(periodIndex, dayIndex)
@@ -180,7 +180,7 @@
 
     function applyState(nextState, persist = true) {
         state.days = nextState.days.map(normalizeText);
-        state.periods = nextState.periods.map(period => ({...period}));
+        state.periods = nextState.periods.map(period => ({ ...period }));
         state.schedule = normalizeSchedule(nextState.schedule, state.periods.length, state.days.length);
         state.customized = Boolean(nextState.customized);
         if (persist) saveState();
@@ -257,8 +257,8 @@
     }
 
     function addPeriod() {
-        state.periods.push({name: 'New Period', start: '12:00', end: '13:00'});
-        state.schedule.push(Array.from({length: state.days.length}, () => 'New Subject'));
+        state.periods.push({ name: 'New Period', start: '12:00', end: '13:00' });
+        state.schedule.push(Array.from({ length: state.days.length }, () => 'New Subject'));
         markCustomized();
         renderAll();
     }
@@ -403,14 +403,14 @@
     function getCurrentSubjectInfo() {
         const now = new Date();
         let dayIndex = now.getDay();
-        const realDayName = now.toLocaleDateString(undefined, {weekday: 'long'});
-        const timeLabel = now.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+        const realDayName = now.toLocaleDateString(undefined, { weekday: 'long' });
+        const timeLabel = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
         if (dayIndex === 0) dayIndex = -1;
         else dayIndex = dayIndex - 1;
 
         if (dayIndex < 0 || dayIndex >= state.days.length) {
-            return {subject: 'No class', period: 'Weekend / No schedule', timeInfo: `${timeLabel} on ${realDayName}`};
+            return { subject: 'No class', period: 'Weekend / No schedule', timeInfo: `${timeLabel} on ${realDayName}` };
         }
 
         const dayName = state.days[dayIndex];
@@ -466,7 +466,7 @@
             periods: state.periods,
             schedule: state.schedule,
             customized: state.customized
-        }, null, 2)], {type: 'application/json'});
+        }, null, 2)], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;

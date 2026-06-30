@@ -28,7 +28,8 @@
     padding: 1rem;
 }
 
-.left-column, .right-column {
+.left-column,
+.right-column {
     width: 100%;
 }
 
@@ -58,7 +59,12 @@
     flex-wrap: wrap;
 }
 
-.date-input, .time-input, .number-input, .voice-textarea, .notes-textarea, .text-input {
+.date-input,
+.time-input,
+.number-input,
+.voice-textarea,
+.notes-textarea,
+.text-input {
     flex: 2;
     min-width: 160px;
     padding: 0.5rem 0.6rem;
@@ -71,7 +77,12 @@
     transition: 0.15s;
 }
 
-.date-input:focus, .time-input:focus, .number-input:focus, .voice-textarea:focus, .notes-textarea:focus, .text-input:focus {
+.date-input:focus,
+.time-input:focus,
+.number-input:focus,
+.voice-textarea:focus,
+.notes-textarea:focus,
+.text-input:focus {
     outline: 2px solid var(--primary);
     border-color: transparent;
 }
@@ -265,13 +276,15 @@
     margin: 0.2rem 0;
 }
 
-.entry-note-preview, .entry-note-full {
+.entry-note-preview,
+.entry-note-full {
     font-size: 0.75rem;
     margin-top: 0.2rem;
     color: var(--gray-dark);
 }
 
-.delete-entry, .edit-entry {
+.delete-entry,
+.edit-entry {
     position: absolute;
     background: none;
     border: none;
@@ -432,11 +445,14 @@
         align-items: stretch;
     }
 
-    .date-input, .time-input, .number-input {
+    .date-input,
+    .time-input,
+    .number-input {
         width: 100%;
     }
 
-    .today-btn, .now-btn {
+    .today-btn,
+    .now-btn {
         width: 100%;
     }
 
