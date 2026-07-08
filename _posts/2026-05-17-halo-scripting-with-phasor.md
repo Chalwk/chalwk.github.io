@@ -89,7 +89,7 @@ end
 ### General Functions
 
 | Function                    | Description                                                                                                           |
-|-----------------------------|-----------------------------------------------------------------------------------------------------------------------|
+| --------------------------- | --------------------------------------------------------------------------------------------------------------------- |
 | `hprintf(message)`          | Prints text to the server terminal.                                                                                   |
 | `resolveplayer(player)`     | Converts a memory ID (0-based) to an RCON/player ID (1-based).                                                        |
 | `rresolveplayer(player)`    | Converts an RCON ID (1-based) back to a memory ID (0-based).                                                          |
@@ -100,7 +100,7 @@ end
 ### Memory Reading
 
 | Function                                 | Description                                                                  |
-|------------------------------------------|------------------------------------------------------------------------------|
+| ---------------------------------------- | ---------------------------------------------------------------------------- |
 | `readbit(data, data_offset, bit_offset)` | Reads a single bit (0 or 1) from `data + data_offset` at `bit_offset` (0-7). |
 | `readbyte(address)`                      | Reads an unsigned 8-bit byte (0-255).                                        |
 | `readchar(address)`                      | Reads a signed 8-bit byte (-128 to 127).                                     |
@@ -116,7 +116,7 @@ end
 ### Memory Writing
 
 | Function                                            | Description                               |
-|-----------------------------------------------------|-------------------------------------------|
+| --------------------------------------------------- | ----------------------------------------- |
 | `writebit(data_addr, data_offset, bit_offset, bit)` | Writes a bit to memory.                   |
 | `writebyte(address, value)`                         | Writes an unsigned 8-bit byte.            |
 | `writechar(address, value)`                         | Writes a signed 8-bit byte.               |
@@ -132,7 +132,7 @@ end
 ### Player & Team Functions
 
 | Function                      | Description                                                                                   |
-|-------------------------------|-----------------------------------------------------------------------------------------------|
+| ----------------------------- | --------------------------------------------------------------------------------------------- |
 | `getplayer(player)`           | Returns the memory address of a player table entry (0-based).                                 |
 | `getname(player)`             | Returns the player's name (ASCII).                                                            |
 | `gethash(player)`             | Returns the player's CD-key hash (unique identifier).                                         |
@@ -147,7 +147,7 @@ end
 ### Object Functions
 
 | Function                                                               | Description                                                                                                                                                                                                                                                                                                                                                                                                         |
-|------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `getobject(m_objId)`                                                   | Converts an object ID into its memory address for reading/writing.                                                                                                                                                                                                                                                                                                                                                  |
 | `getplayerobjectid(player)`                                            | Returns the object ID of the player's biped (`0xFFFFFFFF` if dead/invalid).                                                                                                                                                                                                                                                                                                                                         |
 | `getobjectcoords(m_objectId)`                                          | Returns the (x, y, z) coordinates of an object. If a player is in a vehicle, returns the vehicle's coordinates.                                                                                                                                                                                                                                                                                                     |
@@ -164,7 +164,7 @@ end
 ### Chat & Console Output
 
 | Function                  | Description                                   |
-|---------------------------|-----------------------------------------------|
+| ------------------------- | --------------------------------------------- |
 | `say(msg)`                | Broadcasts a message to all players.          |
 | `privatesay(player, msg)` | Sends a private message to a specific player. |
 | `respond(msg)`            | Sends a message to the server terminal.       |
@@ -174,7 +174,7 @@ end
 ### Timer Functions
 
 | Function                              | Description                                                                                                                                                                                         |
-|---------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `registertimer(delay, callback, ...)` | Creates a timer that calls `callback` after `delay` milliseconds. The callback can return `1` to repeat or `0` to stop. Extra arguments are passed to the callback as userdata. Returns a timer ID. |
 | `removetimer(id)`                     | Stops and removes a timer created by `registertimer`.                                                                                                                                               |
 

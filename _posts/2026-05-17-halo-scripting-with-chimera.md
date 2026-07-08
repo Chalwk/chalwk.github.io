@@ -65,7 +65,7 @@ Chimera checks the `clua_version` variable against its own API version. The tabl
 considered compatible.
 
 | clua_version on the script (compared to chimera) | Example        | Script supported? |
-|--------------------------------------------------|----------------|-------------------|
+| ------------------------------------------------ | -------------- | ----------------- |
 | the same version                                 | 2.056 vs 2.056 | Yes               |
 | a lower version; same major version              | 2.04  vs 2.056 | Yes               |
 | a higher version                                 | 2.06  vs 2.056 | No                |
@@ -186,7 +186,7 @@ Chimera exposes several read-only global variables that provide useful informati
 script's environment, and the Chimera version.
 
 | Variable             | Description                                                                                          |
-|----------------------|------------------------------------------------------------------------------------------------------|
+| -------------------- | ---------------------------------------------------------------------------------------------------- |
 | `build`              | Chimera build number. **Negative** = alpha/pre-release; **positive** = public release.               |
 | `full_build`         | If `build` is negative, contains the **next public release build number**; otherwise equals `build`. |
 | `gametype`           | Current gametype: `"ctf"`, `"slayer"`, `"oddball"`, `"king"`, or `"race"`.                           |

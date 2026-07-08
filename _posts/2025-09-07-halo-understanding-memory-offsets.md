@@ -76,7 +76,7 @@ A signature is a string of bytes with wildcards (`??`) where values may vary (e.
 #### Generating Signatures with Specialized Tools
 
 | Tool             | Plugin / Method                      | Output                                                                                         |
-|------------------|--------------------------------------|------------------------------------------------------------------------------------------------|
+| ---------------- | ------------------------------------ | ---------------------------------------------------------------------------------------------- |
 | **IDA Pro**      | SigMaker (e.g., `IDA_SigMaker.dll`)  | Right-click on assembly → generate AOB signature; copy from output window.                     |
 | **Ghidra**       | MakeSig script                       | Right-click a function → "Generate Signature" → copy pattern.                                  |
 | **Cheat Engine** | Array of bytes scan + Auto Assembler | Find the instruction in memory disassembler → use `aobscan` or generate AOB from context menu. |
@@ -137,7 +137,7 @@ end
 Use these with version detection. All values are hexadecimal. Missing addresses are marked with `-`.
 
 | Pointer Name                  | PC Address | CE Address | Description                                    |
-|-------------------------------|------------|------------|------------------------------------------------|
+| ----------------------------- | ---------- | ---------- | ---------------------------------------------- |
 | `banlist_header`              | `0x641280` | `0x5C52A0` | Header for the banlist structure               |
 | `banlist_path_address`        | `0x69B950` | `0x61FB80` | Path to the banlist file                       |
 | `broadcast_game_address`      | `0x5E4768` | `0x569EAC` | Determines broadcast type (PC/CE/Trial)        |
@@ -199,7 +199,7 @@ SAPP scripts can avoid hardcoded addresses entirely by using the following pre-c
 PC and CE.
 
 | Pointer Name                | SAPP Signature (with offset)                                                                     |
-|-----------------------------|--------------------------------------------------------------------------------------------------|
+| --------------------------- | ------------------------------------------------------------------------------------------------ |
 | `banlist_header`            | `read_dword(sig_scan("A3??????00A1??????0033DB3BC3") + 1)`                                       |
 | `banlist_path_address`      | `read_dword(sig_scan("68??????00E8??????0083C41068") + 0x1)`                                     |
 | `banlist_path_address2`     | `read_dword(sig_scan("CCCCC605??????0000E8??????0085C0") + 0x4)`                                 |
@@ -279,7 +279,7 @@ check compatibility when writing cross-platform scripts.
 Chimera & SAPP: `local dyn = get_dynamic_player()`
 
 | Offset  | Type  | Description                                                           | Example Use                                                            |
-|---------|-------|-----------------------------------------------------------------------|------------------------------------------------------------------------|
+| ------- | ----- | --------------------------------------------------------------------- | ---------------------------------------------------------------------- |
 | `0x5C`  | float | World X position                                                      | `local x = read_float(dyn + 0x5C)`                                     |
 | `0x60`  | float | World Y position                                                      |                                                                        |
 | `0x64`  | float | World Z position                                                      |                                                                        |
@@ -304,7 +304,7 @@ Chimera & SAPP: `local dyn = get_dynamic_player()`
 Chimera & SAPP: `local static_p = get_player(id)`
 
 | Offset  | Type    | Description                          | Example Use                                                                               |
-|---------|---------|--------------------------------------|-------------------------------------------------------------------------------------------|
+| ------- | ------- | ------------------------------------ | ----------------------------------------------------------------------------------------- |
 | `0x4`   | wchar[] | Player name (UTF-16, max 12 chars)   | See Chimera [get_player_name()](2025-09-07-halo-understanding-memory-offsets.md)) example |
 | `0x20`  | byte    | Team (0 = Red, 1 = Blue)             | `local team = read_byte(static_p + 0x20)`                                                 |
 | `0x9C`  | word    | Kill count                           | `local kills = read_word(static_p + 0x9C)`                                                |
@@ -319,7 +319,7 @@ Chimera & SAPP: `local static_p = get_player(id)`
 Chimera: `get_object(weapon_id)`, SAPP `get_object_memory(weapon_id)`
 
 | Offset  | Type  | Description                                 | Example Use      |
-|---------|-------|---------------------------------------------|------------------|
+| ------- | ----- | ------------------------------------------- | ---------------- |
 | `0x2B6` | word  | Rounds in current magazine                  | Low ammo warning |
 | `0x2B8` | word  | Total reserve ammo                          |                  |
 | `0x2C6` | word  | Secondary ammo (e.g., grenades in launcher) |                  |
@@ -331,7 +331,7 @@ Chimera: `get_object(weapon_id)`, SAPP `get_object_memory(weapon_id)`
 Chimera: `get_object(vehicle_id)`, SAPP `get_object_memory(vehicle_id)`
 
 | Offset | Type  | Description                                   |
-|--------|-------|-----------------------------------------------|
+| ------ | ----- | --------------------------------------------- |
 | `0x5C` | float | World X position (same as player when seated) |
 | `0x60` | float | World Y                                       |
 | `0x64` | float | World Z                                       |
@@ -344,7 +344,7 @@ Chimera: `get_object(vehicle_id)`, SAPP `get_object_memory(vehicle_id)`
 Chimera: `get_object(weapon_id)`, SAPP `get_object_memory(weapon_id)`
 
 | Offset  | Type  | Description                                 | Example Use           |
-|---------|-------|---------------------------------------------|-----------------------|
+| ------- | ----- | ------------------------------------------- | --------------------- |
 | `0x2B6` | word  | Rounds in current magazine                  | Low ammo warning      |
 | `0x2B8` | word  | Total reserve ammo                          | Ammo tracking         |
 | `0x2C6` | word  | Secondary ammo (e.g., grenades in launcher) | Grenade launcher ammo |

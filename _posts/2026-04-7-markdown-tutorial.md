@@ -509,16 +509,16 @@ Use `diff` as the language to show additions and deletions.
 Use `|` to create tables. Separate headers from rows with `---`.
 
 ```markdown
-| Name     | Age | Occupation  |
-|----------|-----|-------------|
-| Alice    | 30  | Developer   |
-| Bob      | 25  | Designer    |
+| Name  | Age | Occupation |
+| ----- | --- | ---------- |
+| Alice | 30  | Developer  |
+| Bob   | 25  | Designer   |
 ```
 
 **Result:**
 
 | Name  | Age | Occupation |
-|-------|-----|------------|
+| ----- | --- | ---------- |
 | Alice | 30  | Developer  |
 | Bob   | 25  | Designer   |
 
@@ -532,15 +532,15 @@ Add colons (`:`) in the separator row:
 
 ```markdown
 | Left | Center | Right |
-|:-----|:------:|------:|
-| 1    | 2      | 3     |
-| 4    | 5      | 6     |
+| :--- | :----: | ----: |
+| 1    |   2    |     3 |
+| 4    |   5    |     6 |
 ```
 
 **Result:**
 
 | Left | Center | Right |
-|:-----|:------:|------:|
+| :--- | :----: | ----: |
 | 1    |   2    |     3 |
 | 4    |   5    |     6 |
 

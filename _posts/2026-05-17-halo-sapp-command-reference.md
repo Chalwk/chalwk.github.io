@@ -9,7 +9,7 @@ tags: [ sapp, commands, reference, server ]
 # Configuration Commands
 
 | Command | Usage    | Description                                                      |
-|---------|----------|------------------------------------------------------------------|
+| ------- | -------- | ---------------------------------------------------------------- |
 | load    | `load`   | Load SAPP (requires `strings.dll` enabled, `sapp.dll` present).  |
 | reload  | `reload` | Reload SAPP configuration and scripts (faster than unload+load). |
 | unload  | `unload` | Unload SAPP - reverts to stock. Console/cron only.               |
@@ -21,7 +21,7 @@ tags: [ sapp, commands, reference, server ]
 These are Halo's built-in server commands. SAPP enhances or overrides some.
 
 | Command                    | Usage                                  | Description                                                         |
-|----------------------------|----------------------------------------|---------------------------------------------------------------------|
+| -------------------------- | -------------------------------------- | ------------------------------------------------------------------- |
 | quit                       | `quit`                                 | Close the server application.                                       |
 | sv_ban                     | `sv_ban <player> [length]`             | Ban a player (optional duration).                                   |
 | sv_ban_penalty             | `sv_ban_penalty [1] [2] [3] [4]`       | Set ban lengths for TK penalties. Default: `5m, 1d, 10d, 0`.        |
@@ -67,7 +67,7 @@ These are Halo's built-in server commands. SAPP enhances or overrides some.
 Available to all players.
 
 | Command   | Level | Usage                                | Description                                                                                     |
-|-----------|-------|--------------------------------------|-------------------------------------------------------------------------------------------------|
+| --------- | ----- | ------------------------------------ | ----------------------------------------------------------------------------------------------- |
 | about     | -1    | `about`                              | Display current SAPP version.                                                                   |
 | afk       | 0     | `afk`                                | Mark player as AFK - disables future respawns.                                                  |
 | clead     | -1    | `clead [ping]`                       | Set player lead at a certain ping (requires `no_lead` enabled, `lead` disabled). Default: 0 ms. |
@@ -88,7 +88,7 @@ Available to all players.
 ## General Commands (Admin Moderation)
 
 | Command       | Level | Usage                                          | Description                                                                                                                                                                      |
-|---------------|-------|------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ------------- | ----- | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | afks          | 0     | `afks`                                         | List AFK players.                                                                                                                                                                |
 | b             | 3     | `b <player_id> [reason] [time]`                | Hash-ban a player. **Avoid using this command where possible:** many players use cracked clients with shared CD keys, which can result in innocent players being banned as well. |
 | balance_teams | 2     | `balance_teams`                                | Balance teams based on stats.                                                                                                                                                    |
@@ -125,7 +125,7 @@ Available to all players.
 Used to configure server behaviour. Settings lost on reload unless placed in `init.txt`.
 
 | Command               | Level | Usage                                            | Description                                                                         |
-|-----------------------|-------|--------------------------------------------------|-------------------------------------------------------------------------------------|
+| --------------------- | ----- | ------------------------------------------------ | ----------------------------------------------------------------------------------- |
 | admin_prefix          | 4     | `admin_prefix <prefix>`                          | Prefix for admin messages via `say`. Default: `**SAPP**`.                           |
 | adminadd_samelevel    | 4     | `adminadd_samelevel [0-2]`                       | Allow admins to add V1 admins: `0`=no, `1`=lower, `2`=lower/equal. Default: `0`.    |
 | adminban              | 4     | `adminban [0-2]`                                 | Admin ban permissions: `0`=any, `1`=no higher, `2`=only lower. Default: `0`.        |
@@ -200,7 +200,7 @@ Used to configure server behaviour. Settings lost on reload unless placed in `in
 Manage SAPP's map cycle (stored in `mapcycle.txt`).
 
 | Command        | Level | Usage                                                                   | Description                                   |
-|----------------|-------|-------------------------------------------------------------------------|-----------------------------------------------|
+| -------------- | ----- | ----------------------------------------------------------------------- | --------------------------------------------- |
 | map_next       | 4     | `map_next`                                                              | Start the next game in the map cycle.         |
 | map_prev       | 4     | `map_prev`                                                              | Start the previous game in the map cycle.     |
 | map_spec       | 4     | `map_spec <index>`                                                      | Skip to a specific map cycle entry.           |
@@ -217,7 +217,7 @@ Manage SAPP's map cycle (stored in `mapcycle.txt`).
 Manage map voting (stored in `mapvotes.txt`). Enabling map voting disables the map cycle.
 
 | Command     | Level | Usage                                                                         | Description                                            |
-|-------------|-------|-------------------------------------------------------------------------------|--------------------------------------------------------|
+| ----------- | ----- | ----------------------------------------------------------------------------- | ------------------------------------------------------ |
 | mapvote     | 4     | `mapvote [enabled]`                                                           | Enable map voting at end of game.                      |
 | mapvote_add | 4     | `mapvote_add <map> <game variant> <name> [min players] [max players] [index]` | Add a map vote entry.                                  |
 | mapvote_del | 4     | `mapvote_del <index>`                                                         | Delete a map vote entry.                               |
@@ -231,7 +231,7 @@ Manage map voting (stored in `mapvotes.txt`). Enabling map voting disables the m
 Events allow basic scripting without Lua. Defined in `events.txt`.
 
 | Command   | Level        | Usage                           | Description                                             |
-|-----------|--------------|---------------------------------|---------------------------------------------------------|
+| --------- | ------------ | ------------------------------- | ------------------------------------------------------- |
 | cevent    | 4            | `cevent <name> [player number]` | Raise `event_custom`, set `$ename` and optional player. |
 | events    | 4            | `events`                        | List all events and their indices.                      |
 | eventsdel | 4            | `eventsdel <index>`             | Delete an event by index.                               |
@@ -246,7 +246,7 @@ Create your own commands (stored in `commands.txt`). Format:
 `command_name #arg1 #arg2... 'command1;command2...' level`
 
 | Command | Level | Usage                                                      | Description                  |
-|---------|-------|------------------------------------------------------------|------------------------------|
+| ------- | ----- | ---------------------------------------------------------- | ---------------------------- |
 | cmd_add | 4     | `cmd_add <command> [arguments] <command sequence> [level]` | Create a new custom command. |
 | cmd_del | 4     | `cmd_del <command>`                                        | Remove a custom command.     |
 
@@ -267,7 +267,7 @@ You can validate whether a hash is publicly known using
 the [Hash Checker tool](https://chalwk.github.io/SPCLib/tools/hash-checker).
 
 | Command    | Level | Usage                                                 | Description                                                                                                                       |
-|------------|-------|-------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
+| ---------- | ----- | ----------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
 | adminadd   | 0     | `adminadd <player_id> <level> [allowed IP ranges...]` | Add a CD-key based admin using the player's current CD-key hash. Optional IP ranges can restrict where the admin may log in from. |
 | adminlevel | 0     | `adminlevel <index> <level>`                          | Set new level for a CD-key admin.                                                                                                 |
 | admindel   | 0     | `admindel <index>`                                    | Remove a CD-key admin (requires `admindel_samelevel`).                                                                            |
@@ -279,7 +279,7 @@ Name/password admins authenticate using their current in-game name and assigned 
 When using `admin_add`, the player's current username is saved to `admins.txt`.
 
 | Command            | Level | Usage                                           | Description                                                                              |
-|--------------------|-------|-------------------------------------------------|------------------------------------------------------------------------------------------|
+| ------------------ | ----- | ----------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | admin_add          | 4     | `admin_add <player_id> <password> <level>`      | Add name/password admin using the player's current in-game name (player must be online). |
 | admin_add_manually | 4     | `admin_add_manually <name> <password> <level>`  | Add name/password admin without player being present.                                    |
 | admin_change_pw    | 4     | `admin_change_pw <index> <password>`            | Change password of name/password admin.                                                  |
@@ -296,7 +296,7 @@ When using `admin_add`, the player's current username is saved to `admins.txt`.
 Directly modify player attributes. Cannot be used when `scrim_mode` is enabled.
 
 | Command              | Usage                                                        | Description                                                                     |
-|----------------------|--------------------------------------------------------------|---------------------------------------------------------------------------------|
+| -------------------- | ------------------------------------------------------------ | ------------------------------------------------------------------------------- |
 | ammo                 | `ammo <player_id> [int_expr] [weapon]`                       | Change unloaded ammo (`0`=current,`1`-`4`=weapon slots,`5`=all).                |
 | area_add_cuboid      | `area_add_cuboid <name> <a_x> <a_y> <a_z> <b_x> <b_y> <b_z>` | Add a rectangular area.                                                         |
 | area_add_sphere      | `area_add_sphere <name> <x> <y> <z> <r>`                     | Add a spherical area.                                                           |
@@ -357,7 +357,7 @@ Directly modify player attributes. Cannot be used when `scrim_mode` is enabled.
 Manage the TCP remote console.
 
 | Command             | Level | Usage                        | Description                                         |
-|---------------------|-------|------------------------------|-----------------------------------------------------|
+| ------------------- | ----- | ---------------------------- | --------------------------------------------------- |
 | remote_console      | 4     | `remote_console [enabled]`   | Enable remote console. Default: `false`.            |
 | remote_console_list | 4     | `remote_console_list`        | List connected remote console clients.              |
 | remote_console_port | 4     | `remote_console_port [port]` | Set TCP port for remote console (requires restart). |
@@ -369,7 +369,7 @@ Manage the TCP remote console.
 Add custom fields to Halo's query response.
 
 | Command    | Level | Usage                       | Description                              |
-|------------|-------|-----------------------------|------------------------------------------|
+| ---------- | ----- | --------------------------- | ---------------------------------------- |
 | query_add  | 4     | `query_add <key> <value>`   | Add or overwrite a query key/value pair. |
 | query_del  | 4     | `query_del <index or name>` | Remove a query entry.                    |
 | query_list | 4     | `query_list`                | List custom query entries.               |
@@ -381,7 +381,7 @@ Add custom fields to Halo's query response.
 Create and manage custom event variables (used in events and Lua).
 
 | Command  | Level | Usage                                         | Description                                                                                                                  |
-|----------|-------|-----------------------------------------------|------------------------------------------------------------------------------------------------------------------------------|
+| -------- | ----- | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
 | var_add  | 4     | `var_add <name> <type>`                       | Create custom variable. Type: `0`=global str,`1`=global int,`2`=global float,`3`=player str,`4`=player int,`5`=player float. |
 | var_conv | 4     | `var_conv <name>`                             | Convert between integer and float variable.                                                                                  |
 | var_del  | 4     | `var_del <name>`                              | Delete a custom variable.                                                                                                    |

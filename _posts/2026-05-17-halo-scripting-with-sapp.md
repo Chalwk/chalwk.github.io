@@ -56,7 +56,7 @@ SAPP looks for Lua scripts in its `Lua` folder; By default, this is located in `
 ## Lua Scripting Management
 
 | Command    | Level | Usage                                         | Description                                      |
-|------------|-------|-----------------------------------------------|--------------------------------------------------|
+| ---------- | ----- | --------------------------------------------- | ------------------------------------------------ |
 | lua        | 4     | `lua [enabled]`                               | Enable Lua scripting. Default: false.            |
 | lua_api_v  | 4     | `lua_api_v`                                   | Display current Lua API version.                 |
 | lua_call   | 4     | `lua_call <script> <function> [arguments...]` | Call a function in a loaded Lua script.          |
@@ -68,7 +68,7 @@ SAPP looks for Lua scripts in its `Lua` folder; By default, this is located in `
 ## Global Variables
 
 | Variable          | Description                                                                                                                           |
-|-------------------|---------------------------------------------------------------------------------------------------------------------------------------|
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
 | `cb`              | A table of callback constants for use with `register_callback` and `unregister_callback`. Keys are strings like `"EVENT_GAME_START"`. |
 | `halo_type`       | The version of Halo being used. `"CE"` for Halo Custom Edition, `"PC"` for retail Halo.                                               |
 | `lua_api_version` | The Lua API version running on the server (e.g., `"1.12.0.0"`).                                                                       |
@@ -80,7 +80,7 @@ SAPP looks for Lua scripts in its `Lua` folder; By default, this is located in `
 ## SAPP Functions
 
 | Function                                                         | Description                                                                                                                                                                                  |
-|------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ---------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `add_var(name, type)`                                            | Creates a new custom event variable. `type`: 0=global string, 1=global int, 2=global float, 3=player string, 4=player int, 5=player float.                                                   |
 | `assign_weapon(objectID, playerIndex)`                           | Assigns a weapon object to a player. Returns `true` on success.                                                                                                                              |
 | `camo(playerIndex, duration)`                                    | Applies active camouflage to a player for `duration` ticks (30 ticks/sec). Does nothing if already camo'd.                                                                                   |
@@ -1125,7 +1125,7 @@ Red text (Foreground 12) on Light Aqua background (Background 11):
 ### 2. The Color Code Table
 
 | Color Name   | Value |
-|--------------|:-----:|
+| ------------ | :---: |
 | Black        |   0   |
 | Dark Blue    |   1   |
 | Dark Green   |   2   |
@@ -1211,7 +1211,7 @@ A true, large-scale **D**DoS attack will overwhelm SAPP's protections:
 ### Summary
 
 | For This...                                                    | SAPP is...                                                    |
-|----------------------------------------------------------------|---------------------------------------------------------------|
+| -------------------------------------------------------------- | ------------------------------------------------------------- |
 | Script Kiddies using public flooding tools                     | Excellent. Stops them cold.                                   |
 | Join Spammers trying to crash the server with fake players     | Excellent. `antihalofp` is built for this.                    |
 | RCON Brute-Forcers trying to guess your password               | Excellent. The 4-strike rule works perfectly.                 |
@@ -1242,7 +1242,7 @@ positions defined by the client.
 ### Available Positioning Characters
 
 | Prefix  | Effect                                                |
-|---------|-------------------------------------------------------|
+| ------- | ----------------------------------------------------- |
 | **\|l** | Left-align the message (default position).            |
 | **\|r** | Right-align the message.                              |
 | **\|c** | Center the message horizontally.                      |

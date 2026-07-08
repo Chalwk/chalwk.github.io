@@ -84,7 +84,7 @@ You need to forward **two UDP ports** for your Halo server to work correctly. Cr
 ### Rule 1: Game Port (Required)
 
 | Field             | Value                                  |
-|:------------------|:---------------------------------------|
+| :---------------- | :------------------------------------- |
 | **Service Name**  | `Halo (Game Port)`                     |
 | **Protocol**      | `UDP`                                  |
 | **External Port** | `2302`                                 |
@@ -94,7 +94,7 @@ You need to forward **two UDP ports** for your Halo server to work correctly. Cr
 ### Rule 2: Server Port (Match Your Configuration)
 
 | Field             | Value                                  |
-|:------------------|:---------------------------------------|
+| :---------------- | :------------------------------------- |
 | **Service Name**  | `Halo Server Port`                     |
 | **Protocol**      | `UDP`                                  |
 | **External Port** | `Your chosen server port (e.g., 2310)` |
