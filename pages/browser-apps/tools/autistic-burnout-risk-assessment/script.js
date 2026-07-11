@@ -1,4 +1,4 @@
-// Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
+// Copyright (c) 2024-2026 Jericho Crosby (Chalwk). All Rights Reserved.
 
 // Grab DOM elements we'll need often
 const calculateBtn = document.getElementById('calculate-btn');

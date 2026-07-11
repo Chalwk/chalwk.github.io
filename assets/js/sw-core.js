@@ -1,4 +1,4 @@
-// Copyright (c) 2024-2026. Jericho Crosby (Chalwk)
+// Copyright (c) 2024-2026 Jericho Crosby (Chalwk). All Rights Reserved.
 
 // files to cache right away when service worker installs
 const urlsToCache = [

@@ -1,7 +1,7 @@
 ---
 layout: none
 ---
-{% comment %} Copyright (c) 2024-2026. Jericho Crosby (Chalwk) {% endcomment %}
+{% comment %} Copyright (c) 2024-2026 Jericho Crosby (Chalwk). All Rights Reserved. {% endcomment %}
 [
   {% for post in site.posts %}
     {

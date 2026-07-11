@@ -1,35 +1,31 @@
-<div align="center">
+# chalwk.github.io
 
-## Jericho (Chalwk)
+This repository contains the source code and content for the official **chalwk.github.io** website, built with Jekyll and hosted on GitHub Pages.
 
-**Autistic Programmer · Gamer · Advocate**
-
-  <img src="assets/images/avatar.png" alt="Avatar" width="250">
-
-  <br>
-
-  <a href="mailto:chalwk.dev@gmail.com">
-    <img src="https://img.shields.io/badge/Email-chalwk.dev@gmail.com-c14438?style=for-the-badge&logo=gmail&logoColor=white" alt="Email">
-  </a>
-
-  <a href="https://discord.gg/D76H7RVPC9">
-    <img src="https://img.shields.io/badge/Discord-Join_Server-7289DA?style=for-the-badge&logo=discord&logoColor=white" alt="Chalwk's Discord">
-  </a>
-
-  <a href="https://chalwk.github.io/">
-    <img src="https://img.shields.io/badge/My Website-Visit-0A66C2?style=for-the-badge&logo=google-chrome&logoColor=white" alt="Portfolio Website">
-  </a>
-</div>
+**Live website:** [https://chalwk.github.io](https://chalwk.github.io)
 
 ---
 
-## License
+## Copyright & License
 
-**© 2024-2026 Jericho Crosby (Chalwk). All rights reserved.**
+**© 2024-2026 Jericho Crosby (Chalwk). All Rights Reserved.**
 
-All content in this repository, including source code, images, and documentation, is proprietary. **You may not copy,
-redistribute, or use any assets without explicit prior written permission.**
+This repository and all its contents are **proprietary assets**.  
+You are permitted to **view** the website and this repository for informational purposes only.
 
-For the full legal terms, please read the [**LICENSE**](LICENSE) file.
+No part of this repository may be:
+- Copied, reproduced, or downloaded
+- Modified, adapted, or translated
+- Distributed, shared, or published elsewhere
+- Used in any other project, product, or service
+
+For the full legal terms, please read the [LICENSE](LICENSE) file.
 
 ---
+
+## Contact
+
+For questions, licensing inquiries, or collaboration proposals:
+
+- **Email:** chalwk.dev@gmail.com  
+- **Discord:** chalwk
