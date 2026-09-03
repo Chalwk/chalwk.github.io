@@ -164,7 +164,7 @@ img {
 
 /* profile image - big with hover zoom */
 .about-image img {
-    width: 900px;
+    width: 350px;
     height: auto;
     border-radius: 0;
     object-fit: cover;
@@ -201,25 +201,6 @@ img {
 
 .about-column {
     flex: 1;
-}
-
-.column-heading {
-    font-size: 1.6rem;
-    margin-bottom: 1.8rem;
-    position: relative;
-    font-weight: 600;
-    color: var(--dark);
-}
-
-.column-heading::after {
-    content: '';
-    position: absolute;
-    bottom: -8px;
-    left: 0;
-    width: 70px;
-    height: 3px;
-    background: linear-gradient(90deg, var(--primary), var(--secondary));
-    border-radius: 2px;
 }
 
 /* current focus items - left accent border */
@@ -314,29 +295,6 @@ img {
     margin-top: 1.0rem;
 }
 
-/* skills section - three columns of tags */
-.skills-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
-    margin: 2rem 0;
-}
-
-.skill-category h3 {
-    margin-bottom: 0.75rem;
-    color: var(--secondary);
-    font-size: 1rem;
-    font-weight: 600;
-    border-bottom: 2px solid var(--border);
-    padding-bottom: 0.3rem;
-}
-
-.skill-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-}
-
 .tag {
     background-color: var(--light);
     padding: 0.3rem 0.7rem;
@@ -355,13 +313,6 @@ img {
     background-color: var(--primary);
     color: white;
     border-color: var(--primary);
-}
-
-/* responsive breakpoints - stack things nicely */
-@media (max-width: 992px) {
-    .skills-container {
-        grid-template-columns: repeat(2, 1fr);
-    }
 }
 
 @media (max-width: 768px) {
@@ -394,10 +345,6 @@ img {
     }
 
     .services-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .skills-container {
         grid-template-columns: 1fr;
     }
 
