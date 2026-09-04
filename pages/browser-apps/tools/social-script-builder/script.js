@@ -106,6 +106,9 @@
     ];
 
     const el = (sel, root = document) => root.querySelector(sel);
+    const on = (element, event, handler) => {
+        if (element) element.addEventListener(event, handler);
+    };
     const escapeHtml = s => String(s).replace(/[&<>"']/g, m => ({
         '&': '&amp;',
         '<': '&lt;',
@@ -571,15 +574,15 @@
         renderScriptLibrary();
         renderPremadeScripts();
 
-        addStepBtn.addEventListener("click", () => {
+        on(addStepBtn, "click", () => {
             addStep(stepTypeSelect.value);
         });
 
-        saveScriptBtn.addEventListener("click", saveCurrentScript);
-        newScriptBtn.addEventListener("click", newScript);
-        exportScriptBtn.addEventListener("click", exportScript);
+        on(saveScriptBtn, "click", saveCurrentScript);
+        on(newScriptBtn, "click", newScript);
+        on(exportScriptBtn, "click", exportScript);
 
-        practiceBtn.addEventListener("click", () => {
+        on(practiceBtn, "click", () => {
             if (currentScript.steps.length === 0) {
                 alert("Create a script with at least one step to practice.");
                 return;
@@ -592,32 +595,32 @@
             startPractice(currentScript.id);
         });
 
-        prevStepBtn.addEventListener("click", prevPracticeStep);
-        nextStepBtn.addEventListener("click", nextPracticeStep);
-        resetPracticeBtn.addEventListener("click", resetPractice);
+        on(prevStepBtn, "click", prevPracticeStep);
+        on(nextStepBtn, "click", nextPracticeStep);
+        on(resetPracticeBtn, "click", resetPractice);
 
-        closePractice.addEventListener("click", () => {
+        on(closePractice, "click", () => {
             practiceModal.close();
             stopTimer();
         });
 
-        helpBtn.addEventListener("click", () => {
+        on(helpBtn, "click", () => {
             helpModal.showModal();
         });
 
-        closeHelp.addEventListener("click", () => {
+        on(closeHelp, "click", () => {
             helpModal.close();
         });
 
-        closeHelpBtn.addEventListener("click", () => {
+        on(closeHelpBtn, "click", () => {
             helpModal.close();
         });
 
-        searchScripts.addEventListener("input", (e) => {
+        on(searchScripts, "input", (e) => {
             renderScriptLibrary(e.target.value);
         });
 
-        autoAdvance.addEventListener("change", () => {
+        on(autoAdvance, "change", () => {
             if (autoAdvance.checked && practiceState.script) {
                 console.log("Auto-advance enabled");
             }
