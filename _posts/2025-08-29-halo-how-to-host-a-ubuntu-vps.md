@@ -550,7 +550,7 @@ The VNC password is stored in the user's home directory and is managed with the 
    ```bash
    vncpasswd
    ```
-3. Enter your new password when prompted (maximum 8 characters). You may also set a view‑only password,
+3. Enter your new password when prompted (maximum 8 characters). You may also set a view-only password,
    but you can skip it by typing `n`.
 4. After the password is saved, restart the VNC service:
    ```bash
