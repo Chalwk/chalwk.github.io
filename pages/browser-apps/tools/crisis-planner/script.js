@@ -65,6 +65,7 @@
             meansRestriction: '',
             reasonsForLiving: ''
         },
+        userName: '',
         updatedAt: null
     };
 
@@ -144,6 +145,7 @@
                 whatHappened: parsed.whatHappened || '',
                 needsNow: parsed.needsNow || '',
                 safety: Object.assign({}, DEFAULT_PLAN.safety, parsed.safety || {}),
+                userName: typeof parsed.userName === 'string' ? parsed.userName : '',
                 updatedAt: parsed.updatedAt || null
             };
         } catch (e) {
@@ -323,7 +325,7 @@
             chip.className = 'suggestion-chip';
             chip.textContent = s;
             chip.addEventListener('click', () => {
-                plan.levels[levelId].push({ id: newItemId(), text: s, checked: false });
+                plan.levels[levelId].push({ id: newItemId(), text: s, checked: true });
                 savePlan();
                 renderLevel(levelId);
                 renderSuggestions(levelId);
@@ -459,6 +461,22 @@
         renderSuggestions(levelId);
     }
 
+    const userNameEl = document.getElementById('userNameInput');
+    const originalPageTitle = document.title;
+
+    function updatePageTitle() {
+        const name = (plan.userName || '').trim();
+        if (!name) {
+            document.title = originalPageTitle;
+            return;
+        }
+        if (/Jericho Crosby \(Chalwk\)/i.test(originalPageTitle)) {
+            document.title = originalPageTitle.replace(/Jericho Crosby \(Chalwk\)/i, name);
+        } else {
+            document.title = `${originalPageTitle} - ${name}`;
+        }
+    }
+
     const triggersEl = document.getElementById('currentTriggers');
     const whatHappenedEl = document.getElementById('whatHappened');
     const needsNowEl = document.getElementById('needsNow');
@@ -469,6 +487,8 @@
     const reasonsForLivingEl = document.getElementById('reasonsForLiving');
 
     function loadTextFields() {
+        if (userNameEl) userNameEl.value = plan.userName || '';
+        updatePageTitle();
         triggersEl.value = plan.triggers || '';
         whatHappenedEl.value = plan.whatHappened || '';
         needsNowEl.value = plan.needsNow || '';
@@ -495,6 +515,14 @@
             debouncedSave();
         });
     });
+
+    if (userNameEl) {
+        userNameEl.addEventListener('input', () => {
+            plan.userName = userNameEl.value;
+            updatePageTitle();
+            debouncedSave();
+        });
+    }
 
     [
         [emergencyContactsEl, 'emergencyContacts'],
@@ -614,7 +642,8 @@
         const now = new Date();
         let html = '';
 
-        html += `<div class="summary-section"><strong>CRISIS HANDOVER SUMMARY</strong><br>`;
+        const nameSuffix = (plan.userName || '').trim() ? `: ${escapeHtml(plan.userName.trim())}` : '';
+        html += `<div class="summary-section"><strong>CRISIS HANDOVER SUMMARY${nameSuffix}</strong><br>`;
         html += `Generated: ${now.toLocaleString('en-NZ')}</div>`;
         html += `<hr class="summary-divider">`;
 
@@ -668,7 +697,8 @@
         const now = new Date();
         let html = '';
 
-        html += `<div class="summary-section"><strong>MY CRISIS PLAN</strong><br>`;
+        const nameSuffix = (plan.userName || '').trim() ? `: ${escapeHtml(plan.userName.trim())}` : '';
+        html += `<div class="summary-section"><strong>MY CRISIS PLAN${nameSuffix}</strong><br>`;
         html += `Generated: ${now.toLocaleString('en-NZ')}</div>`;
         html += `<hr class="summary-divider">`;
 
@@ -856,8 +886,11 @@
     const printArea = document.getElementById('printArea');
     if (printBtn && printArea) {
         printBtn.addEventListener('click', () => {
+            updatePageTitle();
             const now = new Date();
-            let html = `<h1>My Crisis Plan</h1><p>Printed: ${escapeHtml(now.toLocaleString('en-NZ'))}</p><hr>`;
+            const name = (plan.userName || '').trim();
+            const heading = name ? `My Crisis Plan - ${escapeHtml(name)}` : 'My Crisis Plan';
+            let html = `<h1>${heading}</h1><p>Printed: ${escapeHtml(now.toLocaleString('en-NZ'))}</p><hr>`;
 
             LEVELS.forEach(lvl => {
                 html += `<h2>${escapeHtml(lvl.label)}</h2>`;
