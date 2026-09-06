@@ -1,3 +1,5 @@
+// Copyright (c) 2024-2026 Jericho Crosby (Chalwk). All Rights Reserved.
+
 (function () {
     const STORAGE_KEY = 'crisis_plan_v1';
 
@@ -66,6 +68,65 @@
         updatedAt: null
     };
 
+    const SUGGESTIONS = {
+        early: [
+            'Avoiding messages or phone calls',
+            'Feeling numb or disconnected',
+            'Increased use of alcohol or other substances',
+            'Skin picking, hair pulling, or other repetitive habits increasing',
+            'Struggling with usual routines or self-care tasks'
+        ],
+        mild: [
+            'Use noise-cancelling headphones or earplugs',
+            'Stim / use a fidget or sensory tool',
+            'Have a warm drink or snack',
+            'Watch or listen to something familiar and comforting',
+            'Wrap up in a blanket or weighted blanket',
+            'Go for a short walk'
+        ],
+        moderate: [
+            'Move to a quiet, low-stimulation room',
+            'Text (rather than call) a trusted person',
+            'Use ear defenders / reduce lighting and noise',
+            'Follow my sensory or meltdown/shutdown plan',
+            'Cancel or postpone non-essential plans for today'
+        ],
+        severe: [
+            'Text 1737 if calling feels like too much',
+            'Have someone else make the call for me',
+            'Go to a public, safe place if I can\u2019t be alone',
+            'Give my phone or keys to someone I trust'
+        ],
+        now: [
+            'Overwhelmed by noise, light, or touch',
+            'Can\u2019t speak right now / non-verbal',
+            'Dissociating or feeling unreal',
+            'In physical pain',
+            'Scared to ask for help'
+        ]
+    };
+
+    const SETTINGS_KEY = 'crisis_plan_settings_v1';
+    const DEFAULT_SETTINGS = { fontSize: 'normal', highContrast: false, reduceMotion: false };
+
+    function loadSettings() {
+        try {
+            const stored = localStorage.getItem(SETTINGS_KEY);
+            if (!stored) return Object.assign({}, DEFAULT_SETTINGS);
+            return Object.assign({}, DEFAULT_SETTINGS, JSON.parse(stored));
+        } catch (e) {
+            return Object.assign({}, DEFAULT_SETTINGS);
+        }
+    }
+
+    function saveSettings(settings) {
+        try {
+            localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+        } catch (e) {
+            console.error('Failed to save settings:', e);
+        }
+    }
+
     function loadPlan() {
         try {
             const stored = localStorage.getItem(STORAGE_KEY);
@@ -105,6 +166,7 @@
             alert('Could not save your plan. Storage may be full or disabled.');
             return;
         }
+        if (typeof updateLastSavedIndicator === 'function') updateLastSavedIndicator();
     }
 
     let plan = loadPlan();
@@ -162,6 +224,117 @@
     });
     setupCollapsible('safetyToggle', document.getElementById('safetyFields'), 'safetyIcon');
     setupCollapsible('currentStateToggle', document.getElementById('currentStateContent'), 'currentStateIcon');
+    setupCollapsible('moreSupportToggle', document.getElementById('moreSupportContent'), 'moreSupportIcon');
+
+    let settings = loadSettings();
+
+    function applySettings() {
+        document.body.classList.remove('text-large', 'text-xlarge');
+        if (settings.fontSize === 'large') document.body.classList.add('text-large');
+        if (settings.fontSize === 'xlarge') document.body.classList.add('text-xlarge');
+        document.body.classList.toggle('high-contrast', !!settings.highContrast);
+        document.body.classList.toggle('reduce-motion', !!settings.reduceMotion);
+
+        document.querySelectorAll('.segmented-btn[data-font-size]').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.fontSize === settings.fontSize);
+        });
+        const hcToggle = document.getElementById('highContrastToggle');
+        const rmToggle = document.getElementById('reduceMotionToggle');
+        if (hcToggle) hcToggle.checked = !!settings.highContrast;
+        if (rmToggle) rmToggle.checked = !!settings.reduceMotion;
+    }
+    applySettings();
+
+    const settingsBtn = document.getElementById('settingsBtn');
+    const settingsPanel = document.getElementById('settingsPanel');
+    if (settingsBtn && settingsPanel) {
+        settingsBtn.addEventListener('click', () => {
+            const isOpen = settingsPanel.style.display === 'block';
+            settingsPanel.style.display = isOpen ? 'none' : 'block';
+            settingsBtn.setAttribute('aria-expanded', String(!isOpen));
+        });
+    }
+
+    document.querySelectorAll('.segmented-btn[data-font-size]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            settings.fontSize = btn.dataset.fontSize;
+            saveSettings(settings);
+            applySettings();
+        });
+    });
+    const highContrastToggle = document.getElementById('highContrastToggle');
+    if (highContrastToggle) {
+        highContrastToggle.addEventListener('change', () => {
+            settings.highContrast = highContrastToggle.checked;
+            saveSettings(settings);
+            applySettings();
+        });
+    }
+    const reduceMotionToggle = document.getElementById('reduceMotionToggle');
+    if (reduceMotionToggle) {
+        reduceMotionToggle.addEventListener('change', () => {
+            settings.reduceMotion = reduceMotionToggle.checked;
+            saveSettings(settings);
+            applySettings();
+        });
+    }
+
+    const QUICK_CALL_KEY = 'crisis_plan_quickcall_collapsed';
+    const quickCallBar = document.getElementById('quickCallBar');
+    const quickCallToggle = document.getElementById('quickCallToggle');
+    if (quickCallBar && quickCallToggle) {
+        const collapsed = localStorage.getItem(QUICK_CALL_KEY) === '1';
+        quickCallBar.classList.toggle('collapsed', collapsed);
+        quickCallToggle.addEventListener('click', () => {
+            const nowCollapsed = !quickCallBar.classList.contains('collapsed');
+            quickCallBar.classList.toggle('collapsed', nowCollapsed);
+            localStorage.setItem(QUICK_CALL_KEY, nowCollapsed ? '1' : '0');
+        });
+    }
+
+    const lastSavedEl = document.getElementById('lastSavedIndicator');
+    function updateLastSavedIndicator() {
+        if (!lastSavedEl) return;
+        if (!plan.updatedAt) {
+            lastSavedEl.textContent = '';
+            return;
+        }
+        const d = new Date(plan.updatedAt);
+        lastSavedEl.textContent = `Saved ${d.toLocaleTimeString('en-NZ', { hour: '2-digit', minute: '2-digit' })}`;
+    }
+
+    function renderSuggestions(levelId) {
+        const wrap = document.getElementById(`level-${levelId}-suggestions`);
+        if (!wrap) return;
+        const list = SUGGESTIONS[levelId] || [];
+        const existingText = new Set(plan.levels[levelId].map(i => i.text.trim().toLowerCase()));
+        wrap.innerHTML = '';
+        const remaining = list.filter(s => !existingText.has(s.trim().toLowerCase()));
+        if (!remaining.length) return;
+
+        const label = document.createElement('span');
+        label.className = 'suggestion-label';
+        label.textContent = 'Quick add:';
+        wrap.appendChild(label);
+
+        remaining.forEach(s => {
+            const chip = document.createElement('button');
+            chip.type = 'button';
+            chip.className = 'suggestion-chip';
+            chip.textContent = s;
+            chip.addEventListener('click', () => {
+                plan.levels[levelId].push({ id: newItemId(), text: s, checked: false });
+                savePlan();
+                renderLevel(levelId);
+                renderSuggestions(levelId);
+            });
+            wrap.appendChild(chip);
+        });
+    }
+
+    function renderAllSuggestions() {
+        RENDERABLE_LEVELS.forEach(lvl => renderSuggestions(lvl.id));
+    }
 
     function renderLevel(levelId) {
         const container = document.getElementById(`level-${levelId}-items`);
@@ -213,6 +386,7 @@
                 plan.levels[levelId] = plan.levels[levelId].filter(i => i.id !== item.id);
                 savePlan();
                 renderLevel(levelId);
+                renderSuggestions(levelId);
             });
 
             actions.appendChild(editBtn);
@@ -241,6 +415,7 @@
             if (val) item.text = val;
             savePlan();
             renderLevel(levelId);
+            renderSuggestions(levelId);
         };
 
         input.addEventListener('keydown', (e) => {
@@ -281,6 +456,7 @@
         input.value = '';
         savePlan();
         renderLevel(levelId);
+        renderSuggestions(levelId);
     }
 
     const triggersEl = document.getElementById('currentTriggers');
@@ -339,6 +515,7 @@
             normalizeLevels();
             savePlan();
             renderAllLevels();
+            renderAllSuggestions();
             loadTextFields();
             showToast('Plan reset to defaults');
         }
@@ -355,6 +532,7 @@
             loadTextFields();
             savePlan();
             renderLevel('now');
+            renderSuggestions('now');
             showToast('Current state reset');
         }
     });
@@ -396,6 +574,7 @@
                     normalizeLevels();
                     savePlan();
                     renderAllLevels();
+                    renderAllSuggestions();
                     loadTextFields();
                     showToast('Plan imported');
                 }
@@ -422,19 +601,6 @@
     const copySummaryBtn = document.getElementById('copySummaryBtn');
     const downloadSummaryBtn = document.getElementById('downloadSummaryBtn');
 
-    function levelLabel(id) {
-        const found = LEVELS.find(l => l.id === id);
-        return found ? found.label : id;
-    }
-
-    function highestLevelReached() {
-        for (let i = LEVELS.length - 1; i >= 0; i--) {
-            const hasChecked = plan.levels[LEVELS[i].id].some(item => item.checked);
-            if (hasChecked) return LEVELS[i].label;
-        }
-        return 'Not specified';
-    }
-
     function escapeHtml(str) {
         if (!str) return '';
         return str.replace(/&/g, '&amp;')
@@ -451,9 +617,6 @@
         html += `<div class="summary-section"><strong>CRISIS HANDOVER SUMMARY</strong><br>`;
         html += `Generated: ${now.toLocaleString('en-NZ')}</div>`;
         html += `<hr class="summary-divider">`;
-
-        html += `<div class="summary-section"><strong>HIGHEST ESCALATION LEVEL REACHED</strong><br>`;
-        html += `${escapeHtml(highestLevelReached())}</div>`;
 
         html += `<div class="summary-section"><strong>WHAT IS HAPPENING NOW</strong><br>`;
         const checkedNow = plan.levels[NOW_ID].filter(i => i.checked);
@@ -560,7 +723,7 @@
         'Crisis Resolution - Waikato: 0800 50 50 50',
         'Crisis Resolution - Otago: 0800 467 846 (press 2)',
         'Crisis Resolution - Southland: 0800 467 846 (press 1)',
-        'What’s Up (kids & teens): 0800 942 8787',
+        'What\'s Up (kids & teens): 0800 942 8787',
         'Youthline: 0800 376 633 or text 234'
     ];
 
@@ -631,6 +794,105 @@
         URL.revokeObjectURL(url);
     });
 
+    const groundingBtn = document.getElementById('groundingBtn');
+    const groundingModal = document.getElementById('groundingModal');
+    const closeGroundingModal = document.getElementById('closeGroundingModal');
+    const breathingCircle = document.getElementById('breathingCircle');
+    const breathingWord = document.getElementById('breathingWord');
+    const breathingToggleBtn = document.getElementById('breathingToggleBtn');
+    let breathingTimer = null;
+    let breathingRunning = false;
+
+    function stopBreathing() {
+        breathingRunning = false;
+        clearInterval(breathingTimer);
+        breathingTimer = null;
+        breathingCircle.classList.remove('inhale', 'exhale');
+        breathingWord.textContent = 'start';
+        breathingToggleBtn.innerHTML = '<i class="fas fa-play"></i> start';
+    }
+
+    function startBreathing() {
+        breathingRunning = true;
+        breathingToggleBtn.innerHTML = '<i class="fas fa-pause"></i> stop';
+        const cycle = [
+            { word: 'breathe in', ms: 4000, cls: 'inhale' },
+            { word: 'hold', ms: 2000, cls: 'inhale' },
+            { word: 'breathe out', ms: 5000, cls: 'exhale' }
+        ];
+        let step = 0;
+        function runStep() {
+            if (!breathingRunning) return;
+            const s = cycle[step % cycle.length];
+            breathingWord.textContent = s.word;
+            breathingCircle.classList.remove('inhale', 'exhale');
+            if (!settings.reduceMotion) breathingCircle.classList.add(s.cls);
+            step += 1;
+            breathingTimer = setTimeout(runStep, s.ms);
+        }
+        runStep();
+    }
+
+    if (breathingToggleBtn) {
+        breathingToggleBtn.addEventListener('click', () => {
+            if (breathingRunning) stopBreathing();
+            else startBreathing();
+        });
+    }
+
+    if (groundingBtn && groundingModal) {
+        groundingBtn.addEventListener('click', () => {
+            groundingModal.style.display = 'flex';
+        });
+    }
+    if (closeGroundingModal) {
+        closeGroundingModal.addEventListener('click', () => {
+            stopBreathing();
+            groundingModal.style.display = 'none';
+        });
+    }
+    window.addEventListener('click', (e) => {
+        if (e.target === groundingModal) {
+            stopBreathing();
+            groundingModal.style.display = 'none';
+        }
+    });
+
+    const printBtn = document.getElementById('printBtn');
+    const printArea = document.getElementById('printArea');
+    if (printBtn && printArea) {
+        printBtn.addEventListener('click', () => {
+            const now = new Date();
+            let html = `<h1>My Crisis Plan</h1><p>Printed: ${escapeHtml(now.toLocaleString('en-NZ'))}</p><hr>`;
+
+            LEVELS.forEach(lvl => {
+                html += `<h2>${escapeHtml(lvl.label)}</h2>`;
+                const items = plan.levels[lvl.id];
+                if (items.length) {
+                    html += '<ul>' + items.map(i => `<li>${escapeHtml(i.text)}</li>`).join('') + '</ul>';
+                } else {
+                    html += '<p><em>No steps added yet.</em></p>';
+                }
+            });
+
+            html += '<h2>Safety information</h2>';
+            html += `<p><strong>Emergency &amp; crisis contacts:</strong><br>${escapeHtml(plan.safety.emergencyContacts) || 'not specified'}</p>`;
+            html += `<p><strong>GP / therapist / support worker:</strong><br>${escapeHtml(plan.safety.professionalContacts) || 'not specified'}</p>`;
+            html += `<p><strong>Diagnoses, medications, allergies:</strong><br>${escapeHtml(plan.safety.medicalInfo) || 'not specified'}</p>`;
+            html += `<p><strong>Means restriction in place:</strong><br>${escapeHtml(plan.safety.meansRestriction) || 'not specified'}</p>`;
+            html += `<p><strong>Reasons to keep going:</strong><br>${escapeHtml(plan.safety.reasonsForLiving) || 'not specified'}</p>`;
+
+            html += '<h2>New Zealand crisis resources</h2><ul>';
+            NZ_RESOURCES_TEXT.forEach(line => { html += `<li>${escapeHtml(line)}</li>`; });
+            html += '</ul>';
+
+            printArea.innerHTML = html;
+            window.print();
+        });
+    }
+
     renderAllLevels();
+    renderAllSuggestions();
     loadTextFields();
+    updateLastSavedIndicator();
 })();
