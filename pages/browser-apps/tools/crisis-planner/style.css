@@ -12,7 +12,6 @@
     --radius: 0.375rem;
     --radius-lg: 0.5rem;
     --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code';
-
     --level-early: #2196F3;
     --level-mild: #d97706;
     --level-moderate: #ea580c;
@@ -169,7 +168,6 @@
     outline-offset: 2px;
 }
 
-/* ---------- Text size / contrast / motion modes ---------- */
 body.text-large {
     font-size: 1.1em;
 }
@@ -1003,4 +1001,26 @@ hr {
         margin: 0.9rem 0 0.3rem;
         border-bottom: 1px solid #000;
     }
+}
+
+.collapse-header[data-target="moreSupportContent"] {
+    background: linear-gradient(135deg, #faf5ff, #f3e8ff);
+    border-radius: var(--radius);
+    padding: 0.5rem 0.75rem;
+    border-left: 4px solid #8b5cf6;
+    margin-bottom: 0.3rem;
+    transition: background 0.15s;
+}
+
+.collapse-header[data-target="moreSupportContent"]:hover {
+    background: linear-gradient(135deg, #f3e8ff, #ede9fe);
+}
+
+.collapse-header[data-target="moreSupportContent"] span {
+    color: #6d28d9;
+    font-weight: 600;
+}
+
+.collapse-header[data-target="moreSupportContent"] .collapse-icon {
+    color: #8b5cf6;
 }

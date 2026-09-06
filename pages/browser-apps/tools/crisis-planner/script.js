@@ -702,12 +702,6 @@
         html += `<div class="summary-text">${escapeHtml(plan.safety.reasonsForLiving) || 'not specified'}</div>`;
         html += `</div>`;
 
-        html += `<div class="summary-section"><strong>NEW ZEALAND CRISIS RESOURCES</strong><br>`;
-        NZ_RESOURCES_TEXT.forEach(line => {
-            html += `<div>• ${escapeHtml(line)}</div>`;
-        });
-        html += `</div>`;
-
         return html;
     }
 
@@ -881,10 +875,6 @@
             html += `<p><strong>Diagnoses, medications, allergies:</strong><br>${escapeHtml(plan.safety.medicalInfo) || 'not specified'}</p>`;
             html += `<p><strong>Means restriction in place:</strong><br>${escapeHtml(plan.safety.meansRestriction) || 'not specified'}</p>`;
             html += `<p><strong>Reasons to keep going:</strong><br>${escapeHtml(plan.safety.reasonsForLiving) || 'not specified'}</p>`;
-
-            html += '<h2>New Zealand crisis resources</h2><ul>';
-            NZ_RESOURCES_TEXT.forEach(line => { html += `<li>${escapeHtml(line)}</li>`; });
-            html += '</ul>';
 
             printArea.innerHTML = html;
             window.print();
