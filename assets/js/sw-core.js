@@ -48,21 +48,32 @@ function fixManifestResponse(response) {
     });
 }
 
+// Network-first, cache as fallback (and as the offline copy).
+// Previously this was cache-first, which meant once a URL was cached it
+// was served forever regardless of what was actually deployed - the cache
+// was the source of truth instead of a fallback. Now the live network
+// response is preferred whenever it's reachable, and the cache is only
+// used when the network fails (i.e. offline).
 self.addEventListener('fetch', event => {
     event.respondWith(
-        caches.match(event.request)
-            .then(cachedResponse => {
-                if (cachedResponse) {
-                    if (isManifestRequest(event.request)) {
+        fetch(event.request)
+            .then(networkResponse => {
+                const responseToCache = networkResponse.clone();
+                caches.open(CACHE_NAME).then(cache => {
+                    cache.put(event.request, responseToCache);
+                });
+
+                if (isManifestRequest(event.request)) {
+                    return fixManifestResponse(networkResponse);
+                }
+                return networkResponse;
+            })
+            .catch(() => {
+                return caches.match(event.request).then(cachedResponse => {
+                    if (cachedResponse && isManifestRequest(event.request)) {
                         return fixManifestResponse(cachedResponse.clone());
                     }
                     return cachedResponse;
-                }
-                return fetch(event.request).then(networkResponse => {
-                    if (isManifestRequest(event.request)) {
-                        return fixManifestResponse(networkResponse);
-                    }
-                    return networkResponse;
                 });
             })
     );
