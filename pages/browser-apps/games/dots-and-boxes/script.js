@@ -11,6 +11,9 @@ const pvaiBtn = document.getElementById('pvai');
 const boardSizeSelect = document.getElementById('board-size');
 const difficultySelect = document.getElementById('difficulty');
 const difficultyLabel = document.getElementById('difficulty-label');
+const gameOverOverlay = document.getElementById('game-over-overlay');
+const gameOverMessageEl = document.getElementById('game-over-message');
+const gameOverScoreEl = document.getElementById('game-over-score');
 
 // ---------------------------------------------------------------------------
 // Layout constants (SVG user-space units; the SVG scales responsively)
@@ -22,7 +25,7 @@ const DOT_R = 7;
 // ---------------------------------------------------------------------------
 // Global UI state (not part of simulate-able game state)
 // ---------------------------------------------------------------------------
-let mode = 'pvai';       // 'pvp' | 'pvai'
+let mode = 'pvai';         // 'pvp'    | 'pvai'
 let difficulty = 'greedy'; // 'random' | 'greedy' | 'strategic'
 let aiBusy = false;
 
@@ -370,7 +373,7 @@ function addEdgeGroup(edge, x1, y1, x2, y2) {
     svg.appendChild(group);
 }
 
-function renderMoveResult(edge, player, capturedBoxes) {
+function renderMoveResult(edge, player, capturedBoxes, viaAI) {
     const key = edgeKey(edge);
     const line = document.getElementById(`line-${key}`);
     const group = document.getElementById(`edge-${key}`);
@@ -384,6 +387,19 @@ function renderMoveResult(edge, player, capturedBoxes) {
         text.classList.add(`owner-${player}`);
         text.textContent = player === 1 ? '\u25CF' : '\u25CB';
     }
+
+    if (viaAI) highlightAIMove(line);
+}
+
+// Briefly pulses a just-played AI edge (thicker + glowing) so it's obvious
+// which line was just drawn, then lets it settle back to its normal color.
+function highlightAIMove(line) {
+    line.classList.remove('ai-move-highlight');
+    void line.offsetWidth; // force reflow so the animation restarts reliably
+    line.classList.add('ai-move-highlight');
+    line.addEventListener('animationend', () => {
+        line.classList.remove('ai-move-highlight');
+    }, { once: true });
 }
 
 // ---------------------------------------------------------------------------
@@ -402,12 +418,12 @@ function onEdgeClick(edge) {
     playMove(edge);
 }
 
-function playMove(edge) {
+function playMove(edge, viaAI = false) {
     const player = currentPlayer;
     const captured = applyRealMove(game, edge, player);
     if (captured.length) scores[player - 1] += captured.length;
 
-    renderMoveResult(edge, player, captured);
+    renderMoveResult(edge, player, captured, viaAI);
 
     const claimed = game.owners.flat().filter(o => o !== null).length;
     if (claimed === totalBoxes(game.n)) {
@@ -426,7 +442,7 @@ function playMove(edge) {
         setTimeout(() => {
             const aiEdge = chooseAIEdge(game);
             aiBusy = false;
-            playMove(aiEdge);
+            playMove(aiEdge, true);
         }, 450);
     }
 }
@@ -437,18 +453,18 @@ function endGame() {
 
     let message;
     if (scores[0] === scores[1]) {
-        message = "It's a tie!";
+        message = 'TIE';
         statusEl.className = 'tie-message';
     } else {
         const winner = scores[0] > scores[1] ? 1 : 2;
-        if (mode === 'pvai') {
-            message = winner === 1 ? 'You win!' : 'AI wins!';
-        } else {
-            message = `Player ${winner} wins!`;
-        }
+        message = (mode === 'pvai' && winner === 2) ? 'AI WINS' : `PLAYER ${winner} WINS`;
         statusEl.className = 'win-message';
     }
     statusEl.textContent = message;
+
+    gameOverMessageEl.textContent = message;
+    gameOverScoreEl.textContent = `${scores[0]} - ${scores[1]}`;
+    gameOverOverlay.classList.add('show');
 }
 
 function updateStatsUI() {
@@ -470,6 +486,7 @@ function resetGame() {
     scores = [0, 0];
     gameOver = false;
     statusEl.className = '';
+    gameOverOverlay.classList.remove('show');
     buildBoard();
     updateStatsUI();
 }
@@ -479,7 +496,7 @@ function setMode(newMode) {
     pvpBtn.className = mode === 'pvp' ? 'btn' : 'btn btn-secondary';
     pvaiBtn.className = mode === 'pvai' ? 'btn' : 'btn btn-secondary';
     difficultyLabel.classList.toggle('hidden', mode !== 'pvai');
-    player2LabelEl.textContent = mode === 'pvai' ? 'AI:' : 'Player 2:';
+    player2LabelEl.textContent = mode === 'pvai' ? 'AI' : 'Player 2';
     resetGame();
 }
 
