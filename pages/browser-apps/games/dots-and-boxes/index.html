@@ -1,0 +1,80 @@
+---
+layout: default
+title: Dots & Boxes
+description: Claim the last edge of a box to own it. Own the most boxes to win.
+---
+
+<!-- Copyright (c) 2024-2026 Jericho Crosby (Chalwk). All Rights Reserved. -->
+
+<link rel="stylesheet" href="style.css">
+
+<main>
+    <div class="container">
+        <section class="panel">
+            <div class="panel-head">
+                <h1>Dots &amp; Boxes</h1>
+                <p class="muted small">Claim the last edge of a box to own it. Own the most boxes to win.</p>
+            </div>
+
+            <div class="game-instructions">
+                <h4><i class="fas fa-info-circle"></i> Rules:</h4>
+                <div>
+                    <div><i class="fas fa-pen"></i> <strong>Move:</strong> Draw one line between two dots</div>
+                    <div><i class="fas fa-square"></i> <strong>Claim:</strong> Complete a box's 4th side to own it</div>
+                    <div><i class="fas fa-redo-alt"></i> <strong>Bonus Turn:</strong> Completing a box gives you
+                        another turn
+                    </div>
+                    <div><i class="fas fa-trophy"></i> <strong>Win Condition:</strong> Own the most boxes when the
+                        board is full
+                    </div>
+                </div>
+            </div>
+
+            <div id="mode-selection">
+                <button class="btn btn-secondary" id="pvp">Player vs Player</button>
+                <button class="btn" id="pvai">Player vs AI</button>
+            </div>
+
+            <div id="game-settings">
+                <label for="board-size">Board Size
+                    <select id="board-size">
+                        <option value="5" selected>5 &times; 5</option>
+                        <option value="8">8 &times; 8</option>
+                        <option value="10">10 &times; 10</option>
+                    </select>
+                </label>
+                <label for="difficulty" id="difficulty-label">Difficulty
+                    <select id="difficulty">
+                        <option value="random">Random</option>
+                        <option value="greedy" selected>Greedy</option>
+                        <option value="strategic">Strategic</option>
+                    </select>
+                </label>
+            </div>
+
+            <div id="game-container">
+                <svg id="game-board" xmlns="http://www.w3.org/2000/svg"></svg>
+            </div>
+
+            <div class="game-stats">
+                <div>
+                    <strong>Player 1:</strong>
+                    <span id="score-1" class="score score-player-1">0</span>
+                </div>
+                <div>
+                    <strong id="player-2-label">Player 2:</strong>
+                    <span id="score-2" class="score score-player-2">0</span>
+                </div>
+                <div>
+                    <strong>Status:</strong>
+                    <span id="status">Player 1's turn</span>
+                </div>
+                <button class="btn btn-secondary" id="reset">
+                    <i class="fas fa-redo"></i> New Game
+                </button>
+            </div>
+        </section>
+    </div>
+</main>
+
+<script src="script.js"></script>

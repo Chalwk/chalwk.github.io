@@ -1,0 +1,266 @@
+/* Copyright (c) 2024-2026 Jericho Crosby (Chalwk). All Rights Reserved. */
+
+.panel {
+    background: var(--light);
+    border: 1px solid var(--gray-light);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin-top: 2rem;
+}
+
+.panel-head h1 {
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+.game-instructions {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: rgba(203, 213, 225, 0.1);
+    border-radius: var(--radius);
+}
+
+.game-instructions h4 {
+    color: var(--dark);
+    margin-bottom: 0.5rem;
+}
+
+.game-instructions>div {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.5rem;
+}
+
+#mode-selection {
+    margin-bottom: 1rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+#game-settings {
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+#game-settings label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    color: var(--dark);
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+#game-settings select {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--gray-light);
+    border-radius: var(--radius);
+    background: white;
+    color: var(--dark);
+    font-family: var(--font-primary);
+    min-width: 140px;
+}
+
+#difficulty-label.hidden {
+    display: none !important;
+}
+
+#game-container {
+    position: relative;
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: center;
+    background: var(--darker);
+    border-radius: var(--radius);
+    padding: 0.5rem; /* 1rem default */
+}
+
+#game-board {
+    width: 100%;
+    max-width: 380px; /* 560 default */
+    height: auto;
+    display: block;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.db-edge-group {
+    cursor: pointer;
+}
+
+.db-edge-group.filled {
+    cursor: default;
+}
+
+.db-hit {
+    stroke: transparent;
+    stroke-width: 24;
+    fill: none;
+}
+
+.db-line {
+    stroke: var(--gray-light);
+    stroke-width: 6;
+    stroke-linecap: round;
+    fill: none;
+    transition: stroke 0.15s ease;
+    pointer-events: none;
+}
+
+.db-edge-group:not(.filled):hover .db-line {
+    stroke: var(--accent);
+}
+
+.db-line.filled-1 {
+    stroke: #ef4444;
+}
+
+.db-line.filled-2 {
+    stroke: #4ade80;
+}
+
+.db-dot {
+    fill: var(--primary);
+    pointer-events: none;
+}
+
+.db-box {
+    fill: transparent;
+    stroke: none;
+    transition: fill 0.3s ease;
+    pointer-events: none;
+}
+
+.db-box.owner-1 {
+    fill: rgba(239, 68, 68, 0.22);
+    animation: boxPop 0.3s ease;
+}
+
+.db-box.owner-2 {
+    fill: rgba(74, 222, 128, 0.22);
+    animation: boxPop 0.3s ease;
+}
+
+.db-box-text {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    text-anchor: middle;
+    dominant-baseline: central;
+    pointer-events: none;
+    opacity: 0;
+    animation: boxPop 0.3s ease forwards;
+}
+
+.db-box-text.owner-1 {
+    fill: #ef4444;
+}
+
+.db-box-text.owner-2 {
+    fill: #4ade80;
+}
+
+@keyframes boxPop {
+    0% {
+        opacity: 0;
+        transform: scale(0.6);
+        transform-box: fill-box;
+        transform-origin: center;
+    }
+
+    60% {
+        opacity: 1;
+        transform: scale(1.15);
+        transform-box: fill-box;
+        transform-origin: center;
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+        transform-box: fill-box;
+        transform-origin: center;
+    }
+}
+
+.game-stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: rgba(203, 213, 225, 0.1);
+    border-radius: var(--radius);
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.game-stats strong {
+    color: var(--primary);
+}
+
+.game-stats span {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    margin-left: 0.5rem;
+}
+
+.score-player-1 {
+    color: #ef4444;
+}
+
+.score-player-2 {
+    color: #4ade80;
+}
+
+#status {
+    font-weight: bold;
+    font-size: 1.1rem;
+    text-align: center;
+}
+
+.win-message {
+    color: var(--warning);
+    font-size: 1.2rem;
+    animation: celebrate 0.5s ease;
+}
+
+.tie-message {
+    color: var(--gray);
+}
+
+@keyframes celebrate {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@media (max-width: 768px) {
+    #game-settings {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .game-stats {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    #game-container {
+        padding: 0.5rem;
+    }
+}
