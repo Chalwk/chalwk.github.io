@@ -1,0 +1,170 @@
+{
+  "easy": {
+    "Animals": [
+      "cat",
+      "dog",
+      "lion",
+      "tiger",
+      "zebra",
+      "horse",
+      "sheep",
+      "mouse",
+      "camel",
+      "koala",
+      "otter",
+      "goose"
+    ],
+    "Food": [
+      "pizza",
+      "bread",
+      "apple",
+      "grape",
+      "onion",
+      "bacon",
+      "candy",
+      "donut",
+      "melon",
+      "toast",
+      "noodle",
+      "cheese"
+    ],
+    "Colors": [
+      "red",
+      "blue",
+      "green",
+      "black",
+      "white",
+      "brown",
+      "purple",
+      "orange",
+      "yellow",
+      "silver",
+      "maroon",
+      "beige"
+    ],
+    "Household": [
+      "chair",
+      "table",
+      "pillow",
+      "mirror",
+      "blanket",
+      "candle",
+      "basket",
+      "carpet",
+      "kettle",
+      "shelf"
+    ]
+  },
+  "medium": {
+    "Countries": [
+      "canada",
+      "brazil",
+      "france",
+      "norway",
+      "mexico",
+      "turkey",
+      "greece",
+      "kenya",
+      "poland",
+      "sweden",
+      "iceland",
+      "vietnam"
+    ],
+    "Sports": [
+      "soccer",
+      "hockey",
+      "boxing",
+      "cycling",
+      "surfing",
+      "archery",
+      "bowling",
+      "rowing",
+      "fencing",
+      "curling",
+      "cricket",
+      "karate"
+    ],
+    "Occupations": [
+      "teacher",
+      "plumber",
+      "surgeon",
+      "chemist",
+      "painter",
+      "dentist",
+      "builder",
+      "farmer",
+      "butcher",
+      "pilot",
+      "librarian",
+      "electrician"
+    ],
+    "Instruments": [
+      "guitar",
+      "trumpet",
+      "clarinet",
+      "violin",
+      "ukulele",
+      "cymbal",
+      "trombone",
+      "harmonica",
+      "bagpipe",
+      "xylophone"
+    ]
+  },
+  "hard": {
+    "Science": [
+      "photosynthesis",
+      "electromagnetism",
+      "chromosome",
+      "catalyst",
+      "isotope",
+      "thermodynamics",
+      "gravity",
+      "molecule",
+      "enzyme",
+      "velocity",
+      "osmosis",
+      "quantum"
+    ],
+    "Mythology": [
+      "poseidon",
+      "minotaur",
+      "valkyrie",
+      "cerberus",
+      "pandora",
+      "excalibur",
+      "mermaid",
+      "phoenix",
+      "chimera",
+      "banshee",
+      "medusa",
+      "loki"
+    ],
+    "Movies": [
+      "inception",
+      "gladiator",
+      "interstellar",
+      "casablanca",
+      "psycho",
+      "goodfellas",
+      "amadeus",
+      "rebecca",
+      "chinatown",
+      "whiplash",
+      "parasite",
+      "arrival"
+    ],
+    "Programming": [
+      "recursion",
+      "algorithm",
+      "encryption",
+      "compiler",
+      "variable",
+      "framework",
+      "database",
+      "iterator",
+      "middleware",
+      "asynchronous"
+    ]
+  }
+}

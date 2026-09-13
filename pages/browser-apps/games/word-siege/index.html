@@ -1,0 +1,79 @@
+---
+layout: default
+title: Word Siege
+description: Guess the word letter by letter before the tower falls.
+---
+
+<!-- Copyright (c) 2024-2026 Jericho Crosby (Chalwk). All Rights Reserved. -->
+
+<link rel="stylesheet" href="style.css">
+
+<main>
+    <div class="container">
+        <section class="panel">
+            <div class="panel-head">
+                <h1>Word Siege</h1>
+                <p class="muted small">Guess the word letter by letter before the tower falls.</p>
+            </div>
+
+            <div id="game-settings">
+                <label for="difficulty">Difficulty
+                    <select id="difficulty">
+                        <option value="easy">Easy</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </label>
+                <label for="category">Category
+                    <select id="category"></select>
+                </label>
+            </div>
+
+            <div id="game-container">
+                <div class="game-stats">
+                    <div class="stat-block score-stat">
+                        <strong>Score</strong>
+                        <span id="score" class="score">0</span>
+                    </div>
+                    <div class="status-block">
+                        <span id="status">Guess the word!</span>
+                    </div>
+                    <div class="stat-block streak-stat">
+                        <strong>Streak</strong>
+                        <span id="streak" class="score">0</span>
+                    </div>
+                </div>
+
+                <div class="tower-wrap">
+                    <svg id="tower-svg" viewBox="0 0 200 260" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="15" y="242" width="170" height="12" rx="3" class="tower-ground"></rect>
+                        <line x1="100" y1="14" x2="100" y2="45" class="flag-pole"></line>
+                        <polygon points="100,14 132,23 100,32" class="flag"></polygon>
+                        <g id="tower-blocks"></g>
+                        <g id="tower-rubble"></g>
+                    </svg>
+
+                    <div class="game-over-overlay" id="game-over-overlay">
+                        <div class="game-over-content">
+                            <div id="game-over-message" class="game-over-message"></div>
+                            <div id="game-over-word" class="game-over-word"></div>
+                            <button class="btn btn-secondary" id="play-again">Play Again</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category-badge" id="category-badge"></div>
+
+                <div id="word-display"></div>
+
+                <div id="keyboard"></div>
+
+                <button class="btn btn-secondary" id="reset">
+                    <i class="fas fa-redo"></i> New Word
+                </button>
+            </div>
+        </section>
+    </div>
+</main>
+
+<script src="script.js"></script>
