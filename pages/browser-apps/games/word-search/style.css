@@ -256,6 +256,25 @@
     }
 }
 
+.action-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.4rem;
+    padding: 0;
+    flex: 0 0 auto;
+}
+
+.btn-icon[aria-pressed="true"] {
+    opacity: 0.6;
+}
+
 /* word list */
 #word-list {
     display: flex;

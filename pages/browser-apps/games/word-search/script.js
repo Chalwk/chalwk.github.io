@@ -14,6 +14,7 @@ const playAgainBtn = document.getElementById('play-again');
 const overlay = document.getElementById('game-over-overlay');
 const overlayMessage = document.getElementById('game-over-message');
 const overlayDetail = document.getElementById('game-over-detail');
+const soundToggleBtn = document.getElementById('sound-toggle');
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
@@ -79,6 +80,9 @@ let activePathEl = null;
 let timerStart = 0;
 let timerInterval = null;
 let gameActive = false;
+
+let audioCtx = null;
+let soundMuted = localStorage.getItem('wordsearch-sound-muted') === 'true';
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -325,6 +329,86 @@ function updateStatus(text, className = '') {
 }
 
 // ---------------------------------------------------------------------------
+// Sound effects (synthesized via Web Audio API — no audio files required)
+// ---------------------------------------------------------------------------
+function updateSoundIcon() {
+    if (!soundToggleBtn) return;
+    soundToggleBtn.innerHTML = soundMuted
+        ? '<i class="fas fa-volume-mute"></i>'
+        : '<i class="fas fa-volume-up"></i>';
+    soundToggleBtn.setAttribute('aria-pressed', String(soundMuted));
+    soundToggleBtn.title = soundMuted ? 'Sound off (click to enable)' : 'Sound on (click to mute)';
+}
+
+function ensureAudioCtx() {
+    if (!audioCtx) {
+        const Ctx = window.AudioContext || window.webkitAudioContext;
+        if (!Ctx) return null;
+        audioCtx = new Ctx();
+    }
+    if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+    }
+    return audioCtx;
+}
+
+// Plays a single short tone. `freq` in Hz, `duration` in seconds.
+function playTone(freq, duration, { type = 'sine', gain = 0.15, delay = 0 } = {}) {
+    if (soundMuted) return;
+    const ctx = ensureAudioCtx();
+    if (!ctx) return;
+
+    const startTime = ctx.currentTime + delay;
+    const osc = ctx.createOscillator();
+    const gainNode = ctx.createGain();
+
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, startTime);
+
+    // Quick fade in/out avoids clicks and keeps effects short and punchy.
+    gainNode.gain.setValueAtTime(0, startTime);
+    gainNode.gain.linearRampToValueAtTime(gain, startTime + 0.015);
+    gainNode.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+
+    osc.connect(gainNode);
+    gainNode.connect(ctx.destination);
+
+    osc.start(startTime);
+    osc.stop(startTime + duration + 0.05);
+}
+
+function playFoundSound() {
+    // Bright two-note chime
+    playTone(660, 0.12, { type: 'sine', gain: 0.18 });
+    playTone(990, 0.16, { type: 'sine', gain: 0.16, delay: 0.08 });
+}
+
+function playInvalidSound() {
+    // Short low buzz
+    playTone(160, 0.18, { type: 'sawtooth', gain: 0.1 });
+}
+
+function playWinSound() {
+    // Little ascending fanfare
+    [523.25, 659.25, 783.99, 1046.5].forEach((freq, i) => {
+        playTone(freq, 0.22, { type: 'triangle', gain: 0.16, delay: i * 0.11 });
+    });
+}
+
+if (soundToggleBtn) {
+    updateSoundIcon();
+    soundToggleBtn.addEventListener('click', () => {
+        soundMuted = !soundMuted;
+        localStorage.setItem('wordsearch-sound-muted', String(soundMuted));
+        updateSoundIcon();
+        if (!soundMuted) {
+            ensureAudioCtx();
+            playTone(440, 0.08, { gain: 0.12 }); // confirmation blip
+        }
+    });
+}
+
+// ---------------------------------------------------------------------------
 // Pointer / drag handling
 // ---------------------------------------------------------------------------
 // Fractional position of the pointer inside the grid (1 unit = 1 cell).
@@ -353,6 +437,7 @@ function onPointerDown(e) {
     const cell = cellFromPoint(e.clientX, e.clientY);
     if (!cell) return;
     e.preventDefault();
+    ensureAudioCtx();
 
     isDragging = true;
     startCell = cell;
@@ -436,6 +521,7 @@ function checkSelection(forward, backward) {
         foundWords.add(match.word);
         markWordFound(match);
         updateFoundCount();
+        playFoundSound();
 
         const chip = wordListEl.querySelector(`[data-word="${match.word}"]`);
         if (chip) chip.classList.add('found');
@@ -451,6 +537,7 @@ function checkSelection(forward, backward) {
     } else if (forward.length >= 3 || backward.length >= 3) {
         const el = activePathEl;
         if (el) el.classList.add('invalid');
+        playInvalidSound();
     }
 }
 
@@ -554,6 +641,7 @@ function endGame() {
     gameActive = false;
     stopTimer();
     updateStatus('Puzzle solved!', 'win-message');
+    playWinSound();
 
     const elapsed = Math.floor((Date.now() - timerStart) / 1000);
     const m = Math.floor(elapsed / 60);

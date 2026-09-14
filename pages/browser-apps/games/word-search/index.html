@@ -83,9 +83,15 @@ description: Drag across the grid to trace every hidden word.
 
                 <div id="word-list"></div>
 
-                <button class="btn btn-secondary" id="reset">
-                    <i class="fas fa-redo"></i> New Puzzle
-                </button>
+                <div class="action-row">
+                    <button class="btn btn-secondary" id="reset">
+                        <i class="fas fa-redo"></i> New Puzzle
+                    </button>
+                    <button class="btn btn-secondary btn-icon" id="sound-toggle" aria-pressed="false"
+                        title="Sound on (click to mute)">
+                        <i class="fas fa-volume-up"></i>
+                    </button>
+                </div>
             </div>
         </section>
     </div>
