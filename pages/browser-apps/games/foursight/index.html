@@ -1,0 +1,110 @@
+---
+layout: default
+title: Forsight
+description: Stack discs down the columns. Line up a row in any direction to win.
+---
+
+<!-- Copyright (c) 2024-2026 Jericho Crosby (Chalwk). All Rights Reserved. -->
+
+<link rel="stylesheet" href="style.css">
+
+<main>
+    <div class="container">
+        <section class="panel">
+            <div class="panel-head">
+                <div class="panel-head-text">
+                    <h1>Drop Four</h1>
+                    <p class="muted small">Stack discs down the columns. Line up a row in any direction to win.</p>
+                </div>
+                <button class="icon-btn" id="sound-toggle" type="button" aria-label="Toggle sound"
+                    title="Toggle sound (M)">
+                    <span id="sound-icon">🔊</span>
+                </button>
+            </div>
+
+            <div id="mode-selection">
+                <button class="btn btn-secondary" id="pvp" type="button">Player vs Player</button>
+                <button class="btn" id="pvai" type="button">Player vs AI</button>
+            </div>
+
+            <div id="game-settings">
+                <label for="board-size">Board Size
+                    <select id="board-size">
+                        <option value="5x5">5 &times; 5</option>
+                        <option value="7x6" selected>7 &times; 6</option>
+                        <option value="8x7">8 &times; 7</option>
+                    </select>
+                </label>
+                <label for="connect-length">Connect
+                    <select id="connect-length">
+                        <option value="3">3 in a row</option>
+                        <option value="4" selected>4 in a row</option>
+                        <option value="5">5 in a row</option>
+                    </select>
+                </label>
+                <label for="difficulty" id="difficulty-label">Difficulty
+                    <select id="difficulty">
+                        <option value="random">Random</option>
+                        <option value="greedy" selected>Greedy</option>
+                        <option value="strategic">Strategic</option>
+                    </select>
+                </label>
+                <label for="turn-timer">Timer
+                    <select id="turn-timer">
+                        <option value="0" selected>Off</option>
+                        <option value="5">5s / move</option>
+                        <option value="10">10s / move</option>
+                        <option value="15">15s / move</option>
+                    </select>
+                </label>
+            </div>
+
+            <div id="game-container">
+                <div class="game-stats">
+                    <div class="stat-block player1">
+                        <strong>Player 1</strong>
+                        <span id="score-1" class="score score-player-1">0</span>
+                    </div>
+                    <div class="status-block">
+                        <span id="status">Player 1's turn</span>
+                        <div id="timer-bar" class="timer-bar">
+                            <div id="timer-fill"></div>
+                        </div>
+                    </div>
+                    <div class="stat-block player2">
+                        <strong id="player-2-label">Player 2</strong>
+                        <span id="score-2" class="score score-player-2">0</span>
+                    </div>
+                </div>
+
+                <div class="board-wrap">
+                    <svg id="game-board" xmlns="http://www.w3.org/2000/svg"></svg>
+
+                    <div class="game-over-overlay" id="game-over-overlay">
+                        <div class="game-over-content">
+                            <div id="game-over-message" class="game-over-message"></div>
+                            <div id="game-over-score" class="game-over-score"></div>
+                            <button class="btn btn-secondary" id="play-again" type="button">Play Again</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="controls">
+                    <button class="btn btn-secondary" id="undo" type="button" title="Undo (U)">
+                        <i class="fas fa-undo"></i> Undo
+                    </button>
+                    <button class="btn btn-secondary" id="reset" type="button" title="New Game (R)">
+                        <i class="fas fa-redo"></i> New Game
+                    </button>
+                </div>
+
+                <div class="record" id="record"></div>
+                <p class="key-hint">← → aim &middot; Enter drop &middot; U undo &middot; R restart &middot; M mute</p>
+            </div>
+        </section>
+    </div>
+</main>
+
+<canvas id="confetti" aria-hidden="true"></canvas>
+
+<script src="script.js"></script>
