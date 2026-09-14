@@ -6,7 +6,6 @@ const score1El = document.getElementById('score-1');
 const score2El = document.getElementById('score-2');
 const player2LabelEl = document.getElementById('player-2-label');
 const resetBtn = document.getElementById('reset');
-const undoBtn = document.getElementById('undo');
 const playAgainBtn = document.getElementById('play-again');
 const pvpBtn = document.getElementById('pvp');
 const pvaiBtn = document.getElementById('pvai');
@@ -57,7 +56,6 @@ let stats = { p1: 0, p2: 0, draws: 0, games: 0 };
 
 let currentPlayer = 1;
 let gameOver = false;
-let gameResult = null;      // { winner: 0 (draw) | 1 | 2 } — used for undo rollback
 let connectLength = 4;
 
 // The core game state: { cols, rows, board }
@@ -73,8 +71,6 @@ let previewDisc = null;
 // Dashed ring marking the most recent drop
 let lastMoveRing = null;
 
-// Undo stack: [{ row, col, player }]
-let moveHistory = [];
 let lastMove = null;
 
 // Keyboard aim target
@@ -158,9 +154,6 @@ const sfx = {
     },
     invalid() {
         tone({ freq: 150, type: 'square', duration: 0.09, gain: 0.07 });
-    },
-    undo() {
-        tone({ freq: 520, type: 'sine', duration: 0.12, gain: 0.1, sweepTo: 240 });
     },
     tick() {
         tone({ freq: 900, type: 'square', duration: 0.045, gain: 0.05 });
@@ -451,6 +444,18 @@ function chooseAIMove(board) {
     }
 }
 
+// How long the AI "thinks" before replying. Longer delays on harder
+// difficulties sell the illusion of a deeper search.
+function getAIThinkDelay() {
+    const ranges = {
+        random: [350, 900],
+        greedy: [600, 1500],
+        strategic: [900, 2100],
+    };
+    const [min, max] = ranges[difficulty] || ranges.greedy;
+    return min + Math.random() * (max - min);
+}
+
 // ---------------------------------------------------------------------------
 // Rendering
 // ---------------------------------------------------------------------------
@@ -661,7 +666,8 @@ function clearConfetti() {
 function startTurnTimer() {
     stopTurnTimer();
 
-    if (!timerSeconds || gameOver) {
+    // No timer for the AI — its think delay is what paces the turn.
+    if (!timerSeconds || gameOver || isAITurn()) {
         timerBar.classList.remove('active');
         return;
     }
@@ -753,7 +759,6 @@ function playMove(col, viaAI) {
 
     onColumnLeave();
 
-    moveHistory.push({ row, col, player });
     lastMove = { row, col, player };
 
     const winningCells = checkWinFrom(game.board, row, col, player);
@@ -792,7 +797,7 @@ function scheduleAITurn() {
         const col = chooseAIMove(game.board);
         aiBusy = false;
         playMove(col, true);
-    }, 450);
+    }, getAIThinkDelay());
 }
 
 function endGame(winner) {
@@ -801,7 +806,6 @@ function endGame(winner) {
     stopTurnTimer();
 
     if (winner !== null) scores[winner - 1] += 1;
-    gameResult = { winner: winner === null ? 0 : winner };
 
     // All-time record
     stats.games += 1;
@@ -856,9 +860,7 @@ function resetGame() {
     game = { cols, rows, board: createBoard(cols, rows) };
     currentPlayer = 1;
     gameOver = false;
-    gameResult = null;
     aiBusy = false;
-    moveHistory = [];
     lastMove = null;
     aimCol = null;
 
@@ -872,53 +874,6 @@ function resetGame() {
     updateStatsUI();
     renderRecord();
     startTurnTimer();
-}
-
-function undo() {
-    if (aiBusy) return;
-    if (!moveHistory.length) { sfx.invalid(); return; }
-
-    // If the round is already over, roll the result back first.
-    if (gameOver && gameResult) {
-        const w = gameResult.winner;
-        if (w > 0) scores[w - 1] = Math.max(0, scores[w - 1] - 1);
-        stats.games = Math.max(0, stats.games - 1);
-        if (w === 0) stats.draws = Math.max(0, stats.draws - 1);
-        else if (w === 1) stats.p1 = Math.max(0, stats.p1 - 1);
-        else stats.p2 = Math.max(0, stats.p2 - 1);
-        saveStats();
-
-        gameResult = null;
-        gameOver = false;
-        gameOverOverlay.classList.remove('show');
-        statusEl.className = '';
-        clearWinHighlights();
-        clearConfetti();
-    }
-
-    if (mode === 'pvai') {
-        // Peel back the AI reply and the player's move together.
-        let removed = 0;
-        while (moveHistory.length && removed < 2) {
-            const m = moveHistory.pop();
-            game.board[m.row][m.col] = null;
-            cellEls[m.row][m.col].setAttribute('class', 'fr-disc');
-            removed++;
-            if (m.player === HUMAN_PLAYER) break;
-        }
-        currentPlayer = HUMAN_PLAYER;
-    } else {
-        const m = moveHistory.pop();
-        game.board[m.row][m.col] = null;
-        cellEls[m.row][m.col].setAttribute('class', 'fr-disc');
-        currentPlayer = m.player;
-    }
-
-    lastMove = moveHistory.length ? moveHistory[moveHistory.length - 1] : null;
-    renderLastMove();
-    updateStatsUI();
-    startTurnTimer();
-    sfx.undo();
 }
 
 function setMode(newMode) {
@@ -982,10 +937,6 @@ function onKeyDown(e) {
             e.preventDefault();
             dropAim();
             break;
-        case 'u':
-        case 'U':
-            undo();
-            break;
         case 'r':
         case 'R':
             resetGame();
@@ -1003,7 +954,6 @@ function onKeyDown(e) {
 // Events
 // ---------------------------------------------------------------------------
 resetBtn.addEventListener('click', resetGame);
-undoBtn.addEventListener('click', undo);
 playAgainBtn.addEventListener('click', resetGame);
 pvpBtn.addEventListener('click', () => setMode('pvp'));
 pvaiBtn.addEventListener('click', () => setMode('pvai'));

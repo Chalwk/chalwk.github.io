@@ -51,10 +51,10 @@ description: Stack discs down the columns. Line up a row in any direction to win
                 </label>
                 <label for="turn-timer">Timer
                     <select id="turn-timer">
-                        <option value="0" selected>Off</option>
+                        <option value="0">Off</option>
                         <option value="5">5s / move</option>
                         <option value="10">10s / move</option>
-                        <option value="15">15s / move</option>
+                        <option value="15" selected>15s / move</option>
                     </select>
                 </label>
             </div>
@@ -90,16 +90,13 @@ description: Stack discs down the columns. Line up a row in any direction to win
                 </div>
 
                 <div class="controls">
-                    <button class="btn btn-secondary" id="undo" type="button" title="Undo (U)">
-                        <i class="fas fa-undo"></i> Undo
-                    </button>
                     <button class="btn btn-secondary" id="reset" type="button" title="New Game (R)">
                         <i class="fas fa-redo"></i> New Game
                     </button>
                 </div>
 
                 <div class="record" id="record"></div>
-                <p class="key-hint">← → aim &middot; Enter drop &middot; U undo &middot; R restart &middot; M mute</p>
+                <p class="key-hint">← → aim &middot; Enter drop &middot; R restart &middot; M mute</p>
             </div>
         </section>
     </div>
