@@ -1,0 +1,78 @@
+---
+layout: default
+title: Recall
+description: Flip two cards, find the match. Most pairs wins.
+---
+
+<!-- Copyright (c) 2024-2026 Jericho Crosby (Chalwk). All Rights Reserved. -->
+
+<link rel="stylesheet" href="style.css">
+
+<main>
+    <div class="container">
+        <section class="panel">
+            <div class="panel-head">
+                <h1>Recall</h1>
+                <p class="muted small">Flip two cards, find the match. Most pairs wins.</p>
+            </div>
+
+            <div id="mode-selection">
+                <button class="btn btn-secondary" id="pvp">Player vs Player</button>
+                <button class="btn" id="pvai">Player vs AI</button>
+            </div>
+
+            <div id="game-settings">
+                <label for="board-size">Board Size
+                    <select id="board-size">
+                        <option value="12">4 &times; 3 (6 pairs)</option>
+                        <option value="16" selected>4 &times; 4 (8 pairs)</option>
+                        <option value="24">6 &times; 4 (12 pairs)</option>
+                    </select>
+                </label>
+                <label for="difficulty" id="difficulty-label">AI Memory
+                    <select id="difficulty">
+                        <option value="forgetful">Forgetful</option>
+                        <option value="sharp" selected>Sharp</option>
+                        <option value="perfect">Perfect</option>
+                    </select>
+                </label>
+            </div>
+
+            <div id="game-container">
+                <div class="game-stats">
+                    <div class="stat-block player1">
+                        <strong>Player 1</strong>
+                        <span id="score-1" class="score score-player-1">0</span>
+                        <span id="moves-1" class="moves">Moves: 0</span>
+                    </div>
+                    <div class="status-block">
+                        <span id="status">Player 1's turn</span>
+                    </div>
+                    <div class="stat-block player2">
+                        <strong id="player-2-label">Player 2</strong>
+                        <span id="score-2" class="score score-player-2">0</span>
+                        <span id="moves-2" class="moves">Moves: 0</span>
+                    </div>
+                </div>
+
+                <div class="board-wrap">
+                    <div id="game-board"></div>
+
+                    <div class="game-over-overlay" id="game-over-overlay">
+                        <div class="game-over-content">
+                            <div id="game-over-message" class="game-over-message"></div>
+                            <div id="game-over-score" class="game-over-score"></div>
+                            <button class="btn btn-secondary" id="play-again">Play Again</button>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-secondary" id="reset">
+                    <i class="fas fa-redo"></i> New Game
+                </button>
+            </div>
+        </section>
+    </div>
+</main>
+
+<script src="script.js"></script>
