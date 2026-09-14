@@ -4,17 +4,27 @@ const canvas = document.getElementById('game-board');
 const ctx = canvas.getContext('2d');
 
 const scoreEl = document.getElementById('score');
+const bestScoreEl = document.getElementById('best-score');
 const statusEl = document.getElementById('status');
 const progressEl = document.getElementById('progress');
+const comboEl = document.getElementById('combo');
 const healthFillEl = document.getElementById('health-fill');
 const resetBtn = document.getElementById('reset');
 const playAgainBtn = document.getElementById('play-again');
+const pauseBtn = document.getElementById('pause-btn');
+const muteBtn = document.getElementById('mute-btn');
+const resumeBtn = document.getElementById('resume-btn');
 const difficultySelect = document.getElementById('difficulty');
 const powerupsSelect = document.getElementById('powerups');
 const controlsHint = document.getElementById('controls-hint');
 const overlay = document.getElementById('game-over-overlay');
 const overlayMessage = document.getElementById('game-over-message');
 const overlayScore = document.getElementById('game-over-score');
+const overlayBest = document.getElementById('game-over-best');
+const pauseOverlay = document.getElementById('pause-overlay');
+const boardWrap = document.getElementById('board-wrap');
+const joystickEl = document.getElementById('joystick');
+const joystickKnobEl = document.getElementById('joystick-knob');
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -41,6 +51,9 @@ const HIT_RADIUS_SCALE = 0.9;
 const PLAYER_COLOR = '#22d3ee';
 const HEALTHY_COLOR = '#4ade80';
 const UNHEALTHY_COLOR = '#ef4444';
+
+const COMBO_WINDOW = 2.4;      // seconds of grace between eats to keep a combo alive
+const COMBO_MAX_BONUS = 12;    // combo count at which the multiplier caps out
 
 const DIFFICULTY = {
     easy: { speed: 60, spawn: 1.30, damage: 10, cap: 12, powerupRate: 6.5 },
@@ -88,13 +101,189 @@ function pickWeightedPowerup() {
 }
 
 // ---------------------------------------------------------------------------
+// Sound engine - fully synthesized via Web Audio API, so there are no
+// external audio assets to host or load on a static Jekyll/GitHub Pages site.
+// ---------------------------------------------------------------------------
+const Sound = (() => {
+    let ac = null;
+    let muted = localStorage.getItem('fatpoly:muted') === '1';
+
+    function ensureCtx() {
+        if (!ac) {
+            const AC = window.AudioContext || window.webkitAudioContext;
+            if (!AC) return null;
+            ac = new AC();
+        }
+        if (ac.state === 'suspended') ac.resume();
+        return ac;
+    }
+
+    // A single synthesized oscillator "blip".
+    function tone({ freq = 440, slideTo = null, duration = 0.15, type = 'sine', volume = 0.2, delay = 0 }) {
+        if (muted) return;
+        const ctx = ensureCtx();
+        if (!ctx) return;
+        const t0 = ctx.currentTime + delay;
+
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, t0);
+        if (slideTo !== null) {
+            osc.frequency.exponentialRampToValueAtTime(Math.max(1, slideTo), t0 + duration);
+        }
+        gain.gain.setValueAtTime(volume, t0);
+        gain.gain.exponentialRampToValueAtTime(0.0001, t0 + duration);
+
+        osc.connect(gain).connect(ctx.destination);
+        osc.start(t0);
+        osc.stop(t0 + duration + 0.02);
+    }
+
+    // Filtered white noise burst - used for impacts/hits.
+    function noise({ duration = 0.2, volume = 0.25, delay = 0, filterFreq = 900 }) {
+        if (muted) return;
+        const ctx = ensureCtx();
+        if (!ctx) return;
+        const t0 = ctx.currentTime + delay;
+
+        const bufferSize = Math.max(1, Math.floor(ctx.sampleRate * duration));
+        const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+
+        const src = ctx.createBufferSource();
+        src.buffer = buffer;
+
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.value = filterFreq;
+
+        const gain = ctx.createGain();
+        gain.gain.setValueAtTime(volume, t0);
+        gain.gain.exponentialRampToValueAtTime(0.0001, t0 + duration);
+
+        src.connect(filter).connect(gain).connect(ctx.destination);
+        src.start(t0);
+    }
+
+    // A short sequence of tones played back-to-back (for fanfares etc).
+    function sequence(notes) {
+        notes.forEach((n) => tone(n));
+    }
+
+    return {
+        setMuted(v) {
+            muted = v;
+            localStorage.setItem('fatpoly:muted', v ? '1' : '0');
+        },
+        isMuted() {
+            return muted;
+        },
+        unlock() {
+            ensureCtx();
+        },
+        eatHealthy(comboLevel) {
+            const step = Math.min(comboLevel, COMBO_MAX_BONUS);
+            tone({
+                freq: 420 + step * 26,
+                slideTo: 640 + step * 26,
+                duration: 0.1,
+                type: 'triangle',
+                volume: 0.16,
+            });
+        },
+        eatUnhealthy() {
+            noise({ duration: 0.22, volume: 0.28, filterFreq: 700 });
+            tone({ freq: 140, slideTo: 55, duration: 0.28, type: 'sawtooth', volume: 0.16 });
+        },
+        powerup(key) {
+            // Each power-up gets its own tiny ascending arpeggio so they're
+            // distinguishable by ear.
+            const bases = { clean: 300, slow: 260, heal: 380, magnet: 340, shrink: 420 };
+            const base = bases[key] || 320;
+            sequence([
+                { freq: base, duration: 0.09, type: 'square', volume: 0.14 },
+                { freq: base * 1.26, duration: 0.09, type: 'square', volume: 0.14, delay: 0.07 },
+                { freq: base * 1.5, duration: 0.14, type: 'square', volume: 0.14, delay: 0.14 },
+            ]);
+        },
+        levelUp() {
+            sequence([
+                { freq: 392, duration: 0.12, type: 'triangle', volume: 0.18 },
+                { freq: 523, duration: 0.12, type: 'triangle', volume: 0.18, delay: 0.1 },
+                { freq: 659, duration: 0.22, type: 'triangle', volume: 0.2, delay: 0.2 },
+            ]);
+        },
+        win() {
+            sequence([
+                { freq: 523, duration: 0.14, type: 'triangle', volume: 0.2 },
+                { freq: 659, duration: 0.14, type: 'triangle', volume: 0.2, delay: 0.13 },
+                { freq: 784, duration: 0.14, type: 'triangle', volume: 0.2, delay: 0.26 },
+                { freq: 1047, duration: 0.35, type: 'triangle', volume: 0.22, delay: 0.39 },
+            ]);
+        },
+        gameOver() {
+            sequence([
+                { freq: 300, slideTo: 90, duration: 0.5, type: 'sawtooth', volume: 0.18 },
+            ]);
+            noise({ duration: 0.4, volume: 0.15, filterFreq: 400, delay: 0.05 });
+        },
+        click() {
+            tone({ freq: 320, duration: 0.05, type: 'square', volume: 0.09 });
+        },
+        pause() {
+            tone({ freq: 260, duration: 0.08, type: 'square', volume: 0.1 });
+        },
+    };
+})();
+
+// ---------------------------------------------------------------------------
+// High scores (persisted per difficulty in localStorage)
+// ---------------------------------------------------------------------------
+const HighScores = (() => {
+    const KEY = 'fatpoly:highscores';
+
+    function load() {
+        try {
+            const raw = localStorage.getItem(KEY);
+            const parsed = raw ? JSON.parse(raw) : {};
+            return { easy: 0, normal: 0, hard: 0, ...parsed };
+        } catch {
+            return { easy: 0, normal: 0, hard: 0 };
+        }
+    }
+
+    let scores = load();
+
+    return {
+        get(diff) {
+            return scores[diff] || 0;
+        },
+        // Returns true if this was a new best.
+        submit(diff, score) {
+            if (score > (scores[diff] || 0)) {
+                scores[diff] = score;
+                localStorage.setItem(KEY, JSON.stringify(scores));
+                return true;
+            }
+            return false;
+        },
+    };
+})();
+
+// ---------------------------------------------------------------------------
 // Globals
 // ---------------------------------------------------------------------------
 let difficulty = 'normal';
 let powerupsOn = true;
 let state = null;
 let lastTime = 0;
+let paused = false;
 const keys = Object.create(null);
+
+// Touch joystick input, normalized -1..1 on each axis.
+const touchVec = { x: 0, y: 0, active: false };
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -136,11 +325,14 @@ function createState() {
         shapes: [],
         powerups: [],
         particles: [],
+        popups: [],
         score: 0,
         level: 1,
         health: HEALTH_MAX,
         eaten: 0,
         target: START_TARGET,
+        combo: 0,
+        comboTimer: 0,
         spawnTimer: 0.4,
         powerupTimer: cfg.powerupRate * 0.6,
         slowTimer: 0,
@@ -148,6 +340,7 @@ function createState() {
         shake: 0,
         time: 0,
         gameOver: false,
+        newBest: false,
     };
 }
 
@@ -220,20 +413,40 @@ function spawnBurst(x, y, color, count, speed) {
     }
 }
 
+// Floating score/label text that drifts upward and fades - gives feedback
+// on exactly how many points (and why) the player just got.
+function spawnPopup(x, y, text, color) {
+    state.popups.push({
+        x, y,
+        text,
+        color,
+        life: 0.9,
+        maxLife: 0.9,
+    });
+}
+
 // ---------------------------------------------------------------------------
 // Player
 // ---------------------------------------------------------------------------
 function updatePlayer(dt) {
     const p = state.player;
 
-    // --- Keyboard thrust (mouse input removed) ---
+    // --- Keyboard thrust ---
     let mx = 0, my = 0;
     if (keys['w'] || keys['arrowup']) my -= 1;
     if (keys['s'] || keys['arrowdown']) my += 1;
     if (keys['a'] || keys['arrowleft']) mx -= 1;
     if (keys['d'] || keys['arrowright']) mx += 1;
 
-    if (mx !== 0 || my !== 0) {
+    // --- Touch joystick overrides keyboard when active ---
+    if (touchVec.active) {
+        mx = touchVec.x;
+        my = touchVec.y;
+        const len = Math.hypot(mx, my);
+        if (len > 1) { mx /= len; my /= len; }
+        p.vx += mx * PLAYER_ACCEL * dt;
+        p.vy += my * PLAYER_ACCEL * dt;
+    } else if (mx !== 0 || my !== 0) {
         const len = Math.hypot(mx, my) || 1;
         p.vx += (mx / len) * PLAYER_ACCEL * dt;
         p.vy += (my / len) * PLAYER_ACCEL * dt;
@@ -321,9 +534,21 @@ function eatHealthy(s) {
     const p = state.player;
     // Grow a little per bite, then cap out.
     p.r = Math.min(PLAYER_MAX_R, p.r + Math.min(1.6, s.r * 0.06));
-    state.score += 10 + Math.round(s.r * 0.5) + state.level * 2;
+
+    // Combo: eating healthy shapes back-to-back (within COMBO_WINDOW
+    // seconds of each other) builds a multiplier that decays if you stall.
+    state.combo++;
+    state.comboTimer = COMBO_WINDOW;
+    const comboMult = 1 + Math.min(state.combo - 1, COMBO_MAX_BONUS) * 0.08;
+
+    const basePoints = 10 + Math.round(s.r * 0.5) + state.level * 2;
+    const points = Math.round(basePoints * comboMult);
+    state.score += points;
     state.eaten++;
+
+    Sound.eatHealthy(state.combo);
     spawnBurst(s.x, s.y, HEALTHY_COLOR, 10, 220);
+    spawnPopup(s.x, s.y, `+${points}`, HEALTHY_COLOR);
     state.shake = Math.min(state.shake + 2, 5);
 
     if (state.eaten >= state.target) {
@@ -345,9 +570,14 @@ function eatUnhealthy(s) {
     state.score = Math.max(0, state.score - 5);
     p.invuln = HIT_INVULN;
     p.hitFlash = 0.4;
-    // Getting hit also shrinks you back a touch.
+    // Getting hit also shrinks you back a touch, and breaks any combo.
     p.r = Math.max(PLAYER_R, p.r - 3);
+    state.combo = 0;
+    state.comboTimer = 0;
+
+    Sound.eatUnhealthy();
     spawnBurst(s.x, s.y, UNHEALTHY_COLOR, 14, 260);
+    spawnPopup(s.x, s.y, '-5', UNHEALTHY_COLOR);
     state.shake = Math.min(state.shake + 8, 14);
 
     if (state.health <= 0) {
@@ -376,7 +606,9 @@ function updatePowerups(dt) {
         const dy = wrappedDelta(state.player.y, pu.y, H);
         if (Math.hypot(dx, dy) < state.player.r + pu.r) {
             applyPowerup(pu.key);
+            Sound.powerup(pu.key);
             spawnBurst(pu.x, pu.y, pu.color, 20, 300);
+            spawnPopup(pu.x, pu.y, POWERUPS[pu.key].label, pu.color);
             state.powerups.splice(i, 1);
         }
     }
@@ -434,27 +666,40 @@ function levelUp() {
     state.score += 100 * state.level;
     state.health = Math.min(HEALTH_MAX, state.health + 15);
     state.shake = 12;
+    Sound.levelUp();
     spawnBurst(state.player.x, state.player.y, PLAYER_COLOR, 30, 340);
+    spawnPopup(state.player.x, state.player.y - 30, `Level ${state.level}!`, PLAYER_COLOR);
     updateHUD();
     updateStatus();
 }
 
 function endGame(won) {
     state.gameOver = true;
+    state.newBest = HighScores.submit(difficulty, state.score);
+    const best = HighScores.get(difficulty);
+
     if (won) {
+        Sound.win();
         overlayMessage.textContent = 'Victory!';
         overlayScore.textContent =
             `Final Score: ${state.score.toLocaleString()}  •  Reached Level ${state.level}`;
         statusEl.textContent = 'Victory!';
         statusEl.className = 'win-message';
     } else {
+        Sound.gameOver();
         overlayMessage.textContent = 'Game Over';
         overlayScore.textContent =
             `Final Score: ${state.score.toLocaleString()}  •  Level ${state.level}`;
         statusEl.textContent = 'Game Over';
         statusEl.className = 'lose-message';
     }
+
+    overlayBest.textContent = state.newBest
+        ? `New Best Score: ${best.toLocaleString()}!`
+        : `Best: ${best.toLocaleString()}`;
+
     overlay.classList.add('show');
+    updateHUD();
 }
 
 // ---------------------------------------------------------------------------
@@ -463,11 +708,25 @@ function endGame(won) {
 function updateHUD() {
     scoreEl.textContent = state.score.toLocaleString();
 
+    const best = HighScores.get(difficulty);
+    const isBest = state.score >= best && state.score > 0;
+    bestScoreEl.textContent = `Best: ${Math.max(best, state.score).toLocaleString()}`;
+    bestScoreEl.classList.toggle('new-best', isBest);
+
     const pct = clamp(state.health / HEALTH_MAX, 0, 1) * 100;
     healthFillEl.style.width = pct + '%';
     healthFillEl.classList.toggle('low', pct < 30);
+    boardWrap.classList.toggle('critical', pct < 25 && !state.gameOver);
 
     progressEl.textContent = `${state.eaten} / ${state.target}`;
+
+    if (state.combo > 1) {
+        const mult = (1 + Math.min(state.combo - 1, COMBO_MAX_BONUS) * 0.08).toFixed(1);
+        comboEl.textContent = `x${state.combo} combo (${mult}x)`;
+        comboEl.classList.add('show');
+    } else {
+        comboEl.classList.remove('show');
+    }
 }
 
 function updateStatus() {
@@ -479,7 +738,7 @@ function updateStatus() {
 
 function updateControlsHint() {
     controlsHint.textContent =
-        'Move: W A S D / Arrows  •  Edges wrap around';
+        'Move: WASD / Arrows / drag to steer  •  P: pause  •  M: mute  •  Edges wrap around';
 }
 
 // ---------------------------------------------------------------------------
@@ -495,6 +754,14 @@ function update(dt) {
 
     if (state.slowTimer > 0) state.slowTimer -= dt;
     if (state.magnetTimer > 0) state.magnetTimer -= dt;
+
+    if (state.comboTimer > 0) {
+        state.comboTimer -= dt;
+        if (state.comboTimer <= 0) {
+            state.combo = 0;
+            updateHUD();
+        }
+    }
 
     const spawnInterval = Math.max(0.35, state.cfg.spawn - (state.level - 1) * 0.06);
     state.spawnTimer -= dt;
@@ -521,6 +788,13 @@ function update(dt) {
         p.vy *= k;
         p.life -= dt;
         if (p.life <= 0) state.particles.splice(i, 1);
+    }
+
+    for (let i = state.popups.length - 1; i >= 0; i--) {
+        const p = state.popups[i];
+        p.y -= 40 * dt;
+        p.life -= dt;
+        if (p.life <= 0) state.popups.splice(i, 1);
     }
 
     if (state.shake > 0) state.shake = Math.max(0, state.shake - 24 * dt);
@@ -702,6 +976,23 @@ function drawPowerup(pu) {
     ctx.restore();
 }
 
+function drawPopups() {
+    ctx.save();
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.font = 'bold 16px ui-monospace, SFMono-Regular, Menlo, monospace';
+    for (const p of state.popups) {
+        ctx.globalAlpha = Math.max(0, p.life / p.maxLife);
+        ctx.fillStyle = p.color;
+        ctx.shadowBlur = 8;
+        ctx.shadowColor = p.color;
+        ctx.fillText(p.text, p.x, p.y);
+    }
+    ctx.globalAlpha = 1;
+    ctx.shadowBlur = 0;
+    ctx.restore();
+}
+
 // Draws the player at (px, py). We call it once for the real position
 // and, when close to an edge, again on the opposite side so the wrap
 // looks continuous instead of teleporting.
@@ -817,6 +1108,8 @@ function render() {
     ctx.globalAlpha = 1;
     ctx.shadowBlur = 0;
 
+    drawPopups();
+
     ctx.restore();
 }
 
@@ -827,22 +1120,62 @@ function loop(now) {
     const dt = Math.min((now - lastTime) / 1000, 0.05);
     lastTime = now;
 
-    update(dt);
+    if (!paused) update(dt);
     render();
 
     requestAnimationFrame(loop);
 }
 
 // ---------------------------------------------------------------------------
+// Pause / mute
+// ---------------------------------------------------------------------------
+function setPaused(v) {
+    if (state.gameOver) return;
+    if (v === paused) return;
+    paused = v;
+    pauseOverlay.classList.toggle('show', paused);
+    pauseBtn.innerHTML = paused
+        ? '<i class="fas fa-play"></i>'
+        : '<i class="fas fa-pause"></i>';
+    pauseBtn.setAttribute('aria-label', paused ? 'Resume game' : 'Pause game');
+    Sound.pause();
+    if (!paused) lastTime = performance.now();
+}
+
+function togglePause() {
+    setPaused(!paused);
+}
+
+function updateMuteButton() {
+    const muted = Sound.isMuted();
+    muteBtn.innerHTML = muted
+        ? '<i class="fas fa-volume-mute"></i>'
+        : '<i class="fas fa-volume-up"></i>';
+    muteBtn.classList.toggle('active', muted);
+    muteBtn.setAttribute('aria-label', muted ? 'Unmute sound' : 'Mute sound');
+}
+
+function toggleMute() {
+    Sound.unlock();
+    Sound.setMuted(!Sound.isMuted());
+    updateMuteButton();
+    if (!Sound.isMuted()) Sound.click();
+}
+
+// ---------------------------------------------------------------------------
 // Lifecycle
 // ---------------------------------------------------------------------------
 function resetGame() {
+    Sound.unlock();
     difficulty = difficultySelect.value;
     powerupsOn = powerupsSelect.value === 'on';
 
     state = createState();
     seedInitialShapes();
 
+    paused = false;
+    pauseOverlay.classList.remove('show');
+    pauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
     overlay.classList.remove('show');
     statusEl.className = '';
 
@@ -854,10 +1187,22 @@ function resetGame() {
 }
 
 // ---------------------------------------------------------------------------
-// Input - keyboard only
+// Input - keyboard
 // ---------------------------------------------------------------------------
 document.addEventListener('keydown', (e) => {
     const k = e.key.toLowerCase();
+
+    if (k === 'p' || k === 'escape') {
+        e.preventDefault();
+        togglePause();
+        return;
+    }
+    if (k === 'm') {
+        e.preventDefault();
+        toggleMute();
+        return;
+    }
+
     keys[k] = true;
     if (['arrowup', 'arrowdown', 'arrowleft', 'arrowright', ' '].includes(k)) {
         e.preventDefault();
@@ -870,21 +1215,100 @@ document.addEventListener('keyup', (e) => {
 
 window.addEventListener('blur', () => {
     for (const k in keys) keys[k] = false;
+    if (state && !state.gameOver) setPaused(true);
 });
 
 document.addEventListener('visibilitychange', () => {
-    if (!document.hidden) lastTime = performance.now();
+    if (document.hidden) {
+        if (state && !state.gameOver) setPaused(true);
+    } else if (!paused) {
+        lastTime = performance.now();
+    }
 });
+
+// ---------------------------------------------------------------------------
+// Input - touch joystick
+// ---------------------------------------------------------------------------
+let touchId = null;
+let touchBase = { x: 0, y: 0 };
+const JOYSTICK_MAX = 44;
+
+function boardWrapPoint(clientX, clientY) {
+    const rect = boardWrap.getBoundingClientRect();
+    return { x: clientX - rect.left, y: clientY - rect.top };
+}
+
+function beginTouch(t) {
+    touchId = t.identifier;
+    touchBase = boardWrapPoint(t.clientX, t.clientY);
+    joystickEl.style.left = `${touchBase.x}px`;
+    joystickEl.style.top = `${touchBase.y}px`;
+    joystickEl.classList.add('show');
+    joystickKnobEl.style.transform = 'translate(0px, 0px)';
+    touchVec.active = true;
+    touchVec.x = 0;
+    touchVec.y = 0;
+    Sound.unlock();
+}
+
+function moveTouch(t) {
+    const pt = boardWrapPoint(t.clientX, t.clientY);
+    let dx = pt.x - touchBase.x;
+    let dy = pt.y - touchBase.y;
+    const dist = Math.hypot(dx, dy);
+    if (dist > JOYSTICK_MAX) {
+        dx = (dx / dist) * JOYSTICK_MAX;
+        dy = (dy / dist) * JOYSTICK_MAX;
+    }
+    joystickKnobEl.style.transform = `translate(${dx}px, ${dy}px)`;
+    touchVec.x = dx / JOYSTICK_MAX;
+    touchVec.y = dy / JOYSTICK_MAX;
+}
+
+function endTouch() {
+    touchId = null;
+    touchVec.active = false;
+    touchVec.x = 0;
+    touchVec.y = 0;
+    joystickEl.classList.remove('show');
+}
+
+boardWrap.addEventListener('touchstart', (e) => {
+    if (touchId !== null) return;
+    e.preventDefault();
+    beginTouch(e.changedTouches[0]);
+}, { passive: false });
+
+boardWrap.addEventListener('touchmove', (e) => {
+    for (const t of e.changedTouches) {
+        if (t.identifier === touchId) {
+            e.preventDefault();
+            moveTouch(t);
+        }
+    }
+}, { passive: false });
+
+function handleTouchEnd(e) {
+    for (const t of e.changedTouches) {
+        if (t.identifier === touchId) endTouch();
+    }
+}
+boardWrap.addEventListener('touchend', handleTouchEnd);
+boardWrap.addEventListener('touchcancel', handleTouchEnd);
 
 // ---------------------------------------------------------------------------
 // Bindings
 // ---------------------------------------------------------------------------
-resetBtn.addEventListener('click', resetGame);
-playAgainBtn.addEventListener('click', resetGame);
+resetBtn.addEventListener('click', () => { Sound.click(); resetGame(); });
+playAgainBtn.addEventListener('click', () => { Sound.click(); resetGame(); });
+resumeBtn.addEventListener('click', () => setPaused(false));
+pauseBtn.addEventListener('click', togglePause);
+muteBtn.addEventListener('click', toggleMute);
 
-difficultySelect.addEventListener('change', resetGame);
+difficultySelect.addEventListener('change', () => { Sound.click(); resetGame(); });
 
 powerupsSelect.addEventListener('change', () => {
+    Sound.click();
     powerupsOn = powerupsSelect.value === 'on';
     if (!powerupsOn && state) state.powerups = [];
 });
@@ -893,6 +1317,7 @@ powerupsSelect.addEventListener('change', () => {
 // Boot
 // ---------------------------------------------------------------------------
 setupCanvas();
+updateMuteButton();
 resetGame();
 
 requestAnimationFrame((t) => {

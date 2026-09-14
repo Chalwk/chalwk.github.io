@@ -104,6 +104,19 @@
     text-shadow: 0 0 12px rgba(34, 211, 238, 0.5);
 }
 
+.best-score {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: rgba(255, 255, 255, 0.45);
+    letter-spacing: 0.03em;
+    margin-top: 0.1rem;
+}
+
+.best-score.new-best {
+    color: #fbbf24;
+    text-shadow: 0 0 8px rgba(251, 191, 36, 0.6);
+}
+
 .status-block {
     grid-area: status;
     justify-self: center;
@@ -127,6 +140,21 @@
     font-size: 0.7rem;
     color: rgba(255, 255, 255, 0.55);
     letter-spacing: 0.05em;
+}
+
+.combo-text {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #fbbf24;
+    text-shadow: 0 0 8px rgba(251, 191, 36, 0.55);
+    min-height: 1em;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.combo-text.show {
+    opacity: 1;
 }
 
 /* health bar */
@@ -160,6 +188,12 @@
     display: flex;
     justify-content: center;
     width: 100%;
+    transition: box-shadow 0.3s ease;
+    border-radius: var(--radius-sm);
+}
+
+.board-wrap.critical {
+    box-shadow: inset 0 0 60px rgba(239, 68, 68, 0.55);
 }
 
 #game-board {
@@ -172,6 +206,7 @@
     background: #050810;
     cursor: default;
     box-shadow: 0 0 40px rgba(34, 211, 238, 0.08) inset;
+    touch-action: none;
 }
 
 .controls-hint {
@@ -215,7 +250,63 @@
     box-shadow: 0 0 8px currentColor;
 }
 
-/* game over overlay */
+/* action row (new game / pause / mute) */
+.action-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    padding: 0;
+    border-radius: 999px;
+}
+
+.btn-icon.active {
+    color: #fbbf24;
+    border-color: rgba(251, 191, 36, 0.5);
+}
+
+/* virtual joystick (touch controls) */
+.joystick {
+    position: absolute;
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    border: 2px solid rgba(255, 255, 255, 0.18);
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+    z-index: 3;
+}
+
+.joystick.show {
+    opacity: 1;
+}
+
+.joystick-knob {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 42px;
+    height: 42px;
+    margin: -21px 0 0 -21px;
+    border-radius: 50%;
+    background: rgba(34, 211, 238, 0.35);
+    border: 2px solid rgba(34, 211, 238, 0.8);
+    box-shadow: 0 0 14px rgba(34, 211, 238, 0.5);
+}
+
+/* game over / pause overlay */
 .game-over-overlay {
     position: absolute;
     inset: 0;
@@ -258,6 +349,13 @@
     font-weight: 600;
     font-size: 1.05rem;
     color: rgba(255, 255, 255, 0.85);
+}
+
+.game-over-best {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: #fbbf24;
     margin-bottom: 0.5rem;
 }
 
