@@ -17,42 +17,64 @@ description: Win 3 small boards in a row to win the game. Next move is dictated 
                     move's position.</p>
             </div>
 
-            <div class="game-instructions">
-                <h4><i class="fas fa-info-circle"></i> Rules:</h4>
-                <div>
-                    <div><i class="fas fa-times"></i> <strong>Player X:</strong> Starts the game</div>
-                    <div><i class="fas fa-circle"></i> <strong>Player O:</strong> Second player</div>
-                    <div><i class="fas fa-arrow-right"></i> <strong>Next Board:</strong> Determined by opponent's last
-                        move position
-                    </div>
-                    <div><i class="fas fa-trophy"></i> <strong>Win Condition:</strong> Win 3 small boards in a row</div>
-                    <div><i class="fas fa-redo"></i> <strong>Reset:</strong> Start a new game</div>
+            <dl id="difficulty-legend">
+                <div class="legend-row">
+                    <dt>Rule</dt>
+                    <dd>The small board you play in is chosen by the cell your opponent played in last.</dd>
                 </div>
-            </div>
+                <div class="legend-row">
+                    <dt>Free move</dt>
+                    <dd>If that target board is already won or full, you may play in any open board.</dd>
+                </div>
+                <div class="legend-row">
+                    <dt>Win</dt>
+                    <dd>Win three small boards in a row &mdash; horizontally, vertically, or diagonally.</dd>
+                </div>
+            </dl>
 
             <div id="mode-selection">
                 <button class="btn btn-secondary" id="pvp">Player vs Player</button>
                 <button class="btn" id="pvai">Player vs AI</button>
             </div>
 
-            <div id="game-container">
-                <div id="game-board"></div>
-                <div id="winning-line"></div>
+            <div id="game-settings">
+                <label for="difficulty" id="difficulty-label">AI Difficulty
+                    <select id="difficulty">
+                        <option value="random">Random</option>
+                        <option value="greedy" selected>Greedy</option>
+                        <option value="strategic">Strategic</option>
+                    </select>
+                </label>
             </div>
 
-            <div class="game-stats">
-                <div>
-                    <strong>Current Player:</strong>
-                    <span id="current-player">X</span>
+            <div id="game-container">
+                <div class="game-stats">
+                    <div class="stat-block player1">
+                        <strong>Player X</strong>
+                        <span id="score-1" class="score score-player-1">0</span>
+                    </div>
+                    <div class="status-block">
+                        <span id="status">Player X's turn</span>
+                    </div>
+                    <div class="stat-block player2">
+                        <strong id="player-2-label">Player O</strong>
+                        <span id="score-2" class="score score-player-2">0</span>
+                    </div>
                 </div>
-                <div>
-                    <strong>Next Board:</strong>
-                    <span id="next-board">Any</span>
+
+                <div class="board-wrap">
+                    <div id="game-board"></div>
+                    <div id="winning-line"></div>
+
+                    <div class="game-over-overlay" id="game-over-overlay">
+                        <div class="game-over-content">
+                            <div id="game-over-message" class="game-over-message"></div>
+                            <div id="game-over-score" class="game-over-score"></div>
+                            <button class="btn btn-secondary" id="play-again">Play Again</button>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <strong>Status:</strong>
-                    <span id="status">Player X's turn</span>
-                </div>
+
                 <button class="btn btn-secondary" id="reset">
                     <i class="fas fa-redo"></i> New Game
                 </button>

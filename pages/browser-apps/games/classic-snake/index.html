@@ -15,25 +15,95 @@ description: Fast. Fancy. Frenetic.
                 <h1>Classic Snake</h1>
                 <p class="muted small">Fast. Fancy. Frenetic.</p>
             </div>
-            <div class="game-area">
-                <div class="game-header">
-                    <div class="game-info">
-                        <div id="score">Score: 0</div>
-                        <div id="best">Best: 0</div>
+
+            <div id="game-settings">
+                <label for="modeSelect">Mode
+                    <select id="modeSelect">
+                        <option value="classic">Classic</option>
+                        <option value="walls">Walls</option>
+                        <option value="obstacles">Obstacles</option>
+                        <option value="portal">Portals</option>
+                    </select>
+                </label>
+                <label for="difficultySelect">Difficulty
+                    <select id="difficultySelect">
+                        <option value="easy">Easy</option>
+                        <option value="normal" selected>Normal</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </label>
+                <label for="controlSelect">Controls
+                    <select id="controlSelect">
+                        <option value="arrows">Arrows</option>
+                        <option value="wasd">WASD</option>
+                    </select>
+                </label>
+            </div>
+
+            <div id="game-container">
+                <div class="game-stats">
+                    <div class="stat-block player1">
+                        <strong>Score</strong>
+                        <span id="score" class="score score-player-1">0</span>
                     </div>
-                    <!-- power-up popup appears here -->
+                    <div class="status-block">
+                        <span id="status">Press Start</span>
+                    </div>
+                    <div class="stat-block player2">
+                        <strong>Best</strong>
+                        <span id="best" class="score score-player-2">0</span>
+                    </div>
+                </div>
+
+                <div class="board-wrap">
+                    <canvas id="gameCanvas" tabindex="0"></canvas>
+
                     <div class="powerup-message" id="powerup-message"></div>
-                    <div class="game-controls">
-                        <button class="btn btn-secondary" id="btn-pause">Pause</button>
-                        <button class="btn btn-secondary" id="btn-sound">🔊</button>
+
+                    <!-- main menu overlay -->
+                    <div class="game-over-overlay show" id="overlay">
+                        <div class="game-over-content">
+                            <div class="game-over-message">Snake</div>
+                            <div class="game-over-score">Fast. Fancy. Frenetic.</div>
+                            <div class="menu-buttons">
+                                <button class="btn btn-secondary" id="btn-start">Start</button>
+                                <button class="btn btn-secondary" id="btn-how">How to play</button>
+                            </div>
+                            <div class="smallprint">
+                                Tip: Golden apples are worth a lot. Powerups are temporary but game changing.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- how-to-play overlay -->
+                    <div class="game-over-overlay" id="overlay-info">
+                        <div class="game-over-content info-content">
+                            <div class="game-over-message">How to play</div>
+                            <ul class="info-list">
+                                <li>Eat food to grow and score points.</li>
+                                <li>Use powerups for short advantages.</li>
+                                <li>Avoid colliding with yourself and (depending on mode) walls or obstacles.</li>
+                                <li>Pause with Space or the Pause button. Touch controls supported.</li>
+                            </ul>
+                            <button class="btn btn-secondary" id="btn-back">Back</button>
+                        </div>
+                    </div>
+
+                    <!-- game over overlay -->
+                    <div class="game-over-overlay" id="overlay-gameover">
+                        <div class="game-over-content">
+                            <div class="game-over-message">Game Over</div>
+                            <div class="game-over-score" id="go-score">Score: 0</div>
+                            <div class="game-over-score" id="go-best">Best: 0</div>
+                            <div class="menu-buttons">
+                                <button class="btn btn-secondary" id="btn-restart">Play Again</button>
+                                <button class="btn btn-secondary" id="btn-menu">Main Menu</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div id="gameContainer">
-                    <canvas id="gameCanvas" tabindex="0"></canvas> <!-- canvas takes keyboard focus -->
-                </div>
-
-                <!-- touch controls for mobile - hidden by default, shows up if touch detected -->
+                <!-- touch controls for mobile -->
                 <div class="touch-controls hidden" id="touch-controls">
                     <div class="dpad">
                         <button class="tc btn-round" data-dir="up">▲</button>
@@ -45,74 +115,11 @@ description: Fast. Fancy. Frenetic.
                     </div>
                 </div>
 
-                <!-- main menu overlay - shows first -->
-                <div class="overlay menu" id="overlay">
-                    <div class="menu-card">
-                        <h2>Snake</h2>
-                        <p class="tagline">Fast. Fancy. Frenetic.</p>
-
-                        <div class="menu-controls">
-                            <label>Mode
-                                <select id="modeSelect">
-                                    <option value="classic">Classic</option>
-                                    <option value="walls">Walls</option>
-                                    <option value="obstacles">Obstacles</option>
-                                    <option value="portal">Portals</option>
-                                </select>
-                            </label>
-
-                            <label>Difficulty
-                                <select id="difficultySelect">
-                                    <option value="easy">Easy</option>
-                                    <option selected value="normal">Normal</option>
-                                    <option value="hard">Hard</option>
-                                </select>
-                            </label>
-
-                            <label>Controls
-                                <select id="controlSelect">
-                                    <option value="arrows">Arrows</option>
-                                    <option value="wasd">WASD</option>
-                                </select>
-                            </label>
-                        </div>
-
-                        <div class="menu-buttons">
-                            <button class="btn btn-primary" id="btn-start">Start</button>
-                            <button class="btn btn-secondary" id="btn-how">How to play</button>
-                        </div>
-
-                        <div class="smallprint">
-                            Tip: Golden apples are worth a lot. Powerups are temporary but game changing.
-                        </div>
-                    </div>
-                </div>
-
-                <!-- how-to-play info panel -->
-                <div class="overlay info-panel hidden" id="overlay-info">
-                    <div class="info-card">
-                        <h3>How to play</h3>
-                        <ul>
-                            <li>Eat food to grow and score points.</li>
-                            <li>Use powerups for short advantages.</li>
-                            <li>Avoid colliding with yourself and (depending on mode) walls or obstacles.</li>
-                            <li>Pause with Space or the Pause button. Touch controls supported.</li>
-                        </ul>
-                        <button class="btn btn-secondary" id="btn-back">Back</button>
-                    </div>
-                </div>
-
-                <!-- game over screen -->
-                <div class="overlay game-over hidden" id="overlay-gameover">
-                    <div class="gameover-card">
-                        <h3>Game Over</h3>
-                        <p id="go-score">Score: 0</p>
-                        <p id="go-best">Best: 0</p>
-                        <div class="menu-buttons">
-                            <button class="btn btn-primary" id="btn-restart">Restart</button>
-                            <button class="btn btn-secondary" id="btn-menu">Main Menu</button>
-                        </div>
-                    </div>
+                <div class="game-buttons">
+                    <button class="btn btn-secondary" id="btn-pause">
+                        <i class="fas fa-pause"></i> Pause
+                    </button>
+                    <button class="btn btn-secondary" id="btn-sound">🔊</button>
                 </div>
             </div>
         </section>

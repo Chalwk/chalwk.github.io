@@ -10,41 +10,72 @@ description: Guess the 5-letter word in 6 tries. Hit Enter to submit. Click tile
 
 <main>
     <div class="container">
-        <section class="panel blunder-panel">
+        <section class="panel">
             <div class="panel-head">
-                <h1 class="blunder-title">
-                    <i class="fas fa-puzzle-piece blunder-title-icon"></i>Blunder
-                </h1>
-                <p class="muted blunder-description">
-                    Guess the 5-letter word in 6 tries. Hit Enter to submit. Click tiles to toggle focus.
-                </p>
+                <h1>Blunder</h1>
+                <p class="muted small">Guess the 5-letter word in 6 tries. Hit Enter to submit. Click tiles to toggle
+                    focus.</p>
             </div>
 
-            <div class="game-container">
-                <!-- action buttons row -->
-                <div class="blunder-controls-row">
-                    <div class="blunder-controls">
-                        <button class="btn blunder-new-game-btn" id="newGameBtn">
-                            <i class="fas fa-redo"></i> New Game
-                        </button>
-                        <button class="btn btn-secondary" id="statsBtn">
-                            <i class="fas fa-chart-bar"></i> Stats
-                        </button>
-                        <button class="btn btn-secondary" id="helpBtn">
-                            <i class="fas fa-question-circle"></i> Help
-                        </button>
+            <div id="game-settings">
+                <label for="hard-mode">
+                    <input type="checkbox" id="hard-mode"> Hard Mode
+                </label>
+            </div>
+
+            <div id="game-container">
+                <div class="game-stats">
+                    <div class="stat-block guess-stat">
+                        <strong>Guesses</strong>
+                        <span id="guess-count" class="score">0 / 6</span>
+                    </div>
+                    <div class="status-block">
+                        <span id="status">Guess the word!</span>
+                    </div>
+                    <div class="stat-block streak-stat">
+                        <strong>Streak</strong>
+                        <span id="streak" class="score">0</span>
                     </div>
                 </div>
 
-                <!-- game grid and keyboard -->
-                <div aria-atomic="true" aria-live="polite" class="grid" id="grid"></div>
-                <div aria-hidden="false" class="keyboard" id="keyboard"></div>
+                <div class="board-wrap">
+                    <div id="grid" class="blunder-grid"></div>
+
+                    <div class="game-over-overlay" id="game-over-overlay">
+                        <div class="game-over-content">
+                            <div id="game-over-message" class="game-over-message"></div>
+                            <div id="game-over-word" class="game-over-word"></div>
+                            <div class="game-over-actions">
+                                <button class="btn btn-secondary" id="share-btn">
+                                    <i class="fas fa-share"></i> Share
+                                </button>
+                                <button class="btn" id="play-again">
+                                    <i class="fas fa-redo"></i> Play Again
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="keyboard" class="blunder-keyboard"></div>
+
+                <div class="blunder-actions">
+                    <button class="btn btn-secondary" id="statsBtn">
+                        <i class="fas fa-chart-bar"></i> Stats
+                    </button>
+                    <button class="btn btn-secondary" id="helpBtn">
+                        <i class="fas fa-question-circle"></i> Help
+                    </button>
+                    <button class="btn btn-secondary" id="reset">
+                        <i class="fas fa-redo"></i> New Game
+                    </button>
+                </div>
             </div>
         </section>
     </div>
 </main>
 
-<!-- modal popup for stats/help/endgame messages -->
+<!-- modal popup for stats/help -->
 <div aria-modal="true" class="modal hidden" id="modal" role="dialog">
     <div class="modal-card" role="document">
         <button aria-label="Close" class="modal-close" id="modalClose">✕</button>

@@ -2,10 +2,10 @@
 
 // ---------- GLOBALS & HELPERS ----------
 const CONFIG = {
-    baseTick: 10,                   // ticks per second (normal speed)
+    baseTick: 10,
     cellSize: 18,
     colors: {
-        bg: '#071017',
+        bg: '#050810',
         snake: '#7ef9ff',
         snakeHead: '#b9fffe',
         food: '#ffd166',
@@ -13,7 +13,7 @@ const CONFIG = {
         obstacle: '#3b3f46',
         powerup: '#8b5cf6',
     },
-    storageKey: 'snake-v1',         // localStorage key for best score
+    storageKey: 'snake-v1',
     audioEnabled: true,
     powerupSpawnIntervalRange: [7000, 16000],
     foodSpawnIntervalRange: [1000, 2500],
@@ -38,7 +38,7 @@ function saveStats(stats) {
     localStorage.setItem(CONFIG.storageKey, JSON.stringify(stats));
 }
 
-// ---------- SIMPLE SOUND EFFECTS (Web Audio) ----------
+// ---------- SIMPLE SOUND EFFECTS ----------
 class SFX {
     constructor(enabled = true) {
         this.enabled = enabled;
@@ -53,7 +53,6 @@ class SFX {
         this.enabled = !!on;
     }
 
-    // quick beep - frequency, duration, waveform, gain
     beep(freq = 440, time = 0.05, type = 'sine', gain = 0.07) {
         if (!this.enabled || !this.ctx) return;
         const ctx = this.ctx;
@@ -82,11 +81,10 @@ class Grid {
         window.addEventListener('resize', () => this.resize());
     }
 
-    // responsive sizing - keep 16:9 ratio
     resize() {
         const container = this.canvas.parentElement;
-        const maxWidth = container.clientWidth - 20;
-        const maxHeight = Math.min(600, window.innerHeight * 0.7);
+        const maxWidth = Math.min(container.clientWidth, 640);
+        const maxHeight = Math.min(480, window.innerHeight * 0.6);
 
         const aspectRatio = 16 / 9;
         let width = maxWidth;
@@ -118,20 +116,19 @@ class Grid {
     }
 }
 
-// ---------- SNAKE (position, direction, growth) ----------
+// ---------- SNAKE ----------
 class Snake {
     constructor(startX, startY) {
         this.segs = [{ x: startX, y: startY }];
         this.dir = { x: 1, y: 0 };
-        this.buffer = [];           // queued direction changes
+        this.buffer = [];
         this.growBy = 0;
         this.alive = true;
-        this.invulnerable = false;  // phase powerup
+        this.invulnerable = false;
         this.maxLen = 1000;
     }
 
     setDir(dx, dy) {
-        // avoid 180 turns and spam
         if (this.buffer.length > 0) {
             const last = this.buffer[this.buffer.length - 1];
             if (last.x === dx && last.y === dy) return;
@@ -155,9 +152,7 @@ class Snake {
         if (this.segs.length > this.maxLen) this.segs.length = this.maxLen;
     }
 
-    grow(n = 1) {
-        this.growBy += n;
-    }
+    grow(n = 1) { this.growBy += n; }
 
     shrink(n = 2) {
         for (let i = 0; i < n; i++) if (this.segs.length > 1) this.segs.pop();
@@ -168,12 +163,10 @@ class Snake {
         return rest.some(s => s.x === h.x && s.y === h.y);
     }
 
-    head() {
-        return this.segs[0];
-    }
+    head() { return this.segs[0]; }
 }
 
-// ---------- HOLDS ALL DYNAMIC ENTITIES (food, powerups, obstacles, portals) ----------
+// ---------- ENTITIES ----------
 class EntityManager {
     constructor() {
         this.food = [];
@@ -181,7 +174,6 @@ class EntityManager {
         this.obstacles = [];
         this.portals = [];
     }
-
     clear() {
         this.food = [];
         this.powerups = [];
@@ -200,7 +192,7 @@ class Powerup {
     }
 }
 
-// ---------- MAIN GAME CLASS (everything comes together) ----------
+// ---------- MAIN GAME ----------
 class Game {
     constructor(canvas) {
         this.stats = loadStats();
@@ -208,7 +200,7 @@ class Game {
         this.grid = new Grid(canvas, CONFIG.cellSize);
         this.sfx = new SFX(CONFIG.audioEnabled);
         this.entities = new EntityManager();
-        this.state = 'menu';            // menu, playing, paused, gameover
+        this.state = 'menu';
         this.lastTick = now();
         this.accumulator = 0;
         this.tickRate = CONFIG.baseTick;
@@ -216,9 +208,9 @@ class Game {
         this.score = 0;
         this.level = 1;
         this.life = 1;
-        this.multiplier = 1;            // from 2x powerup
+        this.multiplier = 1;
         this.multTimer = 0;
-        this.powerTimers = {};           // track active powerup timeouts
+        this.powerTimers = {};
         this.nextPowerSpawn = now() + rand(...CONFIG.powerupSpawnIntervalRange);
         this.nextFoodSpawn = now() + rand(...CONFIG.foodSpawnIntervalRange);
         this.combo = 0;
@@ -240,16 +232,13 @@ class Game {
         this.life = 1;
         this.multiplier = 1;
         this.multTimer = 0;
-        // read current UI settings
         this.activeMode = $('modeSelect') ? $('modeSelect').value : 'classic';
         this.difficulty = $('difficultySelect') ? $('difficultySelect').value : 'normal';
         this.controlScheme = $('controlSelect') ? $('controlSelect').value : 'arrows';
-        // speed based on difficulty
         this.tickRate = CONFIG.baseTick * (this.difficulty === 'easy' ? 0.85 : this.difficulty === 'hard' ? 1.4 : 1);
         this.tickInterval = 1000 / this.tickRate;
         this.nextPowerSpawn = now() + rand(...CONFIG.powerupSpawnIntervalRange);
         this.nextFoodSpawn = now() + 200;
-        // obstacles mode: generate ~2% of grid as obstacles
         this.obstacleCount = this.activeMode === 'obstacles' ? Math.floor(this.grid.cols * this.grid.rows * 0.02) : 0;
         if (this.obstacleCount > 0) {
             for (let i = 0; i < this.obstacleCount; i++) {
@@ -261,7 +250,6 @@ class Game {
         this.updateUI();
     }
 
-    // ---------- INPUT HANDLING (keyboard + touch + buttons) ----------
     setupInput() {
         this.keyMap = {
             ArrowUp: () => this.snake.setDir(0, -1),
@@ -278,7 +266,7 @@ class Game {
         window.addEventListener('keydown', (e) => {
             if (this.state !== 'playing' && e.key === ' ') {
                 e.preventDefault();
-                $('btn-start').click();
+                if (this.state === 'menu') $('btn-start').click();
                 return;
             }
             const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
@@ -295,7 +283,6 @@ class Game {
             }
         });
 
-        // UI buttons
         $('btn-start').addEventListener('click', () => this.startFromMenu());
         $('btn-how').addEventListener('click', () => this.showInfo(true));
         $('btn-back').addEventListener('click', () => this.showInfo(false));
@@ -307,6 +294,7 @@ class Game {
         $('btn-restart').addEventListener('click', () => {
             this.resetGame();
             this.state = 'playing';
+            this.lastTick = now();
             this.updateUI();
         });
         $('btn-menu').addEventListener('click', () => {
@@ -314,7 +302,6 @@ class Game {
             this.updateUI();
         });
 
-        // touch dpad
         document.querySelectorAll('#touch-controls [data-dir]').forEach(btn => {
             btn.addEventListener('click', () => {
                 const d = btn.dataset.dir;
@@ -326,6 +313,7 @@ class Game {
         });
 
         this.canvas.addEventListener('click', () => this.canvas.focus());
+
         const checkTouch = () => {
             const small = window.innerWidth < 720 || /Mobi|Android/i.test(navigator.userAgent);
             $('touch-controls').classList.toggle('hidden', !small);
@@ -337,19 +325,15 @@ class Game {
     startFromMenu() {
         this.resetGame(false);
         this.state = 'playing';
-        $('overlay-info').classList.add('hidden');
-        $('overlay').classList.add('hidden');
+        this.lastTick = now();
+        this.accumulator = 0;
+        $('overlay-info').classList.remove('show');
         this.updateUI();
     }
 
     showInfo(show) {
-        if (show) {
-            $('overlay-info').classList.remove('hidden');
-            $('overlay').classList.add('hidden');
-        } else {
-            $('overlay-info').classList.add('hidden');
-            $('overlay').classList.remove('hidden');
-        }
+        $('overlay-info').classList.toggle('show', show);
+        $('overlay').classList.toggle('show', !show);
     }
 
     togglePause() {
@@ -360,12 +344,12 @@ class Game {
         } else if (this.state === 'paused') {
             this.state = 'playing';
             this.lastTick = now();
+            this.accumulator = 0;
             this.updateUI();
             this.sfx.beep(660, 0.05);
         }
     }
 
-    // popup message for powerup
     showPowerupMessage(type) {
         const messages = {
             'speed': 'Speed Boost!',
@@ -376,33 +360,40 @@ class Game {
             'life': 'Extra Life!',
             'magnet': 'Food Magnet!'
         };
-
-        let messageEl = document.getElementById('powerup-message');
-        messageEl.textContent = messages[type] || 'Powerup!';
-        messageEl.classList.add('show');
-
+        const el = $('powerup-message');
+        el.textContent = messages[type] || 'Powerup!';
+        el.classList.add('show');
         setTimeout(() => {
-            messageEl.classList.remove('show');
-            messageEl.classList.add('fade-out');
-            setTimeout(() => {
-                messageEl.classList.remove('fade-out');
-            }, 300);
+            el.classList.remove('show');
         }, 2000);
     }
 
     updateUI() {
-        $('overlay').classList.toggle('hidden', this.state !== 'menu');
-        $('overlay-gameover').classList.toggle('hidden', this.state !== 'gameover');
-        $('score').textContent = `Score: ${this.score}`;
-        $('best').textContent = `Best: ${this.stats.best}`;
-        $('btn-pause').textContent = this.state === 'playing' ? 'Pause' : 'Resume';
+        $('overlay').classList.toggle('show', this.state === 'menu');
+        $('overlay-gameover').classList.toggle('show', this.state === 'gameover');
+
+        $('score').textContent = this.score;
+        $('best').textContent = this.stats.best;
+
+        const pauseBtn = $('btn-pause');
+        if (this.state === 'playing') {
+            pauseBtn.innerHTML = '<i class="fas fa-pause"></i> Pause';
+        } else {
+            pauseBtn.innerHTML = '<i class="fas fa-play"></i> Resume';
+        }
+
+        const statusEl = $('status');
+        if (this.state === 'menu') statusEl.textContent = 'Press Start';
+        else if (this.state === 'playing') statusEl.textContent = 'Playing';
+        else if (this.state === 'paused') statusEl.textContent = 'Paused';
+        else if (this.state === 'gameover') statusEl.textContent = 'Game Over';
+
         if (this.state === 'gameover') {
             $('go-score').textContent = `Score: ${this.score}`;
             $('go-best').textContent = `Best: ${this.stats.best}`;
         }
     }
 
-    // find a free cell not occupied by snake, food, obstacles, etc.
     randomEmptyCell() {
         let safety = 3000;
         while (safety-- > 0) {
@@ -421,8 +412,7 @@ class Game {
     spawnFood(special = false) {
         const p = this.randomEmptyCell();
         if (!p) return;
-        const food = { x: p.x, y: p.y, points: special ? 50 : 10, golden: special };
-        this.entities.food.push(food);
+        this.entities.food.push({ x: p.x, y: p.y, points: special ? 50 : 10, golden: special });
     }
 
     spawnPowerup() {
@@ -441,7 +431,6 @@ class Game {
         this.entities.portals.push({ x: b.x, y: b.y, id: 2 });
     }
 
-    // apply powerup effect, set timers for duration
     applyPowerup(power) {
         const t = power.type;
         this.showPowerupMessage(t);
@@ -485,8 +474,7 @@ class Game {
                 this.sfx.beep(840, 0.06);
                 break;
             case 'magnet':
-                this.setPowerTimer('magnet', 5000, () => {
-                });
+                this.setPowerTimer('magnet', 5000, () => { });
                 this.sfx.beep(550, 0.06);
                 break;
         }
@@ -500,11 +488,8 @@ class Game {
         }, ms);
     }
 
-    // handle death (or life loss)
     killSnake() {
-        if (this.snake.invulnerable && this.life > 0) {
-            return;
-        }
+        if (this.snake.invulnerable && this.life > 0) return;
         if (this.life > 1) {
             this.life--;
             this.snake = new Snake(Math.floor(this.grid.cols / 2), Math.floor(this.grid.rows / 2));
@@ -530,7 +515,6 @@ class Game {
         this.combo++;
         if (this.combo % 4 === 0) this.sfx.beep(1200 + this.combo * 6, 0.06, 'sine', 0.06);
         else this.sfx.beep(920, 0.05);
-        // tiny chance to spawn golden apple
         if (Math.random() < 0.08) this.spawnFood(true);
         this.updateUI();
     }
@@ -541,7 +525,6 @@ class Game {
         this.updateUI();
     }
 
-    // ---------- GAME LOOP (fixed timestep) ----------
     loop(t) {
         this._animFrame = requestAnimationFrame(this.loop);
         const elapsed = t - (this.lastTick || t);
@@ -551,14 +534,12 @@ class Game {
             return;
         }
 
-        // spawn food over time
         if (now() > this.nextFoodSpawn) {
             const special = Math.random() < 0.03;
             this.spawnFood(special);
             this.nextFoodSpawn = now() + rand(...CONFIG.foodSpawnIntervalRange);
         }
 
-        // spawn powerups & portals randomly
         if (now() > this.nextPowerSpawn) {
             if (Math.random() < 0.6) this.spawnPowerup();
             if (Math.random() < 0.2) this.spawnPortalPair();
@@ -573,12 +554,10 @@ class Game {
         this.render();
     }
 
-    // one game tick: move snake, check collisions, handle effects
     tick() {
         this.snake.step();
 
         const h = this.snake.head();
-        // walls mode: die on boundary; otherwise wrap around
         if (this.activeMode === 'walls') {
             if (h.x < 0 || h.y < 0 || h.x >= this.grid.cols || h.y >= this.grid.rows) {
                 this.killSnake();
@@ -591,12 +570,10 @@ class Game {
             if (h.y >= this.grid.rows) h.y = 0;
         }
 
-        // obstacle collision
         if (!this.snake.invulnerable && this.entities.obstacles.some(o => o.x === h.x && o.y === h.y)) {
             this.killSnake();
         }
 
-        // portal teleport
         if (this.entities.portals.length >= 2) {
             for (const p of this.entities.portals) {
                 if (h.x === p.x && h.y === p.y) {
@@ -611,7 +588,6 @@ class Game {
             }
         }
 
-        // food collision
         for (let i = 0; i < this.entities.food.length; i++) {
             const f = this.entities.food[i];
             if (f.x === h.x && f.y === h.y) {
@@ -620,7 +596,6 @@ class Game {
             }
         }
 
-        // powerup collision
         for (let i = 0; i < this.entities.powerups.length; i++) {
             const p = this.entities.powerups[i];
             if (p.x === h.x && p.y === h.y) {
@@ -629,7 +604,6 @@ class Game {
             }
         }
 
-        // magnet powerup: pull nearest food toward snake
         if (this.powerTimers['magnet']) {
             let nearest = null;
             let dist = 99999;
@@ -650,28 +624,23 @@ class Game {
             this.killSnake();
         }
 
-        // remove old powerups after 45 seconds
         const nowMs = now();
         this.entities.powerups = this.entities.powerups.filter(p => (nowMs - p.spawned) < 45000);
 
-        // limit food count
         if (this.entities.food.length > 8) {
             this.entities.food.shift();
         }
 
-        // multiplier timeout
         if (this.multTimer && now() > this.multTimer) {
             this.multiplier = 1;
             this.multTimer = 0;
         }
 
-        // obstacles mode: occasionally add new obstacles
         if (this.activeMode === 'obstacles' && Math.random() < 0.02) {
             const c = this.randomEmptyCell();
             if (c) this.entities.obstacles.push(c);
         }
 
-        // level up every 200 points - speed gradually increases
         if (this.score > 0 && this.score % 200 === 0) {
             if (Math.random() < 0.08) {
                 this.level++;
@@ -684,7 +653,6 @@ class Game {
         this.updateUI();
     }
 
-    // ---------- DRAW EVERYTHING ----------
     render() {
         const c = this.grid.ctx;
         this.grid.clear();
@@ -707,7 +675,7 @@ class Game {
         }
         c.restore();
 
-        // obstacles (dark blocks)
+        // obstacles
         for (const o of this.entities.obstacles) {
             this.grid.drawCell(o.x, o.y, (ctx, px, py, s) => {
                 ctx.fillStyle = CONFIG.colors.obstacle;
@@ -719,7 +687,7 @@ class Game {
             });
         }
 
-        // portals (glowing circles)
+        // portals
         for (const p of this.entities.portals) {
             this.grid.drawCell(p.x, p.y, (ctx, px, py, s) => {
                 ctx.save();
@@ -735,21 +703,19 @@ class Game {
             });
         }
 
-        // food (rounded rectangles, golden apples have stroke)
+        // food
         for (const f of this.entities.food) {
             this.grid.drawCell(f.x, f.y, (ctx, px, py, s) => {
                 ctx.beginPath();
                 ctx.fillStyle = f.golden ? CONFIG.colors.golden : CONFIG.colors.food;
-                ctx.roundRect = function (x, y, w, h, r) {
-                    this.beginPath();
-                    this.moveTo(x + r, y);
-                    this.arcTo(x + w, y, x + w, y + h, r);
-                    this.arcTo(x + w, y + h, x, y + h, r);
-                    this.arcTo(x, y + h, x, y, r);
-                    this.arcTo(x, y, x + w, y, r);
-                    this.closePath();
-                }
-                ctx.roundRect(px + 3, py + 3, s - 6, s - 6, 3);
+                const r = 3;
+                const x = px + 3, y = py + 3, w = s - 6, h = s - 6;
+                ctx.moveTo(x + r, y);
+                ctx.arcTo(x + w, y, x + w, y + h, r);
+                ctx.arcTo(x + w, y + h, x, y + h, r);
+                ctx.arcTo(x, y + h, x, y, r);
+                ctx.arcTo(x, y, x + w, y, r);
+                ctx.closePath();
                 ctx.fill();
                 if (f.golden) {
                     ctx.strokeStyle = 'rgba(255,220,120,0.6)';
@@ -759,7 +725,7 @@ class Game {
             });
         }
 
-        // powerups (pulsing circles)
+        // powerups
         for (const p of this.entities.powerups) {
             const t = (now() - p.spawned) / 300;
             this.grid.drawCell(p.x, p.y, (ctx, px, py, s) => {
@@ -774,7 +740,7 @@ class Game {
             });
         }
 
-        // snake body (gradient alpha, head brighter)
+        // snake
         for (let i = this.snake.segs.length - 1; i >= 0; i--) {
             const seg = this.snake.segs[i];
             const isHead = i === 0;
@@ -792,61 +758,51 @@ class Game {
             });
         }
 
-        // HUD overlay on canvas (level, lives, multiplier)
+        // HUD overlay
         c.save();
-        c.fillStyle = 'rgba(0,0,0,0.16)';
+        c.fillStyle = 'rgba(0,0,0,0.22)';
         c.fillRect(10, 10, 140, 60);
         c.fillStyle = '#dff7ff';
-        c.font = '14px system-ui,Segoe UI,Roboto';
+        c.font = '14px ui-monospace, SFMono-Regular, Menlo, monospace';
         c.fillText(`Level: ${this.level}`, 18, 30);
         c.fillText(`Life: ${this.life}`, 18, 46);
         c.fillText(`x${this.multiplier}`, 84, 46);
         c.restore();
 
-        // pause overlay
+        // paused overlay
         if (this.state === 'paused') {
             c.save();
-            c.fillStyle = 'rgba(0,0,0,0.44)';
+            c.fillStyle = 'rgba(0,0,0,0.55)';
             c.fillRect(0, 0, this.canvas.width, this.canvas.height);
             c.fillStyle = '#fff';
-            c.font = 'bold 46px system-ui';
+            c.font = 'bold 42px ui-monospace, SFMono-Regular, Menlo, monospace';
             c.textAlign = 'center';
+            c.textBaseline = 'middle';
             c.fillText('PAUSED', this.canvas.width / 2, this.canvas.height / 2);
             c.restore();
         }
     }
 }
 
-// polyfill for Canvas roundRect
-CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
-    if (r === undefined) r = 6;
-    this.beginPath();
-    this.moveTo(x + r, y);
-    this.lineTo(x + w - r, y);
-    this.quadraticCurveTo(x + w, y, x + w, y + r);
-    this.lineTo(x + w, y + h - r);
-    this.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-    this.lineTo(x + r, y + h);
-    this.quadraticCurveTo(x, y + h, x, y + h - r);
-    this.lineTo(x, y + r);
-    this.quadraticCurveTo(x, y, x + r, y);
-    this.closePath();
-};
-
-// start the game when page loads
+// ---------- BOOT ----------
 window.addEventListener('load', () => {
     const canvas = $('gameCanvas');
-    canvas.tabIndex = 1000;
+    canvas.tabIndex = 0;
     const game = new Game(canvas);
+    window.__snakeGame = game;
 
-    const stats = loadStats();
-    $('best').textContent = `Best: ${stats.best}`;
-
-    // just keep listeners for dropdowns (no extra logic needed I think)
+    // settings changes trigger reset if mid-game
     ['modeSelect', 'difficultySelect', 'controlSelect'].forEach(id => {
         const el = $(id);
         if (!el) return;
         el.addEventListener('change', () => {
+            if (game.state === 'playing' || game.state === 'paused') {
+                game.resetGame();
+                game.state = 'playing';
+                game.lastTick = now();
+                game.accumulator = 0;
+                game.updateUI();
+            }
         });
     });
 });

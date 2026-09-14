@@ -1,10 +1,14 @@
 // Copyright (c) 2024-2026 Jericho Crosby (Chalwk). All Rights Reserved.
 
 (() => {
-    // DOM stuff
+    // How many hints a player gets per game.
+    const HINTS_PER_GAME = 3;
+
+    // DOM references
     const boardEl = document.getElementById('board');
     const mineCountEl = document.getElementById('mineCount');
     const timerEl = document.getElementById('timer');
+    const statusEl = document.getElementById('status');
     const newBtn = document.getElementById('newBtn');
     const difficultySelect = document.getElementById('difficulty');
     const customPanel = document.getElementById('customPanel');
@@ -15,32 +19,34 @@
     const revealAllBtn = document.getElementById('revealAllBtn');
     const hintBtn = document.getElementById('hintBtn');
     const flagToggle = document.getElementById('flagToggle');
-    const themeToggle = document.getElementById('themeToggle');
     const bestTimesBtn = document.getElementById('bestTimesBtn');
     const bestTimesModal = document.getElementById('bestTimesModal');
     const bestTimesList = document.getElementById('bestTimesList');
     const closeBestTimes = document.getElementById('closeBestTimes');
+    const overlay = document.getElementById('game-over-overlay');
+    const overlayMessage = document.getElementById('game-over-message');
+    const overlayScore = document.getElementById('game-over-score');
+    const playAgainBtn = document.getElementById('play-again');
 
-    // game state vars
+    // Game state
     let rows = 9, cols = 9, mines = 10;
     let board = [];
     let started = false;
     let ended = false;
-    let flagsMode = true;
     let mineCounter = 0;
+    let hintsRemaining = HINTS_PER_GAME;
     let timer = null;
     let seconds = 0;
     let firstClick = true;
     let revealedCount = 0;
 
-    // preset difficulties
+    // Preset difficulties
     const presets = {
         beginner: { rows: 9, cols: 9, mines: 10 },
         intermediate: { rows: 16, cols: 16, mines: 40 },
         expert: { rows: 16, cols: 30, mines: 99 }
     };
 
-    // helpers
     function clamp(v, a, b) {
         return Math.max(a, Math.min(b, v));
     }
@@ -49,7 +55,22 @@
         return Math.floor(Math.random() * max);
     }
 
-    // reset everything and draw empty board
+    // Enable / disable + relabel the hint button based on the current state.
+    // The hint button is only usable once the first cell has been clicked
+    // (i.e. `started === true`) and while hints remain.
+    function updateHintButton() {
+        const usable = started && !ended && hintsRemaining > 0;
+        hintBtn.disabled = !usable;
+        hintBtn.innerHTML =
+            `<i class="fas fa-lightbulb"></i> Hint (${hintsRemaining})`;
+        hintBtn.title = !started
+            ? 'Click a cell first to start the game.'
+            : hintsRemaining <= 0
+                ? 'No hints remaining this game.'
+                : `${hintsRemaining} hint${hintsRemaining === 1 ? '' : 's'} remaining.`;
+    }
+
+    // Reset everything and draw an empty board
     function resetState(r, c, m) {
         rows = r;
         cols = c;
@@ -62,15 +83,19 @@
         firstClick = true;
         revealedCount = 0;
         seconds = 0;
+        hintsRemaining = HINTS_PER_GAME;
         clearInterval(timer);
         timer = null;
         timerEl.textContent = '00:00';
         mineCounter = mines;
         updateMineCounter();
-        boardEl.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+        boardEl.style.gridTemplateColumns = `repeat(${cols}, minmax(26px, 1fr))`;
         boardEl.innerHTML = '';
 
-        // create clickable cells
+        hideOverlay();
+        setStatus('Click any cell to begin');
+        updateHintButton();
+
         for (let r = 0; r < rows; r++) {
             for (let c = 0; c < cols; c++) {
                 const cell = document.createElement('button');
@@ -85,7 +110,7 @@
         }
     }
 
-    // place mines after first click, avoid blowing up the first cell
+    // Place mines after first click, avoiding the first cell and its neighbours
     function placeMines(firstR, firstC) {
         const forbidden = new Set();
         for (let dr = -1; dr <= 1; dr++) for (let dc = -1; dc <= 1; dc++) {
@@ -101,7 +126,6 @@
             board[r][c].isMine = true;
             placed++;
         }
-        // calc adjacent numbers
         for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
             let adj = 0;
             for (let dr = -1; dr <= 1; dr++) for (let dc = -1; dc <= 1; dc++) {
@@ -113,7 +137,7 @@
         }
     }
 
-    // reveal a single cell (recursive for blanks)
+    // Reveal a single cell (recursive for blanks)
     function revealCell(r, c) {
         if (ended) return;
         const cellObj = board[r][c];
@@ -125,7 +149,7 @@
 
         if (cellObj.isMine) {
             el.classList.add('mine');
-            el.textContent = '💣';
+            el.textContent = '\u{1F4A3}';
             endGame(false);
             return;
         }
@@ -134,7 +158,6 @@
             el.textContent = cellObj.adjacent;
             el.style.color = colorForNumber(cellObj.adjacent);
         } else {
-            // flood fill empty cells
             for (let dr = -1; dr <= 1; dr++) for (let dc = -1; dc <= 1; dc++) {
                 if (dr === 0 && dc === 0) continue;
                 const rr = r + dr, cc = c + dc;
@@ -152,20 +175,23 @@
         ended = true;
         clearInterval(timer);
         timer = null;
+        updateHintButton();
+
         if (!win) {
-            // show all mines on loss
             for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
                 const obj = board[r][c];
                 const el = getCellEl(r, c);
                 if (obj.isMine && !obj.revealed) {
                     el.classList.add('revealed', 'mine');
-                    el.textContent = '💣';
+                    el.textContent = '\u{1F4A3}';
                 }
             }
-            setTimeout(() => alert('Game Over! You hit a mine.'), 100);
+            setStatus('Boom!', 'lose-message');
+            showOverlay('Game Over', 'You hit a mine.');
         } else {
             saveBestTime(rows, cols, mines, seconds);
-            setTimeout(() => alert(`You win! Time: ${formatTime(seconds)}`), 100);
+            setStatus('Victory!', 'win-message');
+            showOverlay('You Win!', `Cleared in ${formatTime(seconds)}`);
         }
     }
 
@@ -173,22 +199,37 @@
         return boardEl.querySelector(`.cell[data-r='${r}'][data-c='${c}']`);
     }
 
-    // number colors (classic minesweeper style)
+    // Colour palette tuned for the dark game-container background
     function colorForNumber(n) {
         const map = {
-            1: '#0b61f7',
-            2: '#0b8f1a',
-            3: '#f22f2f',
-            4: '#1b2f6b',
-            5: '#7b1f1f',
-            6: '#009966',
-            7: '#333333',
-            8: '#666666'
+            1: '#60a5fa',
+            2: '#4ade80',
+            3: '#ef4444',
+            4: '#a78bfa',
+            5: '#fbbf24',
+            6: '#2dd4bf',
+            7: '#f472b6',
+            8: '#fb923c'
         };
-        return map[n] || '#000';
+        return map[n] || '#ffffff';
     }
 
-    // --- event handlers ---
+    function setStatus(text, className = '') {
+        statusEl.textContent = text;
+        statusEl.className = className;
+    }
+
+    function showOverlay(message, detail) {
+        overlayMessage.textContent = message;
+        overlayScore.textContent = detail;
+        overlay.classList.add('show');
+    }
+
+    function hideOverlay() {
+        overlay.classList.remove('show');
+    }
+
+    // Event handlers
     function onCellClick(e) {
         if (ended) return;
         const el = e.currentTarget;
@@ -200,6 +241,7 @@
             startTimer();
             started = true;
             firstClick = false;
+            updateHintButton();
         }
 
         const obj = board[r][c];
@@ -207,7 +249,7 @@
         revealCell(r, c);
     }
 
-    // right-click: cycle flag -> question -> none
+    // Right-click cycles: none -> flag -> question -> none
     function onCellRightClick(e) {
         e.preventDefault();
         if (ended) return;
@@ -216,10 +258,21 @@
         const c = Number(el.dataset.c);
         const obj = board[r][c];
         if (obj.revealed) return;
+
+        // Right-clicking a cell also counts as "interacting with the board",
+        // so it starts the game just like a left-click would.
+        if (firstClick) {
+            placeMines(r, c);
+            startTimer();
+            started = true;
+            firstClick = false;
+            updateHintButton();
+        }
+
         if (!obj.flagged && !obj.question) {
             obj.flagged = true;
             el.classList.add('flag');
-            el.textContent = '🚩';
+            el.textContent = '\u{1F6A9}';
             mineCounter--;
         } else if (obj.flagged) {
             obj.flagged = false;
@@ -236,8 +289,7 @@
         updateMineCounter();
     }
 
-    // double-click to reveal neighbors if flagged count matches adjacent
-    // This is a mess, but it works.
+    // Double-click to chord: if flagged neighbours match the number, reveal the rest
     function onCellDblClick(e) {
         if (ended) return;
         const el = e.currentTarget;
@@ -245,6 +297,7 @@
         const c = Number(el.dataset.c);
         const obj = board[r][c];
         if (!obj.revealed || obj.adjacent === 0) return;
+
         let flags = 0;
         for (let dr = -1; dr <= 1; dr++) for (let dc = -1; dc <= 1; dc++) {
             const rr = r + dr, cc = c + dc;
@@ -259,11 +312,12 @@
     }
 
     function updateMineCounter() {
-        mineCountEl.textContent = `Mines: ${mineCounter}`;
+        mineCountEl.textContent = mineCounter;
     }
 
     function startTimer() {
         if (timer) return;
+        setStatus('Good luck!');
         timer = setInterval(() => {
             seconds++;
             timerEl.textContent = formatTime(seconds);
@@ -274,7 +328,6 @@
         return `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
     }
 
-    // new game from current difficulty/custom settings
     function startNewGame() {
         const val = difficultySelect.value;
         if (presets[val]) {
@@ -290,13 +343,15 @@
         resetState(rows, cols, mines);
     }
 
-    // --- UI listeners ---
-    newBtn.addEventListener('click', () => startNewGame());
+    // UI listeners
+    newBtn.addEventListener('click', startNewGame);
+    playAgainBtn.addEventListener('click', startNewGame);
 
     difficultySelect.addEventListener('change', () => {
         const val = difficultySelect.value;
-        if (val === 'custom') customPanel.classList.remove('hidden');
-        else {
+        if (val === 'custom') {
+            customPanel.classList.remove('hidden');
+        } else {
             customPanel.classList.add('hidden');
             const p = presets[val];
             if (p) {
@@ -326,7 +381,7 @@
                 el.classList.add('revealed');
                 if (obj.isMine) {
                     el.classList.add('mine');
-                    el.textContent = '💣';
+                    el.textContent = '\u{1F4A3}';
                 } else if (obj.adjacent > 0) {
                     el.textContent = obj.adjacent;
                     el.style.color = colorForNumber(obj.adjacent);
@@ -335,28 +390,53 @@
         }
         ended = true;
         clearInterval(timer);
+        timer = null;
+        updateHintButton();
+        setStatus('Solution revealed');
+        showOverlay('Revealed', 'All mines shown.');
     });
 
+    // Hint: reveals a single safe cell. Guarded by (a) the game having started
+    // (so the player can't "probe" before placing mines) and (b) the per-game
+    // hint allowance.
     hintBtn.addEventListener('click', () => {
         if (ended) return;
+        if (!started || firstClick) {
+            setStatus('Start the game first', 'lose-message');
+            return;
+        }
+        if (hintsRemaining <= 0) {
+            setStatus('No hints remaining', 'lose-message');
+            return;
+        }
+
+        // Find the first unrevealed, unflagged, non-mine cell to reveal.
         for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
-            if (!board[r][c].isMine && !board[r][c].revealed) {
+            const obj = board[r][c];
+            if (!obj.isMine && !obj.revealed && !obj.flagged) {
+                hintsRemaining--;
                 revealCell(r, c);
+                updateHintButton();
+                setStatus(
+                    `Hint used (${hintsRemaining} left)`,
+                    'win-message'
+                );
                 return;
             }
         }
     });
 
     flagToggle.addEventListener('click', () => {
-        flagsMode = !flagsMode;
-        flagToggle.innerHTML = flagsMode ? '<i class="fas fa-flag"></i> Toggle Flagging' : '<i class="fas fa-ban"></i> Flagging Off';
+        // Placeholder toggle for the flag label state (flagging itself is
+        // performed by right-clicking a cell).
+        const active = flagToggle.dataset.active !== 'true';
+        flagToggle.dataset.active = String(active);
+        flagToggle.innerHTML = active
+            ? '<i class="fas fa-flag"></i> Flagging On'
+            : '<i class="fas fa-ban"></i> Flagging Off';
     });
 
-    themeToggle.addEventListener('change', () => {
-        document.body.classList.toggle('dark', themeToggle.checked);
-    });
-
-    // best times storage & display
+    // Best times storage & display
     function saveBestTime(r, c, m, t) {
         const key = `best_${r}x${c}_${m}`;
         const prev = JSON.parse(localStorage.getItem(key) || '[]');
@@ -369,8 +449,9 @@
         bestTimesList.innerHTML = '';
         const key = `best_${rows}x${cols}_${mines}`;
         const list = JSON.parse(localStorage.getItem(key) || '[]');
-        if (list.length === 0) bestTimesList.innerHTML = '<li>No best times yet</li>';
-        else {
+        if (list.length === 0) {
+            bestTimesList.innerHTML = '<li class="empty">No best times yet</li>';
+        } else {
             list.forEach((s, i) => {
                 const li = document.createElement('li');
                 li.textContent = `${i + 1}. ${formatTime(s)}`;
@@ -383,6 +464,6 @@
     bestTimesBtn.addEventListener('click', showBestTimes);
     closeBestTimes.addEventListener('click', () => bestTimesModal.classList.add('hidden'));
 
-    // init game
+    // Init
     startNewGame();
 })();
