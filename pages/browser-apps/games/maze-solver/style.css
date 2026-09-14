@@ -1,7 +1,6 @@
 /* Copyright (c) 2024-2026 Jericho Crosby (Chalwk). All Rights Reserved. */
 
-/* main panel styles */
-.maze-panel {
+.panel {
     background: var(--light);
     border: 1px solid var(--gray-light);
     border-radius: var(--radius-lg);
@@ -9,158 +8,314 @@
     margin-top: 2rem;
 }
 
-.maze-title {
+.panel-head h1 {
     color: var(--primary);
     margin-bottom: 0.5rem;
 }
 
-.maze-subtitle {
-    color: var(--gray);
-}
-
-/* instruction box with colorful pills */
-.maze-instructions {
+/* game settings: size, difficulty, fog toggle */
+#game-settings {
     margin-bottom: 1.5rem;
-    padding: 1rem;
-    background: rgba(203, 213, 225, 0.1);
-    border-radius: var(--radius);
-}
-
-.instructions-title {
-    color: var(--dark);
-    margin-bottom: 0.5rem;
-}
-
-.pill {
-    display: inline-block;
-    padding: 4px 8px;
-    border-radius: 999px;
-    font-weight: 700;
-    margin: 0 6px;
-}
-
-.pill.green {
-    background: rgba(34, 197, 94, 0.12);
-    color: #9ef0b4;
-}
-
-.pill.red {
-    background: rgba(239, 68, 68, 0.12);
-    color: #ffb4b4;
-}
-
-/* top control bar: buttons + size selector */
-.maze-controls-top {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
     flex-wrap: wrap;
-}
-
-.maze-left-controls {
-    display: flex;
-    gap: 0.5rem;
-}
-
-.maze-right-controls {
-    display: flex;
-    gap: 0.5rem;
+    gap: 1.5rem;
+    justify-content: center;
     align-items: center;
 }
 
-.size-select-label {
+#game-settings label {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--dark);
     font-weight: 500;
-    color: var(--dark);
+    font-size: 0.9rem;
+    white-space: nowrap;
 }
 
-.maze-size-select {
-    padding: 0.5rem;
-    border-radius: var(--radius-sm);
+#game-settings select {
+    padding: 0.5rem 0.75rem;
     border: 1px solid var(--gray-light);
-    background: white;
-    margin-left: 0.5rem;
-}
-
-/* moves/time/best stats row */
-.maze-game-stats {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    background: rgba(203, 213, 225, 0.1);
     border-radius: var(--radius);
+    background: white;
+    color: var(--dark);
+    font-family: var(--font-primary);
+    min-width: 120px;
+}
+
+.toggle-label {
+    cursor: pointer;
+    user-select: none;
+}
+
+.toggle-label input[type="checkbox"] {
+    accent-color: var(--primary);
+    cursor: pointer;
+    width: 1rem;
+    height: 1rem;
+}
+
+/* main game shell */
+#game-container {
+    position: relative;
     margin-bottom: 1.5rem;
-    flex-wrap: wrap;
-    gap: 1rem;
-}
-
-.stat-item {
     display: flex;
+    flex-direction: column;
     align-items: center;
+    gap: 0.85rem;
+    background: var(--darker);
+    border-radius: var(--radius);
+    padding: 1rem 0.75rem;
 }
 
-.stat-label {
-    color: var(--primary);
+/* stats bar */
+.game-stats {
+    display: grid;
+    grid-template-columns: auto auto 1fr auto;
+    align-items: center;
+    gap: 0.75rem 1.25rem;
+    width: 100%;
+    padding: 0.25rem 0.5rem;
 }
 
-.stat-value {
-    font-family: var(--font-mono);
+.stat-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    line-height: 1.1;
+}
+
+.stat-block strong {
+    color: rgba(255, 255, 255, 0.65);
+    font-size: 0.7rem;
     font-weight: 600;
-    margin-left: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
 }
 
-/* container holding the maze grid */
-.maze-game-container {
+.stat-block .score {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--accent);
+}
+
+.status-block {
+    justify-self: center;
+    text-align: center;
+    min-width: 0;
+}
+
+#status {
+    font-weight: bold;
+    font-size: 0.95rem;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    max-width: 100%;
+}
+
+/* board */
+.board-wrap {
+    position: relative;
     display: flex;
     justify-content: center;
-    margin-bottom: 1.5rem;
-    min-height: 300px;
+    width: 100%;
+    padding: 0.25rem;
+    overflow: auto;
 }
 
-/* actual CSS grid for maze cells */
-.maze-container {
+.maze-board {
     display: grid;
-    gap: 3px;
-    background: var(--darker);
-    padding: 12px;
+    gap: 2px;
+    background: rgba(0, 0, 0, 0.35);
+    padding: 10px;
     border-radius: var(--radius);
-    box-shadow: var(--shadow-lg);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04),
+        0 10px 30px rgba(0, 0, 0, 0.35);
 }
 
-/* touch dpad styling */
-.maze-touch-controls {
-    text-align: center;
-    margin-bottom: 1.5rem;
+/* cells */
+.cell {
+    width: var(--cell-size);
+    height: var(--cell-size);
+    border-radius: 3px;
+    position: relative;
+    transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.12s ease;
 }
 
-.touch-controls-title {
-    color: var(--dark);
-    margin-bottom: 0.5rem;
+.wall {
+    background: linear-gradient(180deg, #273144, #1b2432);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
+.path {
+    background: #0a1428;
+}
+
+.trail {
+    background: #122043;
+}
+
+/* player */
+.player {
+    background: linear-gradient(180deg, #22c55e, #16a34a);
+    box-shadow: 0 0 14px rgba(34, 197, 94, 0.65);
+    animation: playerPulse 1.4s ease-in-out infinite;
+    z-index: 2;
+}
+
+@keyframes playerPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.08);
+    }
+}
+
+/* gems */
+.gem::after {
+    content: '\25C6';
+    /* ◆ */
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fbbf24;
+    font-size: calc(var(--cell-size) * 0.72);
+    line-height: 1;
+    text-shadow: 0 0 8px rgba(251, 191, 36, 0.9);
+    animation: gemGlow 1.6s ease-in-out infinite;
+}
+
+@keyframes gemGlow {
+
+    0%,
+    100% {
+        opacity: 0.85;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.15);
+    }
+}
+
+/* exit */
+.exit {
+    background: linear-gradient(180deg, #fb7185, #ef4444);
+    box-shadow: 0 0 16px rgba(239, 68, 68, 0.7);
+    animation: exitPulse 1.5s ease-in-out infinite;
+    z-index: 1;
+}
+
+.exit.locked {
+    background: linear-gradient(180deg, #3f1a1a, #2a0c0c);
+    box-shadow: none;
+    animation: none;
+    opacity: 0.85;
+}
+
+.exit.locked::after {
+    content: '\1F512';
+    /* 🔒 */
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(var(--cell-size) * 0.55);
+    opacity: 0.9;
+}
+
+@keyframes exitPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.08);
+    }
+}
+
+/* hint cells */
+.hint {
+    background: linear-gradient(180deg, #fffbeb, #fde68a) !important;
+    box-shadow: 0 0 10px rgba(253, 230, 138, 0.85);
+    animation: hintPulse 0.9s ease-in-out;
+}
+
+@keyframes hintPulse {
+    0% {
+        opacity: 0;
+        transform: scale(0.85);
+    }
+
+    60% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* fog of war */
+.fogged {
+    background: #020617 !important;
+    box-shadow: none !important;
+    animation: none !important;
+}
+
+.fogged::after {
+    content: '' !important;
+    animation: none !important;
+}
+
+/* action row */
+.action-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.4rem;
+    padding: 0;
+    flex: 0 0 auto;
+}
+
+.btn-icon[aria-pressed="true"] {
+    opacity: 0.6;
+}
+
+/* d-pad */
 .dpad {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
-}
-
-.dpad-btn {
-    width: 60px;
-    height: 60px;
-    border-radius: var(--radius);
-    background: var(--primary);
-    color: white;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-}
-
-.dpad-btn:active {
-    transform: translateY(2px);
-    opacity: 0.9;
+    margin-top: 0.25rem;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .dpad-row {
@@ -168,106 +323,140 @@
     gap: 0.5rem;
 }
 
-/* base cell style, size set by JS */
-.cell {
-    width: var(--cell-size);
-    height: var(--cell-size);
-    border-radius: 6px;
-    transition: background-color 200ms ease, transform 120ms ease;
+.dpad-btn {
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #fff;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.1s ease;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
 }
 
-.wall {
-    background: linear-gradient(180deg, #273144, #1b2432);
-    opacity: 0.95;
+.dpad-btn:hover {
+    background: rgba(255, 255, 255, 0.16);
 }
 
-.path {
-    background: linear-gradient(180deg, #071226, #071226);
-    border: 1px solid rgba(255, 255, 255, 0.02);
+.dpad-btn:active {
+    transform: translateY(1px);
+    background: var(--accent);
 }
 
-/* player (green) with slight glow */
-.player {
-    background: linear-gradient(180deg, #22c55e, #16a34a);
-    box-shadow: 0 6px 18px rgba(34, 197, 94, 0.18);
-    transform: scale(1.02);
+/* game over overlay */
+.game-over-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.72);
+    border-radius: var(--radius);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+    text-align: center;
+    padding: 1rem;
+    z-index: 3;
 }
 
-.player::after {
-    content: "";
-    display: block;
-    width: 60%;
-    height: 60%;
-    margin: 8% auto 0;
-    border-radius: 3px;
-    background: radial-gradient(circle at 40% 30%, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.02));
-    opacity: 0.6;
+.game-over-overlay.show {
+    opacity: 1;
+    pointer-events: auto;
 }
 
-/* goal (red) pulsing animation */
-.end {
-    background: linear-gradient(180deg, #fb7185, #ef4444);
-    box-shadow: 0 6px 18px rgba(239, 68, 68, 0.16);
-    animation: pulse 1.6s infinite;
+.game-over-content {
+    animation: celebrate 0.5s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
 }
 
-@keyframes pulse {
+.game-over-message {
+    color: #fff;
+    font-weight: 800;
+    font-size: 1.5rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.game-over-detail {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 0.5rem;
+}
+
+@keyframes celebrate {
     0% {
         transform: scale(1);
-        opacity: 1;
     }
 
     50% {
-        transform: scale(1.06);
-        opacity: 0.9;
+        transform: scale(1.1);
     }
 
     100% {
         transform: scale(1);
-        opacity: 1;
     }
 }
 
-/* hint cell flash (light yellow) */
-.hint {
-    background: linear-gradient(180deg, #fffbeb, #fef3c7);
-    box-shadow: 0 6px 12px rgba(255, 223, 93, 0.12);
-    transform: scale(0.98);
-    animation: hintGlow 900ms ease-in-out;
+/* responsive */
+@media (max-width: 560px) {
+    .game-stats {
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-areas:
+            "moves gems time"
+            "status status status";
+    }
+
+    .moves-stat {
+        grid-area: moves;
+    }
+
+    .gems-stat {
+        grid-area: gems;
+    }
+
+    .time-stat {
+        grid-area: time;
+    }
+
+    .status-block {
+        grid-area: status;
+    }
+
+    #status {
+        white-space: normal;
+    }
 }
 
-@keyframes hintGlow {
-    0% {
-        transform: scale(0.9);
-        opacity: 0;
+@media (max-width: 480px) {
+    #game-container {
+        padding: 0.75rem 0.5rem;
     }
 
-    60% {
-        transform: scale(1.03);
-        opacity: 1;
+    #game-settings {
+        gap: 0.5rem 0.75rem;
     }
 
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
-/* responsive tweaks for smaller screens */
-@media (max-width: 768px) {
-    .maze-controls-top {
-        flex-direction: column;
-        align-items: stretch;
+    #game-settings select {
+        min-width: 0;
+        padding: 0.4rem 0.5rem;
+        font-size: 0.85rem;
     }
 
-    .maze-left-controls,
-    .maze-right-controls {
-        width: 100%;
-        justify-content: center;
+    .dpad-btn {
+        width: 52px;
+        height: 52px;
     }
 
-    .maze-container {
-        max-width: 90vw;
-        overflow: auto;
+    .game-over-message {
+        font-size: 1.25rem;
     }
 }

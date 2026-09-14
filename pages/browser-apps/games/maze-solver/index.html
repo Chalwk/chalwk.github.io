@@ -1,78 +1,92 @@
 ---
 layout: default
 title: Maze Solver
-description: Play a maze game with WASD or arrow keys, or touch controls.
+description: Collect every gem, then escape the maze.
 ---
 
 <!-- Copyright (c) 2024-2026 Jericho Crosby (Chalwk). All Rights Reserved. -->
 
-<link href="style.css" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 
 <main>
     <div class="container">
-        <section class="panel maze-panel">
+        <section class="panel">
             <div class="panel-head">
-                <h1 class="maze-title">Maze Solver</h1>
-                <p class="muted small maze-subtitle">WASD / Arrows • Touch-friendly • Hint included</p>
+                <h1>Maze Solver</h1>
+                <p class="muted small">Collect every gem, then reach the exit. WASD / Arrows or touch D-pad.</p>
             </div>
 
-            <!-- quick instructions for players -->
-            <div class="maze-instructions">
-                <h4 class="instructions-title"><i class="fas fa-info-circle"></i> Objective:</h4>
-                <p>Move your <span class="pill green">player</span> to the <span class="pill red">goal</span>. Use WASD
-                    or arrow keys, or the touch D-pad below.</p>
+            <div id="game-settings">
+                <label for="maze-size">Maze Size
+                    <select id="maze-size">
+                        <option value="11">11 &times; 11</option>
+                        <option value="15" selected>15 &times; 15</option>
+                        <option value="21">21 &times; 21</option>
+                        <option value="31">31 &times; 31</option>
+                    </select>
+                </label>
+                <label for="difficulty">Difficulty
+                    <select id="difficulty">
+                        <option value="easy">Easy</option>
+                        <option value="normal" selected>Normal</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </label>
+                <label class="toggle-label" for="fog-toggle">
+                    <input type="checkbox" id="fog-toggle"> Fog of War
+                </label>
             </div>
 
-            <!-- top toolbar: restart, hint, size selector, return button -->
-            <div class="maze-controls-top">
-                <div class="maze-left-controls">
-                    <button class="btn" id="reset-btn"><i class="fas fa-redo"></i> Restart</button>
-                    <button class="btn btn-secondary" id="hint-btn"><i class="fas fa-lightbulb"></i> Show Hint</button>
+            <div id="game-container">
+                <div class="game-stats">
+                    <div class="stat-block moves-stat">
+                        <strong>Moves</strong>
+                        <span id="moves" class="score">0</span>
+                    </div>
+                    <div class="stat-block gems-stat">
+                        <strong>Gems</strong>
+                        <span id="gems" class="score">0 / 0</span>
+                    </div>
+                    <div class="status-block">
+                        <span id="status">Collect every gem, then reach the exit</span>
+                    </div>
+                    <div class="stat-block time-stat">
+                        <strong>Time</strong>
+                        <span id="timer" class="score">0:00</span>
+                    </div>
                 </div>
-                <div class="maze-right-controls">
-                    <label class="size-select-label">
-                        Maze Size:
-                        <select class="maze-size-select" id="size-select">
-                            <option value="11">11 × 11</option>
-                            <option selected value="15">15 × 15</option>
-                            <option value="21">21 × 21</option>
-                            <option value="31">31 × 31</option>
-                        </select>
-                    </label>
-                    <button class="btn btn-secondary" id="browser-btn"><i class="fas fa-arrow-left"></i> Return</button>
-                </div>
-            </div>
 
-            <!-- live stats: moves, timer, best score for this maze size -->
-            <div class="maze-game-stats">
-                <div class="stat-item">
-                    <strong class="stat-label">Moves:</strong>
-                    <span class="stat-value" id="score">0</span>
-                </div>
-                <div class="stat-item">
-                    <strong class="stat-label">Time:</strong>
-                    <span class="stat-value" id="timer">0s</span>
-                </div>
-                <div class="stat-item">
-                    <strong class="stat-label">Best:</strong>
-                    <span class="stat-value" id="best">-</span>
-                </div>
-            </div>
+                <div class="board-wrap">
+                    <div class="maze-board" id="maze-board"></div>
 
-            <!-- the actual maze grid will be injected here -->
-            <div class="maze-game-container" id="game-container">
-                <div class="maze-container" id="maze-container"></div>
-            </div>
+                    <div class="game-over-overlay" id="game-over-overlay">
+                        <div class="game-over-content">
+                            <div id="game-over-message" class="game-over-message"></div>
+                            <div id="game-over-detail" class="game-over-detail"></div>
+                            <button class="btn btn-secondary" id="play-again">Play Again</button>
+                        </div>
+                    </div>
+                </div>
 
-            <!-- touch-friendly D-pad for mobile users -->
-            <div class="maze-touch-controls">
-                <h4 class="touch-controls-title"><i class="fas fa-gamepad"></i> Touch Controls:</h4>
+                <div class="action-row">
+                    <button class="btn btn-secondary" id="reset">
+                        <i class="fas fa-redo"></i> New Maze
+                    </button>
+                    <button class="btn btn-secondary" id="hint-btn">
+                        <i class="fas fa-lightbulb"></i> Hint
+                    </button>
+                    <button class="btn btn-secondary btn-icon" id="sound-toggle" aria-pressed="false"
+                        title="Sound on (click to mute)">
+                        <i class="fas fa-volume-up"></i>
+                    </button>
+                </div>
+
                 <div class="dpad" id="touch-controls">
-                    <button class="dpad-btn" data-dir="up">▲</button>
+                    <button class="dpad-btn" data-dir="up" aria-label="Move up">&#9650;</button>
                     <div class="dpad-row">
-                        <button class="dpad-btn" data-dir="left">◀</button>
-                        <button class="dpad-btn" data-dir="down">▼</button>
-                        <button class="dpad-btn" data-dir="right">▶</button>
+                        <button class="dpad-btn" data-dir="left" aria-label="Move left">&#9664;</button>
+                        <button class="dpad-btn" data-dir="down" aria-label="Move down">&#9660;</button>
+                        <button class="dpad-btn" data-dir="right" aria-label="Move right">&#9654;</button>
                     </div>
                 </div>
             </div>
