@@ -24,11 +24,22 @@ description: Untangle the ropes by dragging the dots. Clear all red crossings to
                         <span id="levelLabel" class="score score-level">1</span>
                     </div>
                     <div class="status-block">
-                        <span id="status">Drag the dots to untangle</span>
+                        <span id="status" aria-live="polite">Drag the dots to untangle</span>
                     </div>
                     <div class="stat-block cross-stat">
                         <strong>Crossings</strong>
                         <span id="crossCount" class="score score-crossings">0</span>
+                    </div>
+                </div>
+
+                <div class="meta-stats">
+                    <div class="meta-block">
+                        <strong>Moves</strong>
+                        <span id="movesCount" class="score-meta">0</span>
+                    </div>
+                    <div class="meta-block">
+                        <strong>Time</strong>
+                        <span id="timeCount" class="score-meta">00:00</span>
                     </div>
                 </div>
 
@@ -39,7 +50,7 @@ description: Untangle the ropes by dragging the dots. Clear all red crossings to
                     <div class="game-over-overlay" id="game-over-overlay">
                         <div class="game-over-content">
                             <div class="game-over-message">Puzzle Solved!</div>
-                            <div class="game-over-detail">Ready for the next one?</div>
+                            <div class="game-over-detail" id="winDetail">Ready for the next one?</div>
                             <div class="game-over-actions">
                                 <button class="btn" id="winNext">Next Level</button>
                                 <button class="btn btn-secondary" id="winShuffle">Shuffle</button>
@@ -48,6 +59,17 @@ description: Untangle the ropes by dragging the dots. Clear all red crossings to
                     </div>
                 </div>
 
+                <div class="action-row">
+                    <button class="btn btn-secondary" id="undoBtn" disabled aria-label="Undo last move">
+                        <i class="fas fa-undo"></i> Undo
+                    </button>
+                    <button class="btn btn-secondary" id="hintBtn" aria-label="Show a hint">
+                        <i class="fas fa-lightbulb"></i> Hint
+                    </button>
+                    <button class="btn btn-secondary" id="muteBtn" aria-label="Mute sound">
+                        <i class="fas fa-volume-up"></i>
+                    </button>
+                </div>
                 <div class="action-row">
                     <button class="btn btn-secondary" id="resetBtn">
                         <i class="fas fa-redo"></i> New Puzzle

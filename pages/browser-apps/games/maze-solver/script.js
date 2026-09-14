@@ -62,7 +62,7 @@ let hintTimeoutId = null;
 let hintedCells = [];
 
 // ---------------------------------------------------------------------------
-// Sound (Web Audio, synthesized — no assets needed)
+// Sound (Web Audio, synthesized - no assets needed)
 // ---------------------------------------------------------------------------
 let audioCtx = null;
 let soundMuted = localStorage.getItem('maze-sound-muted') === 'true';
@@ -403,11 +403,11 @@ function initMaze() {
 
     maze = generateMaze(mazeSize, preset.extraOpenings);
 
-    // Player entrance is always at (1, 0) — the top edge opening.
+    // Player entrance is always at (1, 0) - the top edge opening.
     player = { x: 1, y: 0 };
     trailSet = new Set(['1,0']);
 
-    // Exit auto-placed at the farthest reachable cell — guarantees a long,
+    // Exit auto-placed at the farthest reachable cell - guarantees a long,
     // always-solvable path no matter how the maze was carved.
     const { farthest, dist } = bfsFarthest(maze, player);
     exitCell = farthest;

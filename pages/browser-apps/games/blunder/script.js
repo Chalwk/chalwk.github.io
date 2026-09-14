@@ -94,7 +94,7 @@ function saveStats(wonGame, guesses) {
     }
     try {
         localStorage.setItem(STATS_KEY, JSON.stringify(s));
-    } catch (e) { /* storage unavailable — ignore */ }
+    } catch (e) { /* storage unavailable - ignore */ }
 }
 
 // ---------------------------------------------------------------------------
@@ -258,7 +258,7 @@ function handleKey(key) {
 
 function handleTileClick(r, c) {
     if (finished || r !== row) return;
-    // Clicking past the cursor would create a gap — ignore.
+    // Clicking past the cursor would create a gap - ignore.
     if (c > col) return;
     col = c;
     for (let i = c; i < WORD_LENGTH; i++) {
@@ -284,7 +284,7 @@ function evaluateGuess(guess, secretWord) {
     const secretArr = secretWord.split('');
     const guessArr = guess.split('');
 
-    // First pass — exact matches
+    // First pass - exact matches
     for (let i = 0; i < WORD_LENGTH; i++) {
         if (guessArr[i] === secretArr[i]) {
             status[i] = 'correct';
@@ -292,7 +292,7 @@ function evaluateGuess(guess, secretWord) {
             guessArr[i] = null;
         }
     }
-    // Second pass — misplaced letters
+    // Second pass - misplaced letters
     for (let i = 0; i < WORD_LENGTH; i++) {
         if (guessArr[i] === null) continue;
         const idx = secretArr.indexOf(guessArr[i]);

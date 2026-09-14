@@ -28,9 +28,9 @@ const TARGET_STEP = 3;
 
 const HEALTH_MAX = 100;
 
-// Player sizing — deliberately smaller than before.
+// Player sizing - deliberately smaller than before.
 const PLAYER_R = 14;        // starting radius (was 22)
-const PLAYER_MAX_R = 42;    // hard cap (was 62 — the "too big to play" zone)
+const PLAYER_MAX_R = 42;    // hard cap (was 62 - the "too big to play" zone)
 const PLAYER_ACCEL = 3200;
 const PLAYER_SPEED = 380;
 const PLAYER_DRAG = 0.05;
@@ -66,7 +66,7 @@ const POWERUPS = {
     shrink: { color: '#a78bfa', short: 'X', label: 'Shrink' },
 };
 
-// Weighted pool — Shrink is far more likely so a run doesn't snowball into
+// Weighted pool - Shrink is far more likely so a run doesn't snowball into
 // an unplayable blob. Total is irrelevant; only ratios matter.
 const POWERUP_WEIGHTS = {
     clean: 14,
@@ -301,7 +301,7 @@ function updateShapes(dt) {
         if (s.y < -m) s.y = H + m;
         else if (s.y > H + m) s.y = -m;
 
-        // Collision vs. player — wrapped so the seam doesn't break it.
+        // Collision vs. player - wrapped so the seam doesn't break it.
         const dx = wrappedDelta(p.x, s.x, W);
         const dy = wrappedDelta(p.y, s.y, H);
         const dist = Math.hypot(dx, dy);
@@ -408,7 +408,7 @@ function applyPowerup(key) {
             state.magnetTimer = 6;
             break;
         case 'shrink':
-            // Aggressive shrink — this is the safety valve for a
+            // Aggressive shrink - this is the safety valve for a
             // snowballed player.
             p.r = Math.max(PLAYER_R, p.r - 14);
             state.score += 50;
@@ -527,7 +527,7 @@ function update(dt) {
 }
 
 // ---------------------------------------------------------------------------
-// Rendering — shape paths
+// Rendering - shape paths
 // ---------------------------------------------------------------------------
 function polygonPath(sides, r) {
     for (let i = 0; i < sides; i++) {
@@ -854,7 +854,7 @@ function resetGame() {
 }
 
 // ---------------------------------------------------------------------------
-// Input — keyboard only
+// Input - keyboard only
 // ---------------------------------------------------------------------------
 document.addEventListener('keydown', (e) => {
     const k = e.key.toLowerCase();

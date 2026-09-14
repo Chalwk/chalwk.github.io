@@ -905,7 +905,7 @@ function drawBackground() {
     }
     ctx.globalAlpha = 1;
 
-    // Faint grid — subtle parallax too
+    // Faint grid - subtle parallax too
     const gridX = wrap(-game.parallaxX * 0.08, 60);
     const gridY = wrap(-game.parallaxY * 0.08, 60);
     ctx.strokeStyle = 'rgba(255,255,255,0.022)';

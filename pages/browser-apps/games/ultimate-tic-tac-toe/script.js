@@ -284,7 +284,7 @@ function updateStatus() {
         ? 'any open board'
         : `board ${nextBoard + 1}`;
 
-    status.textContent = `${turnLabel} — play in ${boardLabel}`;
+    status.textContent = `${turnLabel} - play in ${boardLabel}`;
     status.className = '';
 }
 
@@ -304,7 +304,7 @@ function endGame(winner) {
         message = opponentIsAI
             ? 'AI Wins!'
             : `Player ${winner} Wins!`;
-        detail = `Small boards — X: ${score1Display.textContent}   O: ${score2Display.textContent}`;
+        detail = `Small boards - X: ${score1Display.textContent}   O: ${score2Display.textContent}`;
         status.className = 'win-message';
     }
 
@@ -409,7 +409,7 @@ function evaluateAIMove(boardIndex, cellIndex, player) {
     // --- Where are we sending the opponent?
     const sentBoard = cellIndex;
     if (smallBoardWinners[sentBoard]) {
-        // Opponent gets a free move anywhere — generally bad for us.
+        // Opponent gets a free move anywhere - generally bad for us.
         score -= 180;
     } else {
         const oppThreatsThere = countThreats(board[sentBoard], opponent);

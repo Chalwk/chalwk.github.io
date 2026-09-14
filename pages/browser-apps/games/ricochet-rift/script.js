@@ -386,7 +386,7 @@ function endGame(winner) {
     state.gameOver = true;
     const name = winner === 1 ? 'Player 1' : 'AI';
     overlayMessage.textContent = `${name} Wins!`;
-    overlayScore.textContent = `${state.scores[1]} — ${state.scores[2]}`;
+    overlayScore.textContent = `${state.scores[1]} - ${state.scores[2]}`;
     overlay.classList.add('show');
     statusEl.textContent = `${name} Wins!`;
     statusEl.className = 'win-message';

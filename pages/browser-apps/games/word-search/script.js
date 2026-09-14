@@ -329,7 +329,7 @@ function updateStatus(text, className = '') {
 }
 
 // ---------------------------------------------------------------------------
-// Sound effects (synthesized via Web Audio API — no audio files required)
+// Sound effects (synthesized via Web Audio API - no audio files required)
 // ---------------------------------------------------------------------------
 function updateSoundIcon() {
     if (!soundToggleBtn) return;

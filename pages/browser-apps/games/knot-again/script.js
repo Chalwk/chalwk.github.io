@@ -1,19 +1,81 @@
 // Copyright (c) 2024-2026 Jericho Crosby (Chalwk). All Rights Reserved.
 
 (() => {
-    // DOM elements
+    // ---------- DOM ----------
     const svg = document.getElementById('game-board');
     const resetBtn = document.getElementById('resetBtn');
     const shuffleBtn = document.getElementById('shuffleBtn');
     const nextBtn = document.getElementById('nextBtn');
+    const undoBtn = document.getElementById('undoBtn');
+    const hintBtn = document.getElementById('hintBtn');
+    const muteBtn = document.getElementById('muteBtn');
     const winOverlay = document.getElementById('game-over-overlay');
     const winNext = document.getElementById('winNext');
     const winShuffle = document.getElementById('winShuffle');
+    const winDetail = document.getElementById('winDetail');
     const levelLabel = document.getElementById('levelLabel');
     const crossCountEl = document.getElementById('crossCount');
     const statusEl = document.getElementById('status');
+    const movesEl = document.getElementById('movesCount');
+    const timeEl = document.getElementById('timeCount');
 
-    // game state
+    const STORAGE_KEY = 'knot-again-save-v1';
+
+    // ---------- sound (procedural) ----------
+    const Sound = (() => {
+        let ctx = null;
+        let muted = localStorage.getItem(STORAGE_KEY + ':muted') === '1';
+
+        function ensureCtx() {
+            if (!ctx) {
+                const AC = window.AudioContext || window.webkitAudioContext;
+                if (AC) ctx = new AC();
+            }
+            if (ctx && ctx.state === 'suspended') ctx.resume();
+            return ctx;
+        }
+
+        function tone({ freq = 440, duration = 0.12, type = 'sine', gain = 0.07, glideTo = null, delay = 0 }) {
+            if (muted) return;
+            const c = ensureCtx();
+            if (!c) return;
+            const osc = c.createOscillator();
+            const g = c.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, c.currentTime + delay);
+            if (glideTo) osc.frequency.exponentialRampToValueAtTime(glideTo, c.currentTime + delay + duration);
+            g.gain.setValueAtTime(0.0001, c.currentTime + delay);
+            g.gain.linearRampToValueAtTime(gain, c.currentTime + delay + 0.01);
+            g.gain.exponentialRampToValueAtTime(0.0001, c.currentTime + delay + duration);
+            osc.connect(g).connect(c.destination);
+            osc.start(c.currentTime + delay);
+            osc.stop(c.currentTime + delay + duration + 0.03);
+        }
+
+        return {
+            pickup() { tone({ freq: 320, duration: 0.08, type: 'triangle', gain: 0.05 }); },
+            drop() { tone({ freq: 220, duration: 0.09, type: 'triangle', gain: 0.05 }); },
+            crossingCleared() { tone({ freq: 660, duration: 0.12, type: 'sine', gain: 0.06, glideTo: 880 }); },
+            click() { tone({ freq: 380, duration: 0.05, type: 'square', gain: 0.04 }); },
+            undo() { tone({ freq: 260, duration: 0.09, type: 'sawtooth', gain: 0.04 }); },
+            hint() { tone({ freq: 700, duration: 0.15, type: 'sine', gain: 0.05, glideTo: 950 }); },
+            win() {
+                [523.25, 659.25, 783.99, 1046.5].forEach((f, i) =>
+                    tone({ freq: f, duration: 0.2, type: 'sine', gain: 0.07, delay: i * 0.09 })
+                );
+            },
+            unlock() { ensureCtx(); },
+            toggleMute() {
+                muted = !muted;
+                localStorage.setItem(STORAGE_KEY + ':muted', muted ? '1' : '0');
+                if (!muted) ensureCtx();
+                return muted;
+            },
+            isMuted() { return muted; },
+        };
+    })();
+
+    // ---------- game state ----------
     const state = {
         level: 1,
         nodes: [],
@@ -21,6 +83,12 @@
         w: 1000,
         h: 700,
     };
+
+    let activeDrag = null;   // { node, offsetX, offsetY, startX, startY, startCrossCount }
+    let undoStack = [];      // array of move-lists: [{ id, x, y }, ...]
+    let moves = 0;
+    let elapsedSeconds = 0;
+    let timerInterval = null;
 
     // --- geometry helpers ---
     // check if two line segments (p1-p2, p3-p4) intersect
@@ -45,6 +113,10 @@
         return (o1 * o2 < 0) && (o3 * o4 < 0);
     }
 
+    function clamp(v, min, max) {
+        return Math.max(min, Math.min(max, v));
+    }
+
     function makeSvg(tag, attrs) {
         const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
         for (const k in attrs) el.setAttribute(k, attrs[k]);
@@ -53,6 +125,12 @@
 
     function clearSvg() {
         while (svg.firstChild) svg.removeChild(svg.firstChild);
+    }
+
+    function formatTime(sec) {
+        const m = Math.floor(sec / 60).toString().padStart(2, '0');
+        const s = (sec % 60).toString().padStart(2, '0');
+        return `${m}:${s}`;
     }
 
     // --- level generation ---
@@ -145,6 +223,9 @@
             const g = makeSvg('g', {
                 class: 'knot-node',
                 transform: `translate(${n.x}, ${n.y})`,
+                tabindex: '0',
+                role: 'button',
+                'aria-label': `Knot point ${n.id + 1}. Use arrow keys to move.`,
             });
             const circle = makeSvg('circle', {
                 cx: 0, cy: 0, r: n.radius,
@@ -168,78 +249,126 @@
             n.group = g;
             n.circle = circle;
             n.labelEl = label;
-            attachPointerHandlers(g, n);
+            attachNodeHandlers(g, n);
         }
 
         updateCounts();
         checkCrossings();
     }
 
-    // drag & drop for nodes (mouse + touch)
-    function attachPointerHandlers(el, node) {
-        let dragging = false;
-        const offset = { x: 0, y: 0 };
+    // single set of document-level listeners (attached once, see bottom of
+    // this section) drives dragging for every node - avoids leaking a new
+    // pair of document listeners per node on every level like the old code did
+    function svgPoint(e) {
+        const p = svg.createSVGPoint();
+        p.x = e.clientX;
+        p.y = e.clientY;
+        const ctm = svg.getScreenCTM().inverse();
+        const loc = p.matrixTransform(ctm);
+        return { x: loc.x, y: loc.y };
+    }
 
-        function pt(e) {
-            const p = svg.createSVGPoint();
-            p.x = e.clientX;
-            p.y = e.clientY;
-            const ctm = svg.getScreenCTM().inverse();
-            const loc = p.matrixTransform(ctm);
-            return { x: loc.x, y: loc.y };
-        }
+    function attachNodeHandlers(el, node) {
+        el.addEventListener('pointerdown', (e) => startDrag(e, node));
+        el.addEventListener('keydown', (e) => onKeyNudge(e, node));
+    }
 
-        function onDown(e) {
-            if (e.type === 'touchstart') e.preventDefault();
-            dragging = true;
-            const p = pt(e.type === 'touchstart' ? e.touches[0] : e);
-            offset.x = node.x - p.x;
-            offset.y = node.y - p.y;
-            node.circle.classList.add('dragging');
-            node.circle.setAttribute('r', node.radius + 3);
-        }
+    function startDrag(e, node) {
+        e.preventDefault();
+        const p = svgPoint(e);
+        activeDrag = {
+            node,
+            offsetX: node.x - p.x,
+            offsetY: node.y - p.y,
+            startX: node.x,
+            startY: node.y,
+            startCrossCount: computeCrossingIndices().size,
+        };
+        node.circle.classList.add('dragging');
+        node.circle.setAttribute('r', node.radius + 3);
+        safeCapture(node.group, e.pointerId);
+        Sound.pickup();
+    }
 
-        function onMove(e) {
-            if (!dragging) return;
-            const p = pt(e.type === 'touchmove' ? e.touches[0] : e);
-            const padding = 30;
-            node.x = Math.max(padding, Math.min(state.w - padding, p.x + offset.x));
-            node.y = Math.max(padding, Math.min(state.h - padding, p.y + offset.y));
+    function safeCapture(el, pointerId) {
+        try { el.setPointerCapture(pointerId); } catch (err) { /* not supported, ignore */ }
+    }
 
-            node.group.setAttribute('transform', `translate(${node.x}, ${node.y})`);
+    function onDragMove(e) {
+        if (!activeDrag) return;
+        const p = svgPoint(e);
+        const node = activeDrag.node;
+        const padding = 30;
+        node.x = clamp(p.x + activeDrag.offsetX, padding, state.w - padding);
+        node.y = clamp(p.y + activeDrag.offsetY, padding, state.h - padding);
+        node.group.setAttribute('transform', `translate(${node.x}, ${node.y})`);
+        updateAllEdges();
+        checkCrossings();
+    }
 
-            // update connected edges
-            for (const e of state.edges) {
-                if (e.a === node.id || e.b === node.id) {
-                    const A = state.nodes[e.a];
-                    const B = state.nodes[e.b];
-                    e.el.setAttribute('x1', A.x);
-                    e.el.setAttribute('y1', A.y);
-                    e.el.setAttribute('x2', B.x);
-                    e.el.setAttribute('y2', B.y);
-                }
-            }
+    function endDrag() {
+        if (!activeDrag) return;
+        const { node, startX, startY, startCrossCount } = activeDrag;
+        node.circle.classList.remove('dragging');
+        node.circle.setAttribute('r', node.radius);
+
+        const dist = Math.hypot(node.x - startX, node.y - startY);
+        if (dist > 4) {
+            pushUndo([{ id: node.id, x: startX, y: startY }]);
+            incrementMoves();
+            startTimerIfNeeded();
+            const newCount = checkCrossings();
+            Sound.drop();
+            if (newCount < startCrossCount) Sound.crossingCleared();
+        } else {
             checkCrossings();
         }
+        activeDrag = null;
+    }
 
-        function onUp() {
-            if (!dragging) return;
-            dragging = false;
-            node.circle.classList.remove('dragging');
-            node.circle.setAttribute('r', node.radius);
-            checkCrossings();
+    document.addEventListener('pointermove', onDragMove);
+    document.addEventListener('pointerup', endDrag);
+    document.addEventListener('pointercancel', endDrag);
+
+    // keyboard nudge - lets keyboard/switch-device users play without a mouse
+    function onKeyNudge(e, node) {
+        const step = e.shiftKey ? 24 : 8;
+        let dx = 0, dy = 0;
+        switch (e.key) {
+            case 'ArrowLeft': dx = -step; break;
+            case 'ArrowRight': dx = step; break;
+            case 'ArrowUp': dy = -step; break;
+            case 'ArrowDown': dy = step; break;
+            default: return;
         }
+        e.preventDefault();
+        const startX = node.x, startY = node.y;
+        const startCrossCount = computeCrossingIndices().size;
+        const padding = 30;
+        node.x = clamp(node.x + dx, padding, state.w - padding);
+        node.y = clamp(node.y + dy, padding, state.h - padding);
+        node.group.setAttribute('transform', `translate(${node.x}, ${node.y})`);
+        updateAllEdges();
+        const newCount = checkCrossings();
+        pushUndo([{ id: node.id, x: startX, y: startY }]);
+        incrementMoves();
+        startTimerIfNeeded();
+        if (newCount < startCrossCount) Sound.crossingCleared();
+    }
 
-        el.addEventListener('mousedown', onDown);
-        el.addEventListener('touchstart', onDown, { passive: false });
-        document.addEventListener('mousemove', onMove);
-        document.addEventListener('touchmove', onMove, { passive: false });
-        document.addEventListener('mouseup', onUp);
-        document.addEventListener('touchend', onUp);
+    function updateAllEdges() {
+        for (const e of state.edges) {
+            const A = state.nodes[e.a];
+            const B = state.nodes[e.b];
+            e.el.setAttribute('x1', A.x);
+            e.el.setAttribute('y1', A.y);
+            e.el.setAttribute('x2', B.x);
+            e.el.setAttribute('y2', B.y);
+        }
     }
 
     // --- crossing detection & win condition ---
-    function checkCrossings() {
+    function computeCrossingIndices() {
         const crossings = new Set();
         for (let i = 0; i < state.edges.length; i++) {
             for (let j = i + 1; j < state.edges.length; j++) {
@@ -256,17 +385,22 @@
                 }
             }
         }
+        return crossings;
+    }
 
-        let crossCount = 0;
+    function checkCrossings() {
+        const crossings = computeCrossingIndices();
+
         for (let i = 0; i < state.edges.length; i++) {
             const e = state.edges[i];
             if (crossings.has(i)) {
                 e.el.classList.add('crossing');
-                crossCount++;
             } else {
                 e.el.classList.remove('crossing');
             }
         }
+
+        const crossCount = crossings.size;
         crossCountEl.textContent = crossCount.toString();
 
         if (crossCount === 0) {
@@ -280,15 +414,122 @@
             statusEl.classList.remove('win-message');
             hideWin();
         }
+        return crossCount;
     }
 
     function updateCounts() {
         levelLabel.textContent = state.level;
     }
 
+    // --- moves / timer ---
+    function incrementMoves() {
+        moves++;
+        movesEl.textContent = moves.toString();
+    }
+
+    function resetMoves() {
+        moves = 0;
+        movesEl.textContent = '0';
+    }
+
+    function startTimerIfNeeded() {
+        if (timerInterval) return;
+        timerInterval = setInterval(() => {
+            elapsedSeconds++;
+            timeEl.textContent = formatTime(elapsedSeconds);
+        }, 1000);
+    }
+
+    function stopTimer() {
+        clearInterval(timerInterval);
+        timerInterval = null;
+    }
+
+    function resetTimer() {
+        stopTimer();
+        elapsedSeconds = 0;
+        timeEl.textContent = '00:00';
+    }
+
+    // --- undo ---
+    function pushUndo(moveList) {
+        undoStack.push(moveList);
+        if (undoStack.length > 30) undoStack.shift();
+        refreshUndoButton();
+    }
+
+    function refreshUndoButton() {
+        undoBtn.disabled = undoStack.length === 0;
+    }
+
+    undoBtn.addEventListener('click', () => {
+        const entries = undoStack.pop();
+        if (!entries) return;
+        for (const entry of entries) {
+            const node = state.nodes[entry.id];
+            node.x = entry.x;
+            node.y = entry.y;
+            node.group.setAttribute('transform', `translate(${node.x}, ${node.y})`);
+        }
+        updateAllEdges();
+        checkCrossings();
+        refreshUndoButton();
+        Sound.undo();
+    });
+
+    // --- hint ---
+    function findFirstCrossingPair() {
+        for (let i = 0; i < state.edges.length; i++) {
+            for (let j = i + 1; j < state.edges.length; j++) {
+                const e1 = state.edges[i];
+                const e2 = state.edges[j];
+                if (e1.a === e2.a || e1.a === e2.b || e1.b === e2.a || e1.b === e2.b) continue;
+                const p1 = state.nodes[e1.a];
+                const p2 = state.nodes[e1.b];
+                const p3 = state.nodes[e2.a];
+                const p4 = state.nodes[e2.b];
+                if (segmentsIntersect(p1, p2, p3, p4)) return [e1, e2];
+            }
+        }
+        return null;
+    }
+
+    hintBtn.addEventListener('click', () => {
+        Sound.click();
+        const pair = findFirstCrossingPair();
+        if (!pair) {
+            statusEl.textContent = 'No crossings left to hint!';
+            return;
+        }
+        Sound.hint();
+        pair.forEach(e => {
+            e.el.classList.add('hint-flash');
+            setTimeout(() => e.el.classList.remove('hint-flash'), 1200);
+        });
+    });
+
+    // --- mute ---
+    function refreshMuteButton() {
+        muteBtn.innerHTML = Sound.isMuted()
+            ? '<i class="fas fa-volume-mute"></i>'
+            : '<i class="fas fa-volume-up"></i>';
+        muteBtn.setAttribute('aria-label', Sound.isMuted() ? 'Unmute sound' : 'Mute sound');
+    }
+
+    muteBtn.addEventListener('click', () => {
+        Sound.toggleMute();
+        refreshMuteButton();
+        Sound.click();
+    });
+
     // win overlay + confetti celebration
     function onWin() {
+        if (winOverlay.classList.contains('show')) return;
+        stopTimer();
+        winDetail.textContent = `Solved in ${moves} move${moves === 1 ? '' : 's'}, ${formatTime(elapsedSeconds)}`;
         winOverlay.classList.add('show');
+        Sound.win();
+        if (navigator.vibrate) navigator.vibrate([80, 40, 80]);
         burstConfetti();
     }
 
@@ -321,14 +562,36 @@
         }
     }
 
+    // --- progress persistence (remembers which level you were on) ---
+    function saveProgress() {
+        try { localStorage.setItem(STORAGE_KEY + ':level', String(state.level)); } catch (err) { /* ignore */ }
+    }
+
+    function loadProgress() {
+        try {
+            const v = localStorage.getItem(STORAGE_KEY + ':level');
+            const n = v ? parseInt(v, 10) : 1;
+            return Number.isFinite(n) && n > 0 ? n : 1;
+        } catch (err) {
+            return 1;
+        }
+    }
+
     // --- button handlers ---
     resetBtn.addEventListener('click', () => {
+        Sound.click();
         hideWin();
+        undoStack = [];
+        refreshUndoButton();
+        resetMoves();
+        resetTimer();
         buildScene(generateLevel(state.level));
     });
 
     shuffleBtn.addEventListener('click', () => {
+        Sound.click();
         // randomly swap node positions (keep the same graph structure)
+        const before = state.nodes.map(n => ({ id: n.id, x: n.x, y: n.y }));
         const positions = state.nodes.map(n => ({ x: n.x, y: n.y }));
         const shuffled = shuffleArray(positions);
         state.nodes.forEach((n, i) => {
@@ -336,23 +599,19 @@
             n.y = shuffled[i].y;
             n.group.setAttribute('transform', `translate(${n.x}, ${n.y})`);
         });
-        for (const e of state.edges) {
-            const A = state.nodes[e.a];
-            const B = state.nodes[e.b];
-            e.el.setAttribute('x1', A.x);
-            e.el.setAttribute('y1', A.y);
-            e.el.setAttribute('x2', B.x);
-            e.el.setAttribute('y2', B.y);
-        }
+        updateAllEdges();
+        pushUndo(before);
         checkCrossings();
     });
 
     nextBtn.addEventListener('click', () => {
+        Sound.click();
         state.level++;
         startLevel(state.level);
     });
 
     winNext.addEventListener('click', () => {
+        Sound.click();
         state.level++;
         startLevel(state.level);
     });
@@ -366,7 +625,12 @@
         state.level = level;
         updateCounts();
         hideWin();
+        undoStack = [];
+        refreshUndoButton();
+        resetMoves();
+        resetTimer();
         buildScene(generateLevel(level));
+        saveProgress();
     }
 
     // small mobile tweak: adjust viewBox height on portrait
@@ -381,6 +645,9 @@
     function init() {
         adjustForMobile();
         svg.setAttribute('viewBox', `0 0 ${state.w} ${state.h}`);
+        refreshMuteButton();
+        refreshUndoButton();
+        state.level = loadProgress();
         startLevel(state.level);
     }
 

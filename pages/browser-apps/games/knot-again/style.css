@@ -149,7 +149,7 @@
     pointer-events: none;
 }
 
-/* edges — normal vs crossing (red) */
+/* edges - normal vs crossing (red) */
 .knot-edge {
     stroke: rgba(255, 255, 255, 0.55);
     stroke-width: 3;
@@ -280,5 +280,82 @@
 
     .status-block {
         margin-top: 0.15rem;
+    }
+}
+
+/* --- secondary stats row (moves / time) --- */
+.meta-stats {
+    display: flex;
+    justify-content: center;
+    gap: 1.75rem;
+    width: 100%;
+}
+
+.meta-block {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+}
+
+.meta-block strong {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.score-meta {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #6ea8fe;
+}
+
+/* --- keyboard accessibility for draggable nodes --- */
+.knot-node:focus-visible .knot-node-circle,
+.knot-node:focus .knot-node-circle {
+    stroke: #ffd166;
+    stroke-width: 3;
+}
+
+/* --- disabled control buttons --- */
+.action-row .btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* --- hint flash on edges --- */
+.knot-edge.hint-flash {
+    stroke: #ffd166 !important;
+    stroke-width: 5 !important;
+    filter: drop-shadow(0 0 6px rgba(255, 209, 102, 0.8));
+    animation: hint-pulse 0.4s ease-in-out 2;
+}
+
+@keyframes hint-pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.35;
+    }
+}
+
+/* tighten stacked action rows */
+.action-row+.action-row {
+    margin-top: -0.15rem;
+}
+
+@media (max-width: 480px) {
+    .meta-stats {
+        gap: 1rem;
+    }
+
+    .score-meta {
+        font-size: 0.85rem;
     }
 }

@@ -376,7 +376,7 @@ function endGame() {
 
     overlayMessage.textContent = message;
     overlayScore.textContent =
-        `Player 1: ${scores[1]} pairs (${moves[1]} moves)  —  ` +
+        `Player 1: ${scores[1]} pairs (${moves[1]} moves)  -  ` +
         `${opponentName}: ${scores[2]} pairs (${moves[2]} moves)`;
     overlay.classList.add('show');
 }
