@@ -1,175 +1,164 @@
 /* Copyright (c) 2024-2026 Jericho Crosby (Chalwk). All Rights Reserved. */
 
-:root {
-    --bg-1: #0f172a;
-    --bg-2: #0b2545;
-    --glass: rgba(255, 255, 255, 0.06);
-    --accent: #7dd3fc;
-    --accent-2: #60a5fa;
-    --muted: #94a3b8;
-}
-
-/* main panel: dark gradient with subtle glow */
-.giggle-panel {
-    background: linear-gradient(160deg, var(--bg-1), var(--bg-2));
+.panel {
+    background: var(--light);
+    border: 1px solid var(--gray-light);
     border-radius: var(--radius-lg);
-    padding: 2rem;
+    padding: 1.5rem;
     margin-top: 2rem;
-    position: relative;
-    overflow: hidden;
 }
 
-/* fancy radial glow behind panel */
-.giggle-panel::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(1200px 600px at 10% 10%, rgba(96, 165, 250, 0.08), transparent);
-    z-index: -1;
-}
-
-.giggle-panel-head {
-    text-align: center;
-    margin-bottom: 2rem;
-}
-
-/* logo circle with gradient */
-.giggle-logo {
-    width: 60px;
-    height: 60px;
-    margin: 0 auto 1rem;
-    background: linear-gradient(45deg, var(--accent), var(--accent-2));
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.giggle-logo-icon {
-    color: #042033;
-    font-size: 1.8rem;
-}
-
-.giggle-title {
-    color: white;
+.panel-head h1 {
+    color: var(--primary);
     margin-bottom: 0.5rem;
 }
 
-.giggle-description {
-    color: var(--muted);
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-/* joke card: glassmorphism vibes */
-.giggle-card {
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.02));
-    border: 1px solid rgba(255, 255, 255, 0.03);
-    border-radius: var(--radius-lg);
-    padding: 2rem;
-    margin-bottom: 2rem;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 10px 30px rgba(2, 6, 23, 0.6);
-}
-
-/* badge + source row */
-.joke-meta {
+#game-container {
+    position: relative;
+    margin-bottom: 1.5rem;
     display: flex;
-    gap: 0.75rem;
+    flex-direction: column;
     align-items: center;
-    margin-bottom: 1rem;
+    gap: 0.85rem;
+    background: var(--darker);
+    border-radius: var(--radius);
+    padding: 1rem 0.75rem;
 }
 
-.joke-type-badge {
-    background: linear-gradient(90deg, var(--accent), var(--accent-2));
-    padding: 0.4rem 0.75rem;
-    border-radius: 999px;
+/* score / status bar */
+.game-stats {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) minmax(0, 1fr);
+    grid-template-areas: "type status source";
+    align-items: center;
+    width: 100%;
+    gap: 0.5rem 0.75rem;
+    padding: 0.25rem 0.5rem;
+}
+
+.stat-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    line-height: 1.1;
+    min-width: 0;
+}
+
+.joke-type-stat {
+    grid-area: type;
+    align-items: flex-start;
+}
+
+.joke-source-stat {
+    grid-area: source;
+    align-items: flex-end;
+    text-align: right;
+}
+
+.stat-block strong {
+    color: rgba(255, 255, 255, 0.65);
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.stat-block .score {
+    font-family: var(--font-mono);
     font-weight: 700;
-    font-size: 0.8rem;
-    color: #05203a;
+    font-size: 1rem;
+    color: var(--accent);
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-.joke-source {
-    color: var(--muted);
-    font-size: 0.8rem;
+.status-block {
+    grid-area: status;
+    justify-self: center;
+    min-width: 0;
 }
 
-/* the actual joke text */
-.joke-text {
-    font-size: 1.4rem;
-    line-height: 1.5;
-    margin: 1.5rem 0;
+#status {
+    font-weight: bold;
+    font-size: 0.85rem;
+    text-align: center;
+    color: #fff;
+    display: inline-block;
+    max-width: 100%;
+    white-space: normal;
+    word-break: break-word;
+}
+
+/* joke display */
+.joke-display {
+    width: 100%;
+    max-width: 640px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius);
+    padding: 1.5rem 1.25rem;
+    min-height: 130px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+#jokeText {
     color: #e6eef8;
+    font-size: 1.15rem;
+    line-height: 1.55;
+    margin: 0;
+    transition: opacity 0.2s ease;
 }
 
 /* button row */
 .joke-controls {
     display: flex;
-    gap: 0.75rem;
+    gap: 0.5rem;
     flex-wrap: wrap;
-    margin-bottom: 1.5rem;
+    justify-content: center;
+    width: 100%;
 }
 
-.btn {
-    transition: all 0.2s ease !important;
-}
-
-.btn:hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0 8px 22px rgba(2, 6, 23, 0.5) !important;
-}
-
-.btn.primary {
-    background: linear-gradient(90deg, var(--accent), var(--accent-2)) !important;
-    color: #042033 !important;
-    border: none !important;
-    font-weight: 600;
-}
-
-.btn-new-joke {
-    background: linear-gradient(90deg, var(--accent), var(--accent-2));
-    color: #042033;
-    border: 0;
-}
-
-.btn-fallback {
-    border-style: dashed;
-    opacity: 0.9;
-}
-
-/* bottom bar: tip + status */
-.joke-extras {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.85rem;
-    color: var(--muted);
-}
-
+/* tip line */
 .extras-tip {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    justify-content: center;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.55);
+    text-align: center;
 }
 
 .kbd {
-    background: rgba(255, 255, 255, 0.04);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.14);
     border-radius: 4px;
-    padding: 0.2rem 0.4rem;
+    padding: 0.1rem 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
     font-weight: 600;
+    color: #fff;
 }
 
-.joke-status {
-    color: var(--accent);
-}
+/* responsive */
+@media (max-width: 480px) {
+    #game-container {
+        padding: 0.75rem 0.5rem;
+    }
 
-/* responsive: stack buttons on smaller screens */
-@media (max-width: 768px) {
-    .joke-text {
-        font-size: 1.2rem !important;
+    .joke-display {
+        padding: 1rem;
+        min-height: 110px;
+    }
+
+    #jokeText {
+        font-size: 1rem;
     }
 
     .joke-controls {
@@ -180,24 +169,21 @@
         width: 100%;
         justify-content: center;
     }
-
-    .joke-extras {
-        flex-direction: column;
-        gap: 0.5rem;
-        align-items: flex-start;
-    }
 }
 
-@media (max-width: 480px) {
-    .giggle-panel {
-        padding: 1.5rem !important;
+@media (max-width: 420px) {
+    .game-stats {
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas:
+            "type source"
+            "status status";
     }
 
-    .giggle-card {
-        padding: 1.5rem !important;
+    .status-block {
+        margin-top: 0.15rem;
     }
 
-    .giggle-title {
-        font-size: 2rem !important;
+    #status {
+        white-space: normal;
     }
 }
