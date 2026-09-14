@@ -448,7 +448,7 @@ function chooseAIMove(board) {
 // difficulties sell the illusion of a deeper search.
 function getAIThinkDelay() {
     const ranges = {
-        random: [350, 900],
+        random: [200, 900],
         greedy: [600, 1500],
         strategic: [900, 2100],
     };
