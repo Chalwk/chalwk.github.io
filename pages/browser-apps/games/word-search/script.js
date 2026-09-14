@@ -374,11 +374,11 @@ function onPointerMove(e) {
     if (direction === null) {
         const adx = Math.abs(dx);
         const ady = Math.abs(dy);
-        const DEADZONE = 0.3;            // cell units
+        const DEADZONE = 0.6;            // cell units
         if (adx < DEADZONE && ady < DEADZONE) return;
 
         const ratio = Math.min(adx, ady) / Math.max(adx, ady); // 0..1
-        if (ratio >= 0.4) {
+        if (ratio >= 0.6) {
             direction = [Math.sign(dy), Math.sign(dx)];  // diagonal
         } else if (adx > ady) {
             direction = [0, Math.sign(dx)];              // horizontal
