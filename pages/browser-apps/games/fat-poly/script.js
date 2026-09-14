@@ -1,891 +1,901 @@
 // Copyright (c) 2024-2026 Jericho Crosby (Chalwk). All Rights Reserved.
 
-(() => {
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d', { alpha: false });
-    let W = 800, H = 600, DPR = Math.max(1, window.devicePixelRatio || 1);
-    let audioEnabled = true;
-    let running = false;
+const canvas = document.getElementById('game-board');
+const ctx = canvas.getContext('2d');
 
-    const healthFill = document.getElementById('healthFill');
-    const scoreEl = document.getElementById('score');
-    const levelEl = document.getElementById('level');
-    const eatenEl = document.getElementById('eaten');
-    const targetEl = document.getElementById('target');
-    const btnStart = document.getElementById('btn-start');
-    const btnPause = document.getElementById('btn-pause');
-    const btnSound = document.getElementById('btn-sound');
-    const btnReset = document.getElementById('btn-reset');
+const scoreEl = document.getElementById('score');
+const statusEl = document.getElementById('status');
+const progressEl = document.getElementById('progress');
+const healthFillEl = document.getElementById('health-fill');
+const resetBtn = document.getElementById('reset');
+const playAgainBtn = document.getElementById('play-again');
+const difficultySelect = document.getElementById('difficulty');
+const powerupsSelect = document.getElementById('powerups');
+const controlsHint = document.getElementById('controls-hint');
+const overlay = document.getElementById('game-over-overlay');
+const overlayMessage = document.getElementById('game-over-message');
+const overlayScore = document.getElementById('game-over-score');
 
-    const MAX_LEVEL = 10;
-    const BASE_TARGET = 8;
-    const BASE_PARTICLES = 18;
-    const SHAPE_TYPES = [
-        'circle', 'triangle', 'square', 'rectangle', 'oval',
-        'pentagon', 'hexagon', 'heptagon', 'star', 'diamond',
-        'isosceles', 'kite', 'trapezoid', 'parallelogram',
-        'arrow', 'crescent', 'gear', 'spiral', 'cube', 'cylinder',
-        'cone', 'torus', 'octagon', 'nonagon', 'decagon'
-    ];
+// ---------------------------------------------------------------------------
+// Constants
+// ---------------------------------------------------------------------------
+const W = 960;
+const H = 600;
 
-    const healthySet = new Set([
-        'circle', 'triangle', 'pentagon', 'hexagon', 'star',
-        'spiral', 'cylinder', 'cone', 'torus', 'cube',
-        'octagon', 'decagon'
-    ]);
-    const unhealthySet = new Set([
-        'square', 'rectangle', 'oval', 'diamond', 'trapezoid',
-        'parallelogram', 'arrow', 'crescent', 'gear', 'nonagon',
-        'heptagon', 'isosceles', 'kite'
-    ]);
+const MAX_LEVEL = 10;
+const START_TARGET = 8;
+const TARGET_STEP = 3;
 
-    const state = {
-        player: null,
+const HEALTH_MAX = 100;
+
+// Player sizing — deliberately smaller than before.
+const PLAYER_R = 14;        // starting radius (was 22)
+const PLAYER_MAX_R = 42;    // hard cap (was 62 — the "too big to play" zone)
+const PLAYER_ACCEL = 3200;
+const PLAYER_SPEED = 380;
+const PLAYER_DRAG = 0.05;
+
+const HIT_INVULN = 1.0;
+const HIT_RADIUS_SCALE = 0.9;
+
+const PLAYER_COLOR = '#22d3ee';
+const HEALTHY_COLOR = '#4ade80';
+const UNHEALTHY_COLOR = '#ef4444';
+
+const DIFFICULTY = {
+    easy: { speed: 60, spawn: 1.30, damage: 10, cap: 12, powerupRate: 6.5 },
+    normal: { speed: 95, spawn: 1.00, damage: 16, cap: 16, powerupRate: 9.0 },
+    hard: { speed: 140, spawn: 0.75, damage: 24, cap: 20, powerupRate: 12.0 },
+};
+
+const HEALTHY_TYPES = [
+    'circle', 'triangle', 'pentagon', 'hexagon',
+    'star', 'octagon', 'spiral',
+];
+
+const UNHEALTHY_TYPES = [
+    'square', 'rectangle', 'diamond', 'trapezoid',
+    'arrow', 'heptagon', 'gear',
+];
+
+const POWERUPS = {
+    clean: { color: '#f97316', short: 'C', label: 'Clean' },
+    slow: { color: '#60a5fa', short: 'S', label: 'Slow' },
+    heal: { color: '#4ade80', short: 'H', label: 'Heal' },
+    magnet: { color: '#fbbf24', short: 'M', label: 'Magnet' },
+    shrink: { color: '#a78bfa', short: 'X', label: 'Shrink' },
+};
+
+// Weighted pool — Shrink is far more likely so a run doesn't snowball into
+// an unplayable blob. Total is irrelevant; only ratios matter.
+const POWERUP_WEIGHTS = {
+    clean: 14,
+    slow: 14,
+    heal: 16,
+    magnet: 14,
+    shrink: 42,   // <-- dominates the pool
+};
+const POWERUP_TOTAL_WEIGHT = Object.values(POWERUP_WEIGHTS)
+    .reduce((a, b) => a + b, 0);
+
+function pickWeightedPowerup() {
+    let roll = Math.random() * POWERUP_TOTAL_WEIGHT;
+    for (const key of Object.keys(POWERUP_WEIGHTS)) {
+        roll -= POWERUP_WEIGHTS[key];
+        if (roll <= 0) return key;
+    }
+    return 'shrink';
+}
+
+// ---------------------------------------------------------------------------
+// Globals
+// ---------------------------------------------------------------------------
+let difficulty = 'normal';
+let powerupsOn = true;
+let state = null;
+let lastTime = 0;
+const keys = Object.create(null);
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const rand = (a, b) => a + Math.random() * (b - a);
+const irand = (a, b) => Math.floor(rand(a, b + 1));
+
+// Shortest delta between two positions on a wrapping axis.
+// Used so collisions and magnet pulls still work across the wrap seam.
+function wrappedDelta(a, b, size) {
+    let d = a - b;
+    if (d > size / 2) d -= size;
+    else if (d < -size / 2) d += size;
+    return d;
+}
+
+function setupCanvas() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+
+// ---------------------------------------------------------------------------
+// State
+// ---------------------------------------------------------------------------
+function createState() {
+    const cfg = DIFFICULTY[difficulty];
+    return {
+        cfg,
+        player: {
+            x: W / 2, y: H / 2,
+            vx: 0, vy: 0,
+            r: PLAYER_R,
+            invuln: 1.5,
+            hitFlash: 0,
+        },
+        shapes: [],
+        powerups: [],
         particles: [],
-        specials: [],
-        particlesEaten: 0,
         score: 0,
         level: 1,
-        targetToAdvance: BASE_TARGET,
-        health: 100,
+        health: HEALTH_MAX,
+        eaten: 0,
+        target: START_TARGET,
+        spawnTimer: 0.4,
+        powerupTimer: cfg.powerupRate * 0.6,
+        slowTimer: 0,
+        magnetTimer: 0,
         shake: 0,
-        lastSpawn: 0,
-        lastSpecial: 0,
         time: 0,
-        effects: {},
+        gameOver: false,
     };
+}
 
-    function resize() {
-        const rect = canvas.parentElement.getBoundingClientRect();
-        W = Math.max(400, Math.floor(rect.width));
-        H = Math.max(300, Math.floor(W * 0.75));
-        canvas.width = Math.floor(W * DPR);
-        canvas.height = Math.floor(H * DPR);
-        canvas.style.width = W + 'px';
-        canvas.style.height = H + 'px';
-        ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-    }
+function seedInitialShapes() {
+    for (let i = 0; i < 6; i++) spawnShape();
+}
 
-    window.addEventListener('resize', resize);
-    resize();
+// ---------------------------------------------------------------------------
+// Spawning
+// ---------------------------------------------------------------------------
+function spawnShape() {
+    const cfg = state.cfg;
 
-    function rand(min, max) {
-        return Math.random() * (max - min) + min;
-    }
+    const isHealthy = Math.random() < 0.62;
+    const pool = isHealthy ? HEALTHY_TYPES : UNHEALTHY_TYPES;
+    const type = pool[irand(0, pool.length - 1)];
 
-    function irand(min, max) {
-        return Math.floor(rand(min, max + 1));
-    }
+    const r = rand(14, 26);
+    const edge = irand(0, 3);
+    let x, y;
+    if (edge === 0) { x = -r - 20; y = rand(0, H); }
+    else if (edge === 1) { x = W + r + 20; y = rand(0, H); }
+    else if (edge === 2) { x = rand(0, W); y = -r - 20; }
+    else { x = rand(0, W); y = H + r + 20; }
 
-    function clamp(v, a, b) {
-        return Math.max(a, Math.min(b, v))
-    }
+    const toCenter = Math.atan2(H / 2 - y, W / 2 - x);
+    const angle = toCenter + rand(-0.85, 0.85);
+    const speed = cfg.speed * rand(0.7, 1.25) * (1 + (state.level - 1) * 0.06);
 
-    function dist(ax, ay, bx, by) {
-        return Math.hypot(ax - bx, ay - by)
-    }
+    state.shapes.push({
+        x, y,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        r,
+        type,
+        healthy: isHealthy,
+        rotation: Math.random() * Math.PI * 2,
+        spin: rand(-1.4, 1.4),
+        pulse: Math.random() * Math.PI * 2,
+    });
+}
 
-    class Player {
-        constructor() {
-            this.size = 28;
-            this.x = W / 2;
-            this.y = H / 2;
-            this.speed = 280;
-            this.vx = 0;
-            this.vy = 0;
-            this.target = { x: this.x, y: this.y };
-            this.color = '#ffffff';
-            this.health = 100;
-            this.moveKeys = { up: false, down: false, left: false, right: false };
-        }
+function spawnPowerup() {
+    const key = pickWeightedPowerup();
+    state.powerups.push({
+        x: rand(120, W - 120),
+        y: rand(120, H - 120),
+        r: 20,
+        key,
+        color: POWERUPS[key].color,
+        short: POWERUPS[key].short,
+        life: 12,
+        pulse: 0,
+    });
+}
 
-        update(dt) {
-            let mx = 0, my = 0;
-            if (this.moveKeys.up) my -= 1;
-            if (this.moveKeys.down) my += 1;
-            if (this.moveKeys.left) mx -= 1;
-            if (this.moveKeys.right) mx += 1;
-            if (mx !== 0 || my !== 0) {
-                const len = Math.hypot(mx, my) || 1;
-                this.vx = (mx / len) * this.speed;
-                this.vy = (my / len) * this.speed;
-                this.target.x = this.x + this.vx * 0.12;
-                this.target.y = this.y + this.vy * 0.12;
-            } else {
-                const dx = this.target.x - this.x;
-                const dy = this.target.y - this.y;
-                this.vx = dx * 6;
-                this.vy = dy * 6;
-            }
-            const nx = this.x + this.vx * dt;
-            const ny = this.y + this.vy * dt;
-            this.x = clamp(nx, this.size / 2, W - this.size / 2);
-            this.y = clamp(ny, this.size / 2, H - this.size / 2);
-        }
-
-        draw(ctx) {
-            ctx.save();
-            ctx.translate(this.x, this.y);
-            ctx.shadowColor = 'rgba(0,0,0,0.6)';
-            ctx.shadowBlur = 16;
-            ctx.fillStyle = this.color;
-            const s = this.size;
-            const r = Math.min(8, s * 0.12);
-            roundRect(ctx, -s / 2, -s / 2, s, s, r);
-            ctx.fill();
-            ctx.restore();
-        }
-    }
-
-    class Particle {
-        constructor(kind, x, y, radius, angle, speed) {
-            this.kind = kind;
-            this.x = x;
-            this.y = y;
-            this.r = radius;
-            this.angle = angle;
-            this.speed = speed;
-            this.rotation = Math.random() * Math.PI * 2;
-            this.spin = rand(-1.2, 1.2);
-            this.isHealthy = healthySet.has(kind) || (!unhealthySet.has(kind) && Math.random() < 0.55);
-            this.color = this.isHealthy ? '#39b54a' : '#e94b3c';
-            this.reversed = false;
-            this.birth = performance.now();
-        }
-
-        update(dt, t) {
-            this.x += Math.cos(this.angle) * this.speed * dt * speedMultiplier();
-            this.y += Math.sin(this.angle) * this.speed * dt * speedMultiplier();
-            this.rotation += this.spin * dt;
-            if (this.x < -40) this.x = W + 40;
-            if (this.x > W + 40) this.x = -40;
-            if (this.y < -40) this.y = H + 40;
-            if (this.y > H + 40) this.y = -40;
-        }
-
-        draw(ctx) {
-            ctx.save();
-            ctx.translate(this.x, this.y);
-            ctx.rotate(this.rotation);
-            ctx.lineWidth = 1.5;
-            ctx.strokeStyle = 'rgba(0,0,0,0.25)';
-            const fill = (this.reversed ? (this.isHealthy ? '#e94b3c' : '#39b54a') : this.color);
-            drawShape(ctx, this.kind, this.r, fill, '#00000030');
-            ctx.restore();
-        }
-    }
-
-    class Special {
-        constructor(x, y, dur, effect) {
-            this.x = x;
-            this.y = y;
-            this.r = 18;
-            this.timer = dur || 8;
-            this.effect = effect || chooseSpecial();
-            this.birth = performance.now();
-        }
-
-        update(dt) {
-            this.timer -= dt;
-        }
-
-        draw(ctx) {
-            ctx.save();
-            ctx.translate(this.x, this.y);
-            const t = (performance.now() - this.birth) / 400;
-            ctx.beginPath();
-            ctx.fillStyle = 'rgba(170,110,220,0.12)';
-            ctx.arc(0, 0, this.r + 6 * Math.sin(t), 0, Math.PI * 2);
-            ctx.fill();
-            ctx.lineWidth = 2;
-            ctx.strokeStyle = 'rgba(170,110,220,0.95)';
-            ctx.beginPath();
-            ctx.arc(0, 0, this.r, 0, Math.PI * 2);
-            ctx.stroke();
-            ctx.restore();
-            ctx.save();
-            ctx.fillStyle = 'rgba(255,255,255,0.9)';
-            ctx.font = '11px sans-serif';
-            ctx.textAlign = 'center';
-            ctx.fillText(this.effect, this.x, this.y + this.r + 14);
-            ctx.restore();
-        }
-    }
-
-    function chooseSpecial() {
-        const list = ['RUSH', 'JAM', 'REVERSE', 'CLEAN', 'WEIGHT+', 'WEIGHT-'];
-        return list[irand(0, list.length - 1)];
-    }
-
-    function roundRect(ctx, x, y, w, h, r) {
-        ctx.beginPath();
-        ctx.moveTo(x + r, y);
-        ctx.arcTo(x + w, y, x + w, y + h, r);
-        ctx.arcTo(x + w, y + h, x, y + h, r);
-        ctx.arcTo(x, y + h, x, y, r);
-        ctx.arcTo(x, y, x + w, y, r);
-        ctx.closePath();
-    }
-
-    function drawShape(ctx, type, size, fill, stroke) {
-        ctx.fillStyle = fill || '#fff';
-        ctx.strokeStyle = stroke || 'rgba(0,0,0,0.2)';
-        switch (type) {
-            case 'circle':
-                ctx.beginPath();
-                ctx.arc(0, 0, size, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.stroke();
-                break;
-            case 'triangle':
-                ctx.beginPath();
-                ctx.moveTo(0, -size);
-                ctx.lineTo(size * 0.9, size * 0.7);
-                ctx.lineTo(-size * 0.9, size * 0.7);
-                ctx.closePath();
-                ctx.fill();
-                ctx.stroke();
-                break;
-            case 'square':
-            case 'rectangle':
-                roundRect(ctx, -size * 0.85, -size * 0.85, size * 1.7, size * 1.2, size * 0.18);
-                ctx.fill();
-                ctx.stroke();
-                break;
-            case 'oval':
-                ctx.beginPath();
-                ctx.ellipse(0, 0, size * 1.15, size, 0, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.stroke();
-                break;
-            case 'pentagon':
-                poly(ctx, 5, size);
-                break;
-            case 'hexagon':
-                poly(ctx, 6, size);
-                break;
-            case 'heptagon':
-                poly(ctx, 7, size);
-                break;
-            case 'octagon':
-                poly(ctx, 8, size);
-                break;
-            case 'nonagon':
-                poly(ctx, 9, size);
-                break;
-            case 'decagon':
-                poly(ctx, 10, size);
-                break;
-            case 'star':
-                star(ctx, 5, size, size * 0.45);
-                break;
-            case 'diamond':
-                ctx.beginPath();
-                ctx.moveTo(0, -size);
-                ctx.lineTo(size, 0);
-                ctx.lineTo(0, size);
-                ctx.lineTo(-size, 0);
-                ctx.closePath();
-                ctx.fill();
-                ctx.stroke();
-                break;
-            case 'isosceles':
-                ctx.beginPath();
-                ctx.moveTo(0, -size);
-                ctx.lineTo(size * 0.6, size);
-                ctx.lineTo(-size * 0.6, size);
-                ctx.closePath();
-                ctx.fill();
-                ctx.stroke();
-                break;
-            case 'kite':
-                ctx.beginPath();
-                ctx.moveTo(0, -size);
-                ctx.lineTo(size * 0.6, 0);
-                ctx.lineTo(0, size);
-                ctx.lineTo(-size * 0.6, 0);
-                ctx.closePath();
-                ctx.fill();
-                ctx.stroke();
-                break;
-            case 'trapezoid':
-                ctx.beginPath();
-                ctx.moveTo(-size * 0.9, -size * 0.6);
-                ctx.lineTo(size * 0.9, -size * 0.6);
-                ctx.lineTo(size * 0.6, size * 0.9);
-                ctx.lineTo(-size * 0.6, size * 0.9);
-                ctx.closePath();
-                ctx.fill();
-                ctx.stroke();
-                break;
-            case 'parallelogram':
-                ctx.beginPath();
-                ctx.moveTo(-size * 0.8, -size * 0.9);
-                ctx.lineTo(size * 0.8, -size * 0.5);
-                ctx.lineTo(size * 0.8, size * 0.9);
-                ctx.lineTo(-size * 0.8, size * 0.5);
-                ctx.closePath();
-                ctx.fill();
-                ctx.stroke();
-                break;
-            case 'arrow':
-                ctx.beginPath();
-                ctx.moveTo(0, -size);
-                ctx.lineTo(size * 0.8, 0);
-                ctx.lineTo(size * 0.15, 0);
-                ctx.lineTo(size * 0.15, size);
-                ctx.lineTo(-size * 0.15, size);
-                ctx.lineTo(-size * 0.15, 0);
-                ctx.lineTo(-size * 0.8, 0);
-                ctx.closePath();
-                ctx.fill();
-                ctx.stroke();
-                break;
-            case 'crescent':
-                ctx.beginPath();
-                ctx.arc(-size * 0.2, 0, size, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.globalCompositeOperation = 'destination-out';
-                ctx.arc(size * 0.45, 0, size * 0.66, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.globalCompositeOperation = 'source-over';
-                ctx.stroke();
-                break;
-            case 'gear':
-                gear(ctx, size, 8);
-                break;
-            case 'spiral':
-                spiral(ctx, size);
-                break;
-            case 'cube':
-                drawCube(ctx, size);
-                break;
-            case 'cylinder':
-                cylinder(ctx, size);
-                break;
-            case 'cone':
-                cone(ctx, size);
-                break;
-            case 'torus':
-                torus(ctx, size);
-                break;
-            default:
-                ctx.beginPath();
-                ctx.arc(0, 0, size, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.stroke();
-        }
-    }
-
-    function poly(ctx, sides, size) {
-        const ang = Math.PI * 2 / sides;
-        ctx.beginPath();
-        for (let i = 0; i < sides; i++) {
-            const a = -Math.PI / 2 + i * ang;
-            const x = Math.cos(a) * size;
-            const y = Math.sin(a) * size;
-            if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-        }
-        ctx.closePath();
-        ctx.fill();
-        ctx.stroke();
-    }
-
-    function star(ctx, points, outer, inner) {
-        const step = Math.PI / points;
-        ctx.beginPath();
-        for (let i = 0; i < points * 2; i++) {
-            const r = (i % 2 === 0) ? outer : inner;
-            const a = -Math.PI / 2 + i * step;
-            const x = Math.cos(a) * r, y = Math.sin(a) * r;
-            if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-        }
-        ctx.closePath();
-        ctx.fill();
-        ctx.stroke();
-    }
-
-    function gear(ctx, size, teeth) {
-        ctx.beginPath();
-        for (let i = 0; i < teeth * 2; i++) {
-            const a = -Math.PI / 2 + i * (Math.PI / teeth);
-            const r = (i % 2 === 0) ? size * 1.06 : size * 0.7;
-            const x = Math.cos(a) * r, y = Math.sin(a) * r;
-            if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-        }
-        ctx.closePath();
-        ctx.fill();
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.arc(0, 0, size * 0.46, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(0,0,0,0.12)';
-        ctx.fill();
-    }
-
-    function spiral(ctx, size) {
-        ctx.beginPath();
-        for (let i = 0; i < 24; i++) {
-            const a = i * 0.6;
-            const r = size * (i / 24);
-            const x = Math.cos(a) * r, y = Math.sin(a) * r;
-            if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-        }
-        ctx.stroke();
-    }
-
-    function drawCube(ctx, size) {
-        const s = size * 0.7;
-        ctx.beginPath();
-        ctx.moveTo(-s, -s);
-        ctx.lineTo(s, -s);
-        ctx.lineTo(s, s);
-        ctx.lineTo(-s, s);
-        ctx.closePath();
-        ctx.fill();
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.moveTo(-s, -s);
-        ctx.lineTo(-s * 0.6, -s * 1.4);
-        ctx.lineTo(s * 0.6, -s * 1.4);
-        ctx.lineTo(s, -s);
-        ctx.closePath();
-        ctx.fill();
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.moveTo(s, -s);
-        ctx.lineTo(s * 0.6, -s * 1.4);
-        ctx.lineTo(s * 0.6, s * -1.4 + s * 1.4);
-        ctx.lineTo(s, s);
-        ctx.closePath();
-        ctx.fill();
-        ctx.stroke();
-    }
-
-    function cylinder(ctx, size) {
-        ctx.beginPath();
-        ctx.ellipse(0, -size * 0.7, size * 0.9, size * 0.35, 0, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.rect(-size * 0.9, -size * 0.7, size * 1.8, size * 1.2);
-        ctx.fill();
-        ctx.stroke();
-    }
-
-    function cone(ctx, size) {
-        ctx.beginPath();
-        ctx.moveTo(0, -size);
-        ctx.lineTo(size * 0.9, size);
-        ctx.lineTo(-size * 0.9, size);
-        ctx.closePath();
-        ctx.fill();
-        ctx.stroke();
-    }
-
-    function torus(ctx, size) {
-        ctx.beginPath();
-        ctx.arc(0, 0, size, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.globalCompositeOperation = 'destination-out';
-        ctx.beginPath();
-        ctx.arc(0, 0, size * 0.55, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.globalCompositeOperation = 'source-over';
-        ctx.stroke();
-    }
-
-    function speedMultiplier() {
-        let m = 1 + (state.level - 1) * 0.09;
-        if (state.effects.RUSH) m *= 1.9;
-        if (state.effects.JAM) m *= 0.55;
-        return m;
-    }
-
-    function spawnMany(count) {
-        for (let i = 0; i < count; i++) spawnParticle();
-    }
-
-    function spawnParticle(kind) {
-        kind = kind || SHAPE_TYPES[irand(0, SHAPE_TYPES.length - 1)];
-        const size = rand(8, 22) * (0.9 + state.level * 0.03);
-        const side = irand(0, 3);
-        let x, y;
-        if (side === 0) {
-            x = -30;
-            y = rand(0, H);
-        } else if (side === 1) {
-            x = W + 30;
-            y = rand(0, H);
-        } else if (side === 2) {
-            x = rand(0, W);
-            y = -30;
-        } else {
-            x = rand(0, W);
-            y = H + 30;
-        }
-        const angle = Math.atan2(H / 2 - y, W / 2 - x) + rand(-0.9, 0.9);
-        const speed = rand(25, 80) * (1 + state.level * 0.12);
-        const p = new Particle(kind, x, y, size, angle, speed);
-        state.particles.push(p);
-        return p;
-    }
-
-    function spawnSpecial() {
-        const x = rand(80, W - 80), y = rand(80, H - 80);
-        const sp = new Special(x, y, 8, chooseSpecial());
-        state.specials.push(sp);
-    }
-
-    function checkCollisions() {
-        const pl = state.player;
-        const pr = pl.size * 0.5;
-        for (let i = state.particles.length - 1; i >= 0; i--) {
-            const p = state.particles[i];
-            const d = dist(pl.x, pl.y, p.x, p.y);
-            if (d < pr + p.r * 0.9) {
-                eatParticle(p);
-                state.particles.splice(i, 1);
-                screenShake(6);
-                spawnParticlesEffect(p.x, p.y, p.color, 8);
-            }
-        }
-        for (let i = state.specials.length - 1; i >= 0; i--) {
-            const s = state.specials[i];
-            const d = dist(pl.x, pl.y, s.x, s.y);
-            if (d < pr + s.r) {
-                applySpecial(s.effect);
-                state.specials.splice(i, 1);
-                screenShake(10);
-            }
-        }
-    }
-
-    function eatParticle(p) {
-        let healthy = p.isHealthy ^ !!state.effects.REVERSE;
-        if (p.reversed) healthy = !healthy;
-        if (healthy) {
-            const gain = 4 + Math.round(p.r * 0.08);
-            state.player.size += gain;
-            state.score += 10 + Math.round(p.r);
-            state.particlesEaten++;
-            audioBeep(880, 0.06);
-        } else {
-            const dmg = 6 + Math.round(p.r * 0.06) + (state.level - 1);
-            state.health = clamp(state.health - dmg, 0, 100);
-            state.score -= Math.max(0, 6 - state.level);
-            audioBeep(220, 0.08);
-        }
-        updateUI();
-        if (state.particlesEaten >= state.targetToAdvance) {
-            levelUp();
-        }
-    }
-
-    function applySpecial(effect) {
-        switch (effect) {
-            case 'RUSH':
-                state.effects.RUSH = 12;
-                break;
-            case 'JAM':
-                state.effects.JAM = 12;
-                break;
-            case 'REVERSE':
-                state.effects.REVERSE = 10;
-                reverseAllParticles(true);
-                break;
-            case 'CLEAN':
-                state.effects.CLEAN = 10;
-                reverseAllParticles(false);
-                break;
-            case 'WEIGHT+':
-                state.player.size += 10;
-                audioBeep(980, 0.12);
-                break;
-            case 'WEIGHT-':
-                state.player.size = Math.max(12, state.player.size - 8);
-                audioBeep(580, 0.12);
-                break;
-        }
-    }
-
-    function reverseAllParticles(flag) {
-        for (const p of state.particles) p.reversed = !flag ? false : p.reversed;
-        if (flag) {
-            for (const p of state.particles) p.reversed = !p.reversed;
-        }
-    }
-
-    function levelUp() {
-        if (state.level >= MAX_LEVEL) return win();
-        state.level++;
-        state.particlesEaten = 0;
-        state.targetToAdvance = BASE_TARGET + Math.floor(state.level * 1.9);
-        state.player.size = Math.max(14, state.player.size - Math.floor(state.level * 1.1));
-        spawnMany(BASE_PARTICLES + Math.floor(state.level * 3));
-        state.effects = {};
-        audioBeep(1200, 0.16);
-        shakeScreen(14);
-        updateUI();
-    }
-
-    function win() {
-        running = false;
-        showMessage('You beat FatPoly! 🎉', `Score ${state.score} • Level ${state.level}`);
-    }
-
-    function lose() {
-        running = false;
-        showMessage('You Died', `You reached 0 health. Score ${state.score}`);
-    }
-
-    function showMessage(title, text) {
-        const overlay = document.createElement('div');
-        overlay.className = 'overlay';
-        overlay.innerHTML = `
-            <div class="overlay-content">
-                <h1>${title}</h1>
-                <p>${text}</p>
-                <button class="btn btn-primary" id="closeOverlay">Play Again</button>
-            </div>
-        `;
-        document.body.appendChild(overlay);
-        document.getElementById('closeOverlay').addEventListener('click', () => {
-            overlay.remove();
-            startGame();
+function spawnBurst(x, y, color, count, speed) {
+    for (let i = 0; i < count; i++) {
+        const a = Math.random() * Math.PI * 2;
+        const sp = speed * rand(0.4, 1.2);
+        const life = rand(0.4, 1.0);
+        state.particles.push({
+            x, y,
+            vx: Math.cos(a) * sp,
+            vy: Math.sin(a) * sp,
+            life, maxLife: life,
+            color,
+            size: rand(2, 5),
         });
     }
+}
 
-    function updateUI() {
-        healthFill.style.width = Math.max(0, state.health) + '%';
-        scoreEl.textContent = Math.max(0, state.score);
-        levelEl.textContent = state.level;
-        eatenEl.textContent = state.particlesEaten;
-        targetEl.textContent = state.targetToAdvance;
+// ---------------------------------------------------------------------------
+// Player
+// ---------------------------------------------------------------------------
+function updatePlayer(dt) {
+    const p = state.player;
+
+    // --- Keyboard thrust (mouse input removed) ---
+    let mx = 0, my = 0;
+    if (keys['w'] || keys['arrowup']) my -= 1;
+    if (keys['s'] || keys['arrowdown']) my += 1;
+    if (keys['a'] || keys['arrowleft']) mx -= 1;
+    if (keys['d'] || keys['arrowright']) mx += 1;
+
+    if (mx !== 0 || my !== 0) {
+        const len = Math.hypot(mx, my) || 1;
+        p.vx += (mx / len) * PLAYER_ACCEL * dt;
+        p.vy += (my / len) * PLAYER_ACCEL * dt;
     }
 
-    function resetGame() {
-        state.player = new Player();
-        state.particles = [];
-        state.specials = [];
-        state.particlesEaten = 0;
-        state.score = 0;
-        state.level = 1;
-        state.targetToAdvance = BASE_TARGET;
-        state.health = 100;
-        state.effects = {};
-        state.shake = 0;
-        spawnMany(BASE_PARTICLES);
-        updateUI();
+    // --- Drag & speed cap ---
+    const drag = Math.pow(PLAYER_DRAG, dt);
+    p.vx *= drag;
+    p.vy *= drag;
+
+    const sp = Math.hypot(p.vx, p.vy);
+    if (sp > PLAYER_SPEED) {
+        const k = PLAYER_SPEED / sp;
+        p.vx *= k;
+        p.vy *= k;
     }
 
-    const effectsBuffer = [];
+    // --- Move & wrap the CENTER around the arena ---
+    // (Radius is allowed to poke off the edge; that's normal for
+    // wrap-around games and matches how the shapes behave.)
+    p.x += p.vx * dt;
+    p.y += p.vy * dt;
 
-    function spawnParticlesEffect(x, y, color, count) {
-        for (let i = 0; i < count; i++) {
-            effectsBuffer.push({
-                x, y, vx: rand(-120, 120), vy: rand(-120, 120), life: rand(0.3, 0.9), size: rand(2, 6), color
-            });
-        }
-    }
+    if (p.x < 0) p.x += W;
+    else if (p.x >= W) p.x -= W;
+    if (p.y < 0) p.y += H;
+    else if (p.y >= H) p.y -= H;
 
-    function updateEffects(dt) {
-        for (let i = effectsBuffer.length - 1; i >= 0; i--) {
-            const e = effectsBuffer[i];
-            e.vy += 300 * dt;
-            e.x += e.vx * dt;
-            e.y += e.vy * dt;
-            e.life -= dt;
-            if (e.life <= 0) effectsBuffer.splice(i, 1);
-        }
-    }
+    if (p.invuln > 0) p.invuln -= dt;
+    if (p.hitFlash > 0) p.hitFlash -= dt;
+}
 
-    function screenShake(amount) {
-        state.shake = Math.max(state.shake, amount);
-    }
+// ---------------------------------------------------------------------------
+// Shapes
+// ---------------------------------------------------------------------------
+function updateShapes(dt) {
+    const slow = state.slowTimer > 0 ? 0.4 : 1;
+    const magnetOn = state.magnetTimer > 0;
+    const p = state.player;
 
-    function shakeScreen(amount) {
-        screenShake(amount);
-    }
+    for (let i = state.shapes.length - 1; i >= 0; i--) {
+        const s = state.shapes[i];
 
-    let last = performance.now();
+        s.x += s.vx * dt * slow;
+        s.y += s.vy * dt * slow;
+        s.rotation += s.spin * dt * slow;
+        s.pulse += dt * 2.5;
 
-    function loop(now) {
-        const dt = clamp((now - last) / 1000, 0, 0.05);
-        last = now;
-        if (running) {
-            step(dt);
-        }
-        render(now);
-        requestAnimationFrame(loop);
-    }
-
-    function step(dt) {
-        state.time += dt;
-        for (const k of Object.keys(state.effects)) {
-            if (state.effects[k] !== false) {
-                state.effects[k] -= dt;
-                if (state.effects[k] <= 0) delete state.effects[k];
+        // Magnet pulls healthy shapes toward the player (wrap-aware).
+        if (magnetOn && s.healthy) {
+            const dx = wrappedDelta(p.x, s.x, W);
+            const dy = wrappedDelta(p.y, s.y, H);
+            const d = Math.hypot(dx, dy) || 1;
+            if (d < 340) {
+                const pull = 280 * (1 - d / 340);
+                s.x += (dx / d) * pull * dt;
+                s.y += (dy / d) * pull * dt;
             }
         }
-        if (state.time - state.lastSpecial > Math.max(6, 18 - state.level * 1.2)) {
-            state.lastSpecial = state.time;
-            spawnSpecial();
-        }
-        if (state.time - state.lastSpawn > Math.max(0.4, 1.6 - state.level * 0.12)) {
-            state.lastSpawn = state.time;
-            spawnParticle();
-        }
-        state.player.update(dt);
-        for (const p of state.particles) p.update(dt, state.time);
-        for (const s of state.specials) s.update(dt);
-        updateEffects(dt);
-        checkCollisions();
-        if (state.health <= 0) lose();
-    }
 
-    function render(now) {
-        ctx.save();
-        const g = ctx.createLinearGradient(0, 0, 0, H);
-        g.addColorStop(0, '#071026');
-        g.addColorStop(1, '#0f1628');
-        ctx.fillStyle = g;
-        ctx.fillRect(0, 0, W, H);
-        drawBackgroundOrbs(now);
-        let ox = 0, oy = 0;
-        if (state.shake > 0) {
-            ox = rand(-state.shake, state.shake);
-            oy = rand(-state.shake, state.shake);
-            state.shake = Math.max(0, state.shake - 0.7);
-        }
-        ctx.translate(ox, oy);
-        for (const s of state.specials) s.draw(ctx);
-        for (const p of state.particles) p.draw(ctx);
-        state.player.draw(ctx);
-        for (const e of effectsBuffer) {
-            ctx.beginPath();
-            ctx.globalAlpha = Math.max(0, e.life);
-            ctx.fillStyle = e.color || '#fff';
-            ctx.arc(e.x, e.y, e.size, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.globalAlpha = 1.0;
-        }
-        ctx.restore();
-    }
+        // Wrap-around the arena edges.
+        const m = s.r + 30;
+        if (s.x < -m) s.x = W + m;
+        else if (s.x > W + m) s.x = -m;
+        if (s.y < -m) s.y = H + m;
+        else if (s.y > H + m) s.y = -m;
 
-    const orbs = [];
-    for (let i = 0; i < 12; i++) orbs.push({ x: rand(0, 1), y: rand(0, 1), s: rand(40, 160), v: rand(0.02, 0.08) });
-
-    function drawBackgroundOrbs(now) {
-        for (const o of orbs) {
-            o.x += o.v * 0.0005;
-            o.y += Math.sin(now * 0.0008 * o.v) * 0.0008;
-            const x = (o.x % 1 + 1) % 1 * W;
-            const y = (o.y % 1 + 1) % 1 * H;
-            const r = o.s * 0.5;
-            ctx.beginPath();
-            const g = ctx.createRadialGradient(x, y, r * 0.2, x, y, r * 1.4);
-            g.addColorStop(0, 'rgba(169,122,255,0.06)');
-            g.addColorStop(1, 'rgba(169,122,255,0)');
-            ctx.fillStyle = g;
-            ctx.arc(x, y, r, 0, Math.PI * 2);
-            ctx.fill();
+        // Collision vs. player — wrapped so the seam doesn't break it.
+        const dx = wrappedDelta(p.x, s.x, W);
+        const dy = wrappedDelta(p.y, s.y, H);
+        const dist = Math.hypot(dx, dy);
+        const hitR = p.r * HIT_RADIUS_SCALE + s.r * HIT_RADIUS_SCALE;
+        if (dist < hitR) {
+            if (s.healthy) {
+                eatHealthy(s);
+                state.shapes.splice(i, 1);
+            } else {
+                if (eatUnhealthy(s)) state.shapes.splice(i, 1);
+            }
         }
     }
+}
 
-    canvas.addEventListener('pointerdown', (e) => {
-        const rect = canvas.getBoundingClientRect();
-        const x = (e.clientX - rect.left);
-        const y = (e.clientY - rect.top);
-        state.player.target.x = clamp(x, state.player.size / 2, W - state.player.size / 2);
-        state.player.target.y = clamp(y, state.player.size / 2, H - state.player.size / 2);
-    });
+function eatHealthy(s) {
+    const p = state.player;
+    // Grow a little per bite, then cap out.
+    p.r = Math.min(PLAYER_MAX_R, p.r + Math.min(1.6, s.r * 0.06));
+    state.score += 10 + Math.round(s.r * 0.5) + state.level * 2;
+    state.eaten++;
+    spawnBurst(s.x, s.y, HEALTHY_COLOR, 10, 220);
+    state.shake = Math.min(state.shake + 2, 5);
 
-    canvas.addEventListener('pointermove', (e) => {
-        if (e.buttons === 1) {
-            const rect = canvas.getBoundingClientRect();
-            const x = (e.clientX - rect.left);
-            const y = (e.clientY - rect.top);
-            state.player.target.x = clamp(x, state.player.size / 2, W - state.player.size / 2);
-            state.player.target.y = clamp(y, state.player.size / 2, H - state.player.size / 2);
-        }
-    });
-
-    window.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') state.player.moveKeys.up = true;
-        if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') state.player.moveKeys.down = true;
-        if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') state.player.moveKeys.left = true;
-        if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') state.player.moveKeys.right = true;
-        if (e.key === ' ') {
-            e.preventDefault();
-            toggleRunning();
-        }
-    });
-
-    window.addEventListener('keyup', (e) => {
-        if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') state.player.moveKeys.up = false;
-        if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') state.player.moveKeys.down = false;
-        if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') state.player.moveKeys.left = false;
-        if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') state.player.moveKeys.right = false;
-    });
-
-    btnStart.addEventListener('click', () => {
-        startGame();
-    });
-    btnPause.addEventListener('click', () => {
-        toggleRunning();
-    });
-    btnSound.addEventListener('click', () => {
-        audioEnabled = !audioEnabled;
-        btnSound.innerHTML = audioEnabled ? '<i class="fas fa-volume-up"></i>' : '<i class="fas fa-volume-mute"></i>';
-    });
-    btnReset.addEventListener('click', () => {
-        resetGame();
-        running = true;
-    });
-
-    function startGame() {
-        resetGame();
-        running = true;
+    if (state.eaten >= state.target) {
+        levelUp();
+    } else {
+        updateHUD();
     }
+}
 
-    function toggleRunning() {
-        running = !running;
-        btnPause.innerHTML = running ? '<i class="fas fa-pause"></i> Pause' : '<i class="fas fa-play"></i> Resume';
+// Returns true if the shape should be removed (i.e. the player was
+// actually damaged). When invulnerable we keep the shape so the player
+// doesn't "eat" it for free during i-frames.
+function eatUnhealthy(s) {
+    const p = state.player;
+    if (p.invuln > 0) return false;
+
+    const damage = state.cfg.damage + (state.level - 1) * 2;
+    state.health = Math.max(0, state.health - damage);
+    state.score = Math.max(0, state.score - 5);
+    p.invuln = HIT_INVULN;
+    p.hitFlash = 0.4;
+    // Getting hit also shrinks you back a touch.
+    p.r = Math.max(PLAYER_R, p.r - 3);
+    spawnBurst(s.x, s.y, UNHEALTHY_COLOR, 14, 260);
+    state.shake = Math.min(state.shake + 8, 14);
+
+    if (state.health <= 0) {
+        endGame(false);
+    } else {
+        updateHUD();
     }
+    return true;
+}
 
-    const Audio = (() => {
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        return {
-            beep: (freq, time = 0.08, type = 'sine') => {
-                if (!audioEnabled) return;
-                try {
-                    const o = ctx.createOscillator();
-                    const g = ctx.createGain();
-                    o.type = type;
-                    o.frequency.value = freq;
-                    g.gain.value = 0.0001;
-                    o.connect(g);
-                    g.connect(ctx.destination);
-                    const now = ctx.currentTime;
-                    g.gain.exponentialRampToValueAtTime(0.22, now + 0.01);
-                    g.gain.exponentialRampToValueAtTime(0.0001, now + time);
-                    o.start(now);
-                    o.stop(now + time + 0.02);
-                } catch (e) {
+// ---------------------------------------------------------------------------
+// Power-ups
+// ---------------------------------------------------------------------------
+function updatePowerups(dt) {
+    for (let i = state.powerups.length - 1; i >= 0; i--) {
+        const pu = state.powerups[i];
+        pu.life -= dt;
+        pu.pulse += dt;
+
+        if (pu.life <= 0) {
+            state.powerups.splice(i, 1);
+            continue;
+        }
+
+        const dx = wrappedDelta(state.player.x, pu.x, W);
+        const dy = wrappedDelta(state.player.y, pu.y, H);
+        if (Math.hypot(dx, dy) < state.player.r + pu.r) {
+            applyPowerup(pu.key);
+            spawnBurst(pu.x, pu.y, pu.color, 20, 300);
+            state.powerups.splice(i, 1);
+        }
+    }
+}
+
+function applyPowerup(key) {
+    const p = state.player;
+    switch (key) {
+        case 'clean': {
+            for (let i = state.shapes.length - 1; i >= 0; i--) {
+                if (!state.shapes[i].healthy) {
+                    spawnBurst(
+                        state.shapes[i].x, state.shapes[i].y,
+                        UNHEALTHY_COLOR, 8, 220
+                    );
+                    state.shapes.splice(i, 1);
                 }
             }
-        };
-    })();
+            state.shake = Math.min(state.shake + 6, 12);
+            break;
+        }
+        case 'slow':
+            state.slowTimer = 6;
+            break;
+        case 'heal':
+            state.health = Math.min(HEALTH_MAX, state.health + 30);
+            break;
+        case 'magnet':
+            state.magnetTimer = 6;
+            break;
+        case 'shrink':
+            // Aggressive shrink — this is the safety valve for a
+            // snowballed player.
+            p.r = Math.max(PLAYER_R, p.r - 14);
+            state.score += 50;
+            break;
+    }
+    state.score += 15;
+    updateHUD();
+}
 
-    function audioBeep(freq, time) {
-        Audio.beep(freq, time);
+// ---------------------------------------------------------------------------
+// Level / game flow
+// ---------------------------------------------------------------------------
+function levelUp() {
+    if (state.level >= MAX_LEVEL) {
+        endGame(true);
+        return;
+    }
+    state.level++;
+    state.eaten = 0;
+    state.target = START_TARGET + (state.level - 1) * TARGET_STEP;
+    // Gentler per-level shrink so progression doesn't feel punishing.
+    state.player.r = Math.max(PLAYER_R + 2, state.player.r - 4);
+    state.score += 100 * state.level;
+    state.health = Math.min(HEALTH_MAX, state.health + 15);
+    state.shake = 12;
+    spawnBurst(state.player.x, state.player.y, PLAYER_COLOR, 30, 340);
+    updateHUD();
+    updateStatus();
+}
+
+function endGame(won) {
+    state.gameOver = true;
+    if (won) {
+        overlayMessage.textContent = 'Victory!';
+        overlayScore.textContent =
+            `Final Score: ${state.score.toLocaleString()}  •  Reached Level ${state.level}`;
+        statusEl.textContent = 'Victory!';
+        statusEl.className = 'win-message';
+    } else {
+        overlayMessage.textContent = 'Game Over';
+        overlayScore.textContent =
+            `Final Score: ${state.score.toLocaleString()}  •  Level ${state.level}`;
+        statusEl.textContent = 'Game Over';
+        statusEl.className = 'lose-message';
+    }
+    overlay.classList.add('show');
+}
+
+// ---------------------------------------------------------------------------
+// HUD
+// ---------------------------------------------------------------------------
+function updateHUD() {
+    scoreEl.textContent = state.score.toLocaleString();
+
+    const pct = clamp(state.health / HEALTH_MAX, 0, 1) * 100;
+    healthFillEl.style.width = pct + '%';
+    healthFillEl.classList.toggle('low', pct < 30);
+
+    progressEl.textContent = `${state.eaten} / ${state.target}`;
+}
+
+function updateStatus() {
+    if (state.gameOver) return;
+    statusEl.className = '';
+    statusEl.textContent = `Level ${state.level}`;
+    progressEl.textContent = `${state.eaten} / ${state.target}`;
+}
+
+function updateControlsHint() {
+    controlsHint.textContent =
+        'Move: W A S D / Arrows  •  Edges wrap around';
+}
+
+// ---------------------------------------------------------------------------
+// Update loop
+// ---------------------------------------------------------------------------
+function update(dt) {
+    if (state.gameOver) return;
+    state.time += dt;
+
+    updatePlayer(dt);
+    updateShapes(dt);
+    updatePowerups(dt);
+
+    if (state.slowTimer > 0) state.slowTimer -= dt;
+    if (state.magnetTimer > 0) state.magnetTimer -= dt;
+
+    const spawnInterval = Math.max(0.35, state.cfg.spawn - (state.level - 1) * 0.06);
+    state.spawnTimer -= dt;
+    const cap = state.cfg.cap + state.level;
+    if (state.spawnTimer <= 0 && state.shapes.length < cap) {
+        spawnShape();
+        state.spawnTimer = spawnInterval * rand(0.7, 1.3);
     }
 
-    window.addEventListener('load', () => {
-        resize();
-        last = performance.now();
-        requestAnimationFrame(loop);
-    });
+    if (powerupsOn) {
+        state.powerupTimer -= dt;
+        if (state.powerupTimer <= 0 && state.powerups.length < 2) {
+            spawnPowerup();
+            state.powerupTimer = state.cfg.powerupRate * rand(0.8, 1.4);
+        }
+    }
 
-    resetGame();
-})();
+    for (let i = state.particles.length - 1; i >= 0; i--) {
+        const p = state.particles[i];
+        p.x += p.vx * dt;
+        p.y += p.vy * dt;
+        const k = Math.pow(0.15, dt);
+        p.vx *= k;
+        p.vy *= k;
+        p.life -= dt;
+        if (p.life <= 0) state.particles.splice(i, 1);
+    }
+
+    if (state.shake > 0) state.shake = Math.max(0, state.shake - 24 * dt);
+}
+
+// ---------------------------------------------------------------------------
+// Rendering — shape paths
+// ---------------------------------------------------------------------------
+function polygonPath(sides, r) {
+    for (let i = 0; i < sides; i++) {
+        const a = -Math.PI / 2 + (i / sides) * Math.PI * 2;
+        const x = Math.cos(a) * r;
+        const y = Math.sin(a) * r;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+}
+
+function starPath(points, outer, inner) {
+    const steps = points * 2;
+    for (let i = 0; i < steps; i++) {
+        const rr = i % 2 === 0 ? outer : inner;
+        const a = -Math.PI / 2 + (i / steps) * Math.PI * 2;
+        const x = Math.cos(a) * rr;
+        const y = Math.sin(a) * rr;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+}
+
+function shapePath(type, r) {
+    ctx.beginPath();
+    switch (type) {
+        case 'circle':
+            ctx.arc(0, 0, r, 0, Math.PI * 2);
+            break;
+        case 'triangle':
+            polygonPath(3, r);
+            break;
+        case 'square':
+            polygonPath(4, r);
+            break;
+        case 'rectangle':
+            ctx.rect(-r, -r * 0.68, r * 2, r * 1.36);
+            break;
+        case 'pentagon':
+            polygonPath(5, r);
+            break;
+        case 'hexagon':
+            polygonPath(6, r);
+            break;
+        case 'heptagon':
+            polygonPath(7, r);
+            break;
+        case 'octagon':
+            polygonPath(8, r);
+            break;
+        case 'star':
+            starPath(5, r, r * 0.45);
+            break;
+        case 'diamond':
+            ctx.moveTo(0, -r);
+            ctx.lineTo(r, 0);
+            ctx.lineTo(0, r);
+            ctx.lineTo(-r, 0);
+            ctx.closePath();
+            break;
+        case 'trapezoid':
+            ctx.moveTo(-r * 0.85, -r * 0.55);
+            ctx.lineTo(r * 0.85, -r * 0.55);
+            ctx.lineTo(r * 0.55, r * 0.70);
+            ctx.lineTo(-r * 0.55, r * 0.70);
+            ctx.closePath();
+            break;
+        case 'arrow':
+            ctx.moveTo(0, -r);
+            ctx.lineTo(r * 0.85, 0);
+            ctx.lineTo(r * 0.22, 0);
+            ctx.lineTo(r * 0.22, r * 0.85);
+            ctx.lineTo(-r * 0.22, r * 0.85);
+            ctx.lineTo(-r * 0.22, 0);
+            ctx.lineTo(-r * 0.85, 0);
+            ctx.closePath();
+            break;
+        case 'gear': {
+            const teeth = 8;
+            const steps = teeth * 2;
+            for (let i = 0; i < steps; i++) {
+                const a = -Math.PI / 2 + (i / steps) * Math.PI * 2;
+                const rr = i % 2 === 0 ? r * 1.08 : r * 0.72;
+                const x = Math.cos(a) * rr;
+                const y = Math.sin(a) * rr;
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.closePath();
+            break;
+        }
+        case 'spiral':
+            ctx.moveTo(0, 0);
+            for (let i = 1; i <= 40; i++) {
+                const a = i * 0.45;
+                const rr = (i / 40) * r;
+                ctx.lineTo(Math.cos(a) * rr, Math.sin(a) * rr);
+            }
+            break;
+        default:
+            ctx.arc(0, 0, r, 0, Math.PI * 2);
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Rendering
+// ---------------------------------------------------------------------------
+function drawEntityShape(s) {
+    const color = s.healthy ? HEALTHY_COLOR : UNHEALTHY_COLOR;
+    const pulse = 1 + Math.sin(s.pulse) * 0.05;
+    const r = s.r * pulse;
+
+    ctx.save();
+    ctx.translate(s.x, s.y);
+    ctx.rotate(s.rotation);
+
+    ctx.shadowBlur = 16;
+    ctx.shadowColor = color;
+
+    shapePath(s.type, r);
+    if (s.type !== 'spiral') {
+        ctx.globalAlpha = 0.22;
+        ctx.fillStyle = color;
+        ctx.fill();
+        ctx.globalAlpha = 1;
+    }
+
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    if (s.type !== 'spiral') {
+        ctx.shadowBlur = 0;
+        ctx.beginPath();
+        ctx.arc(0, 0, r * 0.14, 0, Math.PI * 2);
+        ctx.fillStyle = color;
+        ctx.fill();
+    }
+
+    ctx.restore();
+}
+
+function drawPowerup(pu) {
+    ctx.save();
+    const pulse = 1 + Math.sin(pu.pulse * 6) * 0.12;
+    const r = pu.r * pulse;
+
+    if (pu.life < 3) ctx.globalAlpha = 0.35 + 0.65 * Math.abs(Math.sin(pu.life * 6));
+
+    ctx.shadowBlur = 22;
+    ctx.shadowColor = pu.color;
+
+    ctx.strokeStyle = pu.color;
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.arc(pu.x, pu.y, r, 0, Math.PI * 2);
+    ctx.stroke();
+
+    ctx.fillStyle = pu.color + '33';
+    ctx.beginPath();
+    ctx.arc(pu.x, pu.y, r - 3, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = pu.color;
+    ctx.font = 'bold 15px ui-monospace, SFMono-Regular, Menlo, monospace';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(pu.short, pu.x, pu.y + 1);
+    ctx.restore();
+}
+
+// Draws the player at (px, py). We call it once for the real position
+// and, when close to an edge, again on the opposite side so the wrap
+// looks continuous instead of teleporting.
+function drawPlayerAt(px, py) {
+    const p = state.player;
+    const flashing = p.hitFlash > 0 && Math.floor(p.hitFlash * 20) % 2 === 0;
+    const blink = p.invuln > 0 && Math.floor(p.invuln * 12) % 2 === 0;
+
+    if (blink && !flashing) return;
+
+    const color = flashing ? '#ffffff' : PLAYER_COLOR;
+    const r = p.r;
+
+    ctx.save();
+    ctx.translate(px, py);
+
+    ctx.shadowBlur = 26;
+    ctx.shadowColor = color;
+
+    const rad = Math.min(8, r * 0.35);
+    const s = r * 0.92;
+    ctx.beginPath();
+    ctx.moveTo(-s + rad, -s);
+    ctx.lineTo(s - rad, -s);
+    ctx.arcTo(s, -s, s, -s + rad, rad);
+    ctx.lineTo(s, s - rad);
+    ctx.arcTo(s, s, s - rad, s, rad);
+    ctx.lineTo(-s + rad, s);
+    ctx.arcTo(-s, s, -s, s - rad, rad);
+    ctx.lineTo(-s, -s + rad);
+    ctx.arcTo(-s, -s, -s + rad, -s, rad);
+    ctx.closePath();
+
+    ctx.globalAlpha = 0.25;
+    ctx.fillStyle = color;
+    ctx.fill();
+    ctx.globalAlpha = 1;
+
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2.5;
+    ctx.stroke();
+
+    ctx.shadowBlur = 0;
+    ctx.beginPath();
+    ctx.arc(r * 0.28, -r * 0.10, r * 0.16, 0, Math.PI * 2);
+    ctx.fillStyle = color;
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(r * 0.28, -r * 0.10, r * 0.07, 0, Math.PI * 2);
+    ctx.fillStyle = '#0b1220';
+    ctx.fill();
+
+    ctx.restore();
+}
+
+function drawPlayer() {
+    const p = state.player;
+    drawPlayerAt(p.x, p.y);
+
+    // Ghost copies across the wrap seam so partial overlaps look right.
+    if (p.x < p.r) drawPlayerAt(p.x + W, p.y);
+    else if (p.x > W - p.r) drawPlayerAt(p.x - W, p.y);
+
+    if (p.y < p.r) drawPlayerAt(p.x, p.y + H);
+    else if (p.y > H - p.r) drawPlayerAt(p.x, p.y - H);
+}
+
+function render() {
+    ctx.save();
+
+    if (state.shake > 0) {
+        const sx = (Math.random() - 0.5) * state.shake;
+        const sy = (Math.random() - 0.5) * state.shake;
+        ctx.translate(sx, sy);
+    }
+
+    const bg = ctx.createRadialGradient(W / 2, H / 2, 60, W / 2, H / 2, Math.max(W, H));
+    bg.addColorStop(0, '#0f1420');
+    bg.addColorStop(1, '#050810');
+    ctx.fillStyle = bg;
+    ctx.fillRect(-40, -40, W + 80, H + 80);
+
+    ctx.strokeStyle = 'rgba(255,255,255,0.025)';
+    ctx.lineWidth = 1;
+    for (let x = 0; x < W; x += 60) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+    }
+    for (let y = 0; y < H; y += 60) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+    }
+
+    if (state.slowTimer > 0) {
+        ctx.fillStyle = `rgba(96,165,250,${0.05 * Math.min(1, state.slowTimer)})`;
+        ctx.fillRect(-40, -40, W + 80, H + 80);
+    }
+    if (state.magnetTimer > 0) {
+        ctx.fillStyle = `rgba(251,191,36,${0.04 * Math.min(1, state.magnetTimer)})`;
+        ctx.fillRect(-40, -40, W + 80, H + 80);
+    }
+
+    for (const pu of state.powerups) drawPowerup(pu);
+    for (const s of state.shapes) drawEntityShape(s);
+
+    if (!state.gameOver) drawPlayer();
+
+    for (const p of state.particles) {
+        ctx.globalAlpha = Math.max(0, p.life / p.maxLife);
+        ctx.fillStyle = p.color;
+        ctx.shadowBlur = 8;
+        ctx.shadowColor = p.color;
+        ctx.fillRect(p.x - p.size / 2, p.y - p.size / 2, p.size, p.size);
+    }
+    ctx.globalAlpha = 1;
+    ctx.shadowBlur = 0;
+
+    ctx.restore();
+}
+
+// ---------------------------------------------------------------------------
+// Loop
+// ---------------------------------------------------------------------------
+function loop(now) {
+    const dt = Math.min((now - lastTime) / 1000, 0.05);
+    lastTime = now;
+
+    update(dt);
+    render();
+
+    requestAnimationFrame(loop);
+}
+
+// ---------------------------------------------------------------------------
+// Lifecycle
+// ---------------------------------------------------------------------------
+function resetGame() {
+    difficulty = difficultySelect.value;
+    powerupsOn = powerupsSelect.value === 'on';
+
+    state = createState();
+    seedInitialShapes();
+
+    overlay.classList.remove('show');
+    statusEl.className = '';
+
+    updateHUD();
+    updateStatus();
+    updateControlsHint();
+
+    lastTime = performance.now();
+}
+
+// ---------------------------------------------------------------------------
+// Input — keyboard only
+// ---------------------------------------------------------------------------
+document.addEventListener('keydown', (e) => {
+    const k = e.key.toLowerCase();
+    keys[k] = true;
+    if (['arrowup', 'arrowdown', 'arrowleft', 'arrowright', ' '].includes(k)) {
+        e.preventDefault();
+    }
+});
+
+document.addEventListener('keyup', (e) => {
+    keys[e.key.toLowerCase()] = false;
+});
+
+window.addEventListener('blur', () => {
+    for (const k in keys) keys[k] = false;
+});
+
+document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) lastTime = performance.now();
+});
+
+// ---------------------------------------------------------------------------
+// Bindings
+// ---------------------------------------------------------------------------
+resetBtn.addEventListener('click', resetGame);
+playAgainBtn.addEventListener('click', resetGame);
+
+difficultySelect.addEventListener('change', resetGame);
+
+powerupsSelect.addEventListener('change', () => {
+    powerupsOn = powerupsSelect.value === 'on';
+    if (!powerupsOn && state) state.powerups = [];
+});
+
+// ---------------------------------------------------------------------------
+// Boot
+// ---------------------------------------------------------------------------
+setupCanvas();
+resetGame();
+
+requestAnimationFrame((t) => {
+    lastTime = t;
+    requestAnimationFrame(loop);
+});

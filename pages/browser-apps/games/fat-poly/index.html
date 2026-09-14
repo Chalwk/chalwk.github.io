@@ -6,76 +6,73 @@ description: Eat healthy shapes, avoid unhealthy ones. Reach level 10 to win!
 
 <!-- Copyright (c) 2024-2026 Jericho Crosby (Chalwk). All Rights Reserved. -->
 
-<link href="style.css" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 
 <main>
     <div class="container">
-        <section class="panel fatpoly-panel">
+        <section class="panel">
             <div class="panel-head">
-                <h1 class="fatpoly-title">FatPoly</h1>
-                <p class="muted small fatpoly-description">Eat healthy shapes, avoid unhealthy ones. Reach level 10 to
-                    win!</p>
+                <h1>FatPoly</h1>
+                <p class="muted small">Eat healthy shapes, avoid unhealthy ones. Reach level 10 to win!</p>
             </div>
 
-            <!-- controls / instructions box -->
-            <div class="fatpoly-instructions">
-                <h4 class="instructions-title"><i class="fas fa-info-circle"></i> Controls:</h4>
-                <div class="instructions-grid">
-                    <div><i class="fas fa-arrow-up"></i> <strong>Arrow Up/W:</strong> Move up</div>
-                    <div><i class="fas fa-arrow-down"></i> <strong>Arrow Down/S:</strong> Move down</div>
-                    <div><i class="fas fa-arrow-left"></i> <strong>Arrow Left/A:</strong> Move left</div>
-                    <div><i class="fas fa-arrow-right"></i> <strong>Arrow Right/D:</strong> Move right</div>
-                    <div><i class="fas fa-mouse-pointer"></i> <strong>Click/Drag:</strong> Move player</div>
-                    <div><i class="fas fa-space-shuttle"></i> <strong>Space:</strong> Pause/Resume</div>
-                </div>
+            <div id="game-settings">
+                <label for="difficulty">Difficulty
+                    <select id="difficulty">
+                        <option value="easy">Easy</option>
+                        <option value="normal" selected>Normal</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </label>
+                <label for="powerups" id="powerups-label">Power-ups
+                    <select id="powerups">
+                        <option value="on" selected>On</option>
+                        <option value="off">Off</option>
+                    </select>
+                </label>
             </div>
 
-            <!-- game canvas area -->
-            <div class="fatpoly-game-container" id="gameContainer">
-                <canvas id="gameCanvas" tabindex="0"></canvas>
-            </div>
-
-            <!-- top stats: score, level, health, start button -->
-            <div class="fatpoly-stats top-stats">
-                <div class="stat-item">
-                    <strong class="stat-label">Score:</strong>
-                    <span class="stat-value" id="score">0</span>
-                </div>
-                <div class="stat-item">
-                    <strong class="stat-label">Level:</strong>
-                    <span class="stat-value" id="level">1</span>
-                </div>
-                <div class="stat-item">
-                    <strong class="stat-label">Health:</strong>
-                    <div class="fatpoly-health-bar" id="healthBar">
-                        <div class="bar-fill" id="healthFill"></div>
+            <div id="game-container">
+                <div class="game-stats">
+                    <div class="stat-block score-stat">
+                        <strong>Score</strong>
+                        <span id="score" class="score">0</span>
+                    </div>
+                    <div class="status-block">
+                        <span id="status">Level 1</span>
+                        <span id="progress" class="progress-text">0 / 8</span>
+                    </div>
+                    <div class="stat-block health-stat">
+                        <strong>Health</strong>
+                        <div class="health-bar" aria-hidden="true">
+                            <div class="health-fill" id="health-fill"></div>
+                        </div>
                     </div>
                 </div>
-                <button class="btn btn-secondary" id="btn-start">
-                    <i class="fas fa-play"></i> Start
-                </button>
-            </div>
 
-            <!-- bottom stats: eaten/target, pause/sound/restart buttons -->
-            <div class="fatpoly-stats bottom-stats">
-                <div class="stat-item">
-                    <strong class="stat-label">Eaten:</strong>
-                    <span class="stat-value" id="eaten">0</span>
-                    <span class="stat-divider">/</span>
-                    <strong class="stat-label">Target:</strong>
-                    <span class="stat-value" id="target">10</span>
+                <div class="board-wrap">
+                    <canvas id="game-board" width="960" height="600"></canvas>
+
+                    <div class="game-over-overlay" id="game-over-overlay">
+                        <div class="game-over-content">
+                            <div id="game-over-message" class="game-over-message"></div>
+                            <div id="game-over-score" class="game-over-score"></div>
+                            <button class="btn btn-secondary" id="play-again">Play Again</button>
+                        </div>
+                    </div>
                 </div>
-                <div class="button-group">
-                    <button class="btn btn-secondary" id="btn-pause">
-                        <i class="fas fa-pause"></i> Pause
-                    </button>
-                    <button class="btn btn-secondary" id="btn-sound">
-                        <i class="fas fa-volume-up"></i>
-                    </button>
-                    <button class="btn btn-secondary" id="btn-reset">
-                        <i class="fas fa-redo"></i> Restart
-                    </button>
+
+                <div class="controls-hint" id="controls-hint"></div>
+
+                <div class="powerup-legend">
+                    <span class="pu-chip"><i class="pu-dot" style="background:#4ade80"></i>Healthy</span>
+                    <span class="pu-chip"><i class="pu-dot" style="background:#ef4444"></i>Unhealthy</span>
+                    <span class="pu-chip"><i class="pu-dot" style="background:#a78bfa"></i>Power-up</span>
                 </div>
+
+                <button class="btn btn-secondary" id="reset">
+                    <i class="fas fa-redo"></i> New Game
+                </button>
             </div>
         </section>
     </div>
