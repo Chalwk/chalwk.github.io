@@ -1,527 +1,748 @@
 // Copyright (c) 2024-2026 Jericho Crosby (Chalwk). All Rights Reserved.
 
 (() => {
-    const canvas = document.getElementById('game');
+    const canvas = document.getElementById('game-board');
     const ctx = canvas.getContext('2d');
-    let DPR = Math.max(1, window.devicePixelRatio || 1);
-
-    function resize() {
-        const rect = canvas.parentElement.getBoundingClientRect();
-        canvas.width = Math.floor(rect.width * DPR);
-        canvas.height = Math.floor(rect.height * DPR);
-        ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-    }
-
-    window.addEventListener('resize', resize);
-
-    let running = false;
-    let paused = false;
-    let last = performance.now();
-    let speed = 240;
-    let distance = 0;
-    let level = 1;
-    const gravity = 2200;
 
     const scoreEl = document.getElementById('score');
     const levelEl = document.getElementById('level');
-    const btnStart = document.getElementById('btn-start');
-    const btnPause = document.getElementById('btn-pause');
+    const statusEl = document.getElementById('status');
+    const startBtn = document.getElementById('start');
+    const pauseBtn = document.getElementById('pause');
+    const playAgainBtn = document.getElementById('play-again');
+    const difficultySelect = document.getElementById('difficulty');
+    const themeSelect = document.getElementById('theme');
+    const controlsHint = document.getElementById('controls-hint');
+    const overlay = document.getElementById('game-over-overlay');
+    const overlayMessage = document.getElementById('game-over-message');
+    const overlayScore = document.getElementById('game-over-score');
 
-    const player = {
-        x: 92,
-        y: 0,
-        vy: 0,
-        w: 46,
-        h: 50,
-        crouchW: 60,
-        crouchH: 30,
-        onGround: false,
-        jumping: false,
-        crouching: false,
-        boostReady: true,
-        color: '#072a14',
-        frame: 0,
-        frameTimer: 0
+    // ------------------------------------------------------------------
+    // Constants
+    // ------------------------------------------------------------------
+    const W = 960;
+    const H = 540;
+    const GROUND_Y = 420;
+
+    const GRAVITY = 2400;
+    const JUMP_VELOCITY = -880;
+    const BOOST_VELOCITY = -560;
+    const MAX_JUMP_HEIGHT = (JUMP_VELOCITY * JUMP_VELOCITY) / (2 * GRAVITY);
+
+    // Difficulty presets - all tuning knobs in one place
+    const DIFFICULTY = {
+        easy: { startSpeed: 210, speedRamp: 9, speedMax: 400, gapBase: 380, gapVar: 200, spikeChance: 0.55, barrelChance: 0.35, droneChance: 0.10 },
+        normal: { startSpeed: 250, speedRamp: 13, speedMax: 500, gapBase: 320, gapVar: 180, spikeChance: 0.50, barrelChance: 0.32, droneChance: 0.18 },
+        hard: { startSpeed: 300, speedRamp: 17, speedMax: 600, gapBase: 265, gapVar: 160, spikeChance: 0.45, barrelChance: 0.30, droneChance: 0.25 },
     };
 
-    const groundY = 300;
+    // Theme palettes
+    const THEMES = {
+        day: {
+            skyTop: '#7fc4ee', skyMid: '#bfe9ff', skyBot: '#eef8ff',
+            mountainFar: '#a9c8de', mountainNear: '#7fa8c4',
+            groundTop: '#c8a87b', groundMid: '#b8945f', groundBot: '#a57c47',
+            groundSpeck: '#8a7455', grass: '#7d9c5a',
+            sun: 'rgba(255,245,200,0.95)', sunGlow: 'rgba(255,245,200,0)',
+            cloud: 'rgba(255,255,255,0.85)',
+            bird: '#333333',
+            dino: '#0a3d20', dinoEye: '#ffffff',
+            star: null,
+        },
+        dusk: {
+            skyTop: '#3d2255', skyMid: '#d97655', skyBot: '#f2b06c',
+            mountainFar: '#7a4b6f', mountainNear: '#5b3a55',
+            groundTop: '#6b4a3a', groundMid: '#523a2c', groundBot: '#3d2b21',
+            groundSpeck: '#2e1f17', grass: '#8b6b3a',
+            sun: 'rgba(255,190,120,0.95)', sunGlow: 'rgba(255,190,120,0)',
+            cloud: 'rgba(255,200,160,0.7)',
+            bird: '#2a1a1a',
+            dino: '#1a2e1e', dinoEye: '#ffe8b0',
+            star: null,
+        },
+        night: {
+            skyTop: '#050a18', skyMid: '#0f1e38', skyBot: '#1e3350',
+            mountainFar: '#1a2a45', mountainNear: '#0f1b30',
+            groundTop: '#2a3245', groundMid: '#1c2330', groundBot: '#0e131b',
+            groundSpeck: '#080b12', grass: '#3a5f4a',
+            sun: 'rgba(220,235,255,0.9)', sunGlow: 'rgba(220,235,255,0)',
+            cloud: 'rgba(150,180,220,0.35)',
+            bird: '#8899aa',
+            dino: '#4a7a5c', dinoEye: '#ffffff',
+            star: '#e8eeff',
+        },
+    };
+
+    // ------------------------------------------------------------------
+    // Canvas
+    // ------------------------------------------------------------------
+    let dpr = 1;
+    function setupCanvas() {
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = W * dpr;
+        canvas.height = H * dpr;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    // ------------------------------------------------------------------
+    // Seeded RNG (used only for one-time / spawn-time generation)
+    // ------------------------------------------------------------------
+    function makeRng(seed) {
+        let t = seed >>> 0;
+        return () => {
+            t += 0x6D2B79F5;
+            let r = Math.imul(t ^ (t >>> 15), 1 | t);
+            r = (r + Math.imul(r ^ (r >>> 7), 61 | r)) ^ r;
+            return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+        };
+    }
+
+    let rng = makeRng(Date.now());
+
+    // ------------------------------------------------------------------
+    // State
+    // ------------------------------------------------------------------
+    let started = false;
+    let paused = false;
+    let gameOver = false;
+
+    let lastTime = 0;
+    let elapsed = 0;
+
+    let distance = 0;
+    let speed = 0;
+    let level = 1;
+    let score = 0;
+
+    let cfg = DIFFICULTY.normal;
+    let theme = THEMES.day;
+
+    let nextSpawnDist = 0;
+    let distSinceSpawn = 0;
+
+    const player = {
+        x: 140,
+        y: GROUND_Y - 60,
+        vy: 0,
+        w: 52,
+        h: 60,
+        crouchW: 66,
+        crouchH: 36,
+        onGround: true,
+        jumping: false,
+        crouching: false,
+        canBoost: false,
+        runFrame: 0,
+        runTimer: 0,
+    };
+
     let obstacles = [];
     let particles = [];
     let clouds = [];
     let birds = [];
-    let groundTextures = [];
+    let groundDetails = [];
+    let grassTufts = [];
+    let stars = [];
 
-    function makeRng(seed = Date.now()) {
-        let t = seed >>> 0;
-        return () => {
-            t += 0x6D2B79F5;
-            let r = Math.imul(t ^ t >>> 15, 1 | t);
-            r = (r + Math.imul(r ^ r >>> 7, 61 | r)) ^ r;
-            return ((r ^ r >>> 14) >>> 0) / 4294967296;
+    // ------------------------------------------------------------------
+    // Audio (created lazily on first user gesture)
+    // ------------------------------------------------------------------
+    let audioCtx = null;
+    function ensureAudio() {
+        if (!audioCtx) {
+            const AC = window.AudioContext || window.webkitAudioContext;
+            if (AC) audioCtx = new AC();
         }
+        if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+        return audioCtx;
+    }
+    function tone(freq, dur, type = 'sine', gain = 0.03) {
+        const ac = ensureAudio();
+        if (!ac) return;
+        const o = ac.createOscillator();
+        const g = ac.createGain();
+        o.type = type;
+        o.frequency.value = freq;
+        g.gain.value = gain;
+        g.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime + dur);
+        o.connect(g);
+        g.connect(ac.destination);
+        o.start();
+        o.stop(ac.currentTime + dur);
     }
 
-    function generateSegments(seed) {
-        const rng = makeRng(seed);
-        const segs = [];
-
-        for (let i = 0; i < 100; i++) {
-            const difficulty = Math.min(1, i / 40);
-            const theme = rng() < 0.22 ? 'aerial' : 'ground';
-            const density = 0.6 + difficulty * 1.2 + rng() * 0.6;
-            const gapMin = 220 - difficulty * 80 - rng() * 60;
-            const gapMax = gapMin + 160 + rng() * 280;
-            segs.push({ theme, density, gapMin: Math.round(gapMin), gapMax: Math.round(gapMax) });
-        }
-        return segs;
-    }
-
-    let segmentCursor = 0;
-    let spawnX = 700;
-    let rng = makeRng();
-    let segments = generateSegments(Date.now());
-
-    function resetGame() {
-        speed = 240;
-        distance = 0;
-        level = 1;
-        obstacles = [];
-        particles = [];
-        clouds = [];
-        birds = [];
-        groundTextures = [];
-        segmentCursor = 0;
-        spawnX = 700;
-        rng = makeRng(Date.now());
-        segments = generateSegments(Date.now());
-        player.y = groundY - player.h;
-        player.vy = 0;
-        player.onGround = true;
-        player.crouching = false;
-        player.frame = 0;
-        player.frameTimer = 0;
-        running = true;
-        paused = false;
-        last = performance.now();
-
-        generateGroundTextures();
-    }
-
-    function createObstacle(type, x) {
-        if (type === 'spike') {
-            const h = 56 + Math.round(rng() * 48);
-            const w = 26 + Math.round(rng() * 18);
-            return { type: 'spike', x, y: 0, w, h, pass: false };
-        }
-        if (type === 'barrel') {
-            const w = 46 + Math.round(rng() * 38);
-            const h = 38 + Math.round(rng() * 20);
-            return { type: 'barrel', x, w, h, pass: false };
-        }
-        if (type === 'drone') {
-            const w = 60;
-            const h = 40;
-            const ybase = groundY - player.h - 80 - Math.round(rng() * 120);
-            return { type: 'drone', x, w, h, y: ybase, osc: rng() * Math.PI * 2, pass: false };
-        }
-        return createObstacle('spike', x);
-    }
-
-    function populateObstaclesIfNeeded() {
-        const needed = 6;
-        if (obstacles.length > 0 && obstacles.filter(o => o.x > 0).length >= needed) return;
-
-        const seg = segments[segmentCursor % segments.length];
-        const density = seg.density;
-        const count = 3 + Math.floor(density * 3);
-        let x = spawnX + rng() * 120;
-        for (let i = 0; i < count; i++) {
-            const roll = rng();
-            let type;
-            if (seg.theme === 'aerial') type = roll < 0.6 ? 'drone' : (roll < 0.8 ? 'spike' : 'barrel');
-            else type = roll < 0.6 ? 'spike' : (roll < 0.85 ? 'barrel' : 'drone');
-
-            const gap = seg.gapMin + Math.round(rng() * (seg.gapMax - seg.gapMin));
-            const ob = createObstacle(type, x + gap);
-            if (ob.type === 'spike' || ob.type === 'barrel') {
-                ob.y = groundY - ob.h;
-            }
-            obstacles.push(ob);
-            x += gap;
-        }
-        spawnX = x + 160 + rng() * 240;
-        segmentCursor++;
-    }
-
+    // ------------------------------------------------------------------
+    // World generation (one-time, per-run)
+    // ------------------------------------------------------------------
     function makeCloud() {
         const layer = Math.floor(rng() * 3);
-        let size, speed, alpha, y;
+        let size, spd, alpha, y;
+        if (layer === 0) { size = 180 + rng() * 200; spd = 10 + rng() * 20; alpha = 0.35 + rng() * 0.25; y = 30 + rng() * 60; }
+        else if (layer === 1) { size = 120 + rng() * 150; spd = 25 + rng() * 30; alpha = 0.55 + rng() * 0.2; y = 70 + rng() * 70; }
+        else { size = 80 + rng() * 100; spd = 45 + rng() * 45; alpha = 0.75 + rng() * 0.2; y = 110 + rng() * 90; }
 
-        switch (layer) {
-            case 0:
-                size = 180 + rng() * 200;
-                speed = 15 + rng() * 25;
-                alpha = 0.1 + rng() * 0.15;
-                y = 20 + rng() * 60;
-                break;
-            case 1:
-                size = 120 + rng() * 150;
-                speed = 30 + rng() * 40;
-                alpha = 0.2 + rng() * 0.2;
-                y = 60 + rng() * 80;
-                break;
-            case 2:
-                size = 80 + rng() * 100;
-                speed = 50 + rng() * 60;
-                alpha = 0.3 + rng() * 0.2;
-                y = 100 + rng() * 100;
-                break;
-        }
-
-        clouds.push({
-            x: 900 + rng() * 600,
-            y: y,
-            w: size,
-            spd: speed,
-            alpha: alpha,
-            layer: layer
-        });
+        return {
+            x: rng() * W * 1.3,
+            y, w: size, spd, alpha, layer,
+            seed: rng() * 1000,
+        };
     }
 
     function makeBird() {
-        const type = Math.floor(rng() * 3);
-        const y = 40 + rng() * 120;
-        const speed = 80 + rng() * 120;
-        const size = 12 + rng() * 8;
-
-        birds.push({
-            x: 900,
-            y: y,
-            spd: speed,
-            size: size,
-            type: type,
+        return {
+            x: W + rng() * 200,
+            y: 40 + rng() * 140,
+            spd: 70 + rng() * 110,
+            size: 10 + rng() * 8,
+            type: Math.floor(rng() * 3),
             wingPhase: rng() * Math.PI * 2,
-            wingSpeed: 8 + rng() * 6
-        });
+            wingSpeed: 8 + rng() * 6,
+        };
     }
 
-    function generateGroundTextures() {
-        const cw = canvas.width / DPR;
-        const count = 50 + Math.floor(rng() * 30);
-
+    function rebuildGroundDecor() {
+        groundDetails = [];
+        grassTufts = [];
+        const count = 140;
         for (let i = 0; i < count; i++) {
-            const type = Math.floor(rng() * 3);
-            const size = 2 + rng() * 6;
-            const x = rng() * cw * 2;
-            const alpha = 0.3 + rng() * 0.4;
-
-            groundTextures.push({
-                x: x,
-                y: groundY + 2 + rng() * 8,
-                size: size,
-                type: type,
-                alpha: alpha,
-                speedMod: 0.3 + rng() * 0.4
+            groundDetails.push({
+                x: rng() * W * 2,
+                y: GROUND_Y + 4 + rng() * 70,
+                size: 2 + rng() * 5,
+                type: Math.floor(rng() * 3),
+                alpha: 0.25 + rng() * 0.4,
+            });
+        }
+        for (let i = 0; i < 90; i++) {
+            grassTufts.push({
+                x: rng() * W * 2,
+                h: 4 + rng() * 7,
+                lean: (rng() - 0.5) * 3,
             });
         }
     }
 
-    function spawnParticles(x, y, color) {
-        for (let i = 0; i < 18; i++) {
-            particles.push({
-                x,
-                y,
-                vx: (rng() - 0.5) * 420,
-                vy: (rng() - 1.5) * 360,
-                life: 0.9 + rng() * 0.9,
-                size: 2 + rng() * 3,
-                color
+    function rebuildStars() {
+        stars = [];
+        for (let i = 0; i < 130; i++) {
+            stars.push({
+                x: rng() * W,
+                y: rng() * (GROUND_Y - 80),
+                r: 0.4 + rng() * 1.4,
+                tw: rng() * Math.PI * 2,
             });
         }
     }
 
-    let wantJump = false;
-    let wantCrouch = false;
-
-    function onJump() {
-        if (!running) return;
+    // ------------------------------------------------------------------
+    // Player actions
+    // ------------------------------------------------------------------
+    function jump() {
+        if (!started || paused || gameOver) return;
         if (player.onGround && !player.crouching) {
-            player.vy = -820;
+            player.vy = JUMP_VELOCITY;
             player.onGround = false;
             player.jumping = true;
-            player.boostReady = true;
-            playJumpTone();
-        } else if (player.jumping && player.boostReady) {
-            player.vy = -520;
-            player.boostReady = false;
-            playBoostTone();
+            player.canBoost = true;
+            tone(420, 0.06, 'sine', 0.025);
+        } else if (!player.onGround && player.jumping && player.canBoost) {
+            player.vy = BOOST_VELOCITY;
+            player.canBoost = false;
+            tone(620, 0.09, 'triangle', 0.03);
+            spawnParticles(player.x + player.w / 2, player.y + player.h, theme.dino, 10, 140);
         }
     }
 
-    function onCrouchStart() {
-        if (!running || !player.onGround || player.jumping) return;
+    function crouchStart() {
+        if (!started || paused || gameOver) return;
+        if (!player.onGround || player.jumping) return;
         player.crouching = true;
         player.w = player.crouchW;
         player.h = player.crouchH;
-        player.y = groundY - player.h;
+        player.y = GROUND_Y - player.h;
     }
 
-    function onCrouchEnd() {
-        if (player.crouching) {
-            player.crouching = false;
-            player.w = 46;
-            player.h = 50;
-            player.y = groundY - player.h;
+    function crouchEnd() {
+        if (!player.crouching) return;
+        player.crouching = false;
+        player.w = 52;
+        player.h = 60;
+        player.y = GROUND_Y - player.h;
+    }
+
+    // ------------------------------------------------------------------
+    // Obstacles
+    // ------------------------------------------------------------------
+    function spawnObstacle() {
+        const r = rng();
+        let type;
+        if (level < 2) {
+            type = r < 0.65 ? 'spike' : 'barrel';
+        } else {
+            type = r < cfg.spikeChance ? 'spike'
+                : r < cfg.spikeChance + cfg.barrelChance ? 'barrel'
+                    : 'drone';
+        }
+
+        const margin = 80;
+        let ob;
+
+        if (type === 'spike') {
+            const h = 48 + Math.round(rng() * 40); // 48-88, jumpable
+            const w = 30 + Math.round(rng() * 16);
+            ob = { type, x: W + margin, y: GROUND_Y - h, w, h };
+        } else if (type === 'barrel') {
+            const w = 46 + Math.round(rng() * 30);
+            const h = 40 + Math.round(rng() * 26);
+            ob = { type, x: W + margin, y: GROUND_Y - h, w, h };
+        } else {
+            // drone - flying, at a height the player must duck or jump under/over
+            const w = 62;
+            const h = 38;
+            // bottom of drone sits between -55 and -95 above ground
+            const bottomOffset = 55 + Math.round(rng() * 40);
+            const y = GROUND_Y - bottomOffset - h;
+            ob = {
+                type: 'drone',
+                x: W + margin,
+                y, w, h,
+                baseY: y,
+                osc: rng() * Math.PI * 2,
+                oscAmp: 4 + rng() * 5,
+                oscSpeed: 2.5 + rng() * 1.5,
+            };
+        }
+
+        obstacles.push(ob);
+
+        // Next spawn gap accounts for this obstacle's width
+        const gap = cfg.gapBase + rng() * cfg.gapVar;
+        nextSpawnDist = gap + ob.w;
+        distSinceSpawn = 0;
+    }
+
+    // ------------------------------------------------------------------
+    // Particles
+    // ------------------------------------------------------------------
+    function spawnParticles(x, y, color, count = 16, speed = 380) {
+        for (let i = 0; i < count; i++) {
+            const a = rng() * Math.PI * 2;
+            const sp = speed * (0.35 + rng() * 0.9);
+            particles.push({
+                x, y,
+                vx: Math.cos(a) * sp,
+                vy: Math.sin(a) * sp - 120,
+                life: 0.7 + rng() * 0.7,
+                maxLife: 0.7 + rng() * 0.7,
+                size: 2 + rng() * 3,
+                color,
+            });
         }
     }
 
-    document.addEventListener('keydown', e => {
-        if ([' ', 'ArrowUp', 'w'].includes(e.key)) {
-            e.preventDefault();
-            onJump();
+    // ------------------------------------------------------------------
+    // Collision
+    // ------------------------------------------------------------------
+    function playerHitbox() {
+        // Slightly tightened hitbox so the game feels fair
+        const px = player.x + (player.crouching ? 8 : 6);
+        const py = player.y + (player.crouching ? 2 : 4);
+        const pw = (player.crouching ? player.crouchW : player.w) - (player.crouching ? 16 : 12);
+        const ph = (player.crouching ? player.crouchH : player.h) - (player.crouching ? 4 : 8);
+        return { x: px, y: py, w: pw, h: ph };
+    }
+
+    function obstacleHitbox(o) {
+        if (o.type === 'spike') {
+            // Narrow the spike down to its solid body
+            return {
+                x: o.x + o.w * 0.22,
+                y: o.y + o.h * 0.35,
+                w: o.w * 0.56,
+                h: o.h * 0.65,
+            };
         }
-        if (['ArrowDown', 's'].includes(e.key)) {
-            e.preventDefault();
-            onCrouchStart();
+        if (o.type === 'barrel') {
+            return { x: o.x + 3, y: o.y + 3, w: o.w - 6, h: o.h - 6 };
         }
-    });
+        // drone
+        return { x: o.x + 5, y: o.y + 5, w: o.w - 10, h: o.h - 10 };
+    }
 
-    document.addEventListener('keyup', e => {
-        if (['ArrowDown', 's'].includes(e.key)) {
-            e.preventDefault();
-            onCrouchEnd();
+    function rectsOverlap(a, b) {
+        return a.x < b.x + b.w && a.x + a.w > b.x &&
+            a.y < b.y + b.h && a.y + a.h > b.y;
+    }
+
+    function checkCollisions() {
+        const p = playerHitbox();
+        for (const o of obstacles) {
+            if (rectsOverlap(p, obstacleHitbox(o))) return o;
         }
-    });
-
-    canvas.addEventListener('pointerdown', e => onJump());
-
-    btnStart.addEventListener('click', () => {
-        resetGame();
-    });
-    btnPause.addEventListener('click', () => {
-        paused = !paused;
-        btnPause.innerHTML = paused ? '<i class="fas fa-play"></i> Resume' : '<i class="fas fa-pause"></i> Pause';
-    });
-
-    let audioCtx;
-
-    function ensureAudio() {
-        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        return null;
     }
 
-    function playJumpTone() {
-        try {
-            ensureAudio();
-            const o = audioCtx.createOscillator();
-            const g = audioCtx.createGain();
-            o.type = 'sine';
-            o.frequency.value = 420;
-            g.gain.value = 0.02;
-            o.connect(g);
-            g.connect(audioCtx.destination);
-            o.start();
-            o.stop(audioCtx.currentTime + 0.06);
-        } catch (e) {
-        }
-    }
-
-    function playBoostTone() {
-        try {
-            ensureAudio();
-            const o = audioCtx.createOscillator();
-            const g = audioCtx.createGain();
-            o.type = 'triangle';
-            o.frequency.value = 620;
-            g.gain.value = 0.03;
-            o.connect(g);
-            g.connect(audioCtx.destination);
-            o.start();
-            o.stop(audioCtx.currentTime + 0.09);
-        } catch (e) {
-        }
-    }
-
-    function playCollision() {
-        try {
-            ensureAudio();
-            const o = audioCtx.createOscillator();
-            const g = audioCtx.createGain();
-            o.type = 'square';
-            o.frequency.value = 120;
-            g.gain.value = 0.06;
-            o.connect(g);
-            g.connect(audioCtx.destination);
-            o.start();
-            o.stop(audioCtx.currentTime + 0.12);
-        } catch (e) {
-        }
-    }
-
-    function collide(a, b) {
-        return a.x < b.x + b.w &&
-            a.x + a.w > b.x &&
-            a.y < b.y + b.h &&
-            a.y + a.h > b.y;
-    }
-
-    function checkPlayerCollision(player, obstacle) {
-        const playerRect = {
-            x: player.x + (player.crouching ? 8 : 4),
-            y: player.y + (player.crouching ? 2 : 6),
-            w: player.w - (player.crouching ? 16 : 8),
-            h: player.h - (player.crouching ? 4 : 12)
-        };
-
-        const obRect = {
-            x: obstacle.x,
-            y: obstacle.y,
-            w: obstacle.w,
-            h: obstacle.h
-        };
-
-        if (!collide(playerRect, obRect)) return false;
-
-        switch (obstacle.type) {
-            case 'spike':
-                return checkSpikeCollision(playerRect, obstacle);
-            case 'barrel':
-                return checkBarrelCollision(playerRect, obstacle);
-            case 'drone':
-                return checkDroneCollision(playerRect, obstacle);
-            default:
-                return collide(playerRect, obRect);
-        }
-    }
-
-    function pointInTriangle(p, a, b, c) {
-        const area = (b.y - c.y) * (a.x - c.x) + (c.x - b.x) * (a.y - c.y);
-        const s = ((b.y - c.y) * (p.x - c.x) + (c.x - b.x) * (p.y - c.y)) / area;
-        const t = ((c.y - a.y) * (p.x - c.x) + (a.x - c.x) * (p.y - c.y)) / area;
-        const u = 1 - s - t;
-
-        return s >= 0 && t >= 0 && u >= 0 && s <= 1 && t <= 1 && u <= 1;
-    }
-
-    function checkSpikeCollision(player, spike) {
-        const spikeTop = { x: spike.x + spike.w * 0.5, y: spike.y + spike.h * 0.05 };
-        const spikeLeft = { x: spike.x + spike.w * 0.25, y: spike.y + spike.h * 0.3 };
-        const spikeRight = { x: spike.x + spike.w * 0.75, y: spike.y + spike.h * 0.3 };
-        const spikeBaseLeft = { x: spike.x, y: spike.y + spike.h };
-        const spikeBaseRight = { x: spike.x + spike.w, y: spike.y + spike.h };
-
-        const playerCorners = [
-            { x: player.x, y: player.y },
-            { x: player.x + player.w, y: player.y },
-            { x: player.x, y: player.y + player.h },
-            { x: player.x + player.w, y: player.y + player.h }
-        ];
-
-        for (let corner of playerCorners) {
-            if (pointInTriangle(corner, spikeTop, spikeLeft, spikeRight) ||
-                pointInTriangle(corner, spikeLeft, spikeBaseLeft, spikeBaseRight) ||
-                pointInTriangle(corner, spikeLeft, spikeRight, spikeBaseRight)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    function checkBarrelCollision(player, barrel) {
-        const adjustedBarrel = {
-            x: barrel.x + 4,
-            y: barrel.y + 4,
-            w: barrel.w - 8,
-            h: barrel.h - 8
-        };
-        return collide(player, adjustedBarrel);
-    }
-
-    function checkDroneCollision(player, drone) {
-        return collide(player, drone);
-    }
-
+    // ------------------------------------------------------------------
+    // Update
+    // ------------------------------------------------------------------
     function update(dt) {
-        if (!running || paused) return;
+        if (!started || paused || gameOver) return;
 
+        elapsed += dt;
         distance += speed * dt;
-        level = 1 + Math.floor(distance / 1500);
-        speed = 240 + level * 18;
 
-        populateObstaclesIfNeeded();
+        const targetLevel = 1 + Math.floor(distance / 1500);
+        if (targetLevel !== level) {
+            level = targetLevel;
+            levelEl.textContent = level;
+        }
+        speed = Math.min(cfg.speedMax, cfg.startSpeed + (level - 1) * cfg.speedRamp);
 
-        if (clouds.length < 12 && rng() < 0.03) makeCloud();
-        if (birds.length < 3 && rng() < 0.008) makeBird();
-
-        player.vy += gravity * dt;
+        // Player physics
+        player.vy += GRAVITY * dt;
         player.y += player.vy * dt;
-        if (player.y + player.h >= groundY) {
-            player.y = groundY - player.h;
+
+        if (player.y + player.h >= GROUND_Y) {
+            player.y = GROUND_Y - player.h;
             player.vy = 0;
+            if (!player.onGround) {
+                // landing puff
+                spawnParticles(player.x + player.w / 2, GROUND_Y, 'rgba(220,200,160,0.9)', 6, 120);
+            }
             player.onGround = true;
             player.jumping = false;
+            player.canBoost = false;
         }
 
+        // Run animation
         if (player.onGround && !player.crouching) {
-            player.frameTimer += dt;
-            if (player.frameTimer > 0.1) {
-                player.frameTimer = 0;
-                player.frame = (player.frame + 1) % 2;
+            player.runTimer += dt;
+            if (player.runTimer > 0.1) {
+                player.runTimer = 0;
+                player.runFrame ^= 1;
             }
         }
 
+        // Obstacles move & scroll
+        const scroll = speed * dt;
         for (const o of obstacles) {
-            o.x -= speed * dt;
+            o.x -= scroll;
             if (o.type === 'drone') {
-                o.osc += dt * 4 * (0.8 + rng() * 0.4);
-                o.y += Math.sin(o.osc) * 6 * dt * 60;
-            }
-            if (!o.pass && o.x + (o.w || 30) < player.x) {
-                o.pass = true;
-                distance += 8;
+                o.osc += dt * o.oscSpeed;
+                o.y = o.baseY + Math.sin(o.osc) * o.oscAmp;
             }
         }
-        obstacles = obstacles.filter(o => o.x + (o.w || 30) > -60);
+        obstacles = obstacles.filter(o => o.x + o.w > -60);
 
-        for (const c of clouds) {
-            const layerSpeed = [0.3, 0.6, 0.9][c.layer] || 0.6;
-            c.x -= c.spd * dt * layerSpeed;
+        // Spawning
+        distSinceSpawn += scroll;
+        if (distSinceSpawn >= nextSpawnDist) {
+            spawnObstacle();
         }
-        clouds = clouds.filter(c => c.x + c.w > -200);
+
+        // Score: award small trickle per distance
+        score = Math.floor(distance / 10) + level * 25;
+        scoreEl.textContent = score;
+
+        // Clouds / birds
+        for (const c of clouds) {
+            const layerMul = [0.25, 0.5, 0.85][c.layer] || 0.5;
+            c.x -= (c.spd + speed * 0.15) * dt * layerMul;
+        }
+        clouds = clouds.filter(c => c.x + c.w > -220);
+
+        if (clouds.length < 14 && rng() < 0.02) clouds.push(makeCloud());
 
         for (const b of birds) {
-            b.x -= b.spd * dt;
+            b.x -= (b.spd + speed * 0.1) * dt;
             b.wingPhase += dt * b.wingSpeed;
         }
-        birds = birds.filter(b => b.x > -50);
+        birds = birds.filter(b => b.x > -60);
+        if (birds.length < 3 && rng() < 0.006) birds.push(makeBird());
 
-        for (const t of groundTextures) {
-            t.x -= speed * dt * t.speedMod;
-            if (t.x < -20) {
-                t.x = canvas.width / DPR + 20;
-            }
+        // Ground decorations scroll
+        for (const t of groundDetails) {
+            t.x -= scroll * 0.55;
+            if (t.x < -20) t.x += W * 2;
+        }
+        for (const g of grassTufts) {
+            g.x -= scroll * 0.9;
+            if (g.x < -20) g.x += W * 2;
         }
 
+        // Particles
         for (let i = particles.length - 1; i >= 0; i--) {
             const p = particles[i];
-            p.vy += 1000 * dt;
+            p.vy += 900 * dt;
             p.x += p.vx * dt;
             p.y += p.vy * dt;
             p.life -= dt;
             if (p.life <= 0) particles.splice(i, 1);
         }
 
-        for (const o of obstacles) {
-            if (checkPlayerCollision(player, o)) {
-                running = false;
-                playCollision();
-                spawnParticles(player.x + player.w / 2, player.y + player.h / 2, '#ff6b6b');
-                btnStart.innerHTML = '<i class="fas fa-redo"></i> Restart';
-                break;
-            }
+        // Collision
+        const hit = checkCollisions();
+        if (hit) {
+            triggerGameOver();
         }
     }
 
-    function drawRoundedRect(ctx, x, y, w, h, r) {
+    function triggerGameOver() {
+        gameOver = true;
+        started = false;
+        tone(120, 0.18, 'square', 0.06);
+        spawnParticles(
+            player.x + player.w / 2,
+            player.y + player.h / 2,
+            '#ff6b6b',
+            26,
+            460
+        );
+        statusEl.textContent = 'Game Over';
+        statusEl.className = 'lose-message';
+
+        overlayMessage.textContent = 'Extinction';
+        overlayScore.textContent = `Score: ${score}  •  Level ${level}`;
+        overlay.classList.add('show');
+
+        pauseBtn.disabled = true;
+        startBtn.innerHTML = '<i class="fas fa-redo"></i> Restart';
+    }
+
+    // ------------------------------------------------------------------
+    // Render
+    // ------------------------------------------------------------------
+    function drawSky() {
+        const g = ctx.createLinearGradient(0, 0, 0, H);
+        g.addColorStop(0, theme.skyTop);
+        g.addColorStop(0.5, theme.skyMid);
+        g.addColorStop(1, theme.skyBot);
+        ctx.fillStyle = g;
+        ctx.fillRect(0, 0, W, H);
+    }
+
+    function drawSun() {
+        const sunX = W - 130;
+        const sunY = 100;
+        const grad = ctx.createRadialGradient(sunX, sunY, 10, sunX, sunY, 170);
+        grad.addColorStop(0, theme.sun);
+        grad.addColorStop(1, theme.sunGlow);
+        ctx.fillStyle = grad;
+        ctx.fillRect(sunX - 200, sunY - 200, 400, 400);
+    }
+
+    function drawStars() {
+        if (!theme.star) return;
+        for (const s of stars) {
+            const tw = 0.5 + 0.5 * Math.sin(elapsed * 1.5 + s.tw);
+            ctx.globalAlpha = 0.4 + tw * 0.6;
+            ctx.fillStyle = theme.star;
+            ctx.beginPath();
+            ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+    }
+
+    function drawMountains() {
+        // Far range
+        ctx.fillStyle = theme.mountainFar;
+        ctx.beginPath();
+        ctx.moveTo(0, GROUND_Y - 40);
+        for (let x = 0; x <= W; x += 40) {
+            const y = GROUND_Y - 70 - Math.sin(x * 0.011 + 1.2) * 40 - Math.cos(x * 0.023) * 22;
+            ctx.lineTo(x, y);
+        }
+        ctx.lineTo(W, GROUND_Y);
+        ctx.lineTo(0, GROUND_Y);
+        ctx.closePath();
+        ctx.fill();
+
+        // Near range
+        ctx.fillStyle = theme.mountainNear;
+        ctx.beginPath();
+        ctx.moveTo(0, GROUND_Y - 20);
+        for (let x = 0; x <= W; x += 30) {
+            const y = GROUND_Y - 40 - Math.sin(x * 0.017 + 2.7) * 26 - Math.cos(x * 0.031) * 12;
+            ctx.lineTo(x, y);
+        }
+        ctx.lineTo(W, GROUND_Y);
+        ctx.lineTo(0, GROUND_Y);
+        ctx.closePath();
+        ctx.fill();
+    }
+
+    function drawCloud(c) {
+        ctx.globalAlpha = c.alpha;
+        ctx.fillStyle = theme.cloud;
+        const cx = c.x + c.w / 2;
+        const cy = c.y + c.w * 0.05;
+        const r = c.w * 0.22;
+
+        ctx.beginPath();
+        ctx.arc(cx - r * 1.2, cy, r * 0.85, 0, Math.PI * 2);
+        ctx.arc(cx, cy - r * 0.35, r * 1.05, 0, Math.PI * 2);
+        ctx.arc(cx + r * 1.1, cy, r * 0.9, 0, Math.PI * 2);
+        ctx.arc(cx + r * 0.1, cy + r * 0.4, r * 0.95, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+    }
+
+    function drawBird(b) {
+        ctx.save();
+        ctx.translate(b.x, b.y);
+        ctx.strokeStyle = theme.bird;
+        ctx.lineWidth = 1.4;
+        const w = b.size;
+        const flap = Math.sin(b.wingPhase) * w * 0.55;
+
+        if (b.type === 0) {
+            // Simple "V"
+            ctx.beginPath();
+            ctx.moveTo(-w, -flap);
+            ctx.lineTo(0, 0);
+            ctx.lineTo(w, -flap);
+            ctx.stroke();
+        } else if (b.type === 1) {
+            // "M" shape
+            ctx.beginPath();
+            ctx.moveTo(-w, 0);
+            ctx.quadraticCurveTo(-w * 0.5, -flap * 1.2, 0, 0);
+            ctx.quadraticCurveTo(w * 0.5, -flap * 1.2, w, 0);
+            ctx.stroke();
+        } else {
+            // Double arc
+            ctx.beginPath();
+            ctx.moveTo(-w * 0.6, 0);
+            ctx.quadraticCurveTo(0, -flap, w * 0.6, 0);
+            ctx.stroke();
+        }
+        ctx.restore();
+    }
+
+    function drawGround() {
+        // Ground band
+        const g = ctx.createLinearGradient(0, GROUND_Y, 0, GROUND_Y + 120);
+        g.addColorStop(0, theme.groundTop);
+        g.addColorStop(0.35, theme.groundMid);
+        g.addColorStop(1, theme.groundBot);
+        ctx.fillStyle = g;
+        ctx.fillRect(0, GROUND_Y, W, H - GROUND_Y);
+
+        // Top highlight line
+        ctx.strokeStyle = 'rgba(0,0,0,0.15)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(0, GROUND_Y + 0.5);
+        ctx.lineTo(W, GROUND_Y + 0.5);
+        ctx.stroke();
+
+        // Details (pre-generated, stable)
+        for (const t of groundDetails) {
+            ctx.globalAlpha = t.alpha;
+            ctx.fillStyle = theme.groundSpeck;
+            if (t.type === 0) {
+                ctx.fillRect(t.x, t.y, t.size, 1.5);
+            } else if (t.type === 1) {
+                ctx.beginPath();
+                ctx.arc(t.x, t.y, t.size * 0.5, 0, Math.PI * 2);
+                ctx.fill();
+            } else {
+                ctx.fillRect(t.x - t.size * 0.5, t.y, t.size, 1);
+            }
+        }
+        ctx.globalAlpha = 1;
+
+        // Grass tufts
+        ctx.strokeStyle = theme.grass;
+        ctx.lineWidth = 1.4;
+        for (const g2 of grassTufts) {
+            ctx.beginPath();
+            ctx.moveTo(g2.x, GROUND_Y);
+            ctx.lineTo(g2.x + g2.lean - 2, GROUND_Y - g2.h);
+            ctx.moveTo(g2.x, GROUND_Y);
+            ctx.lineTo(g2.x + g2.lean + 2, GROUND_Y - g2.h * 0.85);
+            ctx.moveTo(g2.x, GROUND_Y);
+            ctx.lineTo(g2.x + g2.lean, GROUND_Y - g2.h * 1.05);
+            ctx.stroke();
+        }
+    }
+
+    function drawSpike(o) {
+        ctx.save();
+        ctx.fillStyle = '#2b6b3b';
+        ctx.beginPath();
+        ctx.moveTo(o.x, o.y + o.h);
+        ctx.lineTo(o.x + o.w * 0.5, o.y);
+        ctx.lineTo(o.x + o.w, o.y + o.h);
+        ctx.closePath();
+        ctx.fill();
+
+        // Highlight
+        ctx.fillStyle = 'rgba(120,200,120,0.35)';
+        ctx.beginPath();
+        ctx.moveTo(o.x + o.w * 0.5, o.y);
+        ctx.lineTo(o.x + o.w * 0.5, o.y + o.h * 0.75);
+        ctx.lineTo(o.x + o.w * 0.72, o.y + o.h);
+        ctx.lineTo(o.x + o.w * 0.5, o.y + o.h);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+    }
+
+    function drawBarrel(o) {
+        ctx.save();
+        ctx.fillStyle = '#7f4b20';
+        roundRect(o.x, o.y, o.w, o.h, 8);
+        ctx.fill();
+
+        ctx.fillStyle = 'rgba(255,255,255,0.10)';
+        ctx.fillRect(o.x + 6, o.y + 5, o.w - 12, 4);
+        ctx.fillStyle = 'rgba(0,0,0,0.18)';
+        ctx.fillRect(o.x + 6, o.y + o.h - 8, o.w - 12, 3);
+
+        // Bands
+        ctx.strokeStyle = 'rgba(0,0,0,0.25)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(o.x + 3, o.y + o.h * 0.3);
+        ctx.lineTo(o.x + o.w - 3, o.y + o.h * 0.3);
+        ctx.moveTo(o.x + 3, o.y + o.h * 0.7);
+        ctx.lineTo(o.x + o.w - 3, o.y + o.h * 0.7);
+        ctx.stroke();
+        ctx.restore();
+    }
+
+    function drawDrone(o) {
+        ctx.save();
+        // Body
+        ctx.fillStyle = '#263238';
+        roundRect(o.x, o.y, o.w, o.h, 8);
+        ctx.fill();
+
+        // Cockpit / eye
+        ctx.fillStyle = 'rgba(124,200,255,0.98)';
+        ctx.beginPath();
+        ctx.ellipse(o.x + o.w * 0.5, o.y + o.h * 0.5, o.w * 0.24, o.h * 0.28, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Rotor housings
+        ctx.fillStyle = 'rgba(0,0,0,0.35)';
+        ctx.beginPath();
+        ctx.arc(o.x + 8, o.y + 6, 5, 0, Math.PI * 2);
+        ctx.arc(o.x + o.w - 8, o.y + 6, 5, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Blinking LED
+        const blink = 0.5 + 0.5 * Math.sin(elapsed * 8);
+        ctx.fillStyle = `rgba(255,80,80,${0.5 + blink * 0.5})`;
+        ctx.beginPath();
+        ctx.arc(o.x + o.w * 0.5, o.y + o.h - 5, 2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+    }
+
+    function roundRect(x, y, w, h, r) {
         ctx.beginPath();
         ctx.moveTo(x + r, y);
         ctx.arcTo(x + w, y, x + w, y + h, r);
@@ -529,356 +750,319 @@
         ctx.arcTo(x, y + h, x, y, r);
         ctx.arcTo(x, y, x + w, y, r);
         ctx.closePath();
-        ctx.fill();
     }
 
-    function drawDinosaur(ctx, x, y, isCrouching, frame) {
+    function drawRaptor() {
+        const crouch = player.crouching;
+        const x = player.x;
+        const y = player.y;
+        const w = player.w;
+        const h = player.h;
+
         ctx.save();
-        if (isCrouching) {
-            drawCrouchingDino(ctx, x, y);
-        } else {
-            drawRunningDino(ctx, x, y, frame);
-        }
+        ctx.translate(x + w / 2, y + h);
+
+        // Scale to a canonical design space around a standing raptor
+        const sx = crouch ? 1.15 : 1;
+        const sy = crouch ? 0.72 : 1;
+        ctx.scale(sx, sy);
+
+        const bodyColor = theme.dino;
+        const eyeColor = theme.dinoEye;
+
+        // Tail
+        ctx.fillStyle = bodyColor;
+        ctx.beginPath();
+        ctx.moveTo(-w * 0.35, -h * 0.55);
+        ctx.lineTo(-w * 0.85, -h * 0.35);
+        ctx.lineTo(-w * 0.75, -h * 0.15);
+        ctx.lineTo(-w * 0.30, -h * 0.30);
+        ctx.closePath();
+        ctx.fill();
+
+        // Body (rounded capsule)
+        roundRect(-w * 0.4, -h * 0.9, w * 0.78, h * 0.68, 8);
+        ctx.fill();
+
+        // Neck
+        ctx.beginPath();
+        ctx.moveTo(w * 0.10, -h * 0.75);
+        ctx.lineTo(w * 0.32, -h * 1.05);
+        ctx.lineTo(w * 0.42, -h * 0.82);
+        ctx.lineTo(w * 0.20, -h * 0.55);
+        ctx.closePath();
+        ctx.fill();
+
+        // Head
+        roundRect(w * 0.20, -h * 1.14, w * 0.42, h * 0.30, 6);
+        ctx.fill();
+
+        // Snout
+        ctx.beginPath();
+        ctx.moveTo(w * 0.55, -h * 1.10);
+        ctx.lineTo(w * 0.72, -h * 1.02);
+        ctx.lineTo(w * 0.72, -h * 0.94);
+        ctx.lineTo(w * 0.55, -h * 0.88);
+        ctx.closePath();
+        ctx.fill();
+
+        // Eye
+        ctx.fillStyle = eyeColor;
+        ctx.beginPath();
+        ctx.arc(w * 0.50, -h * 1.00, 2.4, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = 'rgba(0,0,0,0.9)';
+        ctx.beginPath();
+        ctx.arc(w * 0.505, -h * 0.998, 1.1, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Legs (animated when grounded)
+        ctx.fillStyle = bodyColor;
+        const phase = player.onGround && !crouch ? player.runFrame : 0;
+        const stride = 4;
+        const backLegY = phase === 0 ? 0 : stride;
+        const frontLegY = phase === 0 ? stride : 0;
+
+        // Back leg
+        ctx.fillRect(-w * 0.20, -h * 0.28 + backLegY, 7, h * 0.30 - backLegY);
+        // Back foot
+        ctx.fillRect(-w * 0.24, -h * 0.02, 12, 4);
+
+        // Front leg
+        ctx.fillRect(w * 0.02, -h * 0.28 + frontLegY, 7, h * 0.30 - frontLegY);
+        ctx.fillRect(w * 0.00, -h * 0.02, 12, 4);
+
+        // Small arm
+        ctx.fillRect(w * 0.22, -h * 0.52, 8, 4);
+
         ctx.restore();
     }
 
-    function drawRunningDino(ctx, x, y, frame) {
-        ctx.fillStyle = '#072a14';
-        ctx.fillRect(x, y, 46, 50);
-        ctx.fillRect(x + 30, y - 10, 20, 20);
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(x + 42, y - 5, 4, 4);
-        ctx.fillStyle = '#072a14';
-        if (frame === 0) {
-            ctx.fillRect(x + 5, y + 50, 12, 8);
-            ctx.fillRect(x + 25, y + 50, 8, 12);
-        } else {
-            ctx.fillRect(x + 5, y + 50, 8, 12);
-            ctx.fillRect(x + 25, y + 50, 12, 8);
+    function drawParticles() {
+        for (const p of particles) {
+            const a = Math.max(0, p.life / p.maxLife);
+            ctx.globalAlpha = a;
+            ctx.fillStyle = p.color;
+            ctx.fillRect(p.x, p.y, p.size, p.size);
         }
-        ctx.fillRect(x - 8, y + 15, 8, 6);
-        ctx.fillRect(x + 20, y + 15, 6, 12);
+        ctx.globalAlpha = 1;
     }
 
-    function drawCrouchingDino(ctx, x, y) {
-        ctx.fillStyle = '#072a14';
-        ctx.fillRect(x, y + 20, 60, 30);
-        ctx.fillRect(x + 15, y + 10, 25, 15);
+    function drawPausedOverlay() {
+        ctx.fillStyle = 'rgba(0,0,0,0.55)';
+        ctx.fillRect(0, 0, W, H);
         ctx.fillStyle = '#ffffff';
-        ctx.fillRect(x + 32, y + 14, 4, 4);
-        ctx.fillStyle = '#072a14';
-        ctx.fillRect(x + 10, y + 50, 15, 6);
-        ctx.fillRect(x + 35, y + 50, 15, 6);
-        ctx.fillRect(x - 6, y + 30, 6, 4);
+        ctx.font = 'bold 44px system-ui, -apple-system, "Segoe UI", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('PAUSED', W / 2, H / 2);
+        ctx.font = '16px system-ui, -apple-system, "Segoe UI", sans-serif';
+        ctx.fillStyle = 'rgba(255,255,255,0.75)';
+        ctx.fillText('Press P or Esc to resume', W / 2, H / 2 + 40);
+        ctx.textAlign = 'start';
+        ctx.textBaseline = 'alphabetic';
     }
 
     function render() {
-        const cw = canvas.width / DPR;
-        const ch = canvas.height / DPR;
-
-        ctx.clearRect(0, 0, cw, ch);
-        const g = ctx.createLinearGradient(0, 0, 0, ch);
-        g.addColorStop(0, '#8fd3f4');
-        g.addColorStop(0.4, '#bfe9ff');
-        g.addColorStop(0.7, '#e9f7ff');
-        g.addColorStop(1, '#f8fbff');
-        ctx.fillStyle = g;
-        ctx.fillRect(0, 0, cw, ch);
-
-        const sunX = cw - 120, sunY = 90;
-        const rad = ctx.createRadialGradient(sunX, sunY, 10, sunX, sunY, 180);
-        rad.addColorStop(0, 'rgba(255,255,200,0.95)');
-        rad.addColorStop(1, 'rgba(255,255,200,0.0)');
-        ctx.fillStyle = rad;
-        ctx.fillRect(sunX - 200, sunY - 200, 400, 400);
-
-        drawMountains(ctx, cw, ch);
-
-        const sortedClouds = [...clouds].sort((a, b) => a.layer - b.layer);
-        for (const c of sortedClouds) {
-            ctx.globalAlpha = c.alpha;
-            drawCloud(ctx, c.x, c.y, c.w, c.layer);
-            ctx.globalAlpha = 1;
-        }
-
-        for (const b of birds) {
-            drawBird(ctx, b.x, b.y, b.size, b.type, b.wingPhase);
-        }
-
-        drawEnhancedGround(ctx, cw, ch, groundY);
-
-        for (const t of groundTextures) {
-            ctx.globalAlpha = t.alpha;
-            drawGroundTexture(ctx, t.x, t.y, t.size, t.type);
-            ctx.globalAlpha = 1;
-        }
+        drawSky();
+        if (theme.star) drawStars();
+        drawSun();
+        drawMountains();
+        for (const c of clouds) drawCloud(c);
+        for (const b of birds) drawBird(b);
+        drawGround();
 
         for (const o of obstacles) {
-            if (o.type === 'spike') drawSpike(ctx, o.x, o.y, o.w, o.h);
-            else if (o.type === 'barrel') drawBarrel(ctx, o.x, o.y, o.w, o.h);
-            else if (o.type === 'drone') drawDrone(ctx, o.x, o.y, o.w, o.h);
+            if (o.type === 'spike') drawSpike(o);
+            else if (o.type === 'barrel') drawBarrel(o);
+            else if (o.type === 'drone') drawDrone(o);
         }
 
-        ctx.save();
-        ctx.shadowColor = 'rgba(124,231,135,0.26)';
-        ctx.shadowBlur = 18;
-        drawDinosaur(ctx, player.x, player.y, player.crouching, player.frame);
-        ctx.restore();
+        drawRaptor();
+        drawParticles();
 
-        for (const p of particles) {
-            ctx.globalAlpha = Math.max(0, p.life);
-            ctx.fillStyle = p.color;
-            ctx.fillRect(p.x, p.y, p.size, p.size);
-            ctx.globalAlpha = 1;
-        }
-
-        ctx.fillStyle = 'rgba(2,6,23,0.06)';
-        ctx.fillRect(12, 12, 160, 40);
-        ctx.fillStyle = '#072a14';
-        ctx.font = '14px system-ui, -apple-system, Roboto, "Segoe UI"';
-        ctx.fillText('Score: ' + Math.floor(distance), 22, 36);
+        if (paused) drawPausedOverlay();
     }
 
-    function drawMountains(ctx, cw, ch) {
-        ctx.save();
-        ctx.fillStyle = '#7fa8c4';
-        ctx.beginPath();
-        ctx.moveTo(0, groundY - 80);
-        for (let i = 0; i < cw; i += 40) {
-            const height = 60 + Math.sin(i * 0.02) * 20;
-            ctx.lineTo(i, groundY - height);
-        }
-        ctx.lineTo(cw, groundY);
-        ctx.lineTo(0, groundY);
-        ctx.closePath();
-        ctx.fill();
+    // ------------------------------------------------------------------
+    // Main loop
+    // ------------------------------------------------------------------
+    function frame(now) {
+        const dt = Math.min((now - lastTime) / 1000, 0.033);
+        lastTime = now;
 
-        ctx.fillStyle = '#95b8d1';
-        ctx.beginPath();
-        ctx.moveTo(0, groundY - 40);
-        for (let i = 0; i < cw; i += 30) {
-            const height = 30 + Math.sin(i * 0.03) * 15;
-            ctx.lineTo(i, groundY - height);
-        }
-        ctx.lineTo(cw, groundY);
-        ctx.lineTo(0, groundY);
-        ctx.closePath();
-        ctx.fill();
-        ctx.restore();
-    }
-
-    function drawCloud(ctx, x, y, w, layer) {
-        ctx.save();
-        let color, detail;
-        switch (layer) {
-            case 0:
-                color = 'rgba(255,255,255,0.7)';
-                detail = 3;
-                break;
-            case 1:
-                color = 'rgba(255,255,255,0.8)';
-                detail = 4;
-                break;
-            case 2:
-                color = 'rgba(255,255,255,0.9)';
-                detail = 5;
-                break;
-        }
-
-        ctx.fillStyle = color;
-        ctx.beginPath();
-        ctx.moveTo(x, y + w * 0.1);
-        for (let i = 0; i <= detail; i++) {
-            const t = i / detail;
-            const angle = Math.PI * t;
-            const cx = x + w * 0.5 * (1 - Math.cos(angle));
-            const cy = y + Math.sin(angle) * w * 0.15;
-            ctx.lineTo(cx, cy);
-        }
-
-        for (let i = detail; i >= 0; i--) {
-            const t = i / detail;
-            const angle = Math.PI * t;
-            const cx = x + w * 0.5 * (1 + Math.cos(angle));
-            const cy = y + Math.sin(angle) * w * 0.15 + w * 0.1;
-            ctx.lineTo(cx, cy);
-        }
-
-        ctx.closePath();
-        ctx.fill();
-        ctx.restore();
-    }
-
-    function drawBird(ctx, x, y, size, type, wingPhase) {
-        ctx.save();
-        ctx.translate(x, y);
-
-        switch (type) {
-            case 0:
-                ctx.strokeStyle = '#ffffff';
-                ctx.lineWidth = 1.5;
-                ctx.beginPath();
-                ctx.moveTo(0, 0);
-                ctx.lineTo(-size * 0.8, -size * 0.3);
-                ctx.moveTo(0, 0);
-                ctx.lineTo(size * 0.8, -size * 0.3);
-                ctx.stroke();
-                break;
-
-            case 1:
-                ctx.strokeStyle = '#333333';
-                ctx.lineWidth = 1.2;
-                ctx.beginPath();
-                ctx.moveTo(-size * 0.5, 0);
-                ctx.lineTo(0, -size * 0.7 * Math.sin(wingPhase));
-                ctx.lineTo(size * 0.5, 0);
-                ctx.stroke();
-                break;
-
-            case 2:
-                ctx.strokeStyle = '#555555';
-                ctx.lineWidth = 1.3;
-                ctx.beginPath();
-                ctx.moveTo(-size * 0.3, 0);
-                ctx.lineTo(size * 0.3, 0);
-                ctx.moveTo(0, 0);
-                ctx.lineTo(-size * 0.4, -size * 0.6 * Math.sin(wingPhase));
-                ctx.moveTo(0, 0);
-                ctx.lineTo(size * 0.4, -size * 0.6 * Math.sin(wingPhase + Math.PI));
-                ctx.stroke();
-                break;
-        }
-        ctx.restore();
-    }
-
-    function drawEnhancedGround(ctx, cw, ch, groundY) {
-        const groundGrad = ctx.createLinearGradient(0, groundY, 0, groundY + 120);
-        groundGrad.addColorStop(0, '#c8a87b');
-        groundGrad.addColorStop(0.3, '#b8945f');
-        groundGrad.addColorStop(1, '#a57c47');
-        ctx.fillStyle = groundGrad;
-        ctx.fillRect(0, groundY, cw, ch - groundY);
-
-        ctx.fillStyle = '#9c7343';
-        for (let i = 0; i < cw; i += 8) {
-            for (let j = groundY; j < groundY + 40; j += 8) {
-                if (Math.random() > 0.7) {
-                    ctx.fillRect(i, j, 2, 1);
-                }
-            }
-        }
-
-        ctx.strokeStyle = '#7d9c5a';
-        ctx.lineWidth = 1;
-        for (let i = 0; i < cw; i += 15) {
-            if (Math.random() > 0.4) {
-                ctx.beginPath();
-                ctx.moveTo(i, groundY);
-                ctx.lineTo(i - 3, groundY - 4);
-                ctx.moveTo(i, groundY);
-                ctx.lineTo(i + 2, groundY - 6);
-                ctx.moveTo(i, groundY);
-                ctx.lineTo(i + 4, groundY - 3);
-                ctx.stroke();
-            }
-        }
-    }
-
-    function drawGroundTexture(ctx, x, y, size, type) {
-        ctx.save();
-
-        switch (type) {
-            case 0:
-                ctx.fillStyle = '#8a7455';
-                ctx.beginPath();
-                ctx.arc(x, y, size * 0.5, 0, Math.PI * 2);
-                ctx.fill();
-                break;
-
-            case 1:
-                ctx.fillStyle = '#7a6648';
-                for (let i = 0; i < 3; i++) {
-                    ctx.beginPath();
-                    ctx.arc(x + (i - 1) * size * 0.3, y, size * 0.3, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-                break;
-
-            case 2:
-                ctx.strokeStyle = '#5d4a32';
-                ctx.lineWidth = 1;
-                ctx.beginPath();
-                ctx.moveTo(x - size * 0.8, y);
-                ctx.lineTo(x + size * 0.8, y + size * 0.2);
-                ctx.stroke();
-                break;
-        }
-        ctx.restore();
-    }
-
-    function drawSpike(ctx, x, y, w, h) {
-        ctx.save();
-        ctx.translate(0, 0);
-        ctx.fillStyle = '#2b6b3b';
-        ctx.beginPath();
-        ctx.moveTo(x, y + h);
-        ctx.lineTo(x + w, y + h);
-        ctx.lineTo(x + w * 0.75, y + h * 0.3);
-        ctx.lineTo(x + w * 0.5, y + h * 0.05);
-        ctx.lineTo(x + w * 0.25, y + h * 0.3);
-        ctx.closePath();
-        ctx.fill();
-        ctx.restore();
-    }
-
-    function drawBarrel(ctx, x, y, w, h) {
-        ctx.save();
-        ctx.fillStyle = '#7f4b20';
-        drawRoundedRect(ctx, x, y, w, h, 8);
-        ctx.fillStyle = 'rgba(255,255,255,0.06)';
-        ctx.fillRect(x + 6, y + 6, w - 12, 6);
-        ctx.restore();
-    }
-
-    function drawDrone(ctx, x, y, w, h) {
-        ctx.save();
-        ctx.fillStyle = '#263238';
-        drawRoundedRect(ctx, x, y, w, h, 8);
-        ctx.fillStyle = 'rgba(124,200,255,0.98)';
-        ctx.fillRect(x + w * 0.18, y + h * 0.28, w * 0.64, h * 0.36);
-        ctx.beginPath();
-        ctx.arc(x + 8, y + 6, 6, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(0,0,0,0.12)';
-        ctx.fill();
-        ctx.beginPath();
-        ctx.arc(x + w - 8, y + 6, 6, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-    }
-
-    function loop(t) {
-        const dt = Math.min(0.032, (t - last) / 1000);
-        last = t;
         update(dt);
         render();
-        scoreEl.textContent = Math.floor(distance);
-        levelEl.textContent = level;
-        requestAnimationFrame(loop);
+
+        requestAnimationFrame(frame);
     }
 
-    function init() {
-        resize();
-        player.y = groundY - player.h;
+    // ------------------------------------------------------------------
+    // Lifecycle
+    // ------------------------------------------------------------------
+    function resetWorld() {
+        rng = makeRng(Date.now());
 
-        for (let i = 0; i < 8; i++) makeCloud();
+        // Reset player
+        player.x = 140;
+        player.y = GROUND_Y - 60;
+        player.vy = 0;
+        player.w = 52;
+        player.h = 60;
+        player.onGround = true;
+        player.jumping = false;
+        player.crouching = false;
+        player.canBoost = false;
+        player.runFrame = 0;
+        player.runTimer = 0;
 
-        generateGroundTextures();
+        // Reset world
+        obstacles = [];
+        particles = [];
+        birds = [];
+        clouds = [];
+        for (let i = 0; i < 8; i++) clouds.push(makeCloud());
 
-        spawnParticles(140, groundY + 2, '#b7f5c6');
+        rebuildGroundDecor();
+        rebuildStars();
 
-        requestAnimationFrame(loop);
+        distance = 0;
+        elapsed = 0;
+        level = 1;
+        score = 0;
+        speed = cfg.startSpeed;
+        distSinceSpawn = 0;
+        nextSpawnDist = 420; // give the player a moment
+
+        scoreEl.textContent = '0';
+        levelEl.textContent = '1';
     }
 
-    init();
+    function startGame() {
+        cfg = DIFFICULTY[difficultySelect.value] || DIFFICULTY.normal;
+        theme = THEMES[themeSelect.value] || THEMES.day;
 
+        overlay.classList.remove('show');
+        statusEl.className = '';
+        statusEl.textContent = 'Running';
+
+        resetWorld();
+
+        started = true;
+        paused = false;
+        gameOver = false;
+
+        pauseBtn.disabled = false;
+        pauseBtn.innerHTML = '<i class="fas fa-pause"></i> Pause';
+        startBtn.innerHTML = '<i class="fas fa-redo"></i> Restart';
+
+        ensureAudio();
+    }
+
+    function togglePause() {
+        if (!started || gameOver) return;
+        paused = !paused;
+        if (paused) {
+            statusEl.textContent = 'Paused';
+            pauseBtn.innerHTML = '<i class="fas fa-play"></i> Resume';
+        } else {
+            statusEl.textContent = 'Running';
+            pauseBtn.innerHTML = '<i class="fas fa-pause"></i> Pause';
+        }
+    }
+
+    function applyTheme() {
+        theme = THEMES[themeSelect.value] || THEMES.day;
+    }
+
+    function updateControlsHint() {
+        controlsHint.textContent =
+            'Jump: Space / ↑ / Click  •  Crouch: ↓ / S  •  Boost: Double-Jump  •  Pause: P / Esc';
+    }
+
+    // ------------------------------------------------------------------
+    // Input
+    // ------------------------------------------------------------------
+    document.addEventListener('keydown', (e) => {
+        const k = e.key.toLowerCase();
+        if (k === ' ' || k === 'arrowup' || k === 'w') {
+            e.preventDefault();
+            jump();
+        } else if (k === 'arrowdown' || k === 's') {
+            e.preventDefault();
+            crouchStart();
+        } else if (k === 'p' || k === 'escape') {
+            e.preventDefault();
+            togglePause();
+        }
+    });
+
+    document.addEventListener('keyup', (e) => {
+        const k = e.key.toLowerCase();
+        if (k === 'arrowdown' || k === 's') {
+            e.preventDefault();
+            crouchEnd();
+        }
+    });
+
+    // Touch / mouse on the canvas - tap upper half to jump, lower half to crouch briefly
+    canvas.addEventListener('pointerdown', (e) => {
+        if (!started || paused || gameOver) return;
+        const rect = canvas.getBoundingClientRect();
+        const relY = (e.clientY - rect.top) / rect.height;
+        if (relY > 0.65) {
+            crouchStart();
+        } else {
+            jump();
+        }
+    });
+
+    canvas.addEventListener('pointerup', () => {
+        crouchEnd();
+    });
+
+    canvas.addEventListener('pointercancel', () => {
+        crouchEnd();
+    });
+
+    // ------------------------------------------------------------------
+    // Bindings
+    // ------------------------------------------------------------------
+    startBtn.addEventListener('click', startGame);
+    playAgainBtn.addEventListener('click', startGame);
+    pauseBtn.addEventListener('click', togglePause);
+
+    difficultySelect.addEventListener('change', () => {
+        cfg = DIFFICULTY[difficultySelect.value] || DIFFICULTY.normal;
+        // Restart so the new tuning takes effect cleanly
+        if (started || gameOver) startGame();
+    });
+
+    themeSelect.addEventListener('change', () => {
+        applyTheme();
+    });
+
+    document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) lastTime = performance.now();
+    });
+
+    window.addEventListener('resize', () => {
+        // Recalculate DPR - keeps things crisp after moving between monitors
+        setupCanvas();
+    });
+
+    // ------------------------------------------------------------------
+    // Boot
+    // ------------------------------------------------------------------
+    setupCanvas();
+    updateControlsHint();
+
+    cfg = DIFFICULTY[difficultySelect.value] || DIFFICULTY.normal;
+    theme = THEMES[themeSelect.value] || THEMES.day;
+
+    resetWorld();
+    render();
+
+    lastTime = performance.now();
+    requestAnimationFrame(frame);
 })();

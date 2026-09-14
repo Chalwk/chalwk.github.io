@@ -17,38 +17,57 @@ description: Jump, dodge, and ride the thermals. Procedurally generated levels -
                     new.</p>
             </div>
 
-            <div class="game-instructions">
-                <h4><i class="fas fa-gamepad"></i> Controls:</h4>
-                <div>
-                    <div><i class="fas fa-space-shuttle"></i> <strong>Space / Up / Click:</strong> Jump</div>
-                    <div><i class="fas fa-arrow-down"></i> <strong>Down Arrow:</strong> Crouch</div>
-                    <div><i class="fas fa-redo"></i> <strong>Double-tap Jump:</strong> Boost (if available)</div>
-                    <div><i class="fas fa-play"></i> <strong>Start Button:</strong> Begin/Restart game</div>
-                    <div><i class="fas fa-pause"></i> <strong>Pause Button:</strong> Pause/Resume</div>
-                </div>
+            <div id="game-settings">
+                <label for="difficulty">Difficulty
+                    <select id="difficulty">
+                        <option value="easy">Easy</option>
+                        <option value="normal" selected>Normal</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </label>
+                <label for="theme">Theme
+                    <select id="theme">
+                        <option value="day" selected>Day</option>
+                        <option value="dusk">Dusk</option>
+                        <option value="night">Night</option>
+                    </select>
+                </label>
             </div>
 
-            <div class="game-area">
-                <canvas id="game"></canvas>
-            </div>
-
-            <div class="game-controls">
+            <div id="game-container">
                 <div class="game-stats">
-                    <div>
-                        <strong>Score:</strong>
-                        <span id="score">0</span>
+                    <div class="stat-block score-stat">
+                        <strong>Score</strong>
+                        <span id="score" class="score">0</span>
                     </div>
-                    <div>
-                        <strong>Level:</strong>
-                        <span id="level">1</span>
+                    <div class="status-block">
+                        <span id="status">Press Start</span>
+                    </div>
+                    <div class="stat-block level-stat">
+                        <strong>Level</strong>
+                        <span id="level" class="score">1</span>
                     </div>
                 </div>
 
-                <div class="controls">
-                    <button class="btn" id="btn-start">
+                <div class="board-wrap">
+                    <canvas id="game-board"></canvas>
+
+                    <div class="game-over-overlay" id="game-over-overlay">
+                        <div class="game-over-content">
+                            <div id="game-over-message" class="game-over-message"></div>
+                            <div id="game-over-score" class="game-over-score"></div>
+                            <button class="btn btn-secondary" id="play-again">Play Again</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="controls-hint" id="controls-hint"></div>
+
+                <div class="game-buttons">
+                    <button class="btn" id="start">
                         <i class="fas fa-play"></i> Start
                     </button>
-                    <button class="btn btn-secondary" id="btn-pause">
+                    <button class="btn btn-secondary" id="pause" disabled>
                         <i class="fas fa-pause"></i> Pause
                     </button>
                 </div>
