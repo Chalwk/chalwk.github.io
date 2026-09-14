@@ -1,0 +1,412 @@
+/* Copyright (c) 2024-2026 Jericho Crosby (Chalwk). All Rights Reserved. */
+
+.panel {
+    background: var(--light);
+    border: 1px solid var(--gray-light);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin-top: 2rem;
+}
+
+.panel-head h1 {
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+#game-settings {
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: center;
+    align-items: center;
+}
+
+#game-settings label {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--dark);
+    font-weight: 500;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+#game-settings select {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--gray-light);
+    border-radius: var(--radius);
+    background: white;
+    color: var(--dark);
+    font-family: var(--font-primary);
+    min-width: 140px;
+}
+
+/* difficulty legend */
+#difficulty-legend {
+    max-width: 520px;
+    margin: 0 auto 1.5rem;
+    padding: 0.75rem 1rem;
+    background: rgba(0, 0, 0, 0.04);
+    border: 1px solid var(--gray-light);
+    border-radius: var(--radius);
+    font-size: 0.8rem;
+    line-height: 1.4;
+}
+
+#difficulty-legend .legend-row {
+    display: flex;
+    gap: 0.6rem;
+    align-items: baseline;
+}
+
+#difficulty-legend .legend-row+.legend-row {
+    margin-top: 0.35rem;
+}
+
+#difficulty-legend dt {
+    flex: 0 0 4.5rem;
+    font-weight: 700;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 0.7rem;
+}
+
+#difficulty-legend dd {
+    margin: 0;
+    color: var(--dark);
+}
+
+#game-container {
+    position: relative;
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.85rem;
+    background: var(--darker);
+    border-radius: var(--radius);
+    padding: 1rem 0.75rem;
+}
+
+/* score / status bar */
+.game-stats {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    grid-template-areas: "found status time";
+    align-items: center;
+    width: 100%;
+    gap: 0.5rem 0.75rem;
+    padding: 0.25rem 0.5rem;
+}
+
+.stat-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    line-height: 1.1;
+}
+
+.score-stat {
+    grid-area: found;
+    align-items: flex-start;
+}
+
+.time-stat {
+    grid-area: time;
+    align-items: flex-end;
+}
+
+.stat-block strong {
+    color: rgba(255, 255, 255, 0.65);
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.stat-block .score {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--accent);
+}
+
+.status-block {
+    grid-area: status;
+    justify-self: center;
+    min-width: 0;
+}
+
+#status {
+    font-weight: bold;
+    font-size: 0.95rem;
+    text-align: center;
+    color: #fff;
+    white-space: nowrap;
+}
+
+/* board */
+.board-wrap {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+#board {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    aspect-ratio: 1 / 1;
+}
+
+#letter-grid {
+    display: grid;
+    width: 100%;
+    height: 100%;
+    gap: 2px;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+#trace-layer {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: clamp(0.55rem, 2.2vw, 1rem);
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+    overflow: hidden;
+    text-transform: uppercase;
+}
+
+.cell:hover {
+    background: rgba(255, 255, 255, 0.14);
+}
+
+.cell.found {
+    animation: cellPop 0.35s ease;
+}
+
+@keyframes cellPop {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.15);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.trace-line {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    pointer-events: none;
+}
+
+.trace-line.active {
+    stroke: var(--accent);
+    stroke-width: 0.05;
+    filter: drop-shadow(0 0 3px rgba(6, 182, 212, 0.8));
+    transition: opacity 0.1s ease;
+}
+
+.trace-line.active.invalid {
+    stroke: #ef4444;
+    filter: drop-shadow(0 0 3px rgba(239, 68, 68, 0.8));
+}
+
+.trace-line.found {
+    stroke-width: 0.05;
+    opacity: 0.9;
+    animation: traceFade 0.4s ease;
+}
+
+@keyframes traceFade {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 0.9;
+    }
+}
+
+/* word list */
+#word-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.4rem;
+    max-width: 480px;
+    width: 100%;
+}
+
+.word-chip {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    padding: 0.3rem 0.7rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.75);
+    transition: all 0.25s ease;
+}
+
+.word-chip.found {
+    background: var(--chip-fill);
+    border-color: var(--chip-stroke);
+    color: var(--chip-stroke);
+    text-decoration: line-through;
+    text-decoration-thickness: 2px;
+}
+
+/* game over overlay */
+.game-over-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.75);
+    border-radius: var(--radius);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+    text-align: center;
+    padding: 1rem;
+    z-index: 2;
+}
+
+.game-over-overlay.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.game-over-content {
+    animation: celebrate 0.5s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.game-over-message {
+    color: #fff;
+    font-weight: 800;
+    font-size: 1.5rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+
+.game-over-detail {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 0.5rem;
+}
+
+.win-message {
+    color: #4ade80;
+}
+
+@keyframes celebrate {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@media (max-width: 480px) {
+    #game-container {
+        padding: 0.75rem 0.5rem;
+    }
+
+    #game-settings {
+        gap: 0.5rem 0.75rem;
+    }
+
+    #game-settings select {
+        min-width: 0;
+        padding: 0.4rem 0.5rem;
+        font-size: 0.85rem;
+    }
+
+    #difficulty-legend {
+        font-size: 0.75rem;
+        padding: 0.65rem 0.85rem;
+    }
+
+    #difficulty-legend dt {
+        flex-basis: 3.75rem;
+    }
+
+    .cell {
+        font-size: 0.7rem;
+    }
+
+    .word-chip {
+        font-size: 0.65rem;
+        padding: 0.25rem 0.55rem;
+    }
+}
+
+@media (max-width: 420px) {
+    .game-stats {
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas:
+            "found time"
+            "status status";
+    }
+
+    .status-block {
+        margin-top: 0.15rem;
+    }
+
+    #difficulty-legend .legend-row {
+        flex-direction: column;
+        gap: 0.1rem;
+    }
+
+    #difficulty-legend dt {
+        flex: none;
+    }
+
+    .game-over-message {
+        font-size: 1.25rem;
+    }
+}

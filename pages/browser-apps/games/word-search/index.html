@@ -1,0 +1,94 @@
+---
+layout: default
+title: Word Search
+description: Drag across the grid to trace every hidden word.
+---
+
+<!-- Copyright (c) 2024-2026 Jericho Crosby (Chalwk). All Rights Reserved. -->
+
+<link rel="stylesheet" href="style.css">
+
+<main>
+    <div class="container">
+        <section class="panel">
+            <div class="panel-head">
+                <h1>Word Search</h1>
+                <p class="muted small">Drag across the grid to trace every hidden word.</p>
+            </div>
+
+            <div id="game-settings">
+                <label for="board-size">Board Size
+                    <select id="board-size">
+                        <option value="8" selected>8 &times; 8</option>
+                        <option value="12">12 &times; 12</option>
+                        <option value="15">15 &times; 15</option>
+                    </select>
+                </label>
+                <label for="difficulty">Difficulty
+                    <select id="difficulty">
+                        <option value="easy">Easy</option>
+                        <option value="normal" selected>Normal</option>
+                        <option value="hard">Hard (overlap &amp; reverse)</option>
+                    </select>
+                </label>
+                <label for="category">Category
+                    <select id="category"></select>
+                </label>
+            </div>
+
+            <dl id="difficulty-legend">
+                <div class="legend-row">
+                    <dt>Easy</dt>
+                    <dd>Words read forward only (&rarr;, &darr;, &#8600;). Letters are never shared.</dd>
+                </div>
+                <div class="legend-row">
+                    <dt>Normal</dt>
+                    <dd>Words can read backwards and in any diagonal (8 directions). Letters are never shared.</dd>
+                </div>
+                <div class="legend-row">
+                    <dt>Hard</dt>
+                    <dd>All 8 directions, plus words may cross and share letters with each other.</dd>
+                </div>
+            </dl>
+
+            <div id="game-container">
+                <div class="game-stats">
+                    <div class="stat-block score-stat">
+                        <strong>Found</strong>
+                        <span id="found-count" class="score">0 / 0</span>
+                    </div>
+                    <div class="status-block">
+                        <span id="status">Drag to trace a word</span>
+                    </div>
+                    <div class="stat-block time-stat">
+                        <strong>Time</strong>
+                        <span id="timer" class="score">0:00</span>
+                    </div>
+                </div>
+
+                <div class="board-wrap">
+                    <div id="board">
+                        <div id="letter-grid"></div>
+                        <svg id="trace-layer" xmlns="http://www.w3.org/2000/svg"></svg>
+                    </div>
+
+                    <div class="game-over-overlay" id="game-over-overlay">
+                        <div class="game-over-content">
+                            <div id="game-over-message" class="game-over-message"></div>
+                            <div id="game-over-detail" class="game-over-detail"></div>
+                            <button class="btn btn-secondary" id="play-again">Play Again</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="word-list"></div>
+
+                <button class="btn btn-secondary" id="reset">
+                    <i class="fas fa-redo"></i> New Puzzle
+                </button>
+            </div>
+        </section>
+    </div>
+</main>
+
+<script src="script.js"></script>
