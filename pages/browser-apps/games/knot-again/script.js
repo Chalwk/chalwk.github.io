@@ -2,24 +2,24 @@
 
 (() => {
     // DOM elements
-    const svg = document.getElementById('svg');
+    const svg = document.getElementById('game-board');
     const resetBtn = document.getElementById('resetBtn');
     const shuffleBtn = document.getElementById('shuffleBtn');
     const nextBtn = document.getElementById('nextBtn');
-    const winOverlay = document.getElementById('winOverlay');
+    const winOverlay = document.getElementById('game-over-overlay');
     const winNext = document.getElementById('winNext');
     const winShuffle = document.getElementById('winShuffle');
     const levelLabel = document.getElementById('levelLabel');
-    const edgeCountEl = document.getElementById('edgeCount');
     const crossCountEl = document.getElementById('crossCount');
+    const statusEl = document.getElementById('status');
 
     // game state
-    let state = {
+    const state = {
         level: 1,
         nodes: [],
         edges: [],
         w: 1000,
-        h: 700
+        h: 700,
     };
 
     // --- geometry helpers ---
@@ -45,7 +45,6 @@
         return (o1 * o2 < 0) && (o3 * o4 < 0);
     }
 
-    // helper to create SVG elements
     function makeSvg(tag, attrs) {
         const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
         for (const k in attrs) el.setAttribute(k, attrs[k]);
@@ -57,35 +56,39 @@
     }
 
     // --- level generation ---
-    // builds a planar-ish graph with some random extra edges, then shuffles node positions
+    // builds a planar-ish graph with some random extra edges, then shuffles
+    // node positions to create the tangled look
     function generateLevel(level) {
         const nodeCount = Math.min(8 + level, 16);
         const maxEdges = Math.floor(nodeCount * 1.6);
 
         // place nodes on a circle (base positions)
-        const cx = state.w / 2, cy = state.h / 2, r = Math.min(state.w, state.h) / 2 - 90;
+        const cx = state.w / 2;
+        const cy = state.h / 2;
+        const r = Math.min(state.w, state.h) / 2 - 90;
         const basePositions = [];
         for (let i = 0; i < nodeCount; i++) {
             const a = (i / nodeCount) * Math.PI * 2;
             basePositions.push({ x: cx + Math.cos(a) * r, y: cy + Math.sin(a) * r });
         }
 
+        const edges = [];
+        for (let i = 0; i < nodeCount; i++) edges.push({ a: i, b: (i + 1) % nodeCount });
+
         // helper: does edge (i,j) cross any existing edge?
         function crossesExisting(i, j) {
-            const p1 = basePositions[i], p2 = basePositions[j];
+            const p1 = basePositions[i];
+            const p2 = basePositions[j];
             for (const e of edges) {
-                const q1 = basePositions[e.a], q2 = basePositions[e.b];
+                const q1 = basePositions[e.a];
+                const q2 = basePositions[e.b];
                 if (e.a === i || e.b === i || e.a === j || e.b === j) continue;
                 if (segmentsIntersect(p1, p2, q1, q2)) return true;
             }
             return false;
         }
 
-        // start with cycle edges (outer polygon)
-        const edges = [];
-        for (let i = 0; i < nodeCount; i++) edges.push({ a: i, b: (i + 1) % nodeCount });
-
-        // randomly add extra edges if they don't cause crossings (keeps puzzles solvable)
+        // randomly add extra edges that don't cause crossings (keeps puzzles solvable)
         for (let attempts = 0; attempts < nodeCount * 6 && edges.length < maxEdges; attempts++) {
             const a = Math.floor(Math.random() * nodeCount);
             const b = Math.floor(Math.random() * nodeCount);
@@ -100,9 +103,11 @@
             .map((p, idx) => ({ x: p.x, y: p.y, id: idx, baseIndex: p.id }));
         const nodes = permuted.map((p, i) => ({
             id: i,
-            x: p.x, y: p.y,
-            baseX: basePositions[p.baseIndex].x, baseY: basePositions[p.baseIndex].y,
-            radius: 12
+            x: p.x,
+            y: p.y,
+            baseX: basePositions[p.baseIndex].x,
+            baseY: basePositions[p.baseIndex].y,
+            radius: 12,
         }));
 
         return { nodes, edges };
@@ -129,7 +134,7 @@
             const B = state.nodes[e.b];
             const line = makeSvg('line', {
                 x1: A.x, y1: A.y, x2: B.x, y2: B.y,
-                class: 'edge', 'stroke-width': 3
+                class: 'knot-edge',
             });
             svg.appendChild(line);
             e.el = line;
@@ -137,22 +142,21 @@
 
         // draw nodes (draggable circles with labels)
         for (const n of state.nodes) {
-            const g = makeSvg('g', { class: 'node', cursor: 'grab' });
-            const circle = makeSvg('circle', {
-                cx: n.x,
-                cy: n.y,
-                r: n.radius,
-                class: 'node-circle',
-                fill: 'white',
-                opacity: 0.95
+            const g = makeSvg('g', {
+                class: 'knot-node',
+                transform: `translate(${n.x}, ${n.y})`,
             });
-            const inner = makeSvg('circle', { cx: n.x, cy: n.y, r: 6, fill: 'url(#grad)' });
+            const circle = makeSvg('circle', {
+                cx: 0, cy: 0, r: n.radius,
+                class: 'knot-node-circle',
+            });
+            const inner = makeSvg('circle', {
+                cx: 0, cy: 0, r: 5,
+                class: 'knot-node-inner',
+            });
             const label = makeSvg('text', {
-                x: n.x,
-                y: n.y + 4,
-                'text-anchor': 'middle',
-                class: 'node-label',
-                'font-size': '10px'
+                x: 0, y: 0,
+                class: 'knot-node-label',
             });
             label.textContent = n.id + 1;
 
@@ -167,26 +171,14 @@
             attachPointerHandlers(g, n);
         }
 
-        addDefs();        // gradient for node inners
-        updateCounts();   // level display
-        checkCrossings(); // initial crossing detection
-    }
-
-    // add gradient definition once
-    function addDefs() {
-        if (svg.querySelector('defs')) return;
-        const defs = makeSvg('defs', {});
-        const grad = makeSvg('radialGradient', { id: 'grad' });
-        grad.appendChild(makeSvg('stop', { offset: '0%', 'stop-color': '#ffffff', 'stop-opacity': '1' }));
-        grad.appendChild(makeSvg('stop', { offset: '100%', 'stop-color': '#6ea8fe', 'stop-opacity': '1' }));
-        defs.appendChild(grad);
-        svg.appendChild(defs);
+        updateCounts();
+        checkCrossings();
     }
 
     // drag & drop for nodes (mouse + touch)
     function attachPointerHandlers(el, node) {
         let dragging = false;
-        let offset = { x: 0, y: 0 };
+        const offset = { x: 0, y: 0 };
 
         function pt(e) {
             const p = svg.createSVGPoint();
@@ -203,23 +195,18 @@
             const p = pt(e.type === 'touchstart' ? e.touches[0] : e);
             offset.x = node.x - p.x;
             offset.y = node.y - p.y;
-            node.circle.setAttribute('r', node.radius + 2);
-            node.circle.style.fill = '#f0f8ff';
+            node.circle.classList.add('dragging');
+            node.circle.setAttribute('r', node.radius + 3);
         }
 
         function onMove(e) {
             if (!dragging) return;
             const p = pt(e.type === 'touchmove' ? e.touches[0] : e);
-            const padding = 40;
+            const padding = 30;
             node.x = Math.max(padding, Math.min(state.w - padding, p.x + offset.x));
             node.y = Math.max(padding, Math.min(state.h - padding, p.y + offset.y));
 
-            // update node position visually
-            node.group.setAttribute('transform', `translate(${node.x - parseFloat(node.circle.getAttribute('cx'))}, ${node.y - parseFloat(node.circle.getAttribute('cy'))})`);
-            node.circle.setAttribute('cx', node.x);
-            node.circle.setAttribute('cy', node.y);
-            node.labelEl.setAttribute('x', node.x);
-            node.labelEl.setAttribute('y', node.y + 4);
+            node.group.setAttribute('transform', `translate(${node.x}, ${node.y})`);
 
             // update connected edges
             for (const e of state.edges) {
@@ -238,8 +225,8 @@
         function onUp() {
             if (!dragging) return;
             dragging = false;
+            node.circle.classList.remove('dragging');
             node.circle.setAttribute('r', node.radius);
-            node.circle.style.fill = 'white';
             checkCrossings();
         }
 
@@ -256,10 +243,13 @@
         const crossings = new Set();
         for (let i = 0; i < state.edges.length; i++) {
             for (let j = i + 1; j < state.edges.length; j++) {
-                const e1 = state.edges[i], e2 = state.edges[j];
+                const e1 = state.edges[i];
+                const e2 = state.edges[j];
                 if (e1.a === e2.a || e1.a === e2.b || e1.b === e2.a || e1.b === e2.b) continue;
-                const p1 = state.nodes[e1.a], p2 = state.nodes[e1.b];
-                const p3 = state.nodes[e2.a], p4 = state.nodes[e2.b];
+                const p1 = state.nodes[e1.a];
+                const p2 = state.nodes[e1.b];
+                const p3 = state.nodes[e2.a];
+                const p4 = state.nodes[e2.b];
                 if (segmentsIntersect(p1, p2, p3, p4)) {
                     crossings.add(i);
                     crossings.add(j);
@@ -272,19 +262,22 @@
             const e = state.edges[i];
             if (crossings.has(i)) {
                 e.el.classList.add('crossing');
-                e.el.setAttribute('stroke-width', 4);
                 crossCount++;
             } else {
                 e.el.classList.remove('crossing');
-                e.el.setAttribute('stroke-width', 3);
             }
         }
         crossCountEl.textContent = crossCount.toString();
-        edgeCountEl.textContent = state.edges.length;
 
         if (crossCount === 0) {
-            onWin();        // all crossings cleared - level solved
+            statusEl.textContent = 'Puzzle solved!';
+            statusEl.classList.add('win-message');
+            onWin();
         } else {
+            statusEl.textContent = crossCount === 1
+                ? '1 crossing left'
+                : `${crossCount} crossings left`;
+            statusEl.classList.remove('win-message');
             hideWin();
         }
     }
@@ -295,19 +288,19 @@
 
     // win overlay + confetti celebration
     function onWin() {
-        winOverlay.classList.remove('hidden');
+        winOverlay.classList.add('show');
         burstConfetti();
     }
 
     function hideWin() {
-        winOverlay.classList.add('hidden');
+        winOverlay.classList.remove('show');
     }
 
     function burstConfetti() {
-        const colors = ['#7ee7c7', '#6ea8fe', '#ffd97a', '#ff9aa2', '#c1a7ff'];
+        const colors = ['#7ee7c7', '#6ea8fe', '#ffd166', '#ef4444', '#4ade80', '#c1a7ff'];
         for (let i = 0; i < 28; i++) {
             const c = document.createElement('div');
-            c.style.position = 'absolute';
+            c.style.position = 'fixed';
             c.style.left = (Math.random() * 60 + 20) + '%';
             c.style.top = (Math.random() * 60 + 20) + '%';
             c.style.width = '8px';
@@ -330,6 +323,7 @@
 
     // --- button handlers ---
     resetBtn.addEventListener('click', () => {
+        hideWin();
         buildScene(generateLevel(state.level));
     });
 
@@ -340,14 +334,11 @@
         state.nodes.forEach((n, i) => {
             n.x = shuffled[i].x;
             n.y = shuffled[i].y;
-            n.group.setAttribute('transform', `translate(${n.x - parseFloat(n.circle.getAttribute('cx'))}, ${n.y - parseFloat(n.circle.getAttribute('cy'))})`);
-            n.circle.setAttribute('cx', n.x);
-            n.circle.setAttribute('cy', n.y);
-            n.labelEl.setAttribute('x', n.x);
-            n.labelEl.setAttribute('y', n.y + 4);
+            n.group.setAttribute('transform', `translate(${n.x}, ${n.y})`);
         });
         for (const e of state.edges) {
-            const A = state.nodes[e.a], B = state.nodes[e.b];
+            const A = state.nodes[e.a];
+            const B = state.nodes[e.b];
             e.el.setAttribute('x1', A.x);
             e.el.setAttribute('y1', A.y);
             e.el.setAttribute('x2', B.x);
@@ -367,15 +358,15 @@
     });
 
     winShuffle.addEventListener('click', () => {
+        // Let checkCrossings() decide whether to keep showing the overlay.
         shuffleBtn.click();
-        hideWin();
     });
 
     function startLevel(level) {
         state.level = level;
         updateCounts();
-        const spec = generateLevel(level);
-        buildScene(spec);
+        hideWin();
+        buildScene(generateLevel(level));
     }
 
     // small mobile tweak: adjust viewBox height on portrait
@@ -383,7 +374,7 @@
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         if (isMobile && window.innerHeight > window.innerWidth) {
             state.h = 900;
-            state.w = Math.min(1000, window.innerWidth / window.innerHeight * 900);
+            state.w = Math.min(1000, (window.innerWidth / window.innerHeight) * 900);
         }
     }
 

@@ -10,61 +10,54 @@ description: Untangle the ropes by dragging the dots. Clear all red crossings to
 
 <main>
     <div class="container">
-        <section class="panel knot-panel">
+        <section class="panel">
             <div class="panel-head">
-                <h1 class="knot-title">Knot Again</h1>
-                <p class="muted small knot-description">Untangle the ropes by dragging the dots. Clear all red crossings
+                <h1>Knot Again</h1>
+                <p class="muted small">Untangle the ropes by dragging the dots. Clear all red crossings
                     to win!</p>
             </div>
 
-            <div class="knot-game-container">
-                <div class="knot-game-area">
-                    <div class="canvas-wrapper">
-                        <!-- stats row: level, edge count, crossing count -->
-                        <div class="canvas-stats-bar">
-                            <div class="canvas-stat-item">
-                                <div class="canvas-stat-label">Level</div>
-                                <div class="canvas-stat-value level-value" id="levelLabel">1</div>
-                            </div>
-                            <div class="canvas-stat-item">
-                                <div class="canvas-stat-label">Edges</div>
-                                <div class="canvas-stat-value edge-value" id="edgeCount">0</div>
-                            </div>
-                            <div class="canvas-stat-item">
-                                <div class="canvas-stat-label">Crossings</div>
-                                <div class="canvas-stat-value cross-value" id="crossCount">0</div>
-                            </div>
-                        </div>
+            <div id="game-container">
+                <div class="game-stats">
+                    <div class="stat-block level-stat">
+                        <strong>Level</strong>
+                        <span id="levelLabel" class="score score-level">1</span>
+                    </div>
+                    <div class="status-block">
+                        <span id="status">Drag the dots to untangle</span>
+                    </div>
+                    <div class="stat-block cross-stat">
+                        <strong>Crossings</strong>
+                        <span id="crossCount" class="score score-crossings">0</span>
+                    </div>
+                </div>
 
-                        <!-- drawing area -->
-                        <svg class="svg-canvas" id="svg" preserveAspectRatio="xMidYMid meet"
-                            viewBox="0 0 1000 700"></svg>
+                <div class="board-wrap">
+                    <svg id="game-board" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700"
+                        preserveAspectRatio="xMidYMid meet"></svg>
 
-                        <!-- win overlay (hidden until solved) -->
-                        <div class="win-overlay hidden" id="winOverlay">
-                            <div class="win-card">
-                                <h2 class="win-title">Nice! Puzzle solved.</h2>
-                                <p class="win-message">Ready for the next one?</p>
-                                <div class="win-actions">
-                                    <button class="btn btn-primary" id="winNext">Next Level</button>
-                                    <button class="btn btn-secondary" id="winShuffle">Shuffle</button>
-                                </div>
+                    <div class="game-over-overlay" id="game-over-overlay">
+                        <div class="game-over-content">
+                            <div class="game-over-message">Puzzle Solved!</div>
+                            <div class="game-over-detail">Ready for the next one?</div>
+                            <div class="game-over-actions">
+                                <button class="btn" id="winNext">Next Level</button>
+                                <button class="btn btn-secondary" id="winShuffle">Shuffle</button>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <!-- bottom control buttons -->
-                    <div class="knot-controls">
-                        <button class="btn btn-secondary" id="resetBtn">
-                            <i class="fas fa-undo"></i> Reset
-                        </button>
-                        <button class="btn btn-secondary" id="shuffleBtn">
-                            <i class="fas fa-random"></i> Shuffle
-                        </button>
-                        <button class="btn btn-primary" id="nextBtn">
-                            <i class="fas fa-forward"></i> Next Level
-                        </button>
-                    </div>
+                <div class="action-row">
+                    <button class="btn btn-secondary" id="resetBtn">
+                        <i class="fas fa-redo"></i> New Puzzle
+                    </button>
+                    <button class="btn btn-secondary" id="shuffleBtn">
+                        <i class="fas fa-random"></i> Shuffle
+                    </button>
+                    <button class="btn" id="nextBtn">
+                        <i class="fas fa-forward"></i> Next Level
+                    </button>
                 </div>
             </div>
         </section>
