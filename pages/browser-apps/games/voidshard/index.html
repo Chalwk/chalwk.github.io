@@ -1,0 +1,87 @@
+---
+layout: default
+title: Voidshard
+description: Shatter the drifting shards, evade the Void Hunter, and survive the collapse.
+---
+
+<!-- Copyright (c) 2024-2026 Jericho Crosby (Chalwk). All Rights Reserved. -->
+
+<link rel="stylesheet" href="style.css">
+
+<main>
+    <div class="container">
+        <section class="panel">
+            <div class="panel-head">
+                <h1>Voidshard</h1>
+                <p class="muted small">Shatter the drifting shards, evade the Void Hunter, and survive the collapse.</p>
+            </div>
+
+            <div id="game-settings">
+                <label for="difficulty">Pilot Rating
+                    <select id="difficulty">
+                        <option value="rookie">Rookie</option>
+                        <option value="veteran" selected>Veteran</option>
+                        <option value="master">Master</option>
+                    </select>
+                </label>
+                <label for="hunter">Void Hunter
+                    <select id="hunter">
+                        <option value="on" selected>On</option>
+                        <option value="off">Off</option>
+                    </select>
+                </label>
+                <label for="powerups">Shard Cores
+                    <select id="powerups">
+                        <option value="on" selected>On</option>
+                        <option value="off">Off</option>
+                    </select>
+                </label>
+            </div>
+
+            <div id="game-container">
+                <div class="game-stats">
+                    <div class="stat-block score-stat">
+                        <strong>Score</strong>
+                        <span id="score" class="score">0</span>
+                    </div>
+                    <div class="status-block">
+                        <span id="status">Wave 1</span>
+                        <span id="chain" class="chain">Chain x1</span>
+                    </div>
+                    <div class="stat-block lives-stat">
+                        <strong>Hull</strong>
+                        <span id="lives" class="score">3</span>
+                    </div>
+                </div>
+
+                <div class="board-wrap">
+                    <canvas id="game-board" width="960" height="600"></canvas>
+
+                    <div class="game-over-overlay" id="game-over-overlay">
+                        <div class="game-over-content">
+                            <div id="game-over-message" class="game-over-message"></div>
+                            <div id="game-over-score" class="game-over-score"></div>
+                            <button class="btn btn-secondary" id="play-again">Play Again</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="controls-hint" id="controls-hint"></div>
+
+                <div class="powerup-legend">
+                    <span class="pu-chip"><i class="pu-dot" style="background:#4ade80"></i>Shield</span>
+                    <span class="pu-chip"><i class="pu-dot" style="background:#fbbf24"></i>Rapid</span>
+                    <span class="pu-chip"><i class="pu-dot" style="background:#a78bfa"></i>Spread</span>
+                    <span class="pu-chip"><i class="pu-dot" style="background:#60a5fa"></i>Slow</span>
+                    <span class="pu-chip"><i class="pu-dot" style="background:#f97316"></i>Pierce</span>
+                </div>
+
+                <button class="btn btn-secondary" id="reset">
+                    <i class="fas fa-redo"></i> New Game
+                </button>
+            </div>
+        </section>
+    </div>
+</main>
+
+<script src="script.js"></script>
