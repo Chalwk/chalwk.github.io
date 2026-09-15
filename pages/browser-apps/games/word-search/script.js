@@ -262,7 +262,7 @@ function buildPuzzle() {
         }
     }
 
-    // Fill remaining cells with random A–Z
+    // Fill remaining cells with random A-Z
     for (let r = 0; r < n; r++) {
         for (let c = 0; c < n; c++) {
             if (grid2D[r][c] === null) {
