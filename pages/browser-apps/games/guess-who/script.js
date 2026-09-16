@@ -23,10 +23,13 @@ const assistSelect = document.getElementById('assist');
 const confettiCanvas = document.getElementById('confetti');
 const chatLogEl = document.getElementById('chat-log');
 const selectionOverlay = document.getElementById('selection-overlay');
+const selectionOkBtn = document.getElementById('selection-ok');
 const aiQuestionOverlay = document.getElementById('ai-question-overlay');
 const aiQuestionText = document.getElementById('ai-question-text');
 const aiAnswerYes = document.getElementById('ai-answer-yes');
 const aiAnswerNo = document.getElementById('ai-answer-no');
+const playerCharacterEl = document.getElementById('player-character');
+const gameContainerEl = document.getElementById('game-container');
 
 // Constants
 const COLS = 6;
@@ -40,63 +43,63 @@ const SOUND_KEY = 'guesswho.sound';
 const BOARDS = {
     'faces1.png': [
         // Row 1
-        { gender: 'male', hairColor: 'brown', hairLength: 'short', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'blue', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
-        { gender: 'female', hairColor: 'blonde', hairLength: 'long', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'blue', skinTone: 'light', freckles: false, bigNose: false, earrings: true },
-        { gender: 'male', hairColor: 'gray', hairLength: 'short', bald: false, facialHair: 'mustache', glasses: true, hat: false, headband: false, eyeColor: 'brown', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
-        { gender: 'female', hairColor: 'black', hairLength: 'long', bald: false, facialHair: 'none', glasses: false, hat: false, headband: true, eyeColor: 'brown', skinTone: 'dark', freckles: false, bigNose: false, earrings: true },
-        { gender: 'male', hairColor: 'red', hairLength: 'short', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'green', skinTone: 'light', freckles: true, bigNose: false, earrings: false },
-        { gender: 'female', hairColor: 'black', hairLength: 'long', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'brown', skinTone: 'light', freckles: false, bigNose: false, earrings: true },
+        { name: 'Alex', gender: 'male', hairColor: 'brown', hairLength: 'short', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'blue', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
+        { name: 'Maria', gender: 'female', hairColor: 'blonde', hairLength: 'long', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'blue', skinTone: 'light', freckles: false, bigNose: false, earrings: true },
+        { name: 'Bernard', gender: 'male', hairColor: 'gray', hairLength: 'short', bald: false, facialHair: 'mustache', glasses: true, hat: false, headband: false, eyeColor: 'brown', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
+        { name: 'Anita', gender: 'female', hairColor: 'black', hairLength: 'long', bald: false, facialHair: 'none', glasses: false, hat: false, headband: true, eyeColor: 'brown', skinTone: 'dark', freckles: false, bigNose: false, earrings: true },
+        { name: 'Eric', gender: 'male', hairColor: 'red', hairLength: 'short', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'green', skinTone: 'light', freckles: true, bigNose: false, earrings: false },
+        { name: 'Claire', gender: 'female', hairColor: 'black', hairLength: 'long', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'brown', skinTone: 'light', freckles: false, bigNose: false, earrings: true },
         // Row 2
-        { gender: 'male', hairColor: 'brown', hairLength: 'short', bald: false, facialHair: 'beard', glasses: false, hat: true, headband: false, eyeColor: 'blue', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
-        { gender: 'female', hairColor: 'red', hairLength: 'long', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'green', skinTone: 'light', freckles: true, bigNose: false, earrings: true },
-        { gender: 'male', hairColor: null, hairLength: null, bald: true, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'blue', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
-        { gender: 'female', hairColor: 'gray', hairLength: 'short', bald: false, facialHair: 'none', glasses: true, hat: false, headband: false, eyeColor: 'brown', skinTone: 'dark', freckles: false, bigNose: false, earrings: true },
-        { gender: 'male', hairColor: 'brown', hairLength: 'short', bald: false, facialHair: 'mustache', glasses: false, hat: true, headband: false, eyeColor: 'brown', skinTone: 'medium', freckles: false, bigNose: false, earrings: false },
-        { gender: 'female', hairColor: 'blonde', hairLength: 'long', bald: false, facialHair: 'none', glasses: false, hat: true, headband: false, eyeColor: 'blue', skinTone: 'light', freckles: true, bigNose: false, earrings: false },
+        { name: 'Bill', gender: 'male', hairColor: 'brown', hairLength: 'short', bald: false, facialHair: 'beard', glasses: false, hat: true, headband: false, eyeColor: 'blue', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
+        { name: 'Susan', gender: 'female', hairColor: 'red', hairLength: 'long', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'green', skinTone: 'light', freckles: true, bigNose: false, earrings: true },
+        { name: 'George', gender: 'male', hairColor: null, hairLength: null, bald: true, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'blue', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
+        { name: 'Anne', gender: 'female', hairColor: 'gray', hairLength: 'short', bald: false, facialHair: 'none', glasses: true, hat: false, headband: false, eyeColor: 'brown', skinTone: 'dark', freckles: false, bigNose: false, earrings: true },
+        { name: 'Alfred', gender: 'male', hairColor: 'brown', hairLength: 'short', bald: false, facialHair: 'mustache', glasses: false, hat: true, headband: false, eyeColor: 'brown', skinTone: 'medium', freckles: false, bigNose: false, earrings: false },
+        { name: 'Sophie', gender: 'female', hairColor: 'blonde', hairLength: 'long', bald: false, facialHair: 'none', glasses: false, hat: true, headband: false, eyeColor: 'blue', skinTone: 'light', freckles: true, bigNose: false, earrings: false },
         // Row 3
-        { gender: 'female', hairColor: 'gray', hairLength: 'short', bald: false, facialHair: 'none', glasses: true, hat: false, headband: false, eyeColor: 'brown', skinTone: 'light', freckles: false, bigNose: false, earrings: true },
-        { gender: 'male', hairColor: 'black', hairLength: 'short', bald: false, facialHair: 'none', glasses: true, hat: false, headband: false, eyeColor: 'brown', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
-        { gender: 'male', hairColor: 'black', hairLength: 'short', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'brown', skinTone: 'dark', freckles: false, bigNose: false, earrings: false },
-        { gender: 'female', hairColor: 'brown', hairLength: 'long', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'green', skinTone: 'light', freckles: false, bigNose: false, earrings: true },
-        { gender: 'male', hairColor: 'blonde', hairLength: 'short', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'blue', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
-        { gender: 'female', hairColor: 'black', hairLength: 'long', bald: false, facialHair: 'none', glasses: false, hat: false, headband: true, eyeColor: 'brown', skinTone: 'dark', freckles: false, bigNose: false, earrings: true },
+        { name: 'Rachel', gender: 'female', hairColor: 'gray', hairLength: 'short', bald: false, facialHair: 'none', glasses: true, hat: false, headband: false, eyeColor: 'brown', skinTone: 'light', freckles: false, bigNose: false, earrings: true },
+        { name: 'Charles', gender: 'male', hairColor: 'black', hairLength: 'short', bald: false, facialHair: 'none', glasses: true, hat: false, headband: false, eyeColor: 'brown', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
+        { name: 'David', gender: 'male', hairColor: 'black', hairLength: 'short', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'brown', skinTone: 'dark', freckles: false, bigNose: false, earrings: false },
+        { name: 'Laura', gender: 'female', hairColor: 'brown', hairLength: 'long', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'green', skinTone: 'light', freckles: false, bigNose: false, earrings: true },
+        { name: 'Max', gender: 'male', hairColor: 'blonde', hairLength: 'short', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'blue', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
+        { name: 'Emily', gender: 'female', hairColor: 'black', hairLength: 'long', bald: false, facialHair: 'none', glasses: false, hat: false, headband: true, eyeColor: 'brown', skinTone: 'dark', freckles: false, bigNose: false, earrings: true },
         // Row 4
-        { gender: 'male', hairColor: 'brown', hairLength: 'short', bald: false, facialHair: 'none', glasses: true, hat: false, headband: false, eyeColor: 'brown', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
-        { gender: 'female', hairColor: 'red', hairLength: 'long', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'blue', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
-        { gender: 'male', hairColor: 'gray', hairLength: 'short', bald: false, facialHair: 'beard', glasses: false, hat: true, headband: false, eyeColor: 'brown', skinTone: 'light', freckles: false, bigNose: true, earrings: false },
-        { gender: 'female', hairColor: 'black', hairLength: 'long', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'brown', skinTone: 'dark', freckles: false, bigNose: false, earrings: true },
-        { gender: 'male', hairColor: 'brown', hairLength: 'short', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'blue', skinTone: 'light', freckles: false, bigNose: true, earrings: false },
-        { gender: 'female', hairColor: 'black', hairLength: 'long', bald: false, facialHair: 'none', glasses: true, hat: false, headband: false, eyeColor: 'brown', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
+        { name: 'Herman', gender: 'male', hairColor: 'brown', hairLength: 'short', bald: false, facialHair: 'none', glasses: true, hat: false, headband: false, eyeColor: 'brown', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
+        { name: 'Jane', gender: 'female', hairColor: 'red', hairLength: 'long', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'blue', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
+        { name: 'Joe', gender: 'male', hairColor: 'gray', hairLength: 'short', bald: false, facialHair: 'beard', glasses: false, hat: true, headband: false, eyeColor: 'brown', skinTone: 'light', freckles: false, bigNose: true, earrings: false },
+        { name: 'Grace', gender: 'female', hairColor: 'black', hairLength: 'long', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'brown', skinTone: 'dark', freckles: false, bigNose: false, earrings: true },
+        { name: 'Peter', gender: 'male', hairColor: 'brown', hairLength: 'short', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'blue', skinTone: 'light', freckles: false, bigNose: true, earrings: false },
+        { name: 'Julia', gender: 'female', hairColor: 'black', hairLength: 'long', bald: false, facialHair: 'none', glasses: true, hat: false, headband: false, eyeColor: 'brown', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
     ],
     'faces2.png': [
         // Row 1
-        { gender: 'male', hairColor: 'black', hairLength: 'short', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'blue', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
-        { gender: 'female', hairColor: 'red', hairLength: 'long', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'green', skinTone: 'light', freckles: true, bigNose: false, earrings: false },
-        { gender: 'male', hairColor: 'gray', hairLength: 'short', bald: false, facialHair: 'mustache', glasses: true, hat: false, headband: false, eyeColor: 'brown', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
-        { gender: 'female', hairColor: 'blonde', hairLength: 'long', bald: false, facialHair: 'none', glasses: false, hat: false, headband: true, eyeColor: 'blue', skinTone: 'light', freckles: false, bigNose: false, earrings: true },
-        { gender: 'male', hairColor: 'black', hairLength: 'short', bald: false, facialHair: 'beard', glasses: false, hat: false, headband: false, eyeColor: 'brown', skinTone: 'dark', freckles: false, bigNose: false, earrings: false },
-        { gender: 'female', hairColor: 'gray', hairLength: 'short', bald: false, facialHair: 'none', glasses: true, hat: true, headband: false, eyeColor: 'brown', skinTone: 'light', freckles: false, bigNose: false, earrings: true },
+        { name: 'Tom', gender: 'male', hairColor: 'black', hairLength: 'short', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'blue', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
+        { name: 'Anita', gender: 'female', hairColor: 'red', hairLength: 'long', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'green', skinTone: 'light', freckles: true, bigNose: false, earrings: false },
+        { name: 'Phillip', gender: 'male', hairColor: 'gray', hairLength: 'short', bald: false, facialHair: 'mustache', glasses: true, hat: false, headband: false, eyeColor: 'brown', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
+        { name: 'Kate', gender: 'female', hairColor: 'blonde', hairLength: 'long', bald: false, facialHair: 'none', glasses: false, hat: false, headband: true, eyeColor: 'blue', skinTone: 'light', freckles: false, bigNose: false, earrings: true },
+        { name: 'Frans', gender: 'male', hairColor: 'black', hairLength: 'short', bald: false, facialHair: 'beard', glasses: false, hat: false, headband: false, eyeColor: 'brown', skinTone: 'dark', freckles: false, bigNose: false, earrings: false },
+        { name: 'Maria', gender: 'female', hairColor: 'gray', hairLength: 'short', bald: false, facialHair: 'none', glasses: true, hat: true, headband: false, eyeColor: 'brown', skinTone: 'light', freckles: false, bigNose: false, earrings: true },
         // Row 2
-        { gender: 'male', hairColor: 'brown', hairLength: 'short', bald: false, facialHair: 'none', glasses: false, hat: true, headband: false, eyeColor: 'blue', skinTone: 'light', freckles: true, bigNose: false, earrings: false },
-        { gender: 'female', hairColor: 'black', hairLength: 'long', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'brown', skinTone: 'light', freckles: false, bigNose: false, earrings: true },
-        { gender: 'male', hairColor: 'brown', hairLength: 'short', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'blue', skinTone: 'light', freckles: true, bigNose: false, earrings: false },
-        { gender: 'male', hairColor: 'brown', hairLength: 'short', bald: false, facialHair: 'mustache', glasses: false, hat: true, headband: false, eyeColor: 'brown', skinTone: 'medium', freckles: false, bigNose: false, earrings: false },
-        { gender: 'female', hairColor: 'red', hairLength: 'short', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'green', skinTone: 'light', freckles: false, bigNose: false, earrings: true },
-        { gender: 'female', hairColor: 'black', hairLength: 'long', bald: false, facialHair: 'none', glasses: false, hat: false, headband: true, eyeColor: 'brown', skinTone: 'dark', freckles: false, bigNose: false, earrings: true },
+        { name: 'Robert', gender: 'male', hairColor: 'brown', hairLength: 'short', bald: false, facialHair: 'none', glasses: false, hat: true, headband: false, eyeColor: 'blue', skinTone: 'light', freckles: true, bigNose: false, earrings: false },
+        { name: 'Sarah', gender: 'female', hairColor: 'black', hairLength: 'long', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'brown', skinTone: 'light', freckles: false, bigNose: false, earrings: true },
+        { name: 'Sam', gender: 'male', hairColor: 'brown', hairLength: 'short', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'blue', skinTone: 'light', freckles: true, bigNose: false, earrings: false },
+        { name: 'Richard', gender: 'male', hairColor: 'brown', hairLength: 'short', bald: false, facialHair: 'mustache', glasses: false, hat: true, headband: false, eyeColor: 'brown', skinTone: 'medium', freckles: false, bigNose: false, earrings: false },
+        { name: 'Olivia', gender: 'female', hairColor: 'red', hairLength: 'short', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'green', skinTone: 'light', freckles: false, bigNose: false, earrings: true },
+        { name: 'Anne', gender: 'female', hairColor: 'black', hairLength: 'long', bald: false, facialHair: 'none', glasses: false, hat: false, headband: true, eyeColor: 'brown', skinTone: 'dark', freckles: false, bigNose: false, earrings: true },
         // Row 3
-        { gender: 'male', hairColor: 'gray', hairLength: 'short', bald: false, facialHair: 'beard', glasses: false, hat: false, headband: false, eyeColor: 'blue', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
-        { gender: 'female', hairColor: 'brown', hairLength: 'long', bald: false, facialHair: 'none', glasses: true, hat: false, headband: false, eyeColor: 'blue', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
-        { gender: 'male', hairColor: 'black', hairLength: 'short', bald: false, facialHair: 'none', glasses: true, hat: false, headband: false, eyeColor: 'brown', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
-        { gender: 'female', hairColor: 'gray', hairLength: 'short', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'blue', skinTone: 'light', freckles: false, bigNose: false, earrings: true },
-        { gender: 'male', hairColor: 'red', hairLength: 'short', bald: false, facialHair: 'beard', glasses: false, hat: true, headband: false, eyeColor: 'blue', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
-        { gender: 'female', hairColor: 'black', hairLength: 'long', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'brown', skinTone: 'light', freckles: false, bigNose: false, earrings: true },
+        { name: 'Paul', gender: 'male', hairColor: 'gray', hairLength: 'short', bald: false, facialHair: 'beard', glasses: false, hat: false, headband: false, eyeColor: 'blue', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
+        { name: 'Julia', gender: 'female', hairColor: 'brown', hairLength: 'long', bald: false, facialHair: 'none', glasses: true, hat: false, headband: false, eyeColor: 'blue', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
+        { name: 'Peter', gender: 'male', hairColor: 'black', hairLength: 'short', bald: false, facialHair: 'none', glasses: true, hat: false, headband: false, eyeColor: 'brown', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
+        { name: 'Emily', gender: 'female', hairColor: 'gray', hairLength: 'short', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'blue', skinTone: 'light', freckles: false, bigNose: false, earrings: true },
+        { name: 'Herman', gender: 'male', hairColor: 'red', hairLength: 'short', bald: false, facialHair: 'beard', glasses: false, hat: true, headband: false, eyeColor: 'blue', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
+        { name: 'Claire', gender: 'female', hairColor: 'black', hairLength: 'long', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'brown', skinTone: 'light', freckles: false, bigNose: false, earrings: true },
         // Row 4
-        { gender: 'male', hairColor: 'brown', hairLength: 'short', bald: false, facialHair: 'none', glasses: false, hat: true, headband: false, eyeColor: 'blue', skinTone: 'light', freckles: false, bigNose: true, earrings: false },
-        { gender: 'male', hairColor: 'black', hairLength: 'short', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'brown', skinTone: 'dark', freckles: false, bigNose: false, earrings: false },
-        { gender: 'female', hairColor: 'brown', hairLength: 'long', bald: false, facialHair: 'none', glasses: true, hat: false, headband: false, eyeColor: 'brown', skinTone: 'light', freckles: false, bigNose: false, earrings: true },
-        { gender: 'male', hairColor: null, hairLength: null, bald: true, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'blue', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
-        { gender: 'male', hairColor: 'blonde', hairLength: 'short', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'blue', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
-        { gender: 'female', hairColor: 'black', hairLength: 'short', bald: false, facialHair: 'none', glasses: false, hat: false, headband: true, eyeColor: 'brown', skinTone: 'medium', freckles: false, bigNose: false, earrings: true },
+        { name: 'Alex', gender: 'male', hairColor: 'brown', hairLength: 'short', bald: false, facialHair: 'none', glasses: false, hat: true, headband: false, eyeColor: 'blue', skinTone: 'light', freckles: false, bigNose: true, earrings: false },
+        { name: 'Charles', gender: 'male', hairColor: 'black', hairLength: 'short', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'brown', skinTone: 'dark', freckles: false, bigNose: false, earrings: false },
+        { name: 'Laura', gender: 'female', hairColor: 'brown', hairLength: 'long', bald: false, facialHair: 'none', glasses: true, hat: false, headband: false, eyeColor: 'brown', skinTone: 'light', freckles: false, bigNose: false, earrings: true },
+        { name: 'George', gender: 'male', hairColor: null, hairLength: null, bald: true, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'blue', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
+        { name: 'Bernard', gender: 'male', hairColor: 'blonde', hairLength: 'short', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'blue', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
+        { name: 'Susan', gender: 'female', hairColor: 'black', hairLength: 'short', bald: false, facialHair: 'none', glasses: false, hat: false, headband: true, eyeColor: 'brown', skinTone: 'medium', freckles: false, bigNose: false, earrings: true },
     ]
 };
 
@@ -133,10 +136,10 @@ let CHARACTERS = [];
 let currentSheet = 'faces1.png';
 let playerSecretIndex = -1;
 let aiSecretIndex = -1;
-let guessesLeft = 3;
+let guessesLeft = 1;
 let questionCount = 0;
 let gameOver = false;
-let autoFlip = true;
+let autoFlip = false;
 let pendingGuessIdx = -1;
 let soundOn = true;
 let stats = { wins: 0, losses: 0, games: 0 };
@@ -233,6 +236,21 @@ function addChatMessage(text, sender) {
     chatLogEl.scrollTop = chatLogEl.scrollHeight;
 }
 
+function charName(index) {
+    const c = CHARACTERS[index];
+    return c && c.name ? c.name : `#${index + 1}`;
+}
+
+function updatePlayerChip() {
+    if (playerSecretIndex >= 0 && CHARACTERS[playerSecretIndex]) {
+        playerCharacterEl.textContent = `You: ${CHARACTERS[playerSecretIndex].name}`;
+        playerCharacterEl.classList.add('show');
+    } else {
+        playerCharacterEl.textContent = '';
+        playerCharacterEl.classList.remove('show');
+    }
+}
+
 // Board rendering
 function renderBoard() {
     boardEl.innerHTML = '';
@@ -247,11 +265,17 @@ function renderBoard() {
         const card = document.createElement('div');
         card.className = 'gw-card';
         card.dataset.index = i;
+        card.setAttribute('role', 'button');
+        card.setAttribute('tabindex', '0');
 
         const face = document.createElement('div');
         face.className = 'gw-face';
         face.style.backgroundImage = `url('${currentSheet}')`;
         face.style.backgroundPosition = `${posX}% ${posY}%`;
+
+        const nameTag = document.createElement('div');
+        nameTag.className = 'gw-name';
+        nameTag.textContent = char.name;
 
         const flip = document.createElement('div');
         flip.className = 'gw-flip';
@@ -260,8 +284,8 @@ function renderBoard() {
         const guessBtn = document.createElement('button');
         guessBtn.type = 'button';
         guessBtn.className = 'gw-guess';
-        guessBtn.title = `Guess character #${i + 1}`;
-        guessBtn.setAttribute('aria-label', `Guess character ${i + 1}`);
+        guessBtn.title = `Guess ${char.name}`;
+        guessBtn.setAttribute('aria-label', `Guess ${char.name}`);
         guessBtn.textContent = '?';
         guessBtn.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -270,6 +294,7 @@ function renderBoard() {
 
         card.appendChild(face);
         card.appendChild(flip);
+        card.appendChild(nameTag);
         card.appendChild(guessBtn);
         card.addEventListener('click', () => onCardClick(i));
 
@@ -328,19 +353,21 @@ function onCardClick(index) {
     if (gameOver) return;
 
     if (gamePhase === 'setup') {
-        // Player is selecting their character
+        // Player is selecting their character - any click inside the cell works
         playerSecretIndex = index;
         selectionOverlay.classList.remove('show');
+        gameContainerEl.classList.remove('setup-mode');
         gamePhase = 'player-turn';
         statusEl.textContent = "Character selected! Your turn.";
         sfx.answer(true);
-        addChatMessage(`You selected character #${index + 1}.`, 'system');
+        updatePlayerChip();
 
         // AI selects a different character
         do {
             aiSecretIndex = Math.floor(Math.random() * TOTAL);
         } while (aiSecretIndex === playerSecretIndex);
 
+        // AI always tracks its own candidates automatically (auto-flip).
         aiCandidates = Array.from({ length: TOTAL }, (_, i) => i);
         return;
     }
@@ -400,7 +427,7 @@ function requestGuess(index) {
     if (guessesLeft <= 0) return;
 
     pendingGuessIdx = index;
-    confirmMessageEl.textContent = `Guess character #${index + 1}?`;
+    confirmMessageEl.textContent = `Guess ${charName(index)}?`;
     confirmOverlay.classList.add('show');
 }
 
@@ -437,7 +464,7 @@ function commitGuess() {
         endGame(false);
     } else {
         flashStatus('Wrong! Try again.', 'tie-message', 1500);
-        addChatMessage(`You guessed character #${idx + 1}. Wrong!`, 'player');
+        addChatMessage(`You guessed ${charName(idx)}. Wrong!`, 'player');
     }
 }
 
@@ -497,7 +524,7 @@ function aiTurn() {
 }
 
 function aiGuess(idx) {
-    addChatMessage(`AI guesses: Character #${idx + 1}`, 'ai');
+    addChatMessage(`AI guesses: ${charName(idx)}`, 'ai');
     const card = boardEl.querySelector(`[data-index="${idx}"]`);
     if (card) card.classList.add('correct');
 
@@ -510,6 +537,7 @@ function aiGuess(idx) {
 }
 
 // Handle Player answering AI's question
+// The AI always narrows its own candidates automatically (auto-flip is always on for the AI).
 aiAnswerYes.addEventListener('click', () => {
     aiQuestionOverlay.classList.remove('show');
     const q = QUESTION_DEFS.find(def => def.id === currentAiQuestionId);
@@ -530,6 +558,10 @@ aiAnswerNo.addEventListener('click', () => {
     }
     gamePhase = 'player-turn';
     updateStatus();
+});
+
+selectionOkBtn.addEventListener('click', () => {
+    selectionOverlay.classList.remove('show');
 });
 
 // End of game
@@ -564,7 +596,7 @@ function endGame(playerWon, aiWon = false) {
     if (playerWon) {
         gameOverScoreEl.textContent = `Solved in ${questionCount} question${questionCount === 1 ? '' : 's'}`;
     } else {
-        gameOverScoreEl.textContent = `Your character was #${playerSecretIndex + 1}. AI's was #${aiSecretIndex + 1}.`;
+        gameOverScoreEl.textContent = `Your character was ${charName(playerSecretIndex)}. AI's was ${charName(aiSecretIndex)}.`;
     }
     gameOverOverlay.classList.add('show');
 }
@@ -585,7 +617,7 @@ function newGame() {
 
     playerSecretIndex = -1;
     aiSecretIndex = -1;
-    guessesLeft = Number(guessesSelect.value) || 3;
+    guessesLeft = Number(guessesSelect.value) || 1;
     questionCount = 0;
     gameOver = false;
     pendingGuessIdx = -1;
@@ -606,8 +638,12 @@ function newGame() {
     aiQuestionOverlay.classList.remove('show');
     selectionOverlay.classList.add('show');
 
+    // Dim everything in the container except the board during selection
+    gameContainerEl.classList.add('setup-mode');
+
     chatLogEl.innerHTML = '';
-    addChatMessage('New game started! Select your character.', 'system');
+
+    updatePlayerChip();
 
     clearConfetti();
     renderBoard();

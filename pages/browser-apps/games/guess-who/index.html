@@ -26,15 +26,15 @@ description: Ask questions, flip the ruled-out faces, and unmask the secret char
             <div id="game-settings">
                 <label for="guesses">Wrong guesses
                     <select id="guesses">
-                        <option value="1">1 allowed</option>
-                        <option value="3" selected>3 allowed</option>
+                        <option value="1" selected>1 allowed</option>
+                        <option value="3">3 allowed</option>
                         <option value="5">5 allowed</option>
                     </select>
                 </label>
                 <label for="assist">Auto-flip ruled out
                     <select id="assist">
-                        <option value="on" selected>On</option>
-                        <option value="off">Off</option>
+                        <option value="on">On</option>
+                        <option value="off" selected>Off</option>
                     </select>
                 </label>
             </div>
@@ -47,14 +47,59 @@ description: Ask questions, flip the ruled-out faces, and unmask the secret char
                     </div>
                     <div class="status-block">
                         <span id="status">Select your character to begin</span>
+                        <span id="player-character" class="player-character"></span>
                     </div>
                     <div class="stat-block player2">
                         <strong>Guesses left</strong>
-                        <span id="guesses-left" class="score score-player-2">3</span>
+                        <span id="guesses-left" class="score score-player-2">1</span>
                     </div>
                 </div>
 
-                <div id="board"></div>
+                <div id="board-wrap">
+                    <div id="board"></div>
+
+                    <!-- Player Character Selection Overlay -->
+                    <div class="game-over-overlay" id="selection-overlay">
+                        <div class="game-over-content">
+                            <div class="game-over-message">Choose Your Character</div>
+                            <div class="game-over-score">Click any face on the board to select who you want to be.</div>
+                            <div class="confirm-actions">
+                                <button class="btn" id="selection-ok" type="button">OK</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI Question Overlay -->
+                    <div class="game-over-overlay" id="ai-question-overlay">
+                        <div class="game-over-content">
+                            <div class="game-over-message" id="ai-question-text">AI is asking...</div>
+                            <div class="confirm-actions">
+                                <button class="btn btn-secondary" id="ai-answer-no" type="button">No</button>
+                                <button class="btn" id="ai-answer-yes" type="button">Yes</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Game Over Overlay -->
+                    <div class="game-over-overlay" id="game-over-overlay">
+                        <div class="game-over-content">
+                            <div id="game-over-message" class="game-over-message"></div>
+                            <div id="game-over-score" class="game-over-score"></div>
+                            <button class="btn btn-secondary" id="play-again" type="button">Play Again</button>
+                        </div>
+                    </div>
+
+                    <!-- Confirm Guess Overlay -->
+                    <div class="game-over-overlay" id="confirm-overlay">
+                        <div class="game-over-content">
+                            <div id="confirm-message" class="game-over-message"></div>
+                            <div class="confirm-actions">
+                                <button class="btn btn-secondary" id="confirm-no" type="button">Cancel</button>
+                                <button class="btn" id="confirm-yes" type="button">Yes, guess</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Chat Log -->
                 <div id="chat-log" class="chat-log"></div>
@@ -75,45 +120,6 @@ description: Ask questions, flip the ruled-out faces, and unmask the secret char
                 <div class="record" id="record"></div>
                 <p class="key-hint">Click a face to flip it down &middot; click the target to guess &middot; R restart
                     &middot; M mute</p>
-
-                <!-- Player Character Selection Overlay -->
-                <div class="game-over-overlay" id="selection-overlay">
-                    <div class="game-over-content">
-                        <div class="game-over-message">Choose Your Character</div>
-                        <div class="game-over-score">Click a face on the board to select who you want to be.</div>
-                    </div>
-                </div>
-
-                <!-- AI Question Overlay -->
-                <div class="game-over-overlay" id="ai-question-overlay">
-                    <div class="game-over-content">
-                        <div class="game-over-message" id="ai-question-text">AI is asking...</div>
-                        <div class="confirm-actions">
-                            <button class="btn btn-secondary" id="ai-answer-no" type="button">No</button>
-                            <button class="btn" id="ai-answer-yes" type="button">Yes</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Game Over Overlay -->
-                <div class="game-over-overlay" id="game-over-overlay">
-                    <div class="game-over-content">
-                        <div id="game-over-message" class="game-over-message"></div>
-                        <div id="game-over-score" class="game-over-score"></div>
-                        <button class="btn btn-secondary" id="play-again" type="button">Play Again</button>
-                    </div>
-                </div>
-
-                <!-- Confirm Guess Overlay -->
-                <div class="game-over-overlay" id="confirm-overlay">
-                    <div class="game-over-content">
-                        <div id="confirm-message" class="game-over-message"></div>
-                        <div class="confirm-actions">
-                            <button class="btn btn-secondary" id="confirm-no" type="button">Cancel</button>
-                            <button class="btn" id="confirm-yes" type="button">Yes, guess</button>
-                        </div>
-                    </div>
-                </div>
             </div>
         </section>
     </div>
