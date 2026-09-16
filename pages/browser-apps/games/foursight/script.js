@@ -83,7 +83,7 @@ let timerDeadline = 0;
 let lastTickSecond = -1;
 
 // ---------------------------------------------------------------------------
-// Sound engine (Web Audio API — everything is synthesised, no assets needed)
+// Sound engine (Web Audio API - everything is synthesised, no assets needed)
 // ---------------------------------------------------------------------------
 let audioCtx = null;
 
@@ -203,7 +203,7 @@ function saveStats() {
 function renderRecord() {
     if (!recordEl) return;
     recordEl.textContent =
-        `All-time — P1 ${stats.p1} · P2 ${stats.p2} · Draws ${stats.draws} · Games ${stats.games}`;
+        `All-time - P1 ${stats.p1} · P2 ${stats.p2} · Draws ${stats.draws} · Games ${stats.games}`;
 }
 
 // ---------------------------------------------------------------------------
@@ -265,7 +265,7 @@ function checkWinFrom(board, r, c, player) {
 }
 
 // ---------------------------------------------------------------------------
-// AI — difficulty strategies
+// AI - difficulty strategies
 // ---------------------------------------------------------------------------
 
 // Easy: pick any legal column at random.
@@ -386,7 +386,7 @@ function evaluateBoard(board) {
                     else if (v === HUMAN_PLAYER) hu++;
                 }
 
-                if (ai > 0 && hu > 0) continue; // blocked window — worthless
+                if (ai > 0 && hu > 0) continue; // blocked window - worthless
                 if (ai === need) score += 10000;
                 else if (ai === need - 1) score += 100;
                 else if (ai === need - 2 && need >= 4) score += 10;
@@ -666,7 +666,7 @@ function clearConfetti() {
 function startTurnTimer() {
     stopTurnTimer();
 
-    // No timer for the AI — its think delay is what paces the turn.
+    // No timer for the AI - its think delay is what paces the turn.
     if (!timerSeconds || gameOver || isAITurn()) {
         timerBar.classList.remove('active');
         return;

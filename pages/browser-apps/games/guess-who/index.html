@@ -1,0 +1,100 @@
+---
+layout: default
+title: Guess Who
+description: Ask questions, flip the ruled-out faces, and unmask the secret character.
+---
+
+<!-- Copyright (c) 2024-2026 Jericho Crosby (Chalwk). All Rights Reserved. -->
+
+<link rel="stylesheet" href="style.css">
+
+<main>
+    <div class="container">
+        <section class="panel">
+            <div class="panel-head">
+                <div class="panel-head-text">
+                    <h1>Guess Who</h1>
+                    <p class="muted small">Ask questions, flip the ruled-out faces, and unmask the secret character.
+                    </p>
+                </div>
+                <button class="icon-btn" id="sound-toggle" type="button" aria-label="Toggle sound"
+                    title="Toggle sound (M)">
+                    <span id="sound-icon">🔊</span>
+                </button>
+            </div>
+
+            <div id="game-settings">
+                <label for="guesses">Wrong guesses
+                    <select id="guesses">
+                        <option value="1">1 allowed</option>
+                        <option value="3" selected>3 allowed</option>
+                        <option value="5">5 allowed</option>
+                    </select>
+                </label>
+                <label for="assist">Auto-flip ruled out
+                    <select id="assist">
+                        <option value="on" selected>On</option>
+                        <option value="off">Off</option>
+                    </select>
+                </label>
+            </div>
+
+            <div id="game-container">
+                <div class="game-stats">
+                    <div class="stat-block player1">
+                        <strong>Questions</strong>
+                        <span id="question-count" class="score score-player-1">0</span>
+                    </div>
+                    <div class="status-block">
+                        <span id="status">Ask a question to begin</span>
+                    </div>
+                    <div class="stat-block player2">
+                        <strong>Guesses left</strong>
+                        <span id="guesses-left" class="score score-player-2">3</span>
+                    </div>
+                </div>
+
+                <div id="board"></div>
+
+                <div id="question-panel">
+                    <div id="question-list"></div>
+                </div>
+
+                <div class="controls">
+                    <button class="btn btn-secondary" id="reset" type="button" title="New Game (R)">
+                        <i class="fas fa-redo"></i> New Game
+                    </button>
+                    <button class="btn btn-secondary" id="reveal" type="button">
+                        <i class="fas fa-eye"></i> Give Up
+                    </button>
+                </div>
+
+                <div class="record" id="record"></div>
+                <p class="key-hint">Click a face to flip it down &middot; click the target to guess &middot; R restart
+                    &middot; M mute</p>
+
+                <div class="game-over-overlay" id="game-over-overlay">
+                    <div class="game-over-content">
+                        <div id="game-over-message" class="game-over-message"></div>
+                        <div id="game-over-score" class="game-over-score"></div>
+                        <button class="btn btn-secondary" id="play-again" type="button">Play Again</button>
+                    </div>
+                </div>
+
+                <div class="game-over-overlay" id="confirm-overlay">
+                    <div class="game-over-content">
+                        <div id="confirm-message" class="game-over-message"></div>
+                        <div class="confirm-actions">
+                            <button class="btn btn-secondary" id="confirm-no" type="button">Cancel</button>
+                            <button class="btn" id="confirm-yes" type="button">Yes, guess</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<canvas id="confetti" aria-hidden="true"></canvas>
+
+<script src="script.js"></script>
