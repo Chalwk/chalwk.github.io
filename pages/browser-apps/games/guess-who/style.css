@@ -93,49 +93,141 @@
     gap: 0.6rem;
     background: var(--darker);
     border-radius: var(--radius);
-    padding: 0.85rem 0.7rem;
+    padding: 0.5rem 0.7rem 0.85rem;
 }
 
 #game-container>* {
     transition: opacity 0.3s ease, filter 0.3s ease;
 }
 
-#game-container.setup-mode>*:not(#board-wrap) {
+#game-container.setup-mode .side-panel,
+#game-container.setup-mode #turn-bar,
+#game-container.setup-mode .controls {
     opacity: 0.25;
     filter: grayscale(1);
     pointer-events: none;
 }
 
-.game-stats {
+.game-layout {
     display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    grid-template-areas: "p1 status p2";
-    align-items: center;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 620px) minmax(0, 1fr);
+    gap: 0.75rem;
+    align-items: start;
     width: 100%;
-    gap: 0.5rem 0.75rem;
-    padding: 0.15rem 0.4rem;
+    margin-top: -0.15rem;
+}
+
+.board-column {
+    width: 100%;
+    min-width: 0;
+}
+
+.side-panel {
+    min-width: 0;
+    width: 100%;
+    max-width: 260px;
+}
+
+.side-left {
+    justify-self: start;
+    align-self: start;
+}
+
+.side-right {
+    justify-self: end;
+    align-self: start;
+}
+
+.side-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.player-card-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    width: 100%;
+}
+
+.player-card-name {
+    display: none;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: #93c5fd;
+    background: rgba(96, 165, 250, 0.18);
+    border: 1px solid rgba(96, 165, 250, 0.45);
+    padding: 0.14rem 0.6rem;
+    border-radius: 999px;
+    white-space: nowrap;
+    line-height: 1.35;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+}
+
+.player-card-name.show {
+    display: inline-block;
+}
+
+.player-card-face-wrap {
+    width: 100%;
+    max-width: 110px;
+    aspect-ratio: 1 / 1;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    background: var(--primary);
+    border: 2px solid rgba(96, 165, 250, 0.55);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
+    position: relative;
+    flex: 0 0 auto;
+}
+
+.player-card-face {
+    position: absolute;
+    inset: 0;
+    background-size: 600% 400%;
+    background-repeat: no-repeat;
+    background-color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.player-card-face.empty {
+    background-image: none !important;
+}
+
+.side-stats {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.55rem;
+    width: 100%;
+    margin-top: 0.6rem;
+    text-align: center;
 }
 
 .stat-block {
     display: flex;
     flex-direction: column;
-    gap: 0.15rem;
+    align-items: center;
+    gap: 0.1rem;
     line-height: 1.1;
-}
-
-.stat-block.player1 {
-    grid-area: p1;
-    align-items: flex-start;
-}
-
-.stat-block.player2 {
-    grid-area: p2;
-    align-items: flex-end;
 }
 
 .stat-block strong {
     color: rgba(255, 255, 255, 0.65);
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.04em;
@@ -156,48 +248,24 @@
 }
 
 .status-block {
-    grid-area: status;
-    justify-self: center;
-    min-width: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.6rem;
-    flex-wrap: wrap;
+    width: 100%;
 }
 
 #status {
     font-weight: bold;
-    font-size: 0.9rem;
+    font-size: 0.78rem;
+    line-height: 1.3;
     text-align: center;
     color: #fff;
-    white-space: nowrap;
-}
-
-.player-character {
-    display: none;
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-    color: #93c5fd;
-    background: rgba(96, 165, 250, 0.18);
-    border: 1px solid rgba(96, 165, 250, 0.45);
-    padding: 0.12rem 0.5rem;
-    border-radius: 999px;
-    white-space: nowrap;
-    line-height: 1.35;
-
-    transform: translateY(2px);
-}
-
-.player-character.show {
-    display: inline-block;
+    white-space: normal;
 }
 
 .win-message {
     color: var(--warning);
-    font-size: 1.05rem;
+    font-size: 0.95rem;
     animation: celebrate 0.5s ease;
 }
 
@@ -437,8 +505,7 @@
 
 #chat-log {
     width: 100%;
-    max-width: 620px;
-    max-height: 92px;
+    max-height: 150px;
     overflow-y: auto;
     background: rgba(0, 0, 0, 0.2);
     border-radius: var(--radius);
@@ -446,15 +513,16 @@
     display: flex;
     flex-direction: column;
     gap: 0.35rem;
-    font-size: 0.78rem;
+    font-size: 0.72rem;
     scroll-behavior: smooth;
 }
 
 .chat-message {
-    padding: 0.28rem 0.55rem;
+    padding: 0.28rem 0.5rem;
     border-radius: var(--radius-sm);
-    max-width: 80%;
+    max-width: 92%;
     word-wrap: break-word;
+    line-height: 1.3;
 }
 
 .chat-message.ai {
@@ -480,38 +548,44 @@
 
 #question-panel {
     width: 100%;
-    max-width: 620px;
     background: rgba(255, 255, 255, 0.035);
     border: 1px solid rgba(255, 255, 255, 0.07);
     border-radius: var(--radius);
-    padding: 0.6rem;
+    padding: 0.55rem;
+    max-height: 260px;
+    overflow-y: auto;
 }
 
 #question-panel::before {
     content: 'Ask a question';
     display: block;
-    font-size: 0.65rem;
+    font-size: 0.62rem;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: rgba(255, 255, 255, 0.45);
     text-align: center;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.45rem;
+    position: sticky;
+    top: 0;
+    background: linear-gradient(to bottom, rgba(20, 24, 31, 0.95), rgba(20, 24, 31, 0.7));
+    padding: 0.15rem 0;
+    z-index: 1;
 }
 
 #question-list {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.35rem;
+    gap: 0.3rem;
     justify-content: center;
     transition: opacity 0.2s ease;
 }
 
 .gw-question {
     font-family: var(--font-primary);
-    font-size: 0.7rem;
+    font-size: 0.66rem;
     font-weight: 600;
-    padding: 0.35rem 0.65rem;
+    padding: 0.3rem 0.55rem;
     border-radius: 999px;
     border: 1px solid rgba(255, 255, 255, 0.16);
     background: rgba(255, 255, 255, 0.06);
@@ -519,6 +593,7 @@
     cursor: pointer;
     transition: all 0.18s ease;
     line-height: 1.2;
+    text-align: left;
 }
 
 .gw-question:hover:not(.used) {
@@ -541,22 +616,6 @@
     justify-content: center;
     flex-wrap: wrap;
     width: 100%;
-}
-
-.record {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    color: rgba(255, 255, 255, 0.55);
-    text-align: center;
-    letter-spacing: 0.02em;
-}
-
-.key-hint {
-    font-size: 0.66rem;
-    color: rgba(255, 255, 255, 0.32);
-    text-align: center;
-    margin: 0;
-    letter-spacing: 0.03em;
 }
 
 .game-over-overlay {
@@ -656,6 +715,73 @@
     z-index: 9999;
 }
 
+@media (max-width: 900px) {
+    .game-layout {
+        grid-template-columns: 1fr;
+        gap: 0.6rem;
+        margin-top: 0;
+    }
+
+    .side-panel {
+        max-width: 620px;
+        width: 100%;
+        justify-self: center;
+        align-self: auto;
+    }
+
+    .board-column {
+        order: 1;
+    }
+
+    .side-right {
+        order: 2;
+    }
+
+    .side-left {
+        order: 3;
+    }
+
+    .side-right .side-inner {
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .player-card-panel {
+        flex: 0 0 auto;
+        width: auto;
+        padding-top: 0 !important;
+    }
+
+    .player-card-face-wrap {
+        width: 80px;
+        max-width: 80px;
+    }
+
+    .side-stats {
+        margin-top: 0;
+        width: auto;
+        flex: 0 0 auto;
+        flex-direction: row;
+        gap: 1.25rem;
+        align-items: center;
+    }
+
+    .status-block {
+        flex-basis: 100%;
+    }
+
+    #question-panel {
+        max-height: 200px;
+    }
+
+    #chat-log {
+        max-height: 120px;
+    }
+}
+
 @media (max-width: 768px) {
     #board {
         gap: 0.3rem;
@@ -686,7 +812,7 @@
 
 @media (max-width: 480px) {
     #game-container {
-        padding: 0.6rem 0.35rem;
+        padding: 0.45rem 0.35rem 0.7rem;
     }
 
     #board {
@@ -699,8 +825,8 @@
     }
 
     .gw-question {
-        font-size: 0.66rem;
-        padding: 0.3rem 0.55rem;
+        font-size: 0.62rem;
+        padding: 0.28rem 0.5rem;
     }
 
     .gw-flip {
@@ -715,13 +841,9 @@
         right: 2px;
     }
 
-    .key-hint {
-        display: none;
-    }
-
     .chat-log {
-        max-height: 70px;
-        font-size: 0.7rem;
+        max-height: 100px;
+        font-size: 0.68rem;
     }
 
     .game-over-overlay {
@@ -744,23 +866,23 @@
     .turn-bar-text {
         font-size: 0.7rem;
     }
+
+    .side-stats {
+        gap: 0.9rem;
+    }
 }
 
 @media (max-width: 420px) {
-    .game-stats {
-        grid-template-columns: 1fr 1fr;
-        grid-template-areas: "p1 p2" "status status";
-    }
-
-    .status-block {
-        margin-top: 0.15rem;
-    }
-
     #status {
-        font-size: 0.82rem;
+        font-size: 0.74rem;
     }
 
     .game-over-message {
         font-size: 0.95rem;
+    }
+
+    .player-card-face-wrap {
+        width: 68px;
+        max-width: 68px;
     }
 }

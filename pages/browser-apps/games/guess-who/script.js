@@ -10,7 +10,6 @@ const revealBtn = document.getElementById('reveal');
 const playAgainBtn = document.getElementById('play-again');
 const soundToggleBtn = document.getElementById('sound-toggle');
 const soundIcon = document.getElementById('sound-icon');
-const recordEl = document.getElementById('record');
 const gameOverOverlay = document.getElementById('game-over-overlay');
 const gameOverMessageEl = document.getElementById('game-over-message');
 const gameOverScoreEl = document.getElementById('game-over-score');
@@ -29,6 +28,7 @@ const aiQuestionText = document.getElementById('ai-question-text');
 const aiAnswerYes = document.getElementById('ai-answer-yes');
 const aiAnswerNo = document.getElementById('ai-answer-no');
 const playerCharacterEl = document.getElementById('player-character');
+const playerCharacterFaceEl = document.getElementById('player-character-face');
 const gameContainerEl = document.getElementById('game-container');
 const turnBarEl = document.getElementById('turn-bar');
 const continueBtn = document.getElementById('continue-btn');
@@ -37,7 +37,6 @@ const continueBtn = document.getElementById('continue-btn');
 const COLS = 6;
 const ROWS = 4;
 const TOTAL = COLS * ROWS; // 24
-const STATS_KEY = 'guesswho.stats.v1';
 const SOUND_KEY = 'guesswho.sound';
 
 // Character traits
@@ -144,7 +143,6 @@ let gameOver = false;
 let autoFlip = false;
 let pendingGuessIdx = -1;
 let soundOn = true;
-let stats = { wins: 0, losses: 0, games: 0 };
 
 // AI State
 let aiCandidates = [];
@@ -210,27 +208,6 @@ function toggleSound() {
     if (soundOn) sfx.toggle();
 }
 
-function loadStats() {
-    try {
-        const raw = localStorage.getItem(STATS_KEY);
-        if (!raw) return;
-        const p = JSON.parse(raw);
-        if (p && typeof p === 'object') {
-            stats.wins = Number(p.wins) || 0;
-            stats.losses = Number(p.losses) || 0;
-            stats.games = Number(p.games) || 0;
-        }
-    } catch (e) { /* ignore */ }
-}
-
-function saveStats() {
-    try { localStorage.setItem(STATS_KEY, JSON.stringify(stats)); } catch (e) { /* ignore */ }
-}
-
-function renderRecord() {
-    recordEl.textContent = `All-time - Won ${stats.wins} · Lost ${stats.losses} · Played ${stats.games}`;
-}
-
 function addChatMessage(text, sender) {
     const msg = document.createElement('div');
     msg.className = `chat-message ${sender}`;
@@ -244,14 +221,68 @@ function charName(index) {
     return c && c.name ? c.name : `#${index + 1}`;
 }
 
+// Renders the player's chosen character into the right-hand side panel.
 function updatePlayerChip() {
     if (playerSecretIndex >= 0 && CHARACTERS[playerSecretIndex]) {
-        playerCharacterEl.textContent = `You: ${CHARACTERS[playerSecretIndex].name}`;
+        const c = CHARACTERS[playerSecretIndex];
+        playerCharacterEl.textContent = `You: ${c.name}`;
         playerCharacterEl.classList.add('show');
+
+        const col = playerSecretIndex % COLS;
+        const row = Math.floor(playerSecretIndex / COLS);
+        const posX = (col * 100) / (COLS - 1);
+        const posY = (row * 100) / (ROWS - 1);
+
+        playerCharacterFaceEl.style.backgroundImage = `url('${currentSheet}')`;
+        playerCharacterFaceEl.style.backgroundPosition = `${posX}% ${posY}%`;
+        playerCharacterFaceEl.classList.remove('empty');
+        playerCharacterFaceEl.textContent = '';
     } else {
         playerCharacterEl.textContent = '';
         playerCharacterEl.classList.remove('show');
+        playerCharacterFaceEl.style.backgroundImage = '';
+        playerCharacterFaceEl.classList.add('empty');
+        playerCharacterFaceEl.textContent = '?';
     }
+    requestAnimationFrame(alignPlayerCard);
+}
+
+// Aligns the right-panel player card with row 2 of the character grid.
+function alignPlayerCard() {
+    const panel = document.querySelector('.player-card-panel');
+    const faceWrap = document.querySelector('.player-card-face-wrap');
+    const nameEl = playerCharacterEl;
+    if (!panel || !faceWrap || !nameEl) return;
+
+    // Only align in the three-column desktop layout.
+    if (window.innerWidth <= 900) {
+        panel.style.paddingTop = '';
+        faceWrap.style.width = '';
+        faceWrap.style.maxWidth = '';
+        return;
+    }
+
+    const boardWrap = document.getElementById('board-wrap');
+    const cards = boardEl.querySelectorAll('.gw-card');
+    if (!boardWrap || cards.length <= COLS) {
+        panel.style.paddingTop = '';
+        return;
+    }
+
+    const row2Card = cards[COLS]; // first card of row 2
+    const boardRect = boardWrap.getBoundingClientRect();
+    const row2Rect = row2Card.getBoundingClientRect();
+
+    // Match the preview face size to an actual board card.
+    faceWrap.style.maxWidth = 'none';
+    faceWrap.style.width = Math.round(row2Rect.width) + 'px';
+
+    const offset = row2Rect.top - boardRect.top;
+    const nameVisible = nameEl.classList.contains('show');
+    const nameH = nameVisible ? nameEl.offsetHeight : 0;
+    const gap = 6; // matches .player-card-panel gap
+    const pad = Math.max(0, offset - nameH - gap);
+    panel.style.paddingTop = Math.round(pad) + 'px';
 }
 
 // Board rendering
@@ -340,13 +371,13 @@ function updateStatus() {
     if (aiTurnQueued) {
         statusEl.textContent = n === 1
             ? 'One face left - flip it or guess!'
-            : `${n} characters face up`;
+            : 'Your turn - ask a question or flip faces';
         return;
     }
 
     if (n === 1) statusEl.textContent = 'One character left - make your guess!';
     else if (n === 0) statusEl.textContent = 'All faces flipped - ask a question or restart';
-    else statusEl.textContent = `${n} characters face up`;
+    else statusEl.textContent = 'Your turn - ask a question or flip faces';
 }
 
 function flashStatus(text, cls, ms = 1300) {
@@ -447,7 +478,7 @@ function askQuestion(def) {
 
     sfx.answer(answer);
     flashStatus(answer ? 'Yes!' : 'No!', answer ? 'win-message' : 'tie-message');
-    addChatMessage(`You asked: "${def.label}" - ${answer ? 'Yes' : 'No'}`, 'player');
+    addChatMessage(`YOU: "${def.label}" — ${answer ? 'Yes' : 'No'}`, 'player');
 
     queueAiTurn();
 
@@ -610,11 +641,6 @@ function endGame(playerWon, aiWon = false) {
     turnBarEl.hidden = true;
     questionListEl.classList.remove('is-locked');
 
-    stats.games++;
-    if (playerWon) stats.wins++; else stats.losses++;
-    saveStats();
-    renderRecord();
-
     let message;
     if (playerWon) {
         message = 'You win!';
@@ -689,12 +715,13 @@ function newGame() {
 
     chatLogEl.innerHTML = '';
 
-    updatePlayerChip();
-
     clearConfetti();
     renderBoard();
     renderQuestions();
+    updatePlayerChip();
     updateStatus();
+
+    requestAnimationFrame(alignPlayerCard);
 }
 
 // Confetti
@@ -780,30 +807,6 @@ function clearConfetti() {
     if (ctx) ctx.clearRect(0, 0, confettiW, confettiH);
 }
 
-// Keyboard shortcuts
-function onKeyDown(e) {
-    const tag = (e.target && e.target.tagName) || '';
-    if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') return;
-
-    if (e.key === ' ' || e.key === 'Enter') {
-        const active = document.activeElement;
-        if (active && (active.tagName === 'BUTTON' || active.tagName === 'A')) return;
-        if (aiTurnQueued) {
-            e.preventDefault();
-            beginAiTurn();
-        }
-        return;
-    }
-
-    switch (e.key) {
-        case 'r': case 'R': newGame(); break;
-        case 'm': case 'M': toggleSound(); break;
-        case 'Escape':
-            if (confirmOverlay.classList.contains('show')) cancelGuess();
-            break;
-    }
-}
-
 // Events
 resetBtn.addEventListener('click', newGame);
 playAgainBtn.addEventListener('click', newGame);
@@ -813,14 +816,12 @@ confirmYesBtn.addEventListener('click', commitGuess);
 confirmNoBtn.addEventListener('click', cancelGuess);
 guessesSelect.addEventListener('change', newGame);
 assistSelect.addEventListener('change', () => { autoFlip = assistSelect.value === 'on'; });
-document.addEventListener('keydown', onKeyDown);
 
 window.addEventListener('resize', () => {
     if (confettiParticles.length) resizeConfettiCanvas();
+    alignPlayerCard();
 });
 
 // Boot
-loadStats();
 loadSoundPref();
-renderRecord();
 newGame();
