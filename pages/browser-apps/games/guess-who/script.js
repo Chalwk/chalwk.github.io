@@ -30,6 +30,8 @@ const aiAnswerYes = document.getElementById('ai-answer-yes');
 const aiAnswerNo = document.getElementById('ai-answer-no');
 const playerCharacterEl = document.getElementById('player-character');
 const gameContainerEl = document.getElementById('game-container');
+const turnBarEl = document.getElementById('turn-bar');
+const continueBtn = document.getElementById('continue-btn');
 
 // Constants
 const COLS = 6;
@@ -149,6 +151,7 @@ let aiCandidates = [];
 let aiUsedQuestions = new Set();
 let currentAiQuestionId = null;
 let gamePhase = 'setup'; // 'setup', 'player-turn', 'ai-turn', 'game-over'
+let aiTurnQueued = false;
 
 // Sound engine
 let audioCtx = null;
@@ -331,7 +334,16 @@ function updateStatus() {
         statusEl.textContent = 'AI is thinking...';
         return;
     }
+
     const n = faceUpCount();
+
+    if (aiTurnQueued) {
+        statusEl.textContent = n === 1
+            ? 'One face left - flip it or guess!'
+            : `${n} characters face up`;
+        return;
+    }
+
     if (n === 1) statusEl.textContent = 'One character left - make your guess!';
     else if (n === 0) statusEl.textContent = 'All faces flipped - ask a question or restart';
     else statusEl.textContent = `${n} characters face up`;
@@ -346,6 +358,29 @@ function flashStatus(text, cls, ms = 1300) {
             updateStatus();
         }
     }, ms);
+}
+
+// Queue / begin the AI turn on the player's signal
+function queueAiTurn() {
+    aiTurnQueued = true;
+    turnBarEl.hidden = false;
+    questionListEl.classList.add('is-locked');
+
+    continueBtn.classList.remove('pulse');
+    void continueBtn.offsetWidth; // force reflow so the animation restarts
+    continueBtn.classList.add('pulse');
+
+    updateStatus();
+}
+
+function beginAiTurn() {
+    if (!aiTurnQueued || gameOver) return;
+    aiTurnQueued = false;
+    turnBarEl.hidden = true;
+    questionListEl.classList.remove('is-locked');
+    gamePhase = 'ai-turn';
+    updateStatus();
+    aiTurn(); // keeps its internal ~1.2s "thinking" beat before acting
 }
 
 // Card interaction
@@ -388,7 +423,7 @@ function onCardClick(index) {
 
 // Player Asking a Question
 function askQuestion(def) {
-    if (gameOver || gamePhase !== 'player-turn') return;
+    if (gameOver || gamePhase !== 'player-turn' || aiTurnQueued) return;
 
     const secret = CHARACTERS[aiSecretIndex];
     const answer = def.test(secret);
@@ -414,11 +449,11 @@ function askQuestion(def) {
     flashStatus(answer ? 'Yes!' : 'No!', answer ? 'win-message' : 'tie-message');
     addChatMessage(`You asked: "${def.label}" - ${answer ? 'Yes' : 'No'}`, 'player');
 
-    // Delay AI turn slightly for pacing
-    setTimeout(() => {
-        gamePhase = 'ai-turn';
-        aiTurn();
-    }, 1000);
+    queueAiTurn();
+
+    if (autoFlip) {
+        setTimeout(() => { if (aiTurnQueued && !gameOver) beginAiTurn(); }, 900);
+    }
 }
 
 // Guessing
@@ -564,10 +599,17 @@ selectionOkBtn.addEventListener('click', () => {
     selectionOverlay.classList.remove('show');
 });
 
+continueBtn.addEventListener('click', beginAiTurn);
+
 // End of game
 function endGame(playerWon, aiWon = false) {
     gameOver = true;
     gamePhase = 'game-over';
+
+    aiTurnQueued = false;
+    turnBarEl.hidden = true;
+    questionListEl.classList.remove('is-locked');
+
     stats.games++;
     if (playerWon) stats.wins++; else stats.losses++;
     saveStats();
@@ -627,6 +669,10 @@ function newGame() {
     aiUsedQuestions.clear();
     currentAiQuestionId = null;
     gamePhase = 'setup';
+
+    aiTurnQueued = false;
+    turnBarEl.hidden = true;
+    questionListEl.classList.remove('is-locked');
 
     questionCountEl.textContent = questionCount;
     guessesLeftEl.textContent = guessesLeft;
@@ -738,6 +784,16 @@ function clearConfetti() {
 function onKeyDown(e) {
     const tag = (e.target && e.target.tagName) || '';
     if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') return;
+
+    if (e.key === ' ' || e.key === 'Enter') {
+        const active = document.activeElement;
+        if (active && (active.tagName === 'BUTTON' || active.tagName === 'A')) return;
+        if (aiTurnQueued) {
+            e.preventDefault();
+            beginAiTurn();
+        }
+        return;
+    }
 
     switch (e.key) {
         case 'r': case 'R': newGame(); break;

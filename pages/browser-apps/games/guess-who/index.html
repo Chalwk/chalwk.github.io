@@ -101,6 +101,14 @@ description: Ask questions, flip the ruled-out faces, and unmask the secret char
                     </div>
                 </div>
 
+                <!-- Continue bar -->
+                <div id="turn-bar" class="turn-bar" hidden>
+                    <span class="turn-bar-text">Flip the ruled-out faces, then hand over.</span>
+                    <button class="btn" id="continue-btn" type="button">
+                        <i class="fas fa-arrow-right"></i> Continue
+                    </button>
+                </div>
+
                 <!-- Chat Log -->
                 <div id="chat-log" class="chat-log"></div>
 
@@ -118,8 +126,8 @@ description: Ask questions, flip the ruled-out faces, and unmask the secret char
                 </div>
 
                 <div class="record" id="record"></div>
-                <p class="key-hint">Click a face to flip it down &middot; click the target to guess &middot; R restart
-                    &middot; M mute</p>
+                <p class="key-hint">Click a face to flip it down &middot; click the target to guess &middot; Space to
+                    continue &middot; R restart &middot; M mute</p>
             </div>
         </section>
     </div>
