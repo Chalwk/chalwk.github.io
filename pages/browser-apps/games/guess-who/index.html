@@ -46,7 +46,7 @@ description: Ask questions, flip the ruled-out faces, and unmask the secret char
                         <span id="question-count" class="score score-player-1">0</span>
                     </div>
                     <div class="status-block">
-                        <span id="status">Ask a question to begin</span>
+                        <span id="status">Select your character to begin</span>
                     </div>
                     <div class="stat-block player2">
                         <strong>Guesses left</strong>
@@ -55,6 +55,9 @@ description: Ask questions, flip the ruled-out faces, and unmask the secret char
                 </div>
 
                 <div id="board"></div>
+
+                <!-- Chat Log -->
+                <div id="chat-log" class="chat-log"></div>
 
                 <div id="question-panel">
                     <div id="question-list"></div>
@@ -73,6 +76,26 @@ description: Ask questions, flip the ruled-out faces, and unmask the secret char
                 <p class="key-hint">Click a face to flip it down &middot; click the target to guess &middot; R restart
                     &middot; M mute</p>
 
+                <!-- Player Character Selection Overlay -->
+                <div class="game-over-overlay" id="selection-overlay">
+                    <div class="game-over-content">
+                        <div class="game-over-message">Choose Your Character</div>
+                        <div class="game-over-score">Click a face on the board to select who you want to be.</div>
+                    </div>
+                </div>
+
+                <!-- AI Question Overlay -->
+                <div class="game-over-overlay" id="ai-question-overlay">
+                    <div class="game-over-content">
+                        <div class="game-over-message" id="ai-question-text">AI is asking...</div>
+                        <div class="confirm-actions">
+                            <button class="btn btn-secondary" id="ai-answer-no" type="button">No</button>
+                            <button class="btn" id="ai-answer-yes" type="button">Yes</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game Over Overlay -->
                 <div class="game-over-overlay" id="game-over-overlay">
                     <div class="game-over-content">
                         <div id="game-over-message" class="game-over-message"></div>
@@ -81,6 +104,7 @@ description: Ask questions, flip the ruled-out faces, and unmask the secret char
                     </div>
                 </div>
 
+                <!-- Confirm Guess Overlay -->
                 <div class="game-over-overlay" id="confirm-overlay">
                     <div class="game-over-content">
                         <div id="confirm-message" class="game-over-message"></div>

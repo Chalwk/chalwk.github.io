@@ -304,6 +304,49 @@
     transform: scale(1.15);
 }
 
+#chat-log {
+    width: 100%;
+    max-width: 820px;
+    max-height: 120px;
+    overflow-y: auto;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: var(--radius);
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    scroll-behavior: smooth;
+}
+
+.chat-message {
+    padding: 0.3rem 0.6rem;
+    border-radius: var(--radius-sm);
+    max-width: 80%;
+    word-wrap: break-word;
+}
+
+.chat-message.ai {
+    background: rgba(96, 165, 250, 0.2);
+    color: #93c5fd;
+    align-self: flex-start;
+    border-left: 3px solid #60a5fa;
+}
+
+.chat-message.player {
+    background: rgba(251, 191, 36, 0.2);
+    color: #fde68a;
+    align-self: flex-end;
+    border-right: 3px solid #fbbf24;
+}
+
+.chat-message.system {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ccc;
+    align-self: center;
+    font-style: italic;
+}
+
 #question-panel {
     width: 100%;
     max-width: 820px;
@@ -390,7 +433,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(0, 0, 0, 0.78);
+    background: rgba(0, 0, 0, 0.85);
     border-radius: var(--radius);
     opacity: 0;
     pointer-events: none;
@@ -403,6 +446,20 @@
 .game-over-overlay.show {
     opacity: 1;
     pointer-events: auto;
+}
+
+#selection-overlay {
+    pointer-events: none !important;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+#selection-overlay .game-over-content {
+    pointer-events: auto;
+    background: rgba(0, 0, 0, 0.9);
+    padding: 1.5rem 2rem;
+    border-radius: var(--radius);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
 }
 
 .game-over-content {
@@ -502,14 +559,17 @@
     .key-hint {
         display: none;
     }
+
+    .chat-log {
+        max-height: 80px;
+        font-size: 0.7rem;
+    }
 }
 
 @media (max-width: 420px) {
     .game-stats {
         grid-template-columns: 1fr 1fr;
-        grid-template-areas:
-            "p1 p2"
-            "status status";
+        grid-template-areas: "p1 p2" "status status";
     }
 
     .status-block {
