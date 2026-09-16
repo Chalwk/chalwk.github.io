@@ -315,22 +315,6 @@ g.mirror-group:hover .mirror-line {
     pointer-events: none;
 }
 
-.mirror-line.hint {
-    animation: mirror-hint 0.55s ease-in-out infinite alternate;
-}
-
-@keyframes mirror-hint {
-    from {
-        stroke: #06b6d4;
-        stroke-width: 5;
-    }
-
-    to {
-        stroke: #fbbf24;
-        stroke-width: 8;
-    }
-}
-
 .source-shape {
     fill: #ffd166;
     stroke: rgba(0, 0, 0, 0.3);

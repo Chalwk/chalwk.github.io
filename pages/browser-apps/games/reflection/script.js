@@ -10,8 +10,6 @@ const levelCounterEl = document.getElementById('level-counter');
 const targetsStatusEl = document.getElementById('targets-status');
 const budgetStatusEl = document.getElementById('budget-status');
 const resetBtn = document.getElementById('reset');
-const undoBtn = document.getElementById('undo');
-const hintBtn = document.getElementById('hint');
 const newPuzzleBtn = document.getElementById('new-puzzle-btn');
 const difficultySelect = document.getElementById('difficulty');
 const gameOverOverlay = document.getElementById('game-over-overlay');
@@ -38,19 +36,19 @@ const DIFFICULTY_CONFIG = {
         minSize: 6, maxSize: 7,
         mirrors: [3, 5], walls: [0, 2], fixed: [0, 1], decoys: [1, 2],
         targets: [1, 2], splitters: 0, portalPairs: 0,
-        budgetExtra: Infinity, hintPenalty: 0,
+        budgetExtra: Infinity,
     },
     normal: {
         minSize: 7, maxSize: 9,
         mirrors: [5, 8], walls: [2, 4], fixed: [0, 2], decoys: [2, 4],
         targets: [2, 3], splitters: [0, 1], portalPairs: [0, 1],
-        budgetExtra: 8, hintPenalty: 1,
+        budgetExtra: 8,
     },
     hard: {
         minSize: 8, maxSize: 10,
         mirrors: [7, 10], walls: [3, 6], fixed: [1, 3], decoys: [3, 6],
         targets: [2, 4], splitters: [1, 2], portalPairs: [1, 2],
-        budgetExtra: 5, hintPenalty: 2,
+        budgetExtra: 5,
     },
 };
 
@@ -209,12 +207,15 @@ function occupiedSet(level) {
 }
 
 function fallbackLevel() {
+    // Guaranteed-solvable level used only if generation fails repeatedly.
+    // Solution: rotate both mirrors to '/', beam routes E -> N -> E and hits
+    // both targets along the top row.
     return {
         size: [7, 7],
         source: { r: 3, c: 0, dir: 'E' },
         mirrors: [
             { r: 3, c: 2, initial: '\\', solution: '/', fixed: false },
-            { r: 1, c: 2, initial: '/', solution: '\\', fixed: false },
+            { r: 1, c: 2, initial: '\\', solution: '/', fixed: false },
         ],
         walls: [{ r: 0, c: 4 }],
         targets: [{ r: 1, c: 4 }, { r: 1, c: 6 }],
@@ -315,16 +316,29 @@ function generateLevel(difficulty, seed, depth = 0) {
             base.portals.push({ id: pair + 1, r: b.r, c: b.c });
         }
 
+        const requiredTargets = new Set(base.targets.map(t => cellKey(t.r, t.c)));
+
         // The intended solution is always represented by the solution orientations.
         const solutionOrientations = {};
         base.mirrors.forEach(m => { solutionOrientations[cellKey(m.r, m.c)] = m.solution || m.initial; });
         const solutionTrace = traceBeam(base, solutionOrientations);
-        const requiredTargets = new Set(base.targets.map(t => cellKey(t.r, t.c)));
         const solvedTargets = requiredTargets.size === 0
             ? true
             : [...requiredTargets].every(k => solutionTrace.hitTargets.has(k));
 
         if (!solvedTargets) continue;
+
+        // Reject any level where the initial (as-presented) state already
+        // solves the puzzle, otherwise the game-over overlay would appear the
+        // instant the level loads.
+        const initialOrientations = {};
+        base.mirrors.forEach(m => { initialOrientations[cellKey(m.r, m.c)] = m.initial; });
+        const initialTrace = traceBeam(base, initialOrientations);
+        const initiallySolved = requiredTargets.size === 0
+            ? true
+            : [...requiredTargets].every(k => initialTrace.hitTargets.has(k));
+
+        if (initiallySolved) continue;
 
         const par = base.mirrors.filter(m => !m.fixed && m.solution && m.initial !== m.solution).length;
         const budget = Number.isFinite(cfg.budgetExtra) ? par + cfg.budgetExtra : Infinity;
@@ -459,9 +473,6 @@ let solved = false;
 let elapsedSeconds = 0;
 let timerHandle = null;
 let history = [];
-let hintKey = null;
-let hintTimer = null;
-let hintUses = 0;
 
 // ---------------------------------------------------------------------------
 // SVG rendering
@@ -575,10 +586,9 @@ function drawMirror(m, cell) {
         ? [x - half, y + half, x + half, y - half]
         : [x - half, y - half, x + half, y + half];
 
-    const isHint = hintKey === cellKey(m.r, m.c);
     const group = svgEl('g', { class: `mirror-group${m.fixed ? ' fixed' : ''}` });
     const hit = svgEl('rect', { class: `cell-hit${m.fixed ? ' static' : ''}`, x: x - cell / 2, y: y - cell / 2, width: cell, height: cell, rx: 2 });
-    const line = svgEl('line', { class: `mirror-line${isHint ? ' hint' : ''}`, x1, y1, x2, y2 });
+    const line = svgEl('line', { class: 'mirror-line', x1, y1, x2, y2 });
     group.appendChild(hit);
     group.appendChild(line);
 
@@ -687,46 +697,13 @@ function onMirrorClick(m) {
     orientations[key] = toggleOrientation(prev);
     history.push({ key, prev });
     moves++;
-    clearHint();
     recompute();
-}
-
-function undo() {
-    if (solved || history.length === 0) return;
-    const last = history.pop();
-    orientations[last.key] = last.prev;
-    moves = Math.max(0, moves - 1);
-    clearHint();
-    recompute();
-}
-
-function showHint() {
-    if (solved || !level) return;
-    const wrong = level.mirrors.filter(m => !m.fixed && m.solution && orientations[cellKey(m.r, m.c)] !== m.solution);
-    if (!wrong.length) return;
-    hintKey = cellKey(wrong[0].r, wrong[0].c);
-    hintUses++;
-    if (hintTimer) clearTimeout(hintTimer);
-    renderBoard();
-    hintTimer = setTimeout(() => {
-        hintKey = null;
-        hintTimer = null;
-        renderBoard();
-    }, 1800);
-}
-
-function clearHint() {
-    if (hintTimer) clearTimeout(hintTimer);
-    hintTimer = null;
-    hintKey = null;
 }
 
 function computeStars(moveCount, par, budget) {
     const overPar = Math.max(0, moveCount - par);
     let stars = overPar === 0 ? 3 : overPar <= 2 ? 2 : 1;
     if (Number.isFinite(budget) && moveCount >= budget) stars = 0;
-    if (hintUses > 0) stars = Math.max(1, stars - 1);
-    if (hintUses >= 2) stars = 1;
     return stars;
 }
 
@@ -741,8 +718,7 @@ function winLevel() {
     renderStars(stars);
     gameOverMessageEl.textContent = stars === 3 ? 'Perfect!' : stars === 2 ? 'Clean solve!' : 'Solved!';
     const targetText = `${level.targets.length} target${level.targets.length === 1 ? '' : 's'} lit`;
-    const hintText = hintUses ? ` · ${hintUses} hint${hintUses === 1 ? '' : 's'}` : '';
-    gameOverDetailEl.textContent = `${moves} move${moves === 1 ? '' : 's'} · par ${level.par} · ${formatTime(elapsedSeconds)} · ${targetText}${hintText}`;
+    gameOverDetailEl.textContent = `${moves} move${moves === 1 ? '' : 's'} · par ${level.par} · ${formatTime(elapsedSeconds)} · ${targetText}`;
 
     saveBest(stars);
     updateStatsUI();
@@ -816,7 +792,6 @@ function randomSeed() {
 
 function loadPuzzle(seed) {
     stopTimer();
-    clearHint();
     puzzleSeed = seed >>> 0;
     level = generateLevel(difficulty, hashString(`${puzzleSeed}:${difficulty}`));
 
@@ -825,7 +800,6 @@ function loadPuzzle(seed) {
     moves = 0;
     solved = false;
     history = [];
-    hintUses = 0;
     gameOverOverlay.classList.remove('show');
     statusEl.className = '';
     statusEl.textContent = 'Rotate the mirrors to guide the beam';
@@ -852,17 +826,13 @@ function setDifficulty(newDifficulty) {
 resetBtn.addEventListener('click', () => loadPuzzle(puzzleSeed));
 retryBtn.addEventListener('click', () => loadPuzzle(puzzleSeed));
 nextBtn.addEventListener('click', newPuzzle);
-undoBtn.addEventListener('click', undo);
-hintBtn.addEventListener('click', showHint);
 newPuzzleBtn.addEventListener('click', newPuzzle);
 difficultySelect.addEventListener('change', () => setDifficulty(difficultySelect.value));
 
 document.addEventListener('keydown', e => {
     const tag = (e.target && e.target.tagName) || '';
     if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') return;
-    if (e.key === 'z' || e.key === 'Z') { undo(); e.preventDefault(); }
-    else if (e.key === 'r' || e.key === 'R') { loadPuzzle(puzzleSeed); e.preventDefault(); }
-    else if (e.key === 'h' || e.key === 'H') { showHint(); e.preventDefault(); }
+    if (e.key === 'r' || e.key === 'R') { loadPuzzle(puzzleSeed); e.preventDefault(); }
     else if (e.key === 'n' || e.key === 'N') { newPuzzle(); e.preventDefault(); }
 });
 
