@@ -42,6 +42,7 @@ const SOUND_KEY = 'guesswho.sound';
 //   facialHair: 'none' | 'mustache' | 'beard'
 //   glasses:    true | false
 //   hat:        true | false
+//   headband:   true | false   (headband, bandana, headscarf)
 //   eyeColor:   'brown' | 'blue' | 'green'
 //   skinTone:   'light' | 'medium' | 'dark'
 //   freckles:   true | false
@@ -50,33 +51,60 @@ const SOUND_KEY = 'guesswho.sound';
 
 const CHARACTERS = [
     // Row 1
-    { gender: 'male', hairColor: 'brown', hairLength: 'short', bald: false, facialHair: 'beard', glasses: false, hat: false, eyeColor: 'brown', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
-    { gender: 'female', hairColor: 'blonde', hairLength: 'long', bald: false, facialHair: 'none', glasses: true, hat: false, eyeColor: 'blue', skinTone: 'light', freckles: true, bigNose: false, earrings: true },
-    { gender: 'male', hairColor: 'black', hairLength: 'short', bald: false, facialHair: 'mustache', glasses: false, hat: true, eyeColor: 'brown', skinTone: 'medium', freckles: false, bigNose: true, earrings: false },
-    { gender: 'female', hairColor: 'red', hairLength: 'long', bald: false, facialHair: 'none', glasses: false, hat: false, eyeColor: 'green', skinTone: 'light', freckles: true, bigNose: false, earrings: true },
-    { gender: 'male', hairColor: null, hairLength: null, bald: true, facialHair: 'beard', glasses: true, hat: false, eyeColor: 'brown', skinTone: 'dark', freckles: false, bigNose: false, earrings: false },
-    { gender: 'female', hairColor: 'black', hairLength: 'short', bald: false, facialHair: 'none', glasses: false, hat: false, eyeColor: 'brown', skinTone: 'medium', freckles: false, bigNose: false, earrings: true },
+    // 1: brown short hair, blue eyes, light skin, blue shirt
+    { gender: 'male', hairColor: 'brown', hairLength: 'short', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'blue', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
+    // 2: blonde wavy long hair, pearl earrings, purple top
+    { gender: 'female', hairColor: 'blonde', hairLength: 'long', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'blue', skinTone: 'light', freckles: false, bigNose: false, earrings: true },
+    // 3: older man, white/gray hair, round glasses, white mustache
+    { gender: 'male', hairColor: 'gray', hairLength: 'short', bald: false, facialHair: 'mustache', glasses: true, hat: false, headband: false, eyeColor: 'brown', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
+    // 4: dark skin, black curly hair, pink headband, gold hoops
+    { gender: 'female', hairColor: 'black', hairLength: 'long', bald: false, facialHair: 'none', glasses: false, hat: false, headband: true, eyeColor: 'brown', skinTone: 'dark', freckles: false, bigNose: false, earrings: true },
+    // 5: young male, orange/red short hair, green eyes, freckles
+    { gender: 'male', hairColor: 'red', hairLength: 'short', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'green', skinTone: 'light', freckles: true, bigNose: false, earrings: false },
+    // 6: long straight black hair with bangs, pearl earrings, purple top
+    { gender: 'female', hairColor: 'black', hairLength: 'long', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'brown', skinTone: 'light', freckles: false, bigNose: false, earrings: true },
+
     // Row 2
-    { gender: 'male', hairColor: 'blonde', hairLength: 'short', bald: false, facialHair: 'none', glasses: false, hat: true, eyeColor: 'blue', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
-    { gender: 'female', hairColor: 'brown', hairLength: 'long', bald: false, facialHair: 'none', glasses: true, hat: false, eyeColor: 'green', skinTone: 'medium', freckles: true, bigNose: false, earrings: false },
-    { gender: 'male', hairColor: 'gray', hairLength: 'short', bald: false, facialHair: 'mustache', glasses: false, hat: false, eyeColor: 'brown', skinTone: 'light', freckles: false, bigNose: true, earrings: false },
-    { gender: 'female', hairColor: 'blonde', hairLength: 'short', bald: false, facialHair: 'none', glasses: false, hat: true, eyeColor: 'blue', skinTone: 'dark', freckles: false, bigNose: false, earrings: true },
-    { gender: 'male', hairColor: 'red', hairLength: 'short', bald: false, facialHair: 'beard', glasses: true, hat: false, eyeColor: 'green', skinTone: 'light', freckles: true, bigNose: false, earrings: false },
-    { gender: 'female', hairColor: 'black', hairLength: 'long', bald: false, facialHair: 'none', glasses: false, hat: false, eyeColor: 'brown', skinTone: 'medium', freckles: false, bigNose: true, earrings: true },
+    // 7: blue beanie, dark beard, blue eyes
+    { gender: 'male', hairColor: 'brown', hairLength: 'short', bald: false, facialHair: 'beard', glasses: false, hat: true, headband: false, eyeColor: 'blue', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
+    // 8: curly red hair, green eyes, freckles, gold earrings
+    { gender: 'female', hairColor: 'red', hairLength: 'long', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'green', skinTone: 'light', freckles: true, bigNose: false, earrings: true },
+    // 9: bald man, blue eyes, no facial hair
+    { gender: 'male', hairColor: null, hairLength: null, bald: true, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'blue', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
+    // 10: older woman, gray hair in updo, purple glasses, dark skin, pearls
+    { gender: 'female', hairColor: 'gray', hairLength: 'short', bald: false, facialHair: 'none', glasses: true, hat: false, headband: false, eyeColor: 'brown', skinTone: 'dark', freckles: false, bigNose: false, earrings: true },
+    // 11: brown cowboy hat, mustache, medium skin
+    { gender: 'male', hairColor: 'brown', hairLength: 'short', bald: false, facialHair: 'mustache', glasses: false, hat: true, headband: false, eyeColor: 'brown', skinTone: 'medium', freckles: false, bigNose: false, earrings: false },
+    // 12: blue baseball cap, blonde hair, freckles
+    { gender: 'female', hairColor: 'blonde', hairLength: 'long', bald: false, facialHair: 'none', glasses: false, hat: true, headband: false, eyeColor: 'blue', skinTone: 'light', freckles: true, bigNose: false, earrings: false },
+
     // Row 3
-    { gender: 'male', hairColor: 'brown', hairLength: 'short', bald: false, facialHair: 'none', glasses: true, hat: false, eyeColor: 'brown', skinTone: 'dark', freckles: false, bigNose: false, earrings: false },
-    { gender: 'female', hairColor: 'gray', hairLength: 'short', bald: false, facialHair: 'none', glasses: false, hat: false, eyeColor: 'blue', skinTone: 'light', freckles: true, bigNose: false, earrings: true },
-    { gender: 'male', hairColor: 'black', hairLength: 'short', bald: false, facialHair: 'beard', glasses: false, hat: true, eyeColor: 'green', skinTone: 'medium', freckles: false, bigNose: false, earrings: false },
-    { gender: 'female', hairColor: 'red', hairLength: 'long', bald: false, facialHair: 'none', glasses: true, hat: false, eyeColor: 'green', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
-    { gender: 'male', hairColor: null, hairLength: null, bald: true, facialHair: 'none', glasses: false, hat: false, eyeColor: 'brown', skinTone: 'light', freckles: false, bigNose: true, earrings: false },
-    { gender: 'female', hairColor: 'blonde', hairLength: 'long', bald: false, facialHair: 'none', glasses: false, hat: false, eyeColor: 'blue', skinTone: 'medium', freckles: false, bigNose: false, earrings: true },
+    // 13: older woman, short white/gray curly hair, red glasses, pearls
+    { gender: 'female', hairColor: 'gray', hairLength: 'short', bald: false, facialHair: 'none', glasses: true, hat: false, headband: false, eyeColor: 'brown', skinTone: 'light', freckles: false, bigNose: false, earrings: true },
+    // 14: black short hair, black-framed glasses, light skin
+    { gender: 'male', hairColor: 'black', hairLength: 'short', bald: false, facialHair: 'none', glasses: true, hat: false, headband: false, eyeColor: 'brown', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
+    // 15: dark skin, short black curly hair, brown eyes
+    { gender: 'male', hairColor: 'black', hairLength: 'short', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'brown', skinTone: 'dark', freckles: false, bigNose: false, earrings: false },
+    // 16: long straight brown hair, green eyes, gold hoops
+    { gender: 'female', hairColor: 'brown', hairLength: 'long', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'green', skinTone: 'light', freckles: false, bigNose: false, earrings: true },
+    // 17: blonde short hair, blue eyes, rosy cheeks
+    { gender: 'male', hairColor: 'blonde', hairLength: 'short', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'blue', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
+    // 18: red polka-dot bandana, dark curly hair, dark skin, gold hoops
+    { gender: 'female', hairColor: 'black', hairLength: 'long', bald: false, facialHair: 'none', glasses: false, hat: false, headband: true, eyeColor: 'brown', skinTone: 'dark', freckles: false, bigNose: false, earrings: true },
+
     // Row 4
-    { gender: 'male', hairColor: 'blonde', hairLength: 'short', bald: false, facialHair: 'mustache', glasses: true, hat: false, eyeColor: 'blue', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
-    { gender: 'female', hairColor: 'brown', hairLength: 'short', bald: false, facialHair: 'none', glasses: false, hat: true, eyeColor: 'brown', skinTone: 'dark', freckles: false, bigNose: false, earrings: false },
-    { gender: 'male', hairColor: 'gray', hairLength: 'short', bald: false, facialHair: 'beard', glasses: false, hat: false, eyeColor: 'green', skinTone: 'light', freckles: true, bigNose: false, earrings: false },
-    { gender: 'female', hairColor: 'black', hairLength: 'long', bald: false, facialHair: 'none', glasses: true, hat: false, eyeColor: 'brown', skinTone: 'medium', freckles: false, bigNose: false, earrings: true },
-    { gender: 'male', hairColor: 'red', hairLength: 'short', bald: false, facialHair: 'none', glasses: false, hat: true, eyeColor: 'green', skinTone: 'dark', freckles: false, bigNose: false, earrings: false },
-    { gender: 'female', hairColor: 'blonde', hairLength: 'long', bald: false, facialHair: 'none', glasses: false, hat: false, eyeColor: 'blue', skinTone: 'light', freckles: true, bigNose: false, earrings: true },
+    // 19: curly brown hair, round glasses, purple sweater
+    { gender: 'male', hairColor: 'brown', hairLength: 'short', bald: false, facialHair: 'none', glasses: true, hat: false, headband: false, eyeColor: 'brown', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
+    // 20: long red/orange braided hair, blue eyes, green top
+    { gender: 'female', hairColor: 'red', hairLength: 'long', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'blue', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
+    // 21: green bucket hat, white/gray beard, prominent nose
+    { gender: 'male', hairColor: 'gray', hairLength: 'short', bald: false, facialHair: 'beard', glasses: false, hat: true, headband: false, eyeColor: 'brown', skinTone: 'light', freckles: false, bigNose: true, earrings: false },
+    // 22: dark curly hair, dark skin, gold hoops (no headwear)
+    { gender: 'female', hairColor: 'black', hairLength: 'long', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'brown', skinTone: 'dark', freckles: false, bigNose: false, earrings: true },
+    // 23: older man, balding on top, brown side hair, big nose, blue eyes
+    { gender: 'male', hairColor: 'brown', hairLength: 'short', bald: false, facialHair: 'none', glasses: false, hat: false, headband: false, eyeColor: 'blue', skinTone: 'light', freckles: false, bigNose: true, earrings: false },
+    // 24: long straight black hair, blue-framed glasses, red top
+    { gender: 'female', hairColor: 'black', hairLength: 'long', bald: false, facialHair: 'none', glasses: true, hat: false, headband: false, eyeColor: 'brown', skinTone: 'light', freckles: false, bigNose: false, earrings: false },
 ];
 
 // Question definitions (auto-generated from trait columns)
@@ -99,6 +127,7 @@ const QUESTION_DEFS = [
     { id: 'clean', label: 'Is your character clean-shaven?', test: c => c.facialHair === 'none' },
     { id: 'glasses', label: 'Does your character wear glasses?', test: c => c.glasses === true },
     { id: 'hat', label: 'Does your character wear a hat?', test: c => c.hat === true },
+    { id: 'headband', label: 'Does your character wear a headband or bandana?', test: c => c.headband === true },
     { id: 'eyes-brown', label: 'Does your character have brown eyes?', test: c => c.eyeColor === 'brown' },
     { id: 'eyes-blue', label: 'Does your character have blue eyes?', test: c => c.eyeColor === 'blue' },
     { id: 'eyes-green', label: 'Does your character have green eyes?', test: c => c.eyeColor === 'green' },
