@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Reflection
-description: Rotate the mirrors to redirect the laser onto the target.
+description: Rotate mirrors and route a laser through a procedurally generated optical maze.
 ---
 
 <!-- Copyright (c) 2024-2026 Jericho Crosby (Chalwk). All Rights Reserved. -->
@@ -13,40 +13,49 @@ description: Rotate the mirrors to redirect the laser onto the target.
         <section class="panel">
             <div class="panel-head">
                 <h1>Reflection</h1>
-                <p class="muted small">Rotate the mirrors to redirect the laser onto the target.</p>
+                <p class="muted small">Rotate mirrors, route light, and activate every target.</p>
             </div>
 
-            <div id="game-settings">
+            <div id="game-settings" aria-label="Puzzle settings">
                 <label for="difficulty">Difficulty
                     <select id="difficulty">
-                        <option value="easy" selected>Easy</option>
-                        <option value="normal">Normal</option>
+                        <option value="easy">Easy</option>
+                        <option value="normal" selected>Normal</option>
                         <option value="hard">Hard</option>
                     </select>
                 </label>
-                <label for="level-select">Level
-                    <select id="level-select"></select>
-                </label>
                 <button class="btn btn-secondary btn-small" id="new-puzzle-btn" type="button"
-                    title="Generate a fresh set of puzzles">
-                    <i class="fas fa-shuffle"></i> New Puzzles
+                    title="Generate a brand new random puzzle">
+                    <i class="fas fa-shuffle"></i> New Puzzle
                 </button>
             </div>
 
-            <dl id="legend">
+            <div id="legend" aria-label="Game legend">
                 <div class="legend-row">
                     <dt><span class="legend-swatch swatch-mirror"></span>Mirror</dt>
-                    <dd>Click to rotate 90&deg;. Redirects the beam.</dd>
+                    <dd>Click to rotate 90&deg; and redirect the beam.</dd>
                 </div>
                 <div class="legend-row">
                     <dt><span class="legend-swatch swatch-mirror-fixed"></span>Fixed</dt>
-                    <dd>Locked in place. Can't be rotated.</dd>
+                    <dd>Locked mirror. It cannot be rotated.</dd>
                 </div>
                 <div class="legend-row">
                     <dt><span class="legend-swatch swatch-wall"></span>Wall</dt>
-                    <dd>Blocks the beam completely. Route around it.</dd>
+                    <dd>Opaque block. The beam stops on contact.</dd>
                 </div>
-            </dl>
+                <div class="legend-row">
+                    <dt><span class="legend-swatch swatch-splitter"></span>Splitter</dt>
+                    <dd>Splits the beam into a straight ray and a 90&deg; branch.</dd>
+                </div>
+                <div class="legend-row">
+                    <dt><span class="legend-swatch swatch-portal"></span>Portal</dt>
+                    <dd>Paired gates teleport the beam while keeping its direction.</dd>
+                </div>
+                <div class="legend-row">
+                    <dt><span class="legend-swatch swatch-target"></span>Targets</dt>
+                    <dd>Activate every target ring to solve the puzzle.</dd>
+                </div>
+            </div>
 
             <div id="game-container">
                 <div class="game-stats">
@@ -63,10 +72,16 @@ description: Rotate the mirrors to redirect the laser onto the target.
                         <span id="timer" class="score">0:00</span>
                         <span id="best" class="meta">best --</span>
                     </div>
+                    <div class="mini-stats" aria-live="polite">
+                        <span id="level-counter">Puzzle 1</span>
+                        <span id="targets-status">Targets 0/1</span>
+                        <span id="budget-status">Moves ∞</span>
+                    </div>
                 </div>
 
                 <div class="board-wrap">
-                    <svg id="game-board" xmlns="http://www.w3.org/2000/svg"></svg>
+                    <svg id="game-board" xmlns="http://www.w3.org/2000/svg" role="img"
+                        aria-label="Reflect puzzle board"></svg>
 
                     <div class="game-over-overlay" id="game-over-overlay">
                         <div class="game-over-content">
@@ -75,20 +90,21 @@ description: Rotate the mirrors to redirect the laser onto the target.
                             <div id="game-over-detail" class="game-over-detail"></div>
                             <div class="game-over-actions">
                                 <button class="btn btn-secondary" id="retry-btn" type="button">Retry</button>
-                                <button class="btn" id="next-btn" type="button">Next Level</button>
+                                <button class="btn" id="next-btn" type="button">Next Puzzle</button>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="action-row">
-                    <button class="btn btn-secondary" id="undo" type="button" title="Undo (Z)">
+                    <button class="btn btn-secondary" id="undo" type="button" title="Undo last move (Z)">
                         <i class="fas fa-rotate-left"></i> Undo
                     </button>
-                    <button class="btn btn-secondary" id="hint" type="button" title="Hint (H)">
+                    <button class="btn btn-secondary" id="hint" type="button"
+                        title="Show one useful mirror for a moment (H)">
                         <i class="fas fa-lightbulb"></i> Hint
                     </button>
-                    <button class="btn btn-secondary" id="reset" type="button" title="Reset (R)">
+                    <button class="btn btn-secondary" id="reset" type="button" title="Reset this puzzle (R)">
                         <i class="fas fa-redo"></i> Reset
                     </button>
                 </div>

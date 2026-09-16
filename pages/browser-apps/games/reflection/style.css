@@ -14,10 +14,10 @@
 }
 
 #game-settings {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.25rem;
     display: flex;
     flex-wrap: wrap;
-    gap: 1.5rem;
+    gap: 0.75rem 1rem;
     justify-content: center;
     align-items: center;
 }
@@ -28,7 +28,7 @@
     align-items: center;
     gap: 0.5rem;
     color: var(--dark);
-    font-weight: 500;
+    font-weight: 600;
     font-size: 0.9rem;
     white-space: nowrap;
 }
@@ -40,7 +40,7 @@
     background: white;
     color: var(--dark);
     font-family: var(--font-primary);
-    min-width: 130px;
+    min-width: 125px;
 }
 
 .btn-small {
@@ -48,16 +48,18 @@
     font-size: 0.8rem;
 }
 
-/* legend */
 #legend {
-    max-width: 480px;
-    margin: 0 auto 1.5rem;
+    max-width: 680px;
+    margin: 0 auto 1.25rem;
     padding: 0.75rem 1rem;
     background: rgba(0, 0, 0, 0.04);
     border: 1px solid var(--gray-light);
     border-radius: var(--radius);
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     line-height: 1.4;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.35rem 1rem;
 }
 
 #legend .legend-row {
@@ -66,12 +68,8 @@
     align-items: baseline;
 }
 
-#legend .legend-row+.legend-row {
-    margin-top: 0.35rem;
-}
-
 #legend dt {
-    flex: 0 0 6rem;
+    flex: 0 0 5.25rem;
     display: flex;
     align-items: center;
     gap: 0.4rem;
@@ -79,7 +77,7 @@
     color: var(--primary);
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    font-size: 0.7rem;
+    font-size: 0.67rem;
 }
 
 #legend dd {
@@ -96,12 +94,12 @@
 }
 
 .swatch-mirror {
-    background: linear-gradient(135deg, transparent 45%, var(--accent) 45%, var(--accent) 55%, transparent 55%);
+    background: linear-gradient(135deg, transparent 42%, var(--accent) 42%, var(--accent) 58%, transparent 58%);
     border: 1px solid rgba(6, 182, 212, 0.5);
 }
 
 .swatch-mirror-fixed {
-    background: linear-gradient(135deg, transparent 45%, #94a3b8 45%, #94a3b8 55%, transparent 55%);
+    background: linear-gradient(135deg, transparent 42%, #94a3b8 42%, #94a3b8 58%, transparent 58%);
     border: 1px solid rgba(148, 163, 184, 0.5);
 }
 
@@ -114,27 +112,45 @@
     border: 1px solid rgba(0, 0, 0, 0.3);
 }
 
+.swatch-splitter {
+    background: linear-gradient(90deg, transparent 38%, #a78bfa 38%, #a78bfa 62%, transparent 62%),
+        linear-gradient(45deg, transparent 43%, #c4b5fd 43%, #c4b5fd 57%, transparent 57%);
+    border: 1px solid rgba(167, 139, 250, 0.55);
+}
+
+.swatch-portal {
+    background: radial-gradient(circle, #111827 31%, #f472b6 33%, #f472b6 50%, #111827 52%);
+    border: 1px solid rgba(244, 114, 182, 0.65);
+}
+
+.swatch-target {
+    background: radial-gradient(circle, #4ade80 0 25%, transparent 27% 100%);
+    border: 2px solid rgba(74, 222, 128, 0.7);
+}
+
 #game-container {
     position: relative;
     margin-bottom: 1.5rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.85rem;
+    gap: 0.75rem;
     background: var(--darker);
     border-radius: var(--radius);
-    padding: 1rem 0.75rem;
+    padding: 0.9rem 0.7rem 1rem;
+    overflow: hidden;
 }
 
-/* score / status bar */
 .game-stats {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
-    grid-template-areas: "moves status time";
+    grid-template-areas:
+        "moves status time"
+        "mini mini mini";
     align-items: center;
     width: 100%;
-    gap: 0.5rem 0.75rem;
-    padding: 0.25rem 0.5rem;
+    gap: 0.4rem 0.75rem;
+    padding: 0.15rem 0.45rem 0.1rem;
 }
 
 .stat-block {
@@ -156,7 +172,7 @@
 
 .stat-block strong {
     color: rgba(255, 255, 255, 0.65);
-    font-size: 0.7rem;
+    font-size: 0.68rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.04em;
@@ -171,7 +187,7 @@
 
 .stat-block .meta {
     font-family: var(--font-mono);
-    font-size: 0.68rem;
+    font-size: 0.66rem;
     color: rgba(255, 255, 255, 0.45);
     letter-spacing: 0.03em;
 }
@@ -183,8 +199,8 @@
 }
 
 #status {
-    font-weight: bold;
-    font-size: 0.95rem;
+    font-weight: 700;
+    font-size: 0.92rem;
     text-align: center;
     color: #fff;
     white-space: nowrap;
@@ -202,7 +218,27 @@
     color: #4ade80;
 }
 
-/* board */
+#status.limit-message {
+    color: #fb7185;
+}
+
+.mini-stats {
+    grid-area: mini;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    color: rgba(255, 255, 255, 0.5);
+    font: 600 0.68rem/1 var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+/* Puzzle counter sits first in the mini-stats row and is visually distinct. */
+#level-counter {
+    color: rgba(6, 182, 212, 0.85);
+}
+
 .board-wrap {
     position: relative;
     display: flex;
@@ -212,7 +248,7 @@
 
 #game-board {
     width: 100%;
-    max-width: 420px;
+    max-width: 560px;
     height: auto;
     display: block;
     touch-action: manipulation;
@@ -220,13 +256,17 @@
 }
 
 .cell-bg {
-    fill: rgba(255, 255, 255, 0.05);
-    stroke: rgba(255, 255, 255, 0.08);
+    fill: rgba(255, 255, 255, 0.045);
+    stroke: rgba(255, 255, 255, 0.075);
     stroke-width: 1;
 }
 
+.cell-bg:hover {
+    fill: rgba(255, 255, 255, 0.065);
+}
+
 .cell-wall {
-    fill: rgba(0, 0, 0, 0.45);
+    fill: rgba(0, 0, 0, 0.5);
 }
 
 .cell-wall-hatch {
@@ -247,11 +287,16 @@
     stroke: var(--accent);
     stroke-width: 5;
     stroke-linecap: round;
-    transition: opacity 0.15s ease;
+    transition: opacity 0.15s ease, transform 0.15s ease;
 }
 
 g.mirror-group:hover .mirror-line {
-    opacity: 0.75;
+    opacity: 0.72;
+}
+
+.g.mirror-group {
+    transform-box: fill-box;
+    transform-origin: center;
 }
 
 .mirror-group.fixed .mirror-line {
@@ -290,27 +335,61 @@ g.mirror-group:hover .mirror-line {
     fill: #ffd166;
     stroke: rgba(0, 0, 0, 0.3);
     stroke-width: 1;
+    filter: drop-shadow(0 0 5px rgba(255, 209, 102, 0.3));
 }
 
 .target-ring {
     fill: none;
-    stroke: rgba(255, 255, 255, 0.4);
+    stroke: rgba(255, 255, 255, 0.35);
     stroke-width: 4;
-    transition: stroke 0.3s ease, filter 0.3s ease;
+    transition: stroke 0.25s ease, filter 0.25s ease;
 }
 
 .target-ring.lit {
     stroke: #4ade80;
-    filter: drop-shadow(0 0 6px rgba(74, 222, 128, 0.9));
+    filter: drop-shadow(0 0 7px rgba(74, 222, 128, 0.95));
 }
 
 .target-dot {
-    fill: rgba(255, 255, 255, 0.4);
-    transition: fill 0.3s ease;
+    fill: rgba(255, 255, 255, 0.36);
+    transition: fill 0.25s ease;
 }
 
 .target-dot.lit {
     fill: #4ade80;
+}
+
+.splitter-body {
+    fill: rgba(167, 139, 250, 0.2);
+    stroke: #a78bfa;
+    stroke-width: 2;
+}
+
+.splitter-ray {
+    stroke: #c4b5fd;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+}
+
+.portal-ring {
+    fill: rgba(244, 114, 182, 0.12);
+    stroke: #f472b6;
+    stroke-width: 2.5;
+    filter: drop-shadow(0 0 4px rgba(244, 114, 182, 0.6));
+}
+
+.portal-core {
+    fill: #111827;
+    stroke: rgba(255, 255, 255, 0.35);
+    stroke-width: 1;
+}
+
+.portal-label {
+    fill: #f9a8d4;
+    font: 700 9px var(--font-mono);
+    text-anchor: middle;
+    dominant-baseline: middle;
+    pointer-events: none;
 }
 
 .beam-path {
@@ -333,29 +412,33 @@ g.mirror-group:hover .mirror-line {
     filter: drop-shadow(0 0 6px rgba(74, 222, 128, 0.95));
 }
 
-/* action row under the board */
+.beam-path.lost {
+    stroke: #f59e0b;
+    filter: drop-shadow(0 0 5px rgba(245, 158, 11, 0.7));
+}
+
 .action-row {
     display: flex;
-    gap: 0.6rem;
+    gap: 0.55rem;
     justify-content: center;
     flex-wrap: wrap;
 }
 
-/* game over overlay */
 .game-over-overlay {
     position: absolute;
     inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(0, 0, 0, 0.75);
+    background: rgba(0, 0, 0, 0.78);
     border-radius: var(--radius);
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.35s ease;
+    transition: opacity 0.3s ease;
     text-align: center;
     padding: 1rem;
     z-index: 2;
+    backdrop-filter: blur(3px);
 }
 
 .game-over-overlay.show {
@@ -369,6 +452,7 @@ g.mirror-group:hover .mirror-line {
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
+    max-width: 360px;
 }
 
 .game-over-message {
@@ -382,12 +466,12 @@ g.mirror-group:hover .mirror-line {
 .game-over-detail {
     font-family: var(--font-mono);
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 0.88rem;
+    line-height: 1.5;
     color: rgba(255, 255, 255, 0.85);
     margin-bottom: 0.25rem;
 }
 
-/* stars */
 .star-row {
     display: flex;
     gap: 0.35rem;
@@ -429,6 +513,8 @@ g.mirror-group:hover .mirror-line {
     display: flex;
     gap: 0.6rem;
     margin-top: 0.25rem;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .game-over-actions .btn[hidden] {
@@ -437,11 +523,11 @@ g.mirror-group:hover .mirror-line {
 
 @keyframes celebrate {
     0% {
-        transform: scale(1);
+        transform: scale(0.96);
     }
 
     50% {
-        transform: scale(1.1);
+        transform: scale(1.05);
     }
 
     100% {
@@ -450,36 +536,46 @@ g.mirror-group:hover .mirror-line {
 }
 
 @media (max-width: 768px) {
+    #legend {
+        grid-template-columns: 1fr;
+    }
+
     #game-settings {
-        flex-direction: row;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 0.75rem 1.25rem;
+        gap: 0.65rem 0.8rem;
     }
 }
 
 @media (max-width: 480px) {
+    .panel {
+        padding: 1rem;
+    }
+
     #game-container {
-        padding: 0.75rem 0.5rem;
+        padding: 0.65rem 0.45rem 0.8rem;
     }
 
     #game-settings {
-        gap: 0.5rem 0.75rem;
+        gap: 0.5rem 0.65rem;
     }
 
     #game-settings select {
         min-width: 0;
         padding: 0.4rem 0.5rem;
-        font-size: 0.85rem;
+        font-size: 0.82rem;
     }
 
     #legend {
-        font-size: 0.75rem;
-        padding: 0.65rem 0.85rem;
+        font-size: 0.74rem;
+        padding: 0.65rem 0.8rem;
+    }
+
+    #legend .legend-row {
+        flex-direction: column;
+        gap: 0.08rem;
     }
 
     #legend dt {
-        flex-basis: 5rem;
+        flex: none;
     }
 
     .star-row {
@@ -490,26 +586,15 @@ g.mirror-group:hover .mirror-line {
 @media (max-width: 420px) {
     .game-stats {
         grid-template-columns: 1fr 1fr;
-        grid-template-areas:
-            "moves time"
-            "status status";
+        grid-template-areas: "moves time" "status status" "mini mini";
     }
 
     .status-block {
-        margin-top: 0.15rem;
+        margin-top: 0.1rem;
     }
 
     #status {
         white-space: normal;
-    }
-
-    #legend .legend-row {
-        flex-direction: column;
-        gap: 0.1rem;
-    }
-
-    #legend dt {
-        flex: none;
     }
 
     .game-over-message {
