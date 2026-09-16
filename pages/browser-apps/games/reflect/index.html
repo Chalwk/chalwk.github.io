@@ -1,0 +1,81 @@
+---
+layout: default
+title: Reflect
+description: Rotate the mirrors to redirect the laser onto the target.
+---
+
+<!-- Copyright (c) 2024-2026 Jericho Crosby (Chalwk). All Rights Reserved. -->
+
+<link rel="stylesheet" href="style.css">
+
+<main>
+    <div class="container">
+        <section class="panel">
+            <div class="panel-head">
+                <h1>Reflect</h1>
+                <p class="muted small">Rotate the mirrors to redirect the laser onto the target.</p>
+            </div>
+
+            <div id="game-settings">
+                <label for="difficulty">Difficulty
+                    <select id="difficulty">
+                        <option value="easy" selected>Easy</option>
+                        <option value="normal">Normal</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </label>
+                <label for="level-select">Level
+                    <select id="level-select"></select>
+                </label>
+            </div>
+
+            <dl id="legend">
+                <div class="legend-row">
+                    <dt><span class="legend-swatch swatch-mirror"></span>Mirror</dt>
+                    <dd>Click to rotate 90&deg;. Redirects the beam.</dd>
+                </div>
+                <div class="legend-row">
+                    <dt><span class="legend-swatch swatch-wall"></span>Wall</dt>
+                    <dd>Blocks the beam completely. Route around it.</dd>
+                </div>
+            </dl>
+
+            <div id="game-container">
+                <div class="game-stats">
+                    <div class="stat-block moves-stat">
+                        <strong>Moves</strong>
+                        <span id="moves" class="score">0</span>
+                    </div>
+                    <div class="status-block">
+                        <span id="status">Rotate the mirrors to guide the beam</span>
+                    </div>
+                    <div class="stat-block time-stat">
+                        <strong>Time</strong>
+                        <span id="timer" class="score">0:00</span>
+                    </div>
+                </div>
+
+                <div class="board-wrap">
+                    <svg id="game-board" xmlns="http://www.w3.org/2000/svg"></svg>
+
+                    <div class="game-over-overlay" id="game-over-overlay">
+                        <div class="game-over-content">
+                            <div id="game-over-message" class="game-over-message"></div>
+                            <div id="game-over-detail" class="game-over-detail"></div>
+                            <div class="game-over-actions">
+                                <button class="btn btn-secondary" id="retry-btn">Retry</button>
+                                <button class="btn" id="next-btn">Next Level</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-secondary" id="reset">
+                    <i class="fas fa-redo"></i> Reset Level
+                </button>
+            </div>
+        </section>
+    </div>
+</main>
+
+<script src="script.js"></script>
