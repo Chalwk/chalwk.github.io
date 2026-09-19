@@ -72,6 +72,29 @@
     font-size: 0.85rem;
 }
 
+.panel-foot {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.panel-foot .small {
+    margin: 0;
+    color: var(--gray);
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+.panel-foot strong {
+    color: var(--darker);
+    font-weight: 700;
+}
+
+.panel-foot em {
+    color: var(--dark);
+    font-style: italic;
+}
+
 .generator-form {
     display: flex;
     flex-direction: column;
