@@ -1,0 +1,128 @@
+---
+layout: default
+title: Pseudonym Generator
+description: Turn your surname into a unique pseudonym by swapping each letter for its exact opposite on the alphabet circle.
+---
+
+<!-- Copyright (c) 2024-2026 Jericho Crosby (Chalwk). All Rights Reserved. -->
+
+<link rel="stylesheet" href="style.css">
+
+<main>
+    <div class="container">
+        <div aria-labelledby="app-title" class="app-grid" id="app" role="main">
+            <h2 class="sr-only" id="app-title">Pseudonym Generator</h2>
+
+            <section aria-labelledby="input-heading" class="panel panel-left" id="input-panel">
+                <div class="panel-head">
+                    <h2 id="input-heading">Your Surname</h2>
+                    <p class="muted small">Enter your surname and each letter will be swapped for the letter directly
+                        opposite it on the alphabet circle.</p>
+                </div>
+
+                <div class="generator-form">
+                    <div class="form-row">
+                        <label for="surname">Surname</label>
+                        <input autocomplete="off" id="surname" maxlength="32" placeholder="e.g. Crosby"
+                            spellcheck="false" type="text" />
+                    </div>
+
+                    <div class="form-row">
+                        <label class="checkbox">
+                            <input checked id="liveMode" type="checkbox">
+                            <span>Transform as I type</span>
+                        </label>
+                    </div>
+
+                    <div class="form-row">
+                        <label class="checkbox">
+                            <input id="keepCase" type="checkbox">
+                            <span>Preserve original letter case</span>
+                        </label>
+                    </div>
+
+                    <div class="actions-row">
+                        <button class="btn btn-primary" id="generate">
+                            <i class="fas fa-dharmachakra"></i> Generate Pseudonym
+                        </button>
+                        <button class="btn btn-secondary" id="copy" title="Copy pseudonym to clipboard">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                        <button class="btn btn-secondary" id="clear" title="Clear the surname field">
+                            <i class="fas fa-eraser"></i> Clear
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <section aria-labelledby="output-heading" class="panel panel-right" id="output-panel">
+                <div class="panel-head">
+                    <h2 id="output-heading">Your Pseudonym</h2>
+                    <p class="muted small">Use this as a screen name, gamertag, or in-game name (IGN).</p>
+                </div>
+
+                <div class="password-output">
+                    <div class="password-display">
+                        <div class="password-input-wrapper">
+                            <input aria-label="Generated pseudonym" id="pseudonymOutput" readonly type="text" />
+                            <button class="btn-copy-inside" id="copyInside" title="Copy pseudonym to clipboard">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="security-stats">
+                        <h3>Letter-by-Letter Breakdown</h3>
+                        <div class="mapping-grid" id="mappingGrid">
+                            <p class="muted small" id="mappingEmpty">Enter a surname to see how each letter maps to
+                                its opposite.</p>
+                        </div>
+                    </div>
+
+                    <div aria-live="polite" class="warnings" id="warnings" style="display: none;"></div>
+                </div>
+            </section>
+
+            <section aria-labelledby="circle-heading" class="panel panel-bottom" id="circle-panel">
+                <div class="panel-head">
+                    <h2 id="circle-heading">The Alphabet Circle</h2>
+                    <p class="muted small">All 26 letters arranged evenly around a circle. Each letter's cipher
+                        partner sits exactly opposite it, 13 places around - the letters currently in your
+                        surname are highlighted below.</p>
+                </div>
+
+                <div class="circle-layout">
+                    <div class="circle-visual-wrap">
+                        <svg aria-hidden="true" id="alphabetCircle" viewBox="0 0 400 400"></svg>
+                    </div>
+
+                    <div class="guidance-content">
+                        <ul>
+                            <li><strong>How it works</strong>: The 26 letters are placed evenly around a circle, so
+                                each letter has exactly one "opposite" 13 positions away - A becomes N, B
+                                becomes O, and so on.
+                            </li>
+                            <li><strong>Order is preserved</strong>: Only the letters themselves change; the order of
+                                letters in your surname stays exactly the same.
+                            </li>
+                            <li><strong>Deterministic</strong>: The same surname always produces the same pseudonym
+                                - there's no randomness involved.
+                            </li>
+                            <li><strong>Reversible</strong>: Because opposite pairs mirror each other, running your
+                                pseudonym back through the cipher returns your original surname.
+                            </li>
+                            <li><strong>Non-letters are untouched</strong>: Spaces, apostrophes, and hyphens (e.g.
+                                O'Brien, Smith-Jones) are kept as-is and only pass through unchanged.
+                            </li>
+                            <li><strong>Great for</strong>: Screen names, gamertags, in-game names (IGN), or just a
+                                fun alter-ego based on your own name.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</main>
+
+<script src="script.js"></script>
