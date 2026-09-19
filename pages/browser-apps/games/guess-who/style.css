@@ -640,8 +640,9 @@
     background: rgba(0, 0, 0, 0.85);
     border-radius: var(--radius);
     opacity: 0;
+    visibility: hidden;
     pointer-events: none;
-    transition: opacity 0.35s ease;
+    transition: opacity 0.35s ease, visibility 0s linear 0.35s;
     text-align: center;
     padding: 1rem;
     z-index: 10;
@@ -649,7 +650,9 @@
 
 .game-over-overlay.show {
     opacity: 1;
+    visibility: visible;
     pointer-events: auto;
+    transition: opacity 0.35s ease, visibility 0s linear 0s;
 }
 
 #selection-overlay {

@@ -481,7 +481,8 @@ function onCardClick(index) {
         } while (aiSecretIndex === playerSecretIndex);
 
         // AI always tracks its own candidates automatically (auto-flip).
-        aiCandidates = Array.from({ length: TOTAL }, (_, i) => i);
+        // Its own secret is excluded since the player's character can never match it.
+        aiCandidates = Array.from({ length: TOTAL }, (_, i) => i).filter(i => i !== aiSecretIndex);
         return;
     }
 
@@ -538,7 +539,7 @@ function askQuestion(def) {
 
 // Guessing
 function requestGuess(index) {
-    if (gameOver || gamePhase !== 'player-turn') return;
+    if (gameOver || gamePhase !== 'player-turn' || aiTurnQueued) return;
     if (guessesLeft <= 0) return;
 
     if (guessedIndices.has(index)) {
@@ -553,7 +554,7 @@ function requestGuess(index) {
     }
 
     pendingGuessIdx = index;
-    showConfirm(`Guess ${charName(index)}?`, commitGuess);
+    showConfirm(`Guess ${charName(index)}?`, commitGuess, cancelGuess);
 }
 
 function cancelGuess() {
@@ -625,9 +626,9 @@ function aiTurn() {
         // Re-check after the delay: the player may have given up or won.
         if (gameOver || gamePhase !== 'ai-turn') return;
 
-        // Safety fallback: if candidates drop to 0, reset to all
+        // Safety fallback: if candidates drop to 0, reset to all (excluding the AI's own secret)
         if (aiCandidates.length === 0) {
-            aiCandidates = Array.from({ length: TOTAL }, (_, i) => i);
+            aiCandidates = Array.from({ length: TOTAL }, (_, i) => i).filter(i => i !== aiSecretIndex);
         }
 
         if (aiCandidates.length === 1) {
