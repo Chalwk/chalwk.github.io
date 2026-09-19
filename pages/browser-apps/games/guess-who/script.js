@@ -332,7 +332,6 @@ function renderBoard() {
         card.className = 'gw-card';
         card.dataset.index = i;
         card.setAttribute('role', 'button');
-        card.setAttribute('tabindex', '0');
 
         const face = document.createElement('div');
         face.className = 'gw-face';
@@ -369,12 +368,6 @@ function renderBoard() {
         card.appendChild(nameTag);
         card.appendChild(guessBtn);
         card.addEventListener('click', () => onCardClick(i));
-        card.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
-                e.preventDefault();
-                onCardClick(i);
-            }
-        });
 
         boardEl.appendChild(card);
     });
