@@ -21,7 +21,6 @@
     const CIRCLE_RADIUS = 160;
     const LABEL_RADIUS = CIRCLE_RADIUS + 22;
 
-    // Each letter's opposite is exactly 13 positions away on a 26-letter circle.
     function oppositeChar(char) {
         const isLetter = /[a-zA-Z]/.test(char);
         if (!isLetter) return char;
@@ -47,7 +46,6 @@
     }
 
     function pointOnCircle(index, total, radius) {
-        // Start at the top (12 o'clock) and go clockwise.
         const angle = (index / total) * 2 * Math.PI - Math.PI / 2;
         return {
             x: CIRCLE_CENTER + radius * Math.cos(angle),
@@ -59,7 +57,6 @@
         const svgNS = 'http://www.w3.org/2000/svg';
         circleSvg.innerHTML = '';
 
-        // Base ring
         const ring = document.createElementNS(svgNS, 'circle');
         ring.setAttribute('cx', CIRCLE_CENTER);
         ring.setAttribute('cy', CIRCLE_CENTER);
@@ -70,7 +67,6 @@
         const activeSet = new Set(activeLetters);
         const drawnPairs = new Set();
 
-        // Opposite-pair connector lines (drawn first, underneath the dots/labels)
         for (let i = 0; i < 26; i++) {
             const letter = ALPHABET[i];
             const oppLetter = oppositeChar(letter);
@@ -91,7 +87,6 @@
             circleSvg.appendChild(line);
         }
 
-        // Letter dots + labels (drawn on top)
         for (let i = 0; i < 26; i++) {
             const letter = ALPHABET[i];
             const isActive = activeSet.has(letter);
@@ -198,14 +193,17 @@
         });
     }
 
+    function updateGenerateButtonVisibility() {
+        generateBtn.style.display = liveModeChk.checked ? 'none' : '';
+    }
+
     surnameInput.addEventListener('input', () => {
         if (liveModeChk.checked) updateOutput();
     });
 
+    liveModeChk.addEventListener('change', updateGenerateButtonVisibility);
     keepCaseChk.addEventListener('change', updateOutput);
-
     generateBtn.addEventListener('click', updateOutput);
-
     copyBtn.addEventListener('click', copyToClipboard);
     copyInsideBtn.addEventListener('click', copyToClipboard);
 
@@ -218,5 +216,6 @@
     window.addEventListener('load', () => {
         buildCircle(new Set());
         buildMapping('', keepCaseChk.checked);
+        updateGenerateButtonVisibility();
     });
 })();
