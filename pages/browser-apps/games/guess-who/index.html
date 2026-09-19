@@ -49,7 +49,7 @@ description: Ask questions, flip the ruled-out faces, and unmask the secret char
                             </div>
 
                             <!-- Chat Log -->
-                            <div id="chat-log" class="chat-log"></div>
+                            <div id="chat-log" class="chat-log" aria-live="polite" aria-atomic="false"></div>
                         </div>
                     </aside>
 
@@ -122,7 +122,8 @@ description: Ask questions, flip the ruled-out faces, and unmask the secret char
                                     <span id="guesses-left" class="score score-player-2">1</span>
                                 </div>
                                 <div class="status-block">
-                                    <span id="status">Select your character to begin</span>
+                                    <span id="status" role="status" aria-live="polite">Select your character to
+                                        begin</span>
                                 </div>
                             </div>
                         </div>
@@ -132,7 +133,7 @@ description: Ask questions, flip the ruled-out faces, and unmask the secret char
 
                 <!-- Continue bar -->
                 <div id="turn-bar" class="turn-bar" hidden>
-                    <span class="turn-bar-text">Flip the ruled-out faces, then hand over.</span>
+                    <span class="turn-bar-text" id="turn-bar-text">Flip the ruled-out faces, then hand over.</span>
                     <button class="btn" id="continue-btn" type="button">
                         <i class="fas fa-arrow-right"></i> Continue
                     </button>
@@ -143,7 +144,7 @@ description: Ask questions, flip the ruled-out faces, and unmask the secret char
                         <i class="fas fa-redo"></i> New Game
                     </button>
                     <button class="btn btn-secondary" id="reveal" type="button">
-                        <i class="fas fa-eye"></i> Give Up
+                        <i class="fas fa-flag"></i> Give Up
                     </button>
                 </div>
             </div>

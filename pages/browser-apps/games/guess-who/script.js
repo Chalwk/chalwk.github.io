@@ -31,6 +31,7 @@ const playerCharacterEl = document.getElementById('player-character');
 const playerCharacterFaceEl = document.getElementById('player-character-face');
 const gameContainerEl = document.getElementById('game-container');
 const turnBarEl = document.getElementById('turn-bar');
+const turnBarTextEl = document.getElementById('turn-bar-text');
 const continueBtn = document.getElementById('continue-btn');
 
 // Constants
@@ -143,6 +144,7 @@ let gameOver = false;
 let autoFlip = false;
 let pendingGuessIdx = -1;
 let soundOn = true;
+let guessedIndices = new Set();
 
 // AI State
 let aiCandidates = [];
@@ -221,6 +223,34 @@ function charName(index) {
     return c && c.name ? c.name : `#${index + 1}`;
 }
 
+let confirmOnYes = null;
+let confirmOnNo = null;
+
+function showConfirm(message, onYes, onNo) {
+    confirmMessageEl.textContent = message;
+    confirmOnYes = onYes || null;
+    confirmOnNo = onNo || null;
+    confirmOverlay.classList.add('show');
+}
+
+function hideConfirm() {
+    confirmOverlay.classList.remove('show');
+    confirmOnYes = null;
+    confirmOnNo = null;
+}
+
+confirmYesBtn.addEventListener('click', () => {
+    const cb = confirmOnYes;
+    hideConfirm();
+    if (cb) cb();
+});
+
+confirmNoBtn.addEventListener('click', () => {
+    const cb = confirmOnNo;
+    hideConfirm();
+    if (cb) cb();
+});
+
 // Renders the player's chosen character into the right-hand side panel.
 function updatePlayerChip() {
     if (playerSecretIndex >= 0 && CHARACTERS[playerSecretIndex]) {
@@ -277,10 +307,12 @@ function alignPlayerCard() {
     faceWrap.style.maxWidth = 'none';
     faceWrap.style.width = Math.round(row2Rect.width) + 'px';
 
+    const cs = getComputedStyle(panel);
+    const gap = parseFloat(cs.rowGap) || parseFloat(cs.gap) || 6;
+
     const offset = row2Rect.top - boardRect.top;
     const nameVisible = nameEl.classList.contains('show');
     const nameH = nameVisible ? nameEl.offsetHeight : 0;
-    const gap = 6; // matches .player-card-panel gap
     const pad = Math.max(0, offset - nameH - gap);
     panel.style.paddingTop = Math.round(pad) + 'px';
 }
@@ -323,6 +355,12 @@ function renderBoard() {
         guessBtn.textContent = '?';
         guessBtn.addEventListener('click', (e) => {
             e.stopPropagation();
+            // During setup the guess button should behave like a card click
+            // so the player can still pick their character from that corner.
+            if (gamePhase === 'setup') {
+                onCardClick(i);
+                return;
+            }
             requestGuess(i);
         });
 
@@ -331,6 +369,12 @@ function renderBoard() {
         card.appendChild(nameTag);
         card.appendChild(guessBtn);
         card.addEventListener('click', () => onCardClick(i));
+        card.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+                e.preventDefault();
+                onCardClick(i);
+            }
+        });
 
         boardEl.appendChild(card);
     });
@@ -369,9 +413,13 @@ function updateStatus() {
     const n = faceUpCount();
 
     if (aiTurnQueued) {
-        statusEl.textContent = n === 1
-            ? 'One face left - flip it or guess!'
-            : 'Your turn - ask a question or flip faces';
+        if (autoFlip) {
+            statusEl.textContent = n <= 1
+                ? 'Ready to hand over.'
+                : 'Auto-flip is on. Hand over when ready.';
+        } else {
+            statusEl.textContent = 'Flip any ruled-out faces, then hand over.';
+        }
         return;
     }
 
@@ -396,6 +444,12 @@ function queueAiTurn() {
     aiTurnQueued = true;
     turnBarEl.hidden = false;
     questionListEl.classList.add('is-locked');
+
+    if (turnBarTextEl) {
+        turnBarTextEl.textContent = autoFlip
+            ? 'Auto-flip is on. Hand over when ready.'
+            : 'Flip any ruled-out faces, then hand over.';
+    }
 
     continueBtn.classList.remove('pulse');
     void continueBtn.offsetWidth; // force reflow so the animation restarts
@@ -467,6 +521,8 @@ function askQuestion(def) {
 
     if (autoFlip) {
         CHARACTERS.forEach((c, i) => {
+            // Never auto-flip the player's own face - they know who they are.
+            if (i === playerSecretIndex) return;
             if (def.test(c) !== answer) {
                 const card = boardEl.querySelector(`[data-index="${i}"]`);
                 if (card && !card.classList.contains('eliminated')) {
@@ -492,28 +548,40 @@ function requestGuess(index) {
     if (gameOver || gamePhase !== 'player-turn') return;
     if (guessesLeft <= 0) return;
 
+    if (guessedIndices.has(index)) {
+        flashStatus('Already guessed that one.', 'tie-message', 1000);
+        return;
+    }
+
+    const card = boardEl.querySelector(`[data-index="${index}"]`);
+    if (card && card.classList.contains('eliminated')) {
+        flashStatus('That face is flipped.', 'tie-message', 1000);
+        return;
+    }
+
     pendingGuessIdx = index;
-    confirmMessageEl.textContent = `Guess ${charName(index)}?`;
-    confirmOverlay.classList.add('show');
+    showConfirm(`Guess ${charName(index)}?`, commitGuess);
 }
 
 function cancelGuess() {
     pendingGuessIdx = -1;
-    confirmOverlay.classList.remove('show');
+    hideConfirm();
 }
 
 function commitGuess() {
-    confirmOverlay.classList.remove('show');
+    hideConfirm();
     if (pendingGuessIdx === -1 || gameOver) return;
 
     const idx = pendingGuessIdx;
     pendingGuessIdx = -1;
+    guessedIndices.add(idx);
 
     const card = boardEl.querySelector(`[data-index="${idx}"]`);
+    if (card) card.classList.add('guessed');
 
     if (idx === aiSecretIndex) {
         if (card) card.classList.add('correct');
-        endGame(true);
+        endGame('player-guessed-correct');
         return;
     }
 
@@ -527,7 +595,7 @@ function commitGuess() {
     }
 
     if (guessesLeft <= 0) {
-        endGame(false);
+        endGame('player-out-of-guesses');
     } else {
         flashStatus('Wrong! Try again.', 'tie-message', 1500);
         addChatMessage(`You guessed ${charName(idx)}. Wrong!`, 'player');
@@ -561,6 +629,9 @@ function aiTurn() {
     if (gameOver || gamePhase !== 'ai-turn') return;
 
     setTimeout(() => {
+        // Re-check after the delay: the player may have given up or won.
+        if (gameOver || gamePhase !== 'ai-turn') return;
+
         // Safety fallback: if candidates drop to 0, reset to all
         if (aiCandidates.length === 0) {
             aiCandidates = Array.from({ length: TOTAL }, (_, i) => i);
@@ -595,16 +666,16 @@ function aiGuess(idx) {
     if (card) card.classList.add('correct');
 
     if (idx === playerSecretIndex) {
-        endGame(false, true); // AI wins
+        endGame('ai-guessed-correct'); // AI wins
     } else {
-        // AI guessed wrong, player wins
-        endGame(true);
+        endGame('ai-guessed-wrong');   // AI blundered - player wins
     }
 }
 
 // Handle Player answering AI's question
 // The AI always narrows its own candidates automatically (auto-flip is always on for the AI).
 aiAnswerYes.addEventListener('click', () => {
+    if (gameOver) return;
     aiQuestionOverlay.classList.remove('show');
     const q = QUESTION_DEFS.find(def => def.id === currentAiQuestionId);
     if (q) {
@@ -616,6 +687,7 @@ aiAnswerYes.addEventListener('click', () => {
 });
 
 aiAnswerNo.addEventListener('click', () => {
+    if (gameOver) return;
     aiQuestionOverlay.classList.remove('show');
     const q = QUESTION_DEFS.find(def => def.id === currentAiQuestionId);
     if (q) {
@@ -633,7 +705,9 @@ selectionOkBtn.addEventListener('click', () => {
 continueBtn.addEventListener('click', beginAiTurn);
 
 // End of game
-function endGame(playerWon, aiWon = false) {
+// reason: 'player-guessed-correct' | 'ai-guessed-wrong'
+//       | 'ai-guessed-correct'   | 'player-out-of-guesses' | 'player-gave-up'
+function endGame(reason) {
     gameOver = true;
     gamePhase = 'game-over';
 
@@ -641,39 +715,70 @@ function endGame(playerWon, aiWon = false) {
     turnBarEl.hidden = true;
     questionListEl.classList.remove('is-locked');
 
-    let message;
-    if (playerWon) {
-        message = 'You win!';
-        statusEl.className = 'win-message';
-        sfx.win();
-        launchConfetti(1);
-    } else if (aiWon) {
-        message = 'AI wins!';
-        statusEl.className = 'tie-message';
-        sfx.lose();
-        launchConfetti(2);
-    } else {
-        message = 'Out of guesses';
-        statusEl.className = 'tie-message';
-        sfx.lose();
-        launchConfetti(2);
-    }
-    statusEl.textContent = message;
+    let message = '';
+    let score = '';
+    let palette = 2; // default red-ish
 
-    gameOverMessageEl.textContent = message;
-    if (playerWon) {
-        gameOverScoreEl.textContent = `Solved in ${questionCount} question${questionCount === 1 ? '' : 's'}`;
-    } else {
-        gameOverScoreEl.textContent = `Your character was ${charName(playerSecretIndex)}. AI's was ${charName(aiSecretIndex)}.`;
+    switch (reason) {
+        case 'player-guessed-correct':
+            message = 'You win!';
+            score = `Solved in ${questionCount} question${questionCount === 1 ? '' : 's'}`;
+            statusEl.className = 'win-message';
+            sfx.win();
+            palette = 1;
+            break;
+
+        case 'ai-guessed-wrong':
+            message = 'You win!';
+            score = `The AI guessed wrong. Its character was ${charName(aiSecretIndex)}.`;
+            statusEl.className = 'win-message';
+            sfx.win();
+            palette = 1;
+            break;
+
+        case 'ai-guessed-correct':
+            message = 'AI wins!';
+            score = `Your character was ${charName(playerSecretIndex)}. AI's was ${charName(aiSecretIndex)}.`;
+            statusEl.className = 'tie-message';
+            sfx.lose();
+            palette = 2;
+            break;
+
+        case 'player-out-of-guesses':
+            message = 'Out of guesses';
+            score = `Your character was ${charName(playerSecretIndex)}. AI's was ${charName(aiSecretIndex)}.`;
+            statusEl.className = 'tie-message';
+            sfx.lose();
+            palette = 2;
+            break;
+
+        case 'player-gave-up':
+            message = 'You gave up';
+            score = `AI's character was ${charName(aiSecretIndex)}.`;
+            statusEl.className = 'tie-message';
+            sfx.lose();
+            palette = 2;
+            break;
+
+        default:
+            message = 'Game over';
+            score = '';
+            statusEl.className = '';
+            palette = 2;
     }
+
+    statusEl.textContent = message;
+    gameOverMessageEl.textContent = message;
+    gameOverScoreEl.textContent = score;
     gameOverOverlay.classList.add('show');
+    launchConfetti(palette);
 }
 
 function giveUp() {
     if (gameOver || gamePhase === 'setup') return;
     const card = boardEl.querySelector(`[data-index="${aiSecretIndex}"]`);
     if (card) card.classList.add('correct');
-    endGame(false, false);
+    endGame('player-gave-up');
 }
 
 // New game
@@ -690,6 +795,7 @@ function newGame() {
     gameOver = false;
     pendingGuessIdx = -1;
     autoFlip = assistSelect.value === 'on';
+    guessedIndices = new Set();
 
     aiCandidates = [];
     aiUsedQuestions.clear();
@@ -808,14 +914,52 @@ function clearConfetti() {
 }
 
 // Events
-resetBtn.addEventListener('click', newGame);
+resetBtn.addEventListener('click', () => {
+    if (gamePhase === 'setup' || gameOver) {
+        newGame();
+        return;
+    }
+    showConfirm('Start a new game? The current match will be lost.', newGame);
+});
+
 playAgainBtn.addEventListener('click', newGame);
-revealBtn.addEventListener('click', giveUp);
+
+revealBtn.addEventListener('click', () => {
+    if (gameOver || gamePhase === 'setup') return;
+    showConfirm("Give up and reveal the AI's character?", giveUp);
+});
+
 soundToggleBtn.addEventListener('click', toggleSound);
-confirmYesBtn.addEventListener('click', commitGuess);
-confirmNoBtn.addEventListener('click', cancelGuess);
-guessesSelect.addEventListener('change', newGame);
-assistSelect.addEventListener('change', () => { autoFlip = assistSelect.value === 'on'; });
+
+// Settings: wrong-guesses restarts the match, so confirm mid-game.
+guessesSelect.addEventListener('change', () => {
+    const apply = () => {
+        guessesLeft = Number(guessesSelect.value) || 1;
+        guessesLeftEl.textContent = guessesLeft;
+    };
+
+    if (gamePhase === 'setup' || gameOver) {
+        apply();
+        return;
+    }
+
+    const previous = String(guessesLeft);
+    showConfirm(
+        'Changing wrong guesses will restart the match. Continue?',
+        () => { apply(); newGame(); },
+        () => { guessesSelect.value = previous; }
+    );
+});
+
+assistSelect.addEventListener('change', () => {
+    autoFlip = assistSelect.value === 'on';
+    // Keep the turn-bar copy in sync if it's currently visible.
+    if (turnBarTextEl && !turnBarEl.hidden) {
+        turnBarTextEl.textContent = autoFlip
+            ? 'Auto-flip is on. Hand over when ready.'
+            : 'Flip any ruled-out faces, then hand over.';
+    }
+});
 
 window.addEventListener('resize', () => {
     if (confettiParticles.length) resizeConfettiCanvas();
@@ -824,4 +968,5 @@ window.addEventListener('resize', () => {
 
 // Boot
 loadSoundPref();
+resizeConfettiCanvas();
 newGame();

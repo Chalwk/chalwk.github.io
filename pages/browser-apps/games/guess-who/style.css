@@ -298,6 +298,11 @@
     -webkit-tap-highlight-color: transparent;
 }
 
+.gw-card:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
 .gw-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
@@ -368,6 +373,15 @@
     background: linear-gradient(to top, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0));
 }
 
+.gw-card.correct.eliminated .gw-face {
+    opacity: 1;
+    filter: none;
+}
+
+.gw-card.correct.eliminated .gw-flip {
+    opacity: 0;
+}
+
 .gw-card.correct {
     animation: correctPulse 0.7s ease;
     box-shadow: 0 0 0 3px #4ade80, 0 0 18px rgba(74, 222, 128, 0.7);
@@ -410,16 +424,16 @@
 
 .gw-guess {
     position: absolute;
-    top: 4px;
-    right: 4px;
-    width: 22px;
-    height: 22px;
+    top: 5px;
+    right: 5px;
+    width: 26px;
+    height: 26px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.9);
     border: none;
     color: var(--dark);
     font-weight: 800;
-    font-size: 0.72rem;
+    font-size: 0.78rem;
     cursor: pointer;
     opacity: 0.55;
     transition: opacity 0.15s ease, transform 0.15s ease, background 0.15s ease, color 0.15s ease;
@@ -439,6 +453,10 @@
     background: var(--accent);
     color: white;
     transform: scale(1.15);
+}
+
+.gw-card.guessed .gw-guess {
+    display: none;
 }
 
 .turn-bar {
@@ -796,9 +814,11 @@
     }
 
     .gw-guess {
-        width: 19px;
-        height: 19px;
-        font-size: 0.62rem;
+        width: 22px;
+        height: 22px;
+        font-size: 0.68rem;
+        top: 4px;
+        right: 4px;
     }
 
     .game-over-message {
@@ -834,11 +854,11 @@
     }
 
     .gw-guess {
-        width: 16px;
-        height: 16px;
-        font-size: 0.55rem;
-        top: 2px;
-        right: 2px;
+        width: 20px;
+        height: 20px;
+        font-size: 0.62rem;
+        top: 3px;
+        right: 3px;
     }
 
     .chat-log {
