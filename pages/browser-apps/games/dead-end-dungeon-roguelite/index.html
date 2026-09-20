@@ -14,7 +14,8 @@ description: Explore a procedurally generated dungeon, fight distinctive enemies
                 <div class="panel-head-text">
                     <h1>Dead End - Dungeon Roguelite</h1>
                     <p class="muted small">Explore. Fight. Build. Find the red key to descend, hunt secrets, and survive
-                        the escalating dungeon.</p>
+                        the escalating dungeon.<span class="key-hint">WASD / Arrows move &amp; attack &middot; Space
+                            wait &middot; P potion &middot; M mute</span></p>
                 </div>
                 <!-- Sound on/off button (M key). Icon is swapped in JS. -->
                 <button class="icon-btn" id="sound-toggle" type="button" aria-label="Toggle sound"
@@ -38,6 +39,9 @@ description: Explore a procedurally generated dungeon, fight distinctive enemies
                         <option value="hard">Hard</option>
                     </select>
                 </label>
+                <button class="btn btn-secondary" id="reset-btn" type="button" title="Start a new dungeon">
+                    <i class="fas fa-redo"></i> New Dungeon
+                </button>
             </div>
             <div id="game-container">
                 <!-- HUD: HP bar, floor info, gold, and status message -->
@@ -93,6 +97,15 @@ description: Explore a procedurally generated dungeon, fight distinctive enemies
                 <!-- The grid is generated dynamically in JS -->
                 <div class="board-wrap">
                     <div class="dungeon-board" id="dungeon-board"></div>
+                    <!-- Manual action buttons, pinned to the right of the board -->
+                    <div class="board-actions">
+                        <button class="btn btn-secondary" id="wait-btn" type="button" title="Wait a turn (Space)">
+                            <i class="fas fa-hourglass-half"></i> Wait
+                        </button>
+                        <button class="btn btn-secondary" id="potion-btn" type="button" title="Drink a potion (P)">
+                            <i class="fas fa-flask"></i> Potion
+                        </button>
+                    </div>
                     <!-- Overlay shown on death or victory -->
                     <div class="game-over-overlay" id="game-over-overlay">
                         <div class="game-over-content">
@@ -113,18 +126,6 @@ description: Explore a procedurally generated dungeon, fight distinctive enemies
                     </div>
                 </div>
 
-                <!-- Manual action buttons -->
-                <div class="action-row">
-                    <button class="btn btn-secondary" id="wait-btn" type="button" title="Wait a turn (Space)">
-                        <i class="fas fa-hourglass-half"></i> Wait
-                    </button>
-                    <button class="btn btn-secondary" id="potion-btn" type="button" title="Drink a potion (P)">
-                        <i class="fas fa-flask"></i> Potion
-                    </button>
-                    <button class="btn btn-secondary" id="reset-btn" type="button" title="Start a new dungeon">
-                        <i class="fas fa-redo"></i> New Dungeon
-                    </button>
-                </div>
                 <!-- D-pad only shows on touch devices (see CSS media query) -->
                 <div class="dpad" id="touch-controls">
                     <button class="dpad-btn" data-dir="up" aria-label="Move / attack up">&#9650;</button>
@@ -134,8 +135,6 @@ description: Explore a procedurally generated dungeon, fight distinctive enemies
                         <button class="dpad-btn" data-dir="right" aria-label="Move / attack right">&#9654;</button>
                     </div>
                 </div>
-                <p class="key-hint">WASD / Arrows move &amp; attack &middot; Space wait &middot; P potion &middot; M
-                    mute</p>
             </div>
         </section>
     </div>

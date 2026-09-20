@@ -6,8 +6,6 @@ categories: [ programming, guide, web-app ]
 tags: [ programming, guide, web-app ]
 ---
 
-# Dead End - Dungeon Roguelite
-<br>
 A turn-based, procedurally generated dungeon roguelite. Explore fog-covered floors, fight distinct enemies, collect weapons and boons, and descend ten floors to escape.
 
 The game is optimized for use on larger devices such as a computer or tablet. Smaller phones work, but the board and HUD are cramped.
