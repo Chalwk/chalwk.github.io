@@ -273,6 +273,7 @@
 .log-panel {
     width: 100%;
     max-width: 100%;
+    margin: 0 auto;
     max-height: 112px;
     overflow-y: auto;
     background: rgba(0, 0, 0, 0.3);

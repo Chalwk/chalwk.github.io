@@ -368,7 +368,7 @@ function carveRoom(r) {
 // match onRoomBorder() and get turned into a door - scattering extra doors
 // along walls that have nothing to do with an actual entrance. Checking the
 // immediate previous/next point in the walked path (rather than the room's
-// whole border ring) pins the door to the one real crossing point!
+// whole border ring) pins the door to the one real crossing point.
 function carveCorridor(x1, y1, x2, y2, roomA, roomB) {
     const horizFirst = Math.random() < 0.5;
     const points = [];
@@ -435,8 +435,11 @@ function roomBfsDist(adjacency, startIdx) {
     return dist;
 }
 
-// Find a DOOR tile on the room's wall ring - used to place locked doors.
-function findRoomDoorTile(r) {
+// Find every DOOR tile on the room's wall ring - used to place locked doors.
+// A room can have more than one entrance (extra edges from connectRooms add
+// cycles to the room graph), so callers that need the room fully sealed off
+// (the exit room) must lock ALL of them, not just one.
+function findRoomDoorTiles(r) {
     const doors = [];
     for (let x = r.x - 1; x <= r.x + r.w; x++) {
         for (let y = r.y - 1; y <= r.y + r.h; y++) {
@@ -444,6 +447,14 @@ function findRoomDoorTile(r) {
             if (tileAt(x, y) === TILE.DOOR) doors.push({ x, y });
         }
     }
+    return doors;
+}
+
+// Single-door convenience wrapper - fine for vault rooms, which are always
+// leaves (exactly one connection) by construction. Not safe to use for the
+// exit room; see findRoomDoorTiles.
+function findRoomDoorTile(r) {
+    const doors = findRoomDoorTiles(r);
     return doors.length ? pick(doors) : null;
 }
 
@@ -577,11 +588,14 @@ function buildDungeon() {
         if (score > bestScore) { bestScore = score; exitIdx = i; }
     });
 
-    // Lock the exit behind a red door; stairs go on a free tile inside.
+    // Lock the exit behind red doors; stairs go on a free tile inside.
+    // The exit room may have more than one entrance (cycles in the room
+    // graph), so every entrance must become a RED_DOOR - locking only one
+    // would leave the stairs reachable through the others without the key.
     const exitRoom = rooms[exitIdx];
-    const exitDoorTile = findRoomDoorTile(exitRoom);
-    if (exitDoorTile) grid[exitDoorTile.y][exitDoorTile.x] = TILE.RED_DOOR;
-    const stairsSpot = freeFloorTile(exitRoom, exitDoorTile ? [exitDoorTile] : []);
+    const exitDoorTiles = findRoomDoorTiles(exitRoom);
+    exitDoorTiles.forEach(t => { grid[t.y][t.x] = TILE.RED_DOOR; });
+    const stairsSpot = freeFloorTile(exitRoom, exitDoorTiles);
     grid[stairsSpot.y][stairsSpot.x] = TILE.STAIRS;
 
     // Gold vaults live in dead-end rooms (leaves) - same idea as picking the exit.
@@ -789,6 +803,12 @@ function itemIcon(item) {
     }
 }
 
+function syncLogPanelWidth() {
+    if (!logEl || !boardEl) return;
+    const width = boardEl.getBoundingClientRect().width;
+    if (width > 0) logEl.style.width = width + 'px';
+}
+
 // Full board rebuild every render. Cheap enough at this grid size and
 // keeps the logic simple - no diffing needed.
 function renderBoard() {
@@ -838,6 +858,7 @@ function renderBoard() {
             boardEl.appendChild(cell);
         }
     }
+    syncLogPanelWidth();
 }
 
 function renderHud() {
@@ -1354,20 +1375,39 @@ function pickupItem(item) {
             break;
         case 'weapon': {
             const w = weaponById(item.weaponId);
-            // Auto-equip only if it's an upgrade; otherwise convert to gold.
-            if (w.tier > player.weapon.tier) {
-                const old = player.weapon;
-                player.weapon = w;
-                playPickupSound();
-                log(`You equipped a ${w.name}! (was ${old.name})`, 'log-entry-good');
-            } else {
-                player.gold += 5;
-                playPickupSound();
-                log(`Found a ${w.name}, but the ${player.weapon.name} is stronger. Sold for 5 gold.`, 'log-entry-loot');
-            }
-            break;
+            const old = player.weapon;
+            const sellValue = 5 * w.tier;
+            const isUpgrade = w.tier > old.tier;
+            playPickupSound();
+            openChoice({
+                kicker: 'WEAPON FOUND',
+                title: `You found a ${w.name}`,
+                description: `${w.description} Damage ${w.dmg[0]}-${w.dmg[1]}.`,
+                options: [
+                    {
+                        icon: w.icon,
+                        title: `Equip ${w.name}`,
+                        desc: isUpgrade ? `Replaces your ${old.name}.` : `A sidegrade from your ${old.name} - style over stats.`,
+                        choose: () => {
+                            player.weapon = w;
+                            return `You equip the ${w.name}. ${old.name} stays behind.`;
+                        },
+                    },
+                    {
+                        icon: '💰',
+                        title: `Sell for ${sellValue} gold`,
+                        desc: `Keep your ${old.name} and pocket the coin instead.`,
+                        choose: () => {
+                            player.gold += sellValue;
+                            return `You sell the ${w.name} for ${sellValue} gold.`;
+                        },
+                    },
+                ],
+            });
+            return true; // signals a choice modal was opened, so the caller skips its own turn-advance
         }
     }
+    return false;
 }
 
 // --- Player turn flow --------------------------------------------------------
@@ -1425,9 +1465,11 @@ function tryMove(dx, dy) {
     }
 
     const item = itemAt(nx, ny);
-    if (item) pickupItem(item);
+    // Picking up a weapon can open an equip-or-sell choice modal; if it does,
+    // don't also fire room-entry logic (which might open its own modal) this turn.
+    const itemOpenedChoice = item ? Boolean(pickupItem(item)) : false;
     const room = roomAt(nx, ny);
-    const openedChoice = triggerRoomEntry(room);
+    const openedChoice = itemOpenedChoice || triggerRoomEntry(room);
     if (tile === TILE.STAIRS) {
         // Boss floor: can't leave until the Warden is dead.
         if (floor >= MAX_FLOOR && boss?.alive) {

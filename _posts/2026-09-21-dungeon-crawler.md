@@ -20,9 +20,9 @@ The game is optimized for use on larger devices such as a computer or tablet. Sm
 - Fog of war with line of sight. Tiles stay remembered once seen, but dim when out of view
 - Turn-based movement with bump-to-attack combat
 - Six enemy types, each with its own AI: coward, skirmisher, sentinel, brute, stalker, ambusher
-- Five tier weapon ladder, each weapon with a unique on-hit effect
+- Five tier weapon ladder, each weapon with a unique on-hit effect. Every pickup is your choice: equip it or sell it for gold
 - Twelve run boons that change how the run plays
-- Locked progression: the red key opens the stairs, gold keys open vaults
+- Locked progression: the red key unlocks every entrance to the stairs, gold keys open vaults
 - Secret rooms hidden behind wall tiles that shimmer when you get close
 - Six floor themes that modify vision, damage, gold, and enemy aggression
 - Ten floors, ending in a three phase boss fight
@@ -47,10 +47,10 @@ Goal: descend ten floors and defeat the Crypt Warden on the last one.
 **Rules:**
 
 - Every move is a turn. Enemies act after you
-- Find the red key, open the red door, then step on the stairs to descend
+- Find the red key, unlock the red door guarding the exit room, then step on the stairs to descend
 - Gold keys open vaults, which hold a weapon, gold, and an elite guard
 - Shrines, armories, libraries, and cleared gauntlets offer a choice of reward
-- Boons last the whole run. Weapons can be swapped as you find them
+- Boons last the whole run. Every weapon you find is yours to equip or sell for gold
 - Potions heal, and each floor restores a little health
 - Changing dungeon size or difficulty starts a new dungeon
 
@@ -64,7 +64,11 @@ One action, one turn. Every player action follows the same sequence: resolve, th
 
 Generation in stages. Rooms are placed first, corridors carved second, and room roles assigned last using a graph distance pass. The exit goes in the furthest or leaf room, which guarantees a real journey to reach it.
 
+Doors mark real crossings only. A corridor becomes a door exactly where it crosses into a room's interior, never anywhere else along that room's wall - so every door on the map means something.
+
 Graphs over coordinates. Room connections are stored as a graph, so distance and dead ends come from a breadth first search instead of geometric guessing.
+
+Every route in is locked. The exit room can end up with more than one corridor leading to it, so every entrance gets sealed behind a red door, not just one of them. Progress always waits on the key, never on a graph coincidence.
 
 Two layers of fog. Discovered tracks memory, visible tracks current sight. Rendering reads both, so remembered tiles dim rather than vanish.
 
@@ -73,6 +77,8 @@ Scaling through multipliers. Difficulty and floor depth adjust HP, damage, and s
 Hooks instead of special cases. Themes expose optional hooks such as `onEnemySpawn` and `onPlayerDamaged`, so a theme can change behavior without the engine knowing about it.
 
 Boons as flags. Boon effects are queried by id at the moment they matter, so a boon is one table entry plus a check where it applies.
+
+Player choice over auto-resolution. Weapon pickups open a choice modal instead of the game deciding for you, using the same modal system as boons and armories.
 
 Full redraw each frame. The board is rebuilt from state on every render. At this grid size that is cheap, and it removes a whole class of stale UI bugs.
 
