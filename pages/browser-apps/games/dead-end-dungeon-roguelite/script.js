@@ -358,8 +358,17 @@ function carveRoom(r) {
     }
 }
 
-// Carve an L-shaped corridor between two points. When the path crosses
-// a room's wall ring, upgrade the tile to a DOOR instead of plain floor.
+// Carve an L-shaped corridor between two points. Only the tile where the
+// path actually transitions into roomA/roomB's interior becomes a DOOR -
+// everything else along the path is plain floor.
+//
+// NOTE: onRoomBorder() matches *any* cell on a room's wall ring, not just
+// the true entrance. If a corridor leg runs parallel to a wall (rather than
+// crossing straight through it), every wall tile along that stretch used to
+// match onRoomBorder() and get turned into a door - scattering extra doors
+// along walls that have nothing to do with an actual entrance. Checking the
+// immediate previous/next point in the walked path (rather than the room's
+// whole border ring) pins the door to the one real crossing point!
 function carveCorridor(x1, y1, x2, y2, roomA, roomB) {
     const horizFirst = Math.random() < 0.5;
     const points = [];
@@ -370,14 +379,20 @@ function carveCorridor(x1, y1, x2, y2, roomA, roomB) {
         for (let y = Math.min(y1, y2); y <= Math.max(y1, y2); y++) points.push({ x: x1, y });
         for (let x = Math.min(x1, x2); x <= Math.max(x1, x2); x++) points.push({ x, y: y2 });
     }
-    for (const p of points) {
+    for (let i = 0; i < points.length; i++) {
+        const p = points[i];
         if (!inBounds(p.x, p.y)) continue;
         const insideA = pointInRoom(roomA, p.x, p.y);
         const insideB = pointInRoom(roomB, p.x, p.y);
         if (insideA || insideB) { grid[p.y][p.x] = TILE.FLOOR; continue; }
-        const borderA = onRoomBorder(roomA, p.x, p.y);
-        const borderB = onRoomBorder(roomB, p.x, p.y);
-        if ((borderA || borderB) && grid[p.y][p.x] === TILE.WALL) grid[p.y][p.x] = TILE.DOOR;
+        const prev = points[i - 1];
+        const next = points[i + 1];
+        const adjoinsRoom = (r) =>
+            (prev && inBounds(prev.x, prev.y) && pointInRoom(r, prev.x, prev.y)) ||
+            (next && inBounds(next.x, next.y) && pointInRoom(r, next.x, next.y));
+        const entersA = onRoomBorder(roomA, p.x, p.y) && adjoinsRoom(roomA);
+        const entersB = onRoomBorder(roomB, p.x, p.y) && adjoinsRoom(roomB);
+        if ((entersA || entersB) && grid[p.y][p.x] === TILE.WALL) grid[p.y][p.x] = TILE.DOOR;
         else if (grid[p.y][p.x] !== TILE.DOOR) grid[p.y][p.x] = TILE.FLOOR;
     }
 }
