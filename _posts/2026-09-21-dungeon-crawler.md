@@ -7,10 +7,12 @@ tags: [ programming, guide, web-app ]
 ---
 
 # Dead End - Dungeon Roguelite
+<br>
+A turn-based, procedurally generated dungeon roguelite. Explore fog-covered floors, fight distinct enemies, collect weapons and boons, and descend ten floors to escape.
 
-A turn-based, procedurally generated dungeon roguelite built as a static Jekyll page. Explore fog-covered floors, fight distinct enemies, collect weapons and boons, and descend ten floors to escape.
+The game is optimized for use on larger devices such as a computer or tablet. Smaller phones work, but the board and HUD are cramped.
 
-[Link to Game](https://chalwk.github.io/pages/browser-apps/games/dead-end-dungeon-roguelite)
+[**Link to Game**](https://chalwk.github.io/pages/browser-apps/games/dead-end-dungeon-roguelite)
 
 ---
 
@@ -36,7 +38,7 @@ A turn-based, procedurally generated dungeon roguelite built as a static Jekyll 
 
 Goal: descend ten floors and defeat the Crypt Warden on the last one.
 
-**Controls**:
+**Controls:**
 
 - WASD or arrow keys: move. Moving into an enemy attacks it
 - Space: wait one turn
@@ -44,7 +46,7 @@ Goal: descend ten floors and defeat the Crypt Warden on the last one.
 - M: mute or unmute
 - Touch devices show an on-screen D-pad
 
-**Rules**:
+**Rules:**
 
 - Every move is a turn. Enemies act after you
 - Find the red key, open the red door, then step on the stairs to descend
