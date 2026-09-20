@@ -237,6 +237,47 @@
     box-shadow: 0 0 6px rgba(251, 191, 36, 0.9);
 }
 
+.log-panel {
+    width: 100%;
+    max-width: 100%;
+    max-height: 96px;
+    overflow-y: auto;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: var(--radius);
+    padding: 0.45rem 0.7rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.75);
+    line-height: 1.45;
+}
+
+.log-panel div {
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.06);
+    padding: 0.1rem 0;
+}
+
+.log-panel div:last-child {
+    border-bottom: none;
+    color: #fff;
+}
+
+.log-entry-combat {
+    color: #fca5a5;
+}
+
+.log-entry-loot {
+    color: #fde68a;
+}
+
+.log-entry-good {
+    color: #86efac;
+}
+
+.log-entry-danger {
+    color: #f87171;
+    font-weight: 700;
+}
+
 .board-wrap {
     position: relative;
     display: flex;
@@ -433,47 +474,6 @@
     }
 }
 
-.log-panel {
-    width: 100%;
-    max-width: 100%;
-    max-height: 110px;
-    overflow-y: auto;
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: var(--radius);
-    padding: 0.5rem 0.75rem;
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: rgba(255, 255, 255, 0.75);
-    line-height: 1.5;
-}
-
-.log-panel div {
-    border-bottom: 1px dashed rgba(255, 255, 255, 0.06);
-    padding: 0.1rem 0;
-}
-
-.log-panel div:last-child {
-    border-bottom: none;
-    color: #fff;
-}
-
-.log-entry-combat {
-    color: #fca5a5;
-}
-
-.log-entry-loot {
-    color: #fde68a;
-}
-
-.log-entry-good {
-    color: #86efac;
-}
-
-.log-entry-danger {
-    color: #f87171;
-    font-weight: 700;
-}
-
 .game-over-overlay {
     position: absolute;
     inset: 0;
@@ -543,13 +543,7 @@
 }
 
 .dpad {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: 0.15rem;
-    user-select: none;
-    -webkit-user-select: none;
+    display: none;
 }
 
 .dpad-row {
@@ -578,6 +572,18 @@
 .dpad-btn:active {
     transform: translateY(1px);
     background: var(--accent);
+}
+
+@media (hover: none) and (pointer: coarse) {
+    .dpad {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 0.15rem;
+        user-select: none;
+        -webkit-user-select: none;
+    }
 }
 
 .key-hint {
@@ -626,6 +632,11 @@
 
     .hp-bar {
         width: 80px;
+    }
+
+    .log-panel {
+        max-height: 72px;
+        font-size: 0.68rem;
     }
 
     .game-over-message {
