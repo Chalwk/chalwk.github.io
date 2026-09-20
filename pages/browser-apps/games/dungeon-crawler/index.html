@@ -16,11 +16,13 @@ description: Explore a procedurally generated dungeon, fight distinctive enemies
                     <p class="muted small">Explore. Fight. Build. Find the red key to descend, hunt secrets, and survive
                         the escalating dungeon.</p>
                 </div>
+                <!-- Sound on/off button (M key). Icon is swapped in JS. -->
                 <button class="icon-btn" id="sound-toggle" type="button" aria-label="Toggle sound"
                     title="Toggle sound (M)">
                     <span id="sound-icon">🔊</span>
                 </button>
             </div>
+            <!-- These two selects rebuild the dungeon on change -->
             <div id="game-settings">
                 <label for="dungeon-size">Dungeon Size
                     <select id="dungeon-size">
@@ -38,6 +40,7 @@ description: Explore a procedurally generated dungeon, fight distinctive enemies
                 </label>
             </div>
             <div id="game-container">
+                <!-- HUD: HP bar, floor info, gold, and status message -->
                 <div class="hud">
                     <div class="hud-row">
                         <div class="hud-block hp-block">
@@ -57,6 +60,7 @@ description: Explore a procedurally generated dungeon, fight distinctive enemies
                             <span id="gold-count" class="gold-count">💰 0</span>
                         </div>
                     </div>
+                    <!-- Chips row: equipped weapon, run boons, current room, keys, potions -->
                     <div class="hud-row hud-subrow">
                         <div class="hud-chip" id="weapon-chip" title="Equipped weapon">
                             <span id="weapon-icon">🤛</span>
@@ -82,11 +86,14 @@ description: Explore a procedurally generated dungeon, fight distinctive enemies
                             <span>🧪</span><span id="potion-count">1</span>
                         </div>
                     </div>
+                    <!-- Scrolling event log -->
                     <div id="log" class="log-panel" aria-live="polite"></div>
                 </div>
 
+                <!-- The grid is generated dynamically in JS -->
                 <div class="board-wrap">
                     <div class="dungeon-board" id="dungeon-board"></div>
+                    <!-- Overlay shown on death or victory -->
                     <div class="game-over-overlay" id="game-over-overlay">
                         <div class="game-over-content">
                             <div id="game-over-message" class="game-over-message"></div>
@@ -96,6 +103,7 @@ description: Explore a procedurally generated dungeon, fight distinctive enemies
                     </div>
                 </div>
 
+                <!-- Modal used for boons / weapon / secret-room choices -->
                 <div class="choice-overlay" id="choice-overlay" aria-hidden="true">
                     <div class="choice-panel" role="dialog" aria-modal="true" aria-labelledby="choice-title">
                         <div class="choice-kicker" id="choice-kicker">DISCOVERY</div>
@@ -105,6 +113,7 @@ description: Explore a procedurally generated dungeon, fight distinctive enemies
                     </div>
                 </div>
 
+                <!-- Manual action buttons -->
                 <div class="action-row">
                     <button class="btn btn-secondary" id="wait-btn" type="button" title="Wait a turn (Space)">
                         <i class="fas fa-hourglass-half"></i> Wait
@@ -116,6 +125,7 @@ description: Explore a procedurally generated dungeon, fight distinctive enemies
                         <i class="fas fa-redo"></i> New Dungeon
                     </button>
                 </div>
+                <!-- D-pad only shows on touch devices (see CSS media query) -->
                 <div class="dpad" id="touch-controls">
                     <button class="dpad-btn" data-dir="up" aria-label="Move / attack up">&#9650;</button>
                     <div class="dpad-row">

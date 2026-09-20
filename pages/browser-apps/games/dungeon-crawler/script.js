@@ -1,5 +1,7 @@
 // Copyright (c) 2024-2026 Jericho Crosby (Chalwk). All Rights Reserved.
 
+// --- DOM handles --------------------------------------------------------------
+// Grabbing them all up front so render/update code stays tidy!
 const boardEl = document.getElementById('dungeon-board');
 const statusEl = document.getElementById('status');
 const floorLabelEl = document.getElementById('floor-label');
@@ -38,6 +40,8 @@ const choiceTitleEl = document.getElementById('choice-title');
 const choiceDescriptionEl = document.getElementById('choice-description');
 const choiceOptionsEl = document.getElementById('choice-options');
 
+// Every tile the board can hold. Values 1..6 are walkable in some form
+// (secret doors are walkable only after you bump them).
 const TILE = {
     WALL: 0,
     FLOOR: 1,
@@ -48,6 +52,7 @@ const TILE = {
     SECRET_DOOR: 6,
 };
 
+// Cardinal directions - used for AI movement fallbacks and key handling.
 const DIRS4 = [
     { x: 0, y: -1 },
     { x: 1, y: 0 },
@@ -55,23 +60,27 @@ const DIRS4 = [
     { x: -1, y: 0 },
 ];
 
+// 8-way directions for AI path smoothing / knockback helpers.
 const DIRS8 = [
     { x: 0, y: -1 }, { x: 1, y: -1 }, { x: 1, y: 0 }, { x: 1, y: 1 },
     { x: 0, y: 1 }, { x: -1, y: 1 }, { x: -1, y: 0 }, { x: -1, y: -1 },
 ];
 
+// Grid dimensions and target room counts per difficulty setting.
 const SIZE_PRESETS = {
     small: { w: 27, h: 19, rooms: 7 },
     medium: { w: 35, h: 23, rooms: 10 },
     large: { w: 43, h: 27, rooms: 14 },
 };
 
+// Difficulty knobs: HP, starting potions, and multipliers on enemies.
 const DIFFICULTY_PRESETS = {
     easy: { startHp: 26, startPotions: 2, enemyHpMult: 0.8, enemyDmgMult: 0.75, enemyCountMult: 0.8 },
     normal: { startHp: 20, startPotions: 1, enemyHpMult: 1, enemyDmgMult: 1, enemyCountMult: 1 },
     hard: { startHp: 16, startPotions: 1, enemyHpMult: 1.3, enemyDmgMult: 1.3, enemyCountMult: 1.3 },
 };
 
+// Weapon ladder. Higher tiers = more raw damage + unique on-hit effects.
 const WEAPONS = [
     {
         id: 'fists', name: 'Fists', icon: '🤛', dmg: [1, 2], tier: 0,
@@ -99,6 +108,8 @@ const WEAPONS = [
     },
 ];
 
+// Enemy roster. minFloor gates when they start showing up; ai selects the
+// move-selection branch in chooseEnemyMove(); aggro is their sight range.
 const ENEMY_TYPES = [
     { id: 'rat', name: 'Rat', icon: '🐀', hp: 3, dmg: [1, 2], minFloor: 1, gold: [1, 3], ai: 'coward', aggro: 5, tags: [] },
     { id: 'goblin', name: 'Goblin', icon: '👺', hp: 6, dmg: [1, 3], minFloor: 1, gold: [2, 5], ai: 'skirmisher', aggro: 8, tags: [] },
@@ -108,6 +119,8 @@ const ENEMY_TYPES = [
     { id: 'spider', name: 'Cave Spider', icon: '🕷️', hp: 8, dmg: [2, 4], minFloor: 4, gold: [4, 8], ai: 'ambusher', aggro: 6, tags: [] },
 ];
 
+// Each floor gets one of these. They mutate spawn stats, gold, vision, etc.
+// The optional hooks let a theme add behavior without special-casing elsewhere.
 const FLOOR_THEMES = [
     {
         id: 'catacombs', name: 'The Catacombs', icon: '🦴', desc: 'Undead are restless. Skeletons and Wraiths are slightly tougher.',
@@ -137,6 +150,8 @@ const FLOOR_THEMES = [
     },
 ];
 
+// Run-long buffs. Each one is checked by id in the relevant mechanic
+// (see hasBoon('...') usages) so the effects are easy to trace.
 const BOONS = [
     { id: 'blood_frenzy', name: 'Blood Frenzy', icon: '🩸', desc: '+1 weapon damage while below 50% HP.' },
     { id: 'executioner', name: 'Executioner', icon: '☠️', desc: '+3 damage against enemies below 25% HP.' },
@@ -152,6 +167,8 @@ const BOONS = [
     { id: 'glass_fang', name: 'Glass Fang', icon: '🔷', desc: '+15% critical chance, but maximum HP -2.' },
 ];
 
+// Room "biomes" inside a floor. The `type` string drives the room-entry
+// triggers in triggerRoomEntry().
 const ROOM_TYPES = {
     normal: { name: 'Combat Hall', icon: '⚔️' },
     start: { name: 'Entrance', icon: '🚪' },
@@ -167,13 +184,15 @@ const ROOM_TYPES = {
     boss: { name: 'Warden Sanctum', icon: '👑' },
 };
 
+// --- Game state --------------------------------------------------------------
+// These are module-level so almost every function can read/tweak them.
 const MAX_FLOOR = 10;
 let sizeKey = sizeSelect.value;
 let difficultyKey = difficultySelect.value;
 let gridW = 0, gridH = 0;
-let grid = [];
-let discovered = [];
-let visible = [];
+let grid = [];              // TILE values
+let discovered = [];        // tiles the player has ever seen (persists per floor)
+let visible = [];           // tiles currently in line of sight
 let rooms = [];
 let secretRoom = null;
 let enemies = [];
@@ -184,13 +203,15 @@ let floorTheme = FLOOR_THEMES[0];
 let gameActive = false;
 let gameOver = false;
 let turnBusy = false;
-let choicePending = false;
+let choicePending = false;  // true while a modal is open - blocks input
 let currentRoomId = null;
 let killCount = 0;
 let boss = null;
 let audioCtx = null;
 let soundMuted = localStorage.getItem('dungeon-sound-muted') === 'true';
 
+// --- Audio -------------------------------------------------------------------
+// Everything is generated via oscillators, so there are no asset files to load.
 function ensureAudioCtx() {
     if (!audioCtx) {
         const Ctx = window.AudioContext || window.webkitAudioContext;
@@ -201,6 +222,7 @@ function ensureAudioCtx() {
     return audioCtx;
 }
 
+// Fire a short tone. `delay` lets callers sequence arpeggios.
 function playTone(freq, duration, { type = 'sine', gain = 0.15, delay = 0 } = {}) {
     if (soundMuted) return;
     const ctx = ensureAudioCtx();
@@ -210,6 +232,7 @@ function playTone(freq, duration, { type = 'sine', gain = 0.15, delay = 0 } = {}
     const gainNode = ctx.createGain();
     osc.type = type;
     osc.frequency.setValueAtTime(freq, startTime);
+    // Quick attack, exponential decay - cheap envelope for a "blip" feel.
     gainNode.gain.setValueAtTime(0, startTime);
     gainNode.gain.linearRampToValueAtTime(gain, startTime + 0.01);
     gainNode.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
@@ -219,6 +242,7 @@ function playTone(freq, duration, { type = 'sine', gain = 0.15, delay = 0 } = {}
     osc.stop(startTime + duration + 0.05);
 }
 
+// Named wrappers keep the game code readable instead of sprinkling freqs everywhere.
 function playMoveSound() { playTone(200, 0.05, { gain: 0.05 }); }
 function playBumpSound() { playTone(110, 0.1, { type: 'sawtooth', gain: 0.07 }); }
 function playHitSound() { playTone(180, 0.09, { type: 'square', gain: 0.12 }); }
@@ -243,11 +267,13 @@ soundToggleBtn.addEventListener('click', () => {
     localStorage.setItem('dungeon-sound-muted', String(soundMuted));
     updateSoundIcon();
     if (!soundMuted) {
+        // Browsers require a user gesture before audio can start.
         ensureAudioCtx();
         playTone(440, 0.08, { gain: 0.1 });
     }
 });
 
+// --- Helpers -----------------------------------------------------------
 function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
 function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 function shuffle(arr) {
@@ -261,20 +287,25 @@ function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
 function inBounds(x, y) { return x >= 0 && y >= 0 && x < gridW && y < gridH; }
 function tileAt(x, y) { return inBounds(x, y) ? grid[y][x] : TILE.WALL; }
 function isWalkableTile(t) { return t >= TILE.FLOOR && t <= TILE.SECRET_DOOR; }
+// Secret doors block line-of-sight until revealed (they look like walls).
 function isOpenForVision(x, y) { const t = tileAt(x, y); return t !== TILE.WALL && t !== TILE.SECRET_DOOR; }
 function enemyAt(x, y) { return enemies.find(e => e.alive && e.x === x && e.y === y) || null; }
 function itemAt(x, y) { return items.find(it => it.x === x && it.y === y) || null; }
 function roomCenter(r) { return { x: r.x + (r.w >> 1), y: r.y + (r.h >> 1) }; }
-function rectsOverlap(a, b, pad) {
-    return a.x - pad < b.x + b.w && a.x + a.w + pad > b.x && a.y - pad < b.y + b.h && a.y + a.h + pad > b.y;
-}
+// pad is the gap enforced between two rooms during generation.
+function rectsOverlap(a, b, pad) { return a.x - pad < b.x + b.w && a.x + a.w + pad > b.x && a.y - pad < b.y + b.h && a.y + a.h + pad > b.y; }
 function pointInRoom(r, x, y) { return x >= r.x && x < r.x + r.w && y >= r.y && y < r.y + r.h; }
+
+// Border cells sit in the wall ring just outside the room rect - that's
+// where door tiles get placed by the corridor carver.
 function onRoomBorder(r, x, y) {
     if (x < r.x - 1 || x > r.x + r.w || y < r.y - 1 || y > r.y + r.h) return false;
     const onVertEdge = (x === r.x - 1 || x === r.x + r.w) && y >= r.y && y < r.y + r.h;
     const onHorizEdge = (y === r.y - 1 || y === r.y + r.h) && x >= r.x && x < r.x + r.w;
     return onVertEdge || onHorizEdge;
 }
+
+// Chebyshev distance - diagonals count as 1 step, which matches how enemies move.
 function distance(a, b) { return Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y)); }
 function roomAt(x, y) { return rooms.find(r => pointInRoom(r, x, y)) || (secretRoom && pointInRoom(secretRoom, x, y) ? secretRoom : null); }
 function roomTypeName(room) { return room ? `${ROOM_TYPES[room.type]?.icon || '▦'} ${ROOM_TYPES[room.type]?.name || 'Room'}` : 'Corridor'; }
@@ -282,10 +313,13 @@ function hasBoon(id) { return player.boons.some(b => b.id === id); }
 function availableBoons() { return BOONS.filter(b => !hasBoon(b.id)); }
 function addStatus(entity, id, turns) {
     if (!entity.statuses) entity.statuses = {};
+    // Only extend duration, never shorten.
     entity.statuses[id] = Math.max(entity.statuses[id] || 0, turns);
 }
+
 function hasStatus(entity, id) { return Boolean(entity.statuses && entity.statuses[id] > 0); }
 
+// Log keeps the last ~70 entries so the DOM doesn't grow forever.
 function log(msg, cls) {
     const div = document.createElement('div');
     if (cls) div.className = cls;
@@ -297,9 +331,13 @@ function log(msg, cls) {
 function clearLog() { logEl.innerHTML = ''; }
 function setStatus(text) { statusEl.textContent = text; }
 
+// --- Dungeon generation ------------------------------------------------------
+// Strategy: scatter non-overlapping rooms, carve corridors between them,
+// pick a far-away room as the exit, then decorate with vaults/secret rooms/etc.
 function generateRooms(w, h, count) {
     const list = [];
     let attempts = 0;
+    // Give up after 800 tries - the size presets are tuned so this rarely hits.
     while (list.length < count && attempts < 800) {
         attempts++;
         const rw = randInt(4, 7);
@@ -312,11 +350,15 @@ function generateRooms(w, h, count) {
     }
     return list;
 }
+
 function carveRoom(r) {
     for (let y = r.y; y < r.y + r.h; y++) {
         for (let x = r.x; x < r.x + r.w; x++) grid[y][x] = TILE.FLOOR;
     }
 }
+
+// Carve an L-shaped corridor between two points. When the path crosses
+// a room's wall ring, upgrade the tile to a DOOR instead of plain floor.
 function carveCorridor(x1, y1, x2, y2, roomA, roomB) {
     const horizFirst = Math.random() < 0.5;
     const points = [];
@@ -338,6 +380,9 @@ function carveCorridor(x1, y1, x2, y2, roomA, roomB) {
         else if (grid[p.y][p.x] !== TILE.DOOR) grid[p.y][p.x] = TILE.FLOOR;
     }
 }
+
+// Chain rooms in index order, then throw in a few random extra edges so the
+// layout isn't a boring single path.
 function connectRooms(roomList) {
     const order = roomList.map((_, i) => i);
     const edges = [];
@@ -358,6 +403,9 @@ function connectRooms(roomList) {
     }
     return adjacency;
 }
+
+// BFS over the room graph to find how far each room is (in rooms, not tiles).
+// Used to place the exit as far from the start as possible.
 function roomBfsDist(adjacency, startIdx) {
     const dist = new Array(adjacency.length).fill(-1);
     dist[startIdx] = 0;
@@ -370,6 +418,8 @@ function roomBfsDist(adjacency, startIdx) {
     }
     return dist;
 }
+
+// Find a DOOR tile on the room's wall ring - used to place locked doors.
 function findRoomDoorTile(r) {
     const doors = [];
     for (let x = r.x - 1; x <= r.x + r.w; x++) {
@@ -380,6 +430,9 @@ function findRoomDoorTile(r) {
     }
     return doors.length ? pick(doors) : null;
 }
+
+// Pick a random walkable, unoccupied tile inside a room. `exclude` avoids
+// stacking two items on the same spot (or on the player).
 function freeFloorTile(r, exclude = []) {
     const candidates = [];
     for (let y = r.y; y < r.y + r.h; y++) {
@@ -390,6 +443,9 @@ function freeFloorTile(r, exclude = []) {
     }
     return candidates.length ? pick(candidates) : roomCenter(r);
 }
+
+// Try to bolt a small secret room onto one side of a host room. It must
+// fit inside the grid, not overlap anything, and have a wall tile for the door.
 function tryAddSecretRoom(hostRoom, allRooms) {
     const sides = shuffle(['top', 'bottom', 'left', 'right']);
     for (const side of sides) {
@@ -416,6 +472,7 @@ function tryAddSecretRoom(hostRoom, allRooms) {
         if (sx < 1 || sy < 1 || sx + sw > gridW - 1 || sy + sh > gridH - 1) continue;
         if (allRooms.some(r => rectsOverlap(candidate, r, 1))) continue;
         if (!inBounds(doorX, doorY) || grid[doorY][doorX] !== TILE.WALL) continue;
+        // The interior must be entirely untouched wall - no clipping into existing space.
         let clear = true;
         for (let y = sy; y < sy + sh && clear; y++) {
             for (let x = sx; x < sx + sw; x++) if (grid[y][x] !== TILE.WALL) { clear = false; break; }
@@ -427,10 +484,15 @@ function tryAddSecretRoom(hostRoom, allRooms) {
     }
     return null;
 }
+
+// Avoid repeating the same theme two floors in a row (unless floor 1).
 function chooseFloorTheme() {
     const candidates = FLOOR_THEMES.filter(t => t.id !== floorTheme.id || floor <= 1);
     floorTheme = pick(candidates.length ? candidates : FLOOR_THEMES);
 }
+
+// Assign the various room roles. Start/exit/vaults are fixed; everything
+// else is shuffled into the remaining special slots.
 function assignRoomTypes(adjacency, startIdx, exitIdx, vaultIdxs) {
     rooms.forEach(r => { r.type = 'normal'; r.entered = false; });
     rooms[startIdx].type = 'start';
@@ -442,9 +504,11 @@ function assignRoomTypes(adjacency, startIdx, exitIdx, vaultIdxs) {
     const count = gridW > 38 ? 5 : gridW > 30 ? 4 : 3;
     specialTypes.slice(0, count).forEach(type => { if (candidates.length) rooms[candidates.shift()].type = type; });
 }
+
 function spawnEnemy(room, type, elite = false, forcedSpot = null) {
     const spot = forcedSpot || freeFloorTile(room);
     const diff = DIFFICULTY_PRESETS[difficultyKey];
+    // HP/damage scales linearly with floor depth; elites get a flat multiplier.
     const floorMult = 1 + (floor - 1) * 0.14;
     const eliteMult = elite ? 1.6 : 1;
     const hp = Math.round(type.hp * diff.enemyHpMult * floorMult * eliteMult);
@@ -453,19 +517,25 @@ function spawnEnemy(room, type, elite = false, forcedSpot = null) {
         dmgMult: diff.enemyDmgMult * floorMult * floorTheme.enemyDamage * (elite ? 1.3 : 1),
         elite, alive: true, roomId: roomIndexOf(room), statuses: {}, hidden: type.ai === 'ambusher', windup: false, retreatNext: false,
     };
+    // Theme hook may bump HP (e.g. Catacombs vs undead) - re-sync after.
     floorTheme.onEnemySpawn?.(enemy);
     enemy.maxHp = Math.max(enemy.maxHp, enemy.hp);
     enemy.hp = enemy.maxHp;
     enemies.push(enemy);
     return enemy;
 }
+
 function roomIndexOf(room) { return rooms.indexOf(room); }
 function weaponById(id) { return WEAPONS.find(w => w.id === id) || WEAPONS[0]; }
+
+// Pick a random weapon in a tier window - used for armory/loot drops.
 function randomWeaponAtTier(minTier, maxTier = WEAPONS.length - 1) {
     const lo = clamp(minTier, 1, WEAPONS.length - 1);
     const hi = clamp(maxTier, lo, WEAPONS.length - 1);
     return pick(WEAPONS.filter(w => w.tier >= lo && w.tier <= hi));
 }
+
+// Main floor generator. Wipes the previous floor and rebuilds everything.
 function buildDungeon() {
     const preset = SIZE_PRESETS[sizeKey];
     gridW = preset.w; gridH = preset.h;
@@ -480,6 +550,8 @@ function buildDungeon() {
     const adjacency = connectRooms(rooms);
     const startIdx = 0;
     const startRoom = rooms[startIdx];
+
+    // Pick the exit room: farthest BFS distance + bonus for dead-ends (leaf rooms).
     const dist = roomBfsDist(adjacency, startIdx);
     let exitIdx = startIdx, bestScore = -1;
     rooms.forEach((r, i) => {
@@ -489,12 +561,14 @@ function buildDungeon() {
         if (score > bestScore) { bestScore = score; exitIdx = i; }
     });
 
+    // Lock the exit behind a red door; stairs go on a free tile inside.
     const exitRoom = rooms[exitIdx];
     const exitDoorTile = findRoomDoorTile(exitRoom);
     if (exitDoorTile) grid[exitDoorTile.y][exitDoorTile.x] = TILE.RED_DOOR;
     const stairsSpot = freeFloorTile(exitRoom, exitDoorTile ? [exitDoorTile] : []);
     grid[stairsSpot.y][stairsSpot.x] = TILE.STAIRS;
 
+    // Gold vaults live in dead-end rooms (leaves) - same idea as picking the exit.
     const vaultCount = gridW > 30 ? 2 : 1;
     const vaultCandidates = rooms.map((r, i) => i)
         .filter(i => i !== startIdx && i !== exitIdx && adjacency[i].size === 1);
@@ -511,6 +585,7 @@ function buildDungeon() {
 
     assignRoomTypes(adjacency, startIdx, exitIdx, vaultIdxs);
 
+    // Try to attach a secret room to any non-start/non-exit host until one sticks.
     const secretHostPool = rooms.filter((r, i) => i !== startIdx && i !== exitIdx && !vaultRooms.includes(r));
     shuffle(secretHostPool);
     for (const host of secretHostPool) {
@@ -521,6 +596,7 @@ function buildDungeon() {
     const spawn = roomCenter(startRoom);
     player.x = spawn.x; player.y = spawn.y;
 
+    // Drop the red key + a gold key per vault into random non-special rooms.
     const keyPool = rooms.filter((r, i) => i !== startIdx && i !== exitIdx && !vaultRooms.includes(r));
     shuffle(keyPool);
     let poolPtr = 0;
@@ -532,6 +608,7 @@ function buildDungeon() {
         items.push({ x: spot.x, y: spot.y, type: 'goldkey' });
     });
 
+    // Each vault gets a weapon, a gold pile, and an elite guard.
     vaultRooms.forEach(vr => {
         const weapon = randomWeaponAtTier(1 + Math.floor((floor - 1) / 3), 3 + Math.floor((floor - 2) / 5));
         const spot1 = freeFloorTile(vr);
@@ -542,6 +619,7 @@ function buildDungeon() {
         spawnEnemy(vr, pick(guardPool.length ? guardPool : [ENEMY_TYPES[0]]), true);
     });
 
+    // Populate every other room with enemies, gold, potions, and occasional loot.
     const specialRooms = new Set(['start', 'exit', 'boss', 'vault']);
     rooms.forEach((r, i) => {
         if (specialRooms.has(r.type)) return;
@@ -553,12 +631,14 @@ function buildDungeon() {
         for (let n = 0; n < enemyCount; n++) {
             const pool = ENEMY_TYPES.filter(e => e.minFloor <= floor);
             const spawned = spawnEnemy(r, pick(pool.length ? pool : [ENEMY_TYPES[0]]), false);
+            // Track gauntlet enemies so we can detect when the room is cleared.
             if (r.type === 'gauntlet') {
                 if (!r.enemyIds) r.enemyIds = [];
                 r.enemyIds.push(spawned);
             }
         }
         if (r.type === 'treasury') {
+            // Treasury rooms always get a couple of big piles.
             for (let n = 0; n < 2; n++) {
                 const spot = freeFloorTile(r);
                 items.push({ x: spot.x, y: spot.y, type: 'gold', amount: Math.round((randInt(8, 18) + floor) * floorTheme.goldMult), roomIndex: i });
@@ -574,6 +654,7 @@ function buildDungeon() {
         }
         if (Math.random() < (r.type === 'armory' ? 0.7 : 0.18)) {
             const spot = freeFloorTile(r);
+            // Weapon tier scales gently with depth, capped at tier 3 for floor drops.
             const tier = Math.min(3, 1 + Math.floor((floor - 1) / 3));
             items.push({ x: spot.x, y: spot.y, type: 'weapon', weaponId: WEAPONS[randInt(1, tier)].id });
         }
@@ -587,6 +668,7 @@ function buildDungeon() {
 
 function spawnBoss(exitRoom) {
     const spot = freeFloorTile(exitRoom, [{ x: player.x, y: player.y }]);
+    // Boss is just a hand-rolled enemy object with a unique type + phase flags.
     boss = {
         x: spot.x, y: spot.y, hp: 95, maxHp: 95, alive: true, roomId: roomIndexOf(exitRoom),
         type: { id: 'crypt_warden', name: 'Crypt Warden', icon: '👑', dmg: [5, 8], ai: 'boss', gold: [20, 35], tags: ['undead'] },
@@ -597,6 +679,8 @@ function spawnBoss(exitRoom) {
     log('The Crypt Warden seals the sanctuary. Defeat it before you can escape.', 'log-entry-danger');
 }
 
+// --- Vision ------------------------------------------------------------------
+// Standard Bresenham line - if any tile between us blocks sight, this fails.
 function hasLineOfSight(x0, y0, x1, y1) {
     let dx = Math.abs(x1 - x0), dy = -Math.abs(y1 - y0);
     let sx = x0 < x1 ? 1 : -1, sy = y0 < y1 ? 1 : -1;
@@ -614,7 +698,11 @@ function visionRadius() {
     if (hasBoon('scouting')) radius += 1;
     return radius;
 }
+
+// Treasure Sense extends the shimmer range; Pathfinder gives a small bump too.
 function secretHintRadius() { return hasBoon('treasure_sense') ? 3 : hasBoon('scouting') ? 2 : 1; }
+
+// Rebuild `visible` (line of sight) and OR the results into `discovered` (memory).
 function recomputeVisibility() {
     visible = Array.from({ length: gridH }, () => Array(gridW).fill(false));
     const px = player.x, py = player.y, vr = visionRadius();
@@ -629,6 +717,8 @@ function recomputeVisibility() {
     }
 }
 
+// --- Rendering ---------------------------------------------------------------
+// Cell size shrinks for larger grids so the board still fits on screen.
 function computeCellSize() {
     const wrap = boardEl.parentElement;
     const available = wrap.clientWidth - 24;
@@ -636,6 +726,7 @@ function computeCellSize() {
     const clamped = Math.max(12, Math.min(28, base));
     boardEl.style.setProperty('--cell-size', clamped + 'px');
 }
+
 function itemClass(type) {
     switch (type) {
         case 'gold': case 'secretgold': return 'item-gold';
@@ -646,6 +737,7 @@ function itemClass(type) {
         default: return '';
     }
 }
+
 function itemIcon(item) {
     switch (item.type) {
         case 'gold': return '💰';
@@ -657,6 +749,9 @@ function itemIcon(item) {
         default: return '';
     }
 }
+
+// Full board rebuild every render. Cheap enough at this grid size and
+// keeps the logic simple - no diffing needed.
 function renderBoard() {
     computeCellSize();
     boardEl.style.gridTemplateColumns = `repeat(${gridW}, var(--cell-size))`;
@@ -675,11 +770,13 @@ function renderBoard() {
                 case TILE.GOLD_DOOR: cell.classList.add('door-gold'); cell.textContent = '🔒'; break;
                 case TILE.STAIRS: cell.classList.add('floor', 'stairs'); cell.textContent = '⬇'; break;
                 case TILE.SECRET_DOOR:
+                    // Secret doors render as walls, but shimmer when close enough.
                     cell.classList.add('wall');
                     if (Math.max(Math.abs(x - player.x), Math.abs(y - player.y)) <= secretHintRadius()) cell.classList.add('secret-hint');
                     break;
                 default: cell.classList.add('floor');
             }
+            // Entities only show on currently-visible tiles.
             if (inView) {
                 const enemy = enemyAt(x, y);
                 const item = itemAt(x, y);
@@ -715,6 +812,7 @@ function renderHud() {
     weaponIconEl.textContent = player.weapon.icon;
     weaponNameEl.textContent = player.weapon.name;
     weaponChip.title = `${player.weapon.name}: ${player.weapon.description}`;
+    // Boon chip shows the first boon + a "+N" for the rest, full list on hover.
     const boonText = player.boons.length ? player.boons.map(b => b.name).join(' • ') : 'No Boons';
     boonNameEl.textContent = player.boons.length ? `${player.boons[0].icon} ${player.boons[0].name}${player.boons.length > 1 ? ` +${player.boons.length - 1}` : ''}` : 'No Boons';
     boonChip.title = boonText;
@@ -727,11 +825,14 @@ function renderHud() {
     goldKeyStatusEl.textContent = `${player.goldKeys} Gold Key${player.goldKeys === 1 ? '' : 's'}`;
     potionCountEl.textContent = player.potions;
 }
+
 function render() { recomputeVisibility(); renderBoard(); renderHud(); }
 
+// --- Boons & choices ---------------------------------------------------------
 function addBoon(boon) {
     if (!boon || hasBoon(boon.id)) return;
     player.boons.push(boon);
+    // Some boons change max HP immediately.
     if (boon.id === 'iron_will') player.maxHp += 3;
     if (boon.id === 'glass_fang') player.maxHp = Math.max(1, player.maxHp - 2);
     player.hp = Math.min(player.maxHp, player.hp + (boon.id === 'iron_will' ? 3 : 0));
@@ -739,6 +840,8 @@ function addBoon(boon) {
     log(`You gain the boon ${boon.name}: ${boon.desc}`, 'log-entry-good');
 }
 
+// Generic modal for boons/weapons/secret rewards. The overlay blocks input
+// until the player clicks a card.
 function openChoice({ kicker = 'DISCOVERY', title, description, options }) {
     choicePending = true;
     choiceKickerEl.textContent = kicker;
@@ -756,6 +859,7 @@ function openChoice({ kicker = 'DISCOVERY', title, description, options }) {
             choiceOverlay.classList.remove('show');
             choiceOverlay.setAttribute('aria-hidden', 'true');
             if (result) log(result, 'log-entry-good');
+            // Picking a reward burns the turn - enemies act now.
             if (!gameOver) {
                 enemyTurnStep();
                 render();
@@ -771,6 +875,7 @@ function openChoice({ kicker = 'DISCOVERY', title, description, options }) {
 
 function chooseBoon(title = 'Choose a Boon', kicker = 'RUN BUILD', count = 3) {
     const pool = shuffle([...availableBoons()]).slice(0, count);
+    // Out of boons? Convert the reward to gold instead of nothing.
     if (!pool.length) {
         player.gold += 20;
         log('You have discovered every boon. The shrine grants 20 gold instead.', 'log-entry-loot');
@@ -789,6 +894,8 @@ function chooseBoon(title = 'Choose a Boon', kicker = 'RUN BUILD', count = 3) {
     });
 }
 
+// Armory offers weapons strictly better than your current tier (or equal),
+// and never your current weapon.
 function chooseArmoryWeapon() {
     const minTier = Math.min(WEAPONS.length - 1, Math.max(1, player.weapon.tier + (Math.random() < 0.65 ? 0 : 1)));
     const pool = WEAPONS.filter(w => w !== player.weapon && w.tier >= minTier);
@@ -810,6 +917,7 @@ function chooseArmoryWeapon() {
     });
 }
 
+// Secret rooms always offer: the legendary hammer, one random boon, or a big gold pile.
 function triggerSecretRoom(room) {
     if (room.entered) return;
     room.entered = true;
@@ -838,6 +946,8 @@ function triggerSecretRoom(room) {
     openChoice({ kicker: 'SECRET ROOM', title: 'A Door That Should Not Exist', description: 'Secret rooms now offer build-defining rewards instead of being just another pile of loot.', options });
 }
 
+// Returns true if the room opened a choice modal (so the caller can skip
+// the normal post-action enemy turn - the modal handles it on close).
 function triggerRoomEntry(room) {
     if (!room || room.entered) return false;
     room.entered = true;
@@ -864,6 +974,7 @@ function triggerRoomEntry(room) {
             log('The gauntlet begins. Clear the room for a choice of reward.', 'log-entry-danger');
             return false;
         case 'library':
+            // Library reveals the whole map (not just its own area).
             for (let y = 0; y < gridH; y++) for (let x = 0; x < gridW; x++) {
                 if (grid[y][x] !== TILE.WALL) discovered[y][x] = true;
             }
@@ -890,6 +1001,8 @@ function triggerRoomEntry(room) {
     }
 }
 
+// After every action, check if any gauntlet room is now clear. If so,
+// hand out the reward. Returns true if a modal was opened.
 function completeGauntlets() {
     for (const room of rooms) {
         if (room.type !== 'gauntlet' || !room.gauntletStarted || room.gauntletRewarded) continue;
@@ -904,6 +1017,9 @@ function completeGauntlets() {
     return false;
 }
 
+// --- Combat ------------------------------------------------------------------
+// All damage bonuses from boons/weapon effects get pooled here so the
+// damage roll in playerAttack() stays easy to read.
 function applyWeaponBonuses(enemy) {
     let bonus = 0;
     if (hasBoon('blood_frenzy') && player.hp < player.maxHp * 0.5) bonus += 1;
@@ -911,6 +1027,7 @@ function applyWeaponBonuses(enemy) {
     if (player.momentumReady) { bonus += 2; player.momentumReady = false; }
     return bonus;
 }
+
 function playerAttack(enemy) {
     if (hasStatus(player, 'stunned')) {
         log('You are stunned and lose the attack.', 'log-entry-danger');
@@ -919,29 +1036,35 @@ function playerAttack(enemy) {
     const [lo, hi] = player.weapon.dmg;
     let dmg = randInt(lo, hi) + applyWeaponBonuses(enemy);
     let crit = false;
+    // Crit chance is weapon crit + the Glass Fang boon bonus.
     const critChance = (player.weapon.crit || 0) + (hasBoon('glass_fang') ? 0.15 : 0);
     if (Math.random() < critChance) {
         crit = true;
         dmg += player.weapon.critBonus || 0;
     }
+    // Vulnerable is a flat +2 damage taken on any hit.
     if (hasStatus(enemy, 'vulnerable')) dmg += 2;
     enemy.hp -= dmg;
     enemy._hitFlash = true;
     playHitSound();
     log(`You hit the ${enemy.elite ? 'Elite ' : ''}${enemy.type.name} for ${dmg}${crit ? ' critical damage' : ''}.`, 'log-entry-combat');
 
+    // Dagger finisher - extra damage on already-hurt targets.
     if (player.weapon.finisher && enemy.hp > 0 && enemy.hp <= enemy.maxHp * 0.5) {
         enemy.hp -= player.weapon.finisher;
         log(`The Dagger finds an opening for +${player.weapon.finisher} damage.`, 'log-entry-combat');
     }
+    // Axe applies Vulnerable, but only sometimes.
     if (player.weapon.vulnerable && enemy.hp > 0 && Math.random() < 0.45) {
         addStatus(enemy, 'vulnerable', player.weapon.vulnerable);
         log('The Axe leaves the target vulnerable.', 'log-entry-loot');
     }
+    // Hammer stuns on a chance.
     if (player.weapon.stun && enemy.hp > 0 && Math.random() < player.weapon.stun) {
         addStatus(enemy, 'stunned', 1);
         log(`The Hammer stuns the ${enemy.type.name}.`, 'log-entry-loot');
     }
+    // Sword cleave - hit one adjacent enemy for a small amount.
     if (player.weapon.cleave) {
         const adjacent = enemies.find(e => e.alive && e !== enemy && distance(e, enemy) <= 1);
         if (adjacent) {
@@ -954,11 +1077,13 @@ function playerAttack(enemy) {
     }
     if (enemy.hp <= 0) killEnemy(enemy);
 }
+
 function killEnemy(enemy) {
     if (!enemy.alive) return;
     enemy.alive = false;
     killCount++;
     playKillSound();
+    // Gold roll: base * elite * scavenger * theme, with a chance to double.
     const [glo, ghi] = enemy.type.gold;
     let gold = randInt(glo, ghi) * (enemy.elite ? 2 : 1);
     if (hasBoon('scavenger')) gold = Math.round(gold * 1.5);
@@ -974,6 +1099,7 @@ function killEnemy(enemy) {
     }
     if (enemy === boss) defeatBoss();
 }
+
 function defeatBoss() {
     if (!boss?.alive) return;
     boss.alive = false;
@@ -984,6 +1110,8 @@ function defeatBoss() {
     setStatus('The Warden is defeated. Escape.');
 }
 
+// Tick statuses on an entity and deal any DOT damage. Decrements each
+// counter by 1 per call.
 function processStatuses(entity) {
     if (!entity.statuses) entity.statuses = {};
     if (entity.statuses.poisoned > 0) {
@@ -1001,6 +1129,8 @@ function processStatuses(entity) {
         if (entity.statuses[k] <= 0) delete entity.statuses[k];
     });
 }
+
+// Decide where an enemy wants to step. Each AI archetype has its own quirk.
 function chooseEnemyMove(enemy) {
     const d = distance(enemy, player);
     const aggro = enemy.type.aggro + floorTheme.aggro;
@@ -1008,13 +1138,16 @@ function chooseEnemyMove(enemy) {
     const dx = Math.sign(player.x - enemy.x), dy = Math.sign(player.y - enemy.y);
     const away = { x: -dx, y: -dy };
 
+    // Ambushers reveal themselves when you get close, and lose that turn.
     if (enemy.hidden && d <= 4) {
         enemy.hidden = false;
         log(`The ${enemy.type.name} springs from hiding!`, 'log-entry-danger');
         return null;
     }
     if (enemy.type.ai === 'ambusher' && enemy.hidden) return null;
+    // Sentinels refuse to chase - they only fight in sight range.
     if (enemy.type.ai === 'sentinel' && !canSee) return null;
+    // Most enemies just idle if they can't see the player (stalkers excepted).
     if (!canSee && enemy.type.ai !== 'stalker') return null;
 
     if (enemy.type.ai === 'coward' && enemy.hp < enemy.maxHp * 0.45 && d <= 8) return away;
@@ -1022,16 +1155,19 @@ function chooseEnemyMove(enemy) {
         enemy.retreatNext = false;
         return away;
     }
+    // Stalkers wander until they get within 10 tiles, then beeline.
     if (enemy.type.ai === 'stalker') {
         if (d <= 10) return { x: dx, y: dy };
         return pick(DIRS4);
     }
     return { x: dx, y: dy };
 }
+
 function enemyCanAttack(enemy) { return distance(enemy, player) <= 1; }
 function enemyAttack(enemy, bonusMultiplier = 1) {
     const [lo, hi] = enemy.type.dmg;
     let dmg = Math.round(randInt(lo, hi) * enemy.dmgMult * bonusMultiplier);
+    // Thick Skin softens the very first hit taken this floor.
     if (hasBoon('thick_skin') && player.firstHitTaken) {
         dmg = Math.max(0, dmg - 2);
         player.firstHitTaken = false;
@@ -1043,6 +1179,8 @@ function enemyAttack(enemy, bonusMultiplier = 1) {
     log(`The ${enemy.elite ? 'Elite ' : ''}${enemy.type.name} hits you for ${dmg}.`, 'log-entry-danger');
     floorTheme.onPlayerDamaged?.();
 }
+
+// Runs every enemy in order: status tick, then either attack or move.
 function enemyTurnStep() {
     for (const enemy of [...enemies]) {
         if (!enemy.alive) continue;
@@ -1058,6 +1196,7 @@ function enemyTurnStep() {
             continue;
         }
         if (enemyCanAttack(enemy)) {
+            // Brutes spend a turn winding up, then swing hard next turn.
             if (enemy.type.ai === 'brute') {
                 if (!enemy.windup) {
                     enemy.windup = true;
@@ -1068,6 +1207,7 @@ function enemyTurnStep() {
                 }
             } else {
                 enemyAttack(enemy);
+                // Skirmishers back off right after they hit you.
                 if (enemy.type.ai === 'skirmisher') enemy.retreatNext = true;
             }
             if (player.hp <= 0) { killPlayer(); return; }
@@ -1075,6 +1215,7 @@ function enemyTurnStep() {
         }
         const move = chooseEnemyMove(enemy);
         if (!move) continue;
+        // Try the ideal step, then fall back to axis-aligned moves, then any cardinal.
         const tryMoves = shuffle([
             move,
             { x: move.x, y: 0 },
@@ -1093,9 +1234,13 @@ function enemyTurnStep() {
         }
     }
     completeGauntlets();
+    // DOT on the player happens after everyone moves.
     processStatuses(player);
     if (player.hp <= 0) killPlayer();
 }
+
+// Boss AI: phase transitions at 66% and 33% HP; telegraphed big hits every
+// third turn when it can reach you, otherwise it just chases.
 function bossTurn(enemy) {
     enemy.turn++;
     if (enemy.hp <= enemy.maxHp * 0.66 && !enemy.phase2) {
@@ -1112,6 +1257,7 @@ function bossTurn(enemy) {
     }
     if (enemyCanAttack(enemy)) {
         if (enemy.windup) {
+            // Second turn of a windup = the actual swing.
             enemy.windup = false;
             enemyAttack(enemy, enemy.phase3 ? 2 : 1.5);
         } else if (enemy.turn % 3 === 0 && distance(enemy, player) <= 4) {
@@ -1123,6 +1269,7 @@ function bossTurn(enemy) {
         if (player.hp <= 0) killPlayer();
         return;
     }
+    // Same movement fallback pattern the grunts use.
     const move = { x: Math.sign(player.x - enemy.x), y: Math.sign(player.y - enemy.y) };
     const tryMoves = shuffle([move, { x: move.x, y: 0 }, { x: 0, y: move.y }, ...DIRS4]);
     for (const m of tryMoves) {
@@ -1134,6 +1281,7 @@ function bossTurn(enemy) {
     }
 }
 
+// --- Items -------------------------------------------------------------------
 function pickupItem(item) {
     items = items.filter(it => it !== item);
     switch (item.type) {
@@ -1167,6 +1315,7 @@ function pickupItem(item) {
             break;
         case 'weapon': {
             const w = weaponById(item.weaponId);
+            // Auto-equip only if it's an upgrade; otherwise convert to gold.
             if (w.tier > player.weapon.tier) {
                 const old = player.weapon;
                 player.weapon = w;
@@ -1182,6 +1331,8 @@ function pickupItem(item) {
     }
 }
 
+// --- Player turn flow --------------------------------------------------------
+// Standard post-action: enemies act, re-render, check gauntlets.
 function afterPlayerAction() {
     if (gameOver || choicePending) return;
     enemyTurnStep();
@@ -1190,6 +1341,8 @@ function afterPlayerAction() {
     if (completeGauntlets()) return;
 }
 
+// Main movement/attack handler. Door and secret interactions resolve here,
+// since the player only learns about them by bumping into tiles.
 function tryMove(dx, dy) {
     if (!gameActive || gameOver || turnBusy || choicePending) return;
     const nx = player.x + dx, ny = player.y + dy;
@@ -1203,6 +1356,7 @@ function tryMove(dx, dy) {
     const tile = tileAt(nx, ny);
     if (tile === TILE.WALL) { playBumpSound(); return; }
     if (tile === TILE.SECRET_DOOR) {
+        // Walking into a secret door reveals it and steps through.
         grid[ny][nx] = TILE.FLOOR;
         playSecretSound();
         log('A hidden passage creaks open!', 'log-entry-good');
@@ -1236,6 +1390,7 @@ function tryMove(dx, dy) {
     const room = roomAt(nx, ny);
     const openedChoice = triggerRoomEntry(room);
     if (tile === TILE.STAIRS) {
+        // Boss floor: can't leave until the Warden is dead.
         if (floor >= MAX_FLOOR && boss?.alive) {
             setStatus('The Crypt Warden still lives.');
             afterPlayerAction();
@@ -1253,11 +1408,13 @@ function waitTurn() {
     log('You wait a moment...');
     afterPlayerAction();
 }
+
 function usePotion() {
     if (!gameActive || gameOver || turnBusy || choicePending) return;
     if (player.potions <= 0) { setStatus('No potions left!'); return; }
     if (player.hp >= player.maxHp) { setStatus('Already at full health.'); return; }
     player.potions--;
+    // Healing is scaled by floor theme (Blighted Grotto weakens it).
     const heal = randInt(6, 10) + (hasBoon('alchemist') ? 3 : 0);
     const finalHeal = Math.round(heal * floorTheme.potionMult);
     player.hp = Math.min(player.maxHp, player.hp + finalHeal);
@@ -1266,6 +1423,7 @@ function usePotion() {
     afterPlayerAction();
 }
 
+// --- Game lifecycle ----------------------------------------------------------
 function newPlayer() {
     const diff = DIFFICULTY_PRESETS[difficultyKey];
     return {
@@ -1274,6 +1432,7 @@ function newPlayer() {
         firstHitTaken: true, momentumReady: false, _hitFlash: false,
     };
 }
+
 function startNewGame() {
     overlay.classList.remove('show');
     choiceOverlay.classList.remove('show');
@@ -1294,9 +1453,11 @@ function startNewGame() {
     currentRoomId = 0;
     render();
 }
+
 function nextFloor() {
     if (floor >= MAX_FLOOR) { winGame(); return; }
     floor++;
+    // Keys are consumed per floor.
     player.hasRedKey = false;
     player.goldKeys = 0;
     player.firstHitTaken = true;
@@ -1310,6 +1471,7 @@ function nextFloor() {
     setStatus(`Floor ${floor} - explore carefully.`);
     render();
 }
+
 function killPlayer() {
     if (gameOver) return;
     gameOver = true;
@@ -1323,6 +1485,7 @@ function killPlayer() {
     setStatus('Game over.');
     render();
 }
+
 function winGame() {
     gameOver = true;
     gameActive = false;
@@ -1335,10 +1498,12 @@ function winGame() {
     render();
 }
 
+// --- Input -------------------------------------------------------------------
 function handleKeyDown(event) {
     if (!gameActive || gameOver) return;
     if (choicePending) return;
     const key = event.key.toLowerCase();
+    // Stop the page from scrolling when arrows/space are pressed.
     if (['arrowup', 'arrowdown', 'arrowleft', 'arrowright', ' '].includes(key)) event.preventDefault();
     switch (key) {
         case 'w': case 'arrowup': tryMove(0, -1); break;
@@ -1361,12 +1526,18 @@ document.querySelectorAll('.dpad-btn').forEach(btn => {
         else if (dir === 'right') tryMove(1, 0);
     });
 });
+
 waitBtn.addEventListener('click', waitTurn);
 potionBtn.addEventListener('click', usePotion);
 resetBtn.addEventListener('click', startNewGame);
 playAgainBtn.addEventListener('click', startNewGame);
+
+// Changing settings mid-run starts a fresh dungeon - intentional.
 sizeSelect.addEventListener('change', () => { sizeKey = sizeSelect.value; startNewGame(); });
 difficultySelect.addEventListener('change', () => { difficultyKey = difficultySelect.value; startNewGame(); });
+
+// Recompute cell size + redraw on resize so the board stays fitted.
 window.addEventListener('resize', () => { if (gameActive || gameOver) renderBoard(); });
+
 updateSoundIcon();
 startNewGame();
