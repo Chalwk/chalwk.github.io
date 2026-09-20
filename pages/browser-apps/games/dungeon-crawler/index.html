@@ -1,28 +1,26 @@
 ---
 layout: default
 title: Dungeon Crawler
-description: Explore a procedurally generated dungeon, fight monsters, and find the red key to descend.
+description: Explore a procedurally generated dungeon, fight distinctive enemies, and survive escalating floors.
 ---
 
 <!-- Copyright (c) 2024-2026 Jericho Crosby (Chalwk). All Rights Reserved. -->
 
 <link rel="stylesheet" href="style.css">
-
 <main>
     <div class="container">
         <section class="panel">
             <div class="panel-head">
                 <div class="panel-head-text">
                     <h1>Dungeon Crawler</h1>
-                    <p class="muted small">Explore. Fight. Loot. Find the red key to descend, and hunt for secret
-                        rooms along the way.</p>
+                    <p class="muted small">Explore. Fight. Build. Find the red key to descend, hunt secrets, and survive
+                        the escalating dungeon.</p>
                 </div>
                 <button class="icon-btn" id="sound-toggle" type="button" aria-label="Toggle sound"
                     title="Toggle sound (M)">
                     <span id="sound-icon">🔊</span>
                 </button>
             </div>
-
             <div id="game-settings">
                 <label for="dungeon-size">Dungeon Size
                     <select id="dungeon-size">
@@ -39,7 +37,6 @@ description: Explore a procedurally generated dungeon, fight monsters, and find 
                     </select>
                 </label>
             </div>
-
             <div id="game-container">
                 <div class="hud">
                     <div class="hud-row">
@@ -52,6 +49,7 @@ description: Explore a procedurally generated dungeon, fight monsters, and find 
                         </div>
                         <div class="hud-block status-block">
                             <span id="floor-label" class="floor-label">Floor 1</span>
+                            <span id="floor-theme" class="floor-theme">The Catacombs</span>
                             <span id="status" role="status" aria-live="polite">Find your way down...</span>
                         </div>
                         <div class="hud-block gold-block">
@@ -64,6 +62,14 @@ description: Explore a procedurally generated dungeon, fight monsters, and find 
                             <span id="weapon-icon">🤛</span>
                             <span id="weapon-name">Fists</span>
                         </div>
+                        <div class="hud-chip boon-chip" id="boon-chip" title="Current run build">
+                            <span>✨</span>
+                            <span id="boon-name">No Boons</span>
+                        </div>
+                        <div class="hud-chip room-chip" id="room-chip" title="Current room">
+                            <span>▦</span>
+                            <span id="room-name">Corridor</span>
+                        </div>
                         <div class="hud-chip key-chip" id="redkey-chip" title="Red key">
                             <span class="key-dot key-dot-red"></span>
                             <span id="redkey-status">No Red Key</span>
@@ -73,23 +79,29 @@ description: Explore a procedurally generated dungeon, fight monsters, and find 
                             <span id="goldkey-status">0 Gold Keys</span>
                         </div>
                         <div class="hud-chip" id="potion-chip" title="Potions carried">
-                            <span>🧪</span>
-                            <span id="potion-count">1</span>
+                            <span>🧪</span><span id="potion-count">1</span>
                         </div>
                     </div>
-
                     <div id="log" class="log-panel" aria-live="polite"></div>
                 </div>
 
                 <div class="board-wrap">
                     <div class="dungeon-board" id="dungeon-board"></div>
-
                     <div class="game-over-overlay" id="game-over-overlay">
                         <div class="game-over-content">
                             <div id="game-over-message" class="game-over-message"></div>
                             <div id="game-over-detail" class="game-over-detail"></div>
                             <button class="btn btn-secondary" id="play-again" type="button">New Dungeon</button>
                         </div>
+                    </div>
+                </div>
+
+                <div class="choice-overlay" id="choice-overlay" aria-hidden="true">
+                    <div class="choice-panel" role="dialog" aria-modal="true" aria-labelledby="choice-title">
+                        <div class="choice-kicker" id="choice-kicker">DISCOVERY</div>
+                        <h2 id="choice-title">Choose</h2>
+                        <p id="choice-description"></p>
+                        <div id="choice-options" class="choice-options"></div>
                     </div>
                 </div>
 
@@ -104,7 +116,6 @@ description: Explore a procedurally generated dungeon, fight monsters, and find 
                         <i class="fas fa-redo"></i> New Dungeon
                     </button>
                 </div>
-
                 <div class="dpad" id="touch-controls">
                     <button class="dpad-btn" data-dir="up" aria-label="Move / attack up">&#9650;</button>
                     <div class="dpad-row">
@@ -113,7 +124,6 @@ description: Explore a procedurally generated dungeon, fight monsters, and find 
                         <button class="dpad-btn" data-dir="right" aria-label="Move / attack right">&#9654;</button>
                     </div>
                 </div>
-
                 <p class="key-hint">WASD / Arrows move &amp; attack &middot; Space wait &middot; P potion &middot; M
                     mute</p>
             </div>
