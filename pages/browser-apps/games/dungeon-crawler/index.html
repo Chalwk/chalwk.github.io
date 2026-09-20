@@ -1,0 +1,124 @@
+---
+layout: default
+title: Dungeon Crawler
+description: Explore a procedurally generated dungeon, fight monsters, and find the red key to descend.
+---
+
+<!-- Copyright (c) 2024-2026 Jericho Crosby (Chalwk). All Rights Reserved. -->
+
+<link rel="stylesheet" href="style.css">
+
+<main>
+    <div class="container">
+        <section class="panel">
+            <div class="panel-head">
+                <div class="panel-head-text">
+                    <h1>Dungeon Crawler</h1>
+                    <p class="muted small">Explore. Fight. Loot. Find the red key to descend, and hunt for secret
+                        rooms along the way.</p>
+                </div>
+                <button class="icon-btn" id="sound-toggle" type="button" aria-label="Toggle sound"
+                    title="Toggle sound (M)">
+                    <span id="sound-icon">🔊</span>
+                </button>
+            </div>
+
+            <div id="game-settings">
+                <label for="dungeon-size">Dungeon Size
+                    <select id="dungeon-size">
+                        <option value="small">Small</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="large">Large</option>
+                    </select>
+                </label>
+                <label for="difficulty">Difficulty
+                    <select id="difficulty">
+                        <option value="easy">Easy</option>
+                        <option value="normal" selected>Normal</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </label>
+            </div>
+
+            <div id="game-container">
+                <div class="hud">
+                    <div class="hud-row">
+                        <div class="hud-block hp-block">
+                            <strong>HP</strong>
+                            <div class="hp-bar">
+                                <div id="hp-fill" class="hp-fill"></div>
+                            </div>
+                            <span id="hp-text" class="hp-text">20 / 20</span>
+                        </div>
+                        <div class="hud-block status-block">
+                            <span id="floor-label" class="floor-label">Floor 1</span>
+                            <span id="status" role="status" aria-live="polite">Find your way down...</span>
+                        </div>
+                        <div class="hud-block gold-block">
+                            <strong>Gold</strong>
+                            <span id="gold-count" class="gold-count">💰 0</span>
+                        </div>
+                    </div>
+                    <div class="hud-row hud-subrow">
+                        <div class="hud-chip" id="weapon-chip" title="Equipped weapon">
+                            <span id="weapon-icon">🤛</span>
+                            <span id="weapon-name">Fists</span>
+                        </div>
+                        <div class="hud-chip key-chip" id="redkey-chip" title="Red key">
+                            <span class="key-dot key-dot-red"></span>
+                            <span id="redkey-status">No Red Key</span>
+                        </div>
+                        <div class="hud-chip key-chip" id="goldkey-chip" title="Gold keys">
+                            <span class="key-dot key-dot-gold"></span>
+                            <span id="goldkey-status">0 Gold Keys</span>
+                        </div>
+                        <div class="hud-chip" id="potion-chip" title="Potions carried">
+                            <span>🧪</span>
+                            <span id="potion-count">1</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="board-wrap">
+                    <div class="dungeon-board" id="dungeon-board"></div>
+
+                    <div class="game-over-overlay" id="game-over-overlay">
+                        <div class="game-over-content">
+                            <div id="game-over-message" class="game-over-message"></div>
+                            <div id="game-over-detail" class="game-over-detail"></div>
+                            <button class="btn btn-secondary" id="play-again" type="button">New Dungeon</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="log" class="log-panel" aria-live="polite"></div>
+
+                <div class="action-row">
+                    <button class="btn btn-secondary" id="wait-btn" type="button" title="Wait a turn (Space)">
+                        <i class="fas fa-hourglass-half"></i> Wait
+                    </button>
+                    <button class="btn btn-secondary" id="potion-btn" type="button" title="Drink a potion (P)">
+                        <i class="fas fa-flask"></i> Potion
+                    </button>
+                    <button class="btn btn-secondary" id="reset-btn" type="button" title="Start a new dungeon">
+                        <i class="fas fa-redo"></i> New Dungeon
+                    </button>
+                </div>
+
+                <div class="dpad" id="touch-controls">
+                    <button class="dpad-btn" data-dir="up" aria-label="Move / attack up">&#9650;</button>
+                    <div class="dpad-row">
+                        <button class="dpad-btn" data-dir="left" aria-label="Move / attack left">&#9664;</button>
+                        <button class="dpad-btn" data-dir="down" aria-label="Move / attack down">&#9660;</button>
+                        <button class="dpad-btn" data-dir="right" aria-label="Move / attack right">&#9654;</button>
+                    </div>
+                </div>
+
+                <p class="key-hint">WASD / Arrows move &amp; attack &middot; Space wait &middot; P potion &middot; M
+                    mute</p>
+            </div>
+        </section>
+    </div>
+</main>
+
+<script src="script.js"></script>
