@@ -730,6 +730,152 @@
     letter-spacing: 0.03em;
 }
 
+#game-panel {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    padding: 0.85rem 1rem;
+    margin-top: 1rem;
+    overflow: hidden;
+}
+
+/* Title + description: smaller and tighter so we save vertical space. */
+#game-panel .panel-head {
+    flex: 0 0 auto;
+    margin-bottom: 0.5rem;
+    align-items: center;
+}
+
+#game-panel .panel-head h1 {
+    font-size: 1.15rem;
+    margin-bottom: 0.15rem;
+    line-height: 1.2;
+}
+
+#game-panel .panel-head .muted.small {
+    font-size: 0.72rem;
+    margin: 0;
+    line-height: 1.3;
+}
+
+#game-panel .icon-btn {
+    width: 1.9rem;
+    height: 1.9rem;
+    font-size: 0.85rem;
+}
+
+/* Settings row shrinks down to a slim single line. */
+#game-panel #game-settings {
+    flex: 0 0 auto;
+    margin-bottom: 0.55rem;
+    gap: 1rem;
+    font-size: 0.8rem;
+}
+
+#game-panel #game-settings label {
+    font-size: 0.8rem;
+    gap: 0.35rem;
+}
+
+#game-panel #game-settings select {
+    padding: 0.3rem 0.55rem;
+    font-size: 0.8rem;
+    min-width: 96px;
+    border-radius: 0.4rem;
+}
+
+/* The game container flexes to fill the rest of the panel. */
+#game-panel #game-container {
+    flex: 1 1 auto;
+    min-height: 0;
+    margin-bottom: 0;
+    padding: 0.5rem 0.6rem;
+    gap: 0.4rem;
+}
+
+/* HUD is a fixed-height block; the board claims everything else. */
+#game-panel .hud {
+    flex: 0 0 auto;
+    gap: 0.35rem;
+}
+
+#game-panel .hud-row {
+    padding: 0.05rem 0.3rem;
+    gap: 0.35rem 0.6rem;
+}
+
+#game-panel .hud-subrow {
+    gap: 0.3rem 0.5rem;
+}
+
+#game-panel .hud-chip {
+    padding: 0.18rem 0.5rem;
+    font-size: 0.68rem;
+    gap: 0.28rem;
+}
+
+#game-panel .hp-bar {
+    width: 120px;
+    height: 7px;
+}
+
+#game-panel .hp-text,
+#game-panel .gold-count {
+    font-size: 0.7rem;
+}
+
+#game-panel .floor-label {
+    font-size: 0.95rem;
+}
+
+#game-panel .floor-theme {
+    font-size: 0.68rem;
+    max-width: 22rem;
+}
+
+#game-panel #status {
+    font-size: 0.78rem;
+}
+
+#game-panel .log-panel {
+    max-height: 72px;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.68rem;
+    line-height: 1.35;
+}
+
+/* The board area is the flex-grow region. It centers the board both
+   horizontally and vertically. `margin: auto` on the board (below) avoids
+   the flex-centering / overflow clip issue. */
+#game-panel .board-wrap {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    padding: 0.1rem;
+    overflow: auto;
+}
+
+#game-panel .dungeon-board {
+    margin: auto;
+}
+
+/* Buttons and hints stay pinned to the bottom of the panel. */
+#game-panel .action-row,
+#game-panel .dpad,
+#game-panel .key-hint {
+    flex: 0 0 auto;
+}
+
+#game-panel .action-row .btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+}
+
+#game-panel .key-hint {
+    font-size: 0.65rem;
+    margin-top: -0.1rem;
+}
+
 /* --- Responsive tweaks ----------------------------------------------------- */
 @media (max-width: 768px) {
     #game-settings {

@@ -39,6 +39,7 @@ const choiceKickerEl = document.getElementById('choice-kicker');
 const choiceTitleEl = document.getElementById('choice-title');
 const choiceDescriptionEl = document.getElementById('choice-description');
 const choiceOptionsEl = document.getElementById('choice-options');
+const gamePanelEl = document.getElementById('game-panel');
 
 // Every tile the board can hold. Values 1..6 are walkable in some form
 // (secret doors are walkable only after you bump them).
@@ -718,12 +719,35 @@ function recomputeVisibility() {
 }
 
 // --- Rendering ---------------------------------------------------------------
-// Cell size shrinks for larger grids so the board still fits on screen.
+
+// Fit the game panel to the remaining viewport height. This is what stops the
+// page from scrolling on a laptop - the panel becomes exactly as tall as the
+// space between its top edge and the bottom of the viewport (with a small gap),
+// and everything inside flexes to share that height.
+function fitGamePanel() {
+    if (!gamePanelEl) return;
+    // Document-relative top of the panel (safe even if the page is scrolled).
+    const top = gamePanelEl.getBoundingClientRect().top + window.scrollY;
+    const available = window.innerHeight - top - 12;
+    // Clamp so tiny windows still render something usable, and huge monitors
+    // don't stretch the panel to absurd heights.
+    const height = clamp(available, 520, 980);
+    gamePanelEl.style.height = height + 'px';
+}
+
+// Cell size considers BOTH available width and available height. If the
+// window is short (like a 15.6" laptop), tall dungeons will lose a couple of
+// pixels per cell so the whole board stays on screen - but we never go below
+// 14px so the player marker and enemy icons stay readable.
 function computeCellSize() {
     const wrap = boardEl.parentElement;
-    const available = wrap.clientWidth - 24;
-    const base = Math.floor(available / gridW) - 1;
-    const clamped = Math.max(12, Math.min(28, base));
+    // Reserve a little room for the board's own padding + the 1px gaps.
+    const availableW = Math.max(0, wrap.clientWidth - 20);
+    const availableH = Math.max(0, wrap.clientHeight - 20);
+    const byW = Math.floor(availableW / gridW) - 1;
+    const byH = Math.floor(availableH / gridH) - 1;
+    const base = Math.min(byW, byH);
+    const clamped = Math.max(14, Math.min(28, base));
     boardEl.style.setProperty('--cell-size', clamped + 'px');
 }
 
@@ -1434,6 +1458,9 @@ function newPlayer() {
 }
 
 function startNewGame() {
+    // Size the panel to the viewport FIRST, so computeCellSize() sees the
+    // real available height when it runs inside render().
+    fitGamePanel();
     overlay.classList.remove('show');
     choiceOverlay.classList.remove('show');
     choicePending = false;
@@ -1536,8 +1563,18 @@ playAgainBtn.addEventListener('click', startNewGame);
 sizeSelect.addEventListener('change', () => { sizeKey = sizeSelect.value; startNewGame(); });
 difficultySelect.addEventListener('change', () => { difficultyKey = difficultySelect.value; startNewGame(); });
 
-// Recompute cell size + redraw on resize so the board stays fitted.
-window.addEventListener('resize', () => { if (gameActive || gameOver) renderBoard(); });
+// Re-fit the panel and redraw the board on resize so cells stay correct.
+window.addEventListener('resize', () => {
+    fitGamePanel();
+    if (gameActive || gameOver) renderBoard();
+});
+
+// After full load (fonts, images, layout settled), do one more fit + render
+// so nothing is stale from a mid-layout first paint.
+window.addEventListener('load', () => {
+    fitGamePanel();
+    if (gameActive || gameOver) renderBoard();
+});
 
 updateSoundIcon();
 startNewGame();
