@@ -205,6 +205,7 @@ let gameActive = false;
 let gameOver = false;
 let turnBusy = false;
 let choicePending = false;  // true while a modal is open - blocks input
+let choiceIndex = 0;        // index of the currently highlighted choice card
 let currentRoomId = null;
 let killCount = 0;
 let boss = null;
@@ -358,26 +359,32 @@ function carveRoom(r) {
     }
 }
 
-// Carve an L-shaped corridor between two points. Only the tile where the
-// path actually transitions into roomA/roomB's interior becomes a DOOR -
-// everything else along the path is plain floor.
+// Carve an L-shaped corridor between two points. The path is walked as a
+// single contiguous polyline starting at (x1,y1) and ending at (x2,y2) with
+// exactly one corner. Only tiles where the walk actually crosses a room's
+// wall ring (i.e. the point immediately before or after the tile lies
+// inside that same room) get turned into DOOR tiles - everything else
+// along the path becomes plain floor.
 //
-// NOTE: onRoomBorder() matches *any* cell on a room's wall ring, not just
-// the true entrance. If a corridor leg runs parallel to a wall (rather than
-// crossing straight through it), every wall tile along that stretch used to
-// match onRoomBorder() and get turned into a door - scattering extra doors
-// along walls that have nothing to do with an actual entrance. Checking the
-// immediate previous/next point in the walked path (rather than the room's
-// whole border ring) pins the door to the one real crossing point.
+// The previous implementation built the path by scanning min->max on each
+// axis independently, which produced a broken polyline (a jump in the
+// middle) and - combined with the old "is prev/next inside" test - could
+// stamp doors onto any room whose wall the corridor happened to run past.
+// Walking the path as a proper polyline fixes both: only real crossings
+// become doors, and everything else is floor.
 function carveCorridor(x1, y1, x2, y2, roomA, roomB) {
     const horizFirst = Math.random() < 0.5;
     const points = [];
+    const stepX = x1 <= x2 ? 1 : -1;
+    const stepY = y1 <= y2 ? 1 : -1;
     if (horizFirst) {
-        for (let x = Math.min(x1, x2); x <= Math.max(x1, x2); x++) points.push({ x, y: y1 });
-        for (let y = Math.min(y1, y2); y <= Math.max(y1, y2); y++) points.push({ x: x2, y });
+        // Horizontal leg at y1, then vertical leg at x2.
+        for (let x = x1; x !== x2 + stepX; x += stepX) points.push({ x, y: y1 });
+        for (let y = y1 + stepY; y !== y2 + stepY; y += stepY) points.push({ x: x2, y });
     } else {
-        for (let y = Math.min(y1, y2); y <= Math.max(y1, y2); y++) points.push({ x: x1, y });
-        for (let x = Math.min(x1, x2); x <= Math.max(x1, x2); x++) points.push({ x, y: y2 });
+        // Vertical leg at x1, then horizontal leg at y2.
+        for (let y = y1; y !== y2 + stepY; y += stepY) points.push({ x: x1, y });
+        for (let x = x1 + stepX; x !== x2 + stepX; x += stepX) points.push({ x, y: y2 });
     }
 
     for (let i = 0; i < points.length; i++) {
@@ -444,10 +451,7 @@ function roomBfsDist(adjacency, startIdx) {
     return dist;
 }
 
-// Find every DOOR tile on the room's wall ring - used to place locked doors.
-// A room can have more than one entrance (extra edges from connectRooms add
-// cycles to the room graph), so callers that need the room fully sealed off
-// (the exit room) must lock ALL of them, not just one.
+// Find every DOOR tile on the room's wall ring.
 function findRoomDoorTiles(r) {
     const doors = [];
     for (let x = r.x - 1; x <= r.x + r.w; x++) {
@@ -459,14 +463,9 @@ function findRoomDoorTiles(r) {
     return doors;
 }
 
-// Single-door convenience wrapper - fine for vault rooms, which are always
-// leaves (exactly one connection) by construction. Not safe to use for the
-// exit room; see findRoomDoorTiles.
-function findRoomDoorTile(r) {
-    const doors = findRoomDoorTiles(r);
-    return doors.length ? pick(doors) : null;
-}
-
+// Any walkable border tile that opens inward. Fallback only - used when a
+// room somehow has no DOOR tile on its border (very unlikely with the
+// current carver, but cheap insurance against an unwinnable run).
 function findRoomEntranceTiles(r) {
     const entrances = [];
     for (let x = r.x - 1; x <= r.x + r.w; x++) {
@@ -486,6 +485,46 @@ function findRoomEntranceTiles(r) {
         }
     }
     return entrances;
+}
+
+// Reduce a room down to a single entrance. DOOR tiles are preferred (and
+// any extras get walled off); if none exist I fall back to any walkable
+// border tile without walling anything (I don't want to sever corridors
+// that merely pass through the room's edge). Returns the surviving tile,
+// or null if the room has no entrance at all.
+function sealRoomToSingleDoor(room) {
+    const doorTiles = findRoomDoorTiles(room);
+    if (doorTiles.length === 1) return doorTiles[0];
+    if (doorTiles.length > 1) {
+        const kept = pick(doorTiles);
+        doorTiles.forEach(d => { if (d !== kept) grid[d.y][d.x] = TILE.WALL; });
+        return kept;
+    }
+    const entries = findRoomEntranceTiles(room);
+    return entries.length ? pick(entries) : null;
+}
+
+// Last-resort: open a WALL tile on the room's border that has a walkable
+// neighbour outside. Only fires if the room ended up with no entrance at
+// all, which would otherwise make the run unwinnable.
+function forceExitDoor(room) {
+    for (let x = room.x - 1; x <= room.x + room.w; x++) {
+        for (let y = room.y - 1; y <= room.y + room.h; y++) {
+            if (!onRoomBorder(room, x, y)) continue;
+            if (!inBounds(x, y)) continue;
+            if (grid[y][x] !== TILE.WALL) continue;
+            let ox = x, oy = y;
+            if (x === room.x - 1) ox = x - 1;
+            else if (x === room.x + room.w) ox = x + 1;
+            else if (y === room.y - 1) oy = y - 1;
+            else if (y === room.y + room.h) oy = y + 1;
+            if (!inBounds(ox, oy)) continue;
+            if (!isWalkableTile(grid[oy][ox])) continue;
+            grid[y][x] = TILE.RED_DOOR;
+            return { x, y };
+        }
+    }
+    return null;
 }
 
 // Pick a random walkable, unoccupied tile inside a room. `exclude` avoids
@@ -618,17 +657,34 @@ function buildDungeon() {
         if (score > bestScore) { bestScore = score; exitIdx = i; }
     });
 
-    // Lock the exit behind red doors; stairs go on a free tile inside.
-    // The exit room may have more than one entrance (cycles in the room
-    // graph), so every entrance must become a RED_DOOR - locking only one
-    // would leave the stairs reachable through the others without the key.
+    // Lock the exit behind a SINGLE red door.
+    // The exit room may genuinely have more than one carved entrance (extra
+    // edges in the room graph produce cycles). Locking only one would leave
+    // the stairs reachable through the others without the key, so the
+    // extras get walled off instead - the room then has exactly one door,
+    // surrounded by the wall ring it was always supposed to have.
     const exitRoom = rooms[exitIdx];
-    const exitEntrances = findRoomEntranceTiles(exitRoom);
-    exitEntrances.forEach(t => { grid[t.y][t.x] = TILE.RED_DOOR; });
-    const stairsSpot = freeFloorTile(exitRoom, exitEntrances);
+    const exitDoor = sealRoomToSingleDoor(exitRoom);
+    let exitDoors = [];
+    if (exitDoor) {
+        grid[exitDoor.y][exitDoor.x] = TILE.RED_DOOR;
+        exitDoors = [exitDoor];
+    } else {
+        // Should never happen, but if it does, force-open a wall tile
+        // that touches an existing walkable tile outside the room.
+        const forced = forceExitDoor(exitRoom);
+        if (forced) {
+            exitDoors = [forced];
+            log('A sealed way opens in the stair hall.', 'log-entry-loot');
+        }
+    }
+    const stairsSpot = freeFloorTile(exitRoom, exitDoors);
     grid[stairsSpot.y][stairsSpot.x] = TILE.STAIRS;
 
     // Gold vaults live in dead-end rooms (leaves) - same idea as picking the exit.
+    // Each vault is sealed to a single gold door for the same reason the
+    // exit room is sealed: a vault with multiple entrances could be entered
+    // without spending a gold key.
     const vaultCount = gridW > 30 ? 2 : 1;
     const vaultCandidates = rooms.map((r, i) => i)
         .filter(i => i !== startIdx && i !== exitIdx && adjacency[i].size === 1);
@@ -636,7 +692,8 @@ function buildDungeon() {
     const vaultIdxs = vaultCandidates.slice(0, vaultCount);
     const vaultRooms = [];
     vaultIdxs.forEach(idx => {
-        const r = rooms[idx], doorTile = findRoomDoorTile(r);
+        const r = rooms[idx];
+        const doorTile = sealRoomToSingleDoor(r);
         if (doorTile) {
             grid[doorTile.y][doorTile.x] = TILE.GOLD_DOOR;
             vaultRooms.push(r);
@@ -854,10 +911,25 @@ function renderBoard() {
             switch (tile) {
                 case TILE.WALL: cell.classList.add('wall'); break;
                 case TILE.FLOOR: cell.classList.add('floor'); break;
-                case TILE.DOOR: cell.classList.add('door'); cell.textContent = '🚪'; break;
-                case TILE.RED_DOOR: cell.classList.add('door-red'); cell.textContent = '🔒'; break;
-                case TILE.GOLD_DOOR: cell.classList.add('door-gold'); cell.textContent = '🔒'; break;
-                case TILE.STAIRS: cell.classList.add('floor', 'stairs'); cell.textContent = '⬇'; break;
+                // Map features (doors, stairs) stay visible on remembered
+                // tiles so the player can navigate back to them. Only
+                // *entities* (enemies, items) are hidden when not in view.
+                case TILE.DOOR:
+                    cell.classList.add('door');
+                    cell.textContent = '🚪';
+                    break;
+                case TILE.RED_DOOR:
+                    cell.classList.add('door-red');
+                    cell.textContent = '🔒';
+                    break;
+                case TILE.GOLD_DOOR:
+                    cell.classList.add('door-gold');
+                    cell.textContent = '🔒';
+                    break;
+                case TILE.STAIRS:
+                    cell.classList.add('floor', 'stairs');
+                    cell.textContent = '⬇';
+                    break;
                 case TILE.SECRET_DOOR:
                     // Secret doors render as walls, but shimmer when close enough.
                     cell.classList.add('wall');
@@ -930,10 +1002,19 @@ function addBoon(boon) {
     log(`You gain the boon ${boon.name}: ${boon.desc}`, 'log-entry-good');
 }
 
+// Helper - paints the currently focused choice card so keyboard navigation
+// has a visible selection state.
+function updateChoiceFocus() {
+    const cards = choiceOptionsEl.querySelectorAll('.choice-card');
+    cards.forEach((c, i) => c.classList.toggle('choice-focused', i === choiceIndex));
+    cards[choiceIndex]?.focus();
+}
+
 // Generic modal for boons/weapons/secret rewards. The overlay blocks input
-// until the player clicks a card.
+// until the player clicks a card (or presses Space on the focused card).
 function openChoice({ kicker = 'DISCOVERY', title, description, options }) {
     choicePending = true;
+    choiceIndex = 0;
     choiceKickerEl.textContent = kicker;
     choiceTitleEl.textContent = title;
     choiceDescriptionEl.textContent = description;
@@ -960,6 +1041,7 @@ function openChoice({ kicker = 'DISCOVERY', title, description, options }) {
     });
     choiceOverlay.classList.add('show');
     choiceOverlay.setAttribute('aria-hidden', 'false');
+    updateChoiceFocus();
     render();
 }
 
@@ -1551,6 +1633,7 @@ function startNewGame() {
     overlay.classList.remove('show');
     choiceOverlay.classList.remove('show');
     choicePending = false;
+    choiceIndex = 0;
     clearLog();
     floor = 1;
     killCount = 0;
@@ -1614,11 +1697,34 @@ function winGame() {
 
 // --- Input -------------------------------------------------------------------
 function handleKeyDown(event) {
-    if (!gameActive || gameOver) return;
-    if (choicePending) return;
     const key = event.key.toLowerCase();
     // Stop the page from scrolling when arrows/space are pressed.
     if (['arrowup', 'arrowdown', 'arrowleft', 'arrowright', ' '].includes(key)) event.preventDefault();
+
+    // 1. Game over: SPACE restarts the run.
+    if (gameOver) {
+        if (key === ' ') startNewGame();
+        return;
+    }
+
+    // 2. Choice modal: LEFT/RIGHT (or A/D) move the highlight, SPACE / ENTER confirm.
+    if (choicePending) {
+        const cards = choiceOptionsEl.querySelectorAll('.choice-card');
+        if (!cards.length) return;
+        if (key === 'arrowleft' || key === 'a') {
+            choiceIndex = (choiceIndex - 1 + cards.length) % cards.length;
+            updateChoiceFocus();
+        } else if (key === 'arrowright' || key === 'd') {
+            choiceIndex = (choiceIndex + 1) % cards.length;
+            updateChoiceFocus();
+        } else if (key === ' ' || key === 'enter') {
+            cards[choiceIndex]?.click();
+        }
+        return;
+    }
+
+    if (!gameActive) return;
+
     switch (key) {
         case 'w': case 'arrowup': tryMove(0, -1); break;
         case 's': case 'arrowdown': tryMove(0, 1); break;
@@ -1656,8 +1762,6 @@ window.addEventListener('resize', () => {
     if (gameActive || gameOver) renderBoard();
 });
 
-// After full load (fonts, images, layout settled), do one more fit + render
-// so nothing is stale from a mid-layout first paint.
 window.addEventListener('load', () => {
     fitGamePanel();
     if (gameActive || gameOver) renderBoard();
