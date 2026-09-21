@@ -661,7 +661,7 @@ function buildDungeon() {
         for (let n = 0; n < enemyCount; n++) {
             const pool = ENEMY_TYPES.filter(e => e.minFloor <= floor);
             const spawned = spawnEnemy(r, pick(pool.length ? pool : [ENEMY_TYPES[0]]), false);
-            // Track gauntlet enemies so we can detect when the room is cleared.
+            // Track gauntlet enemies so I can detect when the room is cleared.
             if (r.type === 'gauntlet') {
                 if (!r.enemyIds) r.enemyIds = [];
                 r.enemyIds.push(spawned);
@@ -766,7 +766,7 @@ function fitGamePanel() {
 
 // Cell size considers BOTH available width and available height. If the
 // window is short (like a 15.6" laptop), tall dungeons will lose a couple of
-// pixels per cell so the whole board stays on screen - but we never go below
+// pixels per cell so the whole board stays on screen - but I never go below
 // 14px so the player marker and enemy icons stay readable.
 function computeCellSize() {
     const wrap = boardEl.parentElement;
