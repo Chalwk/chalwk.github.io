@@ -22,7 +22,7 @@ The game is optimized for use on larger devices such as a computer or tablet. Sm
 - Six enemy types, each with its own AI: coward, skirmisher, sentinel, brute, stalker, ambusher
 - Five tier weapon ladder, each weapon with a unique on-hit effect. Every pickup is your choice: equip it or sell it for gold
 - Twelve run boons that change how the run plays
-- Locked progression: the red key unlocks every entrance to the stairs, gold keys open vaults
+- Locked progression: the red key unlocks the exit door, gold keys open vaults
 - Secret rooms hidden behind wall tiles that shimmer when you get close
 - Six floor themes that modify vision, damage, gold, and enemy aggression
 - Ten floors, ending in a three phase boss fight
@@ -62,13 +62,13 @@ Data driven content. Tiles, weapons, enemies, themes, boons, and room types are 
 
 One action, one turn. Every player action follows the same sequence: resolve, then enemies act, then render. Choice modals pause that sequence and resume it when closed.
 
-Generation in stages. Rooms are placed first, corridors carved second, and room roles assigned last using a graph distance pass. The exit goes in the furthest or leaf room, which guarantees a real journey to reach it.
+Generation in stages. Rooms are placed first, corridors carved second, and room roles assigned last using a graph distance pass. Non-start rooms are ranked once: dead ends first, then by graph distance from the entrance, descending. The exit takes the top slot and the vaults take the next ones. Ranking before assigning rather than filtering after the fact guarantees both slots always get filled, even when the random extra corridor edges leave the graph with no dead ends.
 
 Doors mark real crossings only. A corridor becomes a door exactly where it crosses into a room's interior, never anywhere else along that room's wall - so every door on the map means something.
 
 Graphs over coordinates. Room connections are stored as a graph, so distance and dead ends come from a breadth first search instead of geometric guessing.
 
-Every route in is locked. The exit room can end up with more than one corridor leading to it, so every entrance gets sealed behind a red door, not just one of them. Progress always waits on the key, never on a graph coincidence.
+Every route in is locked. The exit room can end up with more than one corridor leading to it, so every extra entrance gets walled off and the single surviving one becomes the red door. Progress always waits on the key, never on a graph coincidence.
 
 Two layers of fog. Discovered tracks memory, visible tracks current sight. Rendering reads both, so remembered tiles dim rather than vanish.
 
@@ -83,5 +83,3 @@ Player choice over auto-resolution. Weapon pickups open a choice modal instead o
 Full redraw each frame. The board is rebuilt from state on every render. At this grid size that is cheap, and it removes a whole class of stale UI bugs.
 
 No assets. Sound is oscillators, visuals are CSS and text glyphs. The whole game is three files.
-
----

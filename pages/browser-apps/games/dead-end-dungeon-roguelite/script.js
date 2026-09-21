@@ -647,15 +647,26 @@ function buildDungeon() {
     const startIdx = 0;
     const startRoom = rooms[startIdx];
 
-    // Pick the exit room: farthest BFS distance + bonus for dead-ends (leaf rooms).
+    // Rank every non-start room: leaves first (dead-ends), then by BFS
+    // distance from the start, descending. The exit takes slot #0; vaults
+    // take the next slots. This replaces the old "pick the exit by max
+    // score, THEN filter for leaves" flow, which could - and in practice
+    // almost always did - leave the vault filter with zero candidates:
+    // the exit's +100 leaf bonus scooped up the only leaf the chain graph
+    // produced. Ranking once and slicing guarantees we always fill both
+    // slots even when the random extra corridor edges ate every leaf.
     const dist = roomBfsDist(adjacency, startIdx);
-    let exitIdx = startIdx, bestScore = -1;
-    rooms.forEach((r, i) => {
-        if (i === startIdx) return;
-        const leafBonus = adjacency[i].size === 1 ? 100 : 0;
-        const score = (dist[i] === -1 ? 0 : dist[i]) + leafBonus;
-        if (score > bestScore) { bestScore = score; exitIdx = i; }
-    });
+    const ranked = rooms.map((r, i) => i)
+        .filter(i => i !== startIdx)
+        .sort((a, b) => {
+            const leafA = adjacency[a].size === 1 ? 1 : 0;
+            const leafB = adjacency[b].size === 1 ? 1 : 0;
+            if (leafA !== leafB) return leafB - leafA;
+            const distA = dist[a] === -1 ? 0 : dist[a];
+            const distB = dist[b] === -1 ? 0 : dist[b];
+            return distB - distA;
+        });
+    const exitIdx = ranked[0];
 
     // Lock the exit behind a SINGLE red door.
     // The exit room may genuinely have more than one carved entrance (extra
@@ -681,26 +692,33 @@ function buildDungeon() {
     const stairsSpot = freeFloorTile(exitRoom, exitDoors);
     grid[stairsSpot.y][stairsSpot.x] = TILE.STAIRS;
 
-    // Gold vaults live in dead-end rooms (leaves) - same idea as picking the exit.
-    // Each vault is sealed to a single gold door for the same reason the
-    // exit room is sealed: a vault with multiple entrances could be entered
-    // without spending a gold key.
+    // Gold vaults take the next-best rooms off the ranked list. sealRoomToSingleDoor
+    // still walls off any extra carved entrances so a vault can only be entered
+    // through its gold door - same reasoning as the exit room.
     const vaultCount = gridW > 30 ? 2 : 1;
-    const vaultCandidates = rooms.map((r, i) => i)
-        .filter(i => i !== startIdx && i !== exitIdx && adjacency[i].size === 1);
-    shuffle(vaultCandidates);
-    const vaultIdxs = vaultCandidates.slice(0, vaultCount);
+    const vaultIdxs = ranked.slice(1, 1 + vaultCount);
     const vaultRooms = [];
+    const sealedVaultIdxs = [];
     vaultIdxs.forEach(idx => {
         const r = rooms[idx];
         const doorTile = sealRoomToSingleDoor(r);
         if (doorTile) {
             grid[doorTile.y][doorTile.x] = TILE.GOLD_DOOR;
             vaultRooms.push(r);
+            sealedVaultIdxs.push(idx);
+            console.log(`[Dungeon] Floor ${floor}: vault room spawned at room #${idx} ` +
+                `(x=${r.x}, y=${r.y}, w=${r.w}, h=${r.h}); gold door at (${doorTile.x}, ${doorTile.y}).`);
+        } else {
+            console.log(`[Dungeon] Floor ${floor}: vault candidate room #${idx} had no entrance - skipped.`);
         }
     });
+    console.log(`[Dungeon] Floor ${floor}: ${vaultRooms.length} vault room(s) spawned ` +
+        `(ranked=${ranked.length}, requested=${vaultCount}).`);
 
-    assignRoomTypes(adjacency, startIdx, exitIdx, vaultIdxs);
+    // Pass the SEALED list, not the raw picks: a vault whose door couldn't
+    // be carved would otherwise be tagged 'vault' but have no gold door on
+    // it, and get populated as a normal room - reachable without a key.
+    assignRoomTypes(adjacency, startIdx, exitIdx, sealedVaultIdxs);
 
     // Try to attach a secret room to any non-start/non-exit host until one sticks.
     const secretHostPool = rooms.filter((r, i) => i !== startIdx && i !== exitIdx && !vaultRooms.includes(r));
@@ -720,9 +738,11 @@ function buildDungeon() {
     const nextKeyRoom = () => keyPool[poolPtr++ % Math.max(1, keyPool.length)] || startRoom;
     const redKeySpot = freeFloorTile(nextKeyRoom());
     items.push({ x: redKeySpot.x, y: redKeySpot.y, type: 'redkey' });
+    console.log(`[Dungeon] Floor ${floor}: red key spawned at (${redKeySpot.x}, ${redKeySpot.y}).`);
     vaultRooms.forEach(() => {
         const spot = freeFloorTile(nextKeyRoom());
         items.push({ x: spot.x, y: spot.y, type: 'goldkey' });
+        console.log(`[Dungeon] Floor ${floor}: gold key spawned at (${spot.x}, ${spot.y}).`);
     });
 
     // Each vault gets a weapon, a gold pile, and an elite guard.
