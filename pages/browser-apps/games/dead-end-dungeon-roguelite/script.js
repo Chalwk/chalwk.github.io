@@ -69,9 +69,9 @@ const DIRS8 = [
 
 // Grid dimensions and target room counts per difficulty setting.
 const SIZE_PRESETS = {
-    small: { w: 27, h: 19, rooms: 7 },
-    medium: { w: 35, h: 23, rooms: 10 },
-    large: { w: 43, h: 27, rooms: 14 },
+    small: { w: 27, h: 19, rooms: 7, cellMax: 30 },
+    medium: { w: 35, h: 21, rooms: 10, cellMax: 32 },
+    large: { w: 41, h: 23, rooms: 14, cellMax: 34 },
 };
 
 // Difficulty knobs: HP, starting potions, and multipliers on enemies.
@@ -1127,23 +1127,21 @@ function fitGamePanel() {
     const available = window.innerHeight - top - 12;
     // Clamp so tiny windows still render something usable, and huge monitors
     // don't stretch the panel to absurd heights.
-    const height = clamp(available, 520, 980);
+    const height = clamp(available, 520, 1400);
     gamePanelEl.style.height = height + 'px';
 }
 
-// Cell size considers BOTH available width and available height. If the
-// window is short (like a 15.6" laptop), tall dungeons will lose a couple of
-// pixels per cell so the whole board stays on screen - but I never go below
-// 14px so the player marker and enemy icons stay readable.
+// Cell size considers BOTH available width and available height.
 function computeCellSize() {
     const wrap = boardEl.parentElement;
     // Reserve a little room for the board's own padding + the 1px gaps.
-    const availableW = Math.max(0, wrap.clientWidth - 20);
-    const availableH = Math.max(0, wrap.clientHeight - 20);
+    const availableW = Math.max(0, wrap.clientWidth - 12);
+    const availableH = Math.max(0, wrap.clientHeight - 12);
     const byW = Math.floor(availableW / gridW) - 1;
     const byH = Math.floor(availableH / gridH) - 1;
     const base = Math.min(byW, byH);
-    const clamped = Math.max(14, Math.min(28, base));
+    const preset = SIZE_PRESETS[sizeKey] || SIZE_PRESETS.small;
+    const clamped = Math.max(12, Math.min(preset.cellMax, base));
     boardEl.style.setProperty('--cell-size', clamped + 'px');
 }
 
