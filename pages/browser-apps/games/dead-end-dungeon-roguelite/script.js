@@ -884,7 +884,7 @@ function itemIcon(item) {
         case 'secretgold': return '💎';
         case 'potion': return '🧪';
         case 'redkey': return '🔑';
-        case 'goldkey': return '🔑';
+        case 'goldkey': return '🗝️';
         case 'weapon': return weaponById(item.weaponId).icon;
         default: return '';
     }
