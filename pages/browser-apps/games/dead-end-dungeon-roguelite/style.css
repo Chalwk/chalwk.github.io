@@ -346,7 +346,7 @@
 }
 
 .cell.floor {
-    background: #0d1830;
+    background: hsl(var(--floor-hue, 221) 57% 12%);
 }
 
 .cell.door {

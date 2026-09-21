@@ -81,6 +81,8 @@ const DIFFICULTY_PRESETS = {
     hard: { startHp: 16, startPotions: 1, enemyHpMult: 1.3, enemyDmgMult: 1.3, enemyCountMult: 1.3 },
 };
 
+const FLOOR_HUES = [222, 270, 315, 350, 20, 50, 90, 140, 175, 200, 245, 295, 330, 60];
+
 // Weapon ladder. Higher tiers = more raw damage + unique on-hit effects.
 const WEAPONS = [
     {
@@ -963,6 +965,9 @@ function buildDungeon() {
         if (secretRoom) break;
     }
 
+    const allFloorRooms = secretRoom ? [...rooms, secretRoom] : rooms;
+    allFloorRooms.forEach((r, i) => { r.floorHue = FLOOR_HUES[i % FLOOR_HUES.length]; });
+
     const spawn = roomCenter(startRoom);
     player.x = spawn.x; player.y = spawn.y;
 
@@ -1185,7 +1190,12 @@ function renderBoard() {
             if (!seen) { cell.classList.add('fogged'); boardEl.appendChild(cell); continue; }
             switch (tile) {
                 case TILE.WALL: cell.classList.add('wall'); break;
-                case TILE.FLOOR: cell.classList.add('floor'); break;
+                case TILE.FLOOR: {
+                    cell.classList.add('floor');
+                    const floorRoom = roomAt(x, y);
+                    if (floorRoom && floorRoom.floorHue !== undefined) cell.style.setProperty('--floor-hue', floorRoom.floorHue);
+                    break;
+                }
                 // Map features (doors, stairs) stay visible on remembered
                 // tiles so the player can navigate back to them. Only
                 // *entities* (enemies, items) are hidden when not in view.
