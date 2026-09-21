@@ -379,20 +379,29 @@ function carveCorridor(x1, y1, x2, y2, roomA, roomB) {
         for (let y = Math.min(y1, y2); y <= Math.max(y1, y2); y++) points.push({ x: x1, y });
         for (let x = Math.min(x1, x2); x <= Math.max(x1, x2); x++) points.push({ x, y: y2 });
     }
+
     for (let i = 0; i < points.length; i++) {
         const p = points[i];
         if (!inBounds(p.x, p.y)) continue;
-        const insideA = pointInRoom(roomA, p.x, p.y);
-        const insideB = pointInRoom(roomB, p.x, p.y);
-        if (insideA || insideB) { grid[p.y][p.x] = TILE.FLOOR; continue; }
+
+        let insideAnyRoom = false;
+        for (const r of rooms) {
+            if (pointInRoom(r, p.x, p.y)) { insideAnyRoom = true; break; }
+        }
+        if (insideAnyRoom) { grid[p.y][p.x] = TILE.FLOOR; continue; }
+
         const prev = points[i - 1];
         const next = points[i + 1];
-        const adjoinsRoom = (r) =>
-            (prev && inBounds(prev.x, prev.y) && pointInRoom(r, prev.x, prev.y)) ||
-            (next && inBounds(next.x, next.y) && pointInRoom(r, next.x, next.y));
-        const entersA = onRoomBorder(roomA, p.x, p.y) && adjoinsRoom(roomA);
-        const entersB = onRoomBorder(roomB, p.x, p.y) && adjoinsRoom(roomB);
-        if ((entersA || entersB) && grid[p.y][p.x] === TILE.WALL) grid[p.y][p.x] = TILE.DOOR;
+
+        let entersRoom = false;
+        for (const r of rooms) {
+            if (!onRoomBorder(r, p.x, p.y)) continue;
+            const prevInside = prev && inBounds(prev.x, prev.y) && pointInRoom(r, prev.x, prev.y);
+            const nextInside = next && inBounds(next.x, next.y) && pointInRoom(r, next.x, next.y);
+            if (prevInside || nextInside) { entersRoom = true; break; }
+        }
+
+        if (entersRoom && grid[p.y][p.x] === TILE.WALL) grid[p.y][p.x] = TILE.DOOR;
         else if (grid[p.y][p.x] !== TILE.DOOR) grid[p.y][p.x] = TILE.FLOOR;
     }
 }
@@ -456,6 +465,27 @@ function findRoomDoorTiles(r) {
 function findRoomDoorTile(r) {
     const doors = findRoomDoorTiles(r);
     return doors.length ? pick(doors) : null;
+}
+
+function findRoomEntranceTiles(r) {
+    const entrances = [];
+    for (let x = r.x - 1; x <= r.x + r.w; x++) {
+        for (let y = r.y - 1; y <= r.y + r.h; y++) {
+            if (!onRoomBorder(r, x, y)) continue;
+            if (!inBounds(x, y)) continue;
+            if (!isWalkableTile(grid[y][x])) continue;
+            const inward = [];
+            if (x === r.x - 1) inward.push({ x: x + 1, y });
+            if (x === r.x + r.w) inward.push({ x: x - 1, y });
+            if (y === r.y - 1) inward.push({ x, y: y + 1 });
+            if (y === r.y + r.h) inward.push({ x, y: y - 1 });
+            const opensIntoRoom = inward.some(p =>
+                inBounds(p.x, p.y) && pointInRoom(r, p.x, p.y) && isWalkableTile(tileAt(p.x, p.y))
+            );
+            if (opensIntoRoom) entrances.push({ x, y });
+        }
+    }
+    return entrances;
 }
 
 // Pick a random walkable, unoccupied tile inside a room. `exclude` avoids
@@ -593,9 +623,9 @@ function buildDungeon() {
     // graph), so every entrance must become a RED_DOOR - locking only one
     // would leave the stairs reachable through the others without the key.
     const exitRoom = rooms[exitIdx];
-    const exitDoorTiles = findRoomDoorTiles(exitRoom);
-    exitDoorTiles.forEach(t => { grid[t.y][t.x] = TILE.RED_DOOR; });
-    const stairsSpot = freeFloorTile(exitRoom, exitDoorTiles);
+    const exitEntrances = findRoomEntranceTiles(exitRoom);
+    exitEntrances.forEach(t => { grid[t.y][t.x] = TILE.RED_DOOR; });
+    const stairsSpot = freeFloorTile(exitRoom, exitEntrances);
     grid[stairsSpot.y][stairsSpot.x] = TILE.STAIRS;
 
     // Gold vaults live in dead-end rooms (leaves) - same idea as picking the exit.
