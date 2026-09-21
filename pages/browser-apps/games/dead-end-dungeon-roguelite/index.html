@@ -7,7 +7,31 @@ description: Explore a procedurally generated dungeon, fight distinctive enemies
 <!-- Copyright (c) 2024-2026 Jericho Crosby (Chalwk). All Rights Reserved. -->
 
 <link rel="stylesheet" href="style.css">
+
 <main>
+    <!-- Temporary WIP notice. Remove this entire block when the game is ready. -->
+    <style>
+        .wip-notice {
+            margin: 0 auto 1rem;
+            padding: 0.75rem 1rem;
+            max-width: 900px;
+            border: 1px solid rgba(255, 0, 0, 0.35);
+            border-radius: 8px;
+            background: rgba(255, 0, 0, 0.08);
+            color: #ff4444;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .wip-notice strong {
+            color: #ff0000;
+        }
+    </style>
+
+    <div class="wip-notice" role="status">
+        <strong>Work in Progress</strong> This game is currently under development. You may encounter bugs, incomplete features, or other unexpected behaviour.
+    </div>
+
     <div class="container">
         <section class="panel" id="game-panel">
             <div class="panel-head">
@@ -17,12 +41,14 @@ description: Explore a procedurally generated dungeon, fight distinctive enemies
                         the escalating dungeon.<span class="key-hint">WASD / Arrows move &amp; attack &middot; Space
                             wait &middot; P potion &middot; M mute</span></p>
                 </div>
+
                 <!-- Sound on/off button (M key). Icon is swapped in JS. -->
                 <button class="icon-btn" id="sound-toggle" type="button" aria-label="Toggle sound"
                     title="Toggle sound (M)">
                     <span id="sound-icon">🔊</span>
                 </button>
             </div>
+
             <!-- These two selects rebuild the dungeon on change -->
             <div id="game-settings">
                 <label for="dungeon-size">Dungeon Size
@@ -32,6 +58,7 @@ description: Explore a procedurally generated dungeon, fight distinctive enemies
                         <option value="large">Large</option>
                     </select>
                 </label>
+
                 <label for="difficulty">Difficulty
                     <select id="difficulty">
                         <option value="easy">Easy</option>
@@ -39,10 +66,12 @@ description: Explore a procedurally generated dungeon, fight distinctive enemies
                         <option value="hard">Hard</option>
                     </select>
                 </label>
+
                 <button class="btn btn-secondary" id="reset-btn" type="button" title="Start a new dungeon">
                     <i class="fas fa-redo"></i> New Dungeon
                 </button>
             </div>
+
             <div id="game-container">
                 <!-- HUD: HP bar, floor info, gold, and status message -->
                 <div class="hud">
@@ -54,42 +83,52 @@ description: Explore a procedurally generated dungeon, fight distinctive enemies
                             </div>
                             <span id="hp-text" class="hp-text">20 / 20</span>
                         </div>
+
                         <div class="hud-block status-block">
                             <span id="floor-label" class="floor-label">Floor 1</span>
                             <span id="floor-theme" class="floor-theme">The Catacombs</span>
                             <span id="status" role="status" aria-live="polite">Find your way down...</span>
                         </div>
+
                         <div class="hud-block gold-block">
                             <strong>Gold</strong>
                             <span id="gold-count" class="gold-count">💰 0</span>
                         </div>
                     </div>
+
                     <!-- Chips row: equipped weapon, run boons, current room, keys, potions -->
                     <div class="hud-row hud-subrow">
                         <div class="hud-chip" id="weapon-chip" title="Equipped weapon">
                             <span id="weapon-icon">🤛</span>
                             <span id="weapon-name">Fists</span>
                         </div>
+
                         <div class="hud-chip boon-chip" id="boon-chip" title="Current run build">
                             <span>✨</span>
                             <span id="boon-name">No Boons</span>
                         </div>
+
                         <div class="hud-chip room-chip" id="room-chip" title="Current room">
                             <span>▦</span>
                             <span id="room-name">Corridor</span>
                         </div>
+
                         <div class="hud-chip key-chip" id="redkey-chip" title="Red key">
                             <span class="key-dot key-dot-red"></span>
                             <span id="redkey-status">No Red Key</span>
                         </div>
+
                         <div class="hud-chip key-chip" id="goldkey-chip" title="Gold keys">
                             <span class="key-dot key-dot-gold"></span>
                             <span id="goldkey-status">0 Gold Keys</span>
                         </div>
+
                         <div class="hud-chip" id="potion-chip" title="Potions carried">
-                            <span>🧪</span><span id="potion-count">1</span>
+                            <span>🧪</span>
+                            <span id="potion-count">1</span>
                         </div>
                     </div>
+
                     <!-- Scrolling event log -->
                     <div id="log" class="log-panel" aria-live="polite"></div>
                 </div>
@@ -97,22 +136,31 @@ description: Explore a procedurally generated dungeon, fight distinctive enemies
                 <!-- The grid is generated dynamically in JS -->
                 <div class="board-wrap">
                     <div class="dungeon-board" id="dungeon-board"></div>
+
                     <!-- Manual action buttons, pinned to the right of the board -->
                     <div class="board-actions">
                         <button class="btn btn-secondary" id="wait-btn" type="button" title="Wait a turn (Space)">
                             <i class="fas fa-hourglass-half"></i> Wait
                         </button>
+
                         <button class="btn btn-secondary" id="potion-btn" type="button" title="Drink a potion (P)">
                             <i class="fas fa-flask"></i> Potion
                         </button>
                     </div>
+
                     <!-- Overlay shown on death or victory -->
                     <div class="game-over-overlay" id="game-over-overlay">
                         <div class="game-over-content">
                             <div id="game-over-message" class="game-over-message"></div>
                             <div id="game-over-detail" class="game-over-detail"></div>
-                            <button class="btn btn-secondary" id="play-again" type="button">New Dungeon</button>
-                            <p class="game-over-hint">Press <strong>SPACE</strong> to start a new dungeon.</p>
+
+                            <button class="btn btn-secondary" id="play-again" type="button">
+                                New Dungeon
+                            </button>
+
+                            <p class="game-over-hint">
+                                Press <strong>SPACE</strong> to start a new dungeon.
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -123,8 +171,11 @@ description: Explore a procedurally generated dungeon, fight distinctive enemies
                         <div class="choice-kicker" id="choice-kicker">DISCOVERY</div>
                         <h2 id="choice-title">Choose</h2>
                         <p id="choice-description"></p>
+
                         <div id="choice-options" class="choice-options"></div>
-                        <p class="choice-hint">Use <strong>← →</strong> / <strong>A D</strong> to select &middot;
+
+                        <p class="choice-hint">
+                            Use <strong>← →</strong> / <strong>A D</strong> to select &middot;
                             <strong>SPACE</strong> to confirm
                         </p>
                     </div>
@@ -132,11 +183,22 @@ description: Explore a procedurally generated dungeon, fight distinctive enemies
 
                 <!-- D-pad only shows on touch devices (see CSS media query) -->
                 <div class="dpad" id="touch-controls">
-                    <button class="dpad-btn" data-dir="up" aria-label="Move / attack up">&#9650;</button>
+                    <button class="dpad-btn" data-dir="up" aria-label="Move / attack up">
+                        &#9650;
+                    </button>
+
                     <div class="dpad-row">
-                        <button class="dpad-btn" data-dir="left" aria-label="Move / attack left">&#9664;</button>
-                        <button class="dpad-btn" data-dir="down" aria-label="Move / attack down">&#9660;</button>
-                        <button class="dpad-btn" data-dir="right" aria-label="Move / attack right">&#9654;</button>
+                        <button class="dpad-btn" data-dir="left" aria-label="Move / attack left">
+                            &#9664;
+                        </button>
+
+                        <button class="dpad-btn" data-dir="down" aria-label="Move / attack down">
+                            &#9660;
+                        </button>
+
+                        <button class="dpad-btn" data-dir="right" aria-label="Move / attack right">
+                            &#9654;
+                        </button>
                     </div>
                 </div>
             </div>
