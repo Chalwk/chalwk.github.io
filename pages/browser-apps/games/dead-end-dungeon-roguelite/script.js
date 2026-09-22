@@ -1125,9 +1125,7 @@ function fitGamePanel() {
     // Document-relative top of the panel (safe even if the page is scrolled).
     const top = gamePanelEl.getBoundingClientRect().top + window.scrollY;
     const available = window.innerHeight - top - 12;
-    // Clamp so tiny windows still render something usable, and huge monitors
-    // don't stretch the panel to absurd heights.
-    const height = clamp(available, 520, 1400);
+    const height = clamp(available, 300, 1400);
     gamePanelEl.style.height = height + 'px';
 }
 
@@ -1141,7 +1139,7 @@ function computeCellSize() {
     const byH = Math.floor(availableH / gridH) - 1;
     const base = Math.min(byW, byH);
     const preset = SIZE_PRESETS[sizeKey] || SIZE_PRESETS.small;
-    const clamped = Math.max(12, Math.min(preset.cellMax, base));
+    const clamped = Math.max(8, Math.min(preset.cellMax, base));
     boardEl.style.setProperty('--cell-size', clamped + 'px');
 }
 

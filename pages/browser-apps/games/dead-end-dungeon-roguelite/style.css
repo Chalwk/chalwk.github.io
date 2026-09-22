@@ -1195,3 +1195,63 @@
         line-height: 1.55;
     }
 }
+
+@media (max-height: 760px) {
+    #game-panel {
+        padding: 0.55rem 0.75rem;
+        margin-top: 0.5rem;
+    }
+
+    #game-panel .panel-head {
+        margin-bottom: 0.3rem;
+    }
+
+    #game-panel .panel-head h1 {
+        font-size: 1rem;
+        margin-bottom: 0.1rem;
+    }
+
+    #game-panel .panel-head .muted.small {
+        font-size: 0.68rem;
+        line-height: 1.2;
+    }
+
+    #game-panel .key-hint {
+        display: none;
+    }
+
+    #game-panel #game-settings {
+        margin-bottom: 0.35rem;
+        gap: 0.5rem 0.85rem;
+    }
+
+    #game-panel .hud {
+        gap: 0.25rem;
+    }
+
+    #game-panel .hud-row {
+        padding: 0;
+    }
+
+    #game-panel .log-panel {
+        height: 44px;
+    }
+}
+
+@media (max-height: 600px) {
+    #game-panel .panel-head h1 {
+        font-size: 0.9rem;
+    }
+
+    #game-panel .panel-head .muted.small {
+        display: none;
+    }
+
+    #game-panel #game-settings {
+        margin-bottom: 0.25rem;
+    }
+
+    #game-panel .log-panel {
+        height: 32px;
+    }
+}

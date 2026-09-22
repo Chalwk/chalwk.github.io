@@ -9,7 +9,7 @@ description: Explore a procedurally generated dungeon, fight distinctive enemies
 <link rel="stylesheet" href="style.css">
 
 <main>
-    <!-- Temporary WIP notice. Remove this entire block when the game is ready. -->
+    <!-- Temporary WIP notice. -->
     <style>
         .wip-notice {
             margin: 0 auto 1rem;
@@ -26,10 +26,19 @@ description: Explore a procedurally generated dungeon, fight distinctive enemies
         .wip-notice strong {
             color: #ff0000;
         }
+
+        @media (max-height: 760px) {
+            .wip-notice {
+                margin-bottom: 0.5rem;
+                padding: 0.4rem 0.75rem;
+                font-size: 0.78rem;
+            }
+        }
     </style>
 
     <div class="wip-notice" role="status">
-        <strong>Work in Progress</strong> This game is currently under development. You may encounter bugs, incomplete features, or other unexpected behaviour.
+        <strong>Work in Progress</strong> This game is currently under development. You may encounter bugs, incomplete
+        features, or other unexpected behaviour.
     </div>
 
     <div class="container">
