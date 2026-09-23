@@ -81,7 +81,21 @@ const DIFFICULTY_PRESETS = {
     hard: { startHp: 16, startPotions: 1, enemyHpMult: 1.3, enemyDmgMult: 1.3, enemyCountMult: 1.3 },
 };
 
-const FLOOR_HUES = [222, 270, 315, 350, 20, 50, 90, 140, 175, 200, 245, 295, 330, 60];
+// Per-room floor tint, keyed by room type.
+const ROOM_HUES = {
+    start: 200,    // 200 - entrance
+    exit: 50,      // 50  - stair hall
+    vault: 45,     // 45  - locked vault
+    treasury: 35,  // 35  - treasure room
+    shrine: 280,   // 280 - shrine
+    armory: 210,   // 210 - steel blue
+    gauntlet: 0,   // 0 - red
+    library: 220,  // 220 - blue
+    healing: 130,  // 130 - green
+    secret: 300,   // 300 - magenta
+    boss: 350,     // 350 - crimson
+    normal: 222,   // 222 - default blue
+};
 
 // Weapon ladder. Higher tiers = more raw damage + unique on-hit effects.
 const WEAPONS = [
@@ -966,7 +980,7 @@ function buildDungeon() {
     }
 
     const allFloorRooms = secretRoom ? [...rooms, secretRoom] : rooms;
-    allFloorRooms.forEach((r, i) => { r.floorHue = FLOOR_HUES[i % FLOOR_HUES.length]; });
+    allFloorRooms.forEach(r => { r.floorHue = ROOM_HUES[r.type] ?? 222; });
 
     const spawn = roomCenter(startRoom);
     player.x = spawn.x; player.y = spawn.y;
