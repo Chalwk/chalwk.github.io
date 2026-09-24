@@ -74,6 +74,56 @@ Goal: descend ten floors and defeat the Crypt Warden on the last one.
 
 A running log of how the game is built, what is done, and what is still rough.
 
+### File Structure
+
+The game recently moved from one monolithic `script.js` into focused modules. These are plain (non-module) scripts sharing one global scope rather than ES modules, so `index.html` loads them in a fixed order that mirrors the original file's top-to-bottom section order:
+
+```
+dead-end-dungeon-roguelite/
+├── index.html
+├── sprites.js
+├── style.css
+├── spritesheet.png
+├── build-spritesheet.bat
+└── js/
+    ├── dom.js
+    ├── constants.js
+    ├── utils.js
+    ├── state.js
+    ├── audio.js
+    ├── helpers.js
+    ├── dungeon.js
+    ├── vision.js
+    ├── render.js
+    ├── boons.js
+    ├── combat.js
+    ├── items.js
+    ├── turns.js
+    ├── game.js
+    └── input.js
+```
+
+* **`index.html`** - The Jekyll page markup: the HUD, the settings bar, the dungeon board container, the choice modal, the game-over overlay, and the touch D-pad. Loads `sprites.js` first, then every file in `js/` in dependency order.
+* **`style.css`** - All visual styling: panel and HUD layout, tile and cell sizing, HP/status chips, the choice and game-over overlays, animations, and the responsive/touch breakpoints.
+* **`sprites.js`** - The character-grid sprite data (one row of letters per line, mapped to a shared palette) plus the `sprite()` compiler that merges each grid into a compact inline SVG.
+* **`js/dom.js`** - Grabs every DOM element handle the game touches (board, HUD fields, buttons, modals) up front, so the rest of the code just references ready-made constants.
+* **`js/constants.js`** - The data tables that drive the game: `TILE` ids, direction vectors, dungeon size and difficulty presets, `ROOM_HUES`, the weapon ladder, enemy roster, floor themes, boons, and room types.
+* **`js/utils.js`** - The `sprite()` lookup helper and the deterministic tile-hashing functions that pick a stable wall/floor texture variant per coordinate.
+* **`js/state.js`** - The mutable, module-level game state: the grid, discovered/visible fog arrays, rooms, enemies, items, the player object, current floor/theme, and turn/UI flags like `turnBusy` and `choicePending`.
+* **`js/audio.js`** - The oscillator-based Web Audio engine and every named sound wrapper (move, hit, key, door, floor, death, victory), plus the mute toggle.
+* **`js/helpers.js`** - Small, stateless utilities used everywhere: random ints, array shuffle/pick, bounds checks, tile/entity lookups (`tileAt`, `enemyAt`, `itemAt`), and room-geometry helpers.
+* **`js/dungeon.js`** - Procedural generation: scattering rooms, carving corridors with a multi-source BFS, assigning room roles by graph distance, placing vaults and secret rooms, and spawning enemies, items, and the boss.
+* **`js/vision.js`** - Line-of-sight (a Bresenham line test) and the fog-of-war pass that recomputes which tiles are currently visible versus merely discovered.
+* **`js/render.js`** - Fits the panel to the viewport, then draws the board, HUD, and the layered per-cell SVG stack (terrain, map features, entities, player).
+* **`js/boons.js`** - Granting and checking boons, and the choice-modal system shared by weapon pickups, boon offers, and room rewards.
+* **`js/combat.js`** - Player and enemy attack resolution: weapon bonus stacking, damage rolls, enemy AI move selection per archetype, and status effects.
+* **`js/items.js`** - Pickup handling for gold, potions, keys, and weapons found on the floor.
+* **`js/turns.js`** - The per-turn pipeline: resolving a move/attack, waiting, drinking a potion, then running the enemy turn and re-rendering.
+* **`js/game.js`** - Game lifecycle: building a new player, starting a run, advancing floors, and handling death or victory.
+* **`js/input.js`** - Keyboard and touch/D-pad input wiring, button event listeners, and the initial boot call that starts the first game.
+
+---
+
 ### Data and Architecture
 
 I've kept the content data-driven. Tiles, weapons, enemies, themes, boons, room types, terrain variants, and sprites are plain arrays and objects. Adding a weapon or an enemy means adding one entry, not editing the engine. War Hammer's knockback is still a WIP: the table entry declares `knockback: true` and the in-game description advertises it, but `playerAttack()` does not read the field yet, so the hit lands without the push.
