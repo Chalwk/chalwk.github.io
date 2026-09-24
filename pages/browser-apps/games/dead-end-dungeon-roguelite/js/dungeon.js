@@ -380,7 +380,7 @@ function chooseFloorTheme() {
 
 // Assign the various room roles. Start/exit/vaults are fixed; everything
 // else is shuffled into the remaining special slots.
-function assignRoomTypes(adjacency, startIdx, exitIdx, vaultIdxs) {
+function assignRoomTypes(startIdx, exitIdx, vaultIdxs) {
     rooms.forEach(r => { r.type = 'normal'; r.entered = false; });
     rooms[startIdx].type = 'start';
     rooms[exitIdx].type = floor >= MAX_FLOOR ? 'boss' : 'exit';
@@ -617,7 +617,7 @@ function generateFloor() {
     // Pass the SEALED list, not the raw picks: a vault whose door couldn't
     // be carved would otherwise be tagged 'vault' but have no gold door on
     // it, and get populated as a normal room - reachable without a key.
-    assignRoomTypes(adjacency, startIdx, exitIdx, sealedVaultIdxs);
+    assignRoomTypes(startIdx, exitIdx, sealedVaultIdxs);
 
     // Try to attach a secret room to any non-start/non-exit host until one sticks.
     const secretHostPool = rooms.filter((r, i) => i !== startIdx && i !== exitIdx && !vaultRooms.includes(r));
