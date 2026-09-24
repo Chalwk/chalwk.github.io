@@ -99,10 +99,8 @@ function renderBoard() {
             } else {
                 cell.classList.add('floor');
                 const floorRoom = roomAt(x, y);
-                if (floorRoom && floorRoom.floorHue !== undefined) {
-                    cell.style.setProperty('--floor-hue', floorRoom.floorHue);
-                }
-                terrainLayer = sprite(variantFor(x, y, FLOOR_VARIANTS));
+                const floorVariants = ROOM_FLOORS[floorRoom?.type] || ROOM_FLOORS.normal;
+                terrainLayer = sprite(variantFor(x, y, floorVariants));
             }
 
             // --- Layer 2: map feature. -------------------------------------

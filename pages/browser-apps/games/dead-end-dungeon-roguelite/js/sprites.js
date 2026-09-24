@@ -45,6 +45,20 @@
         h: '#0f1524', // floor base
         H: '#1a2136', // floor light speckle
         j: '#080c14', // floor dark speckle
+
+        // --- room-type floor tints ----------------------------------------
+        // Each trio is (base, light speckle, dark speckle).
+        '1': '#0d1a15', '2': '#162e22', '3': '#071310', // start    - mossy green
+        '4': '#1a1408', '5': '#2e2410', '6': '#100c04', // exit     - amber
+        '7': '#1e1808', '8': '#342c12', '9': '#120e05', // vault    - deep gold
+        '!': '#1a1024', '@': '#2c1c3c', '$': '#100818', // shrine   - purple
+        '%': '#0f1a22', '^': '#1e2e3c', '&': '#08121a', // armory   - steel blue
+        '*': '#221a06', '(': '#3a2e0c', ')': '#140f04', // treasury - gold
+        '-': '#200e0e', '_': '#341616', '=': '#140808', // gauntlet - red
+        '+': '#0e1624', '[': '#1c2a44', ']': '#080e18', // library  - blue
+        '{': '#0d1c12', '}': '#1a3422', '|': '#07140b', // healing  - green
+        ':': '#1a0e1c', ';': '#2e1a34', '~': '#100814', // secret   - magenta
+        '<': '#200a12', '>': '#34101e', '?': '#14050b', // boss     - crimson
     };
 
     function sprite(rows) {
@@ -636,4 +650,51 @@
             '................',
         ]),
     };
+
+    const ROOM_TINTS = {
+        start: ['1', '2', '3'],
+        exit: ['4', '5', '6'],
+        vault: ['7', '8', '9'],
+        shrine: ['!', '@', '$'],
+        armory: ['%', '^', '&'],
+        treasury: ['*', '(', ')'],
+        gauntlet: ['-', '_', '='],
+        library: ['+', '[', ']'],
+        healing: ['{', '}', '|'],
+        secret: [':', ';', '~'],
+        boss: ['<', '>', '?'],
+    };
+    const TINT_NAMES = {
+        start: 'Start', exit: 'Exit', vault: 'Vault', shrine: 'Shrine',
+        armory: 'Armory', treasury: 'Treasury', gauntlet: 'Gauntlet',
+        library: 'Library', healing: 'Healing', secret: 'Secret', boss: 'Boss',
+    };
+    const FLOOR_SPECKLES = [
+        [],
+        [[9, 1, 'L'], [15, 12, 'L'], [6, 5, 'D'], [8, 14, 'D']],
+        [[12, 2, 'L'], [8, 9, 'L'], [6, 5, 'D']],
+    ];
+    const FLOOR_SUFFIXES = ['A', 'B', 'C'];
+
+    for (const [type, [base, light, dark]] of Object.entries(ROOM_TINTS)) {
+        const name = TINT_NAMES[type];
+        FLOOR_SPECKLES.forEach((specks, i) => {
+            const rows = [];
+            for (let y = 0; y < 16; y++) {
+                let row = '';
+                for (let x = 0; x < 16; x++) {
+                    let ch = base;
+                    for (const [sx, sy, kind] of specks) {
+                        if (sx === x && sy === y) {
+                            ch = kind === 'L' ? light : dark;
+                            break;
+                        }
+                    }
+                    row += ch;
+                }
+                rows.push(row);
+            }
+            window.GameSprites[`floor${name}${FLOOR_SUFFIXES[i]}`] = sprite(rows);
+        });
+    }
 })();

@@ -346,7 +346,7 @@
 }
 
 .cell.floor {
-    background: hsl(var(--floor-hue, 221) 57% 12%);
+    background: #0f1524;
 }
 
 .cell.door {
@@ -967,65 +967,14 @@
     }
 }
 
-@media (max-width: 480px) {
-    #game-container {
-        padding: 0.6rem 0.4rem;
-    }
-
-    #game-settings select {
-        min-width: 0;
-        padding: 0.4rem 0.5rem;
-        font-size: 0.85rem;
-    }
-
-    .hud-row {
-        grid-template-columns: 1fr 1fr;
-        grid-template-areas: "hp gold" "status status";
-    }
-
-    .hp-block {
-        grid-area: hp;
-    }
-
-    .gold-block {
-        grid-area: gold;
-    }
-
-    .status-block {
-        grid-area: status;
-    }
-
-    .hp-bar {
-        width: 80px;
-    }
-
-    .log-panel {
-        max-height: 57px;
-        font-size: 0.68rem;
-    }
-
-    .game-over-message {
-        font-size: 1.25rem;
-    }
-
-    .dpad-btn {
-        width: 52px;
-        height: 52px;
-    }
-
-    .key-hint {
-        display: none;
-    }
-}
-
 /* --- Touch devices --------------------------------------------------------- */
 @media (hover: none) and (pointer: coarse) {
     .dpad {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 0.5rem;
-        margin-top: 0.15rem;
+        gap: 0.4rem;
+        margin-top: 0.1rem;
         user-select: none;
         -webkit-user-select: none;
     }
@@ -1048,8 +997,8 @@
         flex-direction: row;
         justify-self: center;
         align-self: center;
-        margin-top: 0.5rem;
-        gap: 0.6rem;
+        margin-top: 0.4rem;
+        gap: 0.5rem;
     }
 
     #game-panel .board-actions .btn {
@@ -1283,5 +1232,184 @@
 
     #game-panel .log-panel {
         height: 32px;
+    }
+}
+
+@media (max-width: 480px) {
+    #game-panel {
+        padding: 0.5rem 0.55rem;
+        margin-top: 0.35rem;
+    }
+
+    #game-panel .panel-head {
+        margin-bottom: 0.25rem;
+        gap: 0.5rem;
+    }
+
+    #game-panel .panel-head h1 {
+        font-size: 1rem;
+    }
+
+    #game-panel .panel-head .muted.small {
+        font-size: 0.68rem;
+    }
+
+    #game-panel .icon-btn {
+        width: 1.9rem;
+        height: 1.9rem;
+        font-size: 0.9rem;
+    }
+
+    #game-panel #game-settings {
+        gap: 0.5rem 0.75rem;
+        margin-bottom: 0.4rem;
+    }
+
+    #game-panel #game-settings label {
+        font-size: 0.78rem;
+        gap: 0.3rem;
+    }
+
+    #game-panel #game-settings select {
+        min-width: 0;
+        padding: 0.3rem 0.45rem;
+        font-size: 0.78rem;
+        border-radius: 0.35rem;
+    }
+
+    #game-panel #game-settings .btn {
+        font-size: 0.78rem;
+        padding: 0.3rem 0.6rem;
+        border-radius: 0.35rem;
+    }
+
+    #game-panel #game-container {
+        padding: 0.5rem 0.45rem;
+        gap: 0.3rem;
+    }
+
+    #game-panel .hud {
+        gap: 0.25rem;
+    }
+
+    .hud-row {
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas: "hp gold" "status status";
+        gap: 0.2rem 0.4rem;
+        padding: 0 0.1rem;
+    }
+
+    .hp-block {
+        grid-area: hp;
+    }
+
+    .gold-block {
+        grid-area: gold;
+    }
+
+    .status-block {
+        grid-area: status;
+    }
+
+    .floor-label {
+        font-size: 0.85rem;
+    }
+
+    .floor-theme {
+        font-size: 0.62rem;
+        max-width: 16rem;
+    }
+
+    #status {
+        font-size: 0.72rem;
+    }
+
+    .hp-bar {
+        width: 84px;
+        height: 7px;
+    }
+
+    .hp-text,
+    .gold-count {
+        font-size: 0.65rem;
+    }
+
+    .hud-subrow {
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        overflow-x: auto;
+        gap: 0.25rem;
+        padding: 0 0.1rem 0.1rem;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+
+    .hud-subrow::-webkit-scrollbar {
+        display: none;
+    }
+
+    .hud-chip {
+        flex: 0 0 auto;
+        font-size: 0.62rem;
+        padding: 0.14rem 0.4rem;
+        gap: 0.22rem;
+    }
+
+    .key-dot {
+        width: 7px;
+        height: 7px;
+    }
+
+    #game-panel .log-panel {
+        height: 40px;
+        max-height: 40px;
+        font-size: 0.62rem;
+        line-height: 1.3;
+        padding: 0.25rem 0.5rem;
+    }
+
+    #game-panel .board-actions {
+        gap: 0.4rem;
+        margin-top: 0.3rem;
+    }
+
+    #game-panel .board-actions .btn {
+        font-size: 0.78rem;
+        padding: 0.4rem 0.7rem;
+        min-width: 76px;
+        border-radius: 0.45rem;
+    }
+
+    .dpad {
+        gap: 0.3rem;
+        margin-top: 0.1rem;
+    }
+
+    .dpad-row {
+        gap: 0.4rem;
+    }
+
+    .dpad-btn {
+        width: 46px;
+        height: 46px;
+        font-size: 1rem;
+        border-radius: 0.5rem;
+    }
+
+    .game-over-message {
+        font-size: 1.15rem;
+    }
+
+    .game-over-detail {
+        font-size: 0.82rem;
+        line-height: 1.45;
+    }
+
+    .game-over-hint {
+        font-size: 0.7rem;
+    }
+
+    .key-hint {
+        display: none;
     }
 }

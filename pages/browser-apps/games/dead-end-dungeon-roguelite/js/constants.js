@@ -36,22 +36,6 @@ const DIFFICULTY_PRESETS = {
     hard: { startHp: 16, startPotions: 1, enemyHpMult: 1.3, enemyDmgMult: 1.3, enemyCountMult: 1.3 },
 };
 
-// Per-room floor tint, keyed by room type.
-const ROOM_HUES = {
-    start: 222,     // 200 - entrance
-    exit: 222,      // 50  - stair hall
-    vault: 222,     // 45  - locked vault
-    treasury: 222,  // 35  - treasure room
-    shrine: 222,    // 280 - shrine
-    armory: 222,    // 210 - steel blue
-    gauntlet: 222,  // 0   - red
-    library: 222,   // 220 - blue
-    healing: 222,   // 130 - green
-    secret: 222,    // 300 - magenta
-    boss: 222,      // 350 - crimson
-    normal: 222,    // 222 - default blue
-};
-
 // Weapon ladder. Higher tiers = more raw damage + unique on-hit effects.
 // `sprite` names point into sprites.js.
 const WEAPONS = [
@@ -155,7 +139,8 @@ const BOONS = [
 ];
 
 // Room "biomes" inside a floor. The `type` string drives the room-entry
-// triggers in triggerRoomEntry().
+// triggers in triggerRoomEntry() and selects the floor sprite set via
+// ROOM_FLOORS below.
 const ROOM_TYPES = {
     normal: { name: 'Combat Hall', icon: '⚔️' },
     start: { name: 'Entrance', icon: '🚪' },
@@ -169,4 +154,19 @@ const ROOM_TYPES = {
     healing: { name: 'Healing Sanctum', icon: '💚' },
     secret: { name: 'Secret Chamber', icon: '🌀' },
     boss: { name: 'Warden Sanctum', icon: '👑' },
+};
+
+const ROOM_FLOORS = {
+    normal: ['floorA', 'floorB', 'floorC'],
+    start: ['floorStartA', 'floorStartB', 'floorStartC'],
+    exit: ['floorExitA', 'floorExitB', 'floorExitC'],
+    vault: ['floorVaultA', 'floorVaultB', 'floorVaultC'],
+    shrine: ['floorShrineA', 'floorShrineB', 'floorShrineC'],
+    armory: ['floorArmoryA', 'floorArmoryB', 'floorArmoryC'],
+    treasury: ['floorTreasuryA', 'floorTreasuryB', 'floorTreasuryC'],
+    gauntlet: ['floorGauntletA', 'floorGauntletB', 'floorGauntletC'],
+    library: ['floorLibraryA', 'floorLibraryB', 'floorLibraryC'],
+    healing: ['floorHealingA', 'floorHealingB', 'floorHealingC'],
+    secret: ['floorSecretA', 'floorSecretB', 'floorSecretC'],
+    boss: ['floorBossA', 'floorBossB', 'floorBossC'],
 };

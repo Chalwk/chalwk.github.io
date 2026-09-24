@@ -24,6 +24,5 @@ let choiceIndex = 0;        // index of the currently highlighted choice card
 let currentRoomId = null;
 let killCount = 0;
 let boss = null;
-let floorBuildRetryCount = 0;
 let audioCtx = null;
 let soundMuted = localStorage.getItem('dungeon-sound-muted') === 'true';

@@ -12,7 +12,7 @@ tags: [ programming, guide, web-app ]
 
 ---
 
-A turn-based, procedurally generated dungeon roguelite. Explore fog-covered floors, fight distinct enemies, collect weapons and boons, and descend ten floors to escape. The game is optimized for use on larger devices such as a computer or tablet. Smaller phones work, but the board and HUD are cramped.
+A turn-based, procedurally generated dungeon roguelite. Explore fog-covered floors, fight distinct enemies, collect weapons and boons, and descend ten floors to escape. The game is designed for larger screens first, but the layout adapts down to phones.
 
 ## [**Link to Game**](https://chalwk.github.io/pages/browser-apps/games/dead-end-dungeon-roguelite)
 
@@ -31,6 +31,7 @@ Every actor and prop on the board is one of these: the player, all six enemies, 
 * Procedural floor generation: rooms are scattered, connected by corridors, then assigned roles
 * Every sprite on the board is inline SVG pixel art: player, enemies, boss, doors, stairs, keys, potions, weapons, gold, and the terrain underfoot
 * Textured terrain: walls are running-bond brick, floors are speckled stone. Each tile picks a variant from a small set so large rooms and long corridors never look flat or obviously repeating
+* Per-room floor tinting: every room type has its own floor sprite variants, so shrines, armories, treasuries, and the rest are visually distinct at a glance
 * Fog of war with line of sight. Tiles stay remembered once seen, but dim when out of view
 * Turn-based movement with bump-to-attack combat
 * Six enemy types, each with its own AI: coward, skirmisher, sentinel, brute, stalker, ambusher
@@ -76,7 +77,7 @@ A running log of how the game is built, what is done, and what is still rough.
 
 ### File Structure
 
-The game recently moved from one monolithic `script.js` into focused modules. These are plain (non-module) scripts sharing one global scope rather than ES modules, so `index.html` loads them in a fixed order that mirrors the original file's top-to-bottom section order:
+The game moved from one monolithic `script.js` into focused modules. These are plain (non-module) scripts sharing one global scope rather than ES modules, so `index.html` loads them in a fixed order that mirrors the original file's top-to-bottom section order:
 
 ```
 dead-end-dungeon-roguelite/
@@ -104,17 +105,17 @@ dead-end-dungeon-roguelite/
 ```
 
 * **`index.html`** - The Jekyll page markup: the HUD, the settings bar, the dungeon board container, the choice modal, the game-over overlay, and the touch D-pad. Loads `sprites.js` first, then every file in `js/` in dependency order.
-* **`style.css`** - All visual styling: panel and HUD layout, tile and cell sizing, HP/status chips, the choice and game-over overlays, animations, and the responsive/touch breakpoints.
-* **`sprites.js`** - The character-grid sprite data (one row of letters per line, mapped to a shared palette) plus the `sprite()` compiler that merges each grid into a compact inline SVG.
+* **`style.css`** - All visual styling: panel and HUD layout, tile and cell sizing, HP/status chips, the choice and game-over overlays, animations, and the responsive/touch breakpoints. Small-phone sizing lives in a dedicated `max-width: 480px` block placed after the short-viewport (`max-height`) queries so it wins on compact phones.
+* **`sprites.js`** - The character-grid sprite data (one row of letters per line, mapped to a shared palette) plus the `sprite()` compiler that merges each grid into a compact inline SVG. Room-type floor sprites are generated at load time from a small tint table so eleven room types get three variants each without hand-authoring them.
 * **`js/dom.js`** - Grabs every DOM element handle the game touches (board, HUD fields, buttons, modals) up front, so the rest of the code just references ready-made constants.
-* **`js/constants.js`** - The data tables that drive the game: `TILE` ids, direction vectors, dungeon size and difficulty presets, `ROOM_HUES`, the weapon ladder, enemy roster, floor themes, boons, and room types.
-* **`js/utils.js`** - The `sprite()` lookup helper and the deterministic tile-hashing functions that pick a stable wall/floor texture variant per coordinate.
+* **`js/constants.js`** - The data tables that drive the game: `TILE` ids, direction vectors, dungeon size and difficulty presets, `ROOM_FLOORS` (per-room floor sprite variants), the weapon ladder, enemy roster, floor themes, boons, and room types.
+* **`js/utils.js`** - The `sprite()` lookup helper and the deterministic tile-hashing function that picks a stable wall or floor variant per coordinate.
 * **`js/state.js`** - The mutable, module-level game state: the grid, discovered/visible fog arrays, rooms, enemies, items, the player object, current floor/theme, and turn/UI flags like `turnBusy` and `choicePending`.
 * **`js/audio.js`** - The oscillator-based Web Audio engine and every named sound wrapper (move, hit, key, door, floor, death, victory), plus the mute toggle.
 * **`js/helpers.js`** - Small, stateless utilities used everywhere: random ints, array shuffle/pick, bounds checks, tile/entity lookups (`tileAt`, `enemyAt`, `itemAt`), and room-geometry helpers.
-* **`js/dungeon.js`** - Procedural generation: scattering rooms, carving corridors with a multi-source BFS, assigning room roles by graph distance, placing vaults and secret rooms, and spawning enemies, items, and the boss.
+* **`js/dungeon.js`** - Procedural generation: scattering rooms, carving corridors with a multi-source BFS, assigning room roles by graph distance, placing vaults and secret rooms, and spawning enemies, items, and the boss. The public entry point is `buildDungeon()`, which wraps a single-attempt `generateFloor()` in a small retry loop: because a candidate layout can pass every local check but still fail the progression validator (for example, a sealed vault with no reachable path to the key that opens it), a failed roll is thrown away and the whole floor is rebuilt rather than patched.
 * **`js/vision.js`** - Line-of-sight (a Bresenham line test) and the fog-of-war pass that recomputes which tiles are currently visible versus merely discovered.
-* **`js/render.js`** - Fits the panel to the viewport, then draws the board, HUD, and the layered per-cell SVG stack (terrain, map features, entities, player).
+* **`js/render.js`** - Fits the panel to the viewport, then draws the board, HUD, and the layered per-cell SVG stack (terrain, map features, entities, player). Terrain picks its sprite set from `ROOM_FLOORS` based on which room the tile belongs to, with corridors falling back to the default stone.
 * **`js/boons.js`** - Granting and checking boons, and the choice-modal system shared by weapon pickups, boon offers, and room rewards.
 * **`js/combat.js`** - Player and enemy attack resolution: weapon bonus stacking, damage rolls, enemy AI move selection per archetype, and status effects.
 * **`js/items.js`** - Pickup handling for gold, potions, keys, and weapons found on the floor.
@@ -126,7 +127,7 @@ dead-end-dungeon-roguelite/
 
 ### Data and Architecture
 
-I've kept the content data-driven. Tiles, weapons, enemies, themes, boons, room types, terrain variants, and sprites are plain arrays and objects. Adding a weapon or an enemy means adding one entry, not editing the engine. War Hammer's knockback is still a WIP: the table entry declares `knockback: true` and the in-game description advertises it, but `playerAttack()` does not read the field yet, so the hit lands without the push.
+I've kept the content data-driven. Tiles, weapons, enemies, themes, boons, room types, terrain variants, and sprites are plain arrays and objects. Adding a weapon or an enemy means adding one entry, not editing the engine.
 
 Scaling happens through multipliers. Difficulty and floor depth adjust HP, damage, and spawn counts with multipliers. There are no separate code paths per difficulty.
 
@@ -140,6 +141,8 @@ Sprites are character grids. Every sprite is a small array of equal-length strin
 
 One shared compiler handles all sprites. A single `sprite()` helper walks each grid row, merges horizontal runs of the same color into one `<rect>`, and emits a compact inline SVG with `shape-rendering: crispEdges`. That means the sprites stay pixel-perfect at any cell size the layout picks. The browser scales the viewBox, not a bitmap, so there is no blurry upscaling and no need to ship multiple resolutions.
 
+Generated variants, not hand-authored duplicates. The three wall sprites are drawn by hand because the running-bond layout is fiddly to get right. The eleven per-room floor sets are not: they share the same speckle rhythm as the base floor, so `sprites.js` walks a small tint table at load time and emits each variant by substituting three palette letters. The palette entries for those tints are keyed by unusual characters (`1`, `!`, `%`, `{`...) so they never collide with the letters used by the hand-drawn sprites.
+
 Mirror, don't duplicate. The player sprite is drawn facing right. When the player moves left, the renderer adds a single CSS class that flips the SVG with `scaleX(-1)`. One sprite covers both directions.
 
 Sprites show up where they matter. The equipped-weapon chip and the choice-card modals render from the same sprite set as the board. When you equip the War Hammer, the chip next to your HP bar shows the same hammer the board would. The boon, room, key, and potion chips use emoji and text glyphs instead, which keeps the HUD legible at small sizes.
@@ -149,6 +152,8 @@ No assets. Sound is oscillators, visuals are inline SVG sprites and text glyphs.
 ### Dungeon Generation
 
 Generation happens in stages. Rooms are placed first, corridors carved second, and room roles assigned last using a graph distance pass. Non-start rooms are ranked once: dead ends first, then by graph distance from the entrance, descending. The exit takes the top slot. The vault is a single optional pick. The floor has a 28% chance to spawn one at all, and it prefers a remaining dead end, falling back to the next-best ranked room if the extra corridor edges left the graph without one. Ranking before assigning rather than filtering after the fact is what keeps the exit slot from stealing every leaf.
+
+Retry instead of patch. Because the layout is randomized, a candidate floor that passes every local check can still fail the final progression validator: a vault whose gold door was carved but whose key landed somewhere unreachable, or an exit room whose only reachable entrance got sealed off by a later step. `buildDungeon()` used to solve this with a recursive call, saving and restoring `floorBuildRetryCount` around the recursion so the counter stayed honest across the re-entry. That worked but read poorly. It is now a plain loop: `buildDungeon()` calls `generateFloor()` up to twelve times and stops on the first success. The counter is gone, the recursion is gone, and a failed attempt simply falls through to the next iteration.
 
 Graphs over coordinates. Room connections are stored as a graph, so distance and dead ends come from a breadth first search instead of geometric guessing.
 
@@ -162,7 +167,7 @@ Two layers of fog. Discovered tracks memory, visible tracks current sight. Rende
 
 Textured terrain without a texture atlas. Walls and floors are sprites like every other tile, drawn from the same pixel-art pipeline. Walls use a running-bond brick layout: the top brick row's vertical joints sit at the cell edge, the bottom row's are offset, so side by side wall tiles read as one continuous brick surface rather than a grid of squares. Each wall has a highlight at the top of the brick, mid stone through the body, and a darker bottom for a shallow 3D read.
 
-Per-room floor tinting is wired in but not shipped yet. `ROOM_HUES` has an entry for every room type and the engine applies each room's `floorHue` to its cells, but every value in the table is currently `222`, so the whole floor still renders the same blue. The plumbing is there; the palette is what is left to fill in.
+Per-room floors, not per-room hues. Earlier revisions tinted floors with a CSS custom property (`--floor-hue`) driven by a `ROOM_HUES` table. That worked, but it tinted the same base sprite and every room type was parked on `222` while I decided on colors. The whole mechanism is gone now. Each room type has its own three-variant floor sprite set, chosen per tile from `ROOM_FLOORS` in `render.js`, so a shrine reads purple, a treasury reads gold, a gauntlet reads red, and so on without any CSS involvement. Corridors fall through to the default blue-grey stone, which is also what a missing or unrecognized room type gets.
 
 Deterministic variants, not random. Each tile hashes its own coordinates to pick from the wall and floor variant sets. The hash is stable, so a tile keeps the same look on every render. `Math.random()` here would make the entire dungeon flicker on every step. The same trick gives the whole floor subtle scattershot variation while still being cheap enough to redraw from state on every action.
 
@@ -172,22 +177,8 @@ Full redraw on every render. The board is rebuilt from state whenever the game s
 
 ### Game Flow and Player Choice
 
-One action, one turn. Every player action follows the same sequence: resolve, then enemies act, then render. Choice modals pause that sequence and resume it when closed. Enemy movement is currently cardinal only. `chooseEnemyMove()` and both fallback move loops use `DIRS4`. `DIRS8` is declared near the top of `script.js` for a planned eight-way movement pass, but nothing references it yet, so diagonal enemy stepping is on the list rather than in the game.
+One action, one turn. Every player action follows the same sequence: resolve, then enemies act, then render. Choice modals pause that sequence and resume it when closed.
 
 Player choice over auto-resolution. Weapon pickups open a choice modal instead of the game deciding for you, using the same modal system as boons and armories.
-
----
-
-## TO DO
-
-### Dungeon
-
-* Floor Colouring - Decide between `ROOM_HUES` and floor sprite variants. Every hue is parked at `222` on purpose until that call is made. I may drop `ROOM_HUES`, the `--floor-hue` CSS var, and the `floorHue` write in `renderBoard()`, then add the per-room floor sprites to `sprites.js` and a variant lookup keyed by room type.
-
-* `buildDungeon()` retry - I may convert the recursion to a loop. The current save/restore of `floorBuildRetryCount` around the recursive call works but reads poorly.
-
-### Layout
-
-* Small Phone Viewports - Rework the `@media (max-width: 480px)` and coarse-pointer blocks in `style.css`. Under ~480px the board shrinks, HUD chips wrap to two rows, and the D-pad fights the log for vertical space. This should just be a CSS pass, not a script change.
 
 ---

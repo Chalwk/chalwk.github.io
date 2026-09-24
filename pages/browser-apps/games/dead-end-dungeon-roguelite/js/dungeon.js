@@ -422,8 +422,15 @@ function randomWeaponAtTier(minTier, maxTier = WEAPONS.length - 1) {
     return pick(WEAPONS.filter(w => w.tier >= lo && w.tier <= hi));
 }
 
-// Main floor generator. Wipes the previous floor and rebuilds everything.
+// Main floor generator.
 const VAULT_SPAWN_CHANCE = 0.28;
+
+function buildDungeon() {
+    const MAX_ATTEMPTS = 12;
+    for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+        if (generateFloor()) return;
+    }
+}
 
 function getUnlockedReachable(start) {
     const reachable = Array.from({ length: gridH }, () => Array(gridW).fill(false));
@@ -528,7 +535,7 @@ function validateDungeonProgression(startRoom, exitRoom, exitDoor, vaultRooms, k
     return true;
 }
 
-function buildDungeon() {
+function generateFloor() {
     const preset = SIZE_PRESETS[sizeKey];
     gridW = preset.w; gridH = preset.h;
     grid = Array.from({ length: gridH }, () => Array(gridW).fill(TILE.WALL));
@@ -620,9 +627,6 @@ function buildDungeon() {
         if (secretRoom) break;
     }
 
-    const allFloorRooms = secretRoom ? [...rooms, secretRoom] : rooms;
-    allFloorRooms.forEach(r => { r.floorHue = ROOM_HUES[r.type] ?? 222; });
-
     const spawn = roomCenter(startRoom);
     player.x = spawn.x; player.y = spawn.y;
 
@@ -699,21 +703,13 @@ function buildDungeon() {
 
     const lockedExitDoor = exitDoors[0] || exitDoor;
     if (!validateDungeonProgression(startRoom, exitRoom, lockedExitDoor, vaultRooms, items)) {
-        // Generation bugs should hopefully never become a player-facing unwinnable floor.
-        // Re-seeding the layout is safer than trying to patch a half-populated map (I think?).
-        const retry = floorBuildRetryCount;
-        if (retry < 12) {
-            floorBuildRetryCount++;
-            buildDungeon();
-            floorBuildRetryCount = retry;
-            return;
-        }
+        return false;
     }
 
-    floorBuildRetryCount = 0;
     if (floor >= MAX_FLOOR) {
         spawnBoss(exitRoom);
     }
+    return true;
 }
 
 function spawnBoss(exitRoom) {
