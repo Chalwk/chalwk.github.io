@@ -98,28 +98,29 @@ const ROOM_HUES = {
 };
 
 // Weapon ladder. Higher tiers = more raw damage + unique on-hit effects.
+// `sprite` names point into sprites.js.
 const WEAPONS = [
     {
-        id: 'fists', name: 'Fists', icon: '🤛', dmg: [1, 2], tier: 0,
+        id: 'fists', name: 'Fists', sprite: 'weaponFists', dmg: [1, 2], tier: 0,
         description: 'Reliable, if painfully basic.',
     },
     {
-        id: 'dagger', name: 'Dagger', icon: '🗡️', dmg: [2, 4], tier: 1,
+        id: 'dagger', name: 'Dagger', sprite: 'weaponDagger', dmg: [2, 4], tier: 1,
         description: '25% crit chance. +2 crit damage and +2 damage against enemies below 50% HP.',
         crit: 0.25, critBonus: 2, finisher: 2,
     },
     {
-        id: 'sword', name: 'Sword', icon: '⚔️', dmg: [3, 6], tier: 2,
+        id: 'sword', name: 'Sword', sprite: 'weaponSword', dmg: [3, 6], tier: 2,
         description: 'Balanced damage. Strikes an adjacent enemy for 1-2 cleave damage.',
         cleave: true,
     },
     {
-        id: 'axe', name: 'Axe', icon: '🪓', dmg: [4, 8], tier: 3,
+        id: 'axe', name: 'Axe', sprite: 'weaponAxe', dmg: [4, 8], tier: 3,
         description: 'Heavy hits apply Vulnerable for 2 turns.',
         vulnerable: 2,
     },
     {
-        id: 'hammer', name: 'War Hammer', icon: '🔨', dmg: [5, 10], tier: 4,
+        id: 'hammer', name: 'War Hammer', sprite: 'weaponHammer', dmg: [5, 10], tier: 4,
         description: '25% chance to Stun for 1 turn. Powerful hits knock enemies back.',
         stun: 0.25, knockback: true,
     },
@@ -127,13 +128,14 @@ const WEAPONS = [
 
 // Enemy roster. minFloor gates when they start showing up; ai selects the
 // move-selection branch in chooseEnemyMove(); aggro is their sight range.
+// `sprite` names point into sprites.js.
 const ENEMY_TYPES = [
-    { id: 'rat', name: 'Rat', icon: '🐀', hp: 3, dmg: [1, 2], minFloor: 1, gold: [1, 3], ai: 'coward', aggro: 5, tags: [] },
-    { id: 'goblin', name: 'Goblin', icon: '👺', hp: 6, dmg: [1, 3], minFloor: 1, gold: [2, 5], ai: 'skirmisher', aggro: 8, tags: [] },
-    { id: 'skeleton', name: 'Skeleton', icon: '💀', hp: 9, dmg: [2, 4], minFloor: 2, gold: [3, 7], ai: 'sentinel', aggro: 7, tags: ['undead'] },
-    { id: 'orc', name: 'Orc', icon: '👹', hp: 13, dmg: [3, 6], minFloor: 3, gold: [5, 10], ai: 'brute', aggro: 9, tags: [] },
-    { id: 'wraith', name: 'Wraith', icon: '👻', hp: 17, dmg: [4, 7], minFloor: 5, gold: [8, 14], ai: 'stalker', aggro: 12, tags: ['undead'] },
-    { id: 'spider', name: 'Cave Spider', icon: '🕷️', hp: 8, dmg: [2, 4], minFloor: 4, gold: [4, 8], ai: 'ambusher', aggro: 6, tags: [] },
+    { id: 'rat', name: 'Rat', sprite: 'rat', hp: 3, dmg: [1, 2], minFloor: 1, gold: [1, 3], ai: 'coward', aggro: 5, tags: [] },
+    { id: 'goblin', name: 'Goblin', sprite: 'goblin', hp: 6, dmg: [1, 3], minFloor: 1, gold: [2, 5], ai: 'skirmisher', aggro: 8, tags: [] },
+    { id: 'skeleton', name: 'Skeleton', sprite: 'skeleton', hp: 9, dmg: [2, 4], minFloor: 2, gold: [3, 7], ai: 'sentinel', aggro: 7, tags: ['undead'] },
+    { id: 'orc', name: 'Orc', sprite: 'orc', hp: 13, dmg: [3, 6], minFloor: 3, gold: [5, 10], ai: 'brute', aggro: 9, tags: [] },
+    { id: 'wraith', name: 'Wraith', sprite: 'wraith', hp: 17, dmg: [4, 7], minFloor: 5, gold: [8, 14], ai: 'stalker', aggro: 12, tags: ['undead'] },
+    { id: 'spider', name: 'Cave Spider', sprite: 'spider', hp: 8, dmg: [2, 4], minFloor: 4, gold: [4, 8], ai: 'ambusher', aggro: 6, tags: [] },
 ];
 
 // Each floor gets one of these. They mutate spawn stats, gold, vision, etc.
@@ -200,6 +202,13 @@ const ROOM_TYPES = {
     secret: { name: 'Secret Chamber', icon: '🌀' },
     boss: { name: 'Warden Sanctum', icon: '👑' },
 };
+
+// --- Sprite helper -----------------------------------------------------------
+function sprite(name) {
+    if (!name) return '';
+    const bag = window.GameSprites;
+    return (bag && bag[name]) || '';
+}
 
 // --- Game state --------------------------------------------------------------
 // These are module-level so almost every function can read/tweak them.
@@ -1082,7 +1091,7 @@ function spawnBoss(exitRoom) {
     // Boss is just a hand-rolled enemy object with a unique type + phase flags.
     boss = {
         x: spot.x, y: spot.y, hp: 95, maxHp: 95, alive: true, roomId: roomIndexOf(exitRoom),
-        type: { id: 'crypt_warden', name: 'Crypt Warden', icon: '👑', dmg: [5, 8], ai: 'boss', gold: [20, 35], tags: ['undead'] },
+        type: { id: 'crypt_warden', name: 'Crypt Warden', sprite: 'boss', dmg: [5, 8], ai: 'boss', gold: [20, 35], tags: ['undead'] },
         dmgMult: DIFFICULTY_PRESETS[difficultyKey].enemyDmgMult * 1.1,
         elite: true, statuses: {}, windup: false, turn: 0, phase2: false, phase3: false,
     };
@@ -1168,15 +1177,16 @@ function itemClass(type) {
     }
 }
 
-function itemIcon(item) {
+// Sprite name for each item type.
+function itemSpriteName(item) {
     switch (item.type) {
-        case 'gold': return '💰';
-        case 'secretgold': return '💎';
-        case 'potion': return '🧪';
-        case 'redkey': return '🔑';
-        case 'goldkey': return '🗝️';
-        case 'weapon': return weaponById(item.weaponId).icon;
-        default: return '';
+        case 'gold': return 'gold';
+        case 'secretgold': return 'gem';
+        case 'potion': return 'potion';
+        case 'redkey': return 'redKey';
+        case 'goldkey': return 'goldKey';
+        case 'weapon': return weaponById(item.weaponId).sprite;
+        default: return null;
     }
 }
 
@@ -1211,19 +1221,19 @@ function renderBoard() {
                 // *entities* (enemies, items) are hidden when not in view.
                 case TILE.DOOR:
                     cell.classList.add('door');
-                    cell.textContent = '🚪';
+                    cell.innerHTML = sprite('door');
                     break;
                 case TILE.RED_DOOR:
                     cell.classList.add('door-red');
-                    cell.textContent = '🔒';
+                    cell.innerHTML = sprite('doorRed');
                     break;
                 case TILE.GOLD_DOOR:
                     cell.classList.add('door-gold');
-                    cell.textContent = '🔒';
+                    cell.innerHTML = sprite('doorGold');
                     break;
                 case TILE.STAIRS:
                     cell.classList.add('floor', 'stairs');
-                    cell.textContent = '⬇';
+                    cell.innerHTML = sprite('stairs');
                     break;
                 case TILE.SECRET_DOOR:
                     // Secret doors render as walls, but shimmer when close enough.
@@ -1242,15 +1252,17 @@ function renderBoard() {
                     if (enemy.hidden) cell.classList.add('hidden-enemy');
                     if (enemy.windup) cell.classList.add('windup');
                     if (enemy._hitFlash) { cell.classList.add('hit-flash'); enemy._hitFlash = false; }
-                    cell.textContent = enemy.type.icon;
+                    cell.innerHTML = sprite(enemy.type.sprite);
                 } else if (item) {
                     cell.classList.add(itemClass(item.type), 'entity-icon');
-                    cell.textContent = itemIcon(item);
+                    cell.innerHTML = sprite(itemSpriteName(item));
                 }
             } else cell.classList.add('dim');
             if (x === player.x && y === player.y) {
                 cell.classList.add('player-cell');
                 if (player._hitFlash) { cell.classList.add('player-hit'); player._hitFlash = false; }
+                // Player sprite overrides whatever tile was underneath.
+                cell.innerHTML = sprite('player');
             }
             boardEl.appendChild(cell);
         }
@@ -1266,7 +1278,7 @@ function renderHud() {
     hpFillEl.className = 'hp-fill' + (hpPct <= 25 ? ' danger' : hpPct <= 55 ? ' warn' : '');
     hpTextEl.textContent = `${Math.max(0, player.hp)} / ${player.maxHp}`;
     goldCountEl.textContent = `💰 ${player.gold}`;
-    weaponIconEl.textContent = player.weapon.icon;
+    weaponIconEl.innerHTML = sprite(player.weapon.sprite);
     weaponNameEl.textContent = player.weapon.name;
     weaponChip.title = `${player.weapon.name}: ${player.weapon.description}`;
     // Boon chip shows the first boon + a "+N" for the rest, full list on hover.
@@ -1307,6 +1319,7 @@ function updateChoiceFocus() {
 
 // Generic modal for boons/weapons/secret rewards. The overlay blocks input
 // until the player clicks a card (or presses Space on the focused card).
+// Options may supply either a `sprite` name or an `icon` glyph.
 function openChoice({ kicker = 'DISCOVERY', title, description, options }) {
     choicePending = true;
     choiceIndex = 0;
@@ -1318,7 +1331,8 @@ function openChoice({ kicker = 'DISCOVERY', title, description, options }) {
         const button = document.createElement('button');
         button.type = 'button';
         button.className = `choice-card ${option.kind || ''}`;
-        button.innerHTML = `<span class="choice-icon">${option.icon || '◆'}</span><span class="choice-copy"><strong>${option.title}</strong><small>${option.desc}</small></span>`;
+        const iconHtml = option.sprite ? sprite(option.sprite) : (option.icon || '');
+        button.innerHTML = `<span class="choice-icon">${iconHtml}</span><span class="choice-copy"><strong>${option.title}</strong><small>${option.desc}</small></span>`;
         button.addEventListener('click', () => {
             const result = option.choose?.();
             choicePending = false;
@@ -1367,7 +1381,7 @@ function chooseArmoryWeapon() {
     const minTier = Math.min(WEAPONS.length - 1, Math.max(1, player.weapon.tier + (Math.random() < 0.65 ? 0 : 1)));
     const pool = WEAPONS.filter(w => w !== player.weapon && w.tier >= minTier);
     const options = shuffle(pool.length ? pool : WEAPONS.slice(1)).slice(0, 3).map(w => ({
-        icon: w.icon,
+        sprite: w.sprite,
         title: w.name,
         desc: `${w.description} Damage ${w.dmg[0]}-${w.dmg[1]}.`,
         choose: () => {
@@ -1392,7 +1406,8 @@ function triggerSecretRoom(room) {
     const legendary = WEAPONS[WEAPONS.length - 1];
     const options = [
         {
-            icon: legendary.icon, title: legendary.name,
+            sprite: legendary.sprite,
+            title: legendary.name,
             desc: legendary.description,
             choose: () => { player.weapon = legendary; return `You uncover the ${legendary.name}.`; },
         },
@@ -1782,7 +1797,7 @@ function pickupItem(item) {
                 description: `${w.description} Damage ${w.dmg[0]}-${w.dmg[1]}.`,
                 options: [
                     {
-                        icon: w.icon,
+                        sprite: w.sprite,
                         title: `Equip ${w.name}`,
                         desc: isUpgrade ? `Replaces your ${old.name}.` : `A sidegrade from your ${old.name} - style over stats.`,
                         choose: () => {
