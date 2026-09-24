@@ -3,6 +3,12 @@
 // --- Dungeon generation ------------------------------------------------------
 // Strategy: scatter non-overlapping rooms, carve corridors between them,
 // pick a far-away room as the exit, then decorate with vaults/secret rooms/etc.
+
+function inRoomFootprint(r, x, y) {
+    return x >= r.x - 1 && x <= r.x + r.w &&
+        y >= r.y - 1 && y <= r.y + r.h;
+}
+
 function generateRooms(w, h, count) {
     const list = [];
     let attempts = 0;
@@ -57,10 +63,6 @@ function roomOutsidePoint(room, border) {
     return { x: border.x, y: border.y + 1 };
 }
 
-function pointTouchesRoomBorder(x, y) {
-    return rooms.some(r => onRoomBorder(r, x, y));
-}
-
 function roomDoorIsTooClose(room, point) {
     return findRoomDoorTiles(room).some(d =>
         (d.x !== point.x || d.y !== point.y) &&
@@ -87,8 +89,7 @@ function connectionCandidates(room, targetRoom) {
             const borderTile = tileAt(border.x, border.y);
             if (borderTile !== TILE.WALL && borderTile !== TILE.DOOR) continue;
             if (roomDoorIsTooClose(room, border)) continue;
-            if (pointTouchesRoomBorder(outside.x, outside.y)) continue;
-            if (rooms.some(r => pointInRoom(r, outside.x, outside.y))) continue;
+            if (rooms.some(r => inRoomFootprint(r, outside.x, outside.y))) continue;
             candidates.push({ border, outside });
         }
     }
@@ -97,15 +98,12 @@ function connectionCandidates(room, targetRoom) {
 
 function corridorPathAllowed(x, y, roomA, roomB, start, goal) {
     if (!inBounds(x, y)) return false;
-    if ((x === start.x && y === start.y) || (x === goal.x && y === goal.y)) return true;
-    // Never route through a room interior or across any room's wall ring.
-    if (rooms.some(r => pointInRoom(r, x, y) || onRoomBorder(r, x, y))) return false;
+    if (start && x === start.x && y === start.y) return true;
+    if (rooms.some(r => inRoomFootprint(r, x, y))) return false;
     return true;
 }
 
 function findCorridorPath(starts, goals, roomA, roomB) {
-
-
     const queue = [];
     const visited = Array.from({ length: gridH }, () => Array(gridW).fill(false));
     const prev = Array.from({ length: gridH }, () => Array(gridW).fill(null));
