@@ -25,14 +25,12 @@ function startNewGame() {
     player = newPlayer();
     gameActive = true;
     gameOver = false;
-    turnBusy = false;
     buildDungeon();
     log(`You descend into the dungeon. Floor ${floor}.`, 'log-entry-good');
     log(`${floorTheme.icon} ${floorTheme.name}: ${floorTheme.desc}`, 'log-entry-loot');
     setStatus('Find your way down...');
     const startRoom = rooms[0];
     startRoom.entered = true;
-    currentRoomId = 0;
     render();
 }
 
@@ -78,4 +76,9 @@ function winGame() {
     overlay.classList.add('show');
     setStatus('Victory!');
     render();
+}
+
+function defeatBoss() {
+    log('The Crypt Warden collapses. The stairs to the surface are open!', 'log-entry-good');
+    setStatus('The Warden is dead. Take the stairs to escape.');
 }

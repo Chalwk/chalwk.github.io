@@ -8,8 +8,7 @@
 // and everything inside flexes to share that height.
 function fitGamePanel() {
     if (!gamePanelEl) return;
-    // Document-relative top of the panel (safe even if the page is scrolled).
-    const top = gamePanelEl.getBoundingClientRect().top + window.scrollY;
+    const top = gamePanelEl.getBoundingClientRect().top;
     const available = window.innerHeight - top - 12;
     const height = clamp(available, 300, 1400);
     gamePanelEl.style.height = height + 'px';
@@ -31,7 +30,7 @@ function computeCellSize() {
 
 function itemClass(type) {
     switch (type) {
-        case 'gold': case 'secretgold': return 'item-gold';
+        case 'gold': return 'item-gold';
         case 'potion': return 'item-potion';
         case 'redkey': return 'item-key-red';
         case 'goldkey': return 'item-key-gold';
@@ -44,7 +43,6 @@ function itemClass(type) {
 function itemSpriteName(item) {
     switch (item.type) {
         case 'gold': return 'gold';
-        case 'secretgold': return 'gem';
         case 'potion': return 'potion';
         case 'redkey': return 'redKey';
         case 'goldkey': return 'goldKey';

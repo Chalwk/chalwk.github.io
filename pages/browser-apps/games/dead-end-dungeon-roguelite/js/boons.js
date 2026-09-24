@@ -7,7 +7,7 @@ function addBoon(boon) {
     // Grant-time effects are data-driven off the boon entry itself.
     boon.onGrant?.(player);
     playSecretSound();
-    log(`You gain the boon ${boon.name}: ${boon.desc}`, 'log-entry-good');
+    // Callers log their own message (the string returned from `choose`).
 }
 
 // Paints the currently focused choice card so keyboard navigation
@@ -21,7 +21,7 @@ function updateChoiceFocus() {
 // Generic modal for boons/weapons/secret rewards. The overlay blocks input
 // until the player clicks a card (or presses Space on the focused card).
 // Options may supply either a `sprite` name or an `icon` glyph.
-function openChoice({ kicker = 'DISCOVERY', title, description, options }) {
+function openChoice({ kicker = 'DISCOVERY', title, description, options, advanceTurn = true }) {
     choicePending = true;
     choiceIndex = 0;
     choiceKickerEl.textContent = kicker;
@@ -40,11 +40,9 @@ function openChoice({ kicker = 'DISCOVERY', title, description, options }) {
             choiceOverlay.classList.remove('show');
             choiceOverlay.setAttribute('aria-hidden', 'true');
             if (result) log(result, 'log-entry-good');
-            // Picking a reward burns the turn - enemies act now.
-            if (!gameOver) {
-                enemyTurnStep();
-                render();
-            }
+            // Picking a reward normally burns the turn - enemies act now.
+            if (advanceTurn && !gameOver) enemyTurnStep();
+            render();
         }, { once: true });
         choiceOptionsEl.appendChild(button);
         if (index === 0) setTimeout(() => button.focus(), 0);
@@ -55,7 +53,7 @@ function openChoice({ kicker = 'DISCOVERY', title, description, options }) {
     render();
 }
 
-function chooseBoon(title = 'Choose a Boon', kicker = 'RUN BUILD', count = 3) {
+function chooseBoon(title = 'Choose a Boon', kicker = 'RUN BUILD', count = 3, advanceTurn = true) {
     const pool = shuffle([...availableBoons()]).slice(0, count);
     // Out of boons? Convert the reward to gold instead of nothing.
     if (!pool.length) {
@@ -67,6 +65,7 @@ function chooseBoon(title = 'Choose a Boon', kicker = 'RUN BUILD', count = 3) {
         kicker,
         title,
         description: 'This choice becomes part of the rest of your run. Pick the effect that changes how you want to play.',
+        advanceTurn,
         options: pool.map(boon => ({
             icon: boon.icon,
             title: boon.name,
@@ -101,7 +100,6 @@ function chooseArmoryWeapon() {
 
 // Secret rooms always offer: the legendary hammer, one random boon, or a big gold pile.
 function triggerSecretRoom(room) {
-    if (room.entered) return;
     room.entered = true;
     playSecretSound();
     const legendary = WEAPONS[WEAPONS.length - 1];
@@ -134,7 +132,6 @@ function triggerSecretRoom(room) {
 function triggerRoomEntry(room) {
     if (!room || room.entered) return false;
     room.entered = true;
-    currentRoomId = roomIndexOf(room);
     switch (room.type) {
         case 'start':
             setStatus(`Floor ${floor}: ${floorTheme.name}.`);
@@ -193,7 +190,7 @@ function completeGauntlets() {
         if (!living) {
             room.gauntletRewarded = true;
             log('The gauntlet falls silent. You earned a rare boon.', 'log-entry-good');
-            chooseBoon('Claim Your Gauntlet Reward', 'GAUNTLET CLEARED', 2);
+            chooseBoon('Claim Your Gauntlet Reward', 'GAUNTLET CLEARED', 2, false);
             return true;
         }
     }

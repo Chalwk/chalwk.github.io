@@ -104,15 +104,16 @@ function killEnemy(enemy) {
 // counter by 1 per call.
 function processStatuses(entity) {
     if (!entity.statuses) entity.statuses = {};
+    const label = entity === player ? 'player' : entity.type.name;
     if (entity.statuses.poisoned > 0) {
         entity.hp -= 1;
         entity._hitFlash = true;
-        log(`Poison hurts the ${entity === player ? 'player' : entity.type.name} for 1.`, 'log-entry-danger');
+        log(`Poison hurts the ${label} for 1.`, 'log-entry-danger');
     }
     if (entity.statuses.bleed > 0) {
         entity.hp -= 1;
         entity._hitFlash = true;
-        log(`Bleed deals 1 damage to the ${entity.type.name}.`, 'log-entry-danger');
+        log(`Bleed deals 1 damage to the ${label}.`, 'log-entry-danger');
     }
     Object.keys(entity.statuses).forEach(k => {
         entity.statuses[k]--;
@@ -226,10 +227,10 @@ function enemyTurnStep() {
             break;
         }
     }
-    completeGauntlets();
     // DOT on the player happens after everyone moves.
     processStatuses(player);
-    if (player.hp <= 0) killPlayer();
+    if (player.hp <= 0) { killPlayer(); return; }
+    completeGauntlets();
 }
 
 // Boss AI: phase transitions at 66% and 33% HP; telegraphed big hits every

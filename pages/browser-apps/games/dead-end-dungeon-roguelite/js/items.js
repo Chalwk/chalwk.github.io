@@ -12,11 +12,6 @@ function pickupItem(item) {
             log(`You found ${amount} gold.`, 'log-entry-loot');
             break;
         }
-        case 'secretgold':
-            player.gold += item.amount;
-            playSecretSound();
-            log(`A hidden hoard! +${item.amount} gold.`, 'log-entry-good');
-            break;
         case 'potion':
             player.potions++;
             playPickupSound();

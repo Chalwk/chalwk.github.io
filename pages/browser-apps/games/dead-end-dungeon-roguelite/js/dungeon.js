@@ -430,6 +430,7 @@ function buildDungeon() {
     for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
         if (generateFloor()) return;
     }
+    console.error(`Dungeon generation failed after ${MAX_ATTEMPTS} attempts. The floor may be unwinnable.`);
 }
 
 function getUnlockedReachable(start) {
@@ -541,7 +542,7 @@ function generateFloor() {
     grid = Array.from({ length: gridH }, () => Array(gridW).fill(TILE.WALL));
     discovered = Array.from({ length: gridH }, () => Array(gridW).fill(false));
     visible = Array.from({ length: gridH }, () => Array(gridW).fill(false));
-    enemies = []; items = []; secretRoom = null; boss = null; currentRoomId = null;
+    enemies = []; items = []; secretRoom = null; boss = null;
     chooseFloorTheme();
 
     rooms = generateRooms(gridW, gridH, preset.rooms);
@@ -653,7 +654,7 @@ function generateFloor() {
         const spot1 = freeFloorTile(vr);
         items.push({ x: spot1.x, y: spot1.y, type: 'weapon', weaponId: weapon.id });
         const spot2 = freeFloorTile(vr, [spot1]);
-        items.push({ x: spot2.x, y: spot2.y, type: 'gold', amount: Math.round((randInt(15, 30) + floor * 3) * floorTheme.goldMult), roomIndex: roomIndexOf(vr) });
+        items.push({ x: spot2.x, y: spot2.y, type: 'gold', amount: Math.round((randInt(15, 30) + floor * 3) * floorTheme.goldMult) });
         const guardPool = ENEMY_TYPES.filter(e => e.minFloor <= floor + 1);
         spawnEnemy(vr, pick(guardPool.length ? guardPool : [ENEMY_TYPES[0]]), true);
     });
@@ -669,22 +670,17 @@ function generateFloor() {
         if (r.type === 'healing' || r.type === 'library') enemyCount = Math.min(enemyCount, 1);
         for (let n = 0; n < enemyCount; n++) {
             const pool = ENEMY_TYPES.filter(e => e.minFloor <= floor);
-            const spawned = spawnEnemy(r, pick(pool.length ? pool : [ENEMY_TYPES[0]]), false);
-            // Track gauntlet enemies so I can detect when the room is cleared.
-            if (r.type === 'gauntlet') {
-                if (!r.enemyIds) r.enemyIds = [];
-                r.enemyIds.push(spawned);
-            }
+            spawnEnemy(r, pick(pool.length ? pool : [ENEMY_TYPES[0]]), false);
         }
         if (r.type === 'treasury') {
             // Treasury rooms always get a couple of big piles.
             for (let n = 0; n < 2; n++) {
                 const spot = freeFloorTile(r);
-                items.push({ x: spot.x, y: spot.y, type: 'gold', amount: Math.round((randInt(8, 18) + floor) * floorTheme.goldMult), roomIndex: i });
+                items.push({ x: spot.x, y: spot.y, type: 'gold', amount: Math.round((randInt(8, 18) + floor) * floorTheme.goldMult) });
             }
         } else if (Math.random() < 0.6) {
             const spot = freeFloorTile(r);
-            items.push({ x: spot.x, y: spot.y, type: 'gold', amount: Math.round((randInt(2, 8) + floor) * floorTheme.goldMult), roomIndex: i });
+            items.push({ x: spot.x, y: spot.y, type: 'gold', amount: Math.round((randInt(2, 8) + floor) * floorTheme.goldMult) });
         }
         const potionChance = r.type === 'healing' ? 0.75 : 0.35;
         if (Math.random() < potionChance) {

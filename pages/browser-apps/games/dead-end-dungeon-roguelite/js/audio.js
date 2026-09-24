@@ -54,10 +54,11 @@ function updateSoundIcon() {
 
 soundToggleBtn.addEventListener('click', () => {
     soundMuted = !soundMuted;
-    localStorage.setItem('dungeon-sound-muted', String(soundMuted));
+    try {
+        localStorage.setItem('dungeon-sound-muted', String(soundMuted));
+    } catch (e) { /* storage unavailable */ }
     updateSoundIcon();
     if (!soundMuted) {
-        // Browsers require a user gesture before audio can start.
         ensureAudioCtx();
         playTone(440, 0.08, { gain: 0.1 });
     }

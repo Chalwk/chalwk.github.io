@@ -1,19 +1,17 @@
 // Copyright (c) 2024-2026 Jericho Crosby (Chalwk). All Rights Reserved.
 
 // --- Player turn flow --------------------------------------------------------
-// Standard post-action: enemies act, re-render, check gauntlets.
+// Standard post-action: enemies act, re-render.
 function afterPlayerAction() {
     if (gameOver || choicePending) return;
     enemyTurnStep();
     render();
-    if (gameOver) return;
-    if (completeGauntlets()) return;
 }
 
 // Main movement/attack handler. Door and secret interactions resolve here,
 // since the player only learns about them by bumping into them.
 function tryMove(dx, dy) {
-    if (!gameActive || gameOver || turnBusy || choicePending) return;
+    if (!gameActive || gameOver || choicePending) return;
     const nx = player.x + dx, ny = player.y + dy;
     if (!inBounds(nx, ny)) return;
     if (dx < 0) player.facing = 'left';
@@ -78,13 +76,13 @@ function tryMove(dx, dy) {
 }
 
 function waitTurn() {
-    if (!gameActive || gameOver || turnBusy || choicePending) return;
+    if (!gameActive || gameOver || choicePending) return;
     log('You wait a moment...');
     afterPlayerAction();
 }
 
 function usePotion() {
-    if (!gameActive || gameOver || turnBusy || choicePending) return;
+    if (!gameActive || gameOver || choicePending) return;
     if (player.potions <= 0) { setStatus('No potions left!'); return; }
     if (player.hp >= player.maxHp) { setStatus('Already at full health.'); return; }
     player.potions--;

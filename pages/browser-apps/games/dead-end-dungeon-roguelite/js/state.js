@@ -18,11 +18,12 @@ let floor = 1;
 let floorTheme = FLOOR_THEMES[0];
 let gameActive = false;
 let gameOver = false;
-let turnBusy = false;
 let choicePending = false;  // true while a modal is open - blocks input
 let choiceIndex = 0;        // index of the currently highlighted choice card
-let currentRoomId = null;
 let killCount = 0;
 let boss = null;
 let audioCtx = null;
-let soundMuted = localStorage.getItem('dungeon-sound-muted') === 'true';
+let soundMuted = false;
+try {
+    soundMuted = localStorage.getItem('dungeon-sound-muted') === 'true';
+} catch (e) { /* ignore */ }
