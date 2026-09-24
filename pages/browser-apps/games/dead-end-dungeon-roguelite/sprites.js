@@ -36,6 +36,15 @@
         v: '#a855f7', // violet
         e: '#fde047', // eye glow (bright yellow)
         i: '#dbeafe', // pale icy highlight (frost/glass/spectral shine)
+
+        // --- terrain palette (walls + floors) ---
+        g: '#0d1220', // mortar / grout (very dark)
+        A: '#2a3142', // stone shadow (bottom of brick)
+        a: '#48516b', // stone mid (brick face)
+        G: '#6a7590', // stone highlight (top of brick / bevel)
+        h: '#0f1524', // floor base
+        H: '#1a2136', // floor light speckle
+        j: '#080c14', // floor dark speckle
     };
 
     function sprite(rows) {
@@ -58,6 +67,135 @@
     }
 
     window.GameSprites = {
+        // ------------------------------------------------------------------
+        // TERRAIN - walls and floors.
+        //
+        // Walls use a running-bond brick layout. The top brick row (y0-7)
+        // has vertical joints at x=0 and x=8; the bottom row (y8-15) is
+        // offset so its joints sit at x=4 and x=12. That means when two
+        // wall tiles sit side by side the joints continue naturally across
+        // the seam - no grid line where the cells meet.
+        //
+        // Each brick face is beveled: highlight on the top row, mid stone
+        // through the body, darker stone at the bottom for a shallow 3D
+        // read. The variant letters differ only in a few chipped/scuffed
+        // pixels, so large wall runs pick up subtle texture without looking
+        // obviously repeating.
+        // ------------------------------------------------------------------
+        wallA: sprite([
+            'gGGGGGGGgGGGGGGG',
+            'gaaaaaaagaaaaaaa',
+            'gaaaaaaagaaaaaaa',
+            'gaaaaaaagaaaaaaa',
+            'gaaaaaaagaaaaaaa',
+            'gAaaaaaagAaaaaaa',
+            'gAAAAAAAgAAAAAAA',
+            'gggggggggggggggg',
+            'GGGGgGGGGGGGgGGG',
+            'aaaagaaaaaaagaaa',
+            'aaaagaaaaaaagaaa',
+            'aaaagaaaaaaagaaa',
+            'aaaagaaaaaaagaaa',
+            'AaaagAaaaaaagAaa',
+            'AAAAgAAAAAAAgAAA',
+            'gggggggggggggggg',
+        ]),
+
+        wallB: sprite([
+            'gGGGGGGGgGGGGGGG',
+            'gaaaaaaagaaaaaaa',
+            'gaaajaaagaaaaaaa',
+            'gaaaaaaagaaaajaa',
+            'gaaaaaaagaaaaaaa',
+            'gAajaaaagAaaaaaa',
+            'gAAAAAAAgAAAAAAA',
+            'gggggggggggggggg',
+            'GGGGgGGGGGGGgGGG',
+            'aaaagaaaaaaagaaa',
+            'aaaagaaajaaagaaa',
+            'aaajgaaaaaaagaaa',
+            'aaaagaaaaaaagaaa',
+            'AaaagAaaaaaagAaa',
+            'AAAAgAAAAAAAgAAA',
+            'gggggggggggggggg',
+        ]),
+
+        wallC: sprite([
+            'gGGGGGGGgGGGGGGG',
+            'gaajaaaagaaaaaaa',
+            'gaaaaaaagaaaajaa',
+            'gaaaaaaagaaaaaaa',
+            'gaaaaaaagaaaaaaa',
+            'gAaaaaaagAaaaaaa',
+            'gAAjAAAAgAAAAAAA',
+            'gggggggggggggggg',
+            'GGGGgGGGGGGGgGGG',
+            'aaaagaaaaaaagaaa',
+            'aaaagaaajaaagaaa',
+            'aaaagaaaaaaagaaa',
+            'aaajgaaaaaaagaaa',
+            'AaaagAaaaaaagAaa',
+            'AAAAgAAAAAAAgAAA',
+            'gggggggggggggggg',
+        ]),
+
+        floorA: sprite([
+            'hhhhhhhhhhhhhhhh',
+            'hhhhhhhhhhhhhhhh',
+            'hhhhhhhhhhhhhhhh',
+            'hhhhhhhhhhhhhhhh',
+            'hhhhhhhhhhhhhhhh',
+            'hhhhhhhhhhhhhhhh',
+            'hhhhhhhhhhhhhhhh',
+            'hhhhhhhhhhhhhhhh',
+            'hhhhhhhhhhhhhhhh',
+            'hhhhhhhhhhhhhhhh',
+            'hhhhhhhhhhhhhhhh',
+            'hhhhhhhhhhhhhhhh',
+            'hhhhhhhhhhhhhhhh',
+            'hhhhhhhhhhhhhhhh',
+            'hhhhhhhhhhhhhhhh',
+            'hhhhhhhhhhhhhhhh',
+        ]),
+
+        floorB: sprite([
+            'hhhhhhhhhhhhhhhh',
+            'hhhhhhhhhHhhhhhh',
+            'hhhhhhhhhhhhhhhh',
+            'hhhhhhhhhhhhhhhh',
+            'hhhhhhhhhhhhhhhh',
+            'hhhhhhjhhhhhhhhh',
+            'hhhhhhhhhhhhhhhh',
+            'hhhhhhhhhhhhhhhh',
+            'hhhhhhhhhhhhhhhh',
+            'hhhhhhhhhhhhhhhh',
+            'hhhhhhhhhhhhhhhh',
+            'hhhhhhhhhhhhhhhh',
+            'hhhhhhhhhhhhhhhH',
+            'hhhhhhhhhhhhhhhh',
+            'hhhhhhhhjhhhhhhh',
+            'hhhhhhhhhhhhhhhh',
+        ]),
+
+        floorC: sprite([
+            'hhhhhhhhhhhhhhhh',
+            'hhhhhhhhhhhhhhhh',
+            'hhhhhhhhhhhhHhhh',
+            'hhhhhhhhhhhhhhhh',
+            'hhhhhhhhhhhhhhhh',
+            'hhhhhhjhhhhhhhhh',
+            'hhhhhhhhhhhhhhhh',
+            'hhhhhhhhhhhhhhhh',
+            'hhhhhhhhhhhhhhhh',
+            'hhhhhhhhHhhhhhhh',
+            'hhhhhhhhhhhhhhhh',
+            'hhhhhhhhhhhhhhhh',
+            'hhhhhhhhhhhhhhhh',
+            'hhhhhhhhhhhhhhhh',
+            'hhhhhhhhhhhhhhhh',
+            'hhhhhhhhhhhhhhhh',
+        ]),
+
         // --- player --- (faces right; CSS mirrors it for left movement, do not edit facing)
         player: sprite([
             '........r.......',

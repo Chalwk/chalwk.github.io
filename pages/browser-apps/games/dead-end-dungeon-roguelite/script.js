@@ -210,6 +210,21 @@ function sprite(name) {
     return (bag && bag[name]) || '';
 }
 
+// --- Tile texture variation --------------------------------------------------
+// Walls and floors each have a handful of hand-drawn variants. I hash (x, y)
+// to pick one so a tile keeps the same look across renders - Math.random()
+// here would make the entire dungeon flicker on every step.
+function tileHash(x, y) {
+    let h = (x * 374761393 + y * 668265263) | 0;
+    h = ((h ^ (h >>> 13)) * 1274126177) | 0;
+    return (h ^ (h >>> 16)) >>> 0;
+}
+function variantFor(x, y, variants) {
+    return variants[tileHash(x, y) % variants.length];
+}
+const WALL_VARIANTS = ['wallA', 'wallB', 'wallC'];
+const FLOOR_VARIANTS = ['floorA', 'floorB', 'floorC'];
+
 // --- Game state --------------------------------------------------------------
 // These are module-level so almost every function can read/tweak them.
 const MAX_FLOOR = 10;
@@ -463,7 +478,6 @@ function corridorPathAllowed(x, y, roomA, roomB, start, goal) {
 }
 
 function findCorridorPath(starts, goals, roomA, roomB) {
-
 
 
     const queue = [];
@@ -1198,6 +1212,13 @@ function syncLogPanelWidth() {
 
 // Full board rebuild every render. Cheap enough at this grid size and
 // keeps the logic simple - no diffing needed.
+//
+// Each cell is drawn as a stack of SVG layers (bottom to top):
+//   1. terrain        - wall brick OR textured floor
+//   2. map feature    - door / red door / gold door / stairs (falls through
+//                       to whatever terrain was underneath)
+//   3. entity         - enemy or item (only when the tile is in view)
+//   4. player         - overrides whatever entity was on the same tile
 function renderBoard() {
     computeCellSize();
     boardEl.style.gridTemplateColumns = `repeat(${gridW}, var(--cell-size))`;
@@ -1207,42 +1228,62 @@ function renderBoard() {
             const cell = document.createElement('div');
             cell.className = 'cell';
             const seen = discovered[y][x], inView = visible[y][x], tile = grid[y][x];
-            if (!seen) { cell.classList.add('fogged'); boardEl.appendChild(cell); continue; }
-            switch (tile) {
-                case TILE.WALL: cell.classList.add('wall'); break;
-                case TILE.FLOOR: {
-                    cell.classList.add('floor');
-                    const floorRoom = roomAt(x, y);
-                    if (floorRoom && floorRoom.floorHue !== undefined) cell.style.setProperty('--floor-hue', floorRoom.floorHue);
-                    break;
+
+            // Never-explored tiles are pure fog; nothing to draw.
+            if (!seen) {
+                cell.classList.add('fogged');
+                boardEl.appendChild(cell);
+                continue;
+            }
+
+            // --- Layer 1: terrain. -----------------------------------------
+            // Walls and unrevealed secret doors both look like wall until
+            // the player bumps them. Revealed secret doors become FLOOR.
+            let terrainLayer;
+            if (tile === TILE.WALL || tile === TILE.SECRET_DOOR) {
+                cell.classList.add('wall');
+                terrainLayer = sprite(variantFor(x, y, WALL_VARIANTS));
+                if (tile === TILE.SECRET_DOOR &&
+                    Math.max(Math.abs(x - player.x), Math.abs(y - player.y)) <= secretHintRadius()) {
+                    cell.classList.add('secret-hint');
                 }
-                // Map features (doors, stairs) stay visible on remembered
-                // tiles so the player can navigate back to them. Only
-                // *entities* (enemies, items) are hidden when not in view.
+            } else {
+                cell.classList.add('floor');
+                const floorRoom = roomAt(x, y);
+                if (floorRoom && floorRoom.floorHue !== undefined) {
+                    cell.style.setProperty('--floor-hue', floorRoom.floorHue);
+                }
+                terrainLayer = sprite(variantFor(x, y, FLOOR_VARIANTS));
+            }
+
+            // --- Layer 2: map feature. -------------------------------------
+            // Doors and stairs are drawn ON TOP of the terrain so the stone
+            // texture still shows around their frame. Map features stay
+            // visible on remembered tiles so the player can navigate back
+            // to them - only entities are hidden when the tile is dim.
+            let featureLayer = '';
+            switch (tile) {
                 case TILE.DOOR:
                     cell.classList.add('door');
-                    cell.innerHTML = sprite('door');
+                    featureLayer = sprite('door');
                     break;
                 case TILE.RED_DOOR:
                     cell.classList.add('door-red');
-                    cell.innerHTML = sprite('doorRed');
+                    featureLayer = sprite('doorRed');
                     break;
                 case TILE.GOLD_DOOR:
                     cell.classList.add('door-gold');
-                    cell.innerHTML = sprite('doorGold');
+                    featureLayer = sprite('doorGold');
                     break;
                 case TILE.STAIRS:
-                    cell.classList.add('floor', 'stairs');
-                    cell.innerHTML = sprite('stairs');
+                    cell.classList.add('stairs');
+                    featureLayer = sprite('stairs');
                     break;
-                case TILE.SECRET_DOOR:
-                    // Secret doors render as walls, but shimmer when close enough.
-                    cell.classList.add('wall');
-                    if (Math.max(Math.abs(x - player.x), Math.abs(y - player.y)) <= secretHintRadius()) cell.classList.add('secret-hint');
-                    break;
-                default: cell.classList.add('floor');
             }
-            // Entities only show on currently-visible tiles.
+
+            // --- Layer 3: entities. ----------------------------------------
+            // Only rendered when the tile is currently in line of sight.
+            let entityLayer = '';
             if (inView) {
                 const enemy = enemyAt(x, y);
                 const item = itemAt(x, y);
@@ -1252,22 +1293,34 @@ function renderBoard() {
                     if (enemy.hidden) cell.classList.add('hidden-enemy');
                     if (enemy.windup) cell.classList.add('windup');
                     if (enemy._hitFlash) { cell.classList.add('hit-flash'); enemy._hitFlash = false; }
-                    cell.innerHTML = sprite(enemy.type.sprite);
+                    entityLayer = sprite(enemy.type.sprite);
                 } else if (item) {
                     cell.classList.add(itemClass(item.type), 'entity-icon');
-                    cell.innerHTML = sprite(itemSpriteName(item));
+                    entityLayer = sprite(itemSpriteName(item));
                 }
-            } else cell.classList.add('dim');
-            if (x === player.x && y === player.y) {
+            } else {
+                cell.classList.add('dim');
+            }
+
+            // --- Layer 4: player. ------------------------------------------
+            // The player overrides any entity sprite sitting on its tile.
+            const isPlayer = (x === player.x && y === player.y);
+            if (isPlayer) {
                 cell.classList.add('player-cell');
                 if (player._hitFlash) { cell.classList.add('player-hit'); player._hitFlash = false; }
-                // Player sprite overrides whatever tile was underneath.
-                cell.innerHTML = sprite('player');
-                if (player.facing === 'left') {
-                    const svg = cell.querySelector('svg.sprite');
-                    if (svg) svg.classList.add('facing-left');
-                }
+                entityLayer = sprite('player');
             }
+
+            cell.innerHTML = terrainLayer + featureLayer + entityLayer;
+
+            // Mirror the player sprite when facing left. The player is
+            // always the LAST svg in the cell, so grab the last one.
+            if (isPlayer && player.facing === 'left') {
+                const svgs = cell.querySelectorAll('svg.sprite');
+                const last = svgs[svgs.length - 1];
+                if (last) last.classList.add('facing-left');
+            }
+
             boardEl.appendChild(cell);
         }
     }
