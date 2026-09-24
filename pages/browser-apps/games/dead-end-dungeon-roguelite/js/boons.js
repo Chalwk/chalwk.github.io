@@ -4,10 +4,8 @@
 function addBoon(boon) {
     if (!boon || hasBoon(boon.id)) return;
     player.boons.push(boon);
-    // Some boons change max HP immediately.
-    if (boon.id === 'iron_will') player.maxHp += 3;
-    if (boon.id === 'glass_fang') player.maxHp = Math.max(1, player.maxHp - 2);
-    player.hp = Math.min(player.maxHp, player.hp + (boon.id === 'iron_will' ? 3 : 0));
+    // Grant-time effects are data-driven off the boon entry itself.
+    boon.onGrant?.(player);
     playSecretSound();
     log(`You gain the boon ${boon.name}: ${boon.desc}`, 'log-entry-good');
 }

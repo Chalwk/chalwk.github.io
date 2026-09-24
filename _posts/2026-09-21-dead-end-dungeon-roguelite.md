@@ -180,31 +180,11 @@ Player choice over auto-resolution. Weapon pickups open a choice modal instead o
 
 ## TO DO
 
-### Combat
-
-* Diagonal Attack Parity - Fix the asymmetry. `enemyCanAttack()` uses `distance()` (Chebyshev), so enemies cam attack diagonally. The player can only attack on cardinal WASD/arrow moves through `tryMove()`, so the exchange is one-sided. I'll either extend `tryMove()` to accept diagonal input (QEZC / diagonal D-pad buttons) or switch `distance()` to Manhattan and lock enemies to 4-way too. Parity fix is probably the cheaper one.
-* War Hammer Knockback - Finish Implementing (read `knockback` in `playerAttack`, push the enemy one tile away from the player on hit). Resolve the target tile against `isWalkableTile`, enemy occupancy, and my own position before moving. Skip the push if the tile is blocked.
-* Weapon Tier Roll - Clamp the floor 1 case. `randomWeaponAtTier(1 + Math.floor((floor - 1) / 3), 3 + Math.floor((floor - 2) / 5))` computes a `maxTier` of 2 on floor 1 because of the negative division. Wrap the second arg in `Math.max`.
-
 ### Dungeon
 
 * Floor Colouring - Decide between `ROOM_HUES` and floor sprite variants. Every hue is parked at `222` on purpose until that call is made. I may drop `ROOM_HUES`, the `--floor-hue` CSS var, and the `floorHue` write in `renderBoard()`, then add the per-room floor sprites to `sprites.js` and a variant lookup keyed by room type.
+
 * `buildDungeon()` retry - I may convert the recursion to a loop. The current save/restore of `floorBuildRetryCount` around the recursive call works but reads poorly.
-
-### Enemy AI
-
-* Remove `DIRS8`. It was added for an eight-way movement pass that I decided against. Enemies already step diagonally through `chooseEnemyMove()`, which returns `{ x: sign(dx), y: sign(dy) }` and lands first in the `tryMoves` list, so the const never had a job.
-
-### Architecture
-
-* Boon Grant Hook - Add `onGrant(player)` to the boon entry and drop the `iron_will` / `glass_fang` special cases in `addBoon()`. Keeps grant-time effects data-driven like the rest of the boon table.
-* `corridorPathAllowed()` - Drop the unused `roomA` and `roomB` params. The room checks go through `rooms.some(...)` directly.
-* `findCorridorPath()` - Drop the `visited[ny]?.[nx]` optional chain. `inBounds(nx, ny)` already runs upstream.
-
-### Cleanup
-
-* Console Spam - Gate the `console.log` calls in `buildDungeon()` (vault placement, key placement, vault spawn counts) behind a `DEBUG` flag.
-* Same flag for the `console.warn` / `console.error` in the validation retry path.
 
 ### Layout
 

@@ -47,6 +47,23 @@ function playerAttack(enemy) {
         addStatus(enemy, 'stunned', 1);
         log(`The Hammer stuns the ${enemy.type.name}.`, 'log-entry-loot');
     }
+    // Hammer knockback - push the target one tile directly away from the player.
+    if (player.weapon.knockback && enemy.hp > 0) {
+        const kx = Math.sign(enemy.x - player.x);
+        const ky = Math.sign(enemy.y - player.y);
+        const nx = enemy.x + kx, ny = enemy.y + ky;
+        if (
+            (kx !== 0 || ky !== 0) &&
+            inBounds(nx, ny) &&
+            isWalkableTile(tileAt(nx, ny)) &&
+            !enemyAt(nx, ny) &&
+            !(nx === player.x && ny === player.y)
+        ) {
+            enemy.x = nx;
+            enemy.y = ny;
+            log(`The Hammer knocks the ${enemy.type.name} back.`, 'log-entry-loot');
+        }
+    }
     // Sword cleave - hit one adjacent enemy for a small amount.
     if (player.weapon.cleave) {
         const adjacent = enemies.find(e => e.alive && e !== enemy && distance(e, enemy) <= 1);
@@ -136,7 +153,10 @@ function chooseEnemyMove(enemy) {
     return { x: dx, y: dy };
 }
 
-function enemyCanAttack(enemy) { return distance(enemy, player) <= 1; }
+function enemyCanAttack(enemy) {
+    return Math.abs(enemy.x - player.x) + Math.abs(enemy.y - player.y) <= 1;
+}
+
 function enemyAttack(enemy, bonusMultiplier = 1) {
     const [lo, hi] = enemy.type.dmg;
     let dmg = Math.round(randInt(lo, hi) * enemy.dmgMult * bonusMultiplier);

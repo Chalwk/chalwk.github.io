@@ -22,12 +22,6 @@ const DIRS4 = [
     { x: -1, y: 0 },
 ];
 
-// 8-way directions for AI path smoothing / knockback helpers.
-const DIRS8 = [
-    { x: 0, y: -1 }, { x: 1, y: -1 }, { x: 1, y: 0 }, { x: 1, y: 1 },
-    { x: 0, y: 1 }, { x: -1, y: 1 }, { x: -1, y: 0 }, { x: -1, y: -1 },
-];
-
 // Grid dimensions and target room counts per difficulty setting.
 const SIZE_PRESETS = {
     small: { w: 27, h: 19, rooms: 7, cellMax: 30 },
@@ -132,6 +126,7 @@ const FLOOR_THEMES = [
 
 // Run-long buffs. Each one is checked by id in the relevant mechanic
 // (see hasBoon('...') usages) so the effects are easy to trace.
+// Grant-time effects live on the entry itself via onGrant(player).
 const BOONS = [
     { id: 'blood_frenzy', name: 'Blood Frenzy', icon: '🩸', desc: '+1 weapon damage while below 50% HP.' },
     { id: 'executioner', name: 'Executioner', icon: '☠️', desc: '+3 damage against enemies below 25% HP.' },
@@ -141,10 +136,22 @@ const BOONS = [
     { id: 'vampiric', name: 'Vampiric', icon: '🦇', desc: 'Killing an enemy restores 1 HP.' },
     { id: 'momentum', name: 'Momentum', icon: '⚡', desc: 'After a kill, your next attack deals +2 damage.' },
     { id: 'alchemist', name: 'Alchemist', icon: '🧪', desc: 'Potions heal +3 HP and restore 1 extra HP at floor start.' },
-    { id: 'iron_will', name: 'Iron Will', icon: '⛓️', desc: '+3 maximum HP.' },
+    {
+        id: 'iron_will', name: 'Iron Will', icon: '⛓️', desc: '+3 maximum HP.',
+        onGrant(player) {
+            player.maxHp += 3;
+            player.hp = Math.min(player.maxHp, player.hp + 3);
+        },
+    },
     { id: 'fortune', name: 'Fortune', icon: '🍀', desc: '25% chance to double ordinary gold pickups.' },
     { id: 'scouting', name: 'Pathfinder', icon: '🧭', desc: 'Vision radius +1 and room entrances are highlighted.' },
-    { id: 'glass_fang', name: 'Glass Fang', icon: '🔷', desc: '+15% critical chance, but maximum HP -2.' },
+    {
+        id: 'glass_fang', name: 'Glass Fang', icon: '🔷', desc: '+15% critical chance, but maximum HP -2.',
+        onGrant(player) {
+            player.maxHp = Math.max(1, player.maxHp - 2);
+            player.hp = Math.min(player.maxHp, player.hp);
+        },
+    },
 ];
 
 // Room "biomes" inside a floor. The `type` string drives the room-entry

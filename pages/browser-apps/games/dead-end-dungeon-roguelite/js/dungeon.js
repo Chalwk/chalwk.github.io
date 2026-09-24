@@ -96,7 +96,7 @@ function connectionCandidates(room, targetRoom) {
     return candidates;
 }
 
-function corridorPathAllowed(x, y, roomA, roomB, start, goal) {
+function corridorPathAllowed(x, y, start, goal) {
     if (!inBounds(x, y)) return false;
     if (start && x === start.x && y === start.y) return true;
     if (rooms.some(r => inRoomFootprint(r, x, y))) return false;
@@ -127,7 +127,7 @@ function findCorridorPath(starts, goals, roomA, roomB) {
         }
         for (const d of DIRS4) {
             const nx = cur.x + d.x, ny = cur.y + d.y;
-            if (!corridorPathAllowed(nx, ny, roomA, roomB, starts[source[cur.y][cur.x]], cur) || visited[ny]?.[nx]) continue;
+            if (!corridorPathAllowed(nx, ny, starts[source[cur.y][cur.x]], cur) || visited[ny][nx]) continue;
             visited[ny][nx] = true;
             prev[ny][nx] = cur;
             source[ny][nx] = source[cur.y][cur.x];
@@ -604,14 +604,8 @@ function buildDungeon() {
             grid[doorTile.y][doorTile.x] = TILE.GOLD_DOOR;
             vaultRooms.push(r);
             sealedVaultIdxs.push(idx);
-            console.log(`[Dungeon] Floor ${floor}: vault room spawned at room #${idx} ` +
-                `(x=${r.x}, y=${r.y}, w=${r.w}, h=${r.h}); gold door at (${doorTile.x}, ${doorTile.y}).`);
-        } else {
-            console.log(`[Dungeon] Floor ${floor}: vault candidate room #${idx} had no entrance - skipped.`);
         }
     });
-    console.log(`[Dungeon] Floor ${floor}: ${vaultRooms.length} vault room(s) spawned ` +
-        `(ranked=${ranked.length}, requested=${vaultCount}).`);
 
     // Pass the SEALED list, not the raw picks: a vault whose door couldn't
     // be carved would otherwise be tagged 'vault' but have no gold door on
@@ -640,18 +634,18 @@ function buildDungeon() {
     const redKeyRoom = findCriticalPlacementRoom(startRoom, exitIdx, vaultRooms, reachableForKeys);
     const redKeySpot = freeFloorTile(redKeyRoom);
     items.push({ x: redKeySpot.x, y: redKeySpot.y, type: 'redkey' });
-    console.log(`[Dungeon] Floor ${floor}: red key spawned at (${redKeySpot.x}, ${redKeySpot.y}).`);
 
     vaultRooms.forEach(() => {
         const goldKeyRoom = findCriticalPlacementRoom(startRoom, exitIdx, vaultRooms, reachableForKeys);
         const spot = freeFloorTile(goldKeyRoom);
         items.push({ x: spot.x, y: spot.y, type: 'goldkey' });
-        console.log(`[Dungeon] Floor ${floor}: gold key spawned at (${spot.x}, ${spot.y}).`);
     });
 
     // Each vault gets a weapon, a gold pile, and an elite guard.
     vaultRooms.forEach(vr => {
-        const weapon = randomWeaponAtTier(1 + Math.floor((floor - 1) / 3), 3 + Math.floor((floor - 2) / 5));
+        const minTier = 1 + Math.floor((floor - 1) / 3);
+        const maxTier = Math.max(minTier, 3 + Math.floor((floor - 2) / 5));
+        const weapon = randomWeaponAtTier(minTier, maxTier);
         const spot1 = freeFloorTile(vr);
         items.push({ x: spot1.x, y: spot1.y, type: 'weapon', weaponId: weapon.id });
         const spot2 = freeFloorTile(vr, [spot1]);
@@ -705,7 +699,6 @@ function buildDungeon() {
 
     const lockedExitDoor = exitDoors[0] || exitDoor;
     if (!validateDungeonProgression(startRoom, exitRoom, lockedExitDoor, vaultRooms, items)) {
-        console.warn(`[Dungeon] Floor ${floor}: critical progression validation failed. Rebuilding this floor.`);
         // Generation bugs should hopefully never become a player-facing unwinnable floor.
         // Re-seeding the layout is safer than trying to patch a half-populated map (I think?).
         const retry = floorBuildRetryCount;
@@ -715,7 +708,6 @@ function buildDungeon() {
             floorBuildRetryCount = retry;
             return;
         }
-        console.error('[Dungeon] Floor generation exceeded the retry budget; keeping the best available layout.');
     }
 
     floorBuildRetryCount = 0;
