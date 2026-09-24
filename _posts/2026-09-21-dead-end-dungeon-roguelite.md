@@ -6,6 +6,12 @@ categories: [ programming, guide, web-app ]
 tags: [ programming, guide, web-app ]
 ---
 
+---
+
+# This game is a Work In Progress
+
+---
+
 A turn-based, procedurally generated dungeon roguelite. Explore fog-covered floors, fight distinct enemies, collect weapons and boons, and descend ten floors to escape. The game is optimized for use on larger devices such as a computer or tablet. Smaller phones work, but the board and HUD are cramped.
 
 ## [**Link to Game**](https://chalwk.github.io/pages/browser-apps/games/dead-end-dungeon-roguelite)
@@ -70,90 +76,94 @@ Goal: descend ten floors and defeat the Crypt Warden on the last one.
 
 1. **Data driven content**
 
-   Data driven content. Tiles, weapons, enemies, themes, boons, room types, terrain variants, and sprites are plain arrays and objects. Adding a weapon or an enemy means adding one entry, not editing the engine.
+   Tiles, weapons, enemies, themes, boons, room types, terrain variants, and sprites are plain arrays and objects. Adding a weapon or an enemy means adding one entry, not editing the engine.
+
+   War Hammer's knockback is still a WIP - the table entry declares `knockback: true` and the in-game description advertises it, but `playerAttack()` does not read the field yet, so the hit lands without the push.
 
 2. **Scaling through multipliers**
 
-   Scaling through multipliers. Difficulty and floor depth adjust HP, damage, and spawn counts with multipliers. There are no separate code paths per difficulty.
+   Difficulty and floor depth adjust HP, damage, and spawn counts with multipliers. There are no separate code paths per difficulty.
 
 3. **Hooks instead of special cases**
 
-   Hooks instead of special cases. Themes expose optional hooks such as `onEnemySpawn` and `onPlayerDamaged`, so a theme can change behavior without the engine knowing about it.
+   Themes expose optional hooks such as `onEnemySpawn` and `onPlayerDamaged`, so a theme can change behavior without the engine knowing about it.
 
 4. **Boons as flags**
 
-   Boons as flags. Boon effects are queried by id at the moment they matter, so a boon is one table entry plus a check where it applies.
+   Boon effects are queried by id at the moment they matter, so most boons are one table entry plus a check where it applies. The exception is the two boons that move max HP (`iron_will`, `glass_fang`) - those also need a line in `addBoon()` because the stat has to be applied when the boon is granted, not when it's read.
 
 ### Sprite System
 
 1. **Sprites as character grids**
 
-   Sprites as character grids. Every sprite is a small array of equal-length strings, one row per line, where each character maps to a color in a shared palette. `.` is transparent. Drawing the player means typing out a sixteen line tall grid of letters; adding a new enemy means the same. No image editor, no asset pipeline, no coordinates to fiddle with - if you can see the shape in the text, you can see the sprite.
+   Every sprite is a small array of equal-length strings, one row per line, where each character maps to a color in a shared palette. `.` is transparent. Drawing the player means typing out a sixteen line tall grid of letters; adding a new enemy means the same. No image editor, no asset pipeline, no coordinates to fiddle with - if you can see the shape in the text, you can see the sprite.
 
-2. **One `sprite()` call compiles all of them**
+2. **One shared compiler for all sprites**
 
-   One `sprite()` call compiles all of them. A single function walks each grid row, merges horizontal runs of the same color into one `<rect>`, and emits a compact inline SVG with `shape-rendering: crispEdges`. That means the sprites stay pixel-perfect at any cell size the layout picks - the browser scales the viewBox, not a bitmap, so there is no blurry upscaling and no need to ship multiple resolutions.
+   A single `sprite()` helper walks each grid row, merges horizontal runs of the same color into one `<rect>`, and emits a compact inline SVG with `shape-rendering: crispEdges`. That means the sprites stay pixel-perfect at any cell size the layout picks - the browser scales the viewBox, not a bitmap, so there is no blurry upscaling and no need to ship multiple resolutions.
 
 3. **Mirror, don't duplicate**
 
-   Mirror, don't duplicate. The player sprite is drawn facing right. When the player moves left, the renderer adds a single CSS class that flips the SVG with `scaleX(-1)`. One sprite covers both directions.
+   The player sprite is drawn facing right. When the player moves left, the renderer adds a single CSS class that flips the SVG with `scaleX(-1)`. One sprite covers both directions.
 
-4. **Sprites everywhere, not just the board**
+4. **Sprites where they matter**
 
-   Sprites everywhere, not just the board. The HUD chips, weapon name, and choice-card modals all render from the same sprite set. When you equip the War Hammer, the chip next to your HP bar shows the same hammer the board would. There is one source of truth for what a hammer looks like.
+   The equipped-weapon chip and the choice-card modals render from the same sprite set as the board. When you equip the War Hammer, the chip next to your HP bar shows the same hammer the board would. There is one source of truth for what a hammer looks like. The boon, room, key, and potion chips use emoji / text glyphs instead, which keeps the HUD legible at small sizes.
 
 5. **No assets**
 
-   No assets. Sound is oscillators, visuals are inline SVG sprites and text glyphs. The whole game is still three files.
+   Sound is oscillators, visuals are inline SVG sprites and text glyphs.
 
 ### Dungeon Generation
 
 1. **Generation in stages**
 
-   Generation in stages. Rooms are placed first, corridors carved second, and room roles assigned last using a graph distance pass. Non-start rooms are ranked once: dead ends first, then by graph distance from the entrance, descending. The exit takes the top slot and the vaults take the next ones. Ranking before assigning rather than filtering after the fact guarantees both slots always get filled, even when the random extra corridor edges leave the graph with no dead ends.
+   Rooms are placed first, corridors carved second, and room roles assigned last using a graph distance pass. Non-start rooms are ranked once: dead ends first, then by graph distance from the entrance, descending. The exit takes the top slot. The vault is a single optional pick - the floor has a 28% chance to spawn one at all - and it prefers a remaining dead end, falling back to the next-best ranked room if the extra corridor edges left the graph without one. Ranking before assigning rather than filtering after the fact is what keeps the exit slot from stealing every leaf.
 
 2. **Graphs over coordinates**
 
-   Graphs over coordinates. Room connections are stored as a graph, so distance and dead ends come from a breadth first search instead of geometric guessing.
+   Room connections are stored as a graph, so distance and dead ends come from a breadth first search instead of geometric guessing.
 
 3. **Doors mark real crossings only**
 
-   Doors mark real crossings only. A corridor becomes a door exactly where it crosses into a room's interior, never anywhere else along that room's wall - so every door on the map means something.
+   A corridor becomes a door exactly where it crosses into a room's interior, never anywhere else along that room's wall - so every door on the map means something.
 
 4. **Every route in is locked**
 
-   Every route in is locked. The exit room can end up with more than one corridor leading to it, so every extra entrance gets walled off and the single surviving one becomes the red door. Progress always waits on the key, never on a graph coincidence.
+   The exit room can end up with more than one corridor leading to it, so every extra entrance gets walled off and the single surviving one becomes the red door. Progress always waits on the key, never on a graph coincidence.
 
 ### Rendering and Terrain
 
 1. **Two layers of fog**
 
-   Two layers of fog. Discovered tracks memory, visible tracks current sight. Rendering reads both, so remembered tiles dim rather than vanish.
+   Discovered tracks memory, visible tracks current sight. Rendering reads both, so remembered tiles dim rather than vanish.
 
 2. **Textured terrain without a texture atlas**
 
-   Textured terrain without a texture atlas. Walls and floors are sprites like every other tile, drawn from the same pixel-art pipeline. Walls use a running-bond brick layout: the top brick row's vertical joints sit at the cell edge, the bottom row's are offset, so side by side wall tiles read as one continuous brick surface rather than a grid of squares. Each wall has a highlight at the top of the brick, mid stone through the body, and a darker bottom for a shallow 3D read.
+   Walls and floors are sprites like every other tile, drawn from the same pixel-art pipeline. Walls use a running-bond brick layout: the top brick row's vertical joints sit at the cell edge, the bottom row's are offset, so side by side wall tiles read as one continuous brick surface rather than a grid of squares. Each wall has a highlight at the top of the brick, mid stone through the body, and a darker bottom for a shallow 3D read.
+
+   Per-room floor tinting is wired in but not shipped yet. `ROOM_HUES` has an entry for every room type and the engine applies each room's `floorHue` to its cells, but every value in the table is currently `222`, so the whole floor still renders the same blue. The plumbing is there; the palette is what is left to fill in.
 
 3. **Deterministic variants, not random**
 
-   Deterministic variants, not random. Each tile hashes its own coordinates to pick from the wall and floor variant sets. The hash is stable, so a tile keeps the same look on every render - Math.random() here would make the entire dungeon flicker on every step. Same trick gives the whole floor subtle scattershot variation while still being cheap enough to redraw from state each frame.
+   Each tile hashes its own coordinates to pick from the wall and floor variant sets. The hash is stable, so a tile keeps the same look on every render - `Math.random()` here would make the entire dungeon flicker on every step. Same trick gives the whole floor subtle scattershot variation while still being cheap enough to redraw from state on every action.
 
 4. **Layered rendering**
 
-   Layered rendering. Every cell is drawn as a stack of SVG layers: terrain first, then map features (doors, stairs), then entities (enemies, items), then the player. Features and entities no longer replace the floor beneath them, so an enemy standing on stone still sits on stone. That also means the fog's "dim" state can hide entities while leaving terrain and map features readable - remembered exits stay visible on the map, remembered rats don't.
+   Every cell is drawn as a stack of SVG layers: terrain first, then map features (doors, stairs), then entities (enemies, items), then the player. Features and entities no longer replace the floor beneath them, so an enemy standing on stone still sits on stone. That also means the fog's "dim" state can hide entities while leaving terrain and map features readable - remembered exits stay visible on the map, entities on remembered tiles don't.
 
-5. **Full redraw each frame**
+5. **Full redraw on every render**
 
-   Full redraw each frame. The board is rebuilt from state on every render. At this grid size that is cheap, and it removes a whole class of stale UI bugs.
+   The board is rebuilt from state whenever the game state changes. At this grid size that is cheap, and it removes a whole class of stale UI bugs.
 
 ### Game Flow and Player Choice
 
 1. **One action, one turn**
 
-   One action, one turn. Every player action follows the same sequence: resolve, then enemies act, then render. Choice modals pause that sequence and resume it when closed.
+   Every player action follows the same sequence: resolve, then enemies act, then render. Choice modals pause that sequence and resume it when closed. Enemy movement is currently cardinal only - `chooseEnemyMove()` and both fallback move loops use `DIRS4`. `DIRS8` is declared near the top of `script.js` for a planned eight-way movement pass, but nothing references it yet, so diagonal enemy stepping is on the list rather than in the game.
 
 2. **Player choice over auto-resolution**
 
-   Player choice over auto-resolution. Weapon pickups open a choice modal instead of the game deciding for you, using the same modal system as boons and armories.
+   Weapon pickups open a choice modal instead of the game deciding for you, using the same modal system as boons and armories.
 
 ---
