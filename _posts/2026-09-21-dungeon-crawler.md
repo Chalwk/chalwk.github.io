@@ -10,7 +10,13 @@ A turn-based, procedurally generated dungeon roguelite. Explore fog-covered floo
 
 The game is optimized for use on larger devices such as a computer or tablet. Smaller phones work, but the board and HUD are cramped.
 
-[**Link to Game**](https://chalwk.github.io/pages/browser-apps/games/dead-end-dungeon-roguelite)
+## [**Link to Game**](https://chalwk.github.io/pages/browser-apps/games/dead-end-dungeon-roguelite)
+
+---
+
+## Sprites:
+
+![alt text](../pages/browser-apps/games/dead-end-dungeon-roguelite/spritesheet.png)
 
 ---
 
