@@ -1263,6 +1263,10 @@ function renderBoard() {
                 if (player._hitFlash) { cell.classList.add('player-hit'); player._hitFlash = false; }
                 // Player sprite overrides whatever tile was underneath.
                 cell.innerHTML = sprite('player');
+                if (player.facing === 'left') {
+                    const svg = cell.querySelector('svg.sprite');
+                    if (svg) svg.classList.add('facing-left');
+                }
             }
             boardEl.appendChild(cell);
         }
@@ -1838,6 +1842,9 @@ function tryMove(dx, dy) {
     if (!gameActive || gameOver || turnBusy || choicePending) return;
     const nx = player.x + dx, ny = player.y + dy;
     if (!inBounds(nx, ny)) return;
+    if (dx < 0) player.facing = 'left';
+    else if (dx > 0) player.facing = 'right';
+
     const enemy = enemyAt(nx, ny);
     if (enemy) {
         playerAttack(enemy);
@@ -1923,6 +1930,7 @@ function newPlayer() {
         x: 0, y: 0, hp: diff.startHp, maxHp: diff.startHp, weapon: WEAPONS[0], gold: 0,
         potions: diff.startPotions, hasRedKey: false, goldKeys: 0, boons: [], statuses: {},
         firstHitTaken: true, momentumReady: false, _hitFlash: false,
+        facing: 'right',
     };
 }
 

@@ -553,6 +553,12 @@
     pointer-events: none;
 }
 
+/* The player artwork is drawn facing right. When the player moves left we
+   mirror the SVG in place rather than shipping a second 16x16 sprite. */
+.cell>svg.sprite.facing-left {
+    transform: scaleX(-1);
+}
+
 /* HUD chips + choice cards render sprites at roughly text height. */
 .hud-chip svg.sprite,
 .choice-icon svg.sprite {
