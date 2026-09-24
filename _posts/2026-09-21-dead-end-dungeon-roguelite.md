@@ -92,7 +92,7 @@ One shared compiler handles all sprites. A single `sprite()` helper walks each g
 
 Mirror, don't duplicate. The player sprite is drawn facing right. When the player moves left, the renderer adds a single CSS class that flips the SVG with `scaleX(-1)`. One sprite covers both directions.
 
-Sprites show up where they matter. The equipped-weapon chip and the choice-card modals render from the same sprite set as the board. When you equip the War Hammer, the chip next to your HP bar shows the same hammer the board would. There is one source of truth for what a hammer looks like. The boon, room, key, and potion chips use emoji and text glyphs instead, which keeps the HUD legible at small sizes.
+Sprites show up where they matter. The equipped-weapon chip and the choice-card modals render from the same sprite set as the board. When you equip the War Hammer, the chip next to your HP bar shows the same hammer the board would. The boon, room, key, and potion chips use emoji and text glyphs instead, which keeps the HUD legible at small sizes.
 
 No assets. Sound is oscillators, visuals are inline SVG sprites and text glyphs.
 
@@ -125,5 +125,39 @@ Full redraw on every render. The board is rebuilt from state whenever the game s
 One action, one turn. Every player action follows the same sequence: resolve, then enemies act, then render. Choice modals pause that sequence and resume it when closed. Enemy movement is currently cardinal only. `chooseEnemyMove()` and both fallback move loops use `DIRS4`. `DIRS8` is declared near the top of `script.js` for a planned eight-way movement pass, but nothing references it yet, so diagonal enemy stepping is on the list rather than in the game.
 
 Player choice over auto-resolution. Weapon pickups open a choice modal instead of the game deciding for you, using the same modal system as boons and armories.
+
+---
+
+## TO DO
+
+### Combat
+
+* Diagonal Attack Parity - Fix the asymmetry. `enemyCanAttack()` uses `distance()` (Chebyshev), so enemies cam attack diagonally. The player can only attack on cardinal WASD/arrow moves through `tryMove()`, so the exchange is one-sided. I'll either extend `tryMove()` to accept diagonal input (QEZC / diagonal D-pad buttons) or switch `distance()` to Manhattan and lock enemies to 4-way too. Parity fix is probably the cheaper one.
+* War Hammer Knockback - Finish Implementing (read `knockback` in `playerAttack`, push the enemy one tile away from the player on hit). Resolve the target tile against `isWalkableTile`, enemy occupancy, and my own position before moving. Skip the push if the tile is blocked.
+* Weapon Tier Roll - Clamp the floor 1 case. `randomWeaponAtTier(1 + Math.floor((floor - 1) / 3), 3 + Math.floor((floor - 2) / 5))` computes a `maxTier` of 2 on floor 1 because of the negative division. Wrap the second arg in `Math.max`.
+
+### Dungeon
+
+* Floor Colouring - Decide between `ROOM_HUES` and floor sprite variants. Every hue is parked at `222` on purpose until that call is made. I may drop `ROOM_HUES`, the `--floor-hue` CSS var, and the `floorHue` write in `renderBoard()`, then add the per-room floor sprites to `sprites.js` and a variant lookup keyed by room type.
+* `buildDungeon()` retry - I may convert the recursion to a loop. The current save/restore of `floorBuildRetryCount` around the recursive call works but reads poorly.
+
+### Enemy AI
+
+* Remove `DIRS8`. It was added for an eight-way movement pass that I decided against. Enemies already step diagonally through `chooseEnemyMove()`, which returns `{ x: sign(dx), y: sign(dy) }` and lands first in the `tryMoves` list, so the const never had a job.
+
+### Architecture
+
+* Boon Grant Hook - Add `onGrant(player)` to the boon entry and drop the `iron_will` / `glass_fang` special cases in `addBoon()`. Keeps grant-time effects data-driven like the rest of the boon table.
+* `corridorPathAllowed()` - Drop the unused `roomA` and `roomB` params. The room checks go through `rooms.some(...)` directly.
+* `findCorridorPath()` - Drop the `visited[ny]?.[nx]` optional chain. `inBounds(nx, ny)` already runs upstream.
+
+### Cleanup
+
+* Console Spam - Gate the `console.log` calls in `buildDungeon()` (vault placement, key placement, vault spawn counts) behind a `DEBUG` flag.
+* Same flag for the `console.warn` / `console.error` in the validation retry path.
+
+### Layout
+
+* Small Phone Viewports - Rework the `@media (max-width: 480px)` and coarse-pointer blocks in `style.css`. Under ~480px the board shrinks, HUD chips wrap to two rows, and the D-pad fights the log for vertical space. This should just be a CSS pass, not a script change.
 
 ---
