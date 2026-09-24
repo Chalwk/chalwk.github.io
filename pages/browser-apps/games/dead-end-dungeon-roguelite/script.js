@@ -83,18 +83,18 @@ const DIFFICULTY_PRESETS = {
 
 // Per-room floor tint, keyed by room type.
 const ROOM_HUES = {
-    start: 200,    // 200 - entrance
-    exit: 50,      // 50  - stair hall
-    vault: 45,     // 45  - locked vault
-    treasury: 35,  // 35  - treasure room
-    shrine: 280,   // 280 - shrine
-    armory: 210,   // 210 - steel blue
-    gauntlet: 0,   // 0 - red
-    library: 220,  // 220 - blue
-    healing: 130,  // 130 - green
-    secret: 300,   // 300 - magenta
-    boss: 350,     // 350 - crimson
-    normal: 222,   // 222 - default blue
+    start: 222,     // 200 - entrance
+    exit: 222,      // 50  - stair hall
+    vault: 222,     // 45  - locked vault
+    treasury: 222,  // 35  - treasure room
+    shrine: 222,    // 280 - shrine
+    armory: 222,    // 210 - steel blue
+    gauntlet: 222,  // 0   - red
+    library: 222,   // 220 - blue
+    healing: 222,   // 130 - green
+    secret: 222,    // 300 - magenta
+    boss: 222,      // 350 - crimson
+    normal: 222,    // 222 - default blue
 };
 
 // Weapon ladder. Higher tiers = more raw damage + unique on-hit effects.
