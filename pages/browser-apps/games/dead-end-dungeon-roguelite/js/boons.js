@@ -18,7 +18,7 @@ function updateChoiceFocus() {
     cards[choiceIndex]?.focus();
 }
 
-// Generic modal for boons/weapons/secret rewards. The overlay blocks input
+// Modal for boons/weapons/secret rewards. The overlay blocks input
 // until the player clicks a card (or presses Space on the focused card).
 // Options may supply either a `sprite` name or an `icon` glyph.
 function openChoice({ kicker = 'DISCOVERY', title, description, options, advanceTurn = true }) {
