@@ -38,6 +38,10 @@ const DIFF_SEPARATION = 70;
 // (A palette pair like #fbbf24 / #facc15 scores ~20 — basically invisible.)
 const MIN_RECOLOR_DISTANCE = 60;
 
+// How much two objects' bounding radii are allowed to overlap before we
+// consider them "clashing" (used any time an object's footprint changes).
+const OBJECT_OVERLAP_ALLOWANCE = 0.9;
+
 // Scatters a random handful of objects across the canvas, rejecting spots
 // that would overlap something already placed.
 function generateBaseScene(sizeKey) {
@@ -170,19 +174,38 @@ function generateDifferences(base, diffCount) {
 
         // --- RESIZE: same object, clearly different size on the right --------
         if (kind === 'resize') {
-            if (!farEnough(diffs, anchor, DIFF_SEPARATION)) continue;
-            usedIndices.add(idx);
+            const type = getObjectType(obj.typeId);
+            if (!type) continue;
+
             const grow = Math.random() < 0.5;
             // Make it obvious: at least a 45% / 60% size jump.
-            obj.scale = clamp(obj.scale * (grow ? 1.6 : 0.55), 0.4, 2.2);
-            obj.radius = getObjectRadius(obj.typeId) * obj.scale;
+            const newScale = clamp(obj.scale * (grow ? 1.6 : 0.55), 0.4, 2.2);
+            const newRadius = type.radius * newScale;
+
+            const margin = Math.min(newRadius + 4, base.viewW / 2 - 4, base.viewH / 2 - 4);
+            const nx = clamp(obj.x, margin, base.viewW - margin);
+            const ny = clamp(obj.y, margin, base.viewH - margin);
+
+            const clashes = right.some((other, i) =>
+                i !== idx && !other._removed &&
+                distancePt(other, { x: nx, y: ny }) < (other.radius + newRadius) * OBJECT_OVERLAP_ALLOWANCE);
+            if (clashes) continue;
+
+            const newAnchor = { x: nx, y: ny };
+            if (!farEnough(diffs, newAnchor, DIFF_SEPARATION)) continue;
+
+            usedIndices.add(idx);
+            obj.scale = newScale;
+            obj.radius = newRadius;
+            obj.x = nx;
+            obj.y = ny;
             diffs.push({
                 kind,
-                x: anchor.x,
-                y: anchor.y,
-                radius: Math.max(obj.radius, 24) * preset.hitRadiusMult,
+                x: newAnchor.x,
+                y: newAnchor.y,
+                radius: Math.max(newRadius, 24) * preset.hitRadiusMult,
                 markLeft: { x: anchor.x, y: anchor.y },
-                markRight: { x: anchor.x, y: anchor.y },
+                markRight: { x: newAnchor.x, y: newAnchor.y },
                 found: false,
             });
             continue;
@@ -209,7 +232,7 @@ function generateDifferences(base, diffCount) {
                 // becomes visually merged and effectively invisible.
                 const clashes = right.some((other, i) =>
                     i !== idx && !other._removed &&
-                    distancePt(other, { x: nx, y: ny }) < (other.radius + obj.radius) * 0.9);
+                    distancePt(other, { x: nx, y: ny }) < (other.radius + obj.radius) * OBJECT_OVERLAP_ALLOWANCE);
                 if (clashes) continue;
                 const from = { x: obj.x, y: obj.y };
                 const mid = { x: (from.x + nx) / 2, y: (from.y + ny) / 2 };
@@ -235,6 +258,25 @@ function generateDifferences(base, diffCount) {
     return { left, right: right.filter(o => !o._removed), diffs };
 }
 
+// A last line of defense: confirms every object left in the scene is
+// actually drawable (finite coordinates, positive scale). If generation
+// ever produces something objectMarkup() would silently skip, we want to
+// catch it here and throw the whole scene away rather than hand the player
+// a round with an invisible, unfindable difference.
+function isValidRenderableObject(o) {
+    return !!o && !!o.typeId &&
+        Number.isFinite(o.x) && Number.isFinite(o.y) &&
+        Number.isFinite(o.scale) && o.scale > 0 &&
+        Number.isFinite(o.radius) && o.radius > 0;
+}
+
+function sceneIsValid(built) {
+    if (!built || !Array.isArray(built.left) || !Array.isArray(built.right)) return false;
+    if (!built.left.every(isValidRenderableObject)) return false;
+    if (!built.right.every(isValidRenderableObject)) return false;
+    return true;
+}
+
 function buildRoundScene(sizeKey, round) {
     const preset = SIZE_PRESETS[sizeKey] || SIZE_PRESETS.small;
     const desired = diffCountForRound(round);
@@ -248,7 +290,7 @@ function buildRoundScene(sizeKey, round) {
         const maxByObjects = Math.max(3, base.objects.length - 1);
         const diffCount = Math.max(1, Math.min(desired, maxByObjects, preset.maxObjects + 2));
         const built = generateDifferences(base, diffCount);
-        if (built.diffs.length > 0) {
+        if (built.diffs.length > 0 && sceneIsValid(built)) {
             result = {
                 theme: base.theme,
                 viewW: base.viewW,
@@ -261,17 +303,20 @@ function buildRoundScene(sizeKey, round) {
     }
 
     // Last-ditch fallback: keep the game playable no matter what.
-    if (!result) {
+    for (let attempt = 0; attempt < 10 && !result; attempt++) {
         const base = generateBaseScene(sizeKey);
+        if (!base.objects.length) continue;
         const built = generateDifferences(base, 1);
-        result = {
-            theme: base.theme,
-            viewW: base.viewW,
-            viewH: base.viewH,
-            left: built.left,
-            right: built.right,
-            diffs: built.diffs,
-        };
+        if (built.diffs.length > 0 && sceneIsValid(built)) {
+            result = {
+                theme: base.theme,
+                viewW: base.viewW,
+                viewH: base.viewH,
+                left: built.left,
+                right: built.right,
+                diffs: built.diffs,
+            };
+        }
     }
 
     return result;
