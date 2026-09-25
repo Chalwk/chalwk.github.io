@@ -12,23 +12,28 @@ main {
     height: 100%;
 }
 
-.hmo-app-root {
-    width: 100%;
-    max-width: var(--container-max, 1200px);
-    margin: 0 auto;
-    padding: 0 1.5rem;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}
-
 :root {
     --primary: #4a86e8;
     --primary-rgb: 74, 134, 232;
-    --light: #f9fafb;
-    --dark: #111827;
-    --gray-light: #e5e7eb;
-    --gray: #6b7280;
+
+    /* semantic tokens (overridden by theme classes) */
+    --bg: #f9fafb;
+    --surface: #ffffff;
+    --surface-alt: #f3f4f6;
+    --text: #111827;
+    --text-muted: #6b7280;
+    --border: #e5e7eb;
+    --toast-bg: #111827;
+    --toast-text: #ffffff;
+    --nav-bg: rgba(255, 255, 255, 0.95);
+
+    /* legacy aliases so existing rules keep working */
+    --light: var(--bg);
+    --dark: var(--text);
+    --gray: var(--text-muted);
+    --gray-light: var(--border);
+    --white: var(--surface);
+
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
@@ -36,6 +41,68 @@ main {
     --radius-sm: 0.25rem;
     --radius: 0.375rem;
     --radius-lg: 0.5rem;
+
+    --container-max: 1200px;
+}
+
+/* ---------------- Themes ---------------- */
+body.theme-light {
+    --bg: #f9fafb;
+    --surface: #ffffff;
+    --surface-alt: #f3f4f6;
+    --text: #111827;
+    --text-muted: #6b7280;
+    --border: #e5e7eb;
+    --nav-bg: rgba(255, 255, 255, 0.95);
+}
+
+body.theme-dark {
+    --bg: #111827;
+    --surface: #1f2937;
+    --surface-alt: #374151;
+    --text: #f3f4f6;
+    --text-muted: #9ca3af;
+    --border: #374151;
+    --nav-bg: rgba(31, 41, 55, 0.95);
+    --primary: #60a5fa;
+    --primary-rgb: 96, 165, 250;
+    --toast-bg: #374151;
+    --toast-text: #f9fafb;
+}
+
+body.theme-high-contrast {
+    --bg: #000000;
+    --surface: #000000;
+    --surface-alt: #000000;
+    --text: #ffffff;
+    --text-muted: #ffffff;
+    --border: #ffffff;
+    --nav-bg: #000000;
+    --primary: #ffff00;
+    --primary-rgb: 255, 255, 0;
+    --toast-bg: #ffff00;
+    --toast-text: #000000;
+}
+
+@media (prefers-color-scheme: dark) {
+    body.theme-auto {
+        --bg: #111827;
+        --surface: #1f2937;
+        --surface-alt: #374151;
+        --text: #f3f4f6;
+        --text-muted: #9ca3af;
+        --border: #374151;
+        --nav-bg: rgba(31, 41, 55, 0.95);
+        --primary: #60a5fa;
+        --primary-rgb: 96, 165, 250;
+        --toast-bg: #374151;
+        --toast-text: #f9fafb;
+    }
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
 }
 
 .visually-hidden {
@@ -45,6 +112,16 @@ main {
     overflow: hidden;
     clip: rect(1px, 1px, 1px, 1px);
     white-space: nowrap;
+}
+
+.hmo-app-root {
+    width: 100%;
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .app-container {
@@ -140,7 +217,8 @@ main {
     position: absolute;
     top: 100%;
     right: 0;
-    background: white;
+    background: var(--surface);
+    color: var(--text);
     border: 1px solid var(--gray-light);
     border-radius: var(--radius);
     padding: 0.75rem;
@@ -214,7 +292,7 @@ main {
     flex: 1;
     min-height: 48px;
     padding: 0.75rem;
-    background: white;
+    background: var(--surface);
     border-radius: var(--radius);
     align-items: center;
     border: 1px solid var(--gray-light);
@@ -233,50 +311,61 @@ main {
     gap: 0.5rem;
     padding: 0.5rem 1rem;
     border-radius: 20px;
-    background: var(--light);
-    color: var(--dark);
+    background: var(--surface-alt);
+    color: var(--text);
     font-weight: 600;
     cursor: grab;
     user-select: none;
+    -webkit-user-select: none;
     transition: all 0.2s ease;
     position: relative;
     border: 2px solid transparent;
     min-height: 44px;
     box-shadow: var(--shadow-sm);
-    touch-action: manipulation;
+    touch-action: none;
+}
+
+.phrase-item:hover {
+    background: #dbe8ff;
+    color: #111827;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow);
 }
 
 .phrase-item:active {
     cursor: grabbing;
 }
 
-.phrase-item:hover {
-    background: #dbe8ff;
-    transform: translateY(-1px);
-    box-shadow: var(--shadow);
-}
-
 .phrase-item.dragging {
     opacity: 0.6;
     transform: scale(0.95);
     box-shadow: var(--shadow-lg);
+    cursor: grabbing;
 }
 
 .phrase-item.drag-over {
     border: 2px dashed var(--primary);
     background: #f0f5ff;
+    color: #111827;
 }
 
 .phrase-item img {
     width: 20px;
     height: 20px;
     object-fit: contain;
+    pointer-events: none;
+}
+
+.phrase-item:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
 }
 
 .phrase-controls {
     display: flex;
     gap: 0.5rem;
     align-items: center;
+    flex-wrap: wrap;
 }
 
 .board-container {
@@ -313,7 +402,8 @@ main {
 }
 
 .board-nav {
-    background: rgba(255, 255, 255, 0.95);
+    background: var(--nav-bg);
+    color: var(--text);
     border: 2px solid var(--gray-light);
     border-radius: 50%;
     width: 56px;
@@ -329,7 +419,7 @@ main {
 }
 
 .board-nav:hover {
-    background: white;
+    background: var(--surface);
     box-shadow: var(--shadow-lg);
 }
 
@@ -351,7 +441,6 @@ main {
     font-family: monospace;
 }
 
-/* colour grades: left swipe - darkest on the left (arrow-1), lightest on the right (arrow-3) */
 .swipe-hint-left .arrow-1 {
     color: #000;
 }
@@ -364,7 +453,6 @@ main {
     color: #ccc;
 }
 
-/* right swipe - darkest on the right (arrow-3), lightest on the left (arrow-1) */
 .swipe-hint-right .arrow-1 {
     color: #ccc;
 }
@@ -377,15 +465,20 @@ main {
     color: #000;
 }
 
-/* --- end new styles --- */
+/* hide swipe hints on non-touch devices */
+@media (hover: hover) and (pointer: fine) {
+    .swipe-hint {
+        display: none;
+    }
+}
 
 .category-indicator {
     position: absolute;
     top: 1rem;
     left: 50%;
     transform: translateX(-50%);
-    background: var(--light);
-    color: var(--dark);
+    background: var(--surface);
+    color: var(--text);
     padding: 0.4rem 1.2rem;
     border-radius: 20px;
     font-weight: 600;
@@ -399,7 +492,7 @@ main {
 }
 
 .category-indicator:hover {
-    background: #f0f0f0;
+    background: var(--surface-alt);
 }
 
 .category-dropdown {
@@ -407,7 +500,8 @@ main {
     top: 3.5rem;
     left: 50%;
     transform: translateX(-50%);
-    background: white;
+    background: var(--surface);
+    color: var(--text);
     border: 1px solid var(--gray-light);
     border-radius: var(--radius);
     box-shadow: var(--shadow-lg);
@@ -492,7 +586,7 @@ button:active {
     padding: 0.5rem;
     border-radius: var(--radius);
     background: #e8f0fe;
-    color: var(--dark);
+    color: #111827;
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     text-align: center;
@@ -516,11 +610,13 @@ button:active {
     font-size: 0.65rem;
     font-weight: bold;
     line-height: 1;
-    color: rgba(0, 0, 0, 0.65);
-    background: rgba(255, 255, 255, 0.85);
-    border-radius: 50%;
-    width: 1.5em;
+    color: rgba(0, 0, 0, 0.7);
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 999px;
+    min-width: 1.5em;
     height: 1.5em;
+    padding: 0 0.35em;
+    box-sizing: border-box;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -586,7 +682,6 @@ button:active {
 
 .board.fixed-grid .symbol-emoji {
     font-size: clamp(1.2rem, 6vw, 2rem);
-    line-height: 1;
     white-space: nowrap;
 }
 
@@ -665,8 +760,8 @@ button:active {
 }
 
 .modal-content {
-    background: white;
-    color: var(--dark);
+    background: var(--surface);
+    color: var(--text);
     width: 100%;
     max-width: 520px;
     border-radius: var(--radius-lg);
@@ -687,7 +782,7 @@ button:active {
 
 .modal-header h2 {
     margin: 0;
-    color: var(--dark);
+    color: var(--text);
     font-size: 1.3rem;
 }
 
@@ -711,7 +806,7 @@ button:active {
 }
 
 .close:hover {
-    color: var(--dark);
+    color: var(--text);
 }
 
 .form-group {
@@ -723,7 +818,7 @@ button:active {
 
 .form-group label {
     font-weight: 500;
-    color: var(--dark);
+    color: var(--text);
 }
 
 .form-group input[type="text"],
@@ -732,8 +827,8 @@ button:active {
     padding: 0.75rem;
     border-radius: var(--radius);
     border: 1px solid var(--gray-light);
-    background: white;
-    color: var(--dark);
+    background: var(--surface);
+    color: var(--text);
     font-size: 1rem;
     transition: border-color 0.2s ease;
     font-family: inherit;
@@ -796,8 +891,8 @@ button:active {
     border: 1px solid var(--gray-light);
     border-radius: var(--radius-sm);
     font-size: 0.9rem;
-    background: white;
-    color: var(--dark);
+    background: var(--surface);
+    color: var(--text);
     font-family: inherit;
 }
 
@@ -830,7 +925,7 @@ button:active {
 
 .settings-section h3 {
     margin-bottom: 1rem;
-    color: var(--dark);
+    color: var(--text);
     font-size: 1.1rem;
     border-bottom: 2px solid var(--primary);
     padding-bottom: 0.25rem;
@@ -858,7 +953,7 @@ button:active {
     margin-top: 1.5rem;
     margin-bottom: 0.5rem;
     font-size: 1.1rem;
-    color: var(--dark);
+    color: var(--text);
     border-bottom: 2px solid var(--primary);
     padding-bottom: 0.25rem;
 }
@@ -875,12 +970,12 @@ button:active {
 .toast {
     position: fixed;
     right: 1rem;
-    bottom: 1rem;
+    bottom: 6rem;
     min-width: 200px;
     max-width: 320px;
-    z-index: 80;
-    background: var(--dark);
-    color: white;
+    z-index: 2000;
+    background: var(--toast-bg);
+    color: var(--toast-text);
     padding: 1rem;
     border-radius: var(--radius);
     box-shadow: var(--shadow-lg);
@@ -1062,15 +1157,6 @@ body.clicked-outside .settings-dropdown.active .settings-menu {
     .phrase-item {
         padding: 0.75rem 1rem;
         min-height: 52px;
-    }
-
-    .phrase-display.drag-active {
-        border-width: 3px;
-    }
-
-    .phrase-item.drag-over {
-        border-width: 3px;
-        transform: scale(1.05);
     }
 
     .settings-panel {

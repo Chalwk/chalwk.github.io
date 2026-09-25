@@ -1001,7 +1001,7 @@ function closeFocusMode() {
 function renderFocusTask() {
     const [next] = sortTasks(tasks.filter(t => !t.completed));
     if (!next) {
-        focusModeContent.innerHTML = `<p class="empty-state">No tasks left. Nice work — take a break! 🎉</p>`;
+        focusModeContent.innerHTML = `<p class="empty-state">No tasks left. Nice work - take a break! 🎉</p>`;
         return;
     }
     focusModeContent.innerHTML = '';

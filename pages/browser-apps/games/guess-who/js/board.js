@@ -70,7 +70,7 @@ function faceUpCount() {
 function updateCardAria(card, eliminated) {
     const i = Number(card.dataset.index);
     const name = charName(i);
-    card.setAttribute('aria-label', `${name} — ${eliminated ? 'flipped' : 'face up'}`);
+    card.setAttribute('aria-label', `${name} - ${eliminated ? 'flipped' : 'face up'}`);
     card.setAttribute('aria-pressed', String(eliminated));
 }
 

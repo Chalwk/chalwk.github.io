@@ -183,7 +183,7 @@ function updateDeductionPanel() {
 
 function updateStatsDisplay() {
     if (!gameOverStatsEl) return;
-    const b = stats.bestQuestionCount != null ? `${stats.bestQuestionCount} questions` : '—';
+    const b = stats.bestQuestionCount != null ? `${stats.bestQuestionCount} questions` : '-';
     gameOverStatsEl.innerHTML =
         `Wins <strong>${stats.wins}</strong> · Losses <strong>${stats.losses}</strong> · ` +
         `Streak <strong>${stats.streak}</strong> (best <strong>${stats.bestStreak}</strong>)<br>` +

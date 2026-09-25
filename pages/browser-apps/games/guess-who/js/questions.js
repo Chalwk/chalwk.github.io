@@ -47,7 +47,7 @@ function askQuestion(def) {
 
     sfx.answer(answer);
     flashStatus(answer ? 'Yes!' : 'No!', answer ? 'win-message' : 'tie-message');
-    addChatMessage(`YOU: "${def.label}" — ${answer ? 'Yes' : 'No'}`, 'player');
+    addChatMessage(`YOU: "${def.label}" - ${answer ? 'Yes' : 'No'}`, 'player');
 
     queueAiTurn();
 

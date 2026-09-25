@@ -166,7 +166,7 @@
 
         const hasLetters = /[a-zA-Z]/.test(surname);
         if (!hasLetters) {
-            warnings.textContent = 'No letters detected — only letters A-Z are transformed by the cipher.';
+            warnings.textContent = 'No letters detected - only letters A-Z are transformed by the cipher.';
             warnings.style.display = 'block';
         } else {
             warnings.style.display = 'none';
