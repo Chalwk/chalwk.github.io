@@ -3,6 +3,8 @@
 // --- Game lifecycle ------------------------------------------------------------
 function startNewGame() {
     clearInterval(timerId);
+    clearTimeout(roundTimeoutId);
+    roundTimeoutId = null;
     overlay.classList.remove('show');
     clearLog();
     round = 1;
@@ -41,13 +43,21 @@ function tickTimer() {
     }
 }
 
-// Returns true if the click landed on an un-found difference.
 function roundIsCleared() { return !scene || foundCount >= scene.diffs.length; }
 
+// A click counts if it lands near any of the difference's marked points.
+// A "move" diff has two (from and to). Everything else has one.
 function registerHit(x, y) {
     if (!gameActive || gameOver || !scene) return false;
-    const diff = scene.diffs.find(d => !d.found && distancePt(d, { x, y }) <= d.radius);
     const preset = DIFFICULTY_PRESETS[difficultyKey];
+    const diff = scene.diffs.find(d => {
+        if (d.found) return false;
+        const anchors = [];
+        if (d.markLeft) anchors.push(d.markLeft);
+        if (d.markRight) anchors.push(d.markRight);
+        if (!anchors.length) anchors.push({ x: d.x, y: d.y });
+        return anchors.some(p => distancePt(p, { x, y }) <= d.radius);
+    });
 
     if (diff) {
         diff.found = true;
@@ -80,7 +90,9 @@ function completeRound() {
     carryTime = Math.min(timeLeft, 20);
     if (round >= MAX_ROUND) { endGame(true); return; }
     const nextRound = round + 1;
-    setTimeout(() => {
+    // Stored so a New Game click during the celebration cancels it.
+    roundTimeoutId = setTimeout(() => {
+        roundTimeoutId = null;
         if (!gameActive || gameOver) return;
         round = nextRound;
         newRound();
@@ -107,6 +119,8 @@ function endGame(won) {
     gameOver = true;
     gameActive = false;
     clearInterval(timerId);
+    clearTimeout(roundTimeoutId);
+    roundTimeoutId = null;
     if (won) playVictorySound(); else playDeathSound();
     if (score > bestScore) {
         bestScore = score;

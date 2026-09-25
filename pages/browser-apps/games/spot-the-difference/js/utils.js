@@ -15,14 +15,10 @@ function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
 function distancePt(a, b) { return Math.hypot(a.x - b.x, a.y - b.y); }
 
 // Maps a raw client click into the SVG's own viewBox coordinate space,
-// so hit detection stays correct no matter how the board is scaled on screen.
+// so hit detection stays correct at any rendered size.
 function svgPointFromEvent(svgEl, evt) {
-    if (!svgEl.createSVGPoint) return null;
-    const pt = svgEl.createSVGPoint();
-    pt.x = evt.clientX;
-    pt.y = evt.clientY;
     const ctm = svgEl.getScreenCTM();
     if (!ctm) return null;
-    const loc = pt.matrixTransform(ctm.inverse());
-    return { x: loc.x, y: loc.y };
+    const pt = new DOMPoint(evt.clientX, evt.clientY).matrixTransform(ctm.inverse());
+    return { x: pt.x, y: pt.y };
 }
