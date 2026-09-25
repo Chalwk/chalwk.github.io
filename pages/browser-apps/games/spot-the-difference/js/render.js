@@ -25,10 +25,17 @@ function objectMarkup(o) {
     return `<g transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) scale(${scale.toFixed(2)})">${drawObjectShape(o.typeId, o.color)}</g>`;
 }
 
-function diffRingMarkup(d) {
+function markPointFor(d, side) {
+    const mark = side === 'left' ? d.markLeft : d.markRight;
+    if (mark && Number.isFinite(mark.x) && Number.isFinite(mark.y)) return mark;
+    return { x: d.x, y: d.y };
+}
+
+function diffRingMarkup(d, side) {
+    const p = markPointFor(d, side);
     return `<g class="diff-found-mark">` +
-        `<circle cx="${d.x}" cy="${d.y}" r="${d.radius.toFixed(1)}" class="diff-ring"/>` +
-        `<path d="M ${d.x - 6} ${d.y} l 4 4 l 8 -9" class="diff-check"/>` +
+        `<circle cx="${p.x}" cy="${p.y}" r="${d.radius.toFixed(1)}" class="diff-ring"/>` +
+        `<path d="M ${p.x - 6} ${p.y} l 4 4 l 8 -9" class="diff-check"/>` +
         `</g>`;
 }
 
@@ -39,11 +46,13 @@ function renderBoards() {
         el.setAttribute('viewBox', `0 0 ${viewW} ${viewH}`);
         el.style.aspectRatio = `${viewW} / ${viewH}`;
     });
-    const foundMarkers = diffs.filter(d => d.found).map(diffRingMarkup).join('');
+    const found = diffs.filter(d => d.found);
+    const leftMarkers = found.map(d => diffRingMarkup(d, 'left')).join('');
+    const rightMarkers = found.map(d => diffRingMarkup(d, 'right')).join('');
     leftBoardEl.innerHTML = sceneBackgroundMarkup(theme, viewW, viewH, 'l') +
-        left.map(objectMarkup).join('') + foundMarkers;
+        left.map(objectMarkup).join('') + leftMarkers;
     rightBoardEl.innerHTML = sceneBackgroundMarkup(theme, viewW, viewH, 'r') +
-        right.map(objectMarkup).join('') + foundMarkers;
+        right.map(objectMarkup).join('') + rightMarkers;
 }
 
 // Transient red X where a click missed. Appended directly (not part of the
@@ -60,10 +69,11 @@ function showMissMarker(boardEl, x, y) {
 // Pulses a ring around one un-found difference on both boards for a moment.
 function flashHint(diff) {
     const ns = 'http://www.w3.org/2000/svg';
-    [leftBoardEl, rightBoardEl].forEach(boardEl => {
+    [[leftBoardEl, 'left'], [rightBoardEl, 'right']].forEach(([boardEl, side]) => {
+        const p = markPointFor(diff, side);
         const g = document.createElementNS(ns, 'g');
         g.setAttribute('class', 'diff-hint-mark');
-        g.innerHTML = `<circle cx="${diff.x}" cy="${diff.y}" r="${diff.radius.toFixed(1)}"/>`;
+        g.innerHTML = `<circle cx="${p.x}" cy="${p.y}" r="${diff.radius.toFixed(1)}"/>`;
         boardEl.appendChild(g);
         setTimeout(() => g.remove(), 1800);
     });

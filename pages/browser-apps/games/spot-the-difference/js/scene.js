@@ -203,7 +203,8 @@ function generateDifferences(base, diffCount) {
                     i !== idx && !other._removed &&
                     distancePt(other, { x: nx, y: ny }) < (other.radius + obj.radius) * 0.9);
                 if (clashes) continue;
-                const mid = { x: (obj.x + nx) / 2, y: (obj.y + ny) / 2 };
+                const from = { x: obj.x, y: obj.y };
+                const mid = { x: (from.x + nx) / 2, y: (from.y + ny) / 2 };
                 if (!farEnough(diffs, mid, DIFF_SEPARATION)) continue;
                 usedIndices.add(idx);
                 obj.x = nx;
@@ -212,6 +213,8 @@ function generateDifferences(base, diffCount) {
                     kind,
                     x: mid.x,
                     y: mid.y,
+                    markLeft: from,
+                    markRight: { x: nx, y: ny },
                     radius: Math.max(obj.radius + actual * 0.6, 32) * preset.hitRadiusMult,
                     found: false,
                 });
