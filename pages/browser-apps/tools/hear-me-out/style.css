@@ -555,6 +555,11 @@ button:active {
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
     gap: 1rem;
     transition: opacity 0.15s ease;
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem;
+    background: var(--surface);
 }
 
 .board.fixed-grid {
