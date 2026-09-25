@@ -59,7 +59,7 @@
     margin-bottom: 0.85rem;
     display: flex;
     flex-wrap: wrap;
-    gap: 1.25rem;
+    gap: 1rem 1.25rem;
     justify-content: center;
     align-items: center;
 }
@@ -207,6 +207,30 @@
     background-image: none !important;
 }
 
+/* Deduction / AI tracker */
+.deduction {
+    width: 100%;
+    background: rgba(96, 165, 250, 0.1);
+    border: 1px solid rgba(96, 165, 250, 0.3);
+    border-radius: var(--radius);
+    padding: 0.45rem 0.6rem;
+    font-size: 0.7rem;
+    color: #bfdbfe;
+    text-align: center;
+    line-height: 1.35;
+    margin-top: 0.5rem;
+}
+
+.deduction:empty {
+    display: none;
+}
+
+.deduction strong {
+    color: #93c5fd;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+}
+
 .side-stats {
     display: flex;
     flex-direction: column;
@@ -285,22 +309,51 @@
     width: 100%;
 }
 
+/* ---- 3D Card Flip ---- */
 .gw-card {
     position: relative;
     aspect-ratio: 1 / 1;
     border-radius: var(--radius-sm);
-    overflow: hidden;
     cursor: pointer;
-    background: var(--primary);
+    background: transparent;
     transition: transform 0.15s ease, box-shadow 0.2s ease;
     user-select: none;
     -webkit-user-select: none;
     -webkit-tap-highlight-color: transparent;
+    perspective: 900px;
+    outline: none;
 }
 
 .gw-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
+}
+
+.gw-card:focus-visible {
+    box-shadow: 0 0 0 3px #60a5fa;
+}
+
+.gw-card-inner {
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+    transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+    border-radius: var(--radius-sm);
+    z-index: 1;
+}
+
+.gw-card.eliminated .gw-card-inner {
+    transform: rotateY(180deg);
+}
+
+.gw-face-wrap {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    background: var(--primary);
 }
 
 .gw-face {
@@ -309,7 +362,6 @@
     background-size: 600% 400%;
     background-repeat: no-repeat;
     background-color: var(--primary);
-    transition: opacity 0.3s ease, filter 0.3s ease;
     pointer-events: none;
     image-rendering: -webkit-optimize-contrast;
     z-index: 1;
@@ -318,9 +370,10 @@
 .gw-flip {
     position: absolute;
     inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transform: rotateY(180deg);
     background: linear-gradient(135deg, #14181f, #232a35);
-    opacity: 0;
-    transition: opacity 0.3s ease;
     pointer-events: none;
     display: flex;
     align-items: center;
@@ -354,27 +407,9 @@
     line-height: 1.25;
 }
 
-.gw-card.eliminated .gw-face {
-    opacity: 0.15;
-    filter: grayscale(1);
-}
-
-.gw-card.eliminated .gw-flip {
-    opacity: 1;
-}
-
-.gw-card.eliminated .gw-name {
-    color: rgba(255, 255, 255, 0.55);
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0));
-}
-
-.gw-card.correct.eliminated .gw-face {
-    opacity: 1;
-    filter: none;
-}
-
-.gw-card.correct.eliminated .gw-flip {
-    opacity: 0;
+/* A revealed secret (correct) always faces the player. */
+.gw-card.correct.eliminated .gw-card-inner {
+    transform: rotateY(0deg);
 }
 
 .gw-card.correct {
@@ -631,6 +666,13 @@
     width: 100%;
 }
 
+.controls .btn:disabled,
+.controls .btn.disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
 .game-over-overlay {
     position: absolute;
     inset: 0;
@@ -699,6 +741,18 @@
     color: rgba(255, 255, 255, 0.85);
     margin-bottom: 0.4rem;
     line-height: 1.35;
+}
+
+.game-over-stats {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.5;
+    margin-bottom: 0.5rem;
+}
+
+.game-over-stats strong {
+    color: #93c5fd;
+    font-family: var(--font-mono);
 }
 
 .confirm-actions {
@@ -774,6 +828,11 @@
     .player-card-face-wrap {
         width: 80px;
         max-width: 80px;
+    }
+
+    .deduction {
+        margin-top: 0;
+        flex-basis: 100%;
     }
 
     .side-stats {
@@ -902,5 +961,22 @@
     .player-card-face-wrap {
         width: 68px;
         max-width: 68px;
+    }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .gw-card-inner {
+        transition: none !important;
     }
 }

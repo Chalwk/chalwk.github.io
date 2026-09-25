@@ -78,6 +78,7 @@ function stepConfetti() {
 
 function clearConfetti() {
     confettiParticles = [];
+    if (!confettiW || !confettiH) return;
     const ctx = confettiCanvas.getContext('2d');
     if (ctx) ctx.clearRect(0, 0, confettiW, confettiH);
 }

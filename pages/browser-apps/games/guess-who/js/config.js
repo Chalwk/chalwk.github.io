@@ -5,6 +5,16 @@ const COLS = 6;
 const ROWS = 4;
 const TOTAL = COLS * ROWS; // 24
 const SOUND_KEY = 'guesswho.sound';
+const STATS_KEY = 'guesswho.stats';
+const MAX_UNDOS = 3;
+const BOARD_ORDER = ['faces1.png', 'faces2.png'];
+
+// AI difficulty profiles
+const AI_PROFILES = {
+    easy: { randomChance: 0.45, earlyGuessThreshold: 0.0, maxQuestions: 8 },
+    medium: { randomChance: 0.15, earlyGuessThreshold: 0.0, maxQuestions: 7 },
+    hard: { randomChance: 0.0, earlyGuessThreshold: 0.75, maxQuestions: 6 },
+};
 
 // Character traits
 // Order is left-to-right, top-to-bottom

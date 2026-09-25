@@ -2,51 +2,68 @@
 
 // AI Logic
 function getBestQuestion(candidates, usedQs) {
-    let bestQ = null;
-    let minDiff = Infinity;
-    const availableQs = QUESTION_DEFS.filter(q => !usedQs.has(q.id));
-    if (availableQs.length === 0) return null;
+    const available = pruneRedundantQuestions(
+        QUESTION_DEFS.filter(q => !usedQs.has(q.id)),
+        candidates
+    );
+    if (available.length === 0) return null;
 
-    for (const q of availableQs) {
+    // Difficulty: easy/medium pick a random question some of the time.
+    if (aiProfile.randomChance > 0 && Math.random() < aiProfile.randomChance) {
+        return available[Math.floor(Math.random() * available.length)];
+    }
+
+    let best = -1;
+    let ties = [];
+    for (const q of available) {
         let yes = 0;
-        let no = 0;
-        for (const idx of candidates) {
-            if (q.test(CHARACTERS[idx])) yes++;
-            else no++;
-        }
-        const diff = Math.abs(yes - no);
-        if (diff < minDiff) {
-            minDiff = diff;
-            bestQ = q;
+        for (const idx of candidates) if (q.test(CHARACTERS[idx])) yes++;
+        const h = entropyScore(yes, candidates.length - yes);
+        if (h > best + 1e-9) {
+            best = h;
+            ties = [q];
+        } else if (h >= best - 1e-9) {
+            ties.push(q);
         }
     }
-    return bestQ;
+    // Random tie-break so openings vary.
+    return ties[Math.floor(Math.random() * ties.length)] || null;
 }
 
 function aiTurn() {
     if (gameOver || gamePhase !== 'ai-turn') return;
 
+    addChatMessage('AI is thinking…', 'ai');
+
     setTimeout(() => {
-        // Re-check after the delay: the player may have given up or won.
         if (gameOver || gamePhase !== 'ai-turn') return;
 
-        // Safety fallback: if candidates drop to 0, reset to all (excluding the AI's own secret)
+        // Safety fallback if somehow empty.
         if (aiCandidates.length === 0) {
-            aiCandidates = Array.from({ length: TOTAL }, (_, i) => i).filter(i => i !== aiSecretIndex);
+            aiCandidates = Array.from({ length: TOTAL }, (_, i) => i)
+                .filter(i => i !== aiSecretIndex);
         }
 
-        if (aiCandidates.length === 1) {
-            // AI is confident, make a guess
-            const guessIdx = aiCandidates[0];
-            aiGuess(guessIdx);
+        const confident = aiCandidates.length === 1;
+        const earlyGuess = aiProfile.earlyGuessThreshold > 0
+            && aiCandidates.length > 1
+            && (1 / aiCandidates.length) >= aiProfile.earlyGuessThreshold;
+
+        if (confident || earlyGuess) {
+            aiGuess(aiCandidates[0]);
+            return;
+        }
+
+        if (aiUsedQuestions.size >= aiProfile.maxQuestions) {
+            const idx = aiCandidates[Math.floor(Math.random() * aiCandidates.length)];
+            aiGuess(idx);
             return;
         }
 
         const q = getBestQuestion(aiCandidates, aiUsedQuestions);
         if (!q) {
-            // No questions left, guess randomly from remaining candidates
-            const guessIdx = aiCandidates[Math.floor(Math.random() * aiCandidates.length)];
-            aiGuess(guessIdx);
+            const idx = aiCandidates[Math.floor(Math.random() * aiCandidates.length)];
+            aiGuess(idx);
             return;
         }
 
@@ -64,34 +81,53 @@ function aiGuess(idx) {
     if (card) card.classList.add('correct');
 
     if (idx === playerSecretIndex) {
-        endGame('ai-guessed-correct'); // AI wins
+        endGame('ai-guessed-correct');
     } else {
-        endGame('ai-guessed-wrong');   // AI blundered - player wins
+        endGame('ai-guessed-wrong');
     }
 }
 
-// Handle Player answering AI's question
-// The AI always narrows its own candidates automatically (auto-flip is always on for the AI).
-aiAnswerYes.addEventListener('click', () => {
-    if (gameOver) return;
+// Player answers the AI's question.
+function handleAiAnswer(isYes) {
     aiQuestionOverlay.classList.remove('show');
     const q = QUESTION_DEFS.find(def => def.id === currentAiQuestionId);
-    if (q) {
-        aiCandidates = aiCandidates.filter(idx => q.test(CHARACTERS[idx]));
-        addChatMessage(`You answered: Yes`, 'player');
-    }
-    gamePhase = 'player-turn';
-    updateStatus();
-});
+    currentAiQuestionId = null;
 
-aiAnswerNo.addEventListener('click', () => {
-    if (gameOver) return;
-    aiQuestionOverlay.classList.remove('show');
-    const q = QUESTION_DEFS.find(def => def.id === currentAiQuestionId);
-    if (q) {
-        aiCandidates = aiCandidates.filter(idx => !q.test(CHARACTERS[idx]));
-        addChatMessage(`You answered: No`, 'player');
+    if (!q) {
+        setPhase('player-turn');
+        return;
     }
-    gamePhase = 'player-turn';
-    updateStatus();
-});
+
+    const truthful = q.test(CHARACTERS[playerSecretIndex]);
+    const lying = bluffAllowed && isYes !== truthful;
+
+    addChatMessage(`You answered: ${isYes ? 'Yes' : 'No'}${lying ? ' (bluffing)' : ''}`, 'player');
+
+    const before = aiCandidates.slice();
+    aiCandidates = aiCandidates.filter(idx => q.test(CHARACTERS[idx]) === isYes);
+
+    if (aiCandidates.length === 0) {
+        // The AI catches the inconsistency.
+        aiCandidates = before;
+        aiLieDetected = true;
+        addChatMessage('AI: "That doesn\'t add up. I think you may be bluffing."', 'ai');
+    } else {
+        aiLieDetected = false;
+    }
+
+    updateDeductionPanel();
+    setPhase('player-turn');
+}
+
+// Central answer handler used by the shared overlay.
+function handleAnswerClick(isYes) {
+    if (gameOver) return;
+    if (gameMode === 'hotseat') {
+        handleHotseatAnswer(isYes);
+    } else {
+        handleAiAnswer(isYes);
+    }
+}
+
+aiAnswerYes.addEventListener('click', () => handleAnswerClick(true));
+aiAnswerNo.addEventListener('click', () => handleAnswerClick(false));

@@ -23,6 +23,19 @@ description: Ask questions, flip the ruled-out faces, and unmask the secret char
             </div>
 
             <div id="game-settings">
+                <label for="mode">Mode
+                    <select id="mode">
+                        <option value="ai" selected>Vs AI</option>
+                        <option value="hotseat">2 Players (local)</option>
+                    </select>
+                </label>
+                <label for="difficulty">AI difficulty
+                    <select id="difficulty">
+                        <option value="easy">Easy</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </label>
                 <label for="guesses">Wrong guesses
                     <select id="guesses">
                         <option value="1" selected>1 allowed</option>
@@ -34,6 +47,12 @@ description: Ask questions, flip the ruled-out faces, and unmask the secret char
                     <select id="assist">
                         <option value="on">On</option>
                         <option value="off" selected>Off</option>
+                    </select>
+                </label>
+                <label for="bluff">Allow lying
+                    <select id="bluff">
+                        <option value="off" selected>Off</option>
+                        <option value="on">On</option>
                     </select>
                 </label>
             </div>
@@ -58,7 +77,8 @@ description: Ask questions, flip the ruled-out faces, and unmask the secret char
                             <div id="board"></div>
 
                             <!-- Player Character Selection Overlay -->
-                            <div class="game-over-overlay" id="selection-overlay">
+                            <div class="game-over-overlay" id="selection-overlay" role="dialog" aria-modal="true"
+                                aria-label="Choose your character">
                                 <div class="game-over-content">
                                     <div class="game-over-message">Choose Your Character</div>
                                     <div class="game-over-score">Click any face on the board to select who you want to
@@ -69,8 +89,9 @@ description: Ask questions, flip the ruled-out faces, and unmask the secret char
                                 </div>
                             </div>
 
-                            <!-- AI Question Overlay -->
-                            <div class="game-over-overlay" id="ai-question-overlay">
+                            <!-- AI / Opponent Question Overlay -->
+                            <div class="game-over-overlay" id="ai-question-overlay" role="dialog" aria-modal="true"
+                                aria-labelledby="ai-question-text">
                                 <div class="game-over-content">
                                     <div class="game-over-message" id="ai-question-text">AI is asking...</div>
                                     <div class="confirm-actions">
@@ -80,17 +101,32 @@ description: Ask questions, flip the ruled-out faces, and unmask the secret char
                                 </div>
                             </div>
 
+                            <!-- Pass-the-device Overlay (hot-seat) -->
+                            <div class="game-over-overlay" id="pass-overlay" role="dialog" aria-modal="true"
+                                aria-labelledby="pass-text">
+                                <div class="game-over-content">
+                                    <div class="game-over-message" id="pass-text">Pass the device</div>
+                                    <div class="game-over-score" id="pass-subtext"></div>
+                                    <div class="confirm-actions">
+                                        <button class="btn" id="pass-ready" type="button">Ready</button>
+                                    </div>
+                                </div>
+                            </div>
+
                             <!-- Game Over Overlay -->
-                            <div class="game-over-overlay" id="game-over-overlay">
+                            <div class="game-over-overlay" id="game-over-overlay" role="dialog" aria-modal="true"
+                                aria-labelledby="game-over-message">
                                 <div class="game-over-content">
                                     <div id="game-over-message" class="game-over-message"></div>
                                     <div id="game-over-score" class="game-over-score"></div>
+                                    <div id="game-over-stats" class="game-over-stats"></div>
                                     <button class="btn btn-secondary" id="play-again" type="button">Play Again</button>
                                 </div>
                             </div>
 
                             <!-- Confirm Guess Overlay -->
-                            <div class="game-over-overlay" id="confirm-overlay">
+                            <div class="game-over-overlay" id="confirm-overlay" role="dialog" aria-modal="true"
+                                aria-labelledby="confirm-message">
                                 <div class="game-over-content">
                                     <div id="confirm-message" class="game-over-message"></div>
                                     <div class="confirm-actions">
@@ -110,6 +146,7 @@ description: Ask questions, flip the ruled-out faces, and unmask the secret char
                                 <div class="player-card-face-wrap">
                                     <div class="player-card-face empty" id="player-character-face">?</div>
                                 </div>
+                                <div class="deduction" id="deduction"></div>
                             </div>
 
                             <div class="side-stats">
@@ -142,6 +179,9 @@ description: Ask questions, flip the ruled-out faces, and unmask the secret char
                 <div class="controls">
                     <button class="btn btn-secondary" id="reset" type="button" title="New Game">
                         <i class="fas fa-redo"></i> New Game
+                    </button>
+                    <button class="btn btn-secondary" id="undo" type="button" title="Undo last flip">
+                        <i class="fas fa-undo"></i> Undo
                     </button>
                     <button class="btn btn-secondary" id="reveal" type="button">
                         <i class="fas fa-flag"></i> Give Up
