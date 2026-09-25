@@ -33,9 +33,112 @@ const MIN_RECOLOR_DISTANCE = 60;
 const OBJECT_OVERLAP_ALLOWANCE = 0.9;
 const GROUND_FRACTION = 0.78;
 
+// --- Theme / composition helpers ----------------------------------------------
+function poolHasType(pool, typeId) {
+    return pool.sky.includes(typeId) || pool.ground.includes(typeId);
+}
+
+function compositionFitsPool(comp, pool) {
+    return comp.requires.every(t => poolHasType(pool, t));
+}
+
+// Returns true if placing `candidate` would violate a theme rejection
+// against any of the types already present in the scene.
+function typeIsRejected(candidate, existingTypes, rejects) {
+    if (!rejects || !rejects.length) return false;
+    for (const [a, b] of rejects) {
+        if (candidate === a && existingTypes.has(b)) return true;
+        if (candidate === b && existingTypes.has(a)) return true;
+    }
+    return false;
+}
+
+// Bounding box of a composition relative to its anchor. Lets us know how
+// much slack to leave on each side when picking an anchor point.
+function compositionExtents(comp) {
+    let minDx = Infinity, maxDx = -Infinity, minDy = Infinity, maxDy = -Infinity;
+    for (const part of comp.parts) {
+        const type = getObjectType(part.typeId);
+        if (!type) continue;
+        const r = type.radius * part.scale;
+        minDx = Math.min(minDx, part.dx - r);
+        maxDx = Math.max(maxDx, part.dx + r);
+        minDy = Math.min(minDy, part.dy - r);
+        maxDy = Math.max(maxDy, part.dy + r);
+    }
+    return { minDx, maxDx, minDy, maxDy };
+}
+
+// Try to drop one whole composition into the scene. Returns true on
+// success and commits the placed parts to `objects`.
+function tryPlaceComposition(comp, objects, w, h, groundY) {
+    const pad = 22;
+    const ext = compositionExtents(comp);
+    if (!Number.isFinite(ext.minDx) || !Number.isFinite(ext.maxDx)) return false;
+
+    // The band describes where a composition's *body* may sit. We subtract
+    // the composition's own extents from the band to get a legal anchor
+    // range, so the whole cluster stays inside the band.
+    const band = comp.band === 'sky'
+        ? { minX: pad, maxX: w * 0.72, minY: pad, maxY: groundY - 12 }
+        : { minX: w * 0.14, maxX: w * 0.74, minY: groundY - 20, maxY: h - pad };
+
+    const aMinX = band.minX - ext.minDx;
+    const aMaxX = band.maxX - ext.maxDx;
+    const aMinY = band.minY - ext.minDy;
+    const aMaxY = band.maxY - ext.maxDy;
+    if (aMaxX <= aMinX || aMaxY <= aMinY) return false;
+
+    for (let attempt = 0; attempt < 40; attempt++) {
+        const cx = randInt(aMinX, aMaxX);
+        const cy = randInt(aMinY, aMaxY);
+        const placements = [];
+        let ok = true;
+
+        for (const part of comp.parts) {
+            const type = getObjectType(part.typeId);
+            if (!type) { ok = false; break; }
+            const radius = type.radius * part.scale;
+            const x = cx + part.dx;
+            const y = cy + part.dy;
+
+            if (x - radius < pad || x + radius > w - pad) { ok = false; break; }
+            if (y - radius < pad || y + radius > h - pad) { ok = false; break; }
+            if (comp.band === 'sky' && y + radius > groundY - 8) { ok = false; break; }
+
+            const clashOutside = objects.some(o =>
+                distancePt(o, { x, y }) < (o.radius + radius + 6));
+            if (clashOutside) { ok = false; break; }
+
+            const clashInside = placements.some(p =>
+                distancePt(p, { x, y }) < (p.radius + radius + 4));
+            if (clashInside) { ok = false; break; }
+
+            placements.push({ part, type, x, y, radius });
+        }
+
+        if (!ok) continue;
+
+        for (const p of placements) {
+            objects.push({
+                typeId: p.part.typeId,
+                x: p.x,
+                y: p.y,
+                scale: p.part.scale,
+                radius: p.radius,
+                color: pick(p.type.palette),
+                band: comp.band,
+            });
+        }
+        return true;
+    }
+    return false;
+}
+
+// --- Individual placement ------------------------------------------------------
 // Places one object inside its band, avoiding everything already placed.
 // Sky band is above the ground line, ground band sits along it.
-// The x range for ground objects leaves room for the skeleton tree and fence.
+// The x range for ground objects leaves room for the skeleton anchors.
 function findSpot(objects, w, h, radius, band, groundY) {
     const pad = 22;
     let minX, maxX, minY, maxY;
@@ -60,44 +163,81 @@ function findSpot(objects, w, h, radius, band, groundY) {
     return null;
 }
 
+// Fills the scene up to `target` objects with individual (non-composed)
+// picks, respecting the theme's reject pairs.
+function fillWithIndividuals(objects, w, h, groundY, pool, target, placedTypes) {
+    const types = new Set(placedTypes);
+
+    // Sky band first, so ground objects that depend on remaining room see
+    // the true final count.
+    let skyCount = objects.filter(o => o.band === 'sky').length;
+    const skyTarget = clamp(skyCount + randInt(1, 2), 2, 4);
+    let attempts = 0;
+    while (skyCount < skyTarget && attempts < 60) {
+        attempts++;
+        const candidates = pool.sky.filter(t => !typeIsRejected(t, types, pool.rejects));
+        if (!candidates.length) break;
+        const type = getObjectType(pick(candidates));
+        const scale = 0.6 + Math.random() * 0.4;
+        const radius = type.radius * scale;
+        const spot = findSpot(objects, w, h, radius, 'sky', groundY);
+        if (!spot) continue;
+        objects.push({ typeId: type.id, x: spot.x, y: spot.y, scale, radius, color: pick(type.palette), band: 'sky' });
+        types.add(type.id);
+        skyCount++;
+    }
+
+    // Ground band fills to the target total.
+    attempts = 0;
+    while (objects.length < target && attempts < 120) {
+        attempts++;
+        const candidates = pool.ground.filter(t => !typeIsRejected(t, types, pool.rejects));
+        if (!candidates.length) break;
+        const type = getObjectType(pick(candidates));
+        const scale = 0.95 + Math.random() * 0.4;
+        const radius = type.radius * scale;
+        const spot = findSpot(objects, w, h, radius, 'ground', groundY);
+        if (!spot) continue;
+        objects.push({ typeId: type.id, x: spot.x, y: spot.y, scale, radius, color: pick(type.palette), band: 'ground' });
+        types.add(type.id);
+    }
+}
+
+// --- Base scene ----------------------------------------------------------------
 // Scatters a themed handful of sky and ground objects across the canvas.
+// Compositions (clusters) are dropped in first; individual objects fill
+// the rest of the target so scenes don't look sparse.
 function generateBaseScene(sizeKey) {
     const preset = SIZE_PRESETS[sizeKey] || SIZE_PRESETS.small;
     const theme = pick(SCENE_THEMES);
     const pool = THEME_POOLS[theme.id] || THEME_POOLS.meadow;
+    const variants = SKELETON_VARIANTS[theme.id] || SKELETON_VARIANTS.meadow;
+    const variant = pick(variants);
+    const hillLayout = pick(HILL_LAYOUTS);
     const groundY = preset.h * GROUND_FRACTION;
     const objects = [];
     const target = randInt(preset.minObjects, preset.maxObjects);
+    const placedTypes = new Set();
 
-    // Sky objects, smaller so they read as distant.
-    const skyTarget = randInt(2, 4);
-    let attempts = 0;
-    while (objects.length < skyTarget && attempts < 60) {
-        attempts++;
-        const type = getObjectType(pick(pool.sky));
-        const scale = 0.6 + Math.random() * 0.4;
-        const radius = type.radius * scale;
-        const spot = findSpot(objects, preset.w, preset.h, radius, 'sky', groundY);
-        if (!spot) continue;
-        objects.push({ typeId: type.id, x: spot.x, y: spot.y, scale, radius, color: pick(type.palette), band: 'sky' });
+    // 1. Compositions first - they're the visually deliberate clusters.
+    const eligible = COMPOSITIONS.filter(c =>
+        compositionFitsPool(c, pool) && c.parts.length <= target + 1);
+    const shuffled = shuffle(eligible);
+    const maxComps = Math.min(2, Math.max(1, Math.floor(target / 3)));
+    let compsPlaced = 0;
+    for (const comp of shuffled) {
+        if (compsPlaced >= maxComps) break;
+        if (comp.requires.some(t => typeIsRejected(t, placedTypes, pool.rejects))) continue;
+        if (tryPlaceComposition(comp, objects, preset.w, preset.h, groundY)) {
+            for (const p of comp.parts) placedTypes.add(p.typeId);
+            compsPlaced++;
+        }
     }
 
-    // Ground objects, closer to the camera so they are larger.
-    const groundTarget = Math.max(3, target - objects.length);
-    attempts = 0;
-    let placed = 0;
-    while (placed < groundTarget && attempts < 120) {
-        attempts++;
-        const type = getObjectType(pick(pool.ground));
-        const scale = 0.95 + Math.random() * 0.4;
-        const radius = type.radius * scale;
-        const spot = findSpot(objects, preset.w, preset.h, radius, 'ground', groundY);
-        if (!spot) continue;
-        objects.push({ typeId: type.id, x: spot.x, y: spot.y, scale, radius, color: pick(type.palette), band: 'ground' });
-        placed++;
-    }
+    // 2. Fill out the rest with individual objects.
+    fillWithIndividuals(objects, preset.w, preset.h, groundY, pool, target, placedTypes);
 
-    return { theme, viewW: preset.w, viewH: preset.h, groundY, objects };
+    return { theme, variant, hillLayout, viewW: preset.w, viewH: preset.h, groundY, objects };
 }
 
 // Clones the base scene into a left (untouched) and right (mutated) copy.
@@ -277,6 +417,8 @@ function buildRoundScene(sizeKey, round) {
         if (built.diffs.length > 0 && sceneIsValid(built)) {
             result = {
                 theme: base.theme,
+                variant: base.variant,
+                hillLayout: base.hillLayout,
                 viewW: base.viewW,
                 viewH: base.viewH,
                 groundY: base.groundY,
@@ -294,6 +436,8 @@ function buildRoundScene(sizeKey, round) {
         if (built.diffs.length > 0 && sceneIsValid(built)) {
             result = {
                 theme: base.theme,
+                variant: base.variant,
+                hillLayout: base.hillLayout,
                 viewW: base.viewW,
                 viewH: base.viewH,
                 groundY: base.groundY,

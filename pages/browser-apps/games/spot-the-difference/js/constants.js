@@ -45,14 +45,215 @@ const OBJECT_TYPES = [
 
 // Each theme draws from its own pools. Sky objects float in the upper
 // part of the canvas. Ground objects sit along the ground line.
+// `rejects` is a list of type-id pairs that must not co-exist in one
+// scene. This gives themes a way to keep iconic combos apart (a sun next
+// to a star, a ghost beside a flower) so the scene still reads cleanly
+// even after compositions scatter objects around.
 const THEME_POOLS = {
-    meadow: { sky: ['sun', 'cloud', 'balloon', 'bird'], ground: ['tree', 'mushroom', 'flower', 'bush', 'heart'] },
-    dusk: { sky: ['cloud', 'balloon', 'bird', 'star'], ground: ['tree', 'mushroom', 'flower', 'bush', 'ghost'] },
-    night: { sky: ['moon', 'star', 'cloud', 'ghost'], ground: ['tree', 'mushroom', 'gem', 'bush', 'flower'] },
-    desert: { sky: ['sun', 'cloud', 'bird'], ground: ['tree', 'gem', 'mushroom', 'bush', 'star'] },
-    candy: { sky: ['cloud', 'heart', 'balloon', 'sun'], ground: ['tree', 'mushroom', 'flower', 'heart', 'bush'] },
-    deep: { sky: ['fish', 'star', 'ghost'], ground: ['fish', 'gem', 'star', 'flower', 'bush'] },
+    meadow: {
+        sky: ['sun', 'cloud', 'balloon', 'bird'],
+        ground: ['tree', 'mushroom', 'flower', 'bush', 'heart'],
+        rejects: [['heart', 'mushroom'], ['balloon', 'mushroom']],
+    },
+    dusk: {
+        sky: ['cloud', 'balloon', 'bird', 'star'],
+        ground: ['tree', 'mushroom', 'flower', 'bush', 'ghost'],
+        rejects: [['ghost', 'flower'], ['balloon', 'ghost']],
+    },
+    night: {
+        sky: ['moon', 'star', 'cloud', 'ghost'],
+        ground: ['tree', 'mushroom', 'gem', 'bush', 'flower'],
+        rejects: [['ghost', 'flower'], ['flower', 'mushroom']],
+    },
+    desert: {
+        sky: ['sun', 'cloud', 'bird'],
+        ground: ['tree', 'gem', 'mushroom', 'bush', 'star'],
+        rejects: [['sun', 'star'], ['mushroom', 'gem']],
+    },
+    candy: {
+        sky: ['cloud', 'heart', 'balloon', 'sun'],
+        ground: ['tree', 'mushroom', 'flower', 'heart', 'bush'],
+        rejects: [['sun', 'heart'], ['mushroom', 'heart']],
+    },
+    deep: {
+        sky: ['fish', 'star', 'ghost'],
+        ground: ['fish', 'gem', 'star', 'flower', 'bush'],
+        rejects: [['ghost', 'flower'], ['gem', 'star']],
+    },
 };
+
+// Skeleton variants control the permanent scenery on the left and right
+// edges plus the number of hills. Every variant keeps the "one anchor
+// left, one anchor right" rhythm so differences still pop against a
+// stable frame, but the shape of that frame is no longer predictable.
+const SKELETON_VARIANTS = {
+    meadow: [
+        { id: 'tree_fence', left: 'tree', right: 'fence' },
+        { id: 'cabin_open', left: 'cabin', right: 'none' },
+        { id: 'tree_tree', left: 'tree', right: 'tree' },
+        { id: 'tree_windmill', left: 'tree', right: 'windmill' },
+    ],
+    dusk: [
+        { id: 'tree_fence', left: 'tree', right: 'fence' },
+        { id: 'cabin_open', left: 'cabin', right: 'none' },
+        { id: 'tree_windmill', left: 'tree', right: 'windmill' },
+    ],
+    night: [
+        { id: 'tree_fence', left: 'tree', right: 'fence' },
+        { id: 'cabin_open', left: 'cabin', right: 'none' },
+        { id: 'tree_lighthouse', left: 'tree', right: 'lighthouse' },
+    ],
+    desert: [
+        { id: 'cactus_open', left: 'cactus', right: 'none' },
+        { id: 'rocks_open', left: 'rocks', right: 'none' },
+        { id: 'cactus_rocks', left: 'cactus', right: 'rocks' },
+        { id: 'cactus_windmill', left: 'cactus', right: 'windmill' },
+    ],
+    candy: [
+        { id: 'tree_fence', left: 'tree', right: 'fence' },
+        { id: 'cabin_open', left: 'cabin', right: 'none' },
+        { id: 'tree_tree', left: 'tree', right: 'tree' },
+    ],
+    deep: [
+        { id: 'coral_open', left: 'coral', right: 'none' },
+        { id: 'rocks_open', left: 'rocks', right: 'none' },
+        { id: 'coral_rocks', left: 'coral', right: 'rocks' },
+    ],
+};
+
+// Distant terrain layouts. Fractions are of the viewport size so they
+// scale with the size preset. Each entry has 1-3 hill ellipses.
+const HILL_LAYOUTS = [
+    { hills: [[0.22, 8, 0.32, 0.11], [0.70, 12, 0.38, 0.09]] },
+    { hills: [[0.35, 6, 0.45, 0.13]] },
+    { hills: [[0.15, 10, 0.26, 0.10], [0.52, 4, 0.30, 0.14], [0.84, 12, 0.28, 0.09]] },
+    { hills: [[0.62, 10, 0.50, 0.12]] },
+    { hills: [[0.28, 14, 0.40, 0.10], [0.78, 6, 0.32, 0.12]] },
+];
+
+// Composed templates cluster objects so differences feel deliberate
+// rather than scattered. Each composition declares its band, the object
+// types it needs via `requires`, and relative offsets for each part.
+// If a theme pool does not offer all required types, the composition is
+// skipped and the next candidate is tried.
+const COMPOSITIONS = [
+    {
+        id: 'cottage', band: 'ground',
+        requires: ['tree', 'bush', 'flower'],
+        parts: [
+            { typeId: 'tree', dx: 0, dy: -4, scale: 1.05 },
+            { typeId: 'bush', dx: -30, dy: 10, scale: 0.85 },
+            { typeId: 'bush', dx: 30, dy: 10, scale: 0.85 },
+            { typeId: 'flower', dx: -12, dy: 16, scale: 0.7 },
+            { typeId: 'flower', dx: 12, dy: 16, scale: 0.7 },
+        ],
+    },
+    {
+        id: 'grove', band: 'ground',
+        requires: ['tree'],
+        parts: [
+            { typeId: 'tree', dx: -26, dy: 4, scale: 0.95 },
+            { typeId: 'tree', dx: 0, dy: -8, scale: 1.15 },
+            { typeId: 'tree', dx: 26, dy: 4, scale: 0.95 },
+        ],
+    },
+    {
+        id: 'mushroom_patch', band: 'ground',
+        requires: ['mushroom'],
+        parts: [
+            { typeId: 'mushroom', dx: -16, dy: 6, scale: 1.0 },
+            { typeId: 'mushroom', dx: 2, dy: 0, scale: 1.2 },
+            { typeId: 'mushroom', dx: 18, dy: 8, scale: 0.9 },
+        ],
+    },
+    {
+        id: 'flower_bed', band: 'ground',
+        requires: ['flower'],
+        parts: [
+            { typeId: 'flower', dx: -20, dy: 4, scale: 0.9 },
+            { typeId: 'flower', dx: 0, dy: -2, scale: 1.05 },
+            { typeId: 'flower', dx: 20, dy: 4, scale: 0.9 },
+        ],
+    },
+    {
+        id: 'gem_cluster', band: 'ground',
+        requires: ['gem'],
+        parts: [
+            { typeId: 'gem', dx: -16, dy: 6, scale: 1.0 },
+            { typeId: 'gem', dx: 14, dy: 2, scale: 1.1 },
+        ],
+    },
+    {
+        id: 'bush_row', band: 'ground',
+        requires: ['bush'],
+        parts: [
+            { typeId: 'bush', dx: -24, dy: 4, scale: 0.9 },
+            { typeId: 'bush', dx: 0, dy: 0, scale: 1.0 },
+            { typeId: 'bush', dx: 24, dy: 4, scale: 0.9 },
+        ],
+    },
+    {
+        id: 'heart_pair', band: 'ground',
+        requires: ['heart'],
+        parts: [
+            { typeId: 'heart', dx: -14, dy: 0, scale: 1.0 },
+            { typeId: 'heart', dx: 14, dy: 4, scale: 0.9 },
+        ],
+    },
+    {
+        id: 'fish_school', band: 'sky',
+        requires: ['fish'],
+        parts: [
+            { typeId: 'fish', dx: -28, dy: 2, scale: 0.8 },
+            { typeId: 'fish', dx: 0, dy: -8, scale: 0.9 },
+            { typeId: 'fish', dx: 28, dy: 2, scale: 0.8 },
+        ],
+    },
+    {
+        id: 'cloud_bank', band: 'sky',
+        requires: ['cloud'],
+        parts: [
+            { typeId: 'cloud', dx: -34, dy: 0, scale: 0.8 },
+            { typeId: 'cloud', dx: 10, dy: 6, scale: 0.7 },
+            { typeId: 'cloud', dx: 40, dy: -2, scale: 0.65 },
+        ],
+    },
+    {
+        id: 'balloon_cluster', band: 'sky',
+        requires: ['balloon'],
+        parts: [
+            { typeId: 'balloon', dx: -22, dy: 2, scale: 0.85 },
+            { typeId: 'balloon', dx: 0, dy: -10, scale: 0.95 },
+            { typeId: 'balloon', dx: 22, dy: 4, scale: 0.8 },
+        ],
+    },
+    {
+        id: 'flock', band: 'sky',
+        requires: ['bird'],
+        parts: [
+            { typeId: 'bird', dx: -26, dy: 0, scale: 0.75 },
+            { typeId: 'bird', dx: 0, dy: -8, scale: 0.85 },
+            { typeId: 'bird', dx: 28, dy: 2, scale: 0.7 },
+        ],
+    },
+    {
+        id: 'star_patch', band: 'sky',
+        requires: ['star'],
+        parts: [
+            { typeId: 'star', dx: -24, dy: 0, scale: 0.7 },
+            { typeId: 'star', dx: 4, dy: -10, scale: 0.8 },
+            { typeId: 'star', dx: 26, dy: 4, scale: 0.65 },
+        ],
+    },
+    {
+        id: 'ghost_watch', band: 'sky',
+        requires: ['ghost'],
+        parts: [
+            { typeId: 'ghost', dx: -18, dy: 0, scale: 0.9 },
+            { typeId: 'ghost', dx: 16, dy: -6, scale: 0.8 },
+        ],
+    },
+];
 
 const DIFF_TYPES = {
     recolor: { id: 'recolor', label: 'a colour swap' },
