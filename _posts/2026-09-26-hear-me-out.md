@@ -302,14 +302,3 @@ A significant rework was done. Everything below is in the current version.
 </details>
 
 ---
-
-## What is still rough
-
-* The default symbol set is small. It is a starting point, not a full vocabulary.
-* `symbols.txt` is a pipe-delimited file with no schema validation beyond a line-length check.
-* There is no symbol search. At large board sizes this would help.
-* The voice list depends entirely on the OS. On some Linux setups, no voices ship by default.
-* Long-press preview requires a still finger. Users with tremor may find it unreliable.
-* The high-contrast theme is fine for symbols but the header still uses the primary color, which is less contrasty than it could be.
-
----
