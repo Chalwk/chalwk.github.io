@@ -17,36 +17,23 @@ function renderQuestions() {
     renderQuestionStates();
 }
 
-// Reflect the active player's used questions onto the panel.
+// Reflect the used questions onto the panel.
 function renderQuestionStates() {
-    const used = getActiveUsedQuestions();
     questionListEl.querySelectorAll('.gw-question').forEach(btn => {
-        btn.classList.toggle('used', used.has(btn.dataset.q));
+        btn.classList.toggle('used', playerUsedQuestions.has(btn.dataset.q));
     });
 }
 
 // Player Asking a Question
 function askQuestion(def) {
     if (gameOver || gamePhase !== 'player-turn' || aiTurnQueued) return;
+    if (playerUsedQuestions.has(def.id)) return;
 
-    const used = getActiveUsedQuestions();
-    if (used.has(def.id)) return;
-
-    used.add(def.id);
+    playerUsedQuestions.add(def.id);
     questionCount++;
     questionCountEl.textContent = questionCount;
     renderQuestionStates();
 
-    if (gameMode === 'hotseat') {
-        // Opponent answers via the shared overlay.
-        const answerer = currentPlayer === 1 ? 2 : 1;
-        pendingHotseatQuestion = def;
-        aiQuestionText.textContent = `P${answerer}: ${def.label}`;
-        aiQuestionOverlay.classList.add('show');
-        return;
-    }
-
-    // AI mode
     const secret = CHARACTERS[aiSecretIndex];
     const answer = def.test(secret);
 
@@ -66,35 +53,6 @@ function askQuestion(def) {
 
     if (autoFlip) {
         setTimeout(() => { if (aiTurnQueued && !gameOver) beginAiTurn(); }, 900);
-    }
-}
-
-// Hot-seat: opponent answers the asker's question.
-function handleHotseatAnswer(isYes) {
-    aiQuestionOverlay.classList.remove('show');
-    const def = pendingHotseatQuestion;
-    pendingHotseatQuestion = null;
-    if (!def) return;
-
-    const asker = currentPlayer;
-    const answerer = asker === 1 ? 2 : 1;
-
-    if (autoFlip) {
-        const ownSecret = getActiveSecret();
-        CHARACTERS.forEach((c, i) => {
-            if (i === ownSecret) return;
-            if (def.test(c) !== isYes) setCardEliminated(i, true);
-        });
-        syncEliminatedAria();
-    }
-
-    sfx.answer(isYes);
-    addChatMessage(`P${asker}: "${def.label}" — P${answerer} answered ${isYes ? 'Yes' : 'No'}`, 'system');
-    flashStatus(isYes ? 'Yes!' : 'No!', isYes ? 'win-message' : 'tie-message');
-
-    queueAiTurn();
-    if (autoFlip) {
-        setTimeout(() => { if (aiTurnQueued && !gameOver) endHotseatTurn(); }, 900);
     }
 }
 

@@ -98,36 +98,20 @@ function handleAiAnswer(isYes) {
         return;
     }
 
-    const truthful = q.test(CHARACTERS[playerSecretIndex]);
-    const lying = bluffAllowed && isYes !== truthful;
-
-    addChatMessage(`You answered: ${isYes ? 'Yes' : 'No'}${lying ? ' (bluffing)' : ''}`, 'player');
+    addChatMessage(`You answered: ${isYes ? 'Yes' : 'No'}`, 'player');
 
     const before = aiCandidates.slice();
     aiCandidates = aiCandidates.filter(idx => q.test(CHARACTERS[idx]) === isYes);
 
     if (aiCandidates.length === 0) {
-        // The AI catches the inconsistency.
+        // Defensive: an inconsistent answer ruled out every candidate.
         aiCandidates = before;
-        aiLieDetected = true;
-        addChatMessage('AI: "That doesn\'t add up. I think you may be bluffing."', 'ai');
-    } else {
-        aiLieDetected = false;
+        addChatMessage('AI: "That doesn\'t add up. Let me reconsider."', 'ai');
     }
 
     updateDeductionPanel();
     setPhase('player-turn');
 }
 
-// Central answer handler used by the shared overlay.
-function handleAnswerClick(isYes) {
-    if (gameOver) return;
-    if (gameMode === 'hotseat') {
-        handleHotseatAnswer(isYes);
-    } else {
-        handleAiAnswer(isYes);
-    }
-}
-
-aiAnswerYes.addEventListener('click', () => handleAnswerClick(true));
-aiAnswerNo.addEventListener('click', () => handleAnswerClick(false));
+aiAnswerYes.addEventListener('click', () => handleAiAnswer(true));
+aiAnswerNo.addEventListener('click', () => handleAiAnswer(false));

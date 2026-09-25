@@ -5,8 +5,7 @@ function requestGuess(index) {
     if (gameOver || gamePhase !== 'player-turn' || aiTurnQueued) return;
     if (guessesLeft <= 0) return;
 
-    const guessed = getActiveGuessed();
-    if (guessed.has(index)) {
+    if (guessedIndices.has(index)) {
         flashStatus('Already guessed that one.', 'tie-message', 1000);
         return;
     }
@@ -33,15 +32,12 @@ function commitGuess() {
     const idx = pendingGuessIdx;
     pendingGuessIdx = -1;
 
-    const guessed = getActiveGuessed();
-    guessed.add(idx);
+    guessedIndices.add(idx);
 
     const card = boardEl.querySelector(`[data-index="${idx}"]`);
     if (card) card.classList.add('guessed');
 
-    const target = getOpponentSecret();
-
-    if (idx === target) {
+    if (idx === aiSecretIndex) {
         if (card) card.classList.add('correct');
         endGame('player-guessed-correct');
         return;
@@ -94,42 +90,6 @@ function beginAiTurn() {
     aiTurn();
 }
 
-// Hot-seat: end the current player's turn and pass the device.
-function endHotseatTurn() {
-    if (!aiTurnQueued || gameOver) return;
-    aiTurnQueued = false;
-    turnBarEl.hidden = true;
-    questionListEl.classList.remove('is-locked');
-
-    // Persist current player's guesses
-    if (currentPlayer === 1) p1GuessesLeft = guessesLeft;
-    else p2GuessesLeft = guessesLeft;
-
-    const next = currentPlayer === 1 ? 2 : 1;
-    showPassOverlay(
-        `Pass the device to Player ${next}`,
-        `Player ${currentPlayer}, look away while Player ${next} takes over.`,
-        () => beginHotseatTurn(next)
-    );
-
-    updateUndoButton();
-}
-
-function beginHotseatTurn(player) {
-    currentPlayer = player;
-    guessesLeft = player === 1 ? p1GuessesLeft : p2GuessesLeft;
-    guessesLeftEl.textContent = guessesLeft;
-
-    flipHistory = [];
-    undoCount = 0;
-
-    applyBoardStateToDom();
-    renderQuestionStates();
-    updatePlayerChip();
-    setPhase('player-turn');
-    updateUndoButton();
-}
-
 // End of game
 // reason: 'player-guessed-correct' | 'ai-guessed-wrong'
 //       | 'ai-guessed-correct'   | 'player-out-of-guesses' | 'player-gave-up'
@@ -145,7 +105,6 @@ function endGame(reason) {
     aiQuestionOverlay.classList.remove('show');
     confirmOverlay.classList.remove('show');
     selectionOverlay.classList.remove('show');
-    hidePassOverlay();
 
     let message = '';
     let score = '';
@@ -154,18 +113,12 @@ function endGame(reason) {
 
     const p1Name = charName(playerSecretIndex);
     const aiName = charName(aiSecretIndex);
-    const p2Name = charName(p2SecretIndex);
 
     switch (reason) {
         case 'player-guessed-correct':
             won = true;
-            if (gameMode === 'hotseat') {
-                message = `Player ${currentPlayer} wins!`;
-                score = `Player ${currentPlayer} unmasked Player ${currentPlayer === 1 ? 2 : 1}'s character.`;
-            } else {
-                message = 'You win!';
-                score = `Solved in ${questionCount} question${questionCount === 1 ? '' : 's'}`;
-            }
+            message = 'You win!';
+            score = `Solved in ${questionCount} question${questionCount === 1 ? '' : 's'}`;
             statusEl.className = 'win-message';
             sfx.win();
             palette = 1;
@@ -189,12 +142,8 @@ function endGame(reason) {
             break;
 
         case 'player-out-of-guesses':
-            message = gameMode === 'hotseat'
-                ? `Player ${currentPlayer} is out of guesses`
-                : 'Out of guesses';
-            score = gameMode === 'hotseat'
-                ? `P1's character: ${p1Name}. P2's character: ${p2Name}.`
-                : `Your character was ${p1Name}. AI's was ${aiName}.`;
+            message = 'Out of guesses';
+            score = `Your character was ${p1Name}. AI's was ${aiName}.`;
             statusEl.className = 'tie-message';
             sfx.lose();
             palette = 2;
@@ -202,9 +151,7 @@ function endGame(reason) {
 
         case 'player-gave-up':
             message = 'You gave up';
-            score = gameMode === 'hotseat'
-                ? `P1: ${p1Name}. P2: ${p2Name}.`
-                : `AI's character was ${aiName}.`;
+            score = `AI's character was ${aiName}.`;
             statusEl.className = 'tie-message';
             sfx.lose();
             palette = 2;
@@ -223,7 +170,7 @@ function endGame(reason) {
         stats.wins += 1;
         stats.streak += 1;
         if (stats.streak > stats.bestStreak) stats.bestStreak = stats.streak;
-        if (gameMode === 'ai' && questionCount > 0) {
+        if (questionCount > 0) {
             if (stats.bestQuestionCount == null || questionCount < stats.bestQuestionCount) {
                 stats.bestQuestionCount = questionCount;
             }
@@ -246,9 +193,8 @@ function endGame(reason) {
 }
 
 function giveUp() {
-    if (gameOver || gamePhase === 'setup' || gamePhase === 'setup-p2') return;
-    const target = getOpponentSecret();
-    const card = boardEl.querySelector(`[data-index="${target}"]`);
+    if (gameOver || gamePhase === 'setup') return;
+    const card = boardEl.querySelector(`[data-index="${aiSecretIndex}"]`);
     if (card) card.classList.add('correct');
     endGame('player-gave-up');
 }
@@ -279,39 +225,24 @@ function newGame() {
 
     playerSecretIndex = -1;
     aiSecretIndex = -1;
-    p2SecretIndex = -1;
     initialGuesses = Number(guessesSelect.value) || 1;
     guessesLeft = initialGuesses;
-    p1GuessesLeft = initialGuesses;
-    p2GuessesLeft = initialGuesses;
     questionCount = 0;
     gameOver = false;
     pendingGuessIdx = -1;
     autoFlip = assistSelect.value === 'on';
-    bluffAllowed = bluffSelect.value === 'on';
-    gameMode = modeSelect.value === 'hotseat' ? 'hotseat' : 'ai';
     aiProfile = AI_PROFILES[difficultySelect.value] || AI_PROFILES.medium;
-    currentPlayer = 1;
 
     guessedIndices = new Set();
-    p1Guessed = new Set();
-    p2Guessed = new Set();
     playerEliminated = new Set();
-    p1Eliminated = new Set();
-    p2Eliminated = new Set();
     playerUsedQuestions = new Set();
-    p1UsedQuestions = new Set();
-    p2UsedQuestions = new Set();
 
     aiCandidates = [];
     aiUsedQuestions.clear();
     currentAiQuestionId = null;
-    aiLieDetected = false;
 
     flipHistory = [];
     undoCount = 0;
-
-    pendingHotseatQuestion = null;
 
     aiTurnQueued = false;
     turnBarEl.hidden = true;
@@ -320,22 +251,17 @@ function newGame() {
     questionCountEl.textContent = questionCount;
     guessesLeftEl.textContent = guessesLeft;
     statusEl.className = '';
-    statusEl.textContent = gameMode === 'hotseat'
-        ? 'Player 1 — select your character'
-        : 'Select your character to begin';
+    statusEl.textContent = 'Select your character to begin';
 
     gameOverOverlay.classList.remove('show');
     confirmOverlay.classList.remove('show');
     aiQuestionOverlay.classList.remove('show');
-    hidePassOverlay();
     selectionOverlay.classList.add('show');
 
     gameContainerEl.classList.add('setup-mode');
 
     chatLogEl.innerHTML = '';
-    addChatMessage(gameMode === 'hotseat'
-        ? 'Hot-seat mode. Player 1 picks first.'
-        : `New game. AI difficulty: ${difficultySelect.value}.`, 'system');
+    addChatMessage(`New game. AI difficulty: ${difficultySelect.value}.`, 'system');
 
     clearConfetti();
     renderBoard();
@@ -350,7 +276,7 @@ function newGame() {
 
 // Events
 resetBtn.addEventListener('click', () => {
-    if (gamePhase === 'setup' || gamePhase === 'setup-p2' || gameOver) {
+    if (gamePhase === 'setup' || gameOver) {
         newGame();
         return;
     }
@@ -360,7 +286,7 @@ resetBtn.addEventListener('click', () => {
 playAgainBtn.addEventListener('click', newGame);
 
 revealBtn.addEventListener('click', () => {
-    if (gameOver || gamePhase === 'setup' || gamePhase === 'setup-p2') return;
+    if (gameOver || gamePhase === 'setup') return;
     showConfirm("Give up and reveal the AI's character?", giveUp);
 });
 
@@ -373,12 +299,10 @@ guessesSelect.addEventListener('change', () => {
     const apply = () => {
         initialGuesses = Number(guessesSelect.value) || 1;
         guessesLeft = initialGuesses;
-        p1GuessesLeft = initialGuesses;
-        p2GuessesLeft = initialGuesses;
         guessesLeftEl.textContent = guessesLeft;
     };
 
-    if (gamePhase === 'setup' || gamePhase === 'setup-p2' || gameOver) {
+    if (gamePhase === 'setup' || gameOver) {
         apply();
         return;
     }
@@ -400,9 +324,9 @@ assistSelect.addEventListener('change', () => {
     }
 });
 
-// Changing mode / difficulty / bluff mid-game restarts.
+// Changing difficulty mid-game restarts.
 function promptRestartSetting(applySetting, revertSetting) {
-    if (gamePhase === 'setup' || gamePhase === 'setup-p2' || gameOver) {
+    if (gamePhase === 'setup' || gameOver) {
         applySetting();
         return;
     }
@@ -413,14 +337,6 @@ function promptRestartSetting(applySetting, revertSetting) {
     );
 }
 
-modeSelect.addEventListener('change', () => {
-    const prev = gameMode === 'hotseat' ? 'hotseat' : 'ai';
-    promptRestartSetting(
-        () => { gameMode = modeSelect.value === 'hotseat' ? 'hotseat' : 'ai'; },
-        () => { modeSelect.value = prev; }
-    );
-});
-
 difficultySelect.addEventListener('change', () => {
     const prev = difficultySelect.value;
     promptRestartSetting(
@@ -429,23 +345,12 @@ difficultySelect.addEventListener('change', () => {
     );
 });
 
-bluffSelect.addEventListener('change', () => {
-    const prev = bluffAllowed ? 'on' : 'off';
-    promptRestartSetting(
-        () => { bluffAllowed = bluffSelect.value === 'on'; },
-        () => { bluffSelect.value = prev; }
-    );
-});
-
 window.addEventListener('resize', () => {
     if (confettiParticles.length) resizeConfettiCanvas();
     alignPlayerCard();
 });
 
-continueBtn.addEventListener('click', () => {
-    if (gameMode === 'hotseat') endHotseatTurn();
-    else beginAiTurn();
-});
+continueBtn.addEventListener('click', beginAiTurn);
 
 // ---- Keyboard shortcuts ----
 window.addEventListener('keydown', (e) => {
@@ -454,7 +359,6 @@ window.addEventListener('keydown', (e) => {
     if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') return;
 
     if (e.key === 'Enter') {
-        if (passOverlay.classList.contains('show')) { passReadyBtn.click(); return; }
         if (confirmOverlay.classList.contains('show')) { confirmYesBtn.click(); return; }
         if (!turnBarEl.hidden) { continueBtn.click(); return; }
     }

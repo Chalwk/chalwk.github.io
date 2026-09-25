@@ -80,7 +80,7 @@ boardEl.addEventListener('click', (e) => {
     if (!card) return;
     const i = Number(card.dataset.index);
     if (e.target.closest('.gw-guess')) {
-        if (gamePhase === 'setup' || gamePhase === 'setup-p2') {
+        if (gamePhase === 'setup') {
             onCardClick(i);
         } else {
             requestGuess(i);
@@ -103,11 +103,7 @@ function onCardClick(index) {
     if (gameOver) return;
 
     if (gamePhase === 'setup') {
-        selectSecret(index, 1);
-        return;
-    }
-    if (gamePhase === 'setup-p2') {
-        selectSecret(index, 2);
+        selectSecret(index);
         return;
     }
 
@@ -120,7 +116,7 @@ function onCardClick(index) {
     setCardEliminated(index, eliminated);
     updateCardAria(card, eliminated);
 
-    // Push to undo history (per player)
+    // Push to undo history
     flipHistory.push({ index, wasEliminated: !eliminated });
     if (flipHistory.length > MAX_UNDOS * 4) flipHistory.shift();
     updateUndoButton();
@@ -130,57 +126,13 @@ function onCardClick(index) {
 }
 
 // Player selects their secret character during setup.
-function selectSecret(index, player) {
-    if (player === 1) {
-        playerSecretIndex = index;
-    } else {
-        if (index === playerSecretIndex) {
-            flashStatus('Pick a different character from Player 1.', 'tie-message', 1600);
-            return;
-        }
-        p2SecretIndex = index;
-    }
+function selectSecret(index) {
+    playerSecretIndex = index;
 
     selectionOverlay.classList.remove('show');
     gameContainerEl.classList.remove('setup-mode');
     sfx.answer(true);
 
-    if (gameMode === 'hotseat') {
-        if (player === 1) {
-            // Hand the device to player 2 for their pick.
-            showPassOverlay(
-                'Pass the device to Player 2',
-                'Player 1, look away while Player 2 picks.',
-                () => {
-                    currentPlayer = 2;
-                    setPhase('setup-p2');
-                    selectionOverlay.classList.add('show');
-                    updatePlayerChip();
-                }
-            );
-        } else {
-            // Both secrets picked - start player 1's turn.
-            currentPlayer = 1;
-            showPassOverlay(
-                'Pass the device back to Player 1',
-                'Player 2, look away while Player 1 takes over.',
-                () => {
-                    playerEliminated.clear();
-                    p2Eliminated.clear();
-                    applyBoardStateToDom();
-                    updatePlayerChip();
-                    setPhase('player-turn');
-                    guessesLeft = p1GuessesLeft;
-                    guessesLeftEl.textContent = guessesLeft;
-                }
-            );
-        }
-        return;
-    }
-
-    // AI mode
-    gamePhase = 'player-turn';
-    statusEl.textContent = 'Character selected! Your turn.';
     updatePlayerChip();
 
     const ownCard = boardEl.querySelector(`[data-index="${index}"]`);
