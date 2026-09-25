@@ -1,0 +1,151 @@
+---
+layout: default
+title: Spot the Difference - Picture Puzzle
+description: Compare two procedurally generated scenes and race the clock to spot every difference before time runs out.
+---
+
+<!-- Copyright (c) 2024-2026 Jericho Crosby (Chalwk). All Rights Reserved. -->
+
+<link rel="stylesheet" href="style.css">
+
+<main>
+    <div class="container">
+        <section class="panel" id="game-panel">
+            <div class="panel-head">
+                <div class="panel-head-text">
+                    <h1>Spot the Difference</h1>
+                    <p class="muted small">Two pictures. A handful of differences hidden between them. Click a spot
+                        on either picture to mark it before the timer runs out.<span class="key-hint">Click to mark a
+                            difference &middot; H hint &middot; M mute</span></p>
+                </div>
+
+                <!-- Sound on/off button (M key). Icon is swapped in JS. -->
+                <button class="icon-btn" id="sound-toggle" type="button" aria-label="Toggle sound"
+                    title="Toggle sound (M)">
+                    <span id="sound-icon">🔊</span>
+                </button>
+            </div>
+
+            <!-- These two selects start a fresh game on change -->
+            <div id="game-settings">
+                <label for="scene-size">Scene Size
+                    <select id="scene-size">
+                        <option value="small" selected>Small</option>
+                        <option value="medium">Medium</option>
+                        <option value="large">Large</option>
+                    </select>
+                </label>
+
+                <label for="difficulty">Difficulty
+                    <select id="difficulty">
+                        <option value="easy">Easy</option>
+                        <option value="normal" selected>Normal</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </label>
+
+                <button class="btn btn-secondary" id="reset-btn" type="button" title="Start a new game">
+                    <i class="fas fa-redo"></i> New Game
+                </button>
+            </div>
+
+            <div id="game-container">
+                <!-- HUD: score, round/theme, timer, and chips row -->
+                <div class="hud">
+                    <div class="hud-row">
+                        <div class="hud-block score-block">
+                            <strong>Score</strong>
+                            <span id="score-count" class="score-count">0</span>
+                        </div>
+
+                        <div class="hud-block status-block">
+                            <span id="round-label" class="round-label">Round 1 / 12</span>
+                            <span id="theme-label" class="theme-label">Sunny Meadow</span>
+                            <span id="status" role="status" aria-live="polite">Find the differences...</span>
+                        </div>
+
+                        <div class="hud-block hints-block">
+                            <strong>Best</strong>
+                            <span id="best-score" class="score-count">0</span>
+                        </div>
+                    </div>
+
+                    <!-- Timer bar -->
+                    <div class="hud-row" style="grid-template-columns: auto 1fr auto;">
+                        <strong style="color:#fff;font-size:0.8rem;">Time</strong>
+                        <div class="time-bar">
+                            <div id="time-fill" class="time-fill"></div>
+                        </div>
+                        <span id="time-text" class="time-text">60s</span>
+                    </div>
+
+                    <!-- Chips row: found count, combo, hints -->
+                    <div class="hud-row hud-subrow">
+                        <div class="hud-chip found-chip" id="found-chip" title="Differences found this round">
+                            <span>🔍</span>
+                            <span id="found-count">0 / 0</span>
+                        </div>
+
+                        <div class="hud-chip combo-chip" id="combo-chip" title="Current find streak">
+                            <span>🔥</span>
+                            <span id="combo-count">0x</span>
+                        </div>
+
+                        <div class="hud-chip hints-chip" id="hints-chip" title="Hints remaining this round">
+                            <span>💡</span>
+                            <span id="hints-count">0</span>
+                        </div>
+                    </div>
+
+                    <!-- Scrolling event log -->
+                    <div id="log" class="log-panel" aria-live="polite"></div>
+                </div>
+
+                <!-- The two scenes, drawn fresh as SVG every round -->
+                <div id="scene-wrap">
+                    <svg class="scene-board" id="scene-board-left" viewBox="0 0 480 320" role="img"
+                        aria-label="Left picture - click a spot that looks different"></svg>
+
+                    <div class="scene-divider" aria-hidden="true">🔍</div>
+
+                    <svg class="scene-board" id="scene-board-right" viewBox="0 0 480 320" role="img"
+                        aria-label="Right picture - click a spot that looks different"></svg>
+
+                    <!-- Overlay shown on time-out or a full win -->
+                    <div class="game-over-overlay" id="game-over-overlay">
+                        <div class="game-over-content">
+                            <div id="game-over-message" class="game-over-message"></div>
+                            <div id="game-over-detail" class="game-over-detail"></div>
+
+                            <button class="btn btn-secondary" id="play-again" type="button">
+                                New Game
+                            </button>
+
+                            <p class="game-over-hint">
+                                Press <strong>SPACE</strong> to start a new game.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="board-actions">
+                    <button class="btn btn-secondary" id="hint-btn" type="button" title="Reveal one difference (H)">
+                        <i class="fas fa-lightbulb"></i> Hint
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<script src="js/dom.js"></script>
+<script src="js/constants.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/state.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/helpers.js"></script>
+<script src="js/shapes.js"></script>
+<script src="js/scene.js"></script>
+<script src="js/render.js"></script>
+<script src="js/game.js"></script>
+<script src="js/input.js"></script>
