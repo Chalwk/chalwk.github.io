@@ -27,12 +27,16 @@ function objectMarkup(o) {
 
 function markPointFor(d, side) {
     const mark = side === 'left' ? d.markLeft : d.markRight;
-    if (mark && Number.isFinite(mark.x) && Number.isFinite(mark.y)) return mark;
-    return { x: d.x, y: d.y };
+    if (mark === null) return null;
+    if (!mark || !Number.isFinite(mark.x) || !Number.isFinite(mark.y)) {
+        return { x: d.x, y: d.y };
+    }
+    return mark;
 }
 
 function diffRingMarkup(d, side) {
     const p = markPointFor(d, side);
+    if (!p) return '';
     return `<g class="diff-found-mark">` +
         `<circle cx="${p.x}" cy="${p.y}" r="${d.radius.toFixed(1)}" class="diff-ring"/>` +
         `<path d="M ${p.x - 6} ${p.y} l 4 4 l 8 -9" class="diff-check"/>` +
@@ -71,6 +75,7 @@ function flashHint(diff) {
     const ns = 'http://www.w3.org/2000/svg';
     [[leftBoardEl, 'left'], [rightBoardEl, 'right']].forEach(([boardEl, side]) => {
         const p = markPointFor(diff, side);
+        if (!p) return;
         const g = document.createElementNS(ns, 'g');
         g.setAttribute('class', 'diff-hint-mark');
         g.innerHTML = `<circle cx="${p.x}" cy="${p.y}" r="${diff.radius.toFixed(1)}"/>`;

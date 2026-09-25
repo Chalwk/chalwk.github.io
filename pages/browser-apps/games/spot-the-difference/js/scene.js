@@ -109,6 +109,8 @@ function generateDifferences(base, diffCount) {
                 x: px,
                 y: py,
                 radius: Math.max(radius, 22) * preset.hitRadiusMult,
+                markLeft: null,
+                markRight: { x: px, y: py },
                 found: false,
             });
             continue;
@@ -134,6 +136,8 @@ function generateDifferences(base, diffCount) {
                 x: anchor.x,
                 y: anchor.y,
                 radius: Math.max(obj.radius, 22) * preset.hitRadiusMult,
+                markLeft: { x: anchor.x, y: anchor.y },
+                markRight: null,
                 found: false,
             });
             continue;
@@ -157,6 +161,8 @@ function generateDifferences(base, diffCount) {
                 x: anchor.x,
                 y: anchor.y,
                 radius: Math.max(obj.radius, 22) * preset.hitRadiusMult,
+                markLeft: { x: anchor.x, y: anchor.y },
+                markRight: { x: anchor.x, y: anchor.y },
                 found: false,
             });
             continue;
@@ -175,6 +181,8 @@ function generateDifferences(base, diffCount) {
                 x: anchor.x,
                 y: anchor.y,
                 radius: Math.max(obj.radius, 24) * preset.hitRadiusMult,
+                markLeft: { x: anchor.x, y: anchor.y },
+                markRight: { x: anchor.x, y: anchor.y },
                 found: false,
             });
             continue;
@@ -213,9 +221,9 @@ function generateDifferences(base, diffCount) {
                     kind,
                     x: mid.x,
                     y: mid.y,
+                    radius: Math.max(obj.radius + actual * 0.6, 32) * preset.hitRadiusMult,
                     markLeft: from,
                     markRight: { x: nx, y: ny },
-                    radius: Math.max(obj.radius + actual * 0.6, 32) * preset.hitRadiusMult,
                     found: false,
                 });
                 placed = true;
