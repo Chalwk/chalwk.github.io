@@ -9,6 +9,8 @@ pwa: true
 
 <link rel="stylesheet" href="style.css">
 
+<div id="notification-container" class="notification-container" aria-live="polite"></div>
+
 <main>
     <div class="container">
         <div class="app-grid task-manager-app">
@@ -34,13 +36,37 @@ pwa: true
                         <div class="stat-label">Tasks Done</div>
                     </div>
                 </div>
+
+                <div class="toolbar" role="toolbar" aria-label="App settings and tools">
+                    <button type="button" class="btn btn-secondary" id="focus-mode-btn">🎯 Focus Mode</button>
+
+                    <label class="toolbar-toggle">
+                        <input type="checkbox" id="sound-toggle">
+                        <span>🔊 Sound cues</span>
+                    </label>
+
+                    <label class="toolbar-toggle">
+                        <input type="checkbox" id="motion-toggle">
+                        <span>🌿 Reduce motion</span>
+                    </label>
+
+                    <label class="toolbar-toggle">
+                        <input type="checkbox" id="notify-toggle">
+                        <span>🔔 Browser notifications</span>
+                    </label>
+
+                    <button type="button" class="btn btn-secondary" id="export-data-btn">⬇️ Export backup</button>
+                    <button type="button" class="btn btn-secondary" id="import-data-btn">⬆️ Import backup</button>
+                    <input type="file" id="import-data-input" accept="application/json" class="visually-hidden">
+                </div>
             </div>
 
             <div class="main-content task-main-content">
                 <div class="left-column">
                     <div class="panel task-form-panel">
-                        <h3 class="task-form-title">Create New Task</h3>
+                        <h3 class="task-form-title" id="task-form-title-text">Create New Task</h3>
                         <form class="task-form" id="task-form">
+                            <input type="hidden" id="editing-task-id" value="">
                             <div class="form-group task-form-group">
                                 <label class="form-label" for="task-title">Task Title</label>
                                 <input class="form-input" id="task-title" placeholder="What needs to be done?" required
@@ -66,7 +92,8 @@ pwa: true
                                         <label>
                                             <input class="step-text" placeholder="Step 1" type="text">
                                         </label>
-                                        <button class="btn-remove-step" disabled type="button">×</button>
+                                        <button class="btn-remove-step" disabled type="button"
+                                            aria-label="Remove this step">×</button>
                                     </div>
                                 </div>
                                 <button class="btn btn-secondary" id="add-step" type="button">+ Add Step</button>
@@ -79,7 +106,11 @@ pwa: true
                                 <label class="form-label" for="task-reminder">Reminder</label>
                                 <input class="form-input" id="task-reminder" type="datetime-local">
                             </div>
-                            <button class="btn btn-primary" type="submit">Create Task</button>
+                            <div class="form-actions">
+                                <button class="btn btn-primary" type="submit" id="task-submit-btn">Create Task</button>
+                                <button class="btn btn-secondary" type="button" id="cancel-edit-btn" hidden>Cancel
+                                    Edit</button>
+                            </div>
                         </form>
                     </div>
 
@@ -95,7 +126,18 @@ pwa: true
 
                 <div class="middle-column">
                     <div class="panel tasks-list-panel">
-                        <h3 class="tasks-list-title">Today's Tasks</h3>
+                        <div class="tasks-list-head">
+                            <h3 class="tasks-list-title">Today's Tasks</h3>
+                            <label class="sort-label" for="task-sort">Sort by
+                                <select class="form-input sort-select" id="task-sort">
+                                    <option value="created">Newest first</option>
+                                    <option value="oldest">Oldest first</option>
+                                    <option value="priority-high">Priority (high first)</option>
+                                    <option value="priority-low">Priority (low first)</option>
+                                    <option value="reminder">Soonest reminder</option>
+                                </select>
+                            </label>
+                        </div>
                         <div class="tasks-list" id="tasks-list"></div>
                     </div>
 
@@ -172,5 +214,16 @@ pwa: true
         </div>
     </div>
 </main>
+
+<div class="focus-mode-overlay" id="focus-mode-overlay" hidden>
+    <div class="focus-mode-panel" role="dialog" aria-modal="true" aria-label="Focus mode">
+        <div class="focus-mode-panel-head">
+            <h3>Focus Mode</h3>
+            <button type="button" class="btn btn-secondary" id="focus-mode-close">Close</button>
+        </div>
+        <p class="muted small">Just one task, so nothing else competes for your attention.</p>
+        <div id="focus-mode-content"></div>
+    </div>
+</div>
 
 <script src="script.js"></script>

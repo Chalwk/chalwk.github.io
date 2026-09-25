@@ -6,6 +6,29 @@
     gap: 1.5rem;
 }
 
+.visually-hidden {
+    position: absolute !important;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.empty-state {
+    color: var(--gray);
+    text-align: center;
+    padding: 2rem;
+}
+
+.completed-date {
+    color: var(--gray);
+    font-size: 0.9rem;
+}
+
 .task-item {
     background-color: white;
     border: 1px solid var(--gray-light);
@@ -20,6 +43,18 @@
 .task-item:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow);
+}
+
+.task-item-active-timer {
+    border-left-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.25);
+}
+
+.overdue-badge {
+    color: var(--error);
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
 }
 
 .task-header {
@@ -183,6 +218,7 @@
     display: flex;
     gap: 0.5rem;
     margin-top: 0.75rem;
+    flex-wrap: wrap;
 }
 
 .completed-task-actions {
@@ -221,17 +257,30 @@
     box-shadow: var(--shadow-sm);
 }
 
-.notification {
+.notification-container {
     position: fixed;
     top: 20px;
     right: 20px;
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-width: 320px;
+}
+
+.notification {
     padding: 1rem 1.25rem;
     border-radius: var(--radius);
     color: white;
-    z-index: 2000;
     box-shadow: var(--shadow-lg);
     font-weight: 500;
-    max-width: 300px;
+    opacity: 1;
+    transition: opacity 0.5s ease;
+    background-color: var(--primary);
+}
+
+.notification-fade {
+    opacity: 0;
 }
 
 .notification-success {
@@ -240,6 +289,152 @@
 
 .notification-info {
     background-color: var(--primary);
+}
+
+.notification-snackbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.snackbar-undo-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    color: white;
+    padding: 0.35rem 0.75rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.snackbar-undo-btn:hover {
+    background: rgba(255, 255, 255, 0.35);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Toolbar: sound / motion / notifications / export / import / focus mode */
+/* ---------------------------------------------------------------------- */
+.toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.toolbar-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(37, 99, 235, 0.08);
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius);
+    font-size: 0.9rem;
+    cursor: pointer;
+    user-select: none;
+}
+
+.toolbar-toggle input {
+    cursor: pointer;
+}
+
+.form-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.form-actions .btn {
+    flex: 1;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Sort control                                                            */
+/* ---------------------------------------------------------------------- */
+.tasks-list-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.tasks-list-head .tasks-list-title {
+    margin-bottom: 0;
+}
+
+.sort-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--gray);
+}
+
+.sort-select {
+    width: auto;
+    padding: 0.4rem 0.6rem;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Focus Mode                                                              */
+/* ---------------------------------------------------------------------- */
+.focus-mode-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3000;
+    padding: 1.5rem;
+}
+
+.focus-mode-overlay[hidden] {
+    display: none;
+}
+
+.focus-mode-panel {
+    background: var(--light);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    max-width: 480px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-lg);
+}
+
+.focus-mode-panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.focus-mode-panel-head h3 {
+    color: var(--primary);
+    margin: 0;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Reduced motion: honour the user's toggle (and OS-level preference)      */
+/* ---------------------------------------------------------------------- */
+body.reduce-motion,
+body.reduce-motion * {
+    transition: none !important;
+    animation: none !important;
+    scroll-behavior: auto !important;
+}
+
+body.reduce-motion .task-item:hover {
+    transform: none !important;
+}
+
+body.reduce-motion .achievement.unlocked {
+    transform: none !important;
 }
 
 @media (max-width: 1024px) {
@@ -294,6 +489,11 @@
     .stat-label {
         font-size: 0.7rem;
     }
+
+    .tasks-list-head {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 }
 
 @media (max-width: 480px) {
@@ -332,6 +532,12 @@
 
     .user-stats {
         gap: 0.5rem;
+    }
+
+    .notification-container {
+        left: 20px;
+        right: 20px;
+        max-width: none;
     }
 }
 
@@ -503,6 +709,7 @@
 .btn-remove-step:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+    background: var(--gray-light);
 }
 
 .tasks-list,
