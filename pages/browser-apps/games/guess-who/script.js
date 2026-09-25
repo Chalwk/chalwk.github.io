@@ -475,6 +475,12 @@ function onCardClick(index) {
         sfx.answer(true);
         updatePlayerChip();
 
+        const ownCard = boardEl.querySelector(`[data-index="${index}"]`);
+        if (ownCard) {
+            ownCard.classList.add('eliminated');
+            setTimeout(() => sfx.flip(), 220);
+        }
+
         // AI selects a different character
         do {
             aiSecretIndex = Math.floor(Math.random() * TOTAL);
