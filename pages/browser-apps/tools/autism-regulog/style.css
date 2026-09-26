@@ -212,6 +212,22 @@ kbd {
     max-width: 60ch;
 }
 
+.streak-badge {
+    display: inline-flex;
+    align-items: center;
+    margin-top: 10px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent-strong);
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+[data-theme="dark"] .streak-badge {
+    color: var(--accent);
+}
+
 .app-tools {
     display: flex;
     gap: 8px;
@@ -657,6 +673,57 @@ kbd {
 }
 
 /* =============================================================================
+   Quick note
+   ========================================================================== */
+.note-details {
+    margin: 4px 0 14px;
+}
+
+.note-details summary {
+    cursor: pointer;
+    padding: 8px 12px;
+    background: var(--panel-2);
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 0.86rem;
+    color: var(--muted);
+    list-style: none;
+    display: inline-block;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.note-details summary::-webkit-details-marker {
+    display: none;
+}
+
+.note-details summary:hover {
+    color: var(--text);
+    background: var(--accent-soft);
+}
+
+.note-input {
+    display: block;
+    width: 100%;
+    margin-top: 8px;
+    padding: 10px 12px;
+    border-radius: var(--radius-xs);
+    border: 1px solid var(--border);
+    background: var(--panel-2);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 0.92rem;
+    resize: vertical;
+    min-height: 44px;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.note-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+/* =============================================================================
    Action rows
    ========================================================================== */
 .actions-row {
@@ -680,6 +747,41 @@ kbd {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
+}
+
+/* =============================================================================
+   Immediate support (crisis tier)
+   ========================================================================== */
+.crisis-support {
+    margin-bottom: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.crisis-heading {
+    margin: 0;
+    font-size: 1.05rem;
+}
+
+.crisis-lead {
+    margin: -6px 0 0;
+    font-size: 0.9rem;
+}
+
+.crisis-card {
+    border: 1px solid color-mix(in srgb, var(--danger) 35%, var(--border-soft));
+    background: color-mix(in srgb, var(--danger) 6%, var(--panel));
+    border-radius: var(--radius-sm);
+    padding: 18px 20px;
+}
+
+.crisis-card .suggestion-head h3 {
+    color: color-mix(in srgb, var(--danger) 70%, var(--text));
+}
+
+.crisis-card .strategy:hover {
+    background: color-mix(in srgb, var(--danger) 8%, var(--panel-2));
 }
 
 /* =============================================================================
@@ -750,6 +852,24 @@ kbd {
     flex-shrink: 0;
 }
 
+.percent-bar-track {
+    height: 5px;
+    border-radius: 999px;
+    background: var(--panel-2);
+    overflow: hidden;
+    margin: -2px 0 12px;
+}
+
+.percent-bar-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-strong));
+}
+
+.suggestions-more-wrap {
+    margin: -8px 0 20px;
+}
+
 .suggestion-explain {
     font-size: 0.9rem;
     margin-bottom: 12px;
@@ -790,6 +910,40 @@ kbd {
     cursor: pointer;
     transition: all 0.15s ease;
     min-width: 58px;
+}
+
+.strategy .star {
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--panel);
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    padding: 0;
+}
+
+.strategy .star:hover {
+    border-color: #f59e0b;
+    color: #f59e0b;
+    background: color-mix(in srgb, #f59e0b 12%, var(--panel));
+}
+
+.strategy .star.is-starred {
+    border-color: #f59e0b;
+    color: #f59e0b;
+    background: color-mix(in srgb, #f59e0b 16%, var(--panel));
+}
+
+.strategies-toggle {
+    margin-top: 2px;
 }
 
 .strategy .copy:hover {
@@ -864,6 +1018,14 @@ kbd {
     margin: 0 0 10px;
 }
 
+.pattern-subheading {
+    margin-top: 18px;
+}
+
+.pattern-item-time {
+    border-left-color: #f59e0b;
+}
+
 .pattern-item {
     padding: 12px 14px;
     background: var(--panel);
@@ -885,6 +1047,44 @@ kbd {
 
 .pattern-item .muted {
     font-size: 0.84rem;
+}
+
+/* =============================================================================
+   Toolkit
+   ========================================================================== */
+.toolkit-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.toolkit-item {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    background: var(--panel-2);
+    border-radius: var(--radius-xs);
+    border-left: 3px solid #f59e0b;
+}
+
+.toolkit-text {
+    font-size: 0.92rem;
+    line-height: 1.4;
+}
+
+.toolkit-source {
+    font-size: 0.78rem;
+    white-space: nowrap;
+}
+
+@media (max-width: 520px) {
+    .toolkit-item {
+        grid-template-columns: 1fr;
+        justify-items: start;
+        gap: 6px;
+    }
 }
 
 /* =============================================================================
@@ -994,6 +1194,15 @@ kbd {
     gap: 6px;
     flex-wrap: wrap;
     margin-top: 8px;
+}
+
+.hist-note {
+    margin-top: 8px;
+    font-size: 0.86rem;
+    color: var(--muted);
+    line-height: 1.4;
+    font-style: italic;
+    overflow-wrap: break-word;
 }
 
 .hist-tags .tag {
@@ -1277,6 +1486,31 @@ dialog::backdrop {
     .icon-btn:hover {
         transform: none;
     }
+}
+
+[data-motion="reduced"] *,
+[data-motion="reduced"] *::before,
+[data-motion="reduced"] *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+}
+
+[data-motion="reduced"] .symptom:hover,
+[data-motion="reduced"] .suggestion:hover,
+[data-motion="reduced"] .hist-item:hover,
+[data-motion="reduced"] .icon-btn:hover {
+    transform: none;
+}
+
+[data-motion="reduced"] .panel,
+[data-motion="reduced"] .suggestion,
+[data-motion="reduced"] .hist-item {
+    box-shadow: none;
+}
+
+[data-motion="reduced"] .panel:hover {
+    box-shadow: none;
 }
 
 /* =============================================================================

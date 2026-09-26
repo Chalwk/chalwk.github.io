@@ -36,6 +36,7 @@ pwa: true
                         Check in with yourself, spot patterns over time, and get coping ideas that fit.
                         Everything stays on your device.
                     </p>
+                    <span class="streak-badge" id="streak-badge" hidden></span>
                 </div>
 
                 <div class="app-tools" role="group" aria-label="App tools">
@@ -86,6 +87,13 @@ pwa: true
 
                     <div class="selection-summary" id="selection-summary" aria-live="polite"></div>
 
+                    <details class="note-details">
+                        <summary>Add a quick note (optional)</summary>
+                        <label class="sr-only" for="entry-note">What was happening?</label>
+                        <textarea id="entry-note" class="note-input" rows="2" maxlength="500"
+                            placeholder="Anything that helps future-you remember the context - totally optional."></textarea>
+                    </details>
+
                     <div class="actions-row">
                         <button class="btn primary" id="analyze-btn" type="button">
                             Analyze
@@ -113,11 +121,15 @@ pwa: true
                     </button>
                 </div>
 
+                <div class="crisis-support" id="crisis-support" aria-live="polite" hidden></div>
+
                 <div class="result-summary" id="result-summary">
                     No analysis yet. Pick anything that fits and press <strong>Analyze</strong>.
                 </div>
 
                 <div class="suggestions" id="suggestions" aria-live="polite"></div>
+
+                <div class="suggestions-more-wrap" id="suggestions-more-wrap"></div>
 
                 <div class="pattern-insights" id="pattern-insights-wrap">
                     <h3>Pattern recognition</h3>
@@ -134,6 +146,16 @@ pwa: true
                         services or a professional you trust.
                     </p>
                 </details>
+            </section>
+
+            <section class="panel" id="toolkit-panel" aria-labelledby="toolkit-heading">
+                <div class="panel-head">
+                    <h2 id="toolkit-heading">⭐ My toolkit</h2>
+                    <p class="muted">
+                        Strategies you have starred, so the ones that actually work for you are easy to find again.
+                    </p>
+                </div>
+                <div class="toolkit-list" id="toolkit-list" aria-live="polite"></div>
             </section>
 
             <section class="panel" id="history-panel" aria-labelledby="history-heading">
@@ -194,6 +216,11 @@ pwa: true
         <label class="checkbox">
             <input id="enable-sounds" type="checkbox" />
             <span>Soft interface sounds</span>
+        </label>
+
+        <label class="checkbox">
+            <input id="reduce-motion" type="checkbox" />
+            <span>Reduce motion &amp; simplify visuals</span>
         </label>
 
         <p class="muted small" style="margin:0">

@@ -9,8 +9,15 @@
     const STORAGE_KEY = "autism-regulog-history-v3";
     const SETTINGS_KEY = "autism-regulog-settings-v3";
     const THEME_KEY = "autism-regulog-theme";
+    const TOOLKIT_KEY = "autism-regulog-toolkit-v1";
     const DEFAULT_MAX_HISTORY = 200;
     const HISTORY_PAGE_SIZE = 10;
+    const STRATEGY_PREVIEW_COUNT = 3;
+    const SUGGESTION_PREVIEW_COUNT = 4;
+
+    // Tags that mean "this needs care right now" rather than a pattern to
+    // reflect on later. Shown first, always fully expanded, no percentages.
+    const CRISIS_TAGS = ["meltdown", "shutdown", "panic"];
 
     const SYMPTOMS = [
         { id: "tired", label: "Tired / sleepy", tags: ["fatigue"] },
@@ -309,9 +316,14 @@
     const selectionSummaryEl = el("#selection-summary");
     const analyzeBtn = el("#analyze-btn");
     const saveBtn = el("#save-btn");
+    const entryNoteEl = el("#entry-note");
     const resultSummary = el("#result-summary");
+    const crisisSupportEl = el("#crisis-support");
     const suggestionsEl = el("#suggestions");
+    const suggestionsMoreWrapEl = el("#suggestions-more-wrap");
     const patternInsightsEl = el("#pattern-insights");
+    const toolkitListEl = el("#toolkit-list");
+    const streakBadgeEl = el("#streak-badge");
     const historyList = el("#history-list");
     const historyMoreEl = el("#history-more");
     const clearHistoryBtn = el("#clear-history");
@@ -330,6 +342,7 @@
     const maxHistoryInput = el("#max-history");
     const enableNotifications = el("#enable-notifications");
     const enableSounds = el("#enable-sounds");
+    const reduceMotionEl = el("#reduce-motion");
     const closeHelpBtn = el("#close-help");
     const tagChart = el("#tag-chart");
     const symptomChart = el("#symptom-chart");
@@ -346,13 +359,15 @@
             return {
                 maxHistory: parsed.maxHistory || DEFAULT_MAX_HISTORY,
                 enableNotifications: !!parsed.enableNotifications,
-                enableSounds: !!parsed.enableSounds
+                enableSounds: !!parsed.enableSounds,
+                reduceMotion: !!parsed.reduceMotion
             };
         } catch (e) {
             return {
                 maxHistory: DEFAULT_MAX_HISTORY,
                 enableNotifications: false,
-                enableSounds: false
+                enableSounds: false,
+                reduceMotion: false
             };
         }
     }
@@ -361,6 +376,106 @@
         try {
             localStorage.setItem(SETTINGS_KEY, JSON.stringify(obj));
         } catch (e) { }
+    }
+
+    function applyMotionPref(reduced) {
+        document.documentElement.setAttribute("data-motion", reduced ? "reduced" : "full");
+    }
+
+    // -------------------------------------------------------------------------
+    // Toolkit (starred strategies)
+    // -------------------------------------------------------------------------
+    function loadToolkit() {
+        try {
+            const raw = localStorage.getItem(TOOLKIT_KEY);
+            const parsed = raw ? JSON.parse(raw) : [];
+            return Array.isArray(parsed) ? parsed : [];
+        } catch (e) {
+            return [];
+        }
+    }
+
+    function saveToolkit(arr) {
+        try {
+            localStorage.setItem(TOOLKIT_KEY, JSON.stringify(arr));
+        } catch (e) { }
+    }
+
+    function isInToolkit(strategy) {
+        return loadToolkit().some(t => t.strategy === strategy);
+    }
+
+    function toggleToolkit(strategy, tagName) {
+        const arr = loadToolkit();
+        const idx = arr.findIndex(t => t.strategy === strategy);
+        if (idx >= 0) {
+            arr.splice(idx, 1);
+        } else {
+            arr.unshift({ strategy, tagName, addedAt: Date.now() });
+        }
+        saveToolkit(arr);
+        renderToolkit();
+        return idx < 0; // true if it was just added
+    }
+
+    function renderToolkit() {
+        if (!toolkitListEl) return;
+        const arr = loadToolkit();
+        toolkitListEl.innerHTML = "";
+        if (!arr.length) {
+            toolkitListEl.innerHTML =
+                '<p class="muted empty-state">Nothing starred yet. Tap the star on any strategy to save it here.</p>';
+            return;
+        }
+        arr.forEach(item => {
+            const row = document.createElement("div");
+            row.className = "toolkit-item fade-in";
+            row.innerHTML = `
+                <span class="toolkit-text">${escapeHtml(item.strategy)}</span>
+                <span class="toolkit-source muted">${escapeHtml(item.tagName || "")}</span>
+                <button class="btn ghost small toolkit-remove" type="button" data-strategy="${escapeHtml(item.strategy)}" aria-label="Remove from toolkit">Remove</button>
+            `;
+            toolkitListEl.appendChild(row);
+        });
+        els(".toolkit-remove", toolkitListEl).forEach(btn => {
+            btn.addEventListener("click", () => {
+                toggleToolkit(btn.dataset.strategy);
+                toast("Removed from toolkit.");
+            });
+        });
+    }
+
+    // -------------------------------------------------------------------------
+    // Check-in streak
+    // -------------------------------------------------------------------------
+    function computeStreak(history) {
+        if (!history.length) return 0;
+        const days = new Set(history.map(h => new Date(h.ts).toDateString()));
+        const today = new Date();
+        // Streak must include today or yesterday to still count as "current".
+        const todayStr = today.toDateString();
+        const yesterday = new Date(today);
+        yesterday.setDate(yesterday.getDate() - 1);
+        let cursor = days.has(todayStr) ? today : (days.has(yesterday.toDateString()) ? yesterday : null);
+        if (!cursor) return 0;
+        let streak = 0;
+        const d = new Date(cursor);
+        while (days.has(d.toDateString())) {
+            streak++;
+            d.setDate(d.getDate() - 1);
+        }
+        return streak;
+    }
+
+    function renderStreak() {
+        if (!streakBadgeEl) return;
+        const streak = computeStreak(loadHistory());
+        if (streak < 2) {
+            streakBadgeEl.hidden = true;
+            return;
+        }
+        streakBadgeEl.hidden = false;
+        streakBadgeEl.textContent = `🔥 ${streak}-day check-in streak`;
     }
 
     // -------------------------------------------------------------------------
@@ -593,80 +708,140 @@
     // -------------------------------------------------------------------------
     let lastAnalysis = null;
 
+    function strategyRowHtml(strategy, tagName) {
+        const starred = isInToolkit(strategy);
+        return `
+            <li class="strategy">
+                <button class="star ${starred ? "is-starred" : ""}" type="button"
+                    data-strategy="${escapeHtml(strategy)}" data-tagname="${escapeHtml(tagName)}"
+                    aria-pressed="${starred ? "true" : "false"}"
+                    title="${starred ? "Remove from toolkit" : "Save to toolkit"}"
+                    aria-label="${starred ? "Remove from toolkit" : "Save to toolkit"}">${starred ? "★" : "☆"}</button>
+                <button class="copy" type="button" data-copy="${escapeHtml(strategy)}" title="Copy strategy">Copy</button>
+                <span class="strategy-text">${escapeHtml(strategy)}</span>
+            </li>
+        `;
+    }
+
+    function suggestionCardHtml(entry, opts = {}) {
+        const strategies = entry.info.strategies || [];
+        const previewCount = opts.crisis ? strategies.length : STRATEGY_PREVIEW_COUNT;
+        const preview = strategies.slice(0, previewCount);
+        const rest = strategies.slice(previewCount);
+
+        return `
+            <header class="suggestion-head">
+                <h3>${escapeHtml(entry.info.name)}</h3>
+                ${opts.crisis ? "" : `<span class="percent-badge" title="Relative weight">${entry.percent}%</span>`}
+            </header>
+            ${opts.crisis ? "" : `<div class="percent-bar-track"><div class="percent-bar-fill" style="width:${entry.percent}%"></div></div>`}
+            <p class="muted suggestion-explain">${escapeHtml(entry.info.explanation || "")}</p>
+            <ul class="strategies" aria-label="Strategies for ${escapeHtml(entry.info.name)}">
+                ${preview.map(s => strategyRowHtml(s, entry.info.name)).join("")}
+            </ul>
+            ${rest.length ? `
+                <ul class="strategies strategies-extra" hidden>
+                    ${rest.map(s => strategyRowHtml(s, entry.info.name)).join("")}
+                </ul>
+                <button class="btn ghost small strategies-toggle" type="button">Show ${rest.length} more strateg${rest.length === 1 ? "y" : "ies"}</button>
+            ` : ""}
+            ${opts.crisis ? "" : `
+                <div class="taglist">
+                    ${SYMPTOMS.filter(s => s.tags && s.tags.includes(entry.tag))
+                    .slice(0, 8)
+                    .map(s => `<span class="tag" data-sym="${escapeHtml(s.id)}">${escapeHtml(s.label)}</span>`)
+                    .join("")}
+                </div>
+            `}
+        `;
+    }
+
     function analyze(selected) {
         if (!selected || selected.length === 0) {
             resultSummary.innerHTML =
                 `Nothing is selected yet. Pick anything that fits in <strong>Step 1</strong>, then press Analyze.`;
             suggestionsEl.innerHTML = "";
+            suggestionsMoreWrapEl.innerHTML = "";
+            crisisSupportEl.hidden = true;
+            crisisSupportEl.innerHTML = "";
             patternInsightsEl.innerHTML =
                 '<p class="muted">Patterns will appear here once you have saved a few entries.</p>';
             copyResultsBtn.hidden = true;
             return;
         }
 
-        resultSummary.textContent = "Analyzing your selections…";
-        suggestionsEl.innerHTML = '<div class="loading">Loading suggestions…</div>';
-        copyResultsBtn.hidden = true;
+        const tagScore = {};
+        selected.forEach(item => {
+            const s = SYMPTOMS.find(x => x.id === item.id);
+            if (!s) return;
+            (s.tags || []).forEach(tag => {
+                tagScore[tag] = (tagScore[tag] || 0) + item.weight;
+            });
+        });
 
-        // Small async delay so the UI feels responsive
-        setTimeout(() => {
-            const tagScore = {};
-            selected.forEach(item => {
-                const s = SYMPTOMS.find(x => x.id === item.id);
-                if (!s) return;
-                (s.tags || []).forEach(tag => {
-                    tagScore[tag] = (tagScore[tag] || 0) + item.weight;
+        const totalScore = Object.values(tagScore).reduce((a, b) => a + b, 0);
+
+        const allEntries = Object.keys(tagScore).map(tag => ({
+            tag,
+            score: tagScore[tag],
+            info: TAGS[tag] || { name: tag, strategies: [], explanation: "" },
+            percent: totalScore ? Math.round((tagScore[tag] / totalScore) * 100) : 0
+        })).sort((a, b) => b.score - a.score);
+
+        const crisisEntries = allEntries.filter(e => CRISIS_TAGS.includes(e.tag));
+        const entries = allEntries.filter(e => !CRISIS_TAGS.includes(e.tag));
+
+        resultSummary.innerHTML =
+            `Matched <strong>${selected.length}</strong> item${selected.length === 1 ? "" : "s"}. ` +
+            `Top patterns: <strong>${allEntries.slice(0, 3).map(e => escapeHtml(e.info.name)).join(", ") || "none"}</strong>.`;
+
+        // Immediate-support tier: always fully shown, no percentages or gamification.
+        if (crisisEntries.length) {
+            crisisSupportEl.hidden = false;
+            crisisSupportEl.innerHTML = `
+                <h3 class="crisis-heading">🫂 This needs care right now</h3>
+                <p class="muted crisis-lead">These matter more than the patterns below - it's okay to stop and do one of these first.</p>
+                ${crisisEntries.map(e => `<article class="suggestion crisis-card fade-in">${suggestionCardHtml(e, { crisis: true })}</article>`).join("")}
+            `;
+        } else {
+            crisisSupportEl.hidden = true;
+            crisisSupportEl.innerHTML = "";
+        }
+
+        suggestionsEl.innerHTML = "";
+        suggestionsMoreWrapEl.innerHTML = "";
+
+        const visibleEntries = entries.slice(0, SUGGESTION_PREVIEW_COUNT);
+        const hiddenEntries = entries.slice(SUGGESTION_PREVIEW_COUNT);
+
+        visibleEntries.forEach(entry => {
+            const card = document.createElement("article");
+            card.className = "suggestion fade-in";
+            card.innerHTML = suggestionCardHtml(entry);
+            suggestionsEl.appendChild(card);
+        });
+
+        if (hiddenEntries.length) {
+            const more = document.createElement("button");
+            more.type = "button";
+            more.className = "btn secondary";
+            more.textContent = `Show ${hiddenEntries.length} more pattern${hiddenEntries.length === 1 ? "" : "s"}`;
+            more.addEventListener("click", () => {
+                hiddenEntries.forEach(entry => {
+                    const card = document.createElement("article");
+                    card.className = "suggestion fade-in";
+                    card.innerHTML = suggestionCardHtml(entry);
+                    suggestionsEl.appendChild(card);
                 });
+                more.remove();
             });
+            suggestionsMoreWrapEl.appendChild(more);
+        }
 
-            const totalScore = Object.values(tagScore).reduce((a, b) => a + b, 0);
+        lastAnalysis = { entries: allEntries, selected };
+        copyResultsBtn.hidden = allEntries.length === 0;
 
-            const entries = Object.keys(tagScore).map(tag => ({
-                tag,
-                score: tagScore[tag],
-                info: TAGS[tag] || { name: tag, strategies: [], explanation: "" },
-                percent: totalScore ? Math.round((tagScore[tag] / totalScore) * 100) : 0
-            })).sort((a, b) => b.score - a.score);
-
-            resultSummary.innerHTML =
-                `Matched <strong>${selected.length}</strong> item${selected.length === 1 ? "" : "s"}. ` +
-                `Top patterns: <strong>${entries.slice(0, 3).map(e => escapeHtml(e.info.name)).join(", ") || "none"}</strong>.`;
-
-            suggestionsEl.innerHTML = "";
-            if (!entries.length) return;
-
-            entries.forEach(entry => {
-                const card = document.createElement("article");
-                card.className = "suggestion fade-in";
-                card.innerHTML = `
-                    <header class="suggestion-head">
-                        <h3>${escapeHtml(entry.info.name)}</h3>
-                        <span class="percent-badge" title="Relative weight">${entry.percent}%</span>
-                    </header>
-                    <p class="muted suggestion-explain">${escapeHtml(entry.info.explanation || "")}</p>
-                    <ul class="strategies" aria-label="Strategies for ${escapeHtml(entry.info.name)}">
-                        ${entry.info.strategies.map(s => `
-                            <li class="strategy">
-                                <button class="copy" type="button" data-copy="${escapeHtml(s)}" title="Copy strategy">Copy</button>
-                                <span class="strategy-text">${escapeHtml(s)}</span>
-                            </li>
-                        `).join("")}
-                    </ul>
-                    <div class="taglist">
-                        ${SYMPTOMS.filter(s => s.tags && s.tags.includes(entry.tag))
-                        .slice(0, 8)
-                        .map(s => `<span class="tag" data-sym="${escapeHtml(s.id)}">${escapeHtml(s.label)}</span>`)
-                        .join("")}
-                    </div>
-                `;
-                suggestionsEl.appendChild(card);
-            });
-
-            lastAnalysis = { entries, selected };
-            copyResultsBtn.hidden = false;
-
-            updatePatternInsights();
-        }, 380);
+        updatePatternInsights();
     }
 
     function buildAnalysisText() {
@@ -689,6 +864,56 @@
     // -------------------------------------------------------------------------
     // Pattern insights
     // -------------------------------------------------------------------------
+    const TIME_BUCKETS = [
+        { id: "morning", label: "the morning", from: 5, to: 11 },
+        { id: "afternoon", label: "the afternoon", from: 12, to: 16 },
+        { id: "evening", label: "the evening", from: 17, to: 21 },
+        { id: "night", label: "the night", from: 22, to: 4 }
+    ];
+
+    function bucketForHour(hour) {
+        return TIME_BUCKETS.find(b => b.from <= b.to ? (hour >= b.from && hour <= b.to) : (hour >= b.from || hour <= b.to));
+    }
+
+    function timeOfDayInsights(history) {
+        if (history.length < 6) return [];
+        const tagByBucket = {}; // tag -> { bucketId: count }
+        const tagTotal = {};
+        history.forEach(entry => {
+            const bucket = bucketForHour(new Date(entry.ts).getHours());
+            if (!bucket) return;
+            const tags = new Set();
+            entry.symptoms.forEach(s => {
+                const symptom = SYMPTOMS.find(x => x.id === s.id);
+                if (!symptom) return;
+                (symptom.tags || []).forEach(tag => tags.add(tag));
+            });
+            tags.forEach(tag => {
+                tagByBucket[tag] = tagByBucket[tag] || {};
+                tagByBucket[tag][bucket.id] = (tagByBucket[tag][bucket.id] || 0) + 1;
+                tagTotal[tag] = (tagTotal[tag] || 0) + 1;
+            });
+        });
+
+        const results = [];
+        Object.keys(tagTotal).forEach(tag => {
+            const total = tagTotal[tag];
+            if (total < 4) return;
+            const buckets = tagByBucket[tag];
+            const [topBucketId, topCount] = Object.entries(buckets).sort((a, b) => b[1] - a[1])[0];
+            const share = topCount / total;
+            if (share >= 0.6) {
+                const bucketInfo = TIME_BUCKETS.find(b => b.id === topBucketId);
+                results.push({
+                    tag,
+                    bucketLabel: bucketInfo ? bucketInfo.label : topBucketId,
+                    share: Math.round(share * 100)
+                });
+            }
+        });
+        return results.sort((a, b) => b.share - a.share).slice(0, 2);
+    }
+
     function updatePatternInsights() {
         const history = loadHistory();
         if (history.length < 3) {
@@ -719,32 +944,54 @@
             .sort((a, b) => b[1] - a[1])
             .slice(0, 3);
 
+        const timeInsights = timeOfDayInsights(history);
+
         patternInsightsEl.innerHTML = "";
 
-        if (!common.length) {
+        if (!common.length && !timeInsights.length) {
             patternInsightsEl.innerHTML =
                 '<p class="muted">No strong patterns detected yet. Keep checking in - patterns show up over time.</p>';
             return;
         }
 
-        const heading = document.createElement("h4");
-        heading.textContent = "Common combinations in your entries";
-        patternInsightsEl.appendChild(heading);
+        if (common.length) {
+            const heading = document.createElement("h4");
+            heading.textContent = "Common combinations in your entries";
+            patternInsightsEl.appendChild(heading);
 
-        common.forEach(([pair, count]) => {
-            const [t1, t2] = pair.split("|");
-            const n1 = TAGS[t1]?.name || t1;
-            const n2 = TAGS[t2]?.name || t2;
-            const pct = Math.round((count / history.length) * 100);
+            common.forEach(([pair, count]) => {
+                const [t1, t2] = pair.split("|");
+                const n1 = TAGS[t1]?.name || t1;
+                const n2 = TAGS[t2]?.name || t2;
+                const pct = Math.round((count / history.length) * 100);
 
-            const item = document.createElement("div");
-            item.className = "pattern-item fade-in";
-            item.innerHTML = `
-                <strong>${escapeHtml(n1)} + ${escapeHtml(n2)}</strong>
-                <div class="muted">Appears in ${pct}% of your saved entries</div>
-            `;
-            patternInsightsEl.appendChild(item);
-        });
+                const item = document.createElement("div");
+                item.className = "pattern-item fade-in";
+                item.innerHTML = `
+                    <strong>${escapeHtml(n1)} + ${escapeHtml(n2)}</strong>
+                    <div class="muted">Appears in ${pct}% of your saved entries</div>
+                `;
+                patternInsightsEl.appendChild(item);
+            });
+        }
+
+        if (timeInsights.length) {
+            const heading2 = document.createElement("h4");
+            heading2.className = "pattern-subheading";
+            heading2.textContent = "Time-of-day patterns";
+            patternInsightsEl.appendChild(heading2);
+
+            timeInsights.forEach(t => {
+                const name = TAGS[t.tag]?.name || t.tag;
+                const item = document.createElement("div");
+                item.className = "pattern-item pattern-item-time fade-in";
+                item.innerHTML = `
+                    <strong>${escapeHtml(name)}</strong>
+                    <div class="muted">Shows up in ${escapeHtml(t.bucketLabel)} ${t.share}% of the time it's logged</div>
+                `;
+                patternInsightsEl.appendChild(item);
+            });
+        }
     }
 
     // -------------------------------------------------------------------------
@@ -791,6 +1038,7 @@
             historyList.innerHTML = `<div class="muted empty-state">No saved entries yet. Your check-ins will show up here.</div>`;
             drawTagChart();
             drawSymptomChart();
+            renderStreak();
             return;
         }
 
@@ -811,6 +1059,7 @@
                 <div class="hist-left">
                     <div class="hist-date">${fmtDate(h.ts)}</div>
                     <div class="hist-tags">${labels}</div>
+                    ${h.note ? `<div class="hist-note">${escapeHtml(h.note)}</div>` : ""}
                 </div>
                 <div class="hist-metadata">
                     <div class="hist-summary">${escapeHtml(h.summaryName || h.summary || "")}</div>
@@ -851,6 +1100,7 @@
 
         drawTagChart();
         drawSymptomChart();
+        renderStreak();
     }
 
     // -------------------------------------------------------------------------
@@ -874,7 +1124,7 @@
             toast("Nothing to export yet.", { tone: "error" });
             return;
         }
-        const header = ["timestamp", "human_time", "selected_symptoms", "weights", "top_patterns"];
+        const header = ["timestamp", "human_time", "selected_symptoms", "weights", "top_patterns", "note"];
         const rows = arr.map(item => {
             const labels = item.symptoms.map(s => {
                 const sym = SYMPTOMS.find(x => x.id === s.id);
@@ -888,7 +1138,8 @@
                 `"${fmtDate(item.ts)}"`,
                 `"${escapeCsv(labels)}"`,
                 `"${escapeCsv(weights)}"`,
-                `"${escapeCsv(top)}"`
+                `"${escapeCsv(top)}"`,
+                `"${escapeCsv(item.note || "")}"`
             ];
         });
         const csv = [header.join(","), ...rows.map(r => r.join(","))].join("\n");
@@ -1157,32 +1408,58 @@
             playSound("click");
         });
 
-        // Copy strategy buttons + tag-click copy
-        suggestionsEl.addEventListener("click", ev => {
-            const copyBtn = ev.target.closest("button.copy");
-            if (copyBtn) {
-                const text = copyBtn.dataset.copy || "";
-                navigator.clipboard?.writeText(text).then(() => {
-                    copyBtn.textContent = "Copied";
-                    copyBtn.classList.add("is-copied");
-                    setTimeout(() => {
-                        copyBtn.textContent = "Copy";
-                        copyBtn.classList.remove("is-copied");
-                    }, 900);
-                }).catch(() => { });
-                return;
-            }
+        // Copy strategy buttons, tag-click copy, star toggle, and "show more" per card
+        function wireSuggestionInteractions(container) {
+            container.addEventListener("click", ev => {
+                const toggleBtn = ev.target.closest("button.strategies-toggle");
+                if (toggleBtn) {
+                    const extra = toggleBtn.previousElementSibling;
+                    if (extra && extra.classList.contains("strategies-extra")) {
+                        extra.hidden = false;
+                    }
+                    toggleBtn.remove();
+                    return;
+                }
 
-            const tag = ev.target.closest(".tag");
-            if (!tag) return;
-            const symId = tag.dataset.sym;
-            const sym = symId && SYMPTOMS.find(s => s.id === symId);
-            if (!sym) return;
-            navigator.clipboard?.writeText(sym.label).then(() => {
-                tag.classList.add("is-copied");
-                setTimeout(() => tag.classList.remove("is-copied"), 400);
-            }).catch(() => { });
-        });
+                const starBtn = ev.target.closest("button.star");
+                if (starBtn) {
+                    const added = toggleToolkit(starBtn.dataset.strategy, starBtn.dataset.tagname);
+                    starBtn.classList.toggle("is-starred", added);
+                    starBtn.textContent = added ? "★" : "☆";
+                    starBtn.setAttribute("aria-pressed", added ? "true" : "false");
+                    starBtn.title = added ? "Remove from toolkit" : "Save to toolkit";
+                    toast(added ? "Saved to your toolkit." : "Removed from toolkit.");
+                    playSound("click");
+                    return;
+                }
+
+                const copyBtn = ev.target.closest("button.copy");
+                if (copyBtn) {
+                    const text = copyBtn.dataset.copy || "";
+                    navigator.clipboard?.writeText(text).then(() => {
+                        copyBtn.textContent = "Copied";
+                        copyBtn.classList.add("is-copied");
+                        setTimeout(() => {
+                            copyBtn.textContent = "Copy";
+                            copyBtn.classList.remove("is-copied");
+                        }, 900);
+                    }).catch(() => { });
+                    return;
+                }
+
+                const tag = ev.target.closest(".tag");
+                if (!tag) return;
+                const symId = tag.dataset.sym;
+                const sym = symId && SYMPTOMS.find(s => s.id === symId);
+                if (!sym) return;
+                navigator.clipboard?.writeText(sym.label).then(() => {
+                    tag.classList.add("is-copied");
+                    setTimeout(() => tag.classList.remove("is-copied"), 400);
+                }).catch(() => { });
+            });
+        }
+        wireSuggestionInteractions(suggestionsEl);
+        wireSuggestionInteractions(crisisSupportEl);
 
         // Copy full analysis summary
         copyResultsBtn.addEventListener("click", () => {
@@ -1210,13 +1487,17 @@
             }
             const tags = deriveSummaryTagsWeighted(sel);
             const summaryName = tags.slice(0, 3).map(t => TAGS[t] ? TAGS[t].name : t).join(", ");
+            const note = entryNoteEl ? entryNoteEl.value.trim().slice(0, 500) : "";
 
             pushHistory({
                 ts: Date.now(),
                 symptoms: sel,
                 summary: tags.join(", "),
-                summaryName
+                summaryName,
+                note
             });
+
+            if (entryNoteEl) entryNoteEl.value = "";
 
             playSound("success");
             toast("Saved to your history.", { tone: "success" });
@@ -1234,6 +1515,7 @@
                 });
             });
             searchInput.value = "";
+            if (entryNoteEl) entryNoteEl.value = "";
             activeGroup = "all";
             els(".chip", groupFilterEl).forEach(c => {
                 const isActive = c.dataset.group === "all";
@@ -1245,6 +1527,9 @@
             resultSummary.innerHTML =
                 `Selections cleared. Pick anything that fits, then press <strong>Analyze</strong>.`;
             suggestionsEl.innerHTML = "";
+            suggestionsMoreWrapEl.innerHTML = "";
+            crisisSupportEl.hidden = true;
+            crisisSupportEl.innerHTML = "";
             patternInsightsEl.innerHTML =
                 '<p class="muted">Patterns will appear here once you have saved a few entries.</p>';
             copyResultsBtn.hidden = true;
@@ -1304,6 +1589,7 @@
             maxHistoryInput.value = s.maxHistory || DEFAULT_MAX_HISTORY;
             enableNotifications.checked = s.enableNotifications;
             enableSounds.checked = s.enableSounds;
+            if (reduceMotionEl) reduceMotionEl.checked = s.reduceMotion;
             settingsDialog.showModal();
         });
 
@@ -1311,11 +1597,14 @@
         settingsDialog.addEventListener("close", () => {
             if (settingsDialog.returnValue !== "save") return;
             const val = Math.max(5, Math.min(10000, Number(maxHistoryInput.value) || DEFAULT_MAX_HISTORY));
+            const reduceMotion = !!(reduceMotionEl && reduceMotionEl.checked);
             saveSettings({
                 maxHistory: val,
                 enableNotifications: enableNotifications.checked,
-                enableSounds: enableSounds.checked
+                enableSounds: enableSounds.checked,
+                reduceMotion
             });
+            applyMotionPref(reduceMotion);
             refreshReminderTimer();
             renderHistory();
             toast("Settings saved.", { tone: "success" });
@@ -1364,8 +1653,11 @@
         // but we sync the toggle button state here).
         const theme = getCurrentTheme();
         applyTheme(theme);
+        applyMotionPref(loadSettings().reduceMotion);
 
         wire();
+        renderToolkit();
+        renderStreak();
 
         setTimeout(() => {
             drawTagChart();
