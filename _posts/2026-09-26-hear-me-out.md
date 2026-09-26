@@ -231,9 +231,6 @@ Undo history is a stack of JSON snapshots, capped at 50 entries. Every mutating 
 
 A significant rework was done. Everything below is in the current version.
 
-<details>
-    <summary>Click to expand</summary>
-
 ### Bug fixes
 
 * **Themes did nothing.** `applyTheme()` toggled CSS classes that had no matching rules. Added real `theme-light`, `theme-dark`, `theme-high-contrast`, and `theme-auto` definitions with semantic token overrides.
@@ -298,7 +295,5 @@ A significant rework was done. Everything below is in the current version.
 * Focus is managed across modal open/close and preserved across state changes.
 * `prefers-reduced-motion` collapses all transitions.
 * A `@media print` block hides chrome for printing the board.
-
-</details>
 
 ---

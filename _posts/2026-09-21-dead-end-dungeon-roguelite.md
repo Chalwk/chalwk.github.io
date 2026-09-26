@@ -75,9 +75,6 @@ Goal: descend ten floors and defeat the Crypt Warden on the last one.
 
 A running log of how the game is built, what is done, and what is still rough.
 
-<details>
-    <summary>Click to expand</summary>
-
 ### File Structure
 
 The game moved from one monolithic `script.js` into focused modules. These are plain (non-module) scripts sharing one global scope rather than ES modules, so `index.html` loads them in a fixed order that mirrors the original file's top-to-bottom section order:
@@ -183,7 +180,5 @@ Full redraw on every render. The board is rebuilt from state whenever the game s
 One action, one turn. Every player action follows the same sequence: resolve, then enemies act, then render. Choice modals pause that sequence and resume it when closed.
 
 Player choice over auto-resolution. Weapon pickups open a choice modal instead of the game deciding for you, using the same modal system as boons and armories.
-
-</details>
 
 ---
