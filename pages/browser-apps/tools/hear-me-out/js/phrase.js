@@ -202,13 +202,17 @@ export function updatePhraseDisplay() {
         setupPhraseItemDrag(item, index);
 
         item.addEventListener('keydown', e => {
+            // Stop the global handler from also treating arrows as
+            // category navigation.
             if (e.key === 'Delete' || e.key === 'Backspace') {
                 e.preventDefault();
+                e.stopPropagation();
                 backupPhrase();
                 state.currentPhrase.splice(index, 1);
                 updatePhraseDisplay();
             } else if (e.key === 'ArrowLeft' && index > 0) {
                 e.preventDefault();
+                e.stopPropagation();
                 backupPhrase();
                 [state.currentPhrase[index - 1], state.currentPhrase[index]] =
                     [state.currentPhrase[index], state.currentPhrase[index - 1]];
@@ -217,6 +221,7 @@ export function updatePhraseDisplay() {
                 if (items[index - 1]) items[index - 1].focus();
             } else if (e.key === 'ArrowRight' && index < state.currentPhrase.length - 1) {
                 e.preventDefault();
+                e.stopPropagation();
                 backupPhrase();
                 [state.currentPhrase[index + 1], state.currentPhrase[index]] =
                     [state.currentPhrase[index], state.currentPhrase[index + 1]];

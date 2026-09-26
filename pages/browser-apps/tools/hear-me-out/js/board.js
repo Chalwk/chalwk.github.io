@@ -68,12 +68,9 @@ export function renderBoard() {
         textSpan.textContent = symbol.text;
         node.appendChild(textSpan);
 
-        node.addEventListener('click', () => {
-            if (state.isEditMode) openEditModal(symbol);
-            else addToPhrase(symbol);
-        });
-
+        // Per-symbol interaction state
         let pressTimer = null;
+        let suppressClick = false;
         let startX = 0;
         let startY = 0;
 
@@ -84,15 +81,29 @@ export function renderBoard() {
             }
         };
 
+        node.addEventListener('click', () => {
+            // A long-press just fired; swallow the synthetic click so we
+            // don't also add the symbol to the phrase.
+            if (suppressClick) {
+                suppressClick = false;
+                return;
+            }
+            if (state.isEditMode) openEditModal(symbol);
+            else addToPhrase(symbol);
+        });
+
         node.addEventListener('pointerdown', e => {
             if (state.isEditMode) return;
+            if (e.pointerType === 'mouse' && e.button !== 0) return;
 
+            suppressClick = false;
             startX = e.clientX;
             startY = e.clientY;
             clearPressTimer();
 
             pressTimer = setTimeout(() => {
                 pressTimer = null;
+                suppressClick = true;
                 previewSpeak(symbol);
             }, 550);
         });

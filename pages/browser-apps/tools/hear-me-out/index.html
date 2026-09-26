@@ -8,6 +8,8 @@ pwa: true
 <!-- Copyright (c) 2024-2026 Jericho Crosby (Chalwk). All Rights Reserved. -->
 
 <link href="style.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    crossorigin="anonymous" referrerpolicy="no-referrer">
 
 <main>
     <div class="hmo-app-root">
@@ -147,7 +149,7 @@ pwa: true
                 <div class="form-group">
                     <label for="symbolImage">Image URL or emoji</label>
                     <input id="symbolImage" placeholder="https:// or data:, or emoji" type="text">
-                    <small>Or upload an image file (max 2 MB)</small>
+                    <small>Or upload an image file (max 2 MB; larger images are automatically resized).</small>
                     <input accept="image/*" id="symbolImageFile" type="file">
                 </div>
                 <div class="form-group">
@@ -205,7 +207,7 @@ pwa: true
     </div>
 </div>
 
-<!-- Modal: extra settings (theme, speech volume/voice, fixed grid sizes) -->
+<!-- Modal: extra settings (theme, speech volume/voice, board grid columns) -->
 <div aria-hidden="true" aria-labelledby="settingsModalTitle" aria-modal="true" class="modal" id="settingsModal"
     role="dialog">
     <div class="modal-content">
@@ -258,13 +260,14 @@ pwa: true
                 <div class="settings-section">
                     <h3>Board Layout</h3>
                     <div class="form-group">
-                        <label for="settingsGridSizeSelect">Grid Size</label>
+                        <label for="settingsGridSizeSelect">Grid Columns</label>
                         <select id="settingsGridSizeSelect">
                             <option value="auto">Auto Responsive</option>
-                            <option value="3x4">3x4</option>
-                            <option value="4x6">4x6</option>
-                            <option value="6x8">6x8</option>
+                            <option value="3x4">Fixed 3 columns per row</option>
+                            <option value="4x6">Fixed 4 columns per row</option>
+                            <option value="6x8">Fixed 6 columns per row</option>
                         </select>
+                        <small>Fixed options keep a constant number of columns; rows grow as needed.</small>
                     </div>
                 </div>
             </div>
@@ -308,8 +311,8 @@ pwa: true
                         symbols).
                     </li>
                     <li><strong>Additional Settings</strong> - theme (light/dark/high-contrast/auto), speech volume,
-                        voice, "speak as I build" toggle, and board grid size (auto-responsive or fixed
-                        3×4 / 4×6 / 6×8).
+                        voice, "speak as I build" toggle, and board grid columns (auto-responsive or fixed
+                        3/4/6 columns per row).
                     </li>
                 </ul>
                 <h3>Keyboard shortcuts</h3>

@@ -114,6 +114,70 @@ body {
     white-space: nowrap;
 }
 
+/* ---------------- Buttons ---------------- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.55rem 1rem;
+    border-radius: var(--radius);
+    border: 1px solid transparent;
+    font-size: 0.9rem;
+    font-weight: 500;
+    font-family: inherit;
+    line-height: 1.2;
+    cursor: pointer;
+    white-space: nowrap;
+    text-decoration: none;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, filter 0.15s ease;
+}
+
+.btn i {
+    font-size: 0.95em;
+}
+
+.btn:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: #ffffff;
+    border-color: var(--primary);
+}
+
+.btn-primary:hover {
+    filter: brightness(1.08);
+}
+
+body.theme-high-contrast .btn-primary {
+    color: #000000;
+    font-weight: 700;
+}
+
+.btn-secondary {
+    background: var(--surface);
+    color: var(--text);
+    border-color: var(--border);
+}
+
+.btn-secondary:hover {
+    background: var(--surface-alt);
+}
+
+.btn-danger {
+    background: #dc2626;
+    color: #ffffff;
+    border-color: #dc2626;
+}
+
+.btn-danger:hover {
+    filter: brightness(1.08);
+}
+
+/* ---------------- Layout ---------------- */
 .hmo-app-root {
     width: 100%;
     max-width: var(--container-max);
@@ -210,6 +274,35 @@ body {
     background: rgba(255, 255, 255, 0.25);
     border-color: rgba(255, 255, 255, 0.5);
     transform: scale(1.05);
+}
+
+body.theme-high-contrast .app-header {
+    color: #000000;
+}
+
+body.theme-high-contrast .app-header h2,
+body.theme-high-contrast .header-icon-btn,
+body.theme-high-contrast .header-sub select {
+    color: #000000;
+}
+
+body.theme-high-contrast .header-icon-btn {
+    background: rgba(0, 0, 0, 0.1);
+    border-color: #000000;
+}
+
+body.theme-high-contrast .header-icon-btn:hover {
+    background: rgba(0, 0, 0, 0.2);
+    border-color: #000000;
+}
+
+body.theme-high-contrast .header-sub select {
+    background: rgba(0, 0, 0, 0.1);
+    border-color: #000000;
+}
+
+body.theme-high-contrast .header-sub select:hover {
+    background: rgba(0, 0, 0, 0.2);
 }
 
 .settings-menu {

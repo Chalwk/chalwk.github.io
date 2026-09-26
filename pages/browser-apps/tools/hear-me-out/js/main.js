@@ -171,7 +171,12 @@ function setupWiring() {
         closeSettingsMenu();
     });
 
-    addSymbolBtn.addEventListener('click', () => openEditModal(null));
+    // "Add Symbol" should also enter edit mode (via the central toggle),
+    // so the header button stays in sync with the body class.
+    addSymbolBtn.addEventListener('click', () => {
+        if (!state.isEditMode) toggleEditMode();
+        openEditModal(null);
+    });
     closeModalBtn.addEventListener('click', closeEditModal);
     symbolForm.addEventListener('submit', saveSymbolChanges);
     deleteBtn.addEventListener('click', deleteSymbol);
@@ -308,6 +313,11 @@ function setupWiring() {
         }
 
         if (isFormControl || state.modalStack.length) return;
+
+        // If the user is interacting with a phrase chip, let the chip
+        // handle arrow / delete keys without also switching categories.
+        const inPhraseItem = e.target && e.target.closest && e.target.closest('.phrase-item');
+        if (inPhraseItem) return;
 
         if (e.key === 'ArrowLeft') {
             e.preventDefault();

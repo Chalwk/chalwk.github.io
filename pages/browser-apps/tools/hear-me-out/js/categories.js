@@ -11,6 +11,8 @@ import {
     symbolCategoryInput
 } from './dom.js';
 
+const DEFAULT_FALLBACK_CATEGORY = 'Basic Communication';
+
 let refreshBoardCallback = () => { };
 
 export function setBoardRefresh(fn) {
@@ -101,20 +103,40 @@ export function renameCategory(oldName, newName) {
 export function deleteCategory(name) {
     if (!name) return false;
 
+    const categories = getCategories();
     const count = state.symbols.filter(s => s.category === name).length;
+
+    // Pick a safe fallback that is NOT the category being deleted.
+    let fallback = DEFAULT_FALLBACK_CATEGORY;
+    if (name === fallback) {
+        // Deleting the default fallback — use any other category, or
+        // re-add the default fallback if none remain.
+        const others = categories.filter(c => c !== name);
+        fallback = others.length ? others[0] : DEFAULT_FALLBACK_CATEGORY;
+    } else if (!categories.includes(fallback)) {
+        // Fallback doesn't exist yet — create it or use another existing category.
+        const others = categories.filter(c => c !== name);
+        fallback = others.includes(DEFAULT_FALLBACK_CATEGORY)
+            ? DEFAULT_FALLBACK_CATEGORY
+            : (others[0] || DEFAULT_FALLBACK_CATEGORY);
+    }
+
     if (count > 0 && !confirm(
-        `This category contains ${count} symbol(s). Deleting it will move them to "Basic Communication". Continue?`
+        `This category contains ${count} symbol(s). Deleting it will move them to "${fallback}". Continue?`
     )) return false;
 
     state.symbols.forEach(s => {
-        if (s.category === name) s.category = 'Basic Communication';
+        if (s.category === name) s.category = fallback;
     });
 
     if (count > 0) saveSymbols(true);
 
-    const categories = getCategories();
     const idx = categories.indexOf(name);
     if (idx !== -1) categories.splice(idx, 1);
+
+    // Guarantee the fallback category exists so the moved symbols remain visible.
+    if (!categories.includes(fallback)) categories.push(fallback);
+
     saveCategories(categories);
 
     refreshOrderedCategories();
