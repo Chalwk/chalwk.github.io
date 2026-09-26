@@ -1,8 +1,8 @@
 // Copyright (c) 2024-2026 Jericho Crosby (Chalwk). All Rights Reserved.
 
 (() => {
-    const STORAGE_KEY = "social-script-builder-v1";
-    const DRAFT_KEY = "social-script-builder-draft-v1";
+    const STORAGE_KEY = "autism-social-script-builder-v1";
+    const DRAFT_KEY = "autism-social-script-builder-draft-v1";
 
     const STEP_TYPES = {
         statement: { name: "I Say", color: "step-type-statement" },
@@ -390,7 +390,7 @@
     let breathingTimeout = null;
     let textScaleLevel = 0;
 
-    const TEXT_SCALE_KEY = "social-script-builder-text-scale";
+    const TEXT_SCALE_KEY = "autism-social-script-builder-text-scale";
     const TEXT_SCALE_CLASSES = ["text-scale-1", "text-scale-2", "text-scale-3"];
 
     // ---------- Toasts (non-blocking, replaces alert()) ----------
