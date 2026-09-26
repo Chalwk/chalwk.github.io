@@ -915,15 +915,15 @@ Halo simulates at **30 ticks per second**.
 **World unit conversion**
 
 * **1 World Unit (WU) = 10 feet = 3.048 meters**
-* meters = `WU × 3.048`
+* meters = `WU x 3.048`
 
 **Distance per tick**  
 If you have a scalar speed **`speed_wu`** (the magnitude of the velocity vector, in world units per second), then:
 
 * Distance moved in one tick (WU): `speed_wu / 30`
-* Distance moved in one tick (meters): `(speed_wu / 30) × 3.048`
+* Distance moved in one tick (meters): `(speed_wu / 30) x 3.048`
 
-Example: A player moving at 15 WU/s travels `15 / 30 = 0.5` WU per tick, which is `0.5 × 3.048 = 1.524` meters.
+Example: A player moving at 15 WU/s travels `15 / 30 = 0.5` WU per tick, which is `0.5 x 3.048 = 1.524` meters.
 
 **Distance Calculations**
 

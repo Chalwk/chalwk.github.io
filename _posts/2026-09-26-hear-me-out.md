@@ -48,7 +48,7 @@ The board view: category indicator up top, symbol grid in the middle, phrase bar
 * Any image source for a symbol: emoji, an https:// URL, a data: URL, or an uploaded file
 * Import and export as JSON, so a board can be shared, backed up, or moved between devices
 * Real theming: light, dark, high-contrast, and auto (follows the OS)
-* Grid sizing: auto-responsive, or fixed 3×4 / 4×6 / 6×8 for predictable layouts
+* Grid sizing: auto-responsive, or fixed 3x4 / 4x6 / 6x8 for predictable layouts
 * Keyboard navigation for everything: arrow keys change category, number keys speak cards, Ctrl+Z undoes
 * Touch-first interactions: swipe left/right to change category, long-press to preview, drag to reorder
 * Speech volume and voice selection, persisted per device
@@ -82,10 +82,10 @@ Goal: build a phrase, then have it spoken.
 * `Enter` / `Space` - add focused symbol
 * `←` / `→` - previous / next category
 * `Delete` / `Backspace` - remove the focused phrase chip
-* `1`–`9`, `0` - speak card 1–10
-* `Ctrl+1`–`Ctrl+9`, `Ctrl+0` - speak cards 11–20
-* `Alt+1`–`Alt+9`, `Alt+0` - speak cards 21–30
-* `Ctrl+Alt+1`–`Ctrl+Alt+9`, `Ctrl+Alt+0` - speak cards 31–40
+* `1`-`9`, `0` - speak card 1-10
+* `Ctrl+1`-`Ctrl+9`, `Ctrl+0` - speak cards 11-20
+* `Alt+1`-`Alt+9`, `Alt+0` - speak cards 21-30
+* `Ctrl+Alt+1`-`Ctrl+Alt+9`, `Ctrl+Alt+0` - speak cards 31-40
 * `Escape` - close the current modal or dropdown
 
 **Rules:**

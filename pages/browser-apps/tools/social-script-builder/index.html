@@ -16,7 +16,15 @@ pwa: true
                 <h1>Social Script Builder</h1>
                 <p class="small">Create and practice customizable social scripts for various situations.</p>
             </div>
-            <button class="btn btn-secondary" id="help-btn" type="button">Help</button>
+            <div class="header-controls">
+                <div aria-label="Text size" class="text-size-controls" role="group">
+                    <button aria-label="Decrease text size" class="btn btn-secondary" id="font-decrease"
+                        type="button">A-</button>
+                    <button aria-label="Increase text size" class="btn btn-secondary" id="font-increase"
+                        type="button">A+</button>
+                </div>
+                <button class="btn btn-secondary" id="help-btn" type="button">Help</button>
+            </div>
         </div>
 
         <div class="app-grid">
@@ -67,6 +75,8 @@ pwa: true
                     <button class="btn btn-secondary" id="new-script">New Script</button>
                     <button class="btn btn-secondary" id="export-script">Export</button>
                     <button class="btn btn-secondary" id="import-script-btn">Import</button>
+                    <button class="btn btn-secondary" id="personalize-btn" type="button">Fill In Blanks</button>
+                    <button class="btn btn-secondary" id="print-script-btn" type="button">Print Cue Card</button>
                 </div>
             </section>
 
@@ -81,7 +91,7 @@ pwa: true
                         placeholder="Search scripts..." type="text" />
                     <select aria-label="Sort scripts" class="sort-select" id="sort-scripts">
                         <option value="updated">Recently updated</option>
-                        <option value="title">Title A–Z</option>
+                        <option value="title">Title A-Z</option>
                         <option value="steps">Most steps</option>
                     </select>
                 </div>
@@ -97,6 +107,11 @@ pwa: true
                 <div class="premade-scripts-section">
                     <h3>Pre-made Script Templates</h3>
                     <p class="small">Based on common social situations</p>
+                    <div class="premade-filter-row">
+                        <select aria-label="Filter templates by category" id="premade-category-filter">
+                            <option value="">All categories</option>
+                        </select>
+                    </div>
                     <div aria-label="Pre-made scripts" class="premade-scripts" id="premade-scripts" role="list"></div>
                 </div>
 
@@ -134,7 +149,7 @@ pwa: true
 <dialog aria-labelledby="practice-title" class="modal-base practice-modal" id="practice-modal">
     <div class="modal-header">
         <h3 id="practice-title">Practice: <span id="practice-script-name"></span></h3>
-        <button aria-label="Close practice" class="btn btn-secondary" id="close-practice">×</button>
+        <button aria-label="Close practice" class="btn btn-secondary" id="close-practice">X</button>
     </div>
 
     <div class="practice-content">
@@ -145,7 +160,14 @@ pwa: true
 
         <div class="practice-step-tools">
             <button class="btn btn-secondary" id="read-aloud-btn" type="button">🔊 Read aloud</button>
+            <button class="btn btn-secondary" id="breathing-btn" type="button">🌬️ Breathing break</button>
             <span class="small auto-advance-countdown" id="auto-advance-countdown"></span>
+        </div>
+
+        <div class="breathing-pacer" hidden id="breathing-pacer">
+            <div class="breathing-circle"></div>
+            <p id="breathing-text">Breathe in...</p>
+            <button class="btn btn-secondary" id="breathing-stop-btn" type="button">Done</button>
         </div>
 
         <div class="practice-progress">
@@ -171,7 +193,7 @@ pwa: true
 <dialog aria-labelledby="help-title" class="modal-base help-modal" id="help-modal">
     <div class="modal-header">
         <h3 id="help-title">How to Use Social Script Builder</h3>
-        <button aria-label="Close help" class="btn btn-secondary" id="close-help">×</button>
+        <button aria-label="Close help" class="btn btn-secondary" id="close-help">X</button>
     </div>
 
     <div class="help-content">
@@ -188,14 +210,25 @@ pwa: true
 
         <div class="help-section">
             <h4>Pre-made Templates</h4>
-            <p>Use the pre-made script templates for common social situations. These are based on proven social
-                scripting techniques and can be customized to fit your needs.</p>
+            <p>Browse templates by category (Everyday, Social Events, Phone Calls, Workplace, Coping &amp;
+                Transitions, Conflict &amp; Repair, Boundaries, Getting to Know People). Use "Fill In Blanks" after
+                loading one to replace placeholders like [Name] everywhere in the script at once.</p>
         </div>
 
         <div class="help-section">
             <h4>Practice Mode</h4>
             <p>Use practice mode to rehearse your scripts. This helps build muscle memory and reduces anxiety in real
-                situations.</p>
+                situations. Try "Read aloud" to hear a step spoken, or a "Breathing break" if you need a moment to
+                ground yourself mid-practice. Your library tracks how many times you've practiced each script.</p>
+        </div>
+
+        <div class="help-section">
+            <h4>Other Tools</h4>
+            <ul>
+                <li><strong>Print Cue Card</strong>: prints a clean, physical copy of your script</li>
+                <li><strong>Backup All / Restore All</strong>: save or reload your whole library as a file</li>
+                <li><strong>A- / A+</strong>: adjust text size for easier reading</li>
+            </ul>
         </div>
 
         <div class="help-section">
@@ -213,6 +246,8 @@ pwa: true
         <button class="btn btn-primary" id="close-help-btn">Got it!</button>
     </div>
 </dialog>
+
+<div class="print-only" id="print-area"></div>
 
 <input accept=".json" id="import-file" style="display: none;" type="file" />
 <input accept=".json" id="import-all-file" style="display: none;" type="file" />

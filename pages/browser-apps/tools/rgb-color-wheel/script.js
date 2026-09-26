@@ -159,7 +159,7 @@
             });
             if (isUser) {
                 const rem = document.createElement('button');
-                rem.textContent = '×';
+                rem.textContent = 'x';
                 rem.style.position = 'absolute';
                 rem.style.right = '6px';
                 rem.style.top = '6px';

@@ -80,7 +80,7 @@
     const formatWeakness = (weakness) => {
         if (!weakness) return [];
         if (Array.isArray(weakness) && weakness.length === 2 && typeof weakness[1] === 'string' && !isNaN(parseInt(weakness[1]))) {
-            return [`${weakness[0]} ×${weakness[1]}`];
+            return [`${weakness[0]} x${weakness[1]}`];
         }
         if (Array.isArray(weakness)) return weakness;
         return [];
@@ -105,7 +105,7 @@
         const holoTag = card.holo ? '<span class="holo-indicator">H</span>' : '';
         const linkIcon = card.url ? `<a href="${card.url}" target="_blank" rel="noopener" class="card-link-icon" title="View on Pokémon Database"><i class="fas fa-external-link-alt"></i></a>` : '';
         const rarityBadgeHtml = getRarityBadge(card.rarity);
-        const qtyBadge = `<span class="qty-badge">×${card.count}</span>`;
+        const qtyBadge = `<span class="qty-badge">x${card.count}</span>`;
 
         let detailsHtml = '';
         let extraDetailsHtml = '';
@@ -199,7 +199,7 @@
         let cardName = nameDiv ? nameDiv.childNodes[0]?.nodeValue?.trim() || nameDiv.innerText.split('H')[0].trim() : 'Card';
         cardName = cardName.replace(/H$/, '').trim();
         const qtySpan = currentCardElement.querySelector('.qty-badge');
-        const qty = qtySpan ? qtySpan.innerText : '×1';
+        const qty = qtySpan ? qtySpan.innerText : 'x1';
         modalCaption.innerText = `${cardName} ${qty}`;
     };
 

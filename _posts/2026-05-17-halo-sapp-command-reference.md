@@ -184,7 +184,7 @@ Used to configure server behaviour. Settings lost on reload unless placed in `in
 | say_prefix            | 4     | `say_prefix [enabled]`                           | Enable `**SERVER **` prefix on server messages (CE only). Default: `true`.          |
 | scorelimit            | 4     | `scorelimit [int_expr]`                          | Get or edit current game's score limit.                                             |
 | scrim_mode            | 4     | `scrim_mode [enabled]`                           | Disable naughty commands, Lua scripts, sightjacking. Default: `false`.              |
-| set_ccolor            | 4     | `set_ccolor [value]`                             | Set console colour (foreground + background×16).                                    |
+| set_ccolor            | 4     | `set_ccolor [value]`                             | Set console colour (foreground + background x 16).                                    |
 | setcmd                | 4     | `setcmd <command> <name/level>`                  | Change name or required admin level of a command.                                   |
 | sj_level              | 4     | `sj_level [level]`                               | Minimum level to use HAC2 sightjacker. Default: `-1` (everyone).                    |
 | spawn_protection      | 4     | `spawn_protection [time]`                        | Invulnerability time (seconds) upon spawn. `0`=disabled.                            |

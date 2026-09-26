@@ -698,3 +698,151 @@
         scroll-behavior: auto !important;
     }
 }
+
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.text-size-controls {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.text-size-controls .btn {
+    padding: 0.5rem 0.75rem;
+    font-weight: 700;
+}
+
+body.text-scale-2 .container {
+    font-size: 1.1em;
+}
+
+body.text-scale-3 .container {
+    font-size: 1.25em;
+}
+
+.premade-filter-row {
+    margin-bottom: 0.75rem;
+}
+
+.premade-filter-row select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--gray-light);
+    border-radius: var(--radius);
+    background: white;
+    font-family: var(--font-primary), sans-serif;
+}
+
+.premade-category {
+    display: inline-block;
+    margin: 0 0 0.4rem;
+    padding: 0.15rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: rgba(124, 58, 237, 0.12);
+    color: var(--secondary);
+}
+
+.script-meta-line {
+    margin-top: 0.25rem;
+    color: var(--gray);
+    font-size: 0.8rem;
+}
+
+.personalize-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.5rem;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.breathing-pacer {
+    text-align: center;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-radius: var(--radius);
+    background: var(--light);
+}
+
+.breathing-circle {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1rem;
+    border-radius: 50%;
+    background: var(--primary);
+    opacity: 0.7;
+    animation: breathePulse 12s ease-in-out infinite;
+}
+
+@keyframes breathePulse {
+    0% {
+        transform: scale(0.6);
+    }
+
+    33% {
+        transform: scale(1);
+    }
+
+    66% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(0.6);
+    }
+}
+
+#breathing-text {
+    font-weight: 600;
+    color: var(--dark);
+    margin: 0 0 1rem;
+}
+
+/* Printable cue card */
+.print-only {
+    display: none;
+}
+
+@media print {
+    body * {
+        visibility: hidden;
+    }
+
+    #print-area,
+    #print-area * {
+        visibility: visible;
+    }
+
+    #print-area {
+        display: block !important;
+        position: absolute;
+        inset: 0;
+        padding: 1.5in 0.75in;
+        font-size: 14pt;
+        line-height: 1.5;
+    }
+
+    #print-area h2 {
+        margin-bottom: 0.25em;
+    }
+
+    #print-area .print-step {
+        margin-bottom: 0.75em;
+        padding-left: 0.5em;
+        border-left: 3px solid #333;
+    }
+
+    #print-area .print-step-type {
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.75em;
+        letter-spacing: 0.03em;
+    }
+}

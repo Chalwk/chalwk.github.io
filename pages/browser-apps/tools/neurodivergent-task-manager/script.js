@@ -412,7 +412,7 @@ addStepBtn.addEventListener('click', function () {
     stepInput.className = 'step-input';
     stepInput.innerHTML = `
         <input type="text" class="step-text" placeholder="Step ${stepCount}">
-        <button type="button" class="btn-remove-step" aria-label="Remove this step">×</button>
+        <button type="button" class="btn-remove-step" aria-label="Remove this step">x</button>
     `;
     stepsContainer.appendChild(stepInput);
     updateRemoveButtons();
@@ -442,7 +442,7 @@ function resetSteps() {
     stepsContainer.innerHTML = `
         <div class="step-input">
             <input type="text" class="step-text" placeholder="Step 1">
-            <button type="button" class="btn-remove-step" disabled aria-label="Remove this step">×</button>
+            <button type="button" class="btn-remove-step" disabled aria-label="Remove this step">x</button>
         </div>
     `;
 }

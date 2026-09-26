@@ -692,7 +692,7 @@
             chip.className = "sel-chip";
             chip.title = "Remove";
             chip.innerHTML =
-                `${escapeHtml(sym.label)}<span class="sel-weight" aria-hidden="true">${item.weight}</span><span class="sel-x" aria-hidden="true">×</span>`;
+                `${escapeHtml(sym.label)}<span class="sel-weight" aria-hidden="true">${item.weight}</span><span class="sel-x" aria-hidden="true">x</span>`;
             chip.addEventListener("click", () => {
                 const cb = el(`#sym-${CSS.escape(item.id)}`, symptomListEl);
                 if (cb) cb.checked = false;
