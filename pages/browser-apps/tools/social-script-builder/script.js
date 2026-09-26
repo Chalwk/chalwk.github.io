@@ -2,6 +2,8 @@
 
 (() => {
     const STORAGE_KEY = "social-script-builder-v1";
+    const DRAFT_KEY = "social-script-builder-draft-v1";
+
     const STEP_TYPES = {
         statement: { name: "I Say", color: "step-type-statement" },
         question: { name: "They Might Say", color: "step-type-question" },
@@ -116,6 +118,8 @@
         '"': '&quot;',
         "'": "&#39;"
     }[m]));
+    const getStepType = type => STEP_TYPES[type] || STEP_TYPES.statement;
+    const getStepTypeKey = type => (STEP_TYPES[type] ? type : "statement");
 
     const scriptTitle = el("#script-title");
     const scriptDescription = el("#script-description");
@@ -125,9 +129,16 @@
     const saveScriptBtn = el("#save-script");
     const newScriptBtn = el("#new-script");
     const exportScriptBtn = el("#export-script");
+    const importScriptBtn = el("#import-script-btn");
+    const importFileInput = el("#import-file");
+    const backupAllBtn = el("#backup-all-btn");
+    const restoreAllBtn = el("#restore-all-btn");
+    const importAllFileInput = el("#import-all-file");
     const scriptsLibrary = el("#scripts-library");
     const premadeScripts = el("#premade-scripts");
     const searchScripts = el("#search-scripts");
+    const sortSelect = el("#sort-scripts");
+    const draftStatus = el("#draft-status");
     const practiceBtn = el("#practice-btn");
     const helpBtn = el("#help-btn");
     const practiceModal = el("#practice-modal");
@@ -147,6 +158,15 @@
     const timerDisplay = el("#timer-display");
     const showTimer = el("#show-timer");
     const autoAdvance = el("#auto-advance");
+    const autoAdvanceDelaySelect = el("#auto-advance-delay");
+    const autoAdvanceCountdown = el("#auto-advance-countdown");
+    const readAloudToggle = el("#read-aloud-toggle");
+    const readAloudBtn = el("#read-aloud-btn");
+    const toastContainer = el("#toast-container");
+    const confirmModal = el("#confirm-modal");
+    const confirmMessage = el("#confirm-message");
+    const confirmOkBtn = el("#confirm-ok");
+    const confirmCancelBtn = el("#confirm-cancel");
 
     let currentScript = {
         id: null,
@@ -163,6 +183,120 @@
         elapsed: 0
     };
 
+    let draftSaveTimer = null;
+    let autoAdvanceTimer = null;
+    let autoAdvanceTickTimer = null;
+    let autoAdvanceRemainingMs = 0;
+
+    // ---------- Toasts
+    function showToast(message, type = "info") {
+        if (!toastContainer) return;
+        const toast = document.createElement("div");
+        toast.className = type === "info" ? "toast" : `toast toast-${type}`;
+        toast.setAttribute("role", "status");
+        toast.textContent = message;
+        toastContainer.appendChild(toast);
+
+        setTimeout(() => {
+            toast.style.opacity = "0";
+            setTimeout(() => toast.remove(), 300);
+        }, 3200);
+    }
+
+    // ---------- Confirm dialog
+    function showConfirm(message, { okLabel = "Confirm" } = {}) {
+        return new Promise(resolve => {
+            if (!confirmModal || !confirmMessage || !confirmOkBtn || !confirmCancelBtn) {
+                resolve(window.confirm(message));
+                return;
+            }
+
+            confirmMessage.textContent = message;
+            confirmOkBtn.textContent = okLabel;
+
+            const cleanup = result => {
+                confirmOkBtn.removeEventListener("click", onOk);
+                confirmCancelBtn.removeEventListener("click", onCancel);
+                confirmModal.removeEventListener("cancel", onNativeCancel);
+                confirmModal.close();
+                resolve(result);
+            };
+            const onOk = () => cleanup(true);
+            const onCancel = () => cleanup(false);
+            const onNativeCancel = e => {
+                e.preventDefault();
+                cleanup(false);
+            };
+
+            confirmOkBtn.addEventListener("click", onOk);
+            confirmCancelBtn.addEventListener("click", onCancel);
+            confirmModal.addEventListener("cancel", onNativeCancel);
+
+            confirmModal.showModal();
+        });
+    }
+
+    // ---------- Draft autosave (protects against lost work) ----------
+    function setDraftStatus(text) {
+        if (draftStatus) draftStatus.textContent = text;
+    }
+
+    function scheduleDraftSave() {
+        if (draftSaveTimer) clearTimeout(draftSaveTimer);
+        draftSaveTimer = setTimeout(saveDraftNow, 500);
+    }
+
+    function saveDraftNow() {
+        try {
+            const title = scriptTitle.value.trim();
+            const description = scriptDescription.value.trim();
+            const hasContent = title || description || currentScript.steps.length > 0;
+
+            if (!hasContent) {
+                localStorage.removeItem(DRAFT_KEY);
+                setDraftStatus("");
+                return;
+            }
+
+            currentScript.title = scriptTitle.value;
+            currentScript.description = scriptDescription.value;
+            localStorage.setItem(DRAFT_KEY, JSON.stringify(currentScript));
+            setDraftStatus("Draft autosaved");
+        } catch (e) {
+            console.error("Failed to autosave draft", e);
+        }
+    }
+
+    function restoreDraft() {
+        try {
+            const raw = localStorage.getItem(DRAFT_KEY);
+            if (!raw) return;
+
+            const draft = JSON.parse(raw);
+            const hasContent = draft && (draft.title || draft.description || (draft.steps && draft.steps.length > 0));
+            if (!hasContent) return;
+
+            currentScript = {
+                id: draft.id || null,
+                title: draft.title || "",
+                description: draft.description || "",
+                steps: Array.isArray(draft.steps) ? draft.steps : []
+            };
+            scriptTitle.value = currentScript.title;
+            scriptDescription.value = currentScript.description;
+            setDraftStatus("Restored your unsaved draft");
+        } catch (e) {
+            console.error("Failed to restore draft", e);
+        }
+    }
+
+    function clearDraft() {
+        localStorage.removeItem(DRAFT_KEY);
+        setDraftStatus("");
+    }
+
+    // ---------- Local library storage ----------
+
     function loadScripts() {
         try {
             const raw = localStorage.getItem(STORAGE_KEY);
@@ -175,12 +309,14 @@
 
     function saveScripts(scripts) {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(scripts));
-        renderScriptLibrary();
+        renderScriptLibrary(searchScripts ? searchScripts.value : "");
     }
 
     function generateId() {
         return Date.now().toString(36) + Math.random().toString(36).substr(2);
     }
+
+    // ---------- Step editing ----------
 
     function addStep(type = "statement") {
         const stepId = generateId();
@@ -193,6 +329,7 @@
 
         currentScript.steps.push(step);
         renderSteps();
+        scheduleDraftSave();
 
         setTimeout(() => {
             const textarea = el(`#step-${stepId}-text`);
@@ -200,10 +337,25 @@
         }, 100);
     }
 
-    function removeStep(stepId) {
-        if (!confirm("Remove this step?")) return;
+    async function removeStep(stepId) {
+        const ok = await showConfirm("Remove this step? This can't be undone.");
+        if (!ok) return;
+
         currentScript.steps = currentScript.steps.filter(step => step.id !== stepId);
         renderSteps();
+        scheduleDraftSave();
+        showToast("Step removed");
+    }
+
+    function duplicateStep(stepId) {
+        const index = currentScript.steps.findIndex(step => step.id === stepId);
+        if (index === -1) return;
+
+        const copy = { ...currentScript.steps[index], id: generateId() };
+        currentScript.steps.splice(index + 1, 0, copy);
+        renderSteps();
+        scheduleDraftSave();
+        showToast("Step duplicated");
     }
 
     function moveStep(stepId, direction) {
@@ -217,10 +369,15 @@
             [currentScript.steps[newIndex], currentScript.steps[index]];
 
         renderSteps();
+        scheduleDraftSave();
     }
 
     function renderSteps() {
         stepsList.innerHTML = "";
+
+        currentScript.steps.forEach((step, index) => {
+            step.order = index;
+        });
 
         if (currentScript.steps.length === 0) {
             stepsList.innerHTML = `<div style="color: var(--gray); text-align: center; padding: 2rem;">No steps yet. Add your first step above.</div>`;
@@ -228,8 +385,9 @@
         }
 
         currentScript.steps.forEach((step, index) => {
+            const typeKey = getStepTypeKey(step.type);
             const stepEl = document.createElement("div");
-            stepEl.className = "step-item fade-in";
+            stepEl.className = `step-item fade-in step-type-${typeKey}-accent`;
             stepEl.innerHTML = `
                 <div class="step-content">
                     <textarea
@@ -241,13 +399,14 @@
                 <div class="step-type">
                     <select id="step-${step.id}-type" aria-label="Step type" style="padding: 0.5rem; border: 1px solid var(--gray-light); border-radius: var(--radius); width: 100%;">
                         ${Object.entries(STEP_TYPES).map(([key, value]) =>
-                `<option value="${key}" ${step.type === key ? 'selected' : ''}>${value.name}</option>`
+                `<option value="${key}" ${typeKey === key ? 'selected' : ''}>${value.name}</option>`
             ).join('')}
                     </select>
                 </div>
                 <div class="step-actions">
                     <button type="button" class="btn btn-secondary" onclick="moveStep('${step.id}', 'up')" ${index === 0 ? 'disabled' : ''} aria-label="Move step up" style="padding: 0.5rem;">↑</button>
                     <button type="button" class="btn btn-secondary" onclick="moveStep('${step.id}', 'down')" ${index === currentScript.steps.length - 1 ? 'disabled' : ''} aria-label="Move step down" style="padding: 0.5rem;">↓</button>
+                    <button type="button" class="btn btn-secondary" onclick="duplicateStep('${step.id}')" aria-label="Duplicate step" style="padding: 0.5rem;">⧉</button>
                     <button type="button" class="btn btn-secondary" onclick="removeStep('${step.id}')" aria-label="Remove step" style="padding: 0.5rem;">×</button>
                 </div>
             `;
@@ -258,12 +417,29 @@
 
             textarea.addEventListener("input", (e) => {
                 step.text = e.target.value;
+                scheduleDraftSave();
             });
 
             typeSelect.addEventListener("change", (e) => {
                 step.type = e.target.value;
+                scheduleDraftSave();
+                renderSteps();
             });
         });
+    }
+
+    // ---------- Script library ----------
+
+    function sortScripts(scripts, mode) {
+        const sorted = [...scripts];
+        if (mode === "title") {
+            sorted.sort((a, b) => (a.title || "").localeCompare(b.title || ""));
+        } else if (mode === "steps") {
+            sorted.sort((a, b) => (b.steps || []).length - (a.steps || []).length);
+        } else {
+            sorted.sort((a, b) => (b.updated || b.created || 0) - (a.updated || a.created || 0));
+        }
+        return sorted;
     }
 
     function renderScriptLibrary(filter = "") {
@@ -273,16 +449,19 @@
         scriptsLibrary.innerHTML = "";
 
         if (scripts.length === 0) {
-            scriptsLibrary.innerHTML = `<div style="color: var(--gray); text-align: center; padding: 2rem;">No scripts saved yet. Create your first script!</div>`;
+            scriptsLibrary.innerHTML = `<div class="empty-library">No scripts saved yet. Create your first script!</div>`;
             return;
         }
 
-        const filteredScripts = scripts.filter(script =>
-            !q || script.title.toLowerCase().includes(q) || script.description.toLowerCase().includes(q)
+        const sorted = sortScripts(scripts, sortSelect ? sortSelect.value : "updated");
+        const filteredScripts = sorted.filter(script =>
+            !q ||
+            (script.title || "").toLowerCase().includes(q) ||
+            (script.description || "").toLowerCase().includes(q)
         );
 
         if (filteredScripts.length === 0) {
-            scriptsLibrary.innerHTML = `<div style="color: var(--gray); text-align: center; padding: 2rem;">No scripts match your search.</div>`;
+            scriptsLibrary.innerHTML = `<div class="empty-library">No scripts match your search.</div>`;
             return;
         }
 
@@ -295,11 +474,28 @@
                 <div class="script-card-actions">
                     <button class="btn btn-secondary" onclick="loadScriptForEdit('${script.id}')" style="padding: 0.5rem 0.75rem; font-size: 0.875rem;">Edit</button>
                     <button class="btn btn-primary" onclick="startPractice('${script.id}')" style="padding: 0.5rem 0.75rem; font-size: 0.875rem;">Practice</button>
+                    <button class="btn btn-secondary" onclick="duplicateScript('${script.id}')" style="padding: 0.5rem 0.75rem; font-size: 0.875rem;">Duplicate</button>
                     <button class="btn btn-secondary" onclick="deleteScript('${script.id}')" style="padding: 0.5rem 0.75rem; font-size: 0.875rem;">Delete</button>
                 </div>
             `;
             scriptsLibrary.appendChild(card);
         });
+    }
+
+    function duplicateScript(scriptId) {
+        const scripts = loadScripts();
+        const original = scripts.find(s => s.id === scriptId);
+        if (!original) return;
+
+        const copy = JSON.parse(JSON.stringify(original));
+        copy.id = generateId();
+        copy.title = `${copy.title} (Copy)`;
+        copy.created = Date.now();
+        copy.updated = Date.now();
+
+        scripts.push(copy);
+        saveScripts(scripts);
+        showToast(`Duplicated "${original.title}"`, "success");
     }
 
     function renderPremadeScripts() {
@@ -320,9 +516,10 @@
         });
     }
 
-    function loadPremadeScript(scriptId) {
-        if (currentScript.steps.length > 0 && !confirm("Load this template? Current unsaved changes will be lost.")) {
-            return;
+    async function loadPremadeScript(scriptId) {
+        if (currentScript.steps.length > 0) {
+            const ok = await showConfirm("Load this template? Your current unsaved changes will be replaced.");
+            if (!ok) return;
         }
 
         const script = PREMADE_SCRIPTS.find(s => s.id === scriptId);
@@ -332,6 +529,8 @@
             scriptTitle.value = currentScript.title;
             scriptDescription.value = currentScript.description;
             renderSteps();
+            setDraftStatus("");
+            scheduleDraftSave();
         }
     }
 
@@ -344,7 +543,7 @@
         previewContent += `<div class="preview-steps">`;
 
         script.steps.forEach(step => {
-            const stepType = STEP_TYPES[step.type];
+            const stepType = getStepType(step.type);
             previewContent += `
                 <div class="preview-step ${stepType.color}">
                     <div class="preview-step-type">${stepType.name}</div>
@@ -397,26 +596,35 @@
         if (script) {
             currentScript = JSON.parse(JSON.stringify(script));
             scriptTitle.value = currentScript.title;
-            scriptDescription.value = currentScript.description;
+            scriptDescription.value = currentScript.description || "";
             renderSteps();
+            setDraftStatus("");
+            scheduleDraftSave();
         }
     }
 
-    function deleteScript(scriptId) {
-        if (!confirm("Delete this script? This cannot be undone.")) return;
+    async function deleteScript(scriptId) {
+        const ok = await showConfirm("Delete this script? This cannot be undone.");
+        if (!ok) return;
 
         const scripts = loadScripts();
         const filtered = scripts.filter(s => s.id !== scriptId);
         saveScripts(filtered);
+        showToast("Script deleted");
 
         if (currentScript.id === scriptId) {
-            newScript();
+            currentScript = { id: null, title: "", description: "", steps: [] };
+            scriptTitle.value = "";
+            scriptDescription.value = "";
+            renderSteps();
+            clearDraft();
         }
     }
 
     function saveCurrentScript() {
         if (!scriptTitle.value.trim()) {
-            alert("Please enter a script title.");
+            showToast("Please enter a script title.", "error");
+            scriptTitle.focus();
             return;
         }
 
@@ -440,29 +648,27 @@
         }
 
         saveScripts(scripts);
-        alert("Script saved!");
+        clearDraft();
+        setDraftStatus("Saved to library");
+        showToast("Script saved!", "success");
     }
 
-    function newScript() {
-        if (currentScript.steps.length > 0 && !confirm("Create new script? Unsaved changes will be lost.")) {
-            return;
+    async function newScript() {
+        if (currentScript.steps.length > 0) {
+            const ok = await showConfirm("Start a new script? Unsaved changes will be lost.");
+            if (!ok) return;
         }
 
-        currentScript = {
-            id: null,
-            title: "",
-            description: "",
-            steps: []
-        };
-
+        currentScript = { id: null, title: "", description: "", steps: [] };
         scriptTitle.value = "";
         scriptDescription.value = "";
         renderSteps();
+        clearDraft();
     }
 
     function exportScript() {
         if (currentScript.steps.length === 0) {
-            alert("No script to export.");
+            showToast("Nothing to export yet — add a step first.", "error");
             return;
         }
 
@@ -479,14 +685,130 @@
         URL.revokeObjectURL(url);
     }
 
+    function sanitizeSteps(rawSteps) {
+        if (!Array.isArray(rawSteps)) return [];
+        return rawSteps.map(s => ({
+            id: (s && s.id) || generateId(),
+            type: s && STEP_TYPES[s.type] ? s.type : "statement",
+            text: s && typeof s.text === "string" ? s.text : "",
+            order: 0
+        }));
+    }
+
+    function handleImportFile(file) {
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+            try {
+                const data = JSON.parse(e.target.result);
+                if (!data || typeof data.title !== "string" || !Array.isArray(data.steps)) {
+                    throw new Error("Invalid script file");
+                }
+
+                if (currentScript.steps.length > 0) {
+                    const ok = await showConfirm("Import this script? Your current unsaved changes will be replaced.");
+                    if (!ok) return;
+                }
+
+                currentScript = {
+                    id: generateId(),
+                    title: data.title || "Imported script",
+                    description: typeof data.description === "string" ? data.description : "",
+                    steps: sanitizeSteps(data.steps)
+                };
+
+                scriptTitle.value = currentScript.title;
+                scriptDescription.value = currentScript.description;
+                renderSteps();
+                setDraftStatus("");
+                scheduleDraftSave();
+                showToast("Script imported — remember to save it to your library.", "success");
+            } catch (err) {
+                console.error("Failed to import script", err);
+                showToast("Couldn't read that file — is it a valid exported script?", "error");
+            }
+        };
+        reader.readAsText(file);
+    }
+
+    function exportAllScripts() {
+        const scripts = loadScripts();
+        if (scripts.length === 0) {
+            showToast("No saved scripts to back up yet.", "error");
+            return;
+        }
+
+        const payload = { version: 1, exportedAt: new Date().toISOString(), scripts };
+        const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `social-scripts-backup-${new Date().toISOString().slice(0, 10)}.json`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        showToast(`Backed up ${scripts.length} script${scripts.length === 1 ? "" : "s"}.`, "success");
+    }
+
+    function handleImportAllFile(file) {
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+            try {
+                const data = JSON.parse(e.target.result);
+                const incoming = Array.isArray(data) ? data : (Array.isArray(data.scripts) ? data.scripts : null);
+                if (!incoming) throw new Error("Invalid backup file");
+
+                const ok = await showConfirm(
+                    `Restore ${incoming.length} script${incoming.length === 1 ? "" : "s"}? They'll be added to your library alongside your existing scripts.`,
+                    { okLabel: "Restore" }
+                );
+                if (!ok) return;
+
+                const existing = loadScripts();
+                const existingIds = new Set(existing.map(s => s.id));
+                let added = 0;
+
+                incoming.forEach(script => {
+                    if (!script || typeof script.title !== "string" || !Array.isArray(script.steps)) return;
+
+                    const id = script.id && !existingIds.has(script.id) ? script.id : generateId();
+                    const clean = {
+                        id,
+                        title: script.title,
+                        description: typeof script.description === "string" ? script.description : "",
+                        steps: sanitizeSteps(script.steps),
+                        created: script.created || Date.now(),
+                        updated: script.updated || Date.now()
+                    };
+                    clean.steps.forEach((s, i) => { s.order = i; });
+
+                    existing.push(clean);
+                    existingIds.add(id);
+                    added++;
+                });
+
+                saveScripts(existing);
+                showToast(`Restored ${added} script${added === 1 ? "" : "s"}.`, "success");
+            } catch (err) {
+                console.error("Failed to import backup", err);
+                showToast("Couldn't read that backup file.", "error");
+            }
+        };
+        reader.readAsText(file);
+    }
+
+    // ---------- Practice mode ----------
+
     function startPractice(scriptId) {
         const scripts = loadScripts();
         const script = scripts.find(s => s.id === scriptId);
 
         if (!script || script.steps.length === 0) {
-            alert("No script available for practice.");
+            showToast("No script available for practice.", "error");
             return;
         }
+
+        if ("speechSynthesis" in window) window.speechSynthesis.cancel();
 
         practiceState = {
             currentStep: 0,
@@ -514,11 +836,12 @@
         const step = practiceState.script.steps[practiceState.currentStep];
         if (!step) return;
 
+        const stepType = getStepType(step.type);
         currentStepText.textContent = step.text || "(No content)";
-        currentStepType.textContent = STEP_TYPES[step.type].name;
+        currentStepType.textContent = stepType.name;
 
         currentStepType.className = "step-type-badge";
-        currentStepType.classList.add(STEP_TYPES[step.type].color);
+        currentStepType.classList.add(stepType.color);
 
         const progress = ((practiceState.currentStep + 1) / practiceState.script.steps.length) * 100;
         progressFill.style.width = `${progress}%`;
@@ -526,6 +849,12 @@
 
         prevStepBtn.disabled = practiceState.currentStep === 0;
         nextStepBtn.disabled = practiceState.currentStep === practiceState.script.steps.length - 1;
+
+        if (readAloudToggle && readAloudToggle.checked) {
+            speakStepText(step.text || "");
+        }
+
+        startAutoAdvance();
     }
 
     function nextPracticeStep() {
@@ -569,10 +898,57 @@
         clearInterval(practiceState.timer);
     }
 
+    function stopAutoAdvance() {
+        clearTimeout(autoAdvanceTimer);
+        clearInterval(autoAdvanceTickTimer);
+        autoAdvanceTimer = null;
+        autoAdvanceTickTimer = null;
+        if (autoAdvanceCountdown) autoAdvanceCountdown.textContent = "";
+    }
+
+    function startAutoAdvance() {
+        stopAutoAdvance();
+
+        if (!autoAdvance || !autoAdvance.checked || !practiceState.script) return;
+        if (practiceState.currentStep >= practiceState.script.steps.length - 1) return;
+
+        const delay = parseInt(autoAdvanceDelaySelect ? autoAdvanceDelaySelect.value : "5000", 10) || 5000;
+        autoAdvanceRemainingMs = delay;
+
+        autoAdvanceTickTimer = setInterval(() => {
+            autoAdvanceRemainingMs -= 250;
+            if (autoAdvanceCountdown) {
+                const secs = Math.max(0, Math.ceil(autoAdvanceRemainingMs / 1000));
+                autoAdvanceCountdown.textContent = `Next step in ${secs}s`;
+            }
+        }, 250);
+
+        autoAdvanceTimer = setTimeout(() => {
+            nextPracticeStep();
+        }, delay);
+    }
+
+    function speakStepText(text) {
+        if (!("speechSynthesis" in window)) {
+            showToast("Speech isn't supported in this browser.", "error");
+            return;
+        }
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        const utterance = new SpeechSynthesisUtterance(text);
+        window.speechSynthesis.speak(utterance);
+    }
+
+    // ---------- Wiring ----------
+
     function wire() {
+        restoreDraft();
         renderSteps();
         renderScriptLibrary();
         renderPremadeScripts();
+
+        on(scriptTitle, "input", scheduleDraftSave);
+        on(scriptDescription, "input", scheduleDraftSave);
 
         on(addStepBtn, "click", () => {
             addStep(stepTypeSelect.value);
@@ -582,26 +958,59 @@
         on(newScriptBtn, "click", newScript);
         on(exportScriptBtn, "click", exportScript);
 
+        on(importScriptBtn, "click", () => {
+            if (importFileInput) importFileInput.click();
+        });
+        on(importFileInput, "change", (e) => {
+            const file = e.target.files[0];
+            if (file) handleImportFile(file);
+            e.target.value = "";
+        });
+
+        on(backupAllBtn, "click", exportAllScripts);
+        on(restoreAllBtn, "click", () => {
+            if (importAllFileInput) importAllFileInput.click();
+        });
+        on(importAllFileInput, "change", (e) => {
+            const file = e.target.files[0];
+            if (file) handleImportAllFile(file);
+            e.target.value = "";
+        });
+
         on(practiceBtn, "click", () => {
             if (currentScript.steps.length === 0) {
-                alert("Create a script with at least one step to practice.");
+                showToast("Add at least one step before practicing.", "error");
                 return;
             }
 
-            if (currentScript.title || currentScript.steps.length > 0) {
-                saveCurrentScript();
+            if (!scriptTitle.value.trim()) {
+                scriptTitle.value = "Untitled Script";
             }
 
+            saveCurrentScript();
             startPractice(currentScript.id);
         });
 
         on(prevStepBtn, "click", prevPracticeStep);
         on(nextStepBtn, "click", nextPracticeStep);
         on(resetPracticeBtn, "click", resetPractice);
+        on(readAloudBtn, "click", () => speakStepText(currentStepText.textContent));
+
+        on(practiceModal, "keydown", (e) => {
+            if (e.key === "ArrowRight") {
+                e.preventDefault();
+                nextPracticeStep();
+            } else if (e.key === "ArrowLeft") {
+                e.preventDefault();
+                prevPracticeStep();
+            }
+        });
 
         on(closePractice, "click", () => {
             practiceModal.close();
             stopTimer();
+            stopAutoAdvance();
+            if ("speechSynthesis" in window) window.speechSynthesis.cancel();
         });
 
         on(helpBtn, "click", () => {
@@ -620,19 +1029,29 @@
             renderScriptLibrary(e.target.value);
         });
 
+        on(sortSelect, "change", () => {
+            renderScriptLibrary(searchScripts ? searchScripts.value : "");
+        });
+
         on(autoAdvance, "change", () => {
-            if (autoAdvance.checked && practiceState.script) {
-                console.log("Auto-advance enabled");
-            }
+            if (!practiceState.script) return;
+            if (autoAdvance.checked) startAutoAdvance();
+            else stopAutoAdvance();
+        });
+
+        on(autoAdvanceDelaySelect, "change", () => {
+            if (practiceState.script && autoAdvance.checked) startAutoAdvance();
         });
     }
 
     document.addEventListener("DOMContentLoaded", () => {
         window.moveStep = moveStep;
         window.removeStep = removeStep;
+        window.duplicateStep = duplicateStep;
         window.loadScriptForEdit = loadScriptForEdit;
         window.startPractice = startPractice;
         window.deleteScript = deleteScript;
+        window.duplicateScript = duplicateScript;
         window.loadPremadeScript = loadPremadeScript;
         window.previewPremadeScript = previewPremadeScript;
 

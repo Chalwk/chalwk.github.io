@@ -24,6 +24,7 @@ pwa: true
                 <div class="panel-head">
                     <h2>Script Editor</h2>
                     <p class="small">Build your social script step by step.</p>
+                    <p aria-live="polite" class="small draft-status" id="draft-status"></p>
                 </div>
 
                 <div class="script-meta">
@@ -62,8 +63,10 @@ pwa: true
 
                 <div class="script-actions script-actions-container">
                     <button class="btn btn-primary" id="save-script">Save Script</button>
+                    <button class="btn btn-secondary" id="practice-btn">Practice</button>
                     <button class="btn btn-secondary" id="new-script">New Script</button>
                     <button class="btn btn-secondary" id="export-script">Export</button>
+                    <button class="btn btn-secondary" id="import-script-btn">Import</button>
                 </div>
             </section>
 
@@ -76,6 +79,15 @@ pwa: true
                 <div class="search-controls">
                     <input aria-label="Search scripts" class="search-input" id="search-scripts"
                         placeholder="Search scripts..." type="text" />
+                    <select aria-label="Sort scripts" class="sort-select" id="sort-scripts">
+                        <option value="updated">Recently updated</option>
+                        <option value="title">Title A–Z</option>
+                        <option value="steps">Most steps</option>
+                    </select>
+                </div>
+                <div class="library-actions">
+                    <button class="btn btn-secondary" id="backup-all-btn" type="button">Backup All</button>
+                    <button class="btn btn-secondary" id="restore-all-btn" type="button">Restore All</button>
                 </div>
 
                 <div aria-label="Saved scripts" class="scripts-library" id="scripts-library" role="list">
@@ -99,6 +111,19 @@ pwa: true
                             <input class="checkbox-input" id="auto-advance" type="checkbox" />
                             <span>Auto-advance steps</span>
                         </label>
+                        <label class="field auto-advance-delay-field">
+                            <span>Auto-advance delay</span>
+                            <select aria-label="Auto-advance delay" id="auto-advance-delay">
+                                <option value="3000">3 seconds</option>
+                                <option selected value="5000">5 seconds</option>
+                                <option value="8000">8 seconds</option>
+                                <option value="12000">12 seconds</option>
+                            </select>
+                        </label>
+                        <label class="checkbox tool-option-label">
+                            <input class="checkbox-input" id="read-aloud-toggle" type="checkbox" />
+                            <span>Read steps aloud automatically</span>
+                        </label>
                     </div>
                 </div>
             </section>
@@ -116,6 +141,11 @@ pwa: true
         <div class="practice-step">
             <div class="step-content" id="current-step-text"></div>
             <div class="step-type-badge" id="current-step-type"></div>
+        </div>
+
+        <div class="practice-step-tools">
+            <button class="btn btn-secondary" id="read-aloud-btn" type="button">🔊 Read aloud</button>
+            <span class="small auto-advance-countdown" id="auto-advance-countdown"></span>
         </div>
 
         <div class="practice-progress">
@@ -185,5 +215,21 @@ pwa: true
 </dialog>
 
 <input accept=".json" id="import-file" style="display: none;" type="file" />
+<input accept=".json" id="import-all-file" style="display: none;" type="file" />
+
+<div aria-live="polite" class="toast-container" id="toast-container"></div>
+
+<dialog aria-labelledby="confirm-title" class="modal-base confirm-modal" id="confirm-modal">
+    <div class="modal-header">
+        <h3 id="confirm-title">Please confirm</h3>
+    </div>
+    <div class="confirm-content">
+        <p id="confirm-message"></p>
+    </div>
+    <div class="modal-actions">
+        <button class="btn btn-secondary" id="confirm-cancel" type="button">Cancel</button>
+        <button class="btn btn-primary" id="confirm-ok" type="button">Confirm</button>
+    </div>
+</dialog>
 
 <script src="script.js"></script>
