@@ -558,9 +558,9 @@ function renderHelpModal() {
         <h3>How to Play</h3>
         <p>Guess the hidden 5-letter word in six tries. Each guess must be a valid word. After each guess the colour of the tiles shows how close your guess was.</p>
         <ul>
-            <li><strong style="color:#4ade80;">Green</strong> &mdash; correct letter in the correct spot.</li>
-            <li><strong style="color:#fbbf24;">Yellow</strong> &mdash; letter is in the word but in the wrong spot.</li>
-            <li><strong style="color:#64748b;">Gray</strong> &mdash; letter is not in the word at all.</li>
+            <li><strong style="color:#4ade80;">Green</strong> - correct letter in the correct spot.</li>
+            <li><strong style="color:#fbbf24;">Yellow</strong> - letter is in the word but in the wrong spot.</li>
+            <li><strong style="color:#64748b;">Gray</strong> - letter is not in the word at all.</li>
         </ul>
         <p>Use your physical keyboard or click the on-screen keys. Hit <code>Enter</code> to submit. Click any tile in the active row to move the cursor.</p>
         <p><strong>Hard Mode</strong> forces you to reuse every green and yellow letter you've already discovered.</p>

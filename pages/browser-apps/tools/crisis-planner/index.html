@@ -13,29 +13,31 @@ pwa: true
     <main>
         <div class="container">
             <div class="app-grid app-margin-top">
-                <section class="panel panel">
+                <section class="panel">
                     <div class="panel-head planner-head">
-                        <h2><i class="fas fa-life-ring"></i> Crisis Planner</h2>
+                        <h2><i class="fas fa-life-ring" aria-hidden="true"></i> Crisis Planner</h2>
                         <div class="planner-head-actions">
-                            <span class="last-saved" id="lastSavedIndicator"></span>
+                            <span class="last-saved" id="lastSavedIndicator" aria-live="polite"></span>
                             <button class="icon-btn" id="settingsBtn" type="button" title="Display settings"
-                                aria-label="Display settings">
-                                <i class="fas fa-sliders"></i>
+                                aria-label="Display settings" aria-expanded="false" aria-controls="settingsPanel">
+                                <i class="fas fa-sliders" aria-hidden="true"></i>
                             </button>
                         </div>
                     </div>
 
                     <div class="disclaimer">
-                        <i class="fas fa-circle-info"></i>
+                        <i class="fas fa-circle-info" aria-hidden="true"></i>
                         <span>Build a personal crisis plan you can lean on when things get hard.
                             All data stays <strong>only on your device</strong> (browser storage).
                             Nothing is sent to any server. This is not a substitute for professional
                             care - if you are in immediate danger, call emergency services.</span>
                     </div>
 
-                    <div class="settings-panel" id="settingsPanel" style="display:none;">
+                    <div class="settings-panel" id="settingsPanel" style="display:none;" role="region"
+                        aria-label="Display settings">
                         <div class="settings-row">
-                            <span class="settings-label"><i class="fas fa-text-height"></i> Text size</span>
+                            <span class="settings-label"><i class="fas fa-text-height" aria-hidden="true"></i> Text
+                                size</span>
                             <div class="segmented" role="group" aria-label="Text size">
                                 <button type="button" class="segmented-btn" data-font-size="normal">Normal</button>
                                 <button type="button" class="segmented-btn" data-font-size="large">Large</button>
@@ -43,98 +45,137 @@ pwa: true
                             </div>
                         </div>
                         <div class="settings-row">
-                            <span class="settings-label"><i class="fas fa-circle-half-stroke"></i> High contrast</span>
+                            <span class="settings-label"><i class="fas fa-moon" aria-hidden="true"></i> Dark mode</span>
                             <label class="switch">
-                                <input type="checkbox" id="highContrastToggle">
-                                <span class="switch-track"></span>
+                                <input type="checkbox" id="darkModeToggle">
+                                <span class="switch-track" aria-hidden="true"></span>
                             </label>
                         </div>
                         <div class="settings-row">
-                            <span class="settings-label"><i class="fas fa-wind"></i> Reduce motion</span>
+                            <span class="settings-label"><i class="fas fa-circle-half-stroke" aria-hidden="true"></i>
+                                High contrast</span>
                             <label class="switch">
-                                <input type="checkbox" id="reduceMotionToggle">
-                                <span class="switch-track"></span>
+                                <input type="checkbox" id="highContrastToggle">
+                                <span class="switch-track" aria-hidden="true"></span>
                             </label>
                         </div>
-                        <p class="settings-hint">These display settings are saved on this device only.</p>
+                        <div class="settings-row">
+                            <span class="settings-label"><i class="fas fa-wind" aria-hidden="true"></i> Reduce
+                                motion</span>
+                            <label class="switch">
+                                <input type="checkbox" id="reduceMotionToggle">
+                                <span class="switch-track" aria-hidden="true"></span>
+                            </label>
+                        </div>
+                        <p class="settings-hint">These display settings are saved on this device only.
+                            Press <kbd>?</kbd> for keyboard shortcuts.</p>
                     </div>
 
-                    <div class="crisis-resources" id="crisisResources">
-                        <div class="crisis-resources-header">
-                            <i class="fas fa-triangle-exclamation"></i>
-                            <strong>Important: Crisis resources - New Zealand</strong>
+                    <!-- COMBINED CRISIS RESOURCES (collapsed by default) -->
+                    <div class="input-group collapse-section resources-combined">
+                        <div class="collapse-header resources-header" data-target="resourcesContent" role="button"
+                            tabindex="0" aria-expanded="false" aria-controls="resourcesContent">
+                            <i class="fas fa-chevron-right collapse-icon" id="resourcesIcon" aria-hidden="true"></i>
+                            <span><i class="fas fa-triangle-exclamation" aria-hidden="true"></i> Crisis &amp; support
+                                resources (New Zealand)</span>
+                            <span class="collapse-hint">tap to expand</span>
+                            <label for="resourcesToggle" class="sr-only"></label>
+                            <input id="resourcesToggle" style="display: none;" type="checkbox">
                         </div>
-                        <p class="crisis-resources-intro">If you're feeling unsafe, in crisis, or experiencing thoughts
-                            of
-                            self-harm or suicide, please reach out immediately.</p>
-                        <ul class="crisis-resources-list">
-                            <li><span class="crisis-service">Emergency Services</span> Call <a href="tel:111">111</a> if
-                                you are in immediate danger.</li>
-                            <li><span class="crisis-service">Need to Talk?</span> Call or text <a
-                                    href="tel:1737">1737</a> -
-                                free, 24/7 counselling service in New Zealand.</li>
-                            <li><span class="crisis-service">Suicide Crisis Helpline</span> Call <a
-                                    href="tel:0508828865">0508 828 865</a> (0508 TAUTOKO) - 24/7 specialist support.
-                            </li>
-                            <li><span class="crisis-service">Lifeline (NZ)</span> Call <a href="tel:0800543354">0800 543
-                                    354</a> or text 4357 - 24/7 support.</li>
-                            <li><span class="crisis-service">Healthline</span> Call <a href="tel:0800611116">0800 611
-                                    116</a> - health advice and triage (24/7).</li>
-                            <li class="crisis-divider">Regional Crisis Resolution teams (urgent mental health
-                                assessment)</li>
-                            <li><span class="crisis-service">Christchurch</span> Call <a href="tel:0800920092">0800 920
-                                    092</a></li>
-                            <li><span class="crisis-service">Auckland</span> Call <a href="tel:0800800717">0800 800
-                                    717</a></li>
-                            <li><span class="crisis-service">Wellington / Porirua / Hutt Valley</span> Call <a
-                                    href="tel:0800745477">0800 745 477</a></li>
-                            <li><span class="crisis-service">Waikato</span> Call <a href="tel:0800505050">0800 50 50
-                                    50</a></li>
-                            <li><span class="crisis-service">Otago</span> Call <a href="tel:0800467846">0800 467 846</a>
-                                (press 2)</li>
-                            <li><span class="crisis-service">Southland</span> Call <a href="tel:0800467846">0800 467
-                                    846</a> (press 1)</li>
-                            <li class="crisis-divider">Young people</li>
-                            <li><span class="crisis-service">What's Up (kids &amp; teens)</span> Call <a
-                                    href="tel:0800942878">0800 942 8787</a> - phone/text/chat support.</li>
-                            <li><span class="crisis-service">Youthline</span> Call <a href="tel:0800376633">0800 376
-                                    633</a> or text 234. Online chat also available.</li>
-                        </ul>
-                    </div>
+                        <div class="collapse-content" id="resourcesContent" style="display: none;" role="region"
+                            aria-label="Crisis and support resources">
+                            <p class="section-hint">If you're feeling unsafe, in crisis, or experiencing thoughts of
+                                self-harm or suicide, please reach out immediately. All numbers are free to call from
+                                NZ phones.</p>
 
-                    <div class="input-group collapse-section">
-                        <div class="collapse-header" data-target="moreSupportContent">
-                            <i class="fas fa-chevron-right collapse-icon" id="moreSupportIcon"></i>
-                            <span><i class="fas fa-hand-holding-medical"></i> More support services</span>
-                            <label for="moreSupportToggle"></label><input id="moreSupportToggle" style="display: none;"
-                                type="checkbox">
-                        </div>
-                        <div class="collapse-content" id="moreSupportContent" style="display: none;">
-                            <p class="section-hint">Support for specific situations - not just crisis moments.</p>
-                            <ul class="crisis-resources-list more-support-list">
-                                <li><span class="crisis-service">Depression Helpline</span> Call <a
-                                        href="tel:0800111757">0800 111 757</a> or text 4202.</li>
-                                <li><span class="crisis-service">Anxiety Helpline</span> Call <a
-                                        href="tel:0800269438">0800 269 4389</a>.</li>
-                                <li><span class="crisis-service">Alcohol &amp; Drug Helpline</span> Call <a
-                                        href="tel:0800787797">0800 787 797</a> or text 8681.</li>
-                                <li><span class="crisis-service">Gambling Helpline</span> Call <a
-                                        href="tel:0800654655">0800 654 655</a> or text 8006.</li>
-                                <li><span class="crisis-service">Safe to talk (sexual harm)</span> Call <a
-                                        href="tel:0800044334">0800 044 334</a> or text 4334.</li>
-                                <li><span class="crisis-service">Women's Refuge Crisis Line</span> Call <a
-                                        href="tel:0800733843">0800 733 843</a>.</li>
-                                <li><span class="crisis-service">Shine (family violence)</span> Call <a
-                                        href="tel:0508744633">0508 744 633</a>.</li>
-                                <li><span class="crisis-service">OUTLine NZ (Rainbow support)</span> Call <a
-                                        href="tel:0800688543">0800 688 5463</a>, 6-9pm.</li>
-                                <li><span class="crisis-service">Victim Support</span> Call <a
-                                        href="tel:0800842846">0800 842 846</a>.</li>
-                                <li><span class="crisis-service">Rural Support Trust</span> Call <a
-                                        href="tel:0800787254">0800 787 254</a>.</li>
-                                <li><span class="crisis-service">Poisons Centre</span> Call <a
-                                        href="tel:0800764766">0800 764 766</a>.</li>
-                            </ul>
+                            <div class="resources-tabs" role="tablist" aria-label="Resource categories">
+                                <button class="tab-btn active" role="tab" aria-selected="true" data-tab="emergency"
+                                    id="tab-emergency" aria-controls="panel-emergency">Emergency</button>
+                                <button class="tab-btn" role="tab" aria-selected="false" data-tab="regional"
+                                    id="tab-regional" aria-controls="panel-regional" tabindex="-1">Regional
+                                    crisis</button>
+                                <button class="tab-btn" role="tab" aria-selected="false" data-tab="youth" id="tab-youth"
+                                    aria-controls="panel-youth" tabindex="-1">Young people</button>
+                                <button class="tab-btn" role="tab" aria-selected="false" data-tab="specific"
+                                    id="tab-specific" aria-controls="panel-specific" tabindex="-1">Specific
+                                    support</button>
+                            </div>
+
+                            <div class="tab-panel active" id="panel-emergency" role="tabpanel"
+                                aria-labelledby="tab-emergency">
+                                <ul class="crisis-resources-list">
+                                    <li><span class="crisis-service">Emergency Services</span> Call <a
+                                            href="tel:111">111</a>
+                                        if you are in immediate danger.</li>
+                                    <li><span class="crisis-service">Need to Talk?</span> Call or text <a
+                                            href="tel:1737">1737</a> - free, 24/7 counselling.</li>
+                                    <li><span class="crisis-service">Suicide Crisis Helpline</span> Call <a
+                                            href="tel:0508828865">0508 828 865</a> (0508 TAUTOKO) - 24/7.</li>
+                                    <li><span class="crisis-service">Lifeline (NZ)</span> Call <a
+                                            href="tel:0800543354">0800 543 354</a> or text 4357 - 24/7.</li>
+                                    <li><span class="crisis-service">Healthline</span> Call <a
+                                            href="tel:0800611116">0800 611 116</a> - health advice &amp; triage
+                                        (24/7).</li>
+                                </ul>
+                            </div>
+
+                            <div class="tab-panel" id="panel-regional" role="tabpanel" aria-labelledby="tab-regional"
+                                hidden>
+                                <p class="section-hint">Urgent mental health assessment - Crisis Resolution teams.
+                                </p>
+                                <ul class="crisis-resources-list">
+                                    <li><span class="crisis-service">Christchurch</span> <a href="tel:0800920092">0800
+                                            920 092</a></li>
+                                    <li><span class="crisis-service">Auckland</span> <a href="tel:0800800717">0800 800
+                                            717</a></li>
+                                    <li><span class="crisis-service">Wellington / Porirua / Hutt Valley</span> <a
+                                            href="tel:0800745477">0800 745 477</a></li>
+                                    <li><span class="crisis-service">Waikato</span> <a href="tel:0800505050">0800 50 50
+                                            50</a></li>
+                                    <li><span class="crisis-service">Otago</span> <a href="tel:0800467846">0800 467
+                                            846</a> (press 2)</li>
+                                    <li><span class="crisis-service">Southland</span> <a href="tel:0800467846">0800
+                                            467 846</a> (press 1)</li>
+                                </ul>
+                            </div>
+
+                            <div class="tab-panel" id="panel-youth" role="tabpanel" aria-labelledby="tab-youth" hidden>
+                                <ul class="crisis-resources-list">
+                                    <li><span class="crisis-service">What's Up (kids &amp; teens)</span> Call <a
+                                            href="tel:0800942878">0800 942 8787</a> - phone/text/chat.</li>
+                                    <li><span class="crisis-service">Youthline</span> Call <a href="tel:0800376633">0800
+                                            376 633</a> or text 234. Online chat available.
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="tab-panel" id="panel-specific" role="tabpanel" aria-labelledby="tab-specific"
+                                hidden>
+                                <ul class="crisis-resources-list">
+                                    <li><span class="crisis-service">Depression Helpline</span> <a
+                                            href="tel:0800111757">0800 111 757</a> or text 4202.</li>
+                                    <li><span class="crisis-service">Anxiety Helpline</span> <a
+                                            href="tel:0800269438">0800 269 4389</a>.</li>
+                                    <li><span class="crisis-service">Alcohol &amp; Drug Helpline</span> <a
+                                            href="tel:0800787797">0800 787 797</a> or text 8681.</li>
+                                    <li><span class="crisis-service">Gambling Helpline</span> <a
+                                            href="tel:0800654655">0800 654 655</a> or text 8006.</li>
+                                    <li><span class="crisis-service">Safe to talk (sexual harm)</span> <a
+                                            href="tel:0800044334">0800 044 334</a> or text 4334.</li>
+                                    <li><span class="crisis-service">Women's Refuge Crisis Line</span> <a
+                                            href="tel:0800733843">0800 733 843</a>.</li>
+                                    <li><span class="crisis-service">Shine (family violence)</span> <a
+                                            href="tel:0508744633">0508 744 633</a>.</li>
+                                    <li><span class="crisis-service">OUTLine NZ (Rainbow)</span> <a
+                                            href="tel:0800688543">0800 688 5463</a>, 6&ndash;9pm.</li>
+                                    <li><span class="crisis-service">Victim Support</span> <a href="tel:0800842846">0800
+                                            842 846</a>.</li>
+                                    <li><span class="crisis-service">Rural Support Trust</span> <a
+                                            href="tel:0800787254">0800 787 254</a>.</li>
+                                    <li><span class="crisis-service">Poisons Centre</span> <a href="tel:0800764766">0800
+                                            764 766</a>.</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
 
@@ -143,28 +184,31 @@ pwa: true
 
                             <div class="input-group">
                                 <label class="input-label" for="userNameInput">
-                                    <span><i class="fas fa-user"></i> your name</span>
+                                    <span><i class="fas fa-user" aria-hidden="true"></i> your name</span>
                                     <input class="text-input" id="userNameInput"
                                         placeholder="enter your name (used in the plan, summary, and saved PDF)"
-                                        type="text">
+                                        type="text" autocomplete="name">
                                 </label>
                             </div>
 
-                            <h4 class="section-title"><i class="fas fa-layer-group"></i> Your crisis plan</h4>
+                            <h4 class="section-title"><i class="fas fa-layer-group" aria-hidden="true"></i> Your crisis
+                                plan</h4>
                             <p class="section-hint">
-                                Customise each level with steps that help you de-escalate.
-                                You can tick items off during a crisis (they'll appear in the handover summary), but the
-                                main purpose is to <strong>plan ahead</strong>.
-                                Use the pencil to edit, ✕ to remove, and the box below each level to add your own steps.
+                                Customise each level with steps that help you de-escalate. Tick items off during a
+                                crisis (they'll appear in the handover summary). Use the pencil to edit, ✕ to remove,
+                                and the box below each level to add your own steps.
                             </p>
 
                             <div class="input-group collapse-section">
-                                <div class="collapse-header level-header level-early" data-target="level-early-content">
-                                    <i class="fas fa-chevron-right collapse-icon" id="level-early-icon"></i>
-                                    <span><i class="fas fa-eye"></i> Early warning signs</span>
-                                    <label for="level-early-toggle"></label><input id="level-early-toggle"
-                                        style="display: none;" type="checkbox">
+                                <div class="collapse-header level-header level-early" data-target="level-early-content"
+                                    role="button" tabindex="0" aria-expanded="false"
+                                    aria-controls="level-early-content">
+                                    <i class="fas fa-chevron-right collapse-icon" id="level-early-icon"
+                                        aria-hidden="true"></i>
+                                    <span><i class="fas fa-eye" aria-hidden="true"></i> Early warning signs</span>
                                     <span class="level-count" id="level-early-count"></span>
+                                    <label for="level-early-toggle" class="sr-only"></label>
+                                    <input id="level-early-toggle" style="display: none;" type="checkbox">
                                 </div>
                                 <div class="collapse-content level-content" id="level-early-content"
                                     style="display: none;">
@@ -172,21 +216,24 @@ pwa: true
                                     <div class="suggestion-chips" id="level-early-suggestions"></div>
                                     <div class="add-item-row">
                                         <input class="text-input add-item-input" data-level="early"
-                                            placeholder="add a warning sign..." type="text">
+                                            placeholder="add a warning sign..." type="text"
+                                            aria-label="Add an early warning sign">
                                         <button class="btn btn-secondary add-item-btn" data-level="early" type="button">
-                                            <i class="fas fa-plus"></i> add
+                                            <i class="fas fa-plus" aria-hidden="true"></i> add
                                         </button>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="input-group collapse-section">
-                                <div class="collapse-header level-header level-mild" data-target="level-mild-content">
-                                    <i class="fas fa-chevron-right collapse-icon" id="level-mild-icon"></i>
-                                    <span><i class="fas fa-cloud-rain"></i> Mild distress</span>
-                                    <label for="level-mild-toggle"></label><input id="level-mild-toggle"
-                                        style="display: none;" type="checkbox">
+                                <div class="collapse-header level-header level-mild" data-target="level-mild-content"
+                                    role="button" tabindex="0" aria-expanded="false" aria-controls="level-mild-content">
+                                    <i class="fas fa-chevron-right collapse-icon" id="level-mild-icon"
+                                        aria-hidden="true"></i>
+                                    <span><i class="fas fa-cloud-rain" aria-hidden="true"></i> Mild distress</span>
                                     <span class="level-count" id="level-mild-count"></span>
+                                    <label for="level-mild-toggle" class="sr-only"></label>
+                                    <input id="level-mild-toggle" style="display: none;" type="checkbox">
                                 </div>
                                 <div class="collapse-content level-content" id="level-mild-content"
                                     style="display: none;">
@@ -194,9 +241,10 @@ pwa: true
                                     <div class="suggestion-chips" id="level-mild-suggestions"></div>
                                     <div class="add-item-row">
                                         <input class="text-input add-item-input" data-level="mild"
-                                            placeholder="add a coping step..." type="text">
+                                            placeholder="add a coping step..." type="text"
+                                            aria-label="Add a coping step">
                                         <button class="btn btn-secondary add-item-btn" data-level="mild" type="button">
-                                            <i class="fas fa-plus"></i> add
+                                            <i class="fas fa-plus" aria-hidden="true"></i> add
                                         </button>
                                     </div>
                                 </div>
@@ -204,12 +252,14 @@ pwa: true
 
                             <div class="input-group collapse-section">
                                 <div class="collapse-header level-header level-moderate"
-                                    data-target="level-moderate-content">
-                                    <i class="fas fa-chevron-right collapse-icon" id="level-moderate-icon"></i>
-                                    <span><i class="fas fa-bolt"></i> Moderate crisis</span>
-                                    <label for="level-moderate-toggle"></label><input id="level-moderate-toggle"
-                                        style="display: none;" type="checkbox">
+                                    data-target="level-moderate-content" role="button" tabindex="0"
+                                    aria-expanded="false" aria-controls="level-moderate-content">
+                                    <i class="fas fa-chevron-right collapse-icon" id="level-moderate-icon"
+                                        aria-hidden="true"></i>
+                                    <span><i class="fas fa-bolt" aria-hidden="true"></i> Moderate crisis</span>
                                     <span class="level-count" id="level-moderate-count"></span>
+                                    <label for="level-moderate-toggle" class="sr-only"></label>
+                                    <input id="level-moderate-toggle" style="display: none;" type="checkbox">
                                 </div>
                                 <div class="collapse-content level-content" id="level-moderate-content"
                                     style="display: none;">
@@ -217,10 +267,11 @@ pwa: true
                                     <div class="suggestion-chips" id="level-moderate-suggestions"></div>
                                     <div class="add-item-row">
                                         <input class="text-input add-item-input" data-level="moderate"
-                                            placeholder="add an action..." type="text">
+                                            placeholder="add an action..." type="text"
+                                            aria-label="Add a moderate crisis action">
                                         <button class="btn btn-secondary add-item-btn" data-level="moderate"
                                             type="button">
-                                            <i class="fas fa-plus"></i> add
+                                            <i class="fas fa-plus" aria-hidden="true"></i> add
                                         </button>
                                     </div>
                                 </div>
@@ -228,12 +279,14 @@ pwa: true
 
                             <div class="input-group collapse-section">
                                 <div class="collapse-header level-header level-severe"
-                                    data-target="level-severe-content">
-                                    <i class="fas fa-chevron-right collapse-icon" id="level-severe-icon"></i>
-                                    <span><i class="fas fa-hospital"></i> Severe emergency</span>
-                                    <label for="level-severe-toggle"></label><input id="level-severe-toggle"
-                                        style="display: none;" type="checkbox">
+                                    data-target="level-severe-content" role="button" tabindex="0" aria-expanded="false"
+                                    aria-controls="level-severe-content">
+                                    <i class="fas fa-chevron-right collapse-icon" id="level-severe-icon"
+                                        aria-hidden="true"></i>
+                                    <span><i class="fas fa-hospital" aria-hidden="true"></i> Severe emergency</span>
                                     <span class="level-count" id="level-severe-count"></span>
+                                    <label for="level-severe-toggle" class="sr-only"></label>
+                                    <input id="level-severe-toggle" style="display: none;" type="checkbox">
                                 </div>
                                 <div class="collapse-content level-content" id="level-severe-content"
                                     style="display: none;">
@@ -241,34 +294,54 @@ pwa: true
                                     <div class="suggestion-chips" id="level-severe-suggestions"></div>
                                     <div class="add-item-row">
                                         <input class="text-input add-item-input" data-level="severe"
-                                            placeholder="add an emergency step..." type="text">
+                                            placeholder="add an emergency step..." type="text"
+                                            aria-label="Add a severe emergency step">
                                         <button class="btn btn-secondary add-item-btn" data-level="severe"
                                             type="button">
-                                            <i class="fas fa-plus"></i> add
+                                            <i class="fas fa-plus" aria-hidden="true"></i> add
                                         </button>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="input-group collapse-section">
-                                <div class="collapse-header" data-target="safetyFields">
-                                    <i class="fas fa-chevron-right collapse-icon" id="safetyIcon"></i>
-                                    <span><i class="fas fa-shield-heart"></i> Safety information</span>
-                                    <label for="safetyToggle"></label><input id="safetyToggle" style="display: none;"
-                                        type="checkbox">
+                                <div class="collapse-header" data-target="safetyFields" role="button" tabindex="0"
+                                    aria-expanded="false" aria-controls="safetyFields">
+                                    <i class="fas fa-chevron-right collapse-icon" id="safetyIcon"
+                                        aria-hidden="true"></i>
+                                    <span><i class="fas fa-shield-heart" aria-hidden="true"></i> Safety
+                                        information</span>
+                                    <label for="safetyToggle" class="sr-only"></label>
+                                    <input id="safetyToggle" style="display: none;" type="checkbox">
                                 </div>
                                 <div class="collapse-content" id="safetyFields" style="display: none;">
+
                                     <div class="input-group">
-                                        <label class="input-label" for="emergencyContacts">
-                                            <span><i class="fas fa-phone"></i> emergency &amp; crisis contacts</span>
-                                            <textarea class="notes-textarea" id="emergencyContacts" rows="4"
-                                                placeholder="e.g. Lifeline: 0800 543 354, personal contacts..."></textarea>
-                                        </label>
+                                        <span class="input-label-static">
+                                            <i class="fas fa-address-book" aria-hidden="true"></i> personal
+                                            emergency contacts
+                                        </span>
+                                        <p class="section-hint" style="margin-top:0;">These appear as one-tap call
+                                            buttons in Emergency Mode and in your printed card.</p>
+                                        <div id="contactsList" class="contacts-list"></div>
+                                        <div class="contact-add-row">
+                                            <input class="text-input" id="contactName" type="text" placeholder="Name"
+                                                aria-label="Contact name">
+                                            <input class="text-input" id="contactPhone" type="tel" placeholder="Phone"
+                                                aria-label="Contact phone">
+                                            <input class="text-input" id="contactRel" type="text"
+                                                placeholder="Relationship (optional)" aria-label="Relationship">
+                                            <button class="btn btn-secondary" id="addContactBtn" type="button">
+                                                <i class="fas fa-plus" aria-hidden="true"></i> add contact
+                                            </button>
+                                        </div>
                                     </div>
+
                                     <div class="input-group">
                                         <label class="input-label" for="professionalContacts">
-                                            <span><i class="fas fa-user-doctor"></i> GP / counsellor / support worker
-                                                (CSW)</span>
+                                            <span><i class="fas fa-user-doctor" aria-hidden="true"></i> GP / counsellor
+                                                /
+                                                support worker (CSW)</span>
                                             <textarea class="notes-textarea" id="professionalContacts"
                                                 placeholder="e.g. Dr. Smith, therapist, support worker, their phone numbers..."
                                                 rows="2"></textarea>
@@ -276,15 +349,16 @@ pwa: true
                                     </div>
                                     <div class="input-group">
                                         <label class="input-label" for="medicalInfo">
-                                            <span><i class="fas fa-notes-medical"></i> diagnoses, medications,
-                                                allergies</span>
+                                            <span><i class="fas fa-notes-medical" aria-hidden="true"></i> diagnoses,
+                                                medications, allergies</span>
                                             <textarea class="notes-textarea" id="medicalInfo" rows="2"
                                                 placeholder="e.g. depression, anxiety, sertraline 50mg, no allergies"></textarea>
                                         </label>
                                     </div>
                                     <div class="input-group">
                                         <label class="input-label" for="meansRestriction">
-                                            <span><i class="fas fa-lock"></i> restricting access to means</span>
+                                            <span><i class="fas fa-lock" aria-hidden="true"></i> restricting access to
+                                                means</span>
                                             <textarea class="notes-textarea" id="meansRestriction"
                                                 placeholder="e.g. medications locked away, sharps removed, friend holding car keys"
                                                 rows="2"></textarea>
@@ -292,9 +366,9 @@ pwa: true
                                     </div>
                                     <div class="input-group">
                                         <label class="input-label" for="reasonsForLiving">
-                                            <span><i class="fas fa-heart"></i> reasons to keep going / what matters to
-                                                me</span>
-                                            <textarea class="notes-textarea" id="reasonsForLiving" rows="2"
+                                            <span><i class="fas fa-heart" aria-hidden="true"></i> reasons to keep going
+                                                / what matters to me</span>
+                                            <textarea class="notes-textarea" id="reasonsForLiving" rows="3"
                                                 placeholder="e.g. my children, my dog, hope for the future, things I'm looking forward to"></textarea>
                                         </label>
                                     </div>
@@ -302,55 +376,84 @@ pwa: true
                             </div>
 
                             <div class="button-group">
-                                <button class="btn btn-secondary" id="viewPlanBtn2"><i
-                                        class="fas fa-clipboard-list"></i>
+                                <button class="btn btn-secondary" id="viewPlanBtn2" type="button">
+                                    <i class="fas fa-clipboard-list" aria-hidden="true"></i>
                                     <span>view crisis plan</span>
                                 </button>
-                                <button class="btn btn-primary" id="summaryBtn"><i class="fas fa-file-medical"></i>
+                                <button class="btn btn-primary" id="summaryBtn" type="button">
+                                    <i class="fas fa-file-medical" aria-hidden="true"></i>
                                     <span>generate handover summary</span>
                                 </button>
                             </div>
                             <div class="button-group" style="margin-top: 0.5rem;">
-                                <button class="btn btn-secondary" id="printBtn"><i class="fas fa-print"></i> print /
-                                    save
-                                    PDF
+                                <button class="btn btn-secondary" id="printBtn" type="button">
+                                    <i class="fas fa-print" aria-hidden="true"></i> print / save PDF
                                 </button>
-                                <button class="btn btn-secondary" id="exportBtn"><i class="fas fa-download"></i> export
-                                    plan (JSON)
+                                <button class="btn btn-secondary" id="printCardBtn" type="button">
+                                    <i class="fas fa-id-card" aria-hidden="true"></i> print pocket card
                                 </button>
-                                <button class="btn btn-secondary" id="importBtn"><i class="fas fa-upload"></i> import
-                                    plan (JSON)
+                                <button class="btn btn-secondary" id="exportBtn" type="button">
+                                    <i class="fas fa-download" aria-hidden="true"></i> export (JSON)
                                 </button>
-                                <button class="btn btn-danger" id="resetPlanBtn"><i class="fas fa-trash-alt"></i> reset
-                                    to defaults
+                                <button class="btn btn-secondary" id="importBtn" type="button">
+                                    <i class="fas fa-upload" aria-hidden="true"></i> import (JSON)
+                                </button>
+                                <button class="btn btn-danger" id="resetPlanBtn" type="button">
+                                    <i class="fas fa-trash-alt" aria-hidden="true"></i> reset to defaults
                                 </button>
                             </div>
                             <input accept=".json,application/json" id="importFile" style="display: none;" type="file">
                         </div>
 
                         <div class="right-column">
-                            <h4 class="section-title" style="color: var(--level-severe);"><i
-                                    class="fas fa-triangle-exclamation"></i> What's happening right now</h4>
+                            <h4 class="section-title" style="color: var(--level-severe);">
+                                <i class="fas fa-triangle-exclamation" aria-hidden="true"></i> What's happening right
+                                now
+                            </h4>
                             <p class="section-hint" style="font-weight: 500;">
-                                Use this section <strong>only when you're in crisis</strong>.
-                                Tick the items that apply, add details, and generate a handover summary to share with a
-                                supporter or crisis team.
+                                Use this section <strong>only when you're in crisis</strong>. Tick the items that apply,
+                                add details, and generate a handover summary to share with a supporter or crisis team.
                             </p>
 
+                            <div class="reasons-pinned" id="reasonsPinned" hidden aria-live="polite">
+                                <div class="reasons-pinned-head">
+                                    <i class="fas fa-heart" aria-hidden="true"></i> Remember why you're still here
+                                </div>
+                                <div class="reasons-pinned-body" id="reasonsPinnedBody"></div>
+                            </div>
+
+                            <div class="mood-check" id="moodCheck">
+                                <div class="mood-head">
+                                    <span class="mood-label"><i class="fas fa-gauge-high" aria-hidden="true"></i> Quick
+                                        check-in: how are you right now?</span>
+                                    <span class="mood-value" id="moodValue" aria-live="polite">–</span>
+                                </div>
+                                <input type="range" id="moodSlider" min="1" max="10" step="1" value="5"
+                                    aria-label="Mood from 1 (worst) to 10 (best)">
+                                <div class="mood-scale" aria-hidden="true">
+                                    <span>1 worst</span><span>10 best</span>
+                                </div>
+                                <div class="mood-history" id="moodHistory" aria-live="polite"></div>
+                            </div>
+
                             <div class="input-group collapse-section">
-                                <div class="collapse-header" data-target="currentStateContent">
-                                    <i class="fas fa-chevron-right collapse-icon" id="currentStateIcon"></i>
-                                    <span><i class="fas fa-triangle-exclamation"></i> Current state</span>
-                                    <label for="currentStateToggle"></label><input id="currentStateToggle"
-                                        style="display: none;" type="checkbox">
+                                <div class="collapse-header" data-target="currentStateContent" role="button"
+                                    tabindex="0" aria-expanded="false" aria-controls="currentStateContent">
+                                    <i class="fas fa-chevron-right collapse-icon" id="currentStateIcon"
+                                        aria-hidden="true"></i>
+                                    <span><i class="fas fa-triangle-exclamation" aria-hidden="true"></i> Current
+                                        state</span>
                                     <span class="level-count" id="level-now-count"></span>
+                                    <label for="currentStateToggle" class="sr-only"></label>
+                                    <input id="currentStateToggle" style="display: none;" type="checkbox">
                                 </div>
                                 <div class="collapse-content" id="currentStateContent" style="display: none;">
                                     <p class="section-hint">Tick anything that applies right now, and add details below.
                                         This feeds into your handover summary.</p>
 
                                     <button class="btn btn-grounding" id="groundingBtn" type="button">
-                                        <i class="fas fa-spa"></i> <span>open a grounding &amp; breathing tool</span>
+                                        <i class="fas fa-spa" aria-hidden="true"></i>
+                                        <span>open a grounding &amp; breathing tool</span>
                                     </button>
 
                                     <div class="now-items-wrap">
@@ -358,24 +461,26 @@ pwa: true
                                         <div class="suggestion-chips" id="level-now-suggestions"></div>
                                         <div class="add-item-row">
                                             <input class="text-input add-item-input" data-level="now"
-                                                placeholder="add something that's happening right now..." type="text">
+                                                placeholder="add something that's happening right now..." type="text"
+                                                aria-label="Add something happening right now">
                                             <button class="btn btn-secondary add-item-btn" data-level="now"
                                                 type="button">
-                                                <i class="fas fa-plus"></i> add
+                                                <i class="fas fa-plus" aria-hidden="true"></i> add
                                             </button>
                                         </div>
                                     </div>
                                     <div class="input-group" style="margin-top:0.75rem;">
                                         <label class="input-label" for="currentTriggers">
-                                            <span><i class="fas fa-bolt-lightning"></i> current trigger(s)</span>
+                                            <span><i class="fas fa-bolt-lightning" aria-hidden="true"></i> current
+                                                trigger(s)</span>
                                             <textarea class="notes-textarea" id="currentTriggers"
                                                 placeholder="what set this off, if you know..." rows="2"></textarea>
                                         </label>
                                     </div>
                                     <div class="input-group">
                                         <label class="input-label" for="whatHappened">
-                                            <span><i class="fas fa-comment-dots"></i> what happened / what's going
-                                                on</span>
+                                            <span><i class="fas fa-comment-dots" aria-hidden="true"></i> what happened /
+                                                what's going on</span>
                                             <textarea class="notes-textarea" id="whatHappened"
                                                 placeholder="describe the situation in your own words..."
                                                 rows="3"></textarea>
@@ -383,7 +488,8 @@ pwa: true
                                     </div>
                                     <div class="input-group">
                                         <label class="input-label" for="needsNow">
-                                            <span><i class="fas fa-hand-holding-heart"></i> what I need right now</span>
+                                            <span><i class="fas fa-hand-holding-heart" aria-hidden="true"></i> what I
+                                                need right now</span>
                                             <textarea class="notes-textarea" id="needsNow"
                                                 placeholder="e.g. space, someone to listen, help getting somewhere safe..."
                                                 rows="2"></textarea>
@@ -391,17 +497,11 @@ pwa: true
                                     </div>
                                     <div style="margin-top: 0.75rem;">
                                         <button class="btn btn-outline-danger" id="resetCurrentStateBtn" type="button">
-                                            <i class="fas fa-undo-alt"></i> Reset current state
+                                            <i class="fas fa-undo-alt" aria-hidden="true"></i> Reset current state
                                         </button>
-                                        <span style="font-size: 0.75rem; color: var(--gray); margin-left: 0.5rem;">
-                                            (unchecks all items and clears notes)
-                                        </span>
+                                        <span class="reset-note">(unchecks all items and clears notes)</span>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div class="button-group" style="margin-top: 1rem;">
-                                <button class="btn btn-primary" id="summaryBtn2" style="display:none;"></button>
                             </div>
                         </div>
                     </div>
@@ -410,47 +510,123 @@ pwa: true
         </div>
     </main>
 
-    <div class="modal" id="summaryModal" style="display: none;">
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <h3 id="modalTitle">Crisis Handover Summary</h3>
-            <p class="section-hint" id="modalHint" style="margin-top: -0.3rem;">A clean summary you can show to a crisis
-                team, support worker, or emergency mental health service.</p>
-            <div id="summaryOutput"
-                style="margin-top: 10px; max-height: 340px; overflow-y: auto; background: #f5f5f5; padding: 10px; border-radius: 4px; white-space: pre-wrap; font-family: var(--font-mono), monospace; font-size: 0.85rem;">
+    <!-- Emergency Mode -->
+    <button class="emergency-fab" id="emergencyFab" type="button" aria-label="Open emergency help panel">
+        <i class="fas fa-triangle-exclamation" aria-hidden="true"></i>
+        <span>I need help now</span>
+    </button>
+
+    <div class="modal emergency-modal" id="emergencyModal" style="display: none;" role="dialog" aria-modal="true"
+        aria-labelledby="emergencyTitle">
+        <div class="modal-content emergency-modal-content">
+            <span class="close-modal" id="closeEmergencyModal" role="button" tabindex="0"
+                aria-label="Close">&times;</span>
+            <h3 id="emergencyTitle"><i class="fas fa-life-ring" aria-hidden="true"></i> Help right now</h3>
+            <p class="section-hint">Take one breath. You don't have to solve everything - just do the next small
+                thing.</p>
+
+            <div class="emergency-call-grid">
+                <a class="emergency-call emergency-call-111" href="tel:111">
+                    <i class="fas fa-phone-volume" aria-hidden="true"></i>
+                    <span class="emergency-call-label">Call 111</span>
+                    <span class="emergency-call-sub">Emergency services</span>
+                </a>
+                <a class="emergency-call emergency-call-1737" href="tel:1737">
+                    <i class="fas fa-comment-dots" aria-hidden="true"></i>
+                    <span class="emergency-call-label">Call/text 1737</span>
+                    <span class="emergency-call-sub">24/7 counselling</span>
+                </a>
+                <a class="emergency-call emergency-call-tautoko" href="tel:0508828865">
+                    <i class="fas fa-heart-pulse" aria-hidden="true"></i>
+                    <span class="emergency-call-label">0508 828 865</span>
+                    <span class="emergency-call-sub">Suicide Crisis Helpline</span>
+                </a>
             </div>
-            <div class="button-group" style="margin-top: 10px;">
-                <button class="btn btn-secondary" id="copySummaryBtn"><i class="fas fa-copy"></i> copy to clipboard
+
+            <div class="emergency-personal" id="emergencyPersonal" hidden>
+                <div class="emergency-section-title">Your people</div>
+                <div class="emergency-contacts" id="emergencyContacts"></div>
+            </div>
+
+            <div class="emergency-reasons" id="emergencyReasons" hidden>
+                <div class="emergency-section-title">Reasons to stay</div>
+                <div class="emergency-reasons-body" id="emergencyReasonsBody"></div>
+            </div>
+
+            <div class="button-group" style="margin-top: 0.75rem;">
+                <button class="btn btn-grounding" id="emergencyGroundingBtn" type="button">
+                    <i class="fas fa-spa" aria-hidden="true"></i> Grounding &amp; breathing
                 </button>
-                <button class="btn btn-secondary" id="downloadSummaryBtn"><i class="fas fa-download"></i> download as
-                    text
+                <button class="btn btn-secondary" id="emergencyPlanBtn" type="button">
+                    <i class="fas fa-clipboard-list" aria-hidden="true"></i> Show my plan
+                </button>
+                <button class="btn btn-primary" id="emergencySummaryBtn" type="button">
+                    <i class="fas fa-file-medical" aria-hidden="true"></i> Handover summary
                 </button>
             </div>
         </div>
     </div>
 
-    <div class="modal" id="groundingModal" style="display: none;">
+    <!-- Summary / plan modal -->
+    <div class="modal" id="summaryModal" style="display: none;" role="dialog" aria-modal="true"
+        aria-labelledby="modalTitle">
         <div class="modal-content">
-            <span class="close-modal" id="closeGroundingModal">&times;</span>
-            <h3><i class="fas fa-spa"></i> Grounding &amp; breathing</h3>
+            <span class="close-modal" id="closeSummaryModal" role="button" tabindex="0"
+                aria-label="Close">&times;</span>
+            <h3 id="modalTitle">Crisis Handover Summary</h3>
+            <p class="section-hint" id="modalHint" style="margin-top: -0.3rem;">A clean summary you can show to a crisis
+                team, support worker, or emergency mental health service.</p>
+            <div id="summaryOutput" tabindex="0" aria-live="polite"></div>
+            <div class="button-group" style="margin-top: 10px;">
+                <button class="btn btn-secondary" id="copySummaryBtn" type="button">
+                    <i class="fas fa-copy" aria-hidden="true"></i> copy to clipboard
+                </button>
+                <button class="btn btn-secondary" id="downloadSummaryBtn" type="button">
+                    <i class="fas fa-download" aria-hidden="true"></i> download as text
+                </button>
+                <button class="btn btn-secondary" id="shareSummaryBtn" type="button" hidden>
+                    <i class="fas fa-share-nodes" aria-hidden="true"></i> share
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Grounding modal -->
+    <div class="modal" id="groundingModal" style="display: none;" role="dialog" aria-modal="true"
+        aria-labelledby="groundingTitle">
+        <div class="modal-content">
+            <span class="close-modal" id="closeGroundingModal" role="button" tabindex="0"
+                aria-label="Close">&times;</span>
+            <h3 id="groundingTitle"><i class="fas fa-spa" aria-hidden="true"></i> Grounding &amp; breathing</h3>
             <p class="section-hint" style="margin-top: -0.3rem;">Pick whichever helps right now. There's no wrong way to
                 use these.</p>
 
             <div class="grounding-block">
-                <h4 class="section-title" style="margin-top:0;"><i class="fas fa-wind"></i> Breathing pacer</h4>
+                <h4 class="section-title" style="margin-top:0;"><i class="fas fa-wind" aria-hidden="true"></i> Breathing
+                    pacer</h4>
+                <div class="breathing-technique-picker" role="group" aria-label="Breathing technique">
+                    <button class="segmented-btn active" data-technique="calm" type="button">Calm (4-2-6)</button>
+                    <button class="segmented-btn" data-technique="box" type="button">Box (4-4-4-4)</button>
+                    <button class="segmented-btn" data-technique="478" type="button">4-7-8</button>
+                </div>
                 <div class="breathing-pacer" id="breathingPacer">
-                    <div class="breathing-circle" id="breathingCircle"><span id="breathingWord">start</span></div>
+                    <div class="breathing-circle" id="breathingCircle">
+                        <span id="breathingWord">start</span>
+                        <span class="breathing-count" id="breathingCount" aria-hidden="true"></span>
+                    </div>
                 </div>
                 <div class="button-group" style="justify-content:center;">
-                    <button class="btn btn-secondary" id="breathingToggleBtn" type="button"><i class="fas fa-play"></i>
-                        start</button>
+                    <button class="btn btn-secondary" id="breathingToggleBtn" type="button">
+                        <i class="fas fa-play" aria-hidden="true"></i> start
+                    </button>
                 </div>
             </div>
 
             <hr class="summary-divider">
 
             <div class="grounding-block">
-                <h4 class="section-title"><i class="fas fa-hand-sparkles"></i> 5-4-3-2-1 grounding</h4>
+                <h4 class="section-title"><i class="fas fa-hand-sparkles" aria-hidden="true"></i> 5-4-3-2-1 grounding
+                </h4>
                 <p class="section-hint">Slowly notice, in your own time. You don't need to write anything down.</p>
                 <ol class="grounding-steps">
                     <li><strong>5</strong> things you can see</li>
@@ -463,19 +639,32 @@ pwa: true
         </div>
     </div>
 
-    <div class="quick-call-bar" id="quickCallBar">
-        <button class="quick-call-toggle" id="quickCallToggle" type="button" title="Show/hide quick help"
-            aria-label="Show or hide quick help bar">
-            <i class="fas fa-life-ring"></i>
-        </button>
-        <div class="quick-call-buttons" id="quickCallButtons">
-            <a class="quick-call-btn quick-call-danger" href="tel:111"><i class="fas fa-phone"></i> Call 111</a>
-            <a class="quick-call-btn quick-call-primary" href="tel:1737"><i class="fas fa-comment-dots"></i> Call/text
-                1737</a>
+    <!-- Shortcuts modal -->
+    <div class="modal" id="shortcutsModal" style="display: none;" role="dialog" aria-modal="true"
+        aria-labelledby="shortcutsTitle">
+        <div class="modal-content">
+            <span class="close-modal" id="closeShortcutsModal" role="button" tabindex="0"
+                aria-label="Close">&times;</span>
+            <h3 id="shortcutsTitle">Keyboard shortcuts</h3>
+            <ul class="shortcuts-list">
+                <li><kbd>?</kbd> <span>show this help</span></li>
+                <li><kbd>Esc</kbd> <span>close any modal / cancel edit</span></li>
+                <li><kbd>Ctrl</kbd>/<kbd>Cmd</kbd> + <kbd>S</kbd> <span>save now</span></li>
+                <li><kbd>Ctrl</kbd>/<kbd>Cmd</kbd> + <kbd>P</kbd> <span>print crisis plan</span></li>
+                <li><kbd>E</kbd> <span>open emergency help</span></li>
+                <li><kbd>G</kbd> <span>open grounding tool</span></li>
+            </ul>
         </div>
     </div>
 
-    <div class="toast" id="toast">✓ Plan saved</div>
+    <!-- Undo toast -->
+    <div class="toast toast-with-action" id="undoToast" role="status" aria-live="polite">
+        <span id="undoToastMessage"></span>
+        <button class="toast-action" id="undoToastBtn" type="button">Undo</button>
+    </div>
+
+    <!-- Save toast -->
+    <div class="toast" id="toast" role="status" aria-live="polite">✓ Plan saved</div>
 </div>
 
 <div id="printArea"></div>
