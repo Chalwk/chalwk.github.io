@@ -1489,13 +1489,24 @@ body.dark-mode .emergency-reasons {
 }
 
 @media print {
+    body * {
+        visibility: hidden !important;
+    }
+
     #appRoot {
         display: none !important;
     }
 
+    #printArea,
+    #printArea * {
+        visibility: visible !important;
+    }
+
     #printArea {
         display: block !important;
-        position: static;
+        position: absolute;
+        left: 0;
+        top: 0;
         width: 100%;
         padding: 1rem;
         color: #000;

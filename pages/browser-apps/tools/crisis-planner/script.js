@@ -1002,7 +1002,7 @@
             checkedNow.forEach(i => { html += `<li>${escapeHtml(i.text)}</li>`; });
             html += `</ul>`;
         } else {
-            html += `<span class="summary-empty">(nothing ticked on the "what's happening right now" checklist)</span>`;
+            html += `<span class="summary-empty">(nothing ticked on the "what's happening right now" checklist)</span><br>`;
         }
         html += `Trigger(s): ${escapeHtml(plan.triggers) || 'not specified'}<br>`;
         html += `What happened: ${escapeHtml(plan.whatHappened) || 'not specified'}</div>`;
@@ -1027,7 +1027,7 @@
 
         html += `<div class="summary-section"><strong>SAFETY INFORMATION</strong><br>`;
         if (plan.contacts.length) {
-            html += `<strong>Personal contacts:</strong>`;
+            html += `<strong>Personal contacts:</strong><br>`;
             html += `<ul class="summary-list">`;
             plan.contacts.forEach(c => {
                 const label = [c.name, c.relationship].filter(Boolean).join(' (' + (c.relationship ? '' : '')) || c.name;
@@ -1072,7 +1072,7 @@
 
         html += `<div class="summary-section"><strong>SAFETY INFORMATION</strong><br>`;
         if (plan.contacts.length) {
-            html += `<strong>Personal contacts:</strong>`;
+            html += `<strong>Personal contacts:</strong><br>`;
             html += `<ul class="summary-list">`;
             plan.contacts.forEach(c => {
                 html += `<li>${escapeHtml(c.name || '(no name)')}${c.relationship ? ` (${escapeHtml(c.relationship)})` : ''}${c.phone ? ` - ${escapeHtml(c.phone)}` : ''}</li>`;
@@ -1117,10 +1117,62 @@
     });
     summaryModal.addEventListener('click', (e) => { if (e.target === summaryModal) closeModal(summaryModal); });
 
+    function htmlToPlainText(html) {
+        const root = document.createElement('div');
+        root.innerHTML = html;
+
+        const BLOCK_TAGS = new Set([
+            'ADDRESS', 'ARTICLE', 'ASIDE', 'BLOCKQUOTE', 'DETAILS', 'DIV',
+            'DL', 'DD', 'DT', 'FIELDSET', 'FIGCAPTION', 'FIGURE', 'FOOTER',
+            'FORM', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'HEADER', 'HR',
+            'MAIN', 'NAV', 'OL', 'P', 'PRE', 'SECTION', 'TABLE',
+            'TBODY', 'TD', 'TFOOT', 'TH', 'THEAD', 'TR', 'UL'
+        ]);
+
+        function walk(node) {
+            let out = '';
+            for (const child of node.childNodes) {
+                if (child.nodeType === Node.TEXT_NODE) {
+                    out += child.nodeValue;
+                    continue;
+                }
+                if (child.nodeType !== Node.ELEMENT_NODE) continue;
+
+                const tag = child.tagName;
+
+                if (tag === 'BR') {
+                    out += '\n';
+                    continue;
+                }
+                if (tag === 'HR') {
+                    if (out && !out.endsWith('\n')) out += '\n';
+                    out += '\u2500'.repeat(50) + '\n';
+                    continue;
+                }
+                if (tag === 'LI') {
+                    const inner = walk(child).trim();
+                    if (out && !out.endsWith('\n')) out += '\n';
+                    out += '\u2022 ' + inner + '\n';
+                    continue;
+                }
+
+                out += walk(child);
+                if (BLOCK_TAGS.has(tag) && out && !out.endsWith('\n')) {
+                    out += '\n';
+                }
+            }
+            return out;
+        }
+
+        let text = walk(root);
+        return text
+            .replace(/[ \t]+\n/g, '\n')
+            .replace(/\n{3,}/g, '\n\n')
+            .trim();
+    }
+
     function summaryText() {
-        const temp = document.createElement('div');
-        temp.innerHTML = summaryOutput.innerHTML;
-        return temp.textContent;
+        return htmlToPlainText(summaryOutput.innerHTML);
     }
 
     copySummaryBtn.addEventListener('click', () => {
