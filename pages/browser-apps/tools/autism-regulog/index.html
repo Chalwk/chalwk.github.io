@@ -9,162 +9,235 @@ pwa: true
 
 <link href="style.css" rel="stylesheet">
 
+<script>
+    (function () {
+        try {
+            var t = localStorage.getItem("autism-regulog-theme");
+            if (t !== "dark" && t !== "light") {
+                t = "light";
+            }
+            document.documentElement.setAttribute("data-theme", t);
+        } catch (e) {
+            document.documentElement.setAttribute("data-theme", "light");
+        }
+    })();
+</script>
+
 <main>
     <a class="skip" href="#app">Skip to main content</a>
 
     <div class="container">
-        <!-- Main application grid: left (symptoms), right (suggestions), bottom (history) -->
-        <div aria-labelledby="app-title" class="app-grid" id="app" role="main">
-            <h2 class="sr-only" id="app-title">Tracker app</h2>
+        <div class="app-shell" id="app">
 
-            <!-- Left panel: symptom selection + intensity -->
-            <section aria-labelledby="symptom-heading" class="panel panel-left" id="symptom-panel">
+            <header class="app-header">
+                <div class="app-header-text">
+                    <h1 class="app-title">Autism Regulog</h1>
+                    <p class="app-subtitle">
+                        Check in with yourself, spot patterns over time, and get coping ideas that fit.
+                        Everything stays on your device.
+                    </p>
+                </div>
+
+                <div class="app-tools" role="group" aria-label="App tools">
+                    <button class="icon-btn" id="theme-btn" type="button" aria-pressed="false" title="Toggle dark mode">
+                        <span aria-hidden="true" id="theme-icon">🌙</span>
+                        <span class="sr-only">Toggle dark mode</span>
+                    </button>
+                    <button class="icon-btn" id="help-btn" type="button" title="Quick help">
+                        <span aria-hidden="true">?</span>
+                        <span class="sr-only">Quick help</span>
+                    </button>
+                    <button class="icon-btn" id="open-settings" type="button" title="Settings">
+                        <span aria-hidden="true">⚙</span>
+                        <span class="sr-only">Settings</span>
+                    </button>
+                </div>
+            </header>
+
+            <section class="panel" id="symptom-panel" aria-labelledby="symptom-heading">
                 <div class="panel-head">
-                    <h2 id="symptom-heading">Symptoms &amp; States</h2>
-                    <p class="muted small">Select items that match how you feel. Adjust intensity when relevant.</p>
+                    <span class="step-badge">Step 1</span>
+                    <h2 id="symptom-heading">How are you feeling right now?</h2>
+                    <p class="muted">
+                        Tap anything that matches. Nothing is required - you can skip, stop, or come back later.
+                    </p>
                 </div>
 
                 <div class="controls-row">
                     <label class="search-wrap" for="search">
-                        <input aria-label="Filter symptoms" id="search" placeholder="Filter symptoms or tags" />
+                        <span class="sr-only">Filter symptoms</span>
+                        <input id="search" type="search" placeholder="Search symptoms or tags…" autocomplete="off"
+                            spellcheck="false" />
                     </label>
-                    <div class="controls-cta">
-                        <button class="btn btn-secondary" id="clear-btn" title="Clear selections">Clear</button>
-                    </div>
+                    <button class="btn ghost" id="clear-btn" type="button" title="Clear all selections">
+                        Clear
+                    </button>
                 </div>
 
-                <form aria-describedby="symptom-help" id="symptom-form">
-                    <p class="muted" id="symptom-help">Tap to select; choose intensity if needed. Use Analyze for
-                        suggestions.</p>
+                <div class="chip-row" id="group-filter" role="group" aria-label="Filter by category"></div>
 
-                    <!-- Dynamic symptom list injected via JS (see script.js) -->
-                    <div aria-live="polite" class="symptom-list" id="symptom-list" role="list"></div>
+                <form id="symptom-form" aria-describedby="symptom-help">
+                    <p class="sr-only" id="symptom-help">
+                        Select any symptoms that match how you feel, then optionally choose an intensity.
+                        Press Analyze to see suggestions, or Save entry to keep a record.
+                    </p>
+
+                    <div class="symptom-list" id="symptom-list"></div>
+
+                    <div class="selection-summary" id="selection-summary" aria-live="polite"></div>
 
                     <div class="actions-row">
-                        <button class="btn primary" id="analyze-btn" type="button">Analyze</button>
-                        <button class="btn btn-secondary" id="save-btn" title="Save entry to local history"
-                            type="button">Save
-                            entry
+                        <button class="btn primary" id="analyze-btn" type="button">
+                            Analyze
+                        </button>
+                        <button class="btn secondary" id="save-btn" type="button"
+                            title="Save this check-in to your local history">
+                            Save entry
                         </button>
                     </div>
                 </form>
             </section>
 
-            <!-- Right panel: suggestions + pattern insights -->
-            <section aria-labelledby="results-heading" class="panel panel-right" id="result-panel">
-                <div class="panel-head">
-                    <h2 id="results-heading">Suggestions &amp; Insights</h2>
-                    <p class="muted small">Check how you are feeling and get matched insights and coping strategies
-                        based on your selections.</p>
+            <section class="panel" id="result-panel" aria-labelledby="results-heading">
+                <div class="panel-head row-between">
+                    <div>
+                        <span class="step-badge">Step 2</span>
+                        <h2 id="results-heading">Suggestions &amp; insights</h2>
+                        <p class="muted">
+                            Matched ideas based on what you selected. Pick one small thing - you do not have to do it
+                            all.
+                        </p>
+                    </div>
+                    <button class="btn secondary small" id="copy-results-btn" type="button" hidden>
+                        Copy summary
+                    </button>
                 </div>
 
-                <div class="result-summary muted" id="result-summary">No analysis yet. Pick symptoms and press
-                    Analyze.
+                <div class="result-summary" id="result-summary">
+                    No analysis yet. Pick anything that fits and press <strong>Analyze</strong>.
                 </div>
 
-                <div aria-live="polite" class="suggestions" id="suggestions"></div>
+                <div class="suggestions" id="suggestions" aria-live="polite"></div>
 
-                <div aria-live="polite" class="pattern-insights" id="pattern-insights-wrap">
-                    <h3>Pattern Recognition</h3>
-                    <div class="pattern-insights-content" id="pattern-insights">
-                        <p class="muted">Pattern insights will appear here after multiple entries.</p>
+                <div class="pattern-insights" id="pattern-insights-wrap">
+                    <h3>Pattern recognition</h3>
+                    <div id="pattern-insights">
+                        <p class="muted">Patterns will appear here once you have saved a few entries.</p>
                     </div>
                 </div>
 
-                <details aria-label="How this works" class="notes" id="explain-details">
+                <details class="notes" id="explain-details">
                     <summary>How this works</summary>
-                    <p>This tool uses weighted tag scoring to suggest strategies. It is not medical advice. If in
-                        crisis,
-                        contact local emergency services or a professional.</p>
+                    <p>
+                        This tool uses weighted tag scoring to suggest strategies. It is not medical advice
+                        and it cannot diagnose anything. If you are in crisis, contact your local emergency
+                        services or a professional you trust.
+                    </p>
                 </details>
             </section>
 
-            <!-- Bottom panel: history, export/import, and charts -->
-            <section aria-labelledby="history-heading" class="panel panel-bottom" id="history-panel">
+            <section class="panel" id="history-panel" aria-labelledby="history-heading">
                 <div class="panel-head row-between">
                     <div>
-                        <h2 id="history-heading">History &amp; Patterns</h2>
-                        <p class="muted small">Entries are stored locally. Export backups or import JSON to merge
-                            history.</p>
+                        <span class="step-badge">Step 3</span>
+                        <h2 id="history-heading">History &amp; patterns</h2>
+                        <p class="muted">Saved on this device only. Export a backup whenever you like.</p>
                     </div>
-                    <div aria-label="Export and import actions" class="export-actions" role="group">
-                        <button class="btn btn-secondary" id="export-csv-btn" title="Export history as CSV">Export CSV
-                        </button>
-                        <button class="btn btn-secondary" id="export-json-btn" title="Export as JSON">Export JSON
-                        </button>
-                        <button class="btn btn-secondary" id="import-json-btn" title="Import JSON backup">Import JSON
-                        </button>
+
+                    <div class="export-actions" role="group" aria-label="Backup actions">
+                        <button class="btn secondary" id="export-csv-btn" type="button">Export CSV</button>
+                        <button class="btn secondary" id="export-json-btn" type="button">Export JSON</button>
+                        <button class="btn secondary" id="import-json-btn" type="button">Import</button>
                     </div>
                 </div>
 
-                <div aria-live="polite" class="history-list" id="history-list"></div>
+                <div class="history-list" id="history-list" aria-live="polite"></div>
 
                 <div class="history-footer">
-                    <div class="history-actions">
-                        <button class="btn ghost" id="clear-history" title="Remove all saved entries">Clear All</button>
+                    <div class="history-more" id="history-more"></div>
+                    <button class="btn ghost" id="clear-history" type="button">Clear all history</button>
+                </div>
+
+                <div class="charts">
+                    <div class="chart-wrap">
+                        <h3 class="chart-title">Tag frequency</h3>
+                        <canvas id="tag-chart" role="img"
+                            aria-label="Bar chart of how often each tag appears in your history"></canvas>
                     </div>
 
-                    <!-- Canvas charts for tag + symptom frequency -->
-                    <div class="charts">
-                        <div class="chart-wrap">
-                            <h3 class="chart-title">Tag frequency (history)</h3>
-                            <canvas aria-label="Tag frequency chart" height="160" id="tag-chart" width="400"></canvas>
-                        </div>
-
-                        <div class="chart-wrap">
-                            <h3 class="chart-title">Symptom patterns</h3>
-                            <canvas aria-label="Symptom frequency chart" height="160" id="symptom-chart"
-                                width="400"></canvas>
-                        </div>
+                    <div class="chart-wrap">
+                        <h3 class="chart-title">Symptom frequency</h3>
+                        <canvas id="symptom-chart" role="img"
+                            aria-label="Bar chart of how often each symptom appears in your history"></canvas>
                     </div>
                 </div>
             </section>
+
         </div>
     </div>
 </main>
 
-<!-- Settings modal dialog -->
-<dialog aria-labelledby="settings-title" id="settings-dialog">
+<dialog id="settings-dialog" aria-labelledby="settings-title">
     <form class="dialog-form" method="dialog">
         <h3 id="settings-title">Settings</h3>
 
         <label class="field">
-            <span>Max history entries</span>
-            <input id="max-history" max="10000" min="5" type="number" />
+            <span>Maximum saved entries</span>
+            <input id="max-history" type="number" min="5" max="10000" step="5" />
         </label>
 
         <label class="checkbox">
             <input id="enable-notifications" type="checkbox" />
-            <span>Enable reminder notifications</span>
+            <span>Gentle in-page check-in reminders</span>
         </label>
 
         <label class="checkbox">
             <input id="enable-sounds" type="checkbox" />
-            <span>Enable interface sounds</span>
+            <span>Soft interface sounds</span>
         </label>
 
-        <div class="muted small">Data remains local. Use Export to back up. Import will merge entries.</div>
+        <p class="muted small" style="margin:0">
+            Your data never leaves this device. Use Export to back it up, Import to merge a backup in.
+        </p>
 
         <menu class="dialog-actions">
-            <button class="btn primary" id="save-settings">Save</button>
-            <button class="btn btn-secondary" id="close-settings">Close</button>
+            <button class="btn secondary" value="cancel">Close</button>
+            <button class="btn primary" id="save-settings" value="save">Save</button>
         </menu>
     </form>
 </dialog>
 
-<!-- Help modal dialog -->
-<dialog aria-labelledby="help-title" id="help-dialog">
+<dialog id="help-dialog" aria-labelledby="help-title">
     <form class="dialog-form" method="dialog">
         <h3 id="help-title">Quick help</h3>
-        <p class="muted">Select symptoms, set intensity, Analyze to view suggestions, then Save to keep an entry. Export
-            regularly to backup.</p>
+        <ol class="help-list">
+            <li>Pick anything in <strong>Step 1</strong> that matches how you feel. Intensity is optional.</li>
+            <li>Press <strong>Analyze</strong> for coping ideas, or <strong>Save entry</strong> to keep a record.</li>
+            <li>Look at <strong>Step 3</strong> after a few entries to see your patterns.</li>
+            <li>Export a backup now and then - clearing your browser data will erase your history.</li>
+        </ol>
+        <p class="muted small" style="margin:0">
+            Tip: press <kbd>/</kbd> to jump to the search box, and <kbd>Ctrl</kbd> + <kbd>Enter</kbd> to analyze.
+        </p>
         <menu class="dialog-actions">
-            <button class="btn btn-secondary" id="close-help">Close</button>
+            <button class="btn secondary" value="close">Close</button>
         </menu>
     </form>
 </dialog>
 
-<!-- Hidden file input for JSON import -->
-<input accept="application/json" id="file-input" style="display:none" type="file" />
+<dialog id="confirm-dialog" aria-labelledby="confirm-title">
+    <form class="dialog-form" method="dialog">
+        <h3 id="confirm-title">Are you sure?</h3>
+        <p class="muted" id="confirm-message" style="margin:0"></p>
+        <menu class="dialog-actions">
+            <button class="btn secondary" id="confirm-cancel" value="cancel">Cancel</button>
+            <button class="btn danger" id="confirm-ok" value="confirm">Confirm</button>
+        </menu>
+    </form>
+</dialog>
+
+<div class="toast-region" id="toast-region" role="status" aria-live="polite" aria-atomic="false"></div>
+
+<input accept="application/json,.json" id="file-input" style="display:none" type="file" />
 
 <script src="script.js"></script>

@@ -109,12 +109,12 @@ export function deleteCategory(name) {
     // Pick a safe fallback that is NOT the category being deleted.
     let fallback = DEFAULT_FALLBACK_CATEGORY;
     if (name === fallback) {
-        // Deleting the default fallback — use any other category, or
+        // Deleting the default fallback - use any other category, or
         // re-add the default fallback if none remain.
         const others = categories.filter(c => c !== name);
         fallback = others.length ? others[0] : DEFAULT_FALLBACK_CATEGORY;
     } else if (!categories.includes(fallback)) {
-        // Fallback doesn't exist yet — create it or use another existing category.
+        // Fallback doesn't exist yet - create it or use another existing category.
         const others = categories.filter(c => c !== name);
         fallback = others.includes(DEFAULT_FALLBACK_CATEGORY)
             ? DEFAULT_FALLBACK_CATEGORY
