@@ -1,9 +1,9 @@
 {
-  "name": "Sensory & State Tracker",
-  "short_name": "SensoryStateTracker",
+  "name": "Autism Regulog",
+  "short_name": "AutismRegulog",
   "description": "Check how you are feeling and get matched insights and coping strategies based on your selections.",
-  "start_url": "/pages/browser-apps/tools/sensory-state-tracker/",
-  "scope": "/pages/browser-apps/tools/sensory-state-tracker/",
+  "start_url": "/pages/browser-apps/tools/autism-regulog/",
+  "scope": "/pages/browser-apps/tools/autism-regulog/",
   "display": "standalone",
   "background_color": "#4a86e8",
   "theme_color": "#4a86e8",

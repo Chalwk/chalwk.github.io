@@ -1,7 +1,7 @@
 // Copyright (c) 2024-2026 Jericho Crosby (Chalwk). All Rights Reserved.
 
 (() => {
-    const STORAGE_KEY = "autism-tracker-history-v3";
+    const STORAGE_KEY = "autism-regulog-history-v3";
     const DEFAULT_MAX_HISTORY = 200;
 
     // List of symptoms with tags
@@ -594,7 +594,7 @@
             return [iso, `"${fmtDate(item.ts)}"`, `"${escapeCsv(labels)}"`, `"${escapeCsv(weights)}"`, `"${escapeCsv(top)}"`];
         });
         const csv = [header.join(","), ...rows.map(r => r.join(","))].join("\n");
-        downloadBlob(csv, `autism-tracker-history-${new Date().toISOString().slice(0, 10)}.csv`, "text/csv");
+        downloadBlob(csv, `autism-regulog-history-${new Date().toISOString().slice(0, 10)}.csv`, "text/csv");
     }
 
     function exportJSON() {
@@ -604,7 +604,7 @@
             return;
         }
         const json = JSON.stringify(arr, null, 2);
-        downloadBlob(json, `autism-tracker-history-${new Date().toISOString().slice(0, 10)}.json`, "application/json");
+        downloadBlob(json, `autism-regulog-history-${new Date().toISOString().slice(0, 10)}.json`, "application/json");
     }
 
     function downloadBlob(content, filename, type) {
