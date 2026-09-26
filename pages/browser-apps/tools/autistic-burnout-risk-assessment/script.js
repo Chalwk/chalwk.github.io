@@ -1,325 +1,384 @@
 // Copyright (c) 2024-2026 Jericho Crosby (Chalwk). All Rights Reserved.
 
-// Grab DOM elements we'll need often
+// ---------- Element refs ----------
 const calculateBtn = document.getElementById('calculate-btn');
+const clearAnswersBtn = document.getElementById('clear-answers-btn');
 const saveBtn = document.getElementById('save-btn');
+const copyResultsBtn = document.getElementById('copy-results-btn');
 const recommendationsBtn = document.getElementById('recommendations-btn');
 const clearHistoryBtn = document.getElementById('clear-history-btn');
 const exportBtn = document.getElementById('export-btn');
 const riskIndicator = document.getElementById('risk-indicator');
 const riskScore = document.getElementById('risk-score');
 const riskLevel = document.getElementById('risk-level');
+const riskDescription = document.getElementById('risk-description');
 const factorBreakdown = document.getElementById('factor-breakdown');
 const recommendationsCard = document.getElementById('recommendations-card');
 const historyList = document.getElementById('history-list');
-const tabs = document.querySelectorAll('.tab');
-const tabContents = document.querySelectorAll('.tab-content');
-const collapseToggles = document.querySelectorAll('.collapse-toggle');
-const sliders = document.querySelectorAll('.slider');
-const sliderValues = document.querySelectorAll('.slider-value');
-const energyScore = document.getElementById('energy-score');
-const sensoryScore = document.getElementById('sensory-score');
-const executiveScore = document.getElementById('executive-score');
-const socialScore = document.getElementById('social-score');
-const emotionScore = document.getElementById('emotion-score');
+const progressBar = document.getElementById('progress-bar');
+const progressText = document.getElementById('progress-text');
+
+const tabs = document.querySelectorAll('[role="tab"]');
+const tabContents = document.querySelectorAll('[role="tabpanel"]');
+const allRadios = document.querySelectorAll('input[type="radio"]');
+
+const scoreEls = {
+    energy: document.getElementById('energy-score'),
+    sensory: document.getElementById('sensory-score'),
+    executive: document.getElementById('executive-score'),
+    social: document.getElementById('social-score'),
+    emotion: document.getElementById('emotion-score')
+};
+const barEls = {
+    energy: document.getElementById('energy-bar'),
+    sensory: document.getElementById('sensory-bar'),
+    executive: document.getElementById('executive-bar'),
+    social: document.getElementById('social-bar'),
+    emotion: document.getElementById('emotion-bar')
+};
+
 const STORAGE_KEY = 'burnout-assessment-history';
-const answeredSliders = new Set();  // Track which sliders have been touched
+const DRAFT_KEY = 'burnout-assessment-draft-v2';
 
-// Slider setup: each slider starts at 3 (neutral) and is "unanswered"
-sliders.forEach((slider, index) => {
-    slider.value = 3;
-    sliderValues[index].textContent = '3';
-    slider.classList.add('unanswered');
+// All unique question names (radio group names)
+const QUESTION_NAMES = [...new Set(Array.from(allRadios).map(r => r.name))];
+const TOTAL_QUESTIONS = QUESTION_NAMES.length;
 
-    slider.addEventListener('input', function () {
-        sliderValues[index].textContent = this.value;
-        answeredSliders.add(this.id);
-        slider.classList.remove('unanswered');
-        slider.classList.add('answered');
-        updateCalculateButtonState();
+// ---------- Answer tracking ----------
+const answers = new Map();
+
+allRadios.forEach(radio => {
+    radio.addEventListener('change', e => {
+        answers.set(e.target.name, parseInt(e.target.value, 10));
+        saveDraft();
+        updateProgress();
+        // Clear any previous highlight if all answered
+        const fieldset = e.target.closest('fieldset');
+        if (fieldset) fieldset.classList.remove('unanswered');
     });
 });
 
-// Enable calculate button only after all sliders have been moved at least once
-function updateCalculateButtonState() {
-    const allAnswered = answeredSliders.size === sliders.length;
-    if (allAnswered) {
-        calculateBtn.disabled = false;
-        calculateBtn.classList.remove('disabled');
-        calculateBtn.title = 'Calculate your burnout risk';
-    } else {
-        calculateBtn.disabled = true;
-        calculateBtn.classList.add('disabled');
-        const remaining = sliders.length - answeredSliders.size;
-        calculateBtn.title = `Please answer ${remaining} more question${remaining !== 1 ? 's' : ''}`;
-    }
+function updateProgress() {
+    const answered = answers.size;
+    const pct = (answered / TOTAL_QUESTIONS) * 100;
+    progressBar.style.width = pct + '%';
+    progressText.textContent = `${answered} of ${TOTAL_QUESTIONS} answered`;
+
+    const allDone = answered === TOTAL_QUESTIONS;
+    calculateBtn.disabled = !allDone;
+    calculateBtn.classList.toggle('disabled', !allDone);
+    calculateBtn.title = allDone
+        ? 'Calculate your burnout risk'
+        : `Please answer ${TOTAL_QUESTIONS - answered} more question${TOTAL_QUESTIONS - answered !== 1 ? 's' : ''}`;
 }
 
-updateCalculateButtonState();
+// ---------- Draft save/load (so an interrupted session is not lost) ----------
+function saveDraft() {
+    try {
+        const obj = {};
+        answers.forEach((v, k) => { obj[k] = v; });
+        localStorage.setItem(DRAFT_KEY, JSON.stringify(obj));
+    } catch (e) { /* storage may be unavailable */ }
+}
 
-// Tab switching for recommendations
-tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-        tabs.forEach(t => t.classList.remove('active'));
-        tabContents.forEach(c => c.classList.remove('active'));
-        tab.classList.add('active');
-        const tabId = `${tab.dataset.tab}-tab`;
-        document.getElementById(tabId).classList.add('active');
-    });
-});
-
-// Collapsible sections - start collapsed to save screen space
-function initializeCollapsedState() {
-    collapseToggles.forEach(toggle => {
-        const targetId = toggle.getAttribute('data-target');
-        const content = document.getElementById(targetId);
-        const icon = toggle.querySelector('.collapse-icon');
-
-        content.classList.add('collapsed');
-        content.style.maxHeight = '0';
-        icon.style.transform = 'rotate(-90deg)';
-
-        toggle.addEventListener('click', function () {
-            if (content.classList.contains('collapsed')) {
-                content.classList.remove('collapsed');
-                content.style.maxHeight = content.scrollHeight + 'px';
-                icon.style.transform = 'rotate(0deg)';
-            } else {
-                content.classList.add('collapsed');
-                content.style.maxHeight = '0';
-                icon.style.transform = 'rotate(-90deg)';
+function loadDraft() {
+    try {
+        const draft = JSON.parse(localStorage.getItem(DRAFT_KEY) || '{}');
+        Object.entries(draft).forEach(([name, value]) => {
+            const radio = document.querySelector(`input[name="${CSS.escape(name)}"][value="${value}"]`);
+            if (radio) {
+                radio.checked = true;
+                answers.set(name, parseInt(value, 10));
             }
         });
-    });
+        updateProgress();
+    } catch (e) { /* ignore */ }
 }
 
-initializeCollapsedState();
+// ---------- Clear answers ----------
+clearAnswersBtn.addEventListener('click', () => {
+    if (answers.size === 0) return;
+    if (!confirm('Clear all your answers? This cannot be undone.')) return;
+    answers.clear();
+    allRadios.forEach(r => { r.checked = false; });
+    try { localStorage.removeItem(DRAFT_KEY); } catch (e) { }
+    updateProgress();
+    // Reset results panel
+    riskIndicator.style.left = '0%';
+    riskScore.textContent = '--';
+    riskLevel.textContent = 'Complete assessment first';
+    riskLevel.className = 'risk-level';
+    riskDescription.textContent = '';
+    factorBreakdown.style.display = 'none';
+    recommendationsCard.style.display = 'none';
+});
 
-// Main risk calculation
+// ---------- Tabs (with keyboard arrow navigation) ----------
+tabs.forEach((tab, idx) => {
+    tab.addEventListener('click', () => activateTab(tab));
+    tab.addEventListener('keydown', e => {
+        let newIdx = null;
+        if (e.key === 'ArrowRight') newIdx = (idx + 1) % tabs.length;
+        else if (e.key === 'ArrowLeft') newIdx = (idx - 1 + tabs.length) % tabs.length;
+        else if (e.key === 'Home') newIdx = 0;
+        else if (e.key === 'End') newIdx = tabs.length - 1;
+        if (newIdx !== null) {
+            e.preventDefault();
+            tabs[newIdx].focus();
+            activateTab(tabs[newIdx]);
+        }
+    });
+});
+
+function activateTab(tab) {
+    tabs.forEach(t => {
+        t.classList.remove('active');
+        t.setAttribute('aria-selected', 'false');
+    });
+    tabContents.forEach(c => c.classList.remove('active'));
+    tab.classList.add('active');
+    tab.setAttribute('aria-selected', 'true');
+    const panel = document.getElementById(`${tab.dataset.tab}-tab`);
+    if (panel) panel.classList.add('active');
+}
+
+// ---------- Main calculation ----------
 calculateBtn.addEventListener('click', calculateRisk);
 
 function calculateRisk() {
-    // Safety check: make sure every slider has been used
-    if (answeredSliders.size !== sliders.length) {
-        const unansweredCount = sliders.length - answeredSliders.size;
-        alert(`Please answer all ${unansweredCount} remaining question${unansweredCount !== 1 ? 's' : ''} before calculating your risk.`);
-        sliders.forEach(slider => {
-            if (!answeredSliders.has(slider.id)) {
-                slider.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                slider.focus();
+    if (answers.size !== TOTAL_QUESTIONS) {
+        const remaining = TOTAL_QUESTIONS - answers.size;
+        alert(`Please answer all ${remaining} remaining question${remaining !== 1 ? 's' : ''} before calculating.`);
+        // Highlight the first unanswered question
+        for (const name of QUESTION_NAMES) {
+            if (!answers.has(name)) {
+                const fieldset = document.querySelector(`input[name="${CSS.escape(name)}"]`)?.closest('fieldset');
+                if (fieldset) {
+                    fieldset.classList.add('unanswered');
+                    fieldset.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    fieldset.querySelector('input')?.focus({ preventScroll: true });
+                }
+                break;
             }
-        });
+        }
         return;
     }
 
-    // Grab all slider values (each factor has 4 questions)
-    const energyLevel = parseInt(document.getElementById('energy-level').value);
-    const sleepQuality = parseInt(document.getElementById('sleep-quality').value);
-    const routineDifficulty = parseInt(document.getElementById('routine-difficulty').value);
-    const stimulantUse = parseInt(document.getElementById('stimulant-use').value);
+    const v = name => answers.get(name);
 
-    const sensoryOverload = parseInt(document.getElementById('sensory-overload').value);
-    const sensoryAvoidance = parseInt(document.getElementById('sensory-avoidance').value);
-    const tactileSensitivity = parseInt(document.getElementById('tactile-sensitivity').value);
-    const sensoryTools = parseInt(document.getElementById('sensory-tools').value);
-
-    const taskInitiation = parseInt(document.getElementById('task-initiation').value);
-    const planningDifficulty = parseInt(document.getElementById('planning-difficulty').value);
-    const memoryIssues = parseInt(document.getElementById('memory-issues').value);
-    const decisionFatigue = parseInt(document.getElementById('decision-fatigue').value);
-
-    const socialDrain = parseInt(document.getElementById('social-drain').value);
-    const maskingLevel = parseInt(document.getElementById('masking-level').value);
-    const communicationDifficulty = parseInt(document.getElementById('communication-difficulty').value);
-    const socialIsolation = parseInt(document.getElementById('social-isolation').value);
-
-    const emotionalReactivity = parseInt(document.getElementById('emotional-reactivity').value);
-    const emotionalNumbness = parseInt(document.getElementById('emotional-numbness').value);
-    const meltdownFrequency = parseInt(document.getElementById('meltdown-frequency').value);
-    const hopelessness = parseInt(document.getElementById('hopelessness').value);
-
-    // Each factor max score is 20 (weights are applied per question)
     const energyFactor = Math.round(
-        (energyLevel * 1.2) +
-        (sleepQuality * 1.1) +
-        (routineDifficulty * 1.0) +
-        (stimulantUse * 0.9)
+        (v('energy-level') * 1.2) +
+        (v('sleep-quality') * 1.1) +
+        (v('routine-difficulty') * 1.0) +
+        (v('stimulant-use') * 0.9)
     );
 
     const sensoryFactor = Math.round(
-        (sensoryOverload * 1.1) +
-        (sensoryAvoidance * 1.0) +
-        (tactileSensitivity * 0.9) +
-        (sensoryTools * 0.8)
+        (v('sensory-overload') * 1.1) +
+        (v('sensory-avoidance') * 1.0) +
+        (v('tactile-sensitivity') * 0.9) +
+        (v('sensory-tools') * 0.8)
     );
 
     const executiveFactor = Math.round(
-        (taskInitiation * 1.2) +
-        (planningDifficulty * 1.1) +
-        (memoryIssues * 1.0) +
-        (decisionFatigue * 1.1)
+        (v('task-initiation') * 1.2) +
+        (v('planning-difficulty') * 1.1) +
+        (v('memory-issues') * 1.0) +
+        (v('decision-fatigue') * 1.1)
     );
 
     const socialFactor = Math.round(
-        (socialDrain * 1.1) +
-        (maskingLevel * 1.2) +
-        (communicationDifficulty * 1.0) +
-        (socialIsolation * 0.9)
+        (v('social-drain') * 1.1) +
+        (v('masking-level') * 1.2) +
+        (v('communication-difficulty') * 1.0) +
+        (v('social-isolation') * 0.9)
     );
 
     const emotionFactor = Math.round(
-        (emotionalReactivity * 1.1) +
-        (emotionalNumbness * 1.0) +
-        (meltdownFrequency * 1.3) +
-        (hopelessness * 1.2)
+        (v('emotional-reactivity') * 1.1) +
+        (v('emotional-numbness') * 1.0) +
+        (v('meltdown-frequency') * 1.3) +
+        (v('hopelessness') * 1.2)
     );
 
-    // Apply a compounding multiplier if several factors are already severe (>=15/20)
     const factorScores = [energyFactor, sensoryFactor, executiveFactor, socialFactor, emotionFactor];
-    const highRiskFactors = factorScores.filter(score => score >= 15).length;
+    const highRiskFactors = factorScores.filter(s => s >= 15).length;
     const compoundingMultiplier = 1 + (highRiskFactors * 0.1);
-    let totalScore = Math.round(
-        (energyFactor + sensoryFactor + executiveFactor + socialFactor + emotionFactor) *
-        compoundingMultiplier
-    );
-    totalScore = Math.min(totalScore, 100);   // Cap at 100
+    let totalScore = Math.round(factorScores.reduce((a, b) => a + b, 0) * compoundingMultiplier);
+    totalScore = Math.min(totalScore, 100);
 
-    // Update UI with factor breakdowns
-    energyScore.textContent = `${energyFactor}/20`;
-    sensoryScore.textContent = `${sensoryFactor}/20`;
-    executiveScore.textContent = `${executiveFactor}/20`;
-    socialScore.textContent = `${socialFactor}/20`;
-    emotionScore.textContent = `${emotionFactor}/20`;
+    // Factor UI
+    scoreEls.energy.textContent = `${energyFactor}/20`;
+    scoreEls.sensory.textContent = `${sensoryFactor}/20`;
+    scoreEls.executive.textContent = `${executiveFactor}/20`;
+    scoreEls.social.textContent = `${socialFactor}/20`;
+    scoreEls.emotion.textContent = `${emotionFactor}/20`;
+
+    setBar('energy', energyFactor);
+    setBar('sensory', sensoryFactor);
+    setBar('executive', executiveFactor);
+    setBar('social', socialFactor);
+    setBar('emotion', emotionFactor);
+
     factorBreakdown.style.display = 'block';
 
-    // Update risk meter position (percentage)
+    // Risk meter
     const riskPercentage = Math.min((totalScore / 100) * 100, 100);
     riskIndicator.style.left = `${riskPercentage}%`;
     riskScore.textContent = totalScore;
 
-    // Determine risk level text and style
     let riskText = '';
     let riskClass = '';
-    let riskDescription = '';
-
+    let riskDesc = '';
     if (totalScore <= 20) {
         riskText = 'Low Risk';
         riskClass = 'low-risk';
-        riskDescription = 'Minimal signs of burnout. Good self-care practices detected.';
+        riskDesc = 'Minimal signs of burnout. Your self-care practices appear to be working well.';
     } else if (totalScore <= 40) {
         riskText = 'Moderate Risk';
         riskClass = 'medium-risk';
-        riskDescription = 'Early warning signs present. Consider preventative strategies.';
+        riskDesc = 'Early warning signs are present. Consider preventative strategies and extra rest.';
     } else if (totalScore <= 60) {
         riskText = 'High Risk';
         riskClass = 'high-risk';
-        riskDescription = 'Significant burnout symptoms. Active intervention recommended.';
+        riskDesc = 'Significant burnout symptoms. Active intervention and support are recommended.';
     } else if (totalScore <= 80) {
         riskText = 'Severe Risk';
         riskClass = 'critical-risk';
-        riskDescription = 'Severe burnout symptoms. Professional support strongly advised.';
+        riskDesc = 'Severe burnout symptoms. Professional support is strongly advised.';
     } else {
         riskText = 'Critical Risk';
         riskClass = 'critical-risk';
-        riskDescription = 'Critical level of burnout. Immediate professional support needed.';
+        riskDesc = 'Critical level of burnout. Please seek immediate professional support.';
     }
 
     riskLevel.textContent = riskText;
     riskLevel.className = `risk-level ${riskClass}`;
+    riskDescription.textContent = riskDesc;
 
-    // Optionally show description (if element exists)
-    const riskDescriptionEl = document.getElementById('risk-description');
-    if (riskDescriptionEl) {
-        riskDescriptionEl.textContent = riskDescription;
-    }
-
-    // Update priority badges on recommendation tabs based on highest factor scores
     updatePriorityRecommendations(energyFactor, sensoryFactor, executiveFactor, socialFactor, emotionFactor);
-    factorBreakdown.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    // Scroll to results
+    document.getElementById('results-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-// Dynamically mark which recommendation tabs are highest priority
+function setBar(key, score) {
+    const bar = barEls[key];
+    if (!bar) return;
+    bar.style.width = `${(score / 20) * 100}%`;
+    bar.classList.remove('low', 'medium', 'high');
+    if (score >= 15) bar.classList.add('high');
+    else if (score >= 9) bar.classList.add('medium');
+    else bar.classList.add('low');
+}
+
+// ---------- Tab priority badge ----------
 function updatePriorityRecommendations(energy, sensory, executive, social, emotion) {
     const factors = [
-        { name: 'energy', score: energy, label: 'Energy Management' },
-        { name: 'sensory', score: sensory, label: 'Sensory Processing' },
-        { name: 'executive', score: executive, label: 'Executive Function' },
-        { name: 'social', score: social, label: 'Social Interaction' },
-        { name: 'emotion', score: emotion, label: 'Emotional Regulation' }
+        { name: 'energy', score: energy },
+        { name: 'sensory', score: sensory },
+        { name: 'executive', score: executive },
+        { name: 'social', score: social },
+        { name: 'emotion', score: emotion }
     ];
     factors.sort((a, b) => b.score - a.score);
 
-    // Remove old priority indicators to avoid duplicates
-    document.querySelectorAll('.priority-indicator').forEach(indicator => indicator.remove());
+    document.querySelectorAll('.priority-indicator').forEach(i => i.remove());
 
     factors.forEach((factor, index) => {
         const tab = document.querySelector(`[data-tab="${factor.name}"]`);
-        if (tab) {
-            let priorityText = '';
-            let priorityClass = '';
-            if (factor.score >= 16 || index === 0) {
-                priorityText = 'Highest Priority';
-                priorityClass = 'priority-high';
-            } else if (factor.score >= 12 || index <= 1) {
-                priorityText = 'High Priority';
-                priorityClass = 'priority-high';
-            } else if (factor.score >= 8 || index <= 2) {
-                priorityText = 'Medium Priority';
-                priorityClass = 'priority-medium';
-            } else {
-                priorityText = 'Lower Priority';
-                priorityClass = 'priority-low';
-            }
-            const priorityBadge = document.createElement('span');
-            priorityBadge.className = `priority-badge ${priorityClass} priority-indicator`;
-            priorityBadge.textContent = priorityText;
-            priorityBadge.title = `${factor.label}: ${factor.score}/20`;
-            tab.appendChild(priorityBadge);
-        }
+        if (!tab) return;
+        let text, cls;
+        if (factor.score >= 16 || index === 0) { text = 'Highest Priority'; cls = 'priority-high'; }
+        else if (factor.score >= 12 || index <= 1) { text = 'High Priority'; cls = 'priority-high'; }
+        else if (factor.score >= 8 || index <= 2) { text = 'Medium Priority'; cls = 'priority-medium'; }
+        else { text = 'Lower Priority'; cls = 'priority-low'; }
+        const badge = document.createElement('span');
+        badge.className = `priority-badge ${cls} priority-indicator`;
+        badge.textContent = text;
+        badge.title = `${factor.name}: ${factor.score}/20`;
+        tab.appendChild(badge);
     });
 }
 
-// Save current assessment to localStorage
+// ---------- Save assessment ----------
 saveBtn.addEventListener('click', saveAssessment);
 
 function saveAssessment() {
-    const totalScore = riskScore.textContent;
-    if (totalScore === '--' || answeredSliders.size !== sliders.length) {
+    if (riskScore.textContent === '--' || answers.size !== TOTAL_QUESTIONS) {
         alert('Please complete and calculate your risk score before saving.');
         return;
     }
-
     const assessment = {
         date: new Date().toISOString(),
-        score: parseInt(totalScore),
+        score: parseInt(riskScore.textContent, 10),
         factors: {
-            energy: parseInt(energyScore.textContent.split('/')[0]),
-            sensory: parseInt(sensoryScore.textContent.split('/')[0]),
-            executive: parseInt(executiveScore.textContent.split('/')[0]),
-            social: parseInt(socialScore.textContent.split('/')[0]),
-            emotion: parseInt(emotionScore.textContent.split('/')[0])
+            energy: parseInt(scoreEls.energy.textContent.split('/')[0], 10),
+            sensory: parseInt(scoreEls.sensory.textContent.split('/')[0], 10),
+            executive: parseInt(scoreEls.executive.textContent.split('/')[0], 10),
+            social: parseInt(scoreEls.social.textContent.split('/')[0], 10),
+            emotion: parseInt(scoreEls.emotion.textContent.split('/')[0], 10)
         },
-        answeredQuestions: answeredSliders.size
+        answeredQuestions: answers.size
     };
-
     const history = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
     history.push(assessment);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
     renderHistory();
-    alert('Assessment saved successfully!');
+    alert('Assessment saved successfully.');
 }
 
-// Show recommendations card (only after assessment is done)
+// ---------- Copy results ----------
+copyResultsBtn.addEventListener('click', async () => {
+    if (riskScore.textContent === '--') {
+        alert('Please complete the assessment first.');
+        return;
+    }
+    const date = new Date().toLocaleString();
+    const lines = [
+        'Autistic Burnout Risk Assessment',
+        `Date: ${date}`,
+        `Total Score: ${riskScore.textContent}/100`,
+        `Risk Level: ${riskLevel.textContent}`,
+        '',
+        'Factor Breakdown:',
+        `- Energy & Fatigue: ${scoreEls.energy.textContent}`,
+        `- Sensory Sensitivity: ${scoreEls.sensory.textContent}`,
+        `- Executive Function: ${scoreEls.executive.textContent}`,
+        `- Social Demands: ${scoreEls.social.textContent}`,
+        `- Emotional State: ${scoreEls.emotion.textContent}`,
+        '',
+        'Note: This is a self-assessment tool, not a diagnostic instrument.'
+    ];
+    const text = lines.join('\n');
+    try {
+        await navigator.clipboard.writeText(text);
+        copyResultsBtn.textContent = 'Copied!';
+        setTimeout(() => { copyResultsBtn.textContent = 'Copy Results'; }, 2000);
+    } catch (e) {
+        // Fallback
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); copyResultsBtn.textContent = 'Copied!'; }
+        catch (err) { alert('Could not copy to clipboard.'); }
+        document.body.removeChild(ta);
+        setTimeout(() => { copyResultsBtn.textContent = 'Copy Results'; }, 2000);
+    }
+});
+
+// ---------- Show recommendations ----------
 recommendationsBtn.addEventListener('click', () => {
-    if (answeredSliders.size !== sliders.length) {
-        alert('Please complete the assessment first to get personalized recommendations.');
+    if (answers.size !== TOTAL_QUESTIONS) {
+        alert('Please complete the assessment first to see personalized recommendations.');
         return;
     }
     recommendationsCard.style.display = 'block';
-    recommendationsCard.scrollIntoView({ behavior: 'smooth' });
+    recommendationsCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
 
-// Clear all saved history
+// ---------- History ----------
 clearHistoryBtn.addEventListener('click', () => {
     if (confirm('Are you sure you want to clear all assessment history? This cannot be undone.')) {
         localStorage.removeItem(STORAGE_KEY);
@@ -327,7 +386,6 @@ clearHistoryBtn.addEventListener('click', () => {
     }
 });
 
-// Export history as CSV
 exportBtn.addEventListener('click', exportData);
 
 function exportData() {
@@ -336,70 +394,48 @@ function exportData() {
         alert('No assessment history to export.');
         return;
     }
-
-    let csv = 'Date,Total Score,Energy Factor,Sensory Factor,Executive Factor,Social Factor,Emotion Factor,Questions Answered\n';
-    history.forEach(assessment => {
-        const date = new Date(assessment.date).toLocaleDateString();
-        csv += `${date},${assessment.score},${assessment.factors.energy},${assessment.factors.sensory},${assessment.factors.executive},${assessment.factors.social},${assessment.factors.emotion},${assessment.answeredQuestions || sliders.length}\n`;
+    let csv = 'Date,Total Score,Energy,Sensory,Executive,Social,Emotion,Questions Answered\n';
+    history.forEach(a => {
+        const date = new Date(a.date).toLocaleDateString();
+        csv += `${date},${a.score},${a.factors.energy},${a.factors.sensory},${a.factors.executive},${a.factors.social},${a.factors.emotion},${a.answeredQuestions || TOTAL_QUESTIONS}\n`;
     });
-
     const blob = new Blob([csv], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `burnout-assessment-${new Date().toISOString().split('T')[0]}.csv`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `burnout-assessment-${new Date().toISOString().split('T')[0]}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
     URL.revokeObjectURL(url);
 }
 
-// Render history list from localStorage (latest first)
 function renderHistory() {
     const history = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
     if (history.length === 0) {
         historyList.innerHTML = '<div class="history-empty"><p>No assessment history yet.</p><p>Complete and save an assessment to see your history here.</p></div>';
         return;
     }
-
     history.sort((a, b) => new Date(b.date) - new Date(a.date));
     let html = '';
-
     history.forEach((assessment, index) => {
         const date = new Date(assessment.date).toLocaleDateString();
         const time = new Date(assessment.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        let riskClass = 'low';
+        let riskLevelText = 'Low Risk';
+        if (assessment.score <= 20) { riskClass = 'low'; riskLevelText = 'Low Risk'; }
+        else if (assessment.score <= 40) { riskClass = 'medium'; riskLevelText = 'Moderate Risk'; }
+        else if (assessment.score <= 60) { riskClass = 'high'; riskLevelText = 'High Risk'; }
+        else if (assessment.score <= 80) { riskClass = 'critical'; riskLevelText = 'Severe Risk'; }
+        else { riskClass = 'critical'; riskLevelText = 'Critical Risk'; }
 
-        let riskClass = '';
-        let riskLevelText = '';
-        if (assessment.score <= 20) {
-            riskClass = 'low';
-            riskLevelText = 'Low Risk';
-        } else if (assessment.score <= 40) {
-            riskClass = 'medium';
-            riskLevelText = 'Moderate Risk';
-        } else if (assessment.score <= 60) {
-            riskClass = 'high';
-            riskLevelText = 'High Risk';
-        } else if (assessment.score <= 80) {
-            riskClass = 'critical';
-            riskLevelText = 'Severe Risk';
-        } else {
-            riskClass = 'critical';
-            riskLevelText = 'Critical Risk';
-        }
-
-        // Simple trend indicator (compare with previous assessment)
         let trendHtml = '';
         if (index < history.length - 1) {
             const prevScore = history[index + 1].score;
             const trend = assessment.score - prevScore;
-            if (trend > 5) {
-                trendHtml = '<span class="trend-indicator trend-up">↑ Increasing</span>';
-            } else if (trend < -5) {
-                trendHtml = '<span class="trend-indicator trend-down">↓ Improving</span>';
-            } else {
-                trendHtml = '<span class="trend-indicator trend-stable">→ Stable</span>';
-            }
+            if (trend > 5) trendHtml = '<span class="trend-indicator trend-up">↑ Increasing</span>';
+            else if (trend < -5) trendHtml = '<span class="trend-indicator trend-down">↓ Improving</span>';
+            else trendHtml = '<span class="trend-indicator trend-stable">→ Stable</span>';
         }
 
         html += `
@@ -409,9 +445,7 @@ function renderHistory() {
                     <div class="history-risk">${riskLevelText} ${trendHtml}</div>
                 </div>
                 <div class="history-score-total">Total Score: <strong>${assessment.score}/100</strong></div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: ${(assessment.score / 100) * 100}%"></div>
-                </div>
+                <div class="progress-bar"><div class="progress-fill" style="width: ${assessment.score}%"></div></div>
                 <div class="history-scores">
                     <span class="factor-score">Energy: ${assessment.factors.energy}/20</span>
                     <span class="factor-score">Sensory: ${assessment.factors.sensory}/20</span>
@@ -422,11 +456,14 @@ function renderHistory() {
             </div>
         `;
     });
-
     historyList.innerHTML = html;
 }
 
-// Initial load: show any existing history
+// ---------- Init ----------
 document.addEventListener('DOMContentLoaded', () => {
+    loadDraft();
+    updateProgress();
     renderHistory();
+    // Position indicator at 0 on first load
+    riskIndicator.style.left = '0%';
 });

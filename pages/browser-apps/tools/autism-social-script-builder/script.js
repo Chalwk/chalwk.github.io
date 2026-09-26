@@ -120,7 +120,7 @@
                 { id: "st3", type: "followup", text: "Have you got any plans for the weekend?", order: 2 },
                 { id: "st4", type: "question", text: "They share their plans.", order: 3 },
                 { id: "st5", type: "statement", text: "That sounds nice. I'm planning to [activity].", order: 4 },
-                { id: "st6", type: "reminder", text: "Small talk doesn't need to be deep — short exchanges still count as a success.", order: 5 },
+                { id: "st6", type: "reminder", text: "Small talk doesn't need to be deep - short exchanges still count as a success.", order: 5 },
                 { id: "st7", type: "transition", text: "If it naturally winds down, I can say 'Well, it was nice chatting!' and move on.", order: 6 }
             ]
         },
@@ -135,7 +135,7 @@
                 { id: "ec3", type: "question", text: "Oh okay, no worries!", order: 2 },
                 { id: "ec4", type: "statement", text: "It was really good talking with you.", order: 3 },
                 { id: "ec5", type: "closure", text: "Take care! / See you soon!", order: 4 },
-                { id: "ec6", type: "reminder", text: "I don't need an elaborate excuse — 'I should get going' is a complete sentence.", order: 5 },
+                { id: "ec6", type: "reminder", text: "I don't need an elaborate excuse - 'I should get going' is a complete sentence.", order: 5 },
                 { id: "ec7", type: "reminder", text: "If it feels awkward walking away, a wave and a smile is enough.", order: 6 }
             ]
         },
@@ -148,9 +148,9 @@
                 { id: "di1", type: "statement", text: "Thank you so much for inviting me!", order: 0 },
                 { id: "di2", type: "statement", text: "I'm not going to be able to make it this time.", order: 1 },
                 { id: "di3", type: "question", text: "Oh, that's a shame. Maybe next time?", order: 2 },
-                { id: "di4", type: "statement", text: "Definitely — I'd like that.", order: 3 },
+                { id: "di4", type: "statement", text: "Definitely - I'd like that.", order: 3 },
                 { id: "di5", type: "boundary", text: "I don't owe a detailed reason. 'I have other plans' or 'I need some downtime' is enough.", order: 4 },
-                { id: "di6", type: "reminder", text: "Saying no to protect my energy isn't rude — it's necessary.", order: 5 },
+                { id: "di6", type: "reminder", text: "Saying no to protect my energy isn't rude - it's necessary.", order: 5 },
                 { id: "di7", type: "followup", text: "If I want to, I can suggest an alternative: 'Could we catch up another time instead?'", order: 6 }
             ]
         },
@@ -198,7 +198,7 @@
                 { id: "jg4", type: "observation", text: "I'll listen for a moment to catch the topic before speaking.", order: 3 },
                 { id: "jg5", type: "followup", text: "What were you all talking about?", order: 4 },
                 { id: "jg6", type: "statement", text: "Share a related thought once I understand the topic.", order: 5 },
-                { id: "jg7", type: "reminder", text: "I don't have to say something clever right away — just being present is enough.", order: 6 },
+                { id: "jg7", type: "reminder", text: "I don't have to say something clever right away - just being present is enough.", order: 6 },
                 { id: "jg8", type: "reminder", text: "If it feels like too much, it's okay to quietly step back out.", order: 7 }
             ]
         },
@@ -213,7 +213,7 @@
                 { id: "wa3", type: "statement", text: "I find [specific challenge, e.g. open-plan noise] difficult to manage.", order: 2 },
                 { id: "wa4", type: "statement", text: "It would really help if I could [specific accommodation].", order: 3 },
                 { id: "wa5", type: "question", text: "They may ask follow-up questions or need time to consider.", order: 4 },
-                { id: "wa6", type: "statement", text: "Of course, take your time — I'm happy to discuss options.", order: 5 },
+                { id: "wa6", type: "statement", text: "Of course, take your time - I'm happy to discuss options.", order: 5 },
                 { id: "wa7", type: "validation", text: "This is a reasonable thing to ask for, not a burden.", order: 6 },
                 { id: "wa8", type: "followup", text: "Could we check in again in a couple of weeks to see how it's going?", order: 7 }
             ]
@@ -225,7 +225,7 @@
             category: "Coping & Transitions",
             steps: [
                 { id: "cp1", type: "observation", text: "I notice I'm feeling thrown off because the plan changed.", order: 0 },
-                { id: "cp2", type: "reminder", text: "It's okay to feel unsettled — this is a normal reaction to unexpected change.", order: 1 },
+                { id: "cp2", type: "reminder", text: "It's okay to feel unsettled - this is a normal reaction to unexpected change.", order: 1 },
                 { id: "cp3", type: "statement", text: "Could you give me a moment to adjust to the new plan?", order: 2 },
                 { id: "cp4", type: "question", text: "Sure, take your time.", order: 3 },
                 { id: "cp5", type: "reminder", text: "I'll take a few slow breaths and ask myself: what's the new plan, step by step?", order: 4 },
@@ -240,11 +240,11 @@
             category: "Conflict & Repair",
             steps: [
                 { id: "rm1", type: "observation", text: "I've noticed the other person seems upset or confused by something I said.", order: 0 },
-                { id: "rm2", type: "statement", text: "I think that may have come out differently than I meant — can I clarify?", order: 1 },
+                { id: "rm2", type: "statement", text: "I think that may have come out differently than I meant - can I clarify?", order: 1 },
                 { id: "rm3", type: "statement", text: "What I meant was [intended meaning].", order: 2 },
                 { id: "rm4", type: "question", text: "Oh, that makes more sense, thanks for explaining.", order: 3 },
                 { id: "rm5", type: "statement", text: "I'm sorry if it landed the wrong way.", order: 4 },
-                { id: "rm6", type: "reminder", text: "Misunderstandings happen to everyone — this doesn't mean I did something wrong as a person.", order: 5 },
+                { id: "rm6", type: "reminder", text: "Misunderstandings happen to everyone - this doesn't mean I did something wrong as a person.", order: 5 },
                 { id: "rm7", type: "followup", text: "Is there anything else I can clarify?", order: 6 },
                 { id: "rm8", type: "closure", text: "Thanks for talking it through with me.", order: 7 }
             ]
@@ -256,7 +256,7 @@
             category: "Workplace",
             steps: [
                 { id: "fr1", type: "reminder", text: "Feedback about my work isn't the same as feedback about my worth as a person.", order: 0 },
-                { id: "fr2", type: "statement", text: "Thank you for telling me — can you give me an example?", order: 1 },
+                { id: "fr2", type: "statement", text: "Thank you for telling me - can you give me an example?", order: 1 },
                 { id: "fr3", type: "question", text: "They give a specific example.", order: 2 },
                 { id: "fr4", type: "statement", text: "That makes sense. I'll work on that.", order: 3 },
                 { id: "fr5", type: "reminder", text: "If I feel defensive, I can pause and say 'Let me think about that for a moment.'", order: 4 },
@@ -272,11 +272,11 @@
             steps: [
                 { id: "ad1", type: "statement", text: "Excuse me, could you help me with something?", order: 0 },
                 { id: "ad2", type: "question", text: "Sure, what do you need?", order: 1 },
-                { id: "ad3", type: "statement", text: "I'm trying to find [place/thing] — do you know where that is?", order: 2 },
+                { id: "ad3", type: "statement", text: "I'm trying to find [place/thing] - do you know where that is?", order: 2 },
                 { id: "ad4", type: "question", text: "They give directions.", order: 3 },
                 { id: "ad5", type: "followup", text: "Could you repeat that? I want to make sure I've got it.", order: 4 },
                 { id: "ad6", type: "statement", text: "Thank you so much, I appreciate it.", order: 5 },
-                { id: "ad7", type: "reminder", text: "Most people are happy to help — asking isn't a burden.", order: 6 }
+                { id: "ad7", type: "reminder", text: "Most people are happy to help - asking isn't a burden.", order: 6 }
             ]
         },
         {
@@ -285,11 +285,11 @@
             description: "Exiting gracefully when I'm overstimulated or my social battery is low",
             category: "Coping & Transitions",
             steps: [
-                { id: "le1", type: "observation", text: "I notice I'm feeling overwhelmed — this is a signal to plan my exit.", order: 0 },
+                { id: "le1", type: "observation", text: "I notice I'm feeling overwhelmed - this is a signal to plan my exit.", order: 0 },
                 { id: "le2", type: "statement", text: "I've had a great time, but I'm going to head out now.", order: 1 },
                 { id: "le3", type: "question", text: "Aw, already? Okay, take care!", order: 2 },
                 { id: "le4", type: "statement", text: "Thanks so much for having me.", order: 3 },
-                { id: "le5", type: "reminder", text: "I don't need to explain that I'm overstimulated unless I want to — 'I'm heading out' is enough.", order: 4 },
+                { id: "le5", type: "reminder", text: "I don't need to explain that I'm overstimulated unless I want to - 'I'm heading out' is enough.", order: 4 },
                 { id: "le6", type: "reminder", text: "Leaving early to take care of myself is a strength, not a failure.", order: 5 },
                 { id: "le7", type: "closure", text: "Goodnight / See you soon!", order: 6 }
             ]
@@ -901,7 +901,7 @@
 
     function exportScript() {
         if (currentScript.steps.length === 0) {
-            showToast("Nothing to export yet — add a step first.", "error");
+            showToast("Nothing to export yet - add a step first.", "error");
             return;
         }
 
@@ -954,10 +954,10 @@
                 renderSteps();
                 setDraftStatus("");
                 scheduleDraftSave();
-                showToast("Script imported — remember to save it to your library.", "success");
+                showToast("Script imported - remember to save it to your library.", "success");
             } catch (err) {
                 console.error("Failed to import script", err);
-                showToast("Couldn't read that file — is it a valid exported script?", "error");
+                showToast("Couldn't read that file - is it a valid exported script?", "error");
             }
         };
         reader.readAsText(file);
