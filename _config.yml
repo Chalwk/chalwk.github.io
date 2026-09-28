@@ -13,10 +13,9 @@ baseurl: ""                     # not hosting in a subfolder
 locale: en_NZ
 timezone: Pacific/Auckland
 
-# Viewport scale for the mobile rendering of the site (see head.html).
-# KEEP AT 1.0 - native scale. Values below 1 shrink the viewport, which
-# breaks pinch-zoom on many mobile browsers and fails WCAG 1.4.4.
-site_scale: 1.0
+# Deliberate. Do not touch!
+# Used to shrink the responsive viewport scale on mobile (see head.html).
+site_scale: 0.65
 
 # ------------------------------------------------------------------------------
 # Build behaviour (performance + markdown rendering)
