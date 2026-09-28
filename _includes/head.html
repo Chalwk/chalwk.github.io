@@ -2,7 +2,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta content="width=device-width, initial-scale={{ site.site_scale }}" name="viewport">
+  <meta name="viewport" content="width=device-width, initial-scale={{ site.site_scale | default: 1.0 }}, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
 
   <title>{% if page.title %}{{ page.title }} | {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
   <meta name="description" content="{{ page.description | default: site.description }}">
@@ -12,7 +13,10 @@
 
   <!-- Extra social metadata not emitted by jekyll-seo-tag -->
   <meta property="og:image:alt" content="Jericho Crosby">
-  <meta name="theme-color" content="#1e88e5">
+
+  <!-- Theme colour: matches header gradient. Dark variant for dark-mode UAs. -->
+  <meta name="theme-color" content="#1e88e5" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0d47a1" media="(prefers-color-scheme: dark)">
 
   <!-- Preconnect hints for external resources -->
   <link rel="preconnect" href="https://fonts.googleapis.com">

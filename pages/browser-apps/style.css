@@ -1,29 +1,22 @@
 /* Copyright (c) 2024-2026 Jericho Crosby (Chalwk). All Rights Reserved. */
 
-/* page setup - center everything */
-body.apps-tools-page {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
-    position: relative;
-}
-
-/* smooth scroll behavior for better accessibility */
+/* smooth scroll for anchor navigation */
 html {
     scroll-behavior: smooth;
 }
 
-/* scroll margin to prevent fixed header overlap */
+/* offset anchor targets so the fixed header doesn't cover them */
 .category-section,
 .subcategory-header {
-    scroll-margin-top: 80px;
+    scroll-margin-top: 90px;
 }
 
-/* header area with title & gradient text */
+/* ==========================================================================
+   PAGE HEADER
+   ========================================================================== */
 .apps-header {
     text-align: center;
-    margin: 100px 0 50px;
+    margin: 40px auto 30px;
     padding: 0 20px;
     width: 100%;
     max-width: var(--container-max);
@@ -37,6 +30,8 @@ html {
     margin-bottom: 15px;
     font-weight: 700;
     letter-spacing: 1px;
+    font-size: clamp(2rem, 4vw + 1rem, 3.25rem);
+    line-height: 1.1;
 }
 
 .gradient-text {
@@ -48,13 +43,13 @@ html {
 }
 
 .apps-header p {
-    font-size: 1.2rem;
+    font-size: clamp(1rem, 1vw + 0.75rem, 1.2rem);
     color: var(--gray);
     max-width: 600px;
     margin: 0 auto;
+    text-wrap: balance;
 }
 
-/* three little dots decoration */
 .header-decoration {
     display: flex;
     justify-content: center;
@@ -78,12 +73,15 @@ html {
     background: var(--secondary);
 }
 
+/* ==========================================================================
+   CATEGORY NAVIGATION PILLS
+   ========================================================================== */
 .category-nav {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 12px;
-    margin: 0 auto 40px;
+    margin: 0 auto 50px;
     max-width: var(--container-max);
     padding: 0 20px;
 }
@@ -96,7 +94,9 @@ html {
     color: var(--darker);
     border: 1px solid var(--gray-light);
     border-radius: 40px;
-    padding: 8px 18px;
+    padding: 10px 18px;
+    min-height: 44px;
+    /* touch target */
     font-size: 0.9rem;
     font-weight: 500;
     text-decoration: none;
@@ -128,7 +128,9 @@ html {
     outline-offset: 2px;
 }
 
-/* each category (Games / Tools) */
+/* ==========================================================================
+   CATEGORY SECTIONS
+   ========================================================================== */
 .category-section {
     width: 100%;
     max-width: var(--container-max);
@@ -142,7 +144,6 @@ html {
     position: relative;
 }
 
-/* circular icon per category */
 .category-icon {
     width: 80px;
     height: 80px;
@@ -160,7 +161,7 @@ html {
 }
 
 .category-header h2 {
-    font-size: 2.5rem;
+    font-size: clamp(1.75rem, 2vw + 1rem, 2.5rem);
     margin-bottom: 10px;
     font-weight: 700;
     background: linear-gradient(135deg, var(--primary), var(--secondary));
@@ -168,19 +169,23 @@ html {
     background-clip: text;
     color: transparent;
     display: inline-block;
+    text-wrap: balance;
 }
 
 .category-header p {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     color: var(--gray);
     max-width: 500px;
     margin: 0 auto;
 }
 
-/* responsive card grid */
+/* ==========================================================================
+   CARD GRID
+   ========================================================================== */
 .games-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    /* min(100%, 320px) prevents overflow on very narrow viewports */
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
     gap: 30px;
     width: 100%;
     max-width: var(--container-max);
@@ -189,7 +194,7 @@ html {
     align-items: stretch;
 }
 
-/* individual game/tool card */
+/* individual card */
 .card {
     background: white;
     border-radius: var(--radius-lg);
@@ -207,10 +212,10 @@ html {
     min-height: 340px;
 }
 
-/* limit description to 3 lines */
 .card p {
     display: -webkit-box;
     -webkit-line-clamp: 3;
+    line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -223,10 +228,10 @@ html {
     color: var(--gray);
 }
 
-/* title max 2 lines */
 .card h3 {
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     min-height: 3.9rem;
@@ -236,34 +241,6 @@ html {
     font-weight: 600;
     color: var(--darker);
     word-break: break-word;
-}
-
-/* shiny play button */
-.play-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    color: #fff;
-    padding: 12px 25px;
-    border-radius: 50px;
-    transition: var(--transition);
-    font-weight: 500;
-    box-shadow: var(--shadow);
-    position: relative;
-    overflow: hidden;
-    z-index: 1;
-    margin-top: auto;
-    align-self: center;
-    width: auto;
-}
-
-/* card hover lift & border glow */
-.card:hover {
-    transform: translateY(-10px);
-    box-shadow: var(--shadow-lg);
-    border-color: var(--primary);
 }
 
 /* round icon inside card */
@@ -282,9 +259,36 @@ html {
     transition: var(--transition);
 }
 
-/* fun hover wiggle */
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary);
+}
+
 .card:hover .game-icon {
     transform: scale(1.1) rotate(5deg);
+}
+
+/* CTA button */
+.play-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: #fff;
+    padding: 12px 25px;
+    border-radius: 50px;
+    transition: var(--transition);
+    font-weight: 500;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    margin-top: auto;
+    align-self: center;
+    width: auto;
+    min-height: 44px;
 }
 
 .play-button:hover {
@@ -302,10 +306,55 @@ html {
     transform: translateX(5px);
 }
 
-/* responsive adjustments */
+.play-button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+/* ==========================================================================
+   SUBCATEGORY HEADERS
+   ========================================================================== */
+.subcategory-header {
+    width: 100%;
+    max-width: var(--container-max);
+    margin: 20px auto;
+    padding: 0 20px;
+    text-align: left;
+}
+
+.subcategory-header h3 {
+    font-size: clamp(1.35rem, 1.5vw + 1rem, 1.8rem);
+    font-weight: 600;
+    color: var(--darker);
+    border-bottom: 3px solid transparent;
+    border-image: linear-gradient(135deg, var(--primary), var(--secondary)) 1;
+    padding-bottom: 10px;
+    display: inline-block;
+}
+
+.subcategory-header h3 i {
+    color: var(--accent);
+    margin-right: 10px;
+    font-size: 1.8rem;
+    vertical-align: middle;
+}
+
+/* spacing inside category */
+.category-section .games-grid {
+    margin-top: 0;
+    margin-bottom: 40px;
+}
+
+.category-section .games-grid:last-of-type {
+    margin-bottom: 0;
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
 @media (max-width: 1024px) {
     .games-grid {
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
         gap: 25px;
     }
 
@@ -316,36 +365,22 @@ html {
     .card h3 {
         min-height: 3.6rem;
         font-size: 1.4rem;
-        margin-bottom: 0.75rem;
-    }
-
-    .card p {
-        margin-bottom: 0.75rem;
     }
 }
 
-/* smaller screens */
 @media (max-width: 768px) {
     .apps-header {
-        margin: 90px 0 40px;
-    }
-
-    .apps-header h1 {
-        font-size: 2.5rem;
+        margin: 30px auto 20px;
     }
 
     .games-grid {
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr));
         gap: 20px;
     }
 
     .card {
         padding: 25px 20px;
         min-height: 300px;
-    }
-
-    .category-header h2 {
-        font-size: 2rem;
     }
 
     .category-icon {
@@ -376,12 +411,11 @@ html {
     }
 
     .cat-nav-button {
-        padding: 6px 14px;
+        padding: 8px 14px;
         font-size: 0.85rem;
     }
 }
 
-/* 3-column on medium phones */
 @media (max-width: 768px) and (min-width: 481px) {
     .games-grid {
         grid-template-columns: repeat(3, 1fr);
@@ -418,14 +452,9 @@ html {
     }
 }
 
-/* small phones: 2 columns */
 @media (max-width: 480px) {
     .apps-header {
-        margin: 80px 0 30px;
-    }
-
-    .apps-header h1 {
-        font-size: 2rem;
+        margin: 20px auto 15px;
     }
 
     .apps-header p {
@@ -466,16 +495,11 @@ html {
         font-size: 0.85rem;
     }
 
-    .category-header h2 {
-        font-size: 1.8rem;
-    }
-
     .category-header p {
         font-size: 1rem;
     }
 }
 
-/* tiny screens: single column */
 @media (max-width: 360px) {
     .games-grid {
         grid-template-columns: 1fr;
@@ -496,38 +520,32 @@ html {
     }
 }
 
-/* subcategory titles (e.g. "Neurodivergent Tools") */
-.subcategory-header {
-    width: 100%;
-    max-width: var(--container-max);
-    margin: 20px auto 20px;
-    padding: 0 20px;
-    text-align: left;
-}
+/* ==========================================================================
+   PREFERENCES
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
 
-.subcategory-header h3 {
-    font-size: 1.8rem;
-    font-weight: 600;
-    color: var(--darker);
-    border-bottom: 3px solid transparent;
-    border-image: linear-gradient(135deg, var(--primary), var(--secondary)) 1;
-    padding-bottom: 10px;
-    display: inline-block;
-}
+    .card,
+    .card .game-icon,
+    .play-button,
+    .play-button i,
+    .cat-nav-button {
+        transition: none !important;
+    }
 
-.subcategory-header h3 i {
-    color: var(--accent);
-    margin-right: 10px;
-    font-size: 1.8rem;
-    vertical-align: middle;
-}
+    .card:hover {
+        transform: none;
+    }
 
-/* spacing inside category */
-.category-section .games-grid {
-    margin-top: 0;
-    margin-bottom: 40px;
-}
+    .card:hover .game-icon {
+        transform: none;
+    }
 
-.category-section .games-grid:last-of-type {
-    margin-bottom: 0;
+    .play-button:hover {
+        transform: none;
+    }
+
+    .play-button:hover i {
+        transform: none;
+    }
 }

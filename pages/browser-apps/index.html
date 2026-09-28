@@ -9,446 +9,450 @@ description: Browser-based games, utilities, and tools for everyday use.
 <link href="style.css" rel="stylesheet">
 
 <main>
-    <!-- ========== CATEGORY NAVIGATION BUTTONS ========== -->
-    <div class="category-nav" aria-label="Category navigation">
+    <!-- ========== PAGE HEADER ========== -->
+    <header class="apps-header">
+        <div class="header-content">
+            <h1><span class="gradient-text">Apps &amp; Tools</span></h1>
+            <p>Browser-based games, utilities, and tools for everyday use.</p>
+            <div class="header-decoration" aria-hidden="true">
+                <span class="decoration-dot"></span>
+                <span class="decoration-dot"></span>
+                <span class="decoration-dot"></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ========== CATEGORY NAVIGATION ========== -->
+    <nav class="category-nav" aria-label="Jump to category">
         <a href="#games-section" class="cat-nav-button">
-            <i class="fas fa-gamepad"></i> Games
+            <i class="fas fa-gamepad" aria-hidden="true"></i> Games
         </a>
         <a href="#tools-section" class="cat-nav-button">
-            <i class="fas fa-tools"></i> Tools & Utilities
+            <i class="fas fa-tools" aria-hidden="true"></i> Tools &amp; Utilities
         </a>
         <a href="#neurodivergent-section" class="cat-nav-button">
-            <i class="fas fa-brain"></i> Neurodivergent
+            <i class="fas fa-brain" aria-hidden="true"></i> Neurodivergent
         </a>
         <a href="#everyday-utilities-section" class="cat-nav-button">
-            <i class="fas fa-clipboard-list"></i> Everyday
+            <i class="fas fa-clipboard-list" aria-hidden="true"></i> Everyday
         </a>
         <a href="#browser-automation-section" class="cat-nav-button">
-            <i class="fas fa-robot"></i> Automation
+            <i class="fas fa-robot" aria-hidden="true"></i> Automation
         </a>
-    </div>
+    </nav>
 
     <!-- ========== GAMES SECTION ========== -->
-    <section id="games-section" class="category-section">
+    <section id="games-section" class="category-section" aria-labelledby="games-heading">
         <div class="category-header">
-            <div class="category-icon"><i class="fas fa-gamepad"> </i></div>
-            <h2>Games</h2>
+            <div class="category-icon" aria-hidden="true"><i class="fas fa-gamepad"></i></div>
+            <h2 id="games-heading">Games</h2>
+            <p>Browser-based games - no installs, no accounts.</p>
         </div>
         <div class="games-grid">
-            <!-- <div class="card">
-                <div class="game-icon"><i class="fas fa-dice"></i></div>
-                <h3>Coil &amp; Climb</h3>
-                <p>Climb the ladders, dodge the coils. Reach the final tile first to win.</p>
-                <a class="play-button" href="games/coil-and-climb/">
-                    <span>Play Now</span><i class="fas fa-arrow-right"></i>
-                </a>
-            </div> -->
-
             <div class="card">
-                <div class="game-icon"><i class="fas fa-dragon"></i></div>
+                <div class="game-icon" aria-hidden="true"><i class="fas fa-dragon"></i></div>
                 <h3>Blunder</h3>
                 <p>Guess the 5-letter word in 6 tries. Hit Enter to submit. Click tiles to toggle focus.</p>
                 <a class="play-button" href="games/blunder/">
-                    <span>Play Now</span><i class="fas fa-arrow-right"></i>
+                    <span>Play Now</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>
             </div>
 
             <div class="card">
-                <div class="game-icon"><i class="fas fa-th"></i></div>
+                <div class="game-icon" aria-hidden="true"><i class="fas fa-th"></i></div>
                 <h3>Dots &amp; Boxes</h3>
                 <p>Claim the last edge of a box to own it. Own the most boxes to win.</p>
                 <a class="play-button" href="games/dots-and-boxes/">
-                    <span>Play Now</span><i class="fas fa-arrow-right"></i>
+                    <span>Play Now</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>
             </div>
 
             <div class="card">
-                <div class="game-icon"><i class="fas fa-dungeon"></i></div>
+                <div class="game-icon" aria-hidden="true"><i class="fas fa-dungeon"></i></div>
                 <h3>Dead End - Dungeon Roguelite</h3>
                 <p>Explore a procedurally generated dungeon, fight distinctive enemies, and survive escalating floors.
                 </p>
                 <a class="play-button" href="games/dead-end-dungeon-roguelite/">
-                    <span>Play Now</span><i class="fas fa-arrow-right"></i>
+                    <span>Play Now</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>
             </div>
 
             <div class="card">
-                <div class="game-icon"><i class="fas fa-bomb"></i></div>
+                <div class="game-icon" aria-hidden="true"><i class="fas fa-bomb"></i></div>
                 <h3>Enhanced Minesweeper</h3>
                 <p>An enhanced Minesweeper experience with multiple difficulties, hints, timer, flag/question cycling,
                     and dark mode.</p>
                 <a class="play-button" href="games/enhanced-minesweeper/">
-                    <span>Play Now</span><i class="fas fa-arrow-right"></i>
+                    <span>Play Now</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>
             </div>
 
             <div class="card">
-                <div class="game-icon"><i class="fas fa-shapes"></i></div>
+                <div class="game-icon" aria-hidden="true"><i class="fas fa-shapes"></i></div>
                 <h3>FatPoly</h3>
                 <p>Guide a hungry square through drifting shapes, eating the good and avoiding the bad while triggering
                     wild bonuses.</p>
                 <a class="play-button" href="games/fat-poly/">
-                    <span>Play Now</span><i class="fas fa-arrow-right"></i>
+                    <span>Play Now</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>
             </div>
 
             <div class="card">
-                <div class="game-icon"><i class="fas fa-circle-notch"></i></div>
+                <div class="game-icon" aria-hidden="true"><i class="fas fa-circle-notch"></i></div>
                 <h3>Foursight</h3>
                 <p>Stack discs down the columns. Line up a row in any direction to win.</p>
                 <a class="play-button" href="games/foursight/">
-                    <span>Play Now</span><i class="fas fa-arrow-right"></i>
+                    <span>Play Now</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>
             </div>
 
             <div class="card">
-                <div class="game-icon"><i class="fas fa-laugh-squint"></i></div>
+                <div class="game-icon" aria-hidden="true"><i class="fas fa-laugh-squint"></i></div>
                 <h3>Giggle Factory</h3>
                 <p>Fetch random jokes from the internet. Click for new jokes, copy to clipboard, or tweet favorites!</p>
                 <a class="play-button" href="games/giggle-factory/">
-                    <span>Play Now</span>
-                    <i class="fas fa-arrow-right"></i>
+                    <span>Play Now</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>
             </div>
 
             <div class="card">
-                <div class="game-icon"><i class="fas fa-question"></i></div>
+                <div class="game-icon" aria-hidden="true"><i class="fas fa-question"></i></div>
                 <h3>Guess Who?</h3>
                 <p>Ask questions to narrow down the possibilities and guess the opponent's character.</p>
                 <a class="play-button" href="games/guess-who/">
-                    <span>Play Now</span><i class="fas fa-arrow-right"></i>
+                    <span>Play Now</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>
             </div>
 
             <div class="card">
-                <div class="game-icon"><i class="fas fa-project-diagram"></i></div>
+                <div class="game-icon" aria-hidden="true"><i class="fas fa-project-diagram"></i></div>
                 <h3>Knot Again!</h3>
                 <p>Drag the dots to untangle the ropes. Clear all crossings to win.</p>
                 <a class="play-button" href="games/knot-again/">
-                    <span>Play Now</span><i class="fas fa-arrow-right"></i>
+                    <span>Play Now</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>
             </div>
 
             <div class="card">
-                <div class="game-icon"><i class="fas fa-puzzle-piece"></i></div>
+                <div class="game-icon" aria-hidden="true"><i class="fas fa-puzzle-piece"></i></div>
                 <h3>Maze Solver</h3>
                 <p>Navigate the green square through the maze to reach the red square. Use WASD or arrow keys!</p>
                 <a class="play-button" href="games/maze-solver/">
-                    <span>Play Now</span><i class="fas fa-arrow-right"></i>
+                    <span>Play Now</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>
             </div>
 
             <div class="card">
-                <div class="game-icon"><i class="fas fa-feather-alt"></i></div>
+                <div class="game-icon" aria-hidden="true"><i class="fas fa-feather-alt"></i></div>
                 <h3>Raptor Dash</h3>
                 <p>Soar and dash through procedurally generated obstacles in this endless runner.</p>
                 <a class="play-button" href="games/raptor-dash/">
-                    <span>Play Now</span><i class="fas fa-arrow-right"></i>
+                    <span>Play Now</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>
             </div>
 
             <div class="card">
-                <div class="game-icon"><i class="fas fa-bolt"></i></div>
+                <div class="game-icon" aria-hidden="true"><i class="fas fa-bolt"></i></div>
                 <h3>Recall</h3>
                 <p>Flip two cards, find the match. Most pairs wins.</p>
                 <a class="play-button" href="games/recall/">
-                    <span>Play Now</span><i class="fas fa-arrow-right"></i>
+                    <span>Play Now</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>
             </div>
 
             <div class="card">
-                <div class="game-icon"><i class="fas fa-lightbulb"></i></div>
+                <div class="game-icon" aria-hidden="true"><i class="fas fa-lightbulb"></i></div>
                 <h3>Reflection</h3>
                 <p>Rotate the mirrors to redirect the laser onto the target.</p>
                 <a class="play-button" href="games/reflection/">
-                    <span>Play Now</span><i class="fas fa-arrow-right"></i>
+                    <span>Play Now</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>
             </div>
 
             <div class="card">
-                <div class="game-icon"><i class="fas fa-bullseye"></i></div>
+                <div class="game-icon" aria-hidden="true"><i class="fas fa-bullseye"></i></div>
                 <h3>Ricochet Rift</h3>
                 <p>Hit the ball past your opponent to score points. First to 7 wins.</p>
                 <a class="play-button" href="games/ricochet-rift/">
-                    <span>Play Now</span><i class="fas fa-arrow-right"></i>
+                    <span>Play Now</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>
             </div>
 
             <div class="card">
-                <div class="game-icon"><i class="fas fa-shapes"></i></div>
+                <div class="game-icon" aria-hidden="true"><i class="fas fa-staff-snake"></i></div>
                 <h3>Snakey</h3>
-                <p>Eat food, grow longer, and avoid collisions. Includes powerups, speed boosts, and special
-                    effects.</p>
+                <p>Eat food, grow longer, and avoid collisions. Includes powerups, speed boosts, and special effects.
+                </p>
                 <a class="play-button" href="games/snakey/">
-                    <span>Play Now</span><i class="fas fa-arrow-right"></i>
+                    <span>Play Now</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>
             </div>
 
             <div class="card">
-                <div class="game-icon"><i class="fas fa-search"></i></div>
+                <div class="game-icon" aria-hidden="true"><i class="fas fa-magnifying-glass-plus"></i></div>
                 <h3>Spot The Difference</h3>
                 <p>Compare two procedurally generated scenes and race the clock to spot every difference before time
                     runs out.</p>
                 <a class="play-button" href="games/spot-the-difference/">
-                    <span>Play Now</span><i class="fas fa-arrow-right"></i>
+                    <span>Play Now</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>
             </div>
 
             <div class="card">
-                <div class="game-icon"><i class="fas fa-times"></i></div>
+                <div class="game-icon" aria-hidden="true"><i class="fas fa-times"></i></div>
                 <h3>Ultimate Tic-Tac-Toe</h3>
                 <p>Win 3 small boards in a row to win the game. Next move is dictated by previous move's position.</p>
                 <a class="play-button" href="games/ultimate-tic-tac-toe/">
-                    <span>Play Now</span><i class="fas fa-arrow-right"></i>
+                    <span>Play Now</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>
             </div>
 
             <div class="card">
-                <div class="game-icon"><i class="fas fa-atom"></i></div>
+                <div class="game-icon" aria-hidden="true"><i class="fas fa-atom"></i></div>
                 <h3>Void Shard</h3>
                 <p>Survive waves of enemies and collect shards to upgrade your ship. Avoid collisions to survive!</p>
                 <a class="play-button" href="games/voidshard/">
-                    <span>Play Now</span><i class="fas fa-arrow-right"></i>
+                    <span>Play Now</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>
             </div>
 
             <div class="card">
-                <div class="game-icon"><i class="fas fa-search"></i></div>
+                <div class="game-icon" aria-hidden="true"><i class="fas fa-search"></i></div>
                 <h3>Word Search</h3>
                 <p>Drag across the grid to trace every hidden word.</p>
                 <a class="play-button" href="games/word-search/">
-                    <span>Play Now</span><i class="fas fa-arrow-right"></i>
+                    <span>Play Now</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>
             </div>
 
             <div class="card">
-                <div class="game-icon"><i class="fas fa-tower"></i></div>
+                <div class="game-icon" aria-hidden="true"><i class="fas fa-tower-observation"></i></div>
                 <h3>Word Siege</h3>
                 <p>Guess the word letter by letter before the tower falls.</p>
                 <a class="play-button" href="games/word-siege/">
-                    <span>Play Now</span><i class="fas fa-arrow-right"></i>
+                    <span>Play Now</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>
             </div>
         </div>
     </section>
 
     <!-- ========== TOOLS & UTILITIES ========== -->
-    <section id="tools-section" class="category-section">
+    <section id="tools-section" class="category-section" aria-labelledby="tools-heading">
         <div class="category-header">
-            <div class="category-icon"><i class="fas fa-tools"></i></div>
-            <h2>Tools & Utilities</h2>
+            <div class="category-icon" aria-hidden="true"><i class="fas fa-tools"></i></div>
+            <h2 id="tools-heading">Tools &amp; Utilities</h2>
             <p>Useful browser-based tools and applications</p>
         </div>
 
         <!-- Neurodivergent tools subcategory -->
         <div id="neurodivergent-section" class="subcategory-header">
-            <h3><i class="fas fa-brain"></i> Neurodivergent Tools</h3>
+            <h3><i class="fas fa-brain" aria-hidden="true"></i> Neurodivergent Tools</h3>
         </div>
         <div class="games-grid">
             <div class="card">
-                <div class="game-icon"><i class="fas fa-comments"></i></div>
+                <div class="game-icon" aria-hidden="true"><i class="fas fa-comments"></i></div>
                 <h3>Autism Social Script Builder</h3>
                 <p>Create and practice customizable social scripts for various situations.</p>
                 <a class="play-button" href="tools/autism-social-script-builder/">
-                    <span>Open Tool</span><i class="fas fa-arrow-right"></i>
+                    <span>Open Tool</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>
             </div>
 
             <div class="card">
-                <div class="game-icon"><i class="fas fa-heartbeat"></i></div>
+                <div class="game-icon" aria-hidden="true"><i class="fas fa-heartbeat"></i></div>
                 <h3>Autism Regulog</h3>
                 <p>Check how you are feeling and get matched insights and coping strategies based on your selections.
                 </p>
                 <a class="play-button" href="tools/autism-regulog/">
-                    <span>Open Tool</span><i class="fas fa-arrow-right"></i>
+                    <span>Open Tool</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>
             </div>
 
             <div class="card">
-                <div class="game-icon"><i class="fas fa-fire"></i></div>
+                <div class="game-icon" aria-hidden="true"><i class="fas fa-fire-flame-curved"></i></div>
                 <h3>Autistic Burnout Risk Assessment</h3>
                 <p>A self-assessment tool to help autistic individuals identify early warning signs of burnout.</p>
                 <a class="play-button" href="tools/autistic-burnout-risk-assessment/">
-                    <span>Open Tool</span><i class="fas fa-arrow-right"></i>
+                    <span>Open Tool</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>
             </div>
 
             <div class="card">
-                <div class="game-icon"><i class="fas fa-fire"></i></div>
+                <div class="game-icon" aria-hidden="true"><i class="fas fa-kit-medical"></i></div>
                 <h3>Crisis Planner</h3>
                 <p>Plan, customize and prepare for crisis situations.</p>
                 <a class="play-button" href="tools/crisis-planner/">
-                    <span>Open Tool</span><i class="fas fa-arrow-right"></i>
+                    <span>Open Tool</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>
             </div>
 
             <div class="card">
-                <div class="game-icon"><i class="fas fa-comments"></i></div>
+                <div class="game-icon" aria-hidden="true"><i class="fas fa-comment-dots"></i></div>
                 <h3>HearMeOut: AAC Communicator</h3>
                 <p>An AAC communication board powered by the Web Speech API. Customizable symbols make communication
                     accessible and personal.</p>
                 <a class="play-button" href="tools/hear-me-out/">
-                    <span>Open Tool</span><i class="fas fa-arrow-right"></i>
+                    <span>Open Tool</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>
             </div>
 
             <div class="card">
-                <div class="game-icon"><i class="fas fa-tasks"></i></div>
+                <div class="game-icon" aria-hidden="true"><i class="fas fa-tasks"></i></div>
                 <h3>Neurodivergent Task Manager</h3>
                 <p>Manage tasks and goals effortlessly: track progress, set reminders, and stay organized.</p>
                 <a class="play-button" href="tools/neurodivergent-task-manager/">
-                    <span>Open Tool</span><i class="fas fa-arrow-right"></i>
+                    <span>Open Tool</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>
             </div>
 
             <div class="card">
-                <div class="game-icon"><i class="fas fa-ear-listen"></i></div>
+                <div class="game-icon" aria-hidden="true"><i class="fas fa-ear-listen"></i></div>
                 <h3>Psychosis Tracker</h3>
                 <p>Log episodes, hallucinations, voices, moods, and coping strategies.</p>
                 <a class="play-button" href="tools/psychosis-tracker/">
-                    <span>Open Tool</span><i class="fas fa-arrow-right"></i>
+                    <span>Open Tool</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>
             </div>
 
             <div class="card">
-                <div class="game-icon"><i class="fas fa-bed"></i></div>
+                <div class="game-icon" aria-hidden="true"><i class="fas fa-bed"></i></div>
                 <h3>Sleep Tracker</h3>
                 <p>Log sleep quality, night awakenings, nightmares, mood, and routines.</p>
                 <a class="play-button" href="tools/sleep-tracker/">
-                    <span>Open Tool</span><i class="fas fa-arrow-right"></i>
+                    <span>Open Tool</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>
             </div>
         </div>
 
         <!-- Everyday utilities subcategory -->
         <div id="everyday-utilities-section" class="subcategory-header">
-            <h3><i class="fas fa-clipboard-list"></i> Everyday Utilities</h3>
+            <h3><i class="fas fa-clipboard-list" aria-hidden="true"></i> Everyday Utilities</h3>
         </div>
         <div class="games-grid">
             <div class="card">
-                <div class="game-icon"><i class="fas fa-money-bill"></i></div>
+                <div class="game-icon" aria-hidden="true"><i class="fas fa-money-bill"></i></div>
                 <h3>Bills and Invoice Tracker</h3>
                 <p>Track your bills and invoices with ease.</p>
                 <a class="play-button" href="tools/bills-and-invoice-tracker/">
-                    <span>Open Tool</span><i class="fas fa-arrow-right"></i>
+                    <span>Open Tool</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>
             </div>
 
             <div class="card">
-                <div class="game-icon"><i class="fas fa-street-view"></i></div>
+                <div class="game-icon" aria-hidden="true"><i class="fas fa-street-view"></i></div>
                 <h3>Bowel Movement Logger</h3>
                 <p>Track your bowel movements with ease.</p>
                 <a class="play-button" href="tools/bowel-movement-logger/">
-                    <span>Open Tool</span><i class="fas fa-arrow-right"></i>
+                    <span>Open Tool</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>
             </div>
 
             <div class="card">
-                <div class="game-icon"><i class="fas fa-map-marker-alt"></i></div>
+                <div class="game-icon" aria-hidden="true"><i class="fas fa-map-marker-alt"></i></div>
                 <h3>Christchurch Travel Guide</h3>
                 <p>Discover the best places to visit in Christchurch, New Zealand.</p>
                 <a class="play-button" href="tools/chch-travel-guide/">
-                    <span>Open Tool</span><i class="fas fa-arrow-right"></i>
+                    <span>Open Tool</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>
             </div>
 
             <div class="card">
-                <div class="game-icon"><i class="fas fa-list"></i></div>
+                <div class="game-icon" aria-hidden="true"><i class="fas fa-list"></i></div>
                 <h3>Grocery List</h3>
                 <p>Keep track of what you need to buy with this simple grocery list tool.</p>
                 <a class="play-button" href="tools/grocery-list/">
-                    <span>Open Tool</span><i class="fas fa-arrow-right"></i>
+                    <span>Open Tool</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>
             </div>
 
             <div class="card">
-                <div class="game-icon"><i class="fas fa-lock"></i></div>
+                <div class="game-icon" aria-hidden="true"><i class="fas fa-lock"></i></div>
                 <h3>Random Password Generator</h3>
                 <p>Generate strong, random passwords with customizable length and character sets.</p>
                 <a class="play-button" href="tools/random-password-generator/">
-                    <span>Open Tool</span><i class="fas fa-arrow-right"></i>
+                    <span>Open Tool</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>
             </div>
 
             <div class="card">
-                <div class="game-icon"><i class="fas fa-user-secret"></i></div>
+                <div class="game-icon" aria-hidden="true"><i class="fas fa-user-secret"></i></div>
                 <h3>Pseudonym Generator</h3>
                 <p>Generate a pseudonym by swapping letters in your surname for the letter directly opposite it on the
                     alphabet circle.</p>
                 <a class="play-button" href="tools/pseudonym-generator/">
-                    <span>Open Tool</span><i class="fas fa-arrow-right"></i>
+                    <span>Open Tool</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>
             </div>
 
             <div class="card">
-                <div class="game-icon"><i class="fas fa-palette"></i></div>
+                <div class="game-icon" aria-hidden="true"><i class="fas fa-palette"></i></div>
                 <h3>RGB Color Wheel</h3>
                 <p>Color wheel and palette tool: RGB, HSL, HSV, or CMYK, save swatches, export palettes.</p>
                 <a class="play-button" href="tools/rgb-color-wheel/">
-                    <span>Open Tool</span><i class="fas fa-arrow-right"></i>
+                    <span>Open Tool</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>
             </div>
 
             <div class="card">
-                <div class="game-icon"><i class="fas fa-sort-alpha-down"></i></div>
+                <div class="game-icon" aria-hidden="true"><i class="fas fa-sort-alpha-down"></i></div>
                 <h3>List Alphabetizer</h3>
                 <p>Sort, clean, and transform lists - by last name, ignore articles, strip HTML, and more.</p>
                 <a class="play-button" href="tools/list-alphabetizer/">
-                    <span>Open Tool</span><i class="fas fa-arrow-right"></i>
+                    <span>Open Tool</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>
             </div>
 
             <div class="card">
-                <div class="game-icon"><i class="fas fa-calendar-alt"></i></div>
-                <h3>Time & Date Calculator</h3>
+                <div class="game-icon" aria-hidden="true"><i class="fas fa-calendar-alt"></i></div>
+                <h3>Time &amp; Date Calculator</h3>
                 <p>Calculate days between dates, include/exclude end date, view results in years, months, weeks, and
                     more.</p>
                 <a class="play-button" href="tools/time-and-date-calculator/">
-                    <span>Open Tool</span><i class="fas fa-arrow-right"></i>
+                    <span>Open Tool</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>
             </div>
 
             <div class="card">
-                <div class="game-icon"><i class="fas fa-gauge-high"></i></div>
+                <div class="game-icon" aria-hidden="true"><i class="fas fa-gauge-high"></i></div>
                 <h3>Speed Reading Tester</h3>
                 <p>RSVP word flash and full stories with comprehension checks.</p>
                 <a class="play-button" href="tools/speed-reading-tester/">
-                    <span>Open Tool</span><i class="fas fa-arrow-right"></i>
+                    <span>Open Tool</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>
             </div>
 
             <div class="card">
-                <div class="game-icon"><i class="fas fa-calendar-week"></i></div>
+                <div class="game-icon" aria-hidden="true"><i class="fas fa-calendar-week"></i></div>
                 <h3>Weekly Timetable</h3>
-                <p>Create a live, editable weekly timetable</p>
+                <p>Create a live, editable weekly timetable.</p>
                 <a class="play-button" href="tools/weekly-timetable/">
-                    <span>Open Tool</span><i class="fas fa-arrow-right"></i>
+                    <span>Open Tool</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>
             </div>
         </div>
 
         <!-- Browser automation scripts -->
         <div id="browser-automation-section" class="subcategory-header">
-            <h3><i class="fas fa-robot"></i> Browser Automation</h3>
+            <h3><i class="fas fa-robot" aria-hidden="true"></i> Browser Automation</h3>
         </div>
         <div class="games-grid">
             <div class="card">
-                <div class="game-icon"><i class="fab fa-youtube"></i></div>
+                <div class="game-icon" aria-hidden="true"><i class="fab fa-youtube"></i></div>
                 <h3>YouTube Activity Cleaner</h3>
                 <p>Chrome console script to automatically delete your YouTube activity (comments, posts, live chat,
                     liked videos).</p>
                 <a class="play-button" href="tools/chrome/youtube-activity-cleaner">
-                    <span>Open Tool</span><i class="fas fa-arrow-right"></i>
+                    <span>Open Tool</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>
             </div>
 
             <div class="card">
-                <div class="game-icon"><i class="fab fa-facebook"></i></div>
+                <div class="game-icon" aria-hidden="true"><i class="fab fa-facebook"></i></div>
                 <h3>Facebook Activity Cleaner</h3>
-                <p>Chrome console script to automatically delete your Facebook activity logs (groups, comments,
-                    posts).</p>
+                <p>Chrome console script to automatically delete your Facebook activity logs (groups, comments, posts).
+                </p>
                 <a class="play-button" href="tools/chrome/facebook-activity-cleaner">
-                    <span>Open Tool</span><i class="fas fa-arrow-right"></i>
+                    <span>Open Tool</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>
             </div>
         </div>

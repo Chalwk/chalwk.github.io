@@ -33,12 +33,10 @@ layout: default
 
                     {% assign words = content | number_of_words %}
                     {% assign reading_time = words | divided_by: 200 %}
-                    {% if reading_time < 1 %}{% assign reading_time=1 %}{% endif %} <span class="reading-time">
-                        ~ {{ reading_time }} min read
-                        </span>
+                    {% if reading_time < 1 %}{% assign reading_time=1 %}{% endif %} <span class="reading-time">~ {{ reading_time }} min read</span>
                 </div>
 
-                <!-- table of contents (collapsible) -->
+                <!-- table of contents (collapsible, populated by JS below) -->
                 {% if page.toc != false %}
                 <div class="toc-container">
                     <details class="toc-details" {% if page.toc_open %}open{% endif %}>
@@ -70,7 +68,6 @@ layout: default
     .post-card {
         border: 2px solid var(--gray-light);
         border-radius: var(--radius-lg);
-        background: white;
         background: linear-gradient(145deg, #ffffff, #f9f9f9);
         padding: 2.5rem;
         box-shadow: var(--shadow);
@@ -93,7 +90,7 @@ layout: default
     }
 
     .post h1 {
-        font-size: 2.5rem;
+        font-size: clamp(1.75rem, 2vw + 1rem, 2.5rem);
         margin-bottom: 0.5rem;
         background: linear-gradient(135deg, var(--darker), var(--primary));
         -webkit-background-clip: text;
@@ -138,12 +135,9 @@ layout: default
     .update-date time {
         all: unset;
         display: inline;
-        background: none;
-        padding: 0;
-        margin: 0;
-        border: none;
     }
 
+    /* TOC */
     .toc-container {
         margin: 2rem 0 1.5rem 0;
         background: rgba(30, 136, 229, 0.03);
@@ -226,10 +220,13 @@ layout: default
         margin-left: 1rem;
     }
 
+    /* Content typography */
     .post-content {
         font-size: 1.05rem;
         line-height: 1.7;
         color: var(--dark);
+        word-wrap: break-word;
+        overflow-wrap: break-word;
     }
 
     .post-content h2,
@@ -314,6 +311,8 @@ layout: default
         white-space: pre;
         word-break: normal;
         word-wrap: normal;
+        scrollbar-width: auto;
+        scrollbar-color: #888 #2d2d2d;
     }
 
     .post-content pre code {
@@ -324,15 +323,20 @@ layout: default
         white-space: pre;
     }
 
-    /* scrollbar (hides when not needed) */
-    .code-block-wrapper pre,
-    .post-content pre {
-        overflow-x: auto;
-        scrollbar-width: auto;
-        scrollbar-color: #888 #2d2d2d;
+    .code-block-wrapper {
+        position: relative;
+        margin: 1.5rem 0;
     }
 
-    /* when overflow is detected, force visible scrollbar */
+    .code-block-wrapper pre {
+        margin: 0;
+        overflow-x: auto;
+        white-space: pre;
+        word-break: normal;
+        word-wrap: normal;
+    }
+
+    /* scrollbars */
     .code-block-wrapper.force-scrollbar pre,
     .post-content pre.force-scrollbar,
     .force-scrollbar pre {
@@ -347,7 +351,6 @@ layout: default
     .code-block-wrapper pre::-webkit-scrollbar-track,
     .post-content pre::-webkit-scrollbar-track {
         background: #2d2d2d;
-        /* dark track like code block bg */
         border-radius: 10px;
     }
 
@@ -369,13 +372,34 @@ layout: default
         scrollbar-color: #1e88e5 #2d2d2d;
     }
 
-    .highlight pre,
-    .highlight code {
-        background-color: #2d2d2d !important;
-        color: #f8fafc !important;
-        white-space: pre !important;
+    /* copy button */
+    .code-block-wrapper .copy-btn {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        padding: 0.35rem 0.7rem;
+        font-size: 0.75rem;
+        font-family: inherit;
+        cursor: pointer;
+        background: var(--primary, #1e88e5);
+        color: white;
+        border: none;
+        border-radius: 3px;
+        opacity: 0.85;
+        transition: opacity 0.2s, background 0.2s;
+        z-index: 10;
     }
 
+    .code-block-wrapper .copy-btn:hover {
+        opacity: 1;
+    }
+
+    .code-block-wrapper .copy-btn:focus-visible {
+        outline: 2px solid white;
+        outline-offset: 2px;
+    }
+
+    /* tables */
     .post-content table {
         display: table;
         width: 100%;
@@ -395,55 +419,9 @@ layout: default
         font-weight: 600;
     }
 
-    .code-block-wrapper {
-        position: relative;
-        margin: 1.5rem 0;
-    }
-
-    .code-block-wrapper pre {
-        margin: 0;
-        overflow-x: auto;
-        white-space: pre;
-        word-break: normal;
-        word-wrap: normal;
-    }
-
-    .code-block-wrapper .copy-btn {
-        position: absolute;
-        top: 0.5rem;
-        right: 0.5rem;
-        padding: 0.25rem 0.5rem;
-        font-size: 0.75rem;
-        cursor: pointer;
-        background: var(--primary, #1e88e5);
-        color: white;
-        border: none;
-        border-radius: 3px;
-        opacity: 0.8;
-        transition: opacity 0.2s;
-        z-index: 10;
-    }
-
-    .code-block-wrapper .copy-btn:hover {
-        opacity: 1;
-    }
-
-    body {
-        overflow-x: hidden;
-    }
-
-    .post-content {
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-    }
-
     @media (max-width: 768px) {
         .post-card {
             padding: 1.5rem;
-        }
-
-        .post h1 {
-            font-size: 1.8rem;
         }
 
         .post-content {
@@ -481,6 +459,9 @@ layout: default
 
 <script>
     document.addEventListener("DOMContentLoaded", () => {
+        // -------------------------------------------------------------
+        // Wrap each code block with a container + copy button
+        // -------------------------------------------------------------
         document.querySelectorAll(".post-content pre").forEach(pre => {
             if (pre.parentElement.classList.contains("code-block-wrapper")) return;
 
@@ -490,8 +471,10 @@ layout: default
             wrapper.appendChild(pre);
 
             const button = document.createElement("button");
+            button.type = "button";
             button.className = "copy-btn";
             button.textContent = "Copy";
+            button.setAttribute("aria-label", "Copy code to clipboard");
             wrapper.appendChild(button);
 
             button.addEventListener("click", async () => {
@@ -499,66 +482,87 @@ layout: default
                 try {
                     await navigator.clipboard.writeText(code);
                     button.textContent = "Copied!";
-                    setTimeout(() => button.textContent = "Copy", 2000);
                 } catch (err) {
                     console.error("Copy failed:", err);
+                    button.textContent = "Failed";
                 }
+                setTimeout(() => { button.textContent = "Copy"; }, 2000);
             });
         });
 
+        // -------------------------------------------------------------
+        // Build a hierarchical TOC from headings inside .post-content
+        // -------------------------------------------------------------
         const tocPlaceholder = document.getElementById('jekyll-toc-placeholder');
+        const tocDetails = tocPlaceholder ? tocPlaceholder.closest('details') : null;
+
         if (tocPlaceholder) {
             const content = document.querySelector('.post-content');
-            if (content) {
-                const headings = content.querySelectorAll('h1, h2, h3, h4, h5, h6');
-                if (headings.length === 0) {
-                    tocPlaceholder.innerHTML = '<p><em>No headings found</em></p>';
-                } else {
-                    let toc = document.createElement('ul');
-                    let stack = [{ level: 1, list: toc }];
-                    headings.forEach((heading, idx) => {
-                        if (!heading.id) heading.id = 'toc-heading-' + idx;
-                        const level = parseInt(heading.tagName[1], 10);
-                        const link = document.createElement('a');
-                        link.href = '#' + heading.id;
-                        link.textContent = heading.innerText;
-                        const item = document.createElement('li');
-                        item.appendChild(link);
-                        while (stack.length > 1 && stack[stack.length - 1].level >= level) stack.pop();
-                        let parentList = stack[stack.length - 1].list;
-                        if (level > stack[stack.length - 1].level) {
-                            const newUl = document.createElement('ul');
-                            const lastLi = parentList.lastElementChild;
-                            if (lastLi && lastLi.tagName === 'LI') {
-                                lastLi.appendChild(newUl);
-                                parentList = newUl;
-                                stack.push({ level: level, list: newUl });
-                            }
-                        }
-                        parentList.appendChild(item);
-                    });
-                    tocPlaceholder.innerHTML = '';
-                    tocPlaceholder.appendChild(toc);
-                }
+            const headings = content ? content.querySelectorAll('h2, h3, h4, h5, h6') : [];
+
+            if (!content || headings.length === 0) {
+                // Nothing to build - hide the whole TOC block.
+                if (tocDetails) tocDetails.style.display = 'none';
+            } else {
+                const toc = document.createElement('ul');
+                // Stack entry: { level, list } - top is the currently open nesting level.
+                const stack = [{ level: 0, list: toc }];
+
+                headings.forEach((heading, idx) => {
+                    // Give headings a stable id if they don't already have one.
+                    if (!heading.id) {
+                        const slug = heading.innerText
+                            .toLowerCase()
+                            .replace(/[^\w\s-]/g, '')
+                            .trim()
+                            .replace(/\s+/g, '-')
+                            .slice(0, 60);
+                        heading.id = 'toc-' + (slug || ('heading-' + idx));
+                    }
+
+                    const level = parseInt(heading.tagName[1], 10);
+
+                    // Pop stack until the parent is strictly shallower.
+                    while (stack.length > 1 && stack[stack.length - 1].level >= level) {
+                        stack.pop();
+                    }
+
+                    const parent = stack[stack.length - 1];
+                    const item = document.createElement('li');
+                    const link = document.createElement('a');
+                    link.href = '#' + heading.id;
+                    link.textContent = heading.innerText;
+                    item.appendChild(link);
+                    parent.list.appendChild(item);
+
+                    // Prepare a nested list for any children of this heading.
+                    const childList = document.createElement('ul');
+                    item.appendChild(childList);
+                    stack.push({ level, list: childList });
+                });
+
+                // Remove empty trailing <ul>s.
+                toc.querySelectorAll('ul').forEach(ul => {
+                    if (!ul.children.length) ul.remove();
+                });
+
+                tocPlaceholder.innerHTML = '';
+                tocPlaceholder.appendChild(toc);
             }
         }
 
+        // -------------------------------------------------------------
+        // Force-visible scrollbars for horizontally scrollable code
+        // -------------------------------------------------------------
         function updateScrollbarVisibility() {
-            const wrappers = document.querySelectorAll('.code-block-wrapper');
-            wrappers.forEach(wrapper => {
+            document.querySelectorAll('.code-block-wrapper').forEach(wrapper => {
                 const pre = wrapper.querySelector('pre');
                 if (!pre) return;
-                const hasOverflow = pre.scrollWidth > pre.clientWidth;
-                if (hasOverflow) {
-                    wrapper.classList.add('force-scrollbar');
-                } else {
-                    wrapper.classList.remove('force-scrollbar');
-                }
+                wrapper.classList.toggle('force-scrollbar', pre.scrollWidth > pre.clientWidth);
             });
         }
 
         updateScrollbarVisibility();
-
         let resizeTimer;
         window.addEventListener('resize', () => {
             clearTimeout(resizeTimer);
