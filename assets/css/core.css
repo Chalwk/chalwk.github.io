@@ -14,8 +14,8 @@
     --warning: #f59e0b;
     --error: #ef4444;
 
-    --font-primary: "Inter", Arial, sans-serif;
-    --font-mono: 'Source Code Pro', monospace;
+    --font-primary: "Roboto", Arial, sans-serif;
+    --font-mono: "Source Code Pro", monospace;
 
     --section-padding: 5rem 0;
     --container-max: 1200px;
@@ -691,29 +691,14 @@ footer p {
     font-size: 0.9rem;
 }
 
-.footer-container {
-    max-width: var(--container-max);
-    margin: 0 auto;
-    padding: 20px 15px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.social-icons {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-}
-
-.social-icons a {
+.social-share a {
     color: var(--gray);
     font-size: 1.4rem;
     line-height: 1;
     transition: var(--transition);
 }
 
-.social-icons a:hover {
+.social-share a:hover {
     color: var(--primary);
     transform: translateY(-2px);
 }
@@ -725,12 +710,6 @@ footer p {
     max-width: 800px;
     margin: 0 auto;
     padding: 15px 15px;
-}
-
-.footer-copyright::before {
-    content: "© 2024-2026 Jericho Crosby (Chalwk). All Rights Reserved.";
-    display: block;
-    text-align: center;
 }
 
 /* responsive breakpoints */
@@ -748,11 +727,7 @@ footer p {
         padding-top: 20px;
     }
 
-    .footer-container {
-        padding: 15px 10px;
-    }
-
-    .social-icons a {
+    .social-share a {
         font-size: 1.2rem;
     }
 

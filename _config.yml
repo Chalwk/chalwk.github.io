@@ -9,24 +9,36 @@ title: Jericho Crosby (Chalwk)
 description: Autistic programmer, gamer, and advocate - building tools, mods, and games.
 
 url: https://chalwk.github.io   # production domain (GitHub Pages)
-baseurl: ""                     # not hosting in a subfolder, so I'll leave this empty
+baseurl: ""                     # not hosting in a subfolder
 locale: en_NZ
 timezone: Pacific/Auckland
-site_scale: 0.65                # UI scaling tweak for layout
+
+# Deliberate. Do not touch!
+# Used to shrink the responsive viewport scale on mobile (see head.html).
+site_scale: 0.65
 
 # ------------------------------------------------------------------------------
 # Build behaviour (performance + markdown rendering)
 # ------------------------------------------------------------------------------
-incremental: true               # speeds up rebuilds during dev
-plugins_cache: true             # cache plugins for faster builds
+incremental: true # speeds up rebuilds during dev
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+  - README.md
+  - LICENSE
+  - run.bat
 
-# highlighter:                  # syntax highlighting engine
-markdown: kramdown              # markdown processor
+markdown: kramdown # markdown processor
 kramdown:
   syntax_highlighter: nil
+  input: GFM
+  hard_wrap: false
 
 sass:
-  style: compressed             # minify CSS output
+  style: compressed # minify CSS output
+  quiet_deps: true
 
 # ------------------------------------------------------------------------------
 # SEO / social metadata (used by jekyll-seo-tag)
@@ -44,9 +56,9 @@ favicon: favicon.ico              # browser tab icon
 links:
   CPAS_Discord: https://discord.gg/NsndXgYfxQ
   SPCLib_Discord: https://discord.gg/D76H7RVPC9
-  Liberty_Discord: https://discord.gg/invite/aQXhJy8UTT
+  Liberty_Discord: https://discord.gg/aQXhJy8UTT
   Twitch: https://www.twitch.tv/chalwk
-  Email: CHALWK.DEV@GMAIL.COM
+  Email: chalwk.dev@gmail.com
 
 # ------------------------------------------------------------------------------
 # Jekyll plugins

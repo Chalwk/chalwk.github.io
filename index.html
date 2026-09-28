@@ -1,25 +1,23 @@
 ---
 layout: default
 title: Home
-description: Jericho's hybrid portfolio + playground + blog
+description: "Jericho's hybrid portfolio + playground + blog."
 ---
 
 <!-- Copyright (c) 2024-2026 Jericho Crosby (Chalwk). All Rights Reserved. -->
 
-<link href="{{ site.baseurl }}/assets/css/index.css" rel="stylesheet">
+<link rel="stylesheet" href="{{ site.baseurl }}/assets/css/index.css">
 
 <section class="hero">
     <div class="container">
         <div class="hero-content">
             <div class="hero-text">
-                <h1 style="font-family: Segoe UI, Arial, sans-serif; font-weight: 700;">
-                    <span style="color: #000000;">Jericho Crosby</span>
-                    <span style="color: #fffafa;">(Chalwk)</span>
-                </h1>
+                <h1>Jericho Crosby <span class="hero-nickname">(Chalwk)</span></h1>
                 <p class="hero-subtitle">Autistic Programmer · Gamer · Advocate</p>
                 <div class="hero-buttons">
-                    <a class="btn" href="{{site.author.url}}/" target="_blank"><i class="fab fa-github"></i> GitHub
-                        Profile</a>
+                    <a class="btn" href="{{ site.author.url }}/" target="_blank" rel="noopener">
+                        <i class="fab fa-github" aria-hidden="true"></i> GitHub Profile
+                    </a>
                 </div>
             </div>
         </div>
@@ -37,7 +35,9 @@ description: Jericho's hybrid portfolio + playground + blog
                 <p><em>"There's nothing quite like being able to say at the end of the day, I made this. This is my
                         world."</em></p>
             </div>
-            <div class="about-image"><img alt="Jericho Crosby" class="profile-img" src="{{ site.image }}"></div>
+            <div class="about-image">
+                <img src="{{ site.image }}" alt="Jericho Crosby" class="profile-img" loading="lazy" decoding="async">
+            </div>
         </div>
 
     </div>

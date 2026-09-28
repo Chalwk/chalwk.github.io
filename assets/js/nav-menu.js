@@ -83,6 +83,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const hamburger = document.querySelector('.hamburger');
     const navMobile = document.querySelector('.nav-mobile');
     if (hamburger && navMobile) {
+        const closeMobileMenu = () => {
+            hamburger.classList.remove('active');
+            hamburger.setAttribute('aria-expanded', 'false');
+            navMobile.classList.remove('active');
+            document.body.classList.remove('menu-open');
+        };
+
         hamburger.addEventListener('click', function () {
             requestAnimationFrame(() => {
                 const isExpanded = this.getAttribute('aria-expanded') === 'true';
@@ -121,23 +128,15 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         // close mobile menu when any link is clicked
-        const mobileLinks = navMobile.querySelectorAll('a');
-        mobileLinks.forEach(link => {
-            link.addEventListener('click', function () {
-                hamburger.classList.remove('active');
-                hamburger.setAttribute('aria-expanded', 'false');
-                navMobile.classList.remove('active');
-                document.body.classList.remove('menu-open');
-            });
+        navMobile.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', closeMobileMenu);
         });
 
-        // ESC key closes mobile menu
+        // ESC key closes mobile menu and returns focus to hamburger
         document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape') {
-                hamburger.classList.remove('active');
-                hamburger.setAttribute('aria-expanded', 'false');
-                navMobile.classList.remove('active');
-                document.body.classList.remove('menu-open');
+            if (e.key === 'Escape' && document.body.classList.contains('menu-open')) {
+                closeMobileMenu();
+                hamburger.focus();
             }
         });
     }
@@ -146,9 +145,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const scrollBtn = document.createElement('button');
     scrollBtn.id = 'scrollToTopBtn';
     scrollBtn.className = 'scroll-to-top';
+    scrollBtn.type = 'button';
     scrollBtn.setAttribute('aria-label', 'Scroll to top');
     scrollBtn.setAttribute('tabindex', '-1');
-    scrollBtn.innerHTML = '<span class="sr-only">Scroll to top</span><i class="fas fa-chevron-up" aria-hidden="true"></i>';
+    scrollBtn.setAttribute('aria-hidden', 'true');
+    scrollBtn.innerHTML = '<i class="fas fa-chevron-up" aria-hidden="true"></i>';
     document.body.appendChild(scrollBtn);
 
     const scrollStyle = document.createElement('style');
@@ -180,7 +181,6 @@ document.addEventListener('DOMContentLoaded', function () {
         .scroll-to-top.visible {
             opacity: 1;
             visibility: visible;
-            tab-index: 0;
         }
         .scroll-to-top:hover,
         .scroll-to-top:focus {
@@ -191,17 +191,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         .scroll-to-top:active {
             transform: translateY(0) scale(0.98);
-        }
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border: 0;
         }
         @media (max-width: 768px) {
             .scroll-to-top {
@@ -232,13 +221,10 @@ document.addEventListener('DOMContentLoaded', function () {
             scrollBtn.setAttribute('tabindex', isVisible ? '0' : '-1');
             scrollBtn.setAttribute('aria-hidden', String(!isVisible));
         }, 100);
-    });
+    }, { passive: true });
 
     scrollBtn.addEventListener('click', function () {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         this.blur();
     });
 
@@ -248,6 +234,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const navMobile = document.querySelector('.nav-mobile');
             if (!navMobile) return;
             const focusableElements = navMobile.querySelectorAll('a, button, [tabindex]:not([tabindex="-1"])');
+            if (focusableElements.length === 0) return;
             const firstElement = focusableElements[0];
             const lastElement = focusableElements[focusableElements.length - 1];
 
