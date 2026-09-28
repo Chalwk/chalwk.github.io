@@ -1,7 +1,7 @@
 ---
 title: "Halo: How to host a Linux VPS (Ubuntu 22.04)"
-date: 2025-8-29
-last-updated: 2026-6-20
+date: 2025-08-29
+last-updated: 2026-06-20
 categories: [ education, halo, vps, linux, server ]
 tags: [ ubuntu, wine, vnc, ssh, hosting, tutorial ]
 ---

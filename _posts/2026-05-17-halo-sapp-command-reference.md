@@ -1,6 +1,6 @@
 ---
 title: "Halo: SAPP Command Reference"
-date: 2026-5-17
+date: 2026-05-17
 last-updated: 2026-09-29
 categories: [ education, halo, modding ]
 tags: [ sapp, commands, reference, server ]
