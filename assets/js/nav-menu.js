@@ -1,6 +1,8 @@
 // Copyright (c) 2024-2026 Jericho Crosby (Chalwk). All Rights Reserved.
 
 document.addEventListener('DOMContentLoaded', function () {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     const header = document.querySelector('header.header');
     if (header) {
         // desktop dropdowns: toggle on click (not hover)
@@ -36,6 +38,17 @@ document.addEventListener('DOMContentLoaded', function () {
                     dropdown.querySelector('.dropdown-menu').classList.remove('active');
                 });
             }
+        });
+
+        // close desktop dropdowns with Escape
+        document.addEventListener('keydown', function (e) {
+            if (e.key !== 'Escape' || window.innerWidth <= 768) return;
+            desktopDropdowns.forEach(dropdown => {
+                const toggle = dropdown.querySelector('.dropdown-toggle');
+                const menu = dropdown.querySelector('.dropdown-menu');
+                toggle.setAttribute('aria-expanded', 'false');
+                menu.classList.remove('active');
+            });
         });
 
         // submenu positioning: avoid going off-screen right
@@ -152,99 +165,45 @@ document.addEventListener('DOMContentLoaded', function () {
     scrollBtn.innerHTML = '<i class="fas fa-chevron-up" aria-hidden="true"></i>';
     document.body.appendChild(scrollBtn);
 
-    const scrollStyle = document.createElement('style');
-    scrollStyle.textContent = `
-        .scroll-to-top {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            box-shadow: var(--shadow-lg);
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(20px);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            outline: 2px solid transparent;
-            outline-offset: 2px;
-        }
-        .scroll-to-top.visible {
-            opacity: 1;
-            visibility: visible;
-        }
-        .scroll-to-top:hover,
-        .scroll-to-top:focus {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
-            background: linear-gradient(135deg, var(--secondary), var(--primary));
-            outline: 2px solid var(--accent);
-        }
-        .scroll-to-top:active {
-            transform: translateY(0) scale(0.98);
-        }
-        @media (max-width: 768px) {
-            .scroll-to-top {
-                bottom: 20px;
-                right: 20px;
-                width: 45px;
-                height: 45px;
-                font-size: 18px;
-            }
-        }
-        @media (max-width: 480px) {
-            .scroll-to-top {
-                bottom: 15px;
-                right: 15px;
-                width: 40px;
-                height: 40px;
-            }
-        }
-    `;
-    document.head.appendChild(scrollStyle);
+    let scrollTicking = false;
+    function updateScrollButton() {
+        const isVisible = window.pageYOffset > 300;
+        scrollBtn.classList.toggle('visible', isVisible);
+        scrollBtn.setAttribute('tabindex', isVisible ? '0' : '-1');
+        scrollBtn.setAttribute('aria-hidden', String(!isVisible));
+        scrollTicking = false;
+    }
 
-    let scrollTimeout;
-    window.addEventListener('scroll', function () {
-        clearTimeout(scrollTimeout);
-        scrollTimeout = setTimeout(function () {
-            const isVisible = window.pageYOffset > 300;
-            scrollBtn.classList.toggle('visible', isVisible);
-            scrollBtn.setAttribute('tabindex', isVisible ? '0' : '-1');
-            scrollBtn.setAttribute('aria-hidden', String(!isVisible));
-        }, 100);
+    window.addEventListener('scroll', () => {
+        if (scrollTicking) return;
+        scrollTicking = true;
+        window.requestAnimationFrame(updateScrollButton);
     }, { passive: true });
+    updateScrollButton();
 
     scrollBtn.addEventListener('click', function () {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
         this.blur();
     });
 
     // trap focus inside mobile menu when open
     document.addEventListener('keydown', function (e) {
-        if (e.key === 'Tab' && document.body.classList.contains('menu-open')) {
-            const navMobile = document.querySelector('.nav-mobile');
-            if (!navMobile) return;
-            const focusableElements = navMobile.querySelectorAll('a, button, [tabindex]:not([tabindex="-1"])');
-            if (focusableElements.length === 0) return;
-            const firstElement = focusableElements[0];
-            const lastElement = focusableElements[focusableElements.length - 1];
+        if (e.key !== 'Tab' || !document.body.classList.contains('menu-open')) return;
+        const navMobile = document.querySelector('.nav-mobile');
+        if (!navMobile) return;
 
-            if (e.shiftKey && document.activeElement === firstElement) {
-                e.preventDefault();
-                lastElement.focus();
-            } else if (!e.shiftKey && document.activeElement === lastElement) {
-                e.preventDefault();
-                firstElement.focus();
-            }
+        const focusableElements = navMobile.querySelectorAll('a, button, [tabindex]:not([tabindex="-1"])');
+        if (focusableElements.length === 0) return;
+
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
+
+        if (e.shiftKey && document.activeElement === firstElement) {
+            e.preventDefault();
+            lastElement.focus();
+        } else if (!e.shiftKey && document.activeElement === lastElement) {
+            e.preventDefault();
+            firstElement.focus();
         }
     });
 });

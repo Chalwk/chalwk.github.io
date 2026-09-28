@@ -4,22 +4,22 @@
   <meta charset="UTF-8">
 
   <!-- Deliberate. Do not touch! -->
-  <meta content="width=device-width, initial-scale={{ site.site_scale }}" name="viewport">
+  <meta content="width=device-width, initial-scale={{ site.site_scale }}, viewport-fit=cover" name="viewport">
 
   <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#1e88e5" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0d47a1" media="(prefers-color-scheme: dark)">
+  <meta name="author" content="Jericho Crosby (Chalwk)">
 
-  <title>{% if page.title %}{{ page.title }} | {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
-  <meta name="description" content="{{ page.description | default: site.description | escape }}">
-
-  <!-- SEO (jekyll-seo-tag handles OG, Twitter, canonical, JSON-LD) -->
+  <!--
+    jekyll-seo-tag emits: <title>, <meta name="description">, canonical,
+    og:title/description/url/type/image, twitter:card/title/description/image,
+    and a JSON-LD block.
+  -->
   {% seo %}
 
   <!-- Extra social metadata not emitted by jekyll-seo-tag -->
   <meta property="og:image:alt" content="Jericho Crosby">
-
-  <!-- Theme color: matches header gradient. Dark variant for dark-mode UAs. -->
-  <meta name="theme-color" content="#1e88e5" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#0d47a1" media="(prefers-color-scheme: dark)">
 
   <!-- Preconnect / dns-prefetch hints for external resources -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,12 +28,15 @@
   <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
 
   <!-- Favicon -->
+  {% if site.favicon %}
   <link rel="icon" href="{{ site.favicon | relative_url }}" type="image/x-icon">
+  {% endif %}
 
   <!-- Stylesheets -->
   <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/core.css">
   <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/syntax.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
 

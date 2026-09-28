@@ -6,10 +6,12 @@
 # Site identity / basic info
 # ------------------------------------------------------------------------------
 title: Jericho Crosby (Chalwk)
-description: Autistic programmer, gamer, and advocate - building tools, mods, and games.
+tagline: "Autistic Programmer · Gamer · Advocate"
+description: "Autistic programmer, gamer, and advocate - building tools, mods, and games."
 
 url: https://chalwk.github.io   # production domain (GitHub Pages)
 baseurl: ""                     # not hosting in a subfolder
+lang: en-NZ
 locale: en_NZ
 timezone: Pacific/Auckland
 
@@ -21,6 +23,7 @@ site_scale: 0.65
 # Build behavior (performance + markdown rendering)
 # ------------------------------------------------------------------------------
 incremental: true # speeds up rebuilds during dev
+
 exclude:
   - Gemfile
   - Gemfile.lock
@@ -35,6 +38,7 @@ kramdown:
   syntax_highlighter: nil
   input: GFM
   hard_wrap: false
+  toc_levels: 2..6
 
 sass:
   style: compressed # minify CSS output
@@ -43,6 +47,10 @@ sass:
 # ------------------------------------------------------------------------------
 # SEO / social metadata (used by jekyll-seo-tag)
 # ------------------------------------------------------------------------------
+title_separator: "|"
+twitter:
+  card: summary_large_image
+
 author:
   name: Jericho Crosby
   url: https://github.com/Chalwk
