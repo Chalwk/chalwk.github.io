@@ -227,6 +227,7 @@ SAPP doesn't have `math.atan2` so here is a pure Lua implementation.
 
 ```lua
 if not math.atan2 then
+    local pi = math.pi
     math.atan2 = function(y, x)
         if x > 0 then
             return math.atan(y / x)
@@ -1254,8 +1255,8 @@ These characters are stripped from the displayed message and only affect layout.
 #### Example
 
 ```lua
-rprint("|cHello, welcome to my server")   -- Centers the message
-rprint("|rPlayer joined: " .. playerName) -- Right-aligns the message
+rprint(player_id, "|cHello, welcome to my server")   -- Centers the message
+rprint(player_id, "|rPlayer joined: " .. playerName) -- Right-aligns the message
 ```
 
 > **Note:** Because HAC2 and Chimera handle text positioning differently, scripters should avoid relying solely on `|c`,

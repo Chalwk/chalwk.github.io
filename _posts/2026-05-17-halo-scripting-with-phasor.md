@@ -271,9 +271,9 @@ local function get_player_pos(id)
     local obj, obj_id = get_player_biped(id)
     if not obj then return nil end
 
-    local x = readfloat(obj, 0x5C)
-    local y = readfloat(obj, 0x60)
-    local z = readfloat(obj, 0x64)
+    local x = readfloat(obj + 0x5C)
+    local y = readfloat(obj + 0x60)
+    local z = readfloat(obj + 0x64)
     local crouch = readfloat(obj + 0x50C)
 
     -- 0.65 is standing eye height, 0.35 is crouching adjustment
@@ -556,7 +556,7 @@ local function get_players_by_expression(expression, self_id)
         for i = 0, 15 do
             if getplayer(i) and i ~= self_id then t[#t + 1] = i end
         end
-        if #t > 0 then return { t[random(#t)] } end
+        if #t > 0 then return { t[getrandomnumber(1, #t)] } end
         return nil
 
         -- Nearest player to self
@@ -1123,7 +1123,7 @@ local function safe_write_byte(address, offset, value)
     else
         value = offset
     end
-    value = math_min(math_max(value, 0), 0xFF)
+    value = math.min(math.max(value, 0), 0xFF)
     writebyte(address, value)
 end
 ```
@@ -1552,7 +1552,7 @@ local function has_objective(player_index)
     local tag_data = readdword(readdword(base_tag_table) + readword(weapon_obj) * 0x20 + 0x14)
     if not tag_data then return false end
 
-    local is_objective = (readbyte(tag_data + 0x308) >> 3) & 1
+    local is_objective = bit32.band(bit32.rshift(readbyte(tag_data + 0x308), 3), 1)
     if is_objective ~= 1 then return false end
 
     local obj_type = readbyte(tag_data + 2)

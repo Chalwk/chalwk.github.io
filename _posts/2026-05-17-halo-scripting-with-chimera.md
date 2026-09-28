@@ -417,6 +417,8 @@ function OnTick()
 end
 ```
 
+---
+
 ## Camera Manipulation (OnPreCamera)
 
 Chimera allows you to modify the camera position, orientation, and field of view before the game renders.
@@ -514,6 +516,8 @@ for i = 0, object_count - 1 do
 end
 ```
 
+---
+
 ## Get object name (e.g. weapon name)
 
 Gets the display name of an object (e.g. weapon, vehicle, equipment) by resolving its tag and extracting the tag path.
@@ -610,7 +614,7 @@ local function get_player_name(id)
     end
     return table.concat(name_chars)
 end
-
+```
 
 ---
 

@@ -1,7 +1,7 @@
 ---
 title: "Halo: SAPP Server Guide"
-date: 2026-04-03
-last-updated: 2026-05-28
+date: 2026-04-02
+last-updated: 2026-09-29
 categories: [ education, halo, modding, server ]
 tags: [ sapp, lua, scripting, hosting, multi-server, tutorial ]
 ---

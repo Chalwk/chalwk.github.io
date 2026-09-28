@@ -1,6 +1,6 @@
 ---
 title: "Halo: Understanding Memory Offsets"
-date: 2025-09-08
+date: 2025-09-07
 last-updated: 2026-09-29
 categories: [ education, halo, modding ]
 tags: [ sapp, chimera, lua, memory, offsets, scripting, tutorial ]
@@ -505,6 +505,7 @@ SAPP doesn't have `math.atan2` so here is a pure Lua implementation.
 
 ```lua
 if not math.atan2 then
+    local pi = math.pi
     math.atan2 = function(y, x)
         if x > 0 then
             return math.atan(y / x)

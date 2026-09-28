@@ -1,7 +1,7 @@
 ---
 title: "Halo: Modding References & Tools"
-date: 2025-09-08
-last-updated: 2026-05-20
+date: 2025-09-07
+last-updated: 2026-09-29
 categories: [ education, halo, modding ]
 tags: [ hek, tools, sapp, lua, scripting, tutorial, reference ]
 ---
