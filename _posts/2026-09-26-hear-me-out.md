@@ -1,7 +1,7 @@
 ---
 title: "HearMeOut - AAC Communicator"
 date: 2026-09-26
-last-updated: 2026-09-26
+last-updated: 2026-09-29
 categories: [ programming, guide, web-app, accessibility ]
 tags: [ programming, guide, web-app, accessibility, aac ]
 ---
@@ -100,9 +100,6 @@ Goal: build a phrase, then have it spoken.
 ## Design Notes
 
 A running log of how the app is built, what has been reworked, and what is still rough.
-
-<details>
-    <summary>Click to expand</summary>
 
 ### File Structure
 
@@ -222,8 +219,6 @@ Long-press preview is the compromise. Holding a symbol for about half a second s
 Phrase reordering uses pointer events, not HTML5 drag-and-drop. This is deliberate. HTML5 DnD does not work on touch devices - the drag handles are invisible to mobile browsers, and the events never fire. For an app whose primary use case is a tablet or phone, that is a fatal gap. Pointer events work everywhere: the same code handles mouse drag on desktop and finger drag on touch. Movement under 6 px counts as a tap (which removes the chip); over 6 px starts a drag. Keyboard users can reorder with left/right arrow keys on a focused chip.
 
 Undo history is a stack of JSON snapshots, capped at 50 entries. Every mutating phrase action pushes a snapshot first: add, remove, reorder, clear. Undo pops and replaces. It is simple enough that it will never be the source of a bug.
-
-</details>
 
 ---
 

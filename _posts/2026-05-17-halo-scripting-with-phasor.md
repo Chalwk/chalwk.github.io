@@ -1,7 +1,7 @@
 ---
 title: "Scripting with Phasor - Server-Side Lua"
 date: 2026-5-17
-last-updated: 2026-5-17
+last-updated: 2026-09-29
 categories: [ education, halo, modding ]
 tags: [ phasor, lua, scripting, server, tutorial ]
 ---
@@ -563,7 +563,7 @@ local function get_players_by_expression(expression, self_id)
     elseif expression == "nearest" or expression == "closest" then
         if not self_id or not get_player_pos(self_id) then return nil end
         local sx, sy, sz = get_player_pos(self_id)
-        local min_dist, closest = math_huge, nil
+        local min_dist, closest = math.huge, nil
         for i = 0, 15 do
             if i ~= self_id and getplayer(i) then
                 local x, y, z = get_player_pos(i)

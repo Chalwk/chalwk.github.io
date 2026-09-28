@@ -1,7 +1,7 @@
 ---
 title: "Halo: SAPP Command Reference"
 date: 2026-5-17
-last-updated: 2026-5-28
+last-updated: 2026-09-29
 categories: [ education, halo, modding ]
 tags: [ sapp, commands, reference, server ]
 ---
@@ -46,7 +46,7 @@ These are Halo's built-in server commands. SAPP enhances or overrides some.
 | sv_mapcycle_timeout        | `sv_mapcycle_timeout [time]`           | Set time between games (seconds). Default: `10`.                    |
 | sv_maplist                 | `sv_maplist`                           | Display all loaded maps.                                            |
 | sv_maxplayers              | `sv_maxplayers [players]`              | Get/set max players (1-16). Default: `16`.                          |
-| sv_modt                    | `sv_modt [modt.txt]`                   | Set path for server modt (CE only).                                 |
+| sv_motd                    | `sv_motd [motd.txt]`                   | Set path for server motd (CE only).                                 |
 | sv_name                    | `sv_name [name]`                       | Get/set server name (max 63 chars). Default: `"Halo"`.              |
 | sv_password                | `sv_password [password]`               | Get/set join password (max 8 chars).                                |
 | sv_players                 | `sv_players`                           | List players with indices, team, ping, score, betrayals, TK timer.  |
@@ -140,7 +140,7 @@ Used to configure server behaviour. Settings lost on reload unless placed in `in
 | antihalofp            | 4     | `antihalofp [enabled]`                           | IP ban (5 min) for too-frequent join attempts. Default: `false`.                    |
 | antilagspawn          | 4     | `antilagspawn [enable]`                          | Prevent lag-spawning. Default: `false`.                                             |
 | antispam              | 4     | `antispam [type]`                                | Auto mute spammers: `0`=disabled,`1`=CD-key,`2`=IP. Default: `0`.                   |
-| antiwarp              | 4     | `antivarp [warp_num]`                            | Raise `event_warp` after given warps. `0`=disabled.                                 |
+| antiwarp              | 4     | `antiwarp [warp_num]`                            | Raise `event_warp` after given warps. `0`=disabled.                                 |
 | auto_update           | 4     | `auto_update [enabled]`                          | Auto-update SAPP when available. Default: `true`.                                   |
 | network_thread        | 4     | `network_thread [enabled]`                       | Disable to stop SAPP server list, map download, anticheat. Default: `true`.         |
 | block_tc              | 4     | `block_tc [enabled]`                             | Block team changing. Default: `false`.                                              |

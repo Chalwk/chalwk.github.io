@@ -1,7 +1,7 @@
 ---
 title: "Halo: Understanding Memory Offsets"
 date: 2025-9-8
-last-updated: 2026-5-19
+last-updated: 2026-09-29
 categories: [ education, halo, modding ]
 tags: [ sapp, chimera, lua, memory, offsets, scripting, tutorial ]
 ---
@@ -303,32 +303,32 @@ Chimera & SAPP: `local dyn = get_dynamic_player()`
 
 Chimera & SAPP: `local static_p = get_player(id)`
 
-| Offset  | Type    | Description                          | Example Use                                                                               |
-| ------- | ------- | ------------------------------------ | ----------------------------------------------------------------------------------------- |
-| `0x4`   | wchar[] | Player name (UTF-16, max 12 chars)   | See Chimera [get_player_name()](2025-09-07-halo-understanding-memory-offsets.md)) example |
-| `0x20`  | byte    | Team (0 = Red, 1 = Blue)             | `local team = read_byte(static_p + 0x20)`                                                 |
-| `0x9C`  | word    | Kill count                           | `local kills = read_word(static_p + 0x9C)`                                                |
-| `0xAE`  | word    | Death count                          | `local deaths = read_word(static_p + 0xAE)`                                               |
-| `0xDC`  | dword   | Ping in milliseconds                 |                                                                                           |
-| `0xF8`  | float   | World X (alternate position storage) |                                                                                           |
-| `0xFC`  | float   | World Y                              |                                                                                           |
-| `0x100` | float   | World Z                              |                                                                                           |
+| Offset  | Type    | Description                          | Example Use                                                       |
+| ------- | ------- | ------------------------------------ | ----------------------------------------------------------------- |
+| `0x4`   | wchar[] | Player name (UTF-16, max 12 chars)   | Read the low byte of each UTF-16 code unit, stop at the null byte |
+| `0x20`  | byte    | Team (0 = Red, 1 = Blue)             | `local team = read_byte(static_p + 0x20)`                         |
+| `0x9C`  | word    | Kill count                           | `local kills = read_word(static_p + 0x9C)`                        |
+| `0xAE`  | word    | Death count                          | `local deaths = read_word(static_p + 0xAE)`                       |
+| `0xDC`  | dword   | Ping in milliseconds                 |                                                                   |
+| `0xF8`  | float   | World X (alternate position storage) |                                                                   |
+| `0xFC`  | float   | World Y                              |                                                                   |
+| `0x100` | float   | World Z                              |                                                                   |
 
 ### Weapon Object
 
-Chimera: `get_object(weapon_id)`, SAPP `get_object_memory(weapon_id)`
+Chimera: `get_object(weapon_id)`, SAPP: `get_object_memory(weapon_id)`
 
-| Offset  | Type  | Description                                 | Example Use      |
-| ------- | ----- | ------------------------------------------- | ---------------- |
-| `0x2B6` | word  | Rounds in current magazine                  | Low ammo warning |
-| `0x2B8` | word  | Total reserve ammo                          |                  |
-| `0x2C6` | word  | Secondary ammo (e.g., grenades in launcher) |                  |
-| `0x2C8` | word  | Secondary clip                              |                  |
-| `0x240` | float | Overheat (0 = cool, 1 = overheated)         |                  |
+| Offset  | Type  | Description                                 | Example Use           |
+| ------- | ----- | ------------------------------------------- | --------------------- |
+| `0x2B6` | word  | Rounds in current magazine                  | Low ammo warning      |
+| `0x2B8` | word  | Total reserve ammo                          | Ammo tracking         |
+| `0x2C6` | word  | Secondary ammo (e.g., grenades in launcher) | Grenade launcher ammo |
+| `0x2C8` | word  | Secondary clip                              |                       |
+| `0x240` | float | Overheat (0 = cool, 1 = overheated)         | Plasma weapon heat    |
 
 ### Vehicle Object
 
-Chimera: `get_object(vehicle_id)`, SAPP `get_object_memory(vehicle_id)`
+Chimera: `get_object(vehicle_id)`, SAPP: `get_object_memory(vehicle_id)`
 
 | Offset | Type  | Description                                   |
 | ------ | ----- | --------------------------------------------- |
@@ -338,18 +338,6 @@ Chimera: `get_object(vehicle_id)`, SAPP `get_object_memory(vehicle_id)`
 | `0x68` | float | Velocity X                                    |
 | `0x6C` | float | Velocity Y                                    |
 | `0x70` | float | Velocity Z                                    |
-
-### Weapon Object
-
-Chimera: `get_object(weapon_id)`, SAPP `get_object_memory(weapon_id)`
-
-| Offset  | Type  | Description                                 | Example Use           |
-| ------- | ----- | ------------------------------------------- | --------------------- |
-| `0x2B6` | word  | Rounds in current magazine                  | Low ammo warning      |
-| `0x2B8` | word  | Total reserve ammo                          | Ammo tracking         |
-| `0x2C6` | word  | Secondary ammo (e.g., grenades in launcher) | Grenade launcher ammo |
-| `0x2C8` | word  | Secondary clip                              |                       |
-| `0x240` | float | Overheat (0 = cool, 1 = overheated)         | Plasma weapon heat    |
 
 ---
 
@@ -385,22 +373,25 @@ function is_low_ammo(dynamic_player, threshold)
 end
 ```
 
-### Get Player Name (UTF-16 to ASCII) - Chimera Only, use get_var("$name") for SAPP
+### Get Player Name (UTF-16 to ASCII) - Chimera only; use get_var("$name") for SAPP
 
 ```lua
 function get_player_name(player_id)
-    local addr = static + 0x4
+    local static_p = get_player(player_id)
+    if not static_p then return nil end
+
+    local addr = static_p + 0x4
     local chars = {}
     for i = 1, 12 do
-        local byte = read_byte(addr + (i-1)*2)  -- low byte only; high byte is zero for ASCII
+        local byte = read_byte(addr + (i - 1) * 2)  -- low byte only; high byte is zero for ASCII
         if byte == 0 then break end
-        chars[#chars+1] = string.char(byte)
+        chars[#chars + 1] = string.char(byte)
     end
     return table.concat(chars)
 end
 ```
 
-### Check If Player Is In A Vehicle (and what seat)
+### Check If Player Is In A Vehicle
 
 ```lua
 function is_in_vehicle(dynamic_player)
@@ -442,9 +433,9 @@ end
 
 ```lua
 function get_team_name(player_id)
-    local static = get_player(player_id)
-    if not static then return "None" end
-    local team = read_byte(static + 0x20)
+    local static_p = get_player(player_id)
+    if not static_p then return "None" end
+    local team = read_byte(static_p + 0x20)
     return (team == 0) and "Red" or "Blue"
 end
 ```
@@ -453,10 +444,10 @@ end
 
 ```lua
 function get_kd_ratio(player_id)
-    local static = get_player(player_id)
-    if not static then return 0 end
-    local kills = read_word(static + 0x9C)
-    local deaths = read_word(static + 0xAE)
+    local static_p = get_player(player_id)
+    if not static_p then return 0 end
+    local kills = read_word(static_p + 0x9C)
+    local deaths = read_word(static_p + 0xAE)
     if deaths == 0 then return kills end
     return kills / deaths
 end
@@ -476,7 +467,7 @@ end
 
 -- Usage:
 for_each_player(function(idx, dyn)
-    local name = get_player_name(idx) -- Chimera only, use get_var("$name") for SAPP
+    local name = get_player_name(idx) -- Chimera only; use get_var("$name") for SAPP
     local health = get_health_percent(dyn)
     local shields = get_shields_percent(dyn)
     console_out(string.format("%s HP:%d SH:%i", name, health, shields))
@@ -488,24 +479,23 @@ end)
 Iterate over all weapon slots and retrieve each weapon object using the dynamic player and object memory pointers.
 
 ```lua
-for slot = 0,3 do
-    local item_id = read_dword(dynamic_player + 0x2F8 + s * 4)
-    if item_id == 0xFFFFFFFF then goto next end
-
-    local object = get_object_memory(item_id) -- Use get_object for Chimera
-    if object == 0 then goto next end
-
-    players[player_id].inventory[i + 1] = {
-        [object] = object,                 -- ..
-        [ammo] = read_word(object + 0x2B6),  -- ..
-        [clip] = read_word(object + 0x2B8),  -- ..
-        [ammo2] = read_word(object + 0x2C6), -- ..
-        [clip2] = read_word(object + 0x2C8), -- ..
-        [age] = read_float(object + 0x240),  -- battery weapons (e.g. plasma cannon/pistol)
-        [frags] = read_byte(dynamic_player + 0x31E),
-        [plasmas] = read_byte(dynamic_player + 0x31F)
-    }
-    ::next::
+for slot = 0, 3 do
+    local item_id = read_dword(dynamic_player + 0x2F8 + slot * 4)
+    if item_id ~= 0xFFFFFFFF then
+        local object = get_object_memory(item_id) -- Use get_object for Chimera
+        if object ~= 0 then
+            players[player_id].inventory[slot + 1] = {
+                [object] = object,                    -- object memory address
+                [ammo]   = read_word(object + 0x2B6), -- loaded ammo
+                [clip]   = read_word(object + 0x2B8), -- reserve ammo
+                [ammo2]  = read_word(object + 0x2C6), -- secondary ammo
+                [clip2]  = read_word(object + 0x2C8), -- secondary reserve
+                [age]    = read_float(object + 0x240),-- battery weapons (e.g. plasma cannon/pistol)
+                [frags]   = read_byte(dynamic_player + 0x31E),
+                [plasmas] = read_byte(dynamic_player + 0x31F)
+            }
+        end
+    end
 end
 ```
 

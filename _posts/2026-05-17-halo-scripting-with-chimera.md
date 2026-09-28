@@ -1,7 +1,7 @@
 ---
 title: "Scripting with Chimera - Client-Side Lua"
 date: 2026-5-17
-last-updated: 2026-5-20
+last-updated: 2026-09-29
 categories: [ education, halo, modding ]
 tags: [ chimera, lua, scripting, client, tutorial ]
 ---
@@ -410,9 +410,10 @@ function OnTick()
     local y = read_float(dyn + 0x60)
     local z = read_float(dyn + 0x64)
     
+    local name = get_player_name(local_player_index) -- see definition below
     execute_script("cls") -- clear old HUD lines
     
-    hud_message(string.format("Pos: %s, %.1f, %.1f, %.1f", name, x, y, z))
+    hud_message(string.format("Pos: %s, %.1f, %.1f, %.1f", name or "?", x, y, z))
 end
 ```
 
@@ -428,7 +429,7 @@ Example: zoom in when holding a sniper
 -- ox1,oy1,oz1: camera look-at point (forward vector)
 -- ox2,oy2,oz2: up vector
 function OnPreCamera(x, y, z, fov, ox1, oy1, oz1, ox2, oy2, oz2)
-    local dyn = get_dynamic_player(idx)
+    local dyn = get_dynamic_player(local_player_index)
     if dyn == 0 then return end
 
     local weapon_id = read_dword(dyn + 0x118)
@@ -597,17 +598,19 @@ single `0x00` byte that marks the null terminator.
 
 ```lua
 local function get_player_name(id)
-    local obj = get_player(id)
-    local addr = obj + 0x4
+    local static_p = get_player(id)
+    if not static_p then return nil end
+
+    local addr = static_p + 0x4
     local name_chars = {}
     for i = 1, 12 do
-        local b = read_byte(addr + (i-1)*2)
+        local b = read_byte(addr + (i - 1) * 2)
         if b == 0 then break end
-        name_chars[#name_chars+1] = string.char(b)
+        name_chars[#name_chars + 1] = string.char(b)
     end
     return table.concat(name_chars)
 end
-```
+
 
 ---
 

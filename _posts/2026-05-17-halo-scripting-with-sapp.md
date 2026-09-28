@@ -1,7 +1,7 @@
 ---
 title: "Scripting with SAPP - Server-Side Lua"
 date: 2026-5-17
-last-updated: 2026-5-19
+last-updated: 2026-09-29
 categories: [ education, halo, modding ]
 tags: [ sapp, lua, scripting, server, tutorial ]
 ---
@@ -974,25 +974,25 @@ local WEAPONS = {
     'weapons\\assault rifle\\assault rifle'
 }
 
--- Function to assign weapons to a player
-local function assign_weapon(player_id)
+-- Assign a full loadout to a player
+local function assign_weapons(player_id)
     -- Delete the player's inventory first:
     execute_command('wdel ' .. player_id)
 
     -- Assign primary and secondary weapons immediately
     local primary_weapon = spawn_object('weap', WEAPONS[1], 0, 0, 0)
     local secondary_weapon = spawn_object('weap', WEAPONS[2], 0, 0, 0)
-    
+
     assign_weapon(primary_weapon, player_id)
     assign_weapon(secondary_weapon, player_id)
 
     local tertiary_weapon = spawn_object('weap', WEAPONS[3], 0, 0, 0)
     local quaternary_weapon = spawn_object('weap', WEAPONS[4], 0, 0, 0)
-    
+
     -- Assign tertiary and quaternary weapons with a delay
     timer(250, "assign_weapon", tertiary_weapon, player_id)
     timer(500, "assign_weapon", quaternary_weapon, player_id)
-    
+
     -- Technical note: 
     -- SAPP's "assign_weapon" function will fail silently/safely if the player is dead.
 end
@@ -1003,7 +1003,7 @@ end
 
 -- Assign weapons when the player spawns:
 function OnSpawn(player_id)
-    assign_weapons(player_id)    
+    assign_weapons(player_id)
 end
 
 function OnScriptUnload() end
