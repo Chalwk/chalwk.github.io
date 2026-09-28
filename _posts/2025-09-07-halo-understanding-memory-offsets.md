@@ -352,9 +352,15 @@ function get_speed(dynamic_player)
     local vx = read_float(dynamic_player + 0x68)
     local vy = read_float(dynamic_player + 0x6C)
     local vz = read_float(dynamic_player + 0x70)
-    local speed = math.sqrt(vx*vx + vy*vy + vz*vz)
-    -- Convert world units per tick to km/h (1 tick ≈ 1/30 sec, 1 unit ≈ 0.1 m)
-    return speed * 30 * 3.6
+
+    -- Velocity is in World Units per tick
+    local speed_wu_per_tick = math.sqrt(vx*vx + vy*vy + vz*vz)
+
+    -- Convert WU/tick -> km/h:
+    --   30 ticks per second
+    --   1 World Unit = 3.048 meters
+    --   1 m/s = 3.6 km/h
+    return speed_wu_per_tick * 30 * 3.048 * 3.6
 end
 ```
 

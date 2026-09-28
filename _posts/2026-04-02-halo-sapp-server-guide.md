@@ -185,15 +185,15 @@ The batch script (`run.bat`) contains:
 @ECHO OFF
 set port=2302
 set root=%~dp0
-set path=%root%\cg\
+set cg_path=%root%\cg\
 set exec=%path%\init.txt
 
 rem Use haloded.exe for PC Retail, haloceded.exe for CE
-"%root%\haloded.exe" -path %path% -exec %exec% -port %port%
+"%root%\haloded.exe" -cg_path %cg_path% -exec %exec% -port %port%
 ```
 
 - `%~dp0` expands to the folder where the script is located (makes it portable).
-- `-path` tells the server where to find the instance-specific configs (`cg\`).
+- `-cg_path` tells the server where to find the instance-specific configs (`cg\`).
 - `-exec` points to the main `init.txt`.
 - `-port` sets the UDP port (default 2302).
 

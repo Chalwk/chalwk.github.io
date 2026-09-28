@@ -51,7 +51,7 @@ These are Halo's built-in server commands. SAPP enhances or overrides some.
 | sv_password                | `sv_password [password]`               | Get/set join password (max 8 chars).                                |
 | sv_players                 | `sv_players`                           | List players with indices, team, ping, score, betrayals, TK timer.  |
 | sv_public                  | `sv_public [public]`                   | Set server visibility to master server. Default: `true`.            |
-| sv_rcron_password          | `sv_rcron_password [password]`         | Set cron password (max 8 chars).                                    |
+| sv_rcon_password          | `sv_rcon_password [password]`         | Set cron password (max 8 chars).                                    |
 | sv_single_flag_force_reset | `sv_single_flag_force_reset [enabled]` | Allow flag reset while held in single-flag games. Default: `false`. |
 | sv_status                  | `sv_status`                            | Display current map, player count, max players.                     |
 | sv_timelimit               | `sv_timelimit [minutes]`               | Set time limit (`0`=indefinite, `-1`=use variant).                  |
@@ -184,7 +184,7 @@ Used to configure server behavior. Settings lost on reload unless placed in `ini
 | say_prefix            | 4     | `say_prefix [enabled]`                           | Enable `**SERVER **` prefix on server messages (CE only). Default: `true`.          |
 | scorelimit            | 4     | `scorelimit [int_expr]`                          | Get or edit current game's score limit.                                             |
 | scrim_mode            | 4     | `scrim_mode [enabled]`                           | Disable naughty commands, Lua scripts, sightjacking. Default: `false`.              |
-| set_ccolor            | 4     | `set_ccolor [value]`                             | Set console color (foreground + background x 16).                                    |
+| set_ccolor            | 4     | `set_ccolor [value]`                             | Set console color (foreground + background x 16).                                   |
 | setcmd                | 4     | `setcmd <command> <name/level>`                  | Change name or required admin level of a command.                                   |
 | sj_level              | 4     | `sj_level [level]`                               | Minimum level to use HAC2 sightjacker. Default: `-1` (everyone).                    |
 | spawn_protection      | 4     | `spawn_protection [time]`                        | Invulnerability time (seconds) upon spawn. `0`=disabled.                            |
@@ -280,7 +280,7 @@ When using `admin_add`, the player's current username is saved to `admins.txt`.
 
 | Command            | Level | Usage                                           | Description                                                                              |
 | ------------------ | ----- | ----------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| admin_add          | 4     | `admin_add <player_id> <password> <level>`      | Add name/password admin using the player's current in-game name (player must be online). |
+| admin_add          | 4     | `admin_add <player_name> <password> <level>`    | Add name/password admin using the player's current in-game name (player must be online). |
 | admin_add_manually | 4     | `admin_add_manually <name> <password> <level>`  | Add name/password admin without player being present.                                    |
 | admin_change_pw    | 4     | `admin_change_pw <index> <password>`            | Change password of name/password admin.                                                  |
 | admin_change_level | 4     | `admin_change_level <index> <level>`            | Change level of name/password admin.                                                     |
@@ -307,7 +307,7 @@ Directly modify player attributes. Cannot be used when `scrim_mode` is enabled.
 | battery              | `battery <player_id> [decimal_expr] [weapon]`                | Change weapon battery (weapon index as in `ammo`).                              |
 | boost                | `boost <player_id>`                                          | Move player to location they are looking at.                                    |
 | camo                 | `camo <player_id> [time]`                                    | Apply active camouflage for time (seconds). No effect if already camo.          |
-| color                | `color <player_id> [index]`                                  | Change player's FFA color.                                                     |
+| color                | `color <player_id> [index]`                                  | Change player's FFA color.                                                      |
 | coord                | `coord <player_id>`                                          | Return player's coordinates.                                                    |
 | deaths               | `deaths <player_id> [amount]`                                | Change player's death count.                                                    |
 | disable_all_objects  | `disable_all_objects <team> <disable>`                       | Disable all objects for a team.                                                 |

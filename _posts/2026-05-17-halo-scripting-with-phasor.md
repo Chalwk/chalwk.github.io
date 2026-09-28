@@ -246,7 +246,7 @@ end
 ```lua
 local function is_alive(id)
     if id == nil then return false end
-    return getplayerobjectid(id) ~= nil
+    return getplayerobjectid(id) ~= 0xFFFFFFFF
 end
 ```
 
@@ -654,7 +654,7 @@ end
 ```lua
 local function get_player_color(id)
     local p = getplayer(id)
-    if p then return readword(p + 0x60) end
+    if p then return readbyte(p + 0x60) end
     return nil
 end
 ```
@@ -947,7 +947,7 @@ local function read_string(address, length, reverse)
     while i < max do
         local b = readbyte(address + i)
         if b == 0 then break end
-        t[#t + 1] = char(b)
+        t[#t + 1] = string.char(b)
         i = i + 1
     end
     if reverse then
@@ -955,9 +955,9 @@ local function read_string(address, length, reverse)
         for j = #t, 1, -1 do
             rev[#rev + 1] = t[j]
         end
-        return concat(rev)
+        return table.concat(rev)
     end
-    return concat(t)
+    return table.concat(t)
 end
 ```
 
@@ -991,7 +991,7 @@ local function read_string_reverse(address, offset, length)
     local hex = {}
     for i = 0, length - 1 do
         local b = readbyte(address + offset + i)
-        hex[#hex + 1] = format("%02X", b)
+        hex[#hex + 1] = string.format("%02X", b)
     end
     local result = ""
     for i = #hex, 1, -1 do
@@ -1026,7 +1026,7 @@ local function read_widestring(address, length)
         end
         pos = pos + 2
     end
-    return concat(chars)
+    return table.concat(chars)
 end
 ```
 
@@ -1083,7 +1083,7 @@ end
 
 ```lua
 local function read_bit(address, bit_index)
-    local byte_addr = address + floor(bit_index / 8)
+    local byte_addr = address + math.floor(bit_index / 8)
     local bit_pos = bit_index % 8
     local val = readbyte(byte_addr)
     return bit32.band(bit32.rshift(val, bit_pos), 1)
@@ -1099,7 +1099,7 @@ end
 
 ```lua
 local function write_bit(address, bit_index, value)
-    local byte_addr = address + floor(bit_index / 8)
+    local byte_addr = address + math.floor(bit_index / 8)
     local bit_pos = bit_index % 8
     local old = readbyte(byte_addr)
     if value == 1 then
@@ -1272,7 +1272,7 @@ local function get_score(player)
     elseif game_type == 5 then
         score = readword(p + 0xC6)
     end
-    if timed then score = floor(score / 30) end
+    if timed then score = math.floor(score / 30) end
     return score
 end
 ```
@@ -1448,9 +1448,9 @@ end
 ```lua
 local function get_body_part_position(biped_object, body_part_offset)
     if not biped_object then return nil end
-    local x = readfloat(biped_object, body_part_offset + 0x28)
-    local y = readfloat(biped_object, body_part_offset + 0x2C)
-    local z = readfloat(biped_object, body_part_offset + 0x30)
+    local x = readfloat(biped_object + body_part_offset + 0x28)
+    local y = readfloat(biped_object + body_part_offset + 0x2C)
+    local z = readfloat(biped_object + body_part_offset + 0x30)
     return x, y, z
 end
 ```

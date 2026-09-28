@@ -53,7 +53,7 @@ When you need to understand netcode, packet loss, memory offsets, or the Halo 1 
   packet loss) useful for multiplayer synchronization and debugging.
 - **[Exploring the Halo 1 System Link Protocol](https://hllmn.net/blog/2023-09-18_h1x-net/)** (hllmn.net, 2023) -
   Low-level reverse engineering of CE networking and packet structures.
-- **[Understanding Memory Offsets](https://chalwk.github.io/blog/2025/09/08/halo-understanding-memory-offsets)** -
+- **[Understanding Memory Offsets](https://chalwk.github.io/blog/2025/09/07/halo-understanding-memory-offsets/)** -
   Foundational guide to memory addresses, offsets, signature scanning, and tools for finding offsets in Halo PC/CE.
 
 > **Tip:** Understanding how Halo handles network updates and memory layout will save you hours of frustration when
