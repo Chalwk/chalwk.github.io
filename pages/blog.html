@@ -11,15 +11,16 @@ description: Blog Landing page
     <div class="container">
         <div class="about-card">
             <h1 class="blog-heading">
-                <i class="fas fa-blog blog-icon"></i> Blog
+                <i class="fas fa-blog blog-icon" aria-hidden="true"></i> Blog
             </h1>
 
             <!-- Search box for filtering posts -->
             <div class="blog-search">
                 <label for="search-input">Search blog posts</label>
                 <input autocomplete="off" id="search-input" placeholder="🔍 Search posts by title or content..."
-                    type="text">
-                <div class="search-results" id="search-results" style="display: none;"></div>
+                    type="text" aria-controls="search-results" aria-expanded="false">
+                <div class="search-results" id="search-results" role="region" aria-live="polite" style="display: none;">
+                </div>
             </div>
 
             <!-- Category & Tag Filter Bar -->
@@ -31,24 +32,25 @@ description: Blog Landing page
                 <div class="filter-section" id="tags-filter">
                     <span class="filter-label">
                         Tags:
-                        <button class="toggle-tags-btn" id="toggleTagsBtn" aria-label="Toggle tags">
-                            <i class="fas fa-chevron-down"></i>
+                        <button class="toggle-tags-btn" id="toggleTagsBtn" type="button" aria-label="Toggle tags"
+                            aria-expanded="false" aria-controls="tagsCollapsible">
+                            <i class="fas fa-chevron-down" aria-hidden="true"></i>
                         </button>
                     </span>
                     <div id="tagsCollapsible" class="tags-collapsible">
                         <div class="filter-buttons" id="tag-buttons"></div>
                     </div>
                 </div>
-                <button class="clear-filters-btn" id="clear-filters">Clear Filters</button>
+                <button class="clear-filters-btn" id="clear-filters" type="button">Clear Filters</button>
             </div>
 
-            <!-- post list  -->
+            <!-- post list (source of truth; hidden by JS after init) -->
             <ul class="post-list original-posts">
                 {% for post in site.posts %}
                 <li class="post-item" data-categories="{{ post.categories | join: ',' }}"
                     data-tags="{{ post.tags | join: ',' }}">
                     <h2 class="post-title">
-                        <a href="{{ post.url }}"> {{ post.title }} </a>
+                        <a href="{{ post.url | relative_url }}"> {{ post.title }} </a>
                     </h2>
                     <div class="post-meta">
                         <span class="publish-date">
@@ -71,19 +73,19 @@ description: Blog Landing page
                     <div class="post-categories-tags">
                         {% if post.categories.size > 0 %}
                         <div class="post-categories">
-                            <i class="fas fa-folder-open"></i> Categories:
+                            <i class="fas fa-folder-open" aria-hidden="true"></i> Categories:
                             {% for cat in post.categories %}
-                            <span class="category-badge filterable-badge" data-filter-type="category"
-                                data-filter-value="{{ cat }}">{{ cat }}</span>
+                            <button type="button" class="category-badge filterable-badge" data-filter-type="category"
+                                data-filter-value="{{ cat }}">{{ cat }}</button>
                             {% endfor %}
                         </div>
                         {% endif %}
                         {% if post.tags.size > 0 %}
                         <div class="post-tags">
-                            <i class="fas fa-tags"></i> Tags:
+                            <i class="fas fa-tags" aria-hidden="true"></i> Tags:
                             {% for tag in post.tags %}
-                            <span class="tag-badge filterable-badge" data-filter-type="tag"
-                                data-filter-value="{{ tag }}">{{ tag }}</span>
+                            <button type="button" class="tag-badge filterable-badge" data-filter-type="tag"
+                                data-filter-value="{{ tag }}">{{ tag }}</button>
                             {% endfor %}
                         </div>
                         {% endif %}
@@ -187,7 +189,7 @@ description: Blog Landing page
         color: var(--primary-dark);
     }
 
-    .toggle-tags-btn:focus {
+    .toggle-tags-btn:focus-visible {
         outline: none;
         box-shadow: 0 0 0 2px rgba(30, 136, 229, 0.3);
     }
@@ -213,6 +215,7 @@ description: Blog Landing page
         padding: 0.25rem 0.75rem;
         border-radius: 20px;
         font-size: 0.8rem;
+        font-family: inherit;
         cursor: pointer;
         transition: var(--transition);
     }
@@ -236,6 +239,7 @@ description: Blog Landing page
         padding: 0.35rem 1rem;
         border-radius: 20px;
         font-size: 0.85rem;
+        font-family: inherit;
         cursor: pointer;
         transition: var(--transition);
         margin-top: 0.5rem;
@@ -268,9 +272,11 @@ description: Blog Landing page
         background: rgba(30, 136, 229, 0.1);
         color: var(--primary);
         padding: 0.2rem 0.6rem;
+        border: none;
         border-radius: 20px;
         font-size: 0.75rem;
         font-weight: 500;
+        font-family: inherit;
         cursor: pointer;
         transition: var(--transition);
     }
@@ -279,6 +285,12 @@ description: Blog Landing page
     .tag-badge:hover {
         background: var(--primary);
         color: white;
+    }
+
+    .category-badge:focus-visible,
+    .tag-badge:focus-visible {
+        outline: 2px solid var(--primary);
+        outline-offset: 2px;
     }
 
     .search-result-item {
@@ -441,6 +453,7 @@ description: Blog Landing page
         background: transparent;
         border: 1px solid var(--gray-light);
         color: var(--dark);
+        font-family: inherit;
         font-weight: 500;
         padding: 0.5rem 1rem;
         border-radius: var(--radius);
@@ -522,7 +535,7 @@ description: Blog Landing page
 <script src="https://cdn.jsdelivr.net/npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // ----- DOM Stuff -----
+        // ----- DOM references -----
         const originalList = document.querySelector('.original-posts');
         const paginatedContainer = document.getElementById('paginated-post-list');
         const paginationControls = document.getElementById('pagination-controls');
@@ -530,7 +543,7 @@ description: Blog Landing page
         const resultsContainer = document.getElementById('search-results');
         const clearFiltersBtn = document.getElementById('clear-filters');
 
-        // ----- Toggle Tags Collapsible (hidden by default) -----
+        // ----- Tags collapsible -----
         const tagsCollapsible = document.getElementById('tagsCollapsible');
         const toggleTagsBtn = document.getElementById('toggleTagsBtn');
         const chevronIcon = toggleTagsBtn.querySelector('i');
@@ -540,35 +553,41 @@ description: Blog Landing page
             return;
         }
 
-        // Store original post items and their metadata
         const allPosts = Array.from(originalList.querySelectorAll('.post-item'));
-        originalList.style.display = 'none'; // hide original list
+        originalList.style.display = 'none';
 
         if (allPosts.length === 0) {
             paginatedContainer.innerHTML = '<p>No blog posts found.</p>';
             return;
         }
 
-        // ----- Filter State -----
-        let activeFilter = null; // { type: 'category' or 'tag', value: string }
+        // ----- State -----
+        let activeFilter = null; // { type: 'category'|'tag', value: string } or null
         let filteredPosts = [...allPosts];
-
-        // ----- Pagination Setup -----
         const POSTS_PER_PAGE = 5;
         let currentPage = 1;
         let totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE);
+        let isTagsExpanded = false;
+        let viewMode = 'paginated'; // 'paginated' | 'search'
 
-        // ----- Tags Collapsible State -----
-        let isTagsExpanded = false; // start collapsed
+        // ----- View-mode management (single source of truth for visibility) -----
+        function setViewMode(mode) {
+            viewMode = mode;
+            const paginated = mode === 'paginated';
+            paginatedContainer.style.display = paginated ? 'block' : 'none';
+            paginationControls.style.display = paginated ? 'block' : 'none';
+            resultsContainer.style.display = paginated ? 'none' : 'block';
+            searchInput.setAttribute('aria-expanded', String(!paginated));
+        }
 
-        // Update totalPages and clamp currentPage
+        // ----- Pagination metadata -----
         function updatePaginationMetadata() {
-            totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE);
-            if (currentPage > totalPages) currentPage = totalPages || 1;
+            totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE) || 1;
+            if (currentPage > totalPages) currentPage = totalPages;
             if (currentPage < 1) currentPage = 1;
         }
 
-        // Render current page of filtered posts
+        // ----- Rendering -----
         function renderPage() {
             const start = (currentPage - 1) * POSTS_PER_PAGE;
             const end = start + POSTS_PER_PAGE;
@@ -582,20 +601,15 @@ description: Blog Landing page
 
             const newList = document.createElement('ul');
             newList.className = 'post-list';
-            postsToShow.forEach(post => {
-                const clonedItem = post.cloneNode(true);
-                newList.appendChild(clonedItem);
-            });
+            postsToShow.forEach(post => newList.appendChild(post.cloneNode(true)));
             paginatedContainer.appendChild(newList);
 
-            // Re-attach click handlers to filterable badges inside cloned items
-            document.querySelectorAll('.filterable-badge').forEach(badge => {
-                badge.removeEventListener('click', handleBadgeClick);
+            // Re-attach badge click handlers inside cloned items
+            paginatedContainer.querySelectorAll('.filterable-badge').forEach(badge => {
                 badge.addEventListener('click', handleBadgeClick);
             });
         }
 
-        // Render pagination buttons
         function renderPagination() {
             paginationControls.innerHTML = '';
             if (totalPages <= 1) return;
@@ -604,60 +618,48 @@ description: Blog Landing page
             nav.setAttribute('aria-label', 'Blog pagination');
             nav.className = 'pagination-nav';
 
-            const prevDisabled = currentPage === 1;
-            const nextDisabled = currentPage === totalPages;
-
             const prevBtn = document.createElement('button');
+            prevBtn.type = 'button';
             prevBtn.innerHTML = '&laquo; Prev';
             prevBtn.className = 'pagination-btn prev-btn';
-            if (prevDisabled) {
+            if (currentPage === 1) {
                 prevBtn.disabled = true;
                 prevBtn.setAttribute('aria-disabled', 'true');
             } else {
-                prevBtn.addEventListener('click', () => {
-                    if (currentPage > 1) {
-                        setPage(currentPage - 1);
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }
-                });
+                prevBtn.addEventListener('click', () => setPage(currentPage - 1));
             }
 
             const nextBtn = document.createElement('button');
+            nextBtn.type = 'button';
             nextBtn.innerHTML = 'Next &raquo;';
             nextBtn.className = 'pagination-btn next-btn';
-            if (nextDisabled) {
+            if (currentPage === totalPages) {
                 nextBtn.disabled = true;
                 nextBtn.setAttribute('aria-disabled', 'true');
             } else {
-                nextBtn.addEventListener('click', () => {
-                    if (currentPage < totalPages) {
-                        setPage(currentPage + 1);
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }
-                });
+                nextBtn.addEventListener('click', () => setPage(currentPage + 1));
             }
 
             const pageNumbersDiv = document.createElement('div');
             pageNumbersDiv.className = 'pagination-numbers';
+
             let startPage = Math.max(1, currentPage - 2);
             let endPage = Math.min(totalPages, currentPage + 2);
             if (endPage - startPage < 4) {
                 if (startPage === 1) endPage = Math.min(totalPages, startPage + 4);
                 if (endPage === totalPages) startPage = Math.max(1, endPage - 4);
             }
+
             for (let i = startPage; i <= endPage; i++) {
                 const pageBtn = document.createElement('button');
+                pageBtn.type = 'button';
                 pageBtn.textContent = String(i);
                 pageBtn.className = 'pagination-number';
                 if (i === currentPage) {
                     pageBtn.classList.add('active');
                     pageBtn.setAttribute('aria-current', 'page');
                 }
-                pageBtn.addEventListener('click', (function (pageNum) {
-                    return function () {
-                        setPage(pageNum);
-                    };
-                })(i));
+                pageBtn.addEventListener('click', () => setPage(i));
                 pageNumbersDiv.appendChild(pageBtn);
             }
 
@@ -675,212 +677,172 @@ description: Blog Landing page
             renderPage();
             renderPagination();
             history.pushState(null, null, '#page-' + currentPage);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // ----- Filter Logic -----
+        // ----- Filtering -----
         function applyFilter(type, value) {
             activeFilter = { type, value };
             filteredPosts = allPosts.filter(post => {
                 const categories = (post.dataset.categories || '').split(',').filter(c => c.trim());
                 const tags = (post.dataset.tags || '').split(',').filter(t => t.trim());
-                if (type === 'category') {
-                    return categories.includes(value);
-                } else if (type === 'tag') {
-                    return tags.includes(value);
-                }
+                if (type === 'category') return categories.includes(value);
+                if (type === 'tag') return tags.includes(value);
                 return true;
             });
 
-            // Reset pagination
             currentPage = 1;
             updatePaginationMetadata();
             renderPage();
             renderPagination();
+            history.replaceState(null, null, '#page-1');
 
-            // Update active state on filter buttons
             document.querySelectorAll('.filter-btn').forEach(btn => {
-                if (btn.dataset.filterType === type && btn.dataset.filterValue === value) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
+                const isActive = btn.dataset.filterType === type && btn.dataset.filterValue === value;
+                btn.classList.toggle('active', isActive);
+                btn.setAttribute('aria-pressed', String(isActive));
             });
-
-            // Clear search input and hide search results
-            if (searchInput.value.trim() !== '') {
-                searchInput.value = '';
-                resultsContainer.style.display = 'none';
-                paginatedContainer.style.display = 'block';
-                paginationControls.style.display = 'flex';
-            }
         }
 
-        function clearFilters() {
+        // Reset filter state without touching search input or view mode.
+        function clearFilterState() {
             activeFilter = null;
             filteredPosts = [...allPosts];
             currentPage = 1;
             updatePaginationMetadata();
             renderPage();
             renderPagination();
-
-            // Remove active class from all filter buttons
             document.querySelectorAll('.filter-btn').forEach(btn => {
                 btn.classList.remove('active');
+                btn.setAttribute('aria-pressed', 'false');
             });
+        }
 
-            // Clear search if needed
-            if (searchInput.value.trim() !== '') {
-                searchInput.value = '';
-                resultsContainer.style.display = 'none';
-                paginatedContainer.style.display = 'block';
-                paginationControls.style.display = 'flex';
-            }
+        function handleClearFilters() {
+            if (searchInput.value.trim() !== '') searchInput.value = '';
+            setViewMode('paginated');
+            clearFilterState();
         }
 
         function handleBadgeClick(e) {
             const badge = e.currentTarget;
             const filterType = badge.dataset.filterType;
             const filterValue = badge.dataset.filterValue;
-            if (filterType && filterValue) {
-                applyFilter(filterType, filterValue);
-            }
+            if (!filterType || !filterValue) return;
+            // Switch to paginated view, wipe any active search, and apply filter.
+            if (searchInput.value.trim() !== '') searchInput.value = '';
+            setViewMode('paginated');
+            applyFilter(filterType, filterValue);
         }
 
-        // ----- Build Filter UI (Categories & Tags) -----
+        // ----- Build filter UI -----
         const categoriesSet = new Set();
         const tagsSet = new Set();
 
         allPosts.forEach(post => {
-            const categories = (post.dataset.categories || '').split(',').filter(c => c.trim());
-            const tags = (post.dataset.tags || '').split(',').filter(t => t.trim());
-            categories.forEach(c => categoriesSet.add(c));
-            tags.forEach(t => tagsSet.add(t));
+            (post.dataset.categories || '').split(',').forEach(c => c.trim() && categoriesSet.add(c.trim()));
+            (post.dataset.tags || '').split(',').forEach(t => t.trim() && tagsSet.add(t.trim()));
         });
 
         const categoryContainer = document.getElementById('category-buttons');
         const tagContainer = document.getElementById('tag-buttons');
 
-        // Sort alphabetically
-        const sortedCategories = Array.from(categoriesSet).sort();
-        const sortedTags = Array.from(tagsSet).sort();
-
-        sortedCategories.forEach(cat => {
+        Array.from(categoriesSet).sort().forEach(cat => {
             const btn = document.createElement('button');
+            btn.type = 'button';
             btn.textContent = cat;
             btn.className = 'filter-btn';
             btn.dataset.filterType = 'category';
             btn.dataset.filterValue = cat;
-            btn.addEventListener('click', () => applyFilter('category', cat));
+            btn.setAttribute('aria-pressed', 'false');
+            btn.addEventListener('click', () => {
+                if (searchInput.value.trim() !== '') searchInput.value = '';
+                setViewMode('paginated');
+                applyFilter('category', cat);
+            });
             categoryContainer.appendChild(btn);
         });
 
-        sortedTags.forEach(tag => {
+        Array.from(tagsSet).sort().forEach(tag => {
             const btn = document.createElement('button');
+            btn.type = 'button';
             btn.textContent = tag;
             btn.className = 'filter-btn';
             btn.dataset.filterType = 'tag';
             btn.dataset.filterValue = tag;
-            btn.addEventListener('click', () => applyFilter('tag', tag));
+            btn.setAttribute('aria-pressed', 'false');
+            btn.addEventListener('click', () => {
+                if (searchInput.value.trim() !== '') searchInput.value = '';
+                setViewMode('paginated');
+                applyFilter('tag', tag);
+            });
             tagContainer.appendChild(btn);
         });
 
-        if (sortedCategories.length === 0) {
+        if (categoriesSet.size === 0) {
             categoryContainer.innerHTML = '<span class="no-filters">No categories</span>';
         }
-        if (sortedTags.length === 0) {
+        if (tagsSet.size === 0) {
             tagContainer.innerHTML = '<span class="no-filters">No tags</span>';
         }
 
-        clearFiltersBtn.addEventListener('click', clearFilters);
+        clearFiltersBtn.addEventListener('click', handleClearFilters);
 
-        // Attach badge click handlers
+        // Attach initial badge handlers on the (visible, pre-clone) list too.
         document.querySelectorAll('.filterable-badge').forEach(badge => {
             badge.addEventListener('click', handleBadgeClick);
         });
 
-        // Initially, tags are collapsed
-        tagsCollapsible.style.maxHeight = '0';
-        chevronIcon.classList.remove('fa-chevron-up');
-        chevronIcon.classList.add('fa-chevron-down');
-
-        function adjustTagsCollapsibleHeight() {
-            if (isTagsExpanded) {
-                // Set to scrollHeight for smooth transition
-                tagsCollapsible.style.maxHeight = tagsCollapsible.scrollHeight + 'px';
-            } else {
-                tagsCollapsible.style.maxHeight = '0';
-            }
+        // ----- Tags collapsible -----
+        function syncTagsHeight() {
+            tagsCollapsible.style.maxHeight = isTagsExpanded
+                ? tagsCollapsible.scrollHeight + 'px'
+                : '0';
         }
 
         function toggleTags() {
             isTagsExpanded = !isTagsExpanded;
-            if (isTagsExpanded) {
-                // Expand: set maxHeight to scrollHeight
-                tagsCollapsible.style.maxHeight = tagsCollapsible.scrollHeight + 'px';
-                chevronIcon.classList.remove('fa-chevron-down');
-                chevronIcon.classList.add('fa-chevron-up');
-            } else {
-                // Collapse
-                tagsCollapsible.style.maxHeight = '0';
-                chevronIcon.classList.remove('fa-chevron-up');
-                chevronIcon.classList.add('fa-chevron-down');
-            }
+            toggleTagsBtn.setAttribute('aria-expanded', String(isTagsExpanded));
+            chevronIcon.classList.toggle('fa-chevron-down', !isTagsExpanded);
+            chevronIcon.classList.toggle('fa-chevron-up', isTagsExpanded);
+            syncTagsHeight();
         }
 
         toggleTagsBtn.addEventListener('click', toggleTags);
+        window.addEventListener('resize', () => { if (isTagsExpanded) syncTagsHeight(); });
+        // Ensure collapsed state after layout settles.
+        requestAnimationFrame(syncTagsHeight);
 
-        // On window resize, if expanded, recalculate scrollHeight
-        window.addEventListener('resize', function () {
-            if (isTagsExpanded) {
-                tagsCollapsible.style.maxHeight = tagsCollapsible.scrollHeight + 'px';
-            }
-        });
-
-        setTimeout(() => {
-            if (!isTagsExpanded) {
-                tagsCollapsible.style.maxHeight = '0';
-            } else {
-                tagsCollapsible.style.maxHeight = tagsCollapsible.scrollHeight + 'px';
-            }
-        }, 50);
-
-        // ----- Pagination URL Hash Handling -----
-        function getCurrentPageFromHash() {
-            const hash = window.location.hash;
-            const match = hash.match(/page-(\d+)/);
-            if (match && match[1]) {
-                let page = parseInt(match[1], 10);
-                if (isNaN(page)) page = 1;
-                if (page < 1) page = 1;
-                if (page > totalPages) page = totalPages;
-                return page;
-            }
-            return 1;
+        // ----- Hash-based pagination -----
+        function getPageFromHash() {
+            const m = window.location.hash.match(/page-(\d+)/);
+            let page = m ? parseInt(m[1], 10) : 1;
+            if (isNaN(page) || page < 1) page = 1;
+            if (page > totalPages) page = totalPages;
+            return page;
         }
 
-        function syncPageFromHash() {
-            const newPage = getCurrentPageFromHash();
+        window.addEventListener('hashchange', () => {
+            if (viewMode !== 'paginated') return;
+            const newPage = getPageFromHash();
             if (newPage !== currentPage) {
                 currentPage = newPage;
                 renderPage();
                 renderPagination();
             }
-        }
+        });
 
-        window.addEventListener('hashchange', syncPageFromHash);
-
-        // Initial render
+        // ----- Initial render -----
         updatePaginationMetadata();
-        currentPage = getCurrentPageFromHash();
+        currentPage = getPageFromHash();
         renderPage();
         renderPagination();
+        setViewMode('paginated');
         if (!window.location.hash) {
             history.replaceState(null, null, '#page-1');
         }
 
         // ----- Live search -----
-        resultsContainer.style.display = 'none';
-
         SimpleJekyllSearch({
             searchInput: searchInput,
             resultsContainer: resultsContainer,
@@ -899,34 +861,37 @@ description: Blog Landing page
             fuzzy: false
         });
 
-        // Show/hide search results vs normal paginated view, and clear filters on search
+        // Debounced input handler: switch view modes without cannibalising each other.
+        let searchDebounce;
         searchInput.addEventListener('input', function () {
-            const query = this.value.trim();
-            if (query === '') {
-                // If search cleared, restore filtered or all posts
-                paginatedContainer.style.display = 'block';
-                paginationControls.style.display = 'flex';
-                resultsContainer.style.display = 'none';
-                if (activeFilter) {
-                    // Re-apply current filter (which may have been cleared? no, keep filter)
-                    applyFilter(activeFilter.type, activeFilter.value);
-                } else {
-                    // No active filter, show all posts
-                    filteredPosts = [...allPosts];
+            clearTimeout(searchDebounce);
+            const value = this.value;
+            searchDebounce = setTimeout(() => {
+                const query = value.trim();
+                if (query === '') {
+                    // Back to paginated view. Preserve any filter that was active,
+                    // otherwise show all posts again.
+                    setViewMode('paginated');
+                    if (!activeFilter) {
+                        filteredPosts = [...allPosts];
+                    }
+                    currentPage = getPageFromHash();
                     updatePaginationMetadata();
-                    currentPage = getCurrentPageFromHash();
                     renderPage();
                     renderPagination();
+                } else {
+                    // While searching, drop filter state (but do NOT wipe the input).
+                    if (activeFilter) {
+                        activeFilter = null;
+                        filteredPosts = [...allPosts];
+                        document.querySelectorAll('.filter-btn').forEach(btn => {
+                            btn.classList.remove('active');
+                            btn.setAttribute('aria-pressed', 'false');
+                        });
+                    }
+                    setViewMode('search');
                 }
-            } else {
-                // User is searching: clear any active filter
-                if (activeFilter) {
-                    clearFilters();
-                }
-                paginatedContainer.style.display = 'none';
-                paginationControls.style.display = 'none';
-                resultsContainer.style.display = 'block';
-            }
+            }, 120);
         });
     });
 </script>
