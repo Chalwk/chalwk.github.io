@@ -15,7 +15,7 @@ const DIFFICULTY_PRESETS = {
     hard: { baseTime: 50, minTime: 22, diffStart: 6, diffStep: 3, hitRadiusMult: 0.82, missPenalty: 6, hintCost: 16, hintsPerRound: 1 },
 };
 
-// Sky, ground and hill colours for each theme. The skeleton and the
+// Sky, ground and hill colors for each theme. The skeleton and the
 // objects share these so the scene reads as one picture.
 const SCENE_THEMES = [
     { id: 'meadow', name: 'Sunny Meadow', icon: '🌼', sky: ['#8ec9f0', '#d8f3ff'], ground: '#7bbf6a', groundLine: '#5a9c4a', hillA: '#9ad786', hillB: '#6eb25c', accent: '#fde047' },
@@ -256,7 +256,7 @@ const COMPOSITIONS = [
 ];
 
 const DIFF_TYPES = {
-    recolor: { id: 'recolor', label: 'a colour swap' },
+    recolor: { id: 'recolor', label: 'a color swap' },
     resize: { id: 'resize', label: 'a size change' },
     move: { id: 'move', label: 'a shifted object' },
     remove: { id: 'remove', label: 'a missing object' },

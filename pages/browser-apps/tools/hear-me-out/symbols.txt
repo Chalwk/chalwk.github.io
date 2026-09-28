@@ -359,7 +359,7 @@ Bike;🚲;#2ecc71;Activities & Play
 iPad;📱;#2ecc71;Activities & Play
 Craft;🧵;#2ecc71;Activities & Play
 Build;🧱;#2ecc71;Activities & Play
-Colour;🖍️;#2ecc71;Activities & Play
+color;🖍️;#2ecc71;Activities & Play
 Movie;🎬;#2ecc71;Activities & Play
 Computer;💻;#2ecc71;Activities & Play
 Console;🕹️;#2ecc71;Activities & Play

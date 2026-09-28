@@ -412,7 +412,7 @@
 
 /* Keep important map features clearly readable on the remembered map.
    Without this the 0.45 brightness filter flattens the door/stairs
-   colours and glows into near-black, hiding the exit entirely. */
+   colors and glows into near-black, hiding the exit entirely. */
 .cell.dim.door {
     filter: brightness(0.85) saturate(0.9);
     background: #3b2a17;

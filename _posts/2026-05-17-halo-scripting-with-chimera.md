@@ -432,7 +432,7 @@ Example: zoom in when holding a sniper
 -- ox2,oy2,oz2: up vector
 function OnPreCamera(x, y, z, fov, ox1, oy1, oz1, ox2, oy2, oz2)
     local dyn = get_dynamic_player(local_player_index)
-    if dyn == 0 then return end
+    if not dyn then return end
 
     local weapon_id = read_dword(dyn + 0x118)
     if weapon_id ~= 0xFFFFFFFF then

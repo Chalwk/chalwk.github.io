@@ -414,7 +414,7 @@ function applyResultToRow(r, result) {
     tiles.forEach((tile, i) => {
         setTimeout(() => {
             tile.classList.add('flip');
-            // Swap the tile colour at the visual midpoint of the flip.
+            // Swap the tile color at the visual midpoint of the flip.
             setTimeout(() => {
                 tile.classList.remove('absent', 'present', 'correct');
                 tile.classList.add(result[i]);
@@ -556,7 +556,7 @@ function renderStatsModal() {
 function renderHelpModal() {
     showModal(`
         <h3>How to Play</h3>
-        <p>Guess the hidden 5-letter word in six tries. Each guess must be a valid word. After each guess the colour of the tiles shows how close your guess was.</p>
+        <p>Guess the hidden 5-letter word in six tries. Each guess must be a valid word. After each guess the color of the tiles shows how close your guess was.</p>
         <ul>
             <li><strong style="color:#4ade80;">Green</strong> - correct letter in the correct spot.</li>
             <li><strong style="color:#fbbf24;">Yellow</strong> - letter is in the word but in the wrong spot.</li>

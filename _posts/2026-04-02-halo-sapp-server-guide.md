@@ -89,14 +89,14 @@ exact folder structure you will see after extracting the zip file.
   The SAPP mod. Loaded by Halo when the `load` command is issued.
 
 - **`Strings.dll`**  
-  A helper DLL that enables SAPP to intercept and modify Halo's behaviour. Required.
+  A helper DLL that enables SAPP to intercept and modify Halo's behavior. Required.
 
 - **`libeay32.dll` / `ssleay32.dll` / `libgcc_s_dw2-1.dll`**  
   Runtime libraries for OpenSSL and GCC. Required for certain SAPP features (e.g., remote console encryption).
 
 - **`motd.txt`**  
-  Message of the Day - displayed to players when they join. **This is for Halo PC only** (Custom Edition uses `sv_motd`
-  pointing to a file; the package includes it for convenience but it only works on PC).
+  Message of the Day - displayed to players when they join. **This is for Halo CE only** (Custom Edition uses `sv_motd`
+  pointing to a file; the package includes it for convenience but it only works on CE).
 
 - **`run.bat`** (Windows) and **`run.sh`** (Linux/Wine)  
   Launch scripts that start the server with the correct command-line arguments.

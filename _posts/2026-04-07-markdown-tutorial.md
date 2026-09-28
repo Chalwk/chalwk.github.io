@@ -608,7 +608,24 @@ Use a backslash (`\`) to escape Markdown syntax and display literal characters.
 \# Not a heading  
 1\. Not a numbered list item
 
-**Escape these characters:** `\` ` ` ` ` `*` `_` `{}` `[]` `()` `#` `+` `-` `.` `!` `|` `<` `>` `~`
+**Escape these characters:**
+```
+\
+*
+_
+{}
+[]
+()
+#
++
+-
+,
+!
+|
+<
+>
+~
+```
 
 ---
 

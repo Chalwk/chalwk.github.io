@@ -356,7 +356,7 @@ local function split_string(str, ...)
         tokens[#tokens + 1] = token
     end
 
-    -- Strip all delimiter characters from each token (legacy behaviour)
+    -- Strip all delimiter characters from each token (legacy behavior)
     for i = 1, #tokens do
         local token = tokens[i]
         for _, d in ipairs(delims) do

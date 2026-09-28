@@ -10,7 +10,7 @@ SAPP is a **server-side** extension for Halo PC/Custom Edition. It exposes a Lua
 hooks, command handling, player management, logging, and numerous under-the-hood features. **This guide focuses on its
 Lua API**, walks through the core scripting model and practical examples so you can build your Lua scripts.
 
-**Important:** <u>SAPP uses <strong>LuaJit</strong> based on <strong>Lua 5.1</strong>.</u>
+**Important:** <u>SAPP uses <strong>LuaJIT</strong> based on <strong>Lua 5.1</strong>.</u>
 
 This guide assumes you have read:
 
@@ -322,7 +322,7 @@ Rule of thumb:
 - **Validate every client command** - Check player index exists, admin level for privileged commands, numeric ranges,
   and types. Never `loadstring` arbitrary strings from clients.
 - **Rate-limit resource-hungry actions** (spawns, custom commands). Per-player cooldown tables are simple and effective.
-- **Anti-tampering** - Assume a modified client will attempt odd commands; log suspicious behaviour server-side for
+- **Anti-tampering** - Assume a modified client will attempt odd commands; log suspicious behavior server-side for
   review. SAPP offers anti-cheat utilities - use them.
 
 ---

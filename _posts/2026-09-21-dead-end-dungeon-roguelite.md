@@ -40,7 +40,7 @@ Every actor and prop on the board is one of these: the player, all six enemies, 
 * Locked progression: the red key unlocks the exit door, gold keys open vaults
 * Secret rooms hidden behind wall tiles that shimmer when you get close
 * Six floor themes that modify vision, damage, gold, and enemy aggression
-* Ten floors, ending in a three phase boss fight
+* Ten floors, ending in a three-phase boss fight
 * Three dungeon sizes and three difficulty settings
 * All sound generated at runtime with the Web Audio API, no asset files
 * Keyboard and touch controls

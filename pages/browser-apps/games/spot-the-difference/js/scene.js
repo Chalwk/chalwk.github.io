@@ -11,7 +11,7 @@ function timeForRound(round) {
     return Math.max(p.minTime, p.baseTime - (round - 1) * 3);
 }
 
-// --- Colour helpers -----------------------------------------------------------
+// --- color helpers -----------------------------------------------------------
 function hexToRgb(hex) {
     const h = String(hex).replace('#', '');
     const full = h.length === 3 ? h.split('').map(c => c + c).join('') : h;
@@ -284,7 +284,7 @@ function generateDifferences(base, diffCount) {
             continue;
         }
 
-        // --- RECOLOR: same object, new colour on the right -------------------
+        // --- RECOLOR: same object, new color on the right -------------------
         if (kind === 'recolor') {
             const type = getObjectType(obj.typeId);
             if (!type) continue;

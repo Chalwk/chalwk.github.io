@@ -122,7 +122,7 @@ Available to all players.
 
 ## Configuration Commands
 
-Used to configure server behaviour. Settings lost on reload unless placed in `init.txt`.
+Used to configure server behavior. Settings lost on reload unless placed in `init.txt`.
 
 | Command               | Level | Usage                                            | Description                                                                         |
 | --------------------- | ----- | ------------------------------------------------ | ----------------------------------------------------------------------------------- |
@@ -147,7 +147,7 @@ Used to configure server behaviour. Settings lost on reload unless placed in `in
 | chat_console_echo     | 4     | `chat_console_echo [enabled]`                    | Output chat to console. Default: `false`.                                           |
 | cmdstart1             | 4     | `cmdstart1 [character]`                          | Primary command prefix in chat. Default: `\`.                                       |
 | cmdstart2             | 4     | `cmdstart2 [character]`                          | Secondary command prefix. Default: `/`.                                             |
-| collect_alaises       | 4     | `collect_alaises [enabled] [valid CD keys only]` | Collect aliases into `alias.txt`. Default: `false`.                                 |
+| collect_aliases       | 4     | `collect_aliases [enabled] [valid CD keys only]` | Collect aliases into `alias.txt`. Default: `false`.                                 |
 | console_input         | 4     | `console_input [enabled]`                        | Allow console to accept input. Default: `true`.                                     |
 | custom_sleep          | 4     | `custom_sleep [ms]`                              | Modify Halo thread sleep per cycle (ms). Default: `8`.                              |
 | disable_timer_offsets | 4     | `disable_timer_offsets [enabled]`                | Use fixed Xbox-style spawn timers. Default: `false`.                                |
@@ -184,7 +184,7 @@ Used to configure server behaviour. Settings lost on reload unless placed in `in
 | say_prefix            | 4     | `say_prefix [enabled]`                           | Enable `**SERVER **` prefix on server messages (CE only). Default: `true`.          |
 | scorelimit            | 4     | `scorelimit [int_expr]`                          | Get or edit current game's score limit.                                             |
 | scrim_mode            | 4     | `scrim_mode [enabled]`                           | Disable naughty commands, Lua scripts, sightjacking. Default: `false`.              |
-| set_ccolor            | 4     | `set_ccolor [value]`                             | Set console colour (foreground + background x 16).                                    |
+| set_ccolor            | 4     | `set_ccolor [value]`                             | Set console color (foreground + background x 16).                                    |
 | setcmd                | 4     | `setcmd <command> <name/level>`                  | Change name or required admin level of a command.                                   |
 | sj_level              | 4     | `sj_level [level]`                               | Minimum level to use HAC2 sightjacker. Default: `-1` (everyone).                    |
 | spawn_protection      | 4     | `spawn_protection [time]`                        | Invulnerability time (seconds) upon spawn. `0`=disabled.                            |
@@ -307,7 +307,7 @@ Directly modify player attributes. Cannot be used when `scrim_mode` is enabled.
 | battery              | `battery <player_id> [decimal_expr] [weapon]`                | Change weapon battery (weapon index as in `ammo`).                              |
 | boost                | `boost <player_id>`                                          | Move player to location they are looking at.                                    |
 | camo                 | `camo <player_id> [time]`                                    | Apply active camouflage for time (seconds). No effect if already camo.          |
-| color                | `color <player_id> [index]`                                  | Change player's FFA colour.                                                     |
+| color                | `color <player_id> [index]`                                  | Change player's FFA color.                                                     |
 | coord                | `coord <player_id>`                                          | Return player's coordinates.                                                    |
 | deaths               | `deaths <player_id> [amount]`                                | Change player's death count.                                                    |
 | disable_all_objects  | `disable_all_objects <team> <disable>`                       | Disable all objects for a team.                                                 |

@@ -140,22 +140,22 @@
     border: 1px solid var(--border);
 }
 
-.legend-colour {
+.legend-color {
     width: 20px;
     height: 20px;
     border-radius: var(--radius-sm);
     flex-shrink: 0;
 }
 
-.legend-colour.danger {
+.legend-color.danger {
     background-color: var(--danger);
 }
 
-.legend-colour.success {
+.legend-color.success {
     background-color: var(--success);
 }
 
-.legend-colour.warning {
+.legend-color.warning {
     background-color: var(--warning);
 }
 

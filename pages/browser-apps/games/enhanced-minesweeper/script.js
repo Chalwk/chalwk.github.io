@@ -199,7 +199,7 @@
         return boardEl.querySelector(`.cell[data-r='${r}'][data-c='${c}']`);
     }
 
-    // Colour palette tuned for the dark game-container background
+    // color palette tuned for the dark game-container background
     function colorForNumber(n) {
         const map = {
             1: '#60a5fa',

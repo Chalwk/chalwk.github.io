@@ -18,7 +18,7 @@ timezone: Pacific/Auckland
 site_scale: 0.65
 
 # ------------------------------------------------------------------------------
-# Build behaviour (performance + markdown rendering)
+# Build behavior (performance + markdown rendering)
 # ------------------------------------------------------------------------------
 incremental: true # speeds up rebuilds during dev
 exclude:
@@ -118,7 +118,7 @@ default_categories:
   - accessibility
   - games
 
-# Files cached for offline support (service worker / PWA behaviour)
+# Files cached for offline support (service worker / PWA behavior)
 default_urls:
   - "./"
   - "./index.html"

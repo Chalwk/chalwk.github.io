@@ -509,7 +509,7 @@ end
 #### get_players_by_expression
 
 **Parameters:**  
-`expression` - String (e.g., `"*"`, `"me"`, `"red"`, `"blue"`, `"random"`, `"nearest"`, `"farthest"`, colour name,
+`expression` - String (e.g., `"*"`, `"me"`, `"red"`, `"blue"`, `"random"`, `"nearest"`, `"farthest"`, color name,
 wildcard name, or numeric ID 1-16)  
 `self_id` (optional) - Player index used for `"me"`, `"random"` exclusion, and as reference for `"nearest"`/
 `"farthest"`.
@@ -604,13 +604,13 @@ local function get_players_by_expression(expression, self_id)
             return nil
         end
 
-        -- Player colour name (e.g. "white", "yellow", "green", "orange", "purple", etc.)
-        local colour_index = player_colours[expression]
-        if colour_index then
+        -- Player color name (e.g. "white", "yellow", "green", "orange", "purple", etc.)
+        local color_index = player_colors[expression]
+        if color_index then
             local t = {}
             for i = 0, 15 do
                 local p = getplayer(i)
-                if p and readword(p + 0x60) == colour_index then
+                if p and readword(p + 0x60) == color_index then
                     t[#t + 1] = i
                 end
             end
@@ -649,7 +649,7 @@ end
 `id` - Player index (0-based)
 
 **Returns:**  
-`number` or `nil` - Colour index (0-17) as seen by others.
+`number` or `nil` - color index (0-17) as seen by others.
 
 ```lua
 local function get_player_color(id)
@@ -663,20 +663,20 @@ end
 
 **Parameters:**  
 `id` - Player index (0-based)  
-`colour` - Colour index (0-17) or colour name string (e.g., `"white"`, `"yellow"`). A respawn is usually required for
+`color` - color index (0-17) or color name string (e.g., `"white"`, `"yellow"`). A respawn is usually required for
 the change to fully apply.
 
 ```lua
-local function set_player_color(id, colour)
+local function set_player_color(id, color)
     local p = getplayer(id)
     if not p then return end
 
-    if type(colour) == "string" then
-        colour = player_colours[colour:lower()]
+    if type(color) == "string" then
+        color = player_colors[color:lower()]
     end
-    if not colour or type(colour) ~= "number" then return end
+    if not color or type(color) ~= "number" then return end
 
-    writebyte(p + 0x60, colour)
+    writebyte(p + 0x60, color)
 end
 ```
 
