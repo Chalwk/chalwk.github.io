@@ -36,7 +36,8 @@ description: "Jericho's hybrid portfolio + playground + blog."
                         world."</em></p>
             </div>
             <div class="about-image">
-                <img src="{{ site.image }}" alt="Jericho Crosby" class="profile-img" loading="lazy" decoding="async">
+                <img src="{{ page.image.path | relative_url }}" alt="{{ page.image.alt | default: 'Jericho Crosby' }}"
+                    class="profile-img" loading="lazy" decoding="async">
             </div>
         </div>
 
