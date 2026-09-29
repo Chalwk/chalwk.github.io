@@ -55,7 +55,6 @@ author:
   name: Jericho Crosby
   url: https://github.com/Chalwk
 
-image: /assets/images/avatar.png  # default social preview image
 favicon: favicon.ico              # browser tab icon
 
 # ------------------------------------------------------------------------------
@@ -89,6 +88,14 @@ relative_links:
 # Default front matter (for the sake of DRY)
 # ------------------------------------------------------------------------------
 defaults:
+
+  # Global defaults (apply to all pages, posts, and collections)
+  - scope:
+      path: ""
+    values:
+      image:
+        path: /assets/images/avatar.png
+        alt: "Jericho Crosby"
 
   # Blog posts
   - scope:
