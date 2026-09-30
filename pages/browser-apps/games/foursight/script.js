@@ -37,8 +37,8 @@ const DISC_R = CELL * 0.36;
 const HUMAN_PLAYER = 1;
 const AI_PLAYER = 2;
 
-const STATS_KEY = 'forsight.stats.v1';
-const SOUND_KEY = 'forsight.sound';
+const STATS_KEY = 'Foursight.stats.v1';
+const SOUND_KEY = 'Foursight.sound';
 
 // ---------------------------------------------------------------------------
 // Global UI state (not part of simulate-able game state)
