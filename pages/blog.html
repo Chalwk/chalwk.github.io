@@ -115,8 +115,16 @@ description: Blog Landing page
         border: 2px solid var(--gray-light);
         border-radius: var(--radius);
         background: white;
+        color: var(--dark);
+        color-scheme: light;
+        caret-color: var(--primary);
         transition: var(--transition);
         font-family: inherit;
+    }
+
+    #search-input::placeholder {
+        color: var(--gray);
+        opacity: 1;
     }
 
     #search-input:focus {
@@ -138,6 +146,56 @@ description: Blog Landing page
         overflow-y: auto;
         box-shadow: var(--shadow-lg);
         z-index: 100;
+        color: var(--dark);
+        color-scheme: light;
+    }
+
+    .search-result-item {
+        padding: 1rem;
+        border-bottom: 1px solid var(--gray-light);
+        transition: background 0.2s;
+        color: var(--dark);
+    }
+
+    .search-result-item:last-child {
+        border-bottom: none;
+    }
+
+    .search-result-item:hover {
+        background: rgba(30, 136, 229, 0.05);
+    }
+
+    .search-result-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+    }
+
+    .search-result-title a {
+        color: var(--primary);
+        text-decoration: none;
+    }
+
+    .search-result-title a:hover {
+        text-decoration: underline;
+    }
+
+    .search-result-date {
+        font-size: 0.8rem;
+        color: var(--gray);
+        margin-bottom: 0.5rem;
+    }
+
+    .search-result-excerpt {
+        font-size: 0.9rem;
+        color: var(--dark);
+        line-height: 1.4;
+    }
+
+    .no-results {
+        padding: 2rem;
+        text-align: center;
+        color: var(--gray);
     }
 
     /* filter Bar stuff */
@@ -291,53 +349,6 @@ description: Blog Landing page
     .tag-badge:focus-visible {
         outline: 2px solid var(--primary);
         outline-offset: 2px;
-    }
-
-    .search-result-item {
-        padding: 1rem;
-        border-bottom: 1px solid var(--gray-light);
-        transition: background 0.2s;
-    }
-
-    .search-result-item:last-child {
-        border-bottom: none;
-    }
-
-    .search-result-item:hover {
-        background: rgba(30, 136, 229, 0.05);
-    }
-
-    .search-result-title {
-        font-size: 1.2rem;
-        font-weight: 600;
-        margin-bottom: 0.25rem;
-    }
-
-    .search-result-title a {
-        color: var(--primary);
-        text-decoration: none;
-    }
-
-    .search-result-title a:hover {
-        text-decoration: underline;
-    }
-
-    .search-result-date {
-        font-size: 0.8rem;
-        color: var(--gray);
-        margin-bottom: 0.5rem;
-    }
-
-    .search-result-excerpt {
-        font-size: 0.9rem;
-        color: var(--dark);
-        line-height: 1.4;
-    }
-
-    .no-results {
-        padding: 2rem;
-        text-align: center;
-        color: var(--gray);
     }
 
     /* card + post styling */

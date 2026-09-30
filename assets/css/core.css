@@ -31,6 +31,21 @@
     --transition: all 0.3s ease;
 }
 
+input,
+select,
+textarea,
+button {
+    color: var(--dark);
+    color-scheme: light;
+    font-family: inherit;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: var(--gray);
+    opacity: 1;
+}
+
 * {
     margin: 0;
     padding: 0;
