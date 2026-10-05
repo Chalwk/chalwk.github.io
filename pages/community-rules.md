@@ -1,4 +1,12 @@
+---
+layout: default
+title: Community Rules
+permalink: /pages/community-rules/
+---
+
 <!-- Copyright (c) 2026 Jericho Crosby (Chalwk). All rights reserved. -->
+
+{% include toc.html %}
 
 ## Common Rules
 

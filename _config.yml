@@ -61,6 +61,7 @@ favicon: favicon.ico              # browser tab icon
 # External links used across layouts/components
 # ------------------------------------------------------------------------------
 links:
+  Community_Discord: https://discord.gg/VAEb4FXU5 # Chalwk - Code & Chill
   CPAS_Discord: https://discord.gg/NsndXgYfxQ
   SPCLib_Discord: https://discord.gg/D76H7RVPC9
   Liberty_Discord: https://discord.gg/aQXhJy8UTT
