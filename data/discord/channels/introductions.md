@@ -6,3 +6,5 @@
 - Reply to others to welcome them. I read every post.
 
 Keep it short and kind. Thanks for being here.
+
+**Tags used in this forum:** 👋 hello; 🌱 new; 🔁 returning
