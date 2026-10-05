@@ -72,7 +72,7 @@ Proprietary license. Applications are reviewed through the CPAS [Discord](https:
 
 ## SPCLib: Lua scripting for Halo PC/CE
 
-The largest public archive of Lua scripts and resources for Halo: PC and Custom Edition. Built for SAPP and Phasor server extensions, plus support for the Chimera client-side mod.
+**SPCLib** *(SAPP, Phasor and Chimera Library)* is the largest public archive of Lua scripts and resources for the **SAPP** and **Phasor** dedicated server extensions, and the **Chimera** client-side mod, for Halo: PC/CE.
 
 **Inside you'll find:**
 - Lua scripts for admin tools, chat, gameplay, gametypes, and more
@@ -83,6 +83,36 @@ Repo: https://github.com/Chalwk/SPCLib
 Contributing guide: https://github.com/Chalwk/SPCLib/blob/master/CONTRIBUTING.md
 
 MIT licensed. Issues, PRs, and community script contributions are welcome.
+
+### Knowledge Base
+
+**Server Setup & Hosting**
+- [Host a Linux VPS (Ubuntu 22.04)](https://chalwk.github.io/blog/2025/08/29/halo-how-to-host-a-ubuntu-vps/): Setup with Wine, VNC, firewall, SSH, and fail2ban.
+- [Server Port Forwarding](https://chalwk.github.io/blog/2025/08/31/halo-server-port-forwarding/): Router config for UDP ports 2302 & server port, plus Windows/Linux firewall rules.
+- [SAPP Server Guide](https://chalwk.github.io/blog/2026/04/02/halo-sapp-server-guide/): Pre-configured package: file structure, launch, multi-server expansion.
+
+**Scripting Guides**
+- [Scripting with SAPP](https://chalwk.github.io/blog/2026/05/17/halo-scripting-with-sapp/): Server-side Lua API: signature scanning, globals, core functions.
+- [Scripting with Phasor](https://chalwk.github.io/blog/2026/05/17/halo-scripting-with-phasor/): Server-side Lua: version handling, hardcoded addresses.
+- [Scripting with Chimera](https://chalwk.github.io/blog/2026/05/17/halo-scripting-with-chimera/): Client-side Lua: event callbacks, script placement, version compat.
+
+**Alt References**
+- [SAPP Command Reference](https://chalwk.github.io/blog/2026/05/17/halo-sapp-command-reference): Server commands, admin levels, usage.
+- [Common Lua References](https://chalwk.github.io/blog/2026/05/17/halo-lua-common-references): Patterns, utilities, helpers for server & client scripting.
+- [Understanding Memory Offsets](https://chalwk.github.io/blog/2025/09/07/halo-understanding-memory-offsets/): Addresses, offsets, signature scanning, tools for Halo PC/CE.
+- [Modding References](https://chalwk.github.io/blog/2025/09/07/halo-modding-references/): Tag editing, map rebuilding, asset injection, community tools.
+
+### Bug Reports
+Post in **this thread** with a clear description: steps to reproduce, error messages, and context (script, map, or game mode). Or use the GitHub **Bug Report Form**.
+
+**Feature Requests**
+Share ideas here or submit through the GitHub **Feature Request Form**.
+
+**Submit via GitHub (optional):**
+- [Bug Report Form](https://github.com/Chalwk/SPCLib/issues/new?assignees=Chalwk&labels=Bug%2CNeeds+Triage&projects=&template=BUG_REPORT.yaml&title=%5BBUG%5D+%3Ctitle%3E)
+- [Feature Request Form](https://github.com/Chalwk/SPCLib/issues/new?assignees=Chalwk&labels=Feature%2CNeeds+Review&projects=&template=FEATURE_REQUEST.yaml&title=%5BFEATURE%5D+%3Ctitle%3E)
+
+Be clear and specific: include error messages, what you’ve tried, and any scripts or configs involved. This helps others help you faster.
 
 ---
 
