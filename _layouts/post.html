@@ -33,7 +33,8 @@ layout: default
 
                     {% assign words = content | number_of_words %}
                     {% assign reading_time = words | divided_by: 200 %}
-                    {% if reading_time < 1 %}{% assign reading_time=1 %}{% endif %} <span class="reading-time">~ {{ reading_time }} min read</span>
+                    {% if reading_time < 1 %}{% assign reading_time=1 %}{% endif %} <span class="reading-time">~ {{
+                        reading_time }} min read</span>
                 </div>
 
                 <!-- table of contents -->
@@ -198,8 +199,8 @@ layout: default
     }
 
     .post-content code:not(pre code) {
-        background-color: #f1f5f9;
-        color: #1e293b;
+        background-color: #f1f5f9 !important;
+        color: #1e293b !important;
         padding: 0.2rem 0.4rem;
         border-radius: 0.25rem;
         font-size: 0.9em;
