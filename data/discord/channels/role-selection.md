@@ -12,7 +12,7 @@
 -# Java development.
 
 <@&1556755380942405723>
--# C++ development, native applications, game development, and engine work.
+-# C and C++ development, native applications, game development, and engine work.
 
 <@&1556582143637979186>
 -# Writing Lua for SPCLib or other platforms.
