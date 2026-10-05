@@ -15,3 +15,7 @@ Where a contributing guide exists, you'll find it at `CONTRIBUTING.md` in the re
 If you have questions, ask in this forum: <#1556486004909543486>
 
 Thanks for helping make my projects better for everyone.
+
+---
+
+**Tags used in this forum:** ❓ question; 💡 proposal; 🌱 first-pr; 🐍 script; 📝 docs; ⚙️ infra; ✅ answered; 🛠️ in-progress; 🔗 pr-open; 🎉 merged; ⏸️ on-hold; 🚫 wont-do; 💤 stale

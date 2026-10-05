@@ -34,3 +34,7 @@ Please avoid DMing moderators about regular questions or bugs unless it's privat
 Posting here keeps everything trackable and may help others.
 
 Everyone is welcome to jump in and share solutions.
+
+---
+
+**Tags used in this forum:** 🐛 bug; 💥 crash; 📝 docs; 🌐 website; ✅ confirmed; 🔍 investigating; 🛠️ fix-in-progress; 🎉 resolved; 🔎 needs-info; 🔗 duplicate; 🚫 wontfix; ❓ question

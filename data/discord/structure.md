@@ -1,6 +1,6 @@
 ## INFO
 
-| Channel                      | Description                                                | Documentation/Tags                            |
+| Channel                      | Description                                                | Documentation                                 |
 | ---------------------------- | ---------------------------------------------------------- | --------------------------------------------- |
 | `welcome` (text channel)     | Landing page. Start here for an introduction to the server | [welcome.md](channels/welcome.md)             |
 | `rules` (text channel)       | Community rules and policies for all members               | [rules.md](channels/rules.md)                 |
@@ -11,20 +11,20 @@
 
 ## SOCIAL
 
-| Channel                      | Description                                         | Documentation                       | Tags                                                            |
-| ---------------------------- | --------------------------------------------------- | ----------------------------------- | --------------------------------------------------------------- |
-| `chatter-box` (text channel) | General discussion about coding, projects, and life |                                     |                                                                 |
-| `showcase` (forum)           | Share stuff you've built                            | [showcase.md](channels/showcase.md) | 📦 project; 🌐 web; 🎮 game; 🛠️ tool; ⭐ featured; 💤 stale |
+| Channel                      | Description                                         | Documentation                       |
+| ---------------------------- | --------------------------------------------------- | ----------------------------------- |
+| `chatter-box` (text channel) | General discussion about coding, projects, and life |                                     |
+| `showcase` (forum)           | Share stuff you've built                            | [showcase.md](channels/showcase.md) |
 
 ---
 
 ## PROJECTS
 
-| Channel                | Description                                                          | Documentation                               | Tags                                                                                                                                             |
-| ---------------------- | -------------------------------------------------------------------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `github-feed` (forum)  | GitHub notifications (pull, push, commit, etc).                      |                                             |                                                                                                                                                  |
-| `support` (forum)      | Ask for help, report bugs, or get support with any of my projects    | [support.md](channels/support.md)           | 🐛 bug; 💥 crash; 📝 docs; 🌐 website; ✅ confirmed; 🔍 investigating; 🛠️ fix-in-progress; 🎉 resolved; 🔎 needs-info; 🔗 duplicate; 🚫 wontfix; ❓ question |
-| `contributing` (forum) | Learn how to contribute to my repos, ask questions, or propose ideas | [contributing.md](channels/contributing.md) | ❓ question; 💡 proposal; 🌱 first-pr; 🐍 script; 📝 docs; ⚙️ infra; ✅ answered; 🛠️ in-progress; 🔗 pr-open; 🎉 merged; ⏸️ on-hold; 🚫 wont-do; 💤 stale     |
+| Channel                | Description                                                          | Documentation                               |
+| ---------------------- | -------------------------------------------------------------------- | ------------------------------------------- |
+| `github-feed` (forum)  | GitHub notifications (pull, push, commit, etc).                      |                                             |
+| `support` (forum)      | Ask for help, report bugs, or get support with any of my projects    | [support.md](channels/support.md)           |
+| `contributing` (forum) | Learn how to contribute to my repos, ask questions, or propose ideas | [contributing.md](channels/contributing.md) |
 
 ---
 

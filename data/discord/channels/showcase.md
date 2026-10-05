@@ -19,3 +19,7 @@ One project per post. Updates to an existing project go in the original thread, 
 Everyone is welcome. First project, half-finished experiment, or something you have been working on for years. No gatekeeping here.
 
 Need help with something you are building? Ask in <#1556486004590907510>
+
+---
+
+**Tags used in this forum:** 📦 project; 🌐 web; 🎮 game; 🛠️ tool; ⭐ featured; 💤 stale
