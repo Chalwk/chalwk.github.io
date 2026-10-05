@@ -1,8 +1,6 @@
 # Welcome to Chalwk's Code & Chill
 
-This is the community server for my coding projects, but it's also a
-place to just hang out, chill, chat, and enjoy some company. Ask questions,
-suggest ideas, report bugs, see what's being worked on, or just drop by and say hi.
+This is the community server for my coding projects, but it's also a place to just hang out, chill, chat, and enjoy some company. Ask questions, suggest ideas, report bugs, see what's being worked on, or just drop by and say hi.
 
 ## What lives here
 - Support and discussion for my public repositories
