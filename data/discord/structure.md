@@ -22,10 +22,11 @@
 
 ---
 
-## PROJECTS
+## GITHUB
 
 | Channel                | Description                                                          |
 | ---------------------- | -------------------------------------------------------------------- |
+| `github-feed` (forum)  | GitHub notifications (pull, push, commit, etc).                      |
 | `support` (forum)      | Ask for help, report bugs, or get support with any of my projects    |
 | `contributing` (forum) | Learn how to contribute to my repos, ask questions, or propose ideas |
 
