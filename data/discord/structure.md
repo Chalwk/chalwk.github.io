@@ -4,12 +4,12 @@
 
 ## INFO
 
-| Channel                        | Description                                                |
-| ------------------------------ | ---------------------------------------------------------- |
-| `welcome` (text channel)       | Landing page. Start here for an introduction to the server |
-| `rules` (text channel)         | Community rules and policies for all members               |
-| `announcements` (text channel) | Project launches, releases, and site updates               |
-| `introductions` (forum)        | Say hi and introduce yourself to the community             |
+| Channel                      | Description                                                |
+| ---------------------------- | ---------------------------------------------------------- |
+| `welcome` (text channel)     | Landing page. Start here for an introduction to the server |
+| `rules` (text channel)       | Community rules and policies for all members               |
+| `my-projects` (text channel) | Project launches, releases, and site updates               |
+| `introductions` (forum)      | Say hi and introduce yourself to the community             |
 
 ---
 
