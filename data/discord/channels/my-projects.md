@@ -86,7 +86,7 @@ MIT licensed. Issues, PRs, and community script contributions are welcome.
 
 ---
 
-## New project: python-scripts
+## Python Scripts: Self-contained utilities
 
 A grab-bag of self-contained Python scripts.
 
