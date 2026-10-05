@@ -1,11 +1,12 @@
 ## INFO
 
-| Channel                      | Description                                                | Documentation                                 |
-| ---------------------------- | ---------------------------------------------------------- | --------------------------------------------- |
-| `welcome` (text channel)     | Landing page. Start here for an introduction to the server | [welcome.md](channels/welcome.md)             |
-| `rules` (text channel)       | Community rules and policies for all members               | [rules.md](channels/rules.md)                 |
-| `my-projects` (text channel) | Project launches, releases, and site updates               |                                               |
-| `introductions` (forum)      | Say hi and introduce yourself to the community             | [introductions.md](channels/introductions.md) |
+| Channel                              | Description                                                                                                                             | Documentation                                 |
+| ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
+| `welcome` (text channel)             | Landing page. Start here for an introduction to the server                                                                              | [welcome.md](channels/welcome.md)             |
+| `rules` (text channel)               | Community rules and policies for all members                                                                                            | [rules.md](channels/rules.md)                 |
+| `my-projects` (text channel)         | Project launches, releases, and site updates                                                                                            |                                               |
+| `introductions` (forum)              | Say hi and introduce yourself to the community                                                                                          | [introductions.md](channels/introductions.md) |
+| `arrivals-departures` (text channel) | `ChalwkBot` posts notifications automatically when users join or leave the server. It also automatically assigns the `@Chillager` role. |                                               |
 
 ---
 
