@@ -21,6 +21,8 @@ Repo: https://github.com/Chalwk/JCBudgetBuddy
 
 GPL-3.0 licensed. Issues and PRs welcome.
 
+<@&1556755380942405723> <@&1556579451603652648>
+
 ---
 
 ## SAPP-HTTP: HTTP/HTTPS client DLL for SAPP
@@ -43,6 +45,8 @@ A lightweight HTTP/HTTPS client DLL for SAPP that exposes a C API through LuaJIT
 Repo: https://github.com/Chalwk/SAPP-HTTP
 
 MIT licensed. Issues and PRs welcome.
+
+<@&1556755380942405723> <@&1556579451603652648>
 
 ---
 
@@ -68,6 +72,8 @@ A Virtual Charter (VC) and specialty flight operator for Microsoft Flight Simula
 
 Proprietary license. Applications are reviewed through the CPAS [Discord](https://discord.gg/NsndXgYfxQ) or [GitHub](https://github.com/Chalwk/CPAS).
 
+<@&1556579330170290228> <@&1556579451603652648>
+
 ---
 
 ## SPCLib: Lua scripting for Halo PC/CE
@@ -83,6 +89,8 @@ Repo: https://github.com/Chalwk/SPCLib
 Contributing guide: https://github.com/Chalwk/SPCLib/blob/master/CONTRIBUTING.md
 
 MIT licensed. Issues, PRs, and community script contributions are welcome.
+
+<@&1556582143637979186> <@&1556579330170290228> <@&1556579451603652648>
 
 ### Knowledge Base
 
@@ -127,6 +135,8 @@ Docs: https://chalwk.github.io/python-scripts/
 
 MIT licensed. Issues and PRs welcome.
 
+<@&1556578831630991471> <@&1556579451603652648>
+
 ---
 
 ## JeriCraft: Minecraft Server
@@ -150,6 +160,8 @@ To get started, read the full [CONTRIBUTING guide](https://github.com/Chalwk/Jer
 If you have questions, ask here!
 
 Proprietary license. Issues and PRs are reviewed through the [GitHub](https://github.com/Chalwk/JeriCraft) repository.
+
+<@&1556579134744829953> <@&1556579330170290228> <@&1556579451603652648>
 
 ---
 
@@ -180,6 +192,8 @@ Repo: https://github.com/Chalwk/Paper-AutoMessages
 - `automessages.*` - Wildcard for all permissions
 
 MIT licensed. Issues and PRs are welcome.
+
+<@&1556579134744829953> <@&1556579330170290228> <@&1556579451603652648>
 
 ---
 
@@ -219,6 +233,8 @@ Repo: https://github.com/Chalwk/Paper-BigBrother
 
 MIT licensed. Issues and PRs are welcome.
 
+<@&1556579134744829953> <@&1556579330170290228> <@&1556579451603652648>
+
 ---
 
 ## Paper-GameModeManager (Java MC Plugin)
@@ -245,6 +261,8 @@ Repo: https://github.com/Chalwk/Paper-GameModeManager
 - `gmmanage.*` - Grants all `gmmanage` permissions (default: op)
 
 MIT licensed. Issues and PRs are welcome.
+
+<@&1556579134744829953> <@&1556579330170290228> <@&1556579451603652648>
 
 ---
 
@@ -292,6 +310,8 @@ Repo: https://github.com/Chalwk/Paper-VacuLoot
 
 MIT licensed. Issues and PRs are welcome.
 
+<@&1556579134744829953> <@&1556579330170290228> <@&1556579451603652648>
+
 ---
 
 ## OBS-Lua-Scripts
@@ -306,3 +326,5 @@ Repo: https://github.com/Chalwk/OBS-Lua-Scripts
 - **webcam_fallback.lua** - Webcam fallback handling
 
 MIT licensed. Issues and PRs are welcome.
+
+<@&1556582143637979186> <@&1556579451603652648>
