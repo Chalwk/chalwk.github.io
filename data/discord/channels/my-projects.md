@@ -1,4 +1,8 @@
-# JCBudgetBuddy: Personal finance tracker for Windows
+# Back of pinned messages for my posted projects
+
+---
+
+## JCBudgetBuddy: Personal finance tracker for Windows
 
 A Windows desktop personal finance tracker built with Qt Widgets, JSON persistence, and CMake. Manages weekly and monthly expenses, invoices, and payments.
 
@@ -19,7 +23,7 @@ GPL-3.0 licensed. Issues and PRs welcome.
 
 ---
 
-# SAPP-HTTP: HTTP/HTTPS client DLL for SAPP
+## SAPP-HTTP: HTTP/HTTPS client DLL for SAPP
 
 A lightweight HTTP/HTTPS client DLL for SAPP that exposes a C API through LuaJIT FFI. Lets your Lua scripts make GET, POST, and PUT requests using libcurl.
 
@@ -42,7 +46,7 @@ MIT licensed. Issues and PRs welcome.
 
 ---
 
-# Coastal Peaks Air Service (CPAS)
+## Coastal Peaks Air Service (CPAS)
 
 A Virtual Charter (VC) and specialty flight operator for Microsoft Flight Simulator. We fly general aviation aircraft and helicopters across New Zealand's South Island, covering Canterbury, Christchurch, Banks Peninsula, and the Southern Alps.
 
@@ -92,3 +96,27 @@ Repo: https://github.com/Chalwk/python-scripts
 Docs: https://chalwk.github.io/python-scripts/
 
 MIT licensed. Issues and PRs welcome.
+
+---
+
+## JeriCraft: Minecraft Server
+
+A medieval-themed SMP/RPG Factions server for Minecraft Java Edition. This repository contains the Jekyll source code for the official public documentation site at [jericraft.net](https://jericraft.net), featuring server guides, tutorials, rules, and policies.
+
+Repo: https://github.com/Chalwk/JeriCraft/
+
+**Want to help improve the JeriCraft website?**
+
+You can contribute guides, fix typos, update command lists, add shop pages, or improve existing pages.
+
+To get started, read the full [CONTRIBUTING guide](https://github.com/Chalwk/JeriCraft/blob/main/CONTRIBUTING.md). It covers:
+- How to submit a pull request
+- Writing new guides in `_guides`
+- Adding shop pages in `_shops`
+- Updating existing `pages` and `includes`
+- Front matter, image paths, and style conventions
+- Testing your changes locally
+
+If you have questions, ask here!
+
+Proprietary license. Issues and PRs are reviewed through the [GitHub](https://github.com/Chalwk/JeriCraft) repository.
