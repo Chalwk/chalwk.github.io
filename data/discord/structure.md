@@ -1,15 +1,21 @@
-# DISCORD CATEGORY/CHANNEL STRUCTURE
+## INFO
+
+| Channel                      | Description                                                | Documentation                     |
+| ---------------------------- | ---------------------------------------------------------- | --------------------------------- |
+| `welcome` (text channel)     | Landing page. Start here for an introduction to the server | [welcome.md](channels/welcome.md) |
+| `rules` (text channel)       | Community rules and policies for all members               | [rules.md](channels/rules.md)     |
+| `my-projects` (text channel) | Project launches, releases, and site updates               |                                   |
+| `introductions` (forum)      | Say hi and introduce yourself to the community             |                                   |
 
 ---
 
-## INFO
+## GITHUB
 
-| Channel                      | Description                                                |
-| ---------------------------- | ---------------------------------------------------------- |
-| `welcome` (text channel)     | Landing page. Start here for an introduction to the server |
-| `rules` (text channel)       | Community rules and policies for all members               |
-| `my-projects` (text channel) | Project launches, releases, and site updates               |
-| `introductions` (forum)      | Say hi and introduce yourself to the community             |
+| Channel                | Description                                                          | Documentation                               |
+| ---------------------- | -------------------------------------------------------------------- | ------------------------------------------- |
+| `github-feed` (forum)  | GitHub notifications (pull, push, commit, etc).                      |                                             |
+| `support` (forum)      | Ask for help, report bugs, or get support with any of my projects    | [support.md](channels/support.md)           |
+| `contributing` (forum) | Learn how to contribute to my repos, ask questions, or propose ideas | [contributing.md](channels/contributing.md) |
 
 ---
 
@@ -19,16 +25,6 @@
 | ---------------------------- | --------------------------------------------------- |
 | `chatter-box` (text channel) | General discussion about coding, projects, and life |
 | `off-topic` (text channel)   | Anything that doesn't fit the other channels        |
-
----
-
-## GITHUB
-
-| Channel                | Description                                                          |
-| ---------------------- | -------------------------------------------------------------------- |
-| `github-feed` (forum)  | GitHub notifications (pull, push, commit, etc).                      |
-| `support` (forum)      | Ask for help, report bugs, or get support with any of my projects    |
-| `contributing` (forum) | Learn how to contribute to my repos, ask questions, or propose ideas |
 
 ---
 
