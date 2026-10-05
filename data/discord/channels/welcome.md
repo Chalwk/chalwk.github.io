@@ -6,8 +6,8 @@ suggest ideas, report bugs, see what's being worked on, or just drop by and say 
 
 ## What lives here
 - Support and discussion for my public repositories
-- Early looks at scripts before they hit GitHub
-- A place to share what you've built with them
+- Early looks at projects before they hit GitHub
+- A place to share what you've done with them
 
 **Projects:** [github.com/Chalwk](https://github.com/Chalwk)
 **Website:** [chalwk.github.io](https://chalwk.github.io/)
