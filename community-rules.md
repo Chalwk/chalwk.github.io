@@ -1,11 +1,5 @@
 <!-- Copyright (c) 2026 Jericho Crosby (Chalwk). All rights reserved. -->
 
----
-
-{% include toc.html %}
-
----
-
 ## Common Rules
 
 The following rules apply to the **Chalwk - Code & Chill** Discord server and
