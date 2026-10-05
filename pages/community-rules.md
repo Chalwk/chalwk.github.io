@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: page
 title: Community Rules
 permalink: /pages/community-rules/
 ---

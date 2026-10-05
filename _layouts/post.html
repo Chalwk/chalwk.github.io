@@ -36,20 +36,9 @@ layout: default
                     {% if reading_time < 1 %}{% assign reading_time=1 %}{% endif %} <span class="reading-time">~ {{ reading_time }} min read</span>
                 </div>
 
-                <!-- table of contents (collapsible, populated by JS below) -->
+                <!-- table of contents -->
                 {% if page.toc != false %}
-                <div class="toc-container">
-                    <details class="toc-details" {% if page.toc_open %}open{% endif %}>
-                        <summary class="toc-summary">
-                            <i class="fas fa-list-ul" aria-hidden="true"></i> Table of Contents
-                        </summary>
-                        <div class="toc-content" id="jekyll-toc-placeholder">
-                            <ul>
-                                <li>Loading table of contents...</li>
-                            </ul>
-                        </div>
-                    </details>
-                </div>
+                {% include toc.html %}
                 {% endif %}
 
                 <!-- main post content -->
@@ -135,89 +124,6 @@ layout: default
     .update-date time {
         all: unset;
         display: inline;
-    }
-
-    /* TOC */
-    .toc-container {
-        margin: 2rem 0 1.5rem 0;
-        background: rgba(30, 136, 229, 0.03);
-        border-radius: var(--radius);
-        border: 1px solid var(--gray-light);
-        overflow: hidden;
-    }
-
-    .toc-details {
-        background: transparent;
-        border: none;
-    }
-
-    .toc-summary {
-        padding: 0.75rem 1.25rem;
-        font-weight: 600;
-        font-size: 1.1rem;
-        cursor: pointer;
-        background: rgba(30, 136, 229, 0.05);
-        color: var(--darker);
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        list-style: none;
-        transition: background 0.2s;
-    }
-
-    .toc-summary::-webkit-details-marker {
-        display: none;
-    }
-
-    .toc-summary::before {
-        content: '▶';
-        font-size: 0.8rem;
-        display: inline-block;
-        transition: transform 0.2s;
-    }
-
-    .toc-details[open] .toc-summary::before {
-        transform: rotate(90deg);
-    }
-
-    .toc-summary:hover {
-        background: rgba(30, 136, 229, 0.1);
-    }
-
-    .toc-summary i {
-        color: var(--primary);
-        font-size: 1rem;
-    }
-
-    .toc-content {
-        padding: 0.75rem 1.5rem 1rem 2rem;
-    }
-
-    .toc-content ul {
-        margin: 0;
-        padding-left: 1.2rem;
-        list-style: none;
-    }
-
-    .toc-content li {
-        margin: 0.4rem 0;
-        line-height: 1.4;
-    }
-
-    .toc-content a {
-        color: var(--primary);
-        text-decoration: none;
-        border-bottom: 1px dotted transparent;
-        transition: border-color 0.2s, color 0.2s;
-    }
-
-    .toc-content a:hover {
-        color: var(--primary-dark);
-        border-bottom-color: var(--primary-dark);
-    }
-
-    .toc-content ul ul {
-        margin-left: 1rem;
     }
 
     /* Content typography */
@@ -440,10 +346,6 @@ layout: default
             font-size: 0.85rem;
         }
 
-        .toc-content {
-            padding: 0.5rem 1rem 0.75rem 1.5rem;
-        }
-
         .post-content table {
             display: block;
             overflow-x: auto;
@@ -489,67 +391,6 @@ layout: default
                 setTimeout(() => { button.textContent = "Copy"; }, 2000);
             });
         });
-
-        // -------------------------------------------------------------
-        // Build a hierarchical TOC from headings inside .post-content
-        // -------------------------------------------------------------
-        const tocPlaceholder = document.getElementById('jekyll-toc-placeholder');
-        const tocDetails = tocPlaceholder ? tocPlaceholder.closest('details') : null;
-
-        if (tocPlaceholder) {
-            const content = document.querySelector('.post-content');
-            const headings = content ? content.querySelectorAll('h2, h3, h4, h5, h6') : [];
-
-            if (!content || headings.length === 0) {
-                // Nothing to build - hide the whole TOC block.
-                if (tocDetails) tocDetails.style.display = 'none';
-            } else {
-                const toc = document.createElement('ul');
-                // Stack entry: { level, list } - top is the currently open nesting level.
-                const stack = [{ level: 0, list: toc }];
-
-                headings.forEach((heading, idx) => {
-                    // Give headings a stable id if they don't already have one.
-                    if (!heading.id) {
-                        const slug = heading.innerText
-                            .toLowerCase()
-                            .replace(/[^\w\s-]/g, '')
-                            .trim()
-                            .replace(/\s+/g, '-')
-                            .slice(0, 60);
-                        heading.id = 'toc-' + (slug || ('heading-' + idx));
-                    }
-
-                    const level = parseInt(heading.tagName[1], 10);
-
-                    // Pop stack until the parent is strictly shallower.
-                    while (stack.length > 1 && stack[stack.length - 1].level >= level) {
-                        stack.pop();
-                    }
-
-                    const parent = stack[stack.length - 1];
-                    const item = document.createElement('li');
-                    const link = document.createElement('a');
-                    link.href = '#' + heading.id;
-                    link.textContent = heading.innerText;
-                    item.appendChild(link);
-                    parent.list.appendChild(item);
-
-                    // Prepare a nested list for any children of this heading.
-                    const childList = document.createElement('ul');
-                    item.appendChild(childList);
-                    stack.push({ level, list: childList });
-                });
-
-                // Remove empty trailing <ul>s.
-                toc.querySelectorAll('ul').forEach(ul => {
-                    if (!ul.children.length) ul.remove();
-                });
-
-                tocPlaceholder.innerHTML = '';
-                tocPlaceholder.appendChild(toc);
-            }
-        }
 
         // -------------------------------------------------------------
         // Force-visible scrollbars for horizontally scrollable code

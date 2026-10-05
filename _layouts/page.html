@@ -1,0 +1,134 @@
+---
+layout: default
+---
+
+<!-- Copyright (c) 2024-2026 Jericho Crosby (Chalwk). All Rights Reserved. -->
+
+<section class="section">
+    <div class="container">
+        <article class="page-content">
+            {% if page.title %}
+            <h1>{{ page.title }}</h1>
+            {% endif %}
+
+            {% if page.toc != false %}
+            {% include toc.html %}
+            {% endif %}
+
+            {{ content }}
+        </article>
+    </div>
+</section>
+
+<style>
+    .page-content {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 2rem 0;
+        font-size: 1.05rem;
+        line-height: 1.7;
+        color: var(--dark);
+    }
+
+    .page-content h1 {
+        font-size: clamp(1.75rem, 2vw + 1rem, 2.5rem);
+        margin-bottom: 1.5rem;
+        color: var(--darker);
+    }
+
+    .page-content h2 {
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        padding-left: 1rem;
+        border-left: 4px solid var(--primary);
+        font-size: 1.6rem;
+        color: var(--darker);
+    }
+
+    .page-content h3 {
+        margin-top: 1.6rem;
+        margin-bottom: 0.8rem;
+        font-size: 1.3rem;
+        color: var(--darker);
+    }
+
+    .page-content p {
+        margin-bottom: 1.2rem;
+    }
+
+    .page-content a {
+        color: var(--primary);
+        text-decoration: underline;
+    }
+
+    .page-content a:hover {
+        color: var(--primary-dark);
+        text-decoration: none;
+    }
+
+    .page-content ul,
+    .page-content ol {
+        margin: 1rem 0 1.2rem 2rem;
+    }
+
+    .page-content li {
+        margin-bottom: 0.4rem;
+    }
+
+    .page-content hr {
+        margin: 2rem 0;
+        border: 0;
+        border-top: 1px solid var(--gray-light);
+    }
+
+    .page-content code {
+        background-color: #f1f5f9;
+        color: #1e293b;
+        padding: 0.2rem 0.4rem;
+        border-radius: 0.25rem;
+        font-size: 0.9em;
+        font-family: var(--font-mono), monospace;
+        border: 1px solid #cbd5e1;
+    }
+
+    .page-content table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1.5rem 0;
+        font-size: 0.95rem;
+    }
+
+    .page-content th,
+    .page-content td {
+        border: 1px solid var(--gray-light);
+        padding: 0.6rem 0.85rem;
+        text-align: left;
+        vertical-align: top;
+    }
+
+    .page-content th {
+        background: var(--gray-light);
+        font-weight: 600;
+    }
+
+    .page-content tr:hover td {
+        background: rgba(30, 136, 229, 0.03);
+    }
+
+    @media (max-width: 768px) {
+        .page-content {
+            padding: 1rem 0;
+            font-size: 1rem;
+        }
+
+        .page-content h2 {
+            font-size: 1.35rem;
+        }
+
+        .page-content table {
+            display: block;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+    }
+</style>
