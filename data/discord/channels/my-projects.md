@@ -120,3 +120,159 @@ To get started, read the full [CONTRIBUTING guide](https://github.com/Chalwk/Jer
 If you have questions, ask here!
 
 Proprietary license. Issues and PRs are reviewed through the [GitHub](https://github.com/Chalwk/JeriCraft) repository.
+
+---
+
+## Paper-AutoMessages (Java MC Plugin)
+
+AutoMessages is a PaperMC plugin that automatically broadcasts rich, interactive messages to the JeriCraft server at configurable intervals. It supports colored text, clickable links, hover tooltips, and command execution.
+
+> Related discussion: <#1556743504699334708>
+
+Repo: https://github.com/Chalwk/Paper-AutoMessages
+
+**Key features**
+- **Periodic announcements:** Broadcast messages in sequential order at a configurable interval (default: 600 seconds)
+- **Rich text support:** Use Minecraft color codes (`&`) for colorful and formatted text
+- **Interactive components:** Embed clickable and hoverable elements using JSON chat components—click actions include `open_url`, `run_command`, `suggest_command`, and `change_page`; hover actions include `show_text`, `show_item`, and `show_entity`
+- **Flexible configuration:** Define any number of messages; each message can have any number of lines, mixing plain text and JSON components
+- **Simple management:** `/automessages reload` to apply changes instantly, `/automessages status` to check current settings
+- **Lightweight & efficient:** Scheduler runs with minimal overhead; messages are parsed and cached on reload
+
+**Commands**
+- `/automessages` or `/am` - Show the command usage
+- `/automessages reload` - Reload the configuration file and restart the scheduler
+- `/automessages status` - Display current interval, total messages, and next index
+
+**Permissions**
+- `automessages.use` - Allows using `/automessages` (default: op)
+- `automessages.reload` - Allows reloading configuration (default: op)
+- `automessages.*` - Wildcard for all permissions
+
+MIT licensed. Issues and PRs are welcome.
+
+---
+
+## Paper-BigBrother (Java MC Plugin)
+
+Monitor player interactions with anvils, books, commands, portals, signs, and private messages. BigBrother gives you fine-grained control with customizable filters and per-feature notifications.
+
+Repo: https://github.com/Chalwk/Paper-BigBrother
+
+**Key features**
+- **CommandSpy:** Monitor all commands executed by players with configurable exclusions
+- **SignSpy:** Track sign interactions and edits, displaying written content
+- **AnvilSpy:** Monitor anvil usage with item renaming information
+- **BookSpy:** Track book writing and editing activities
+- **PortalSpy:** Monitor portal travel between dimensions
+- **Granular permissions:** Fine-grained control over each spy feature
+- **Configurable filters:** Exclude specific commands, players, and worlds
+- **Custom notifications:** Tailored notification formats for each spy type
+- **Global & individual toggles:** Enable/disable the entire system or specific features
+- **Player management:** Toggle spy features for individual players
+
+**Commands**
+- `/bigbrother` or `/bb` - Toggle all BigBrother spy features for yourself
+- `/bigbrother reload` - Reload the plugin configuration
+- `/bigbrother status` - Check which spy features you have enabled
+- `/bigbrother commands` - Toggle command spy for yourself
+- `/bigbrother signs` - Toggle sign spy for yourself
+- `/bigbrother anvils` - Toggle anvil spy for yourself
+- `/bigbrother books` - Toggle book spy for yourself
+- `/bigbrother portals` - Toggle portal spy for yourself
+
+**Permissions**
+- `bigbrother.use` - Allows using BigBrother commands (default: op)
+- `bigbrother.reload` - Allows reloading configuration (default: op)
+- `bigbrother.*` - Wildcard for all BigBrother permissions (default: op)
+- Per-spy toggle permissions for self and others are also available
+
+MIT licensed. Issues and PRs are welcome.
+
+---
+
+## Paper-GameModeManager (Java MC Plugin)
+
+Store and restore player states per game mode. GameModeManager keeps separate inventories, health, hunger, experience, and potion effects for Creative and Survival modes.
+
+Repo: https://github.com/Chalwk/Paper-GameModeManager
+
+**Key features**
+- **Per-gamemode player states:** Saves inventory, health, food, saturation, experience (total, level, progress), and active potion effects separately for Creative and Survival modes
+- **Automatic state switching:** When a player changes gamemode, the current state is saved and the state of the new gamemode is applied
+- **World-change awareness:** If a player teleports or portals to another world, the plugin remembers the gamemode they had before the world change and restores it after the world switch completes
+- **Persistent storage:** All player data is saved to disk (`playerdata/.yml`) and loaded when the player joins; data is automatically saved on quit and during server shutdown
+- **Reload support:** Configuration can be reloaded in-game without restarting the server
+
+**Commands**
+- `/gmmanage` or `/gmm` - Shows the help message
+- `/gmmanage reload` - Reloads the `config.yml` file
+- `/gmmanage help` - Displays the help message
+
+**Permissions**
+- `gmmanage.use` - Allows using the `/gmmanage` command (default: op)
+- `gmmanage.reload` - Allows reloading the configuration (default: op)
+- `gmmanage.*` - Grants all `gmmanage` permissions (default: op)
+
+MIT licensed. Issues and PRs are welcome.
+
+---
+
+## Paper-VacuLoot (Java MC Plugin)
+
+VacuLoot is an item magnet system that automatically attracts nearby items and experience orbs to players. Features toggleable settings, multiple power tiers, and optional economy integration.
+
+Repo: https://github.com/Chalwk/Paper-VacuLoot
+
+**Key features**
+- **Toggleable magnet** - Enable/disable item attraction with a simple command
+- **4 power tiers** - Basic, Advanced, Ultimate, God
+- **World restrictions** - Configure which worlds allow magnet functionality
+- **Smart attraction** - Smooth movement respecting Minecraft physics
+- **Economy integration** - Optional toggle cost with Vault support
+- **XP orb attraction** - Optional experience orb collection
+- **Item blacklist** - Exclude specific items from attraction
+- **Configurable cooldown** - Prevent toggle spam
+- **Per-player settings** - Admins can manage magnet states for others
+- **Permission-based tiers** - Tie magnet power to player permissions
+
+**Magnet tiers**
+- **Basic:** 5 blocks, normal speed
+- **Advanced:** 10 blocks, 20% faster
+- **Ultimate:** 15 blocks, 50% faster
+- **God:** 25 blocks, 2x speed
+
+**Commands**
+- `/magnet` or `/mag` - Toggle your magnet on/off
+- `/magnet check` - Check your status and tier
+- `/magnet help` - Show command help
+- `/magnet <player>` - Toggle magnet for another player
+- `/magnet tier <player> <tier>` - Set a player's magnet tier
+- `/magnet reload` - Reload the plugin configuration
+
+**Permissions**
+- `magnet.use` - Use the magnet command (default: op)
+- `magnet.use.others` - Toggle magnet for other players (default: op)
+- `magnet.admin` - Admin management commands (default: op)
+- `magnet.tier.basic` - Basic tier (default: true)
+- `magnet.tier.advanced` - Advanced tier (default: op)
+- `magnet.tier.ultimate` - Ultimate tier (default: op)
+- `magnet.tier.god` - God tier (default: op)
+- `magnet.*` - Wildcard for all VacuLoot permissions
+
+MIT licensed. Issues and PRs are welcome.
+
+---
+
+## OBS-Lua-Scripts
+
+A collection of Lua scripts for OBS Studio, designed to automate and enhance your streaming setup.
+
+Repo: https://github.com/Chalwk/OBS-Lua-Scripts
+
+**Included scripts**
+- **focus_standby.lua** - Focus and standby management
+- **splash_mic_mute.lua** - Splash screen with microphone mute integration
+- **webcam_fallback.lua** - Webcam fallback handling
+
+MIT licensed. Issues and PRs are welcome.
