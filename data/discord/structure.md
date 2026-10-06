@@ -1,88 +1,108 @@
 <!--
-This file documents the server's channel structure and serves as a backup of important
-server-specific messages and my personal posts (#releases-and-updates). I'm keeping it
-so that if I ever need to recreate the server, I won't have to remember or rewrite
-everything from scratch.
+This file documents the structure of the `Chalwk - Code & Chill` Discord server, and
+serves as a backup of important server-specific messages and my personal posts
+(#releases-and-updates). I'm keeping it so that if I ever need to recreate the server,
+I won't have to remember or rewrite everything from scratch.
 -->
 
 # Chalwk - Code & Chill <!-- omit from toc -->
 
 ## Table of Contents <!-- omit from toc -->
 
-- [Server Structure](#server-structure)
+- [Community Roles:](#community-roles)
+- [Server Structure (5 categories)](#server-structure-5-categories)
   - [INFO](#info)
   - [SOCIAL](#social)
   - [PROJECTS](#projects)
   - [VOICE](#voice)
   - [COUNCIL CHAMBERS (hidden to the public)](#council-chambers-hidden-to-the-public)
-- [Backup of important server-specific messages in relevant channels:](#backup-of-important-server-specific-messages-in-relevant-channels)
+- [Backup of important server-specific messages in relevant channels](#backup-of-important-server-specific-messages-in-relevant-channels)
   - [welcome](#welcome)
   - [role-selection](#role-selection)
   - [rules](#rules)
   - [introductions](#introductions)
   - [chatter-box](#chatter-box)
   - [releases-and-updates](#releases-and-updates)
-    - [JCBudgetBuddy: Personal finance tracker for Windows](#jcbudgetbuddy-personal-finance-tracker-for-windows)
-    - [SAPP-HTTP: HTTP/HTTPS client DLL for SAPP](#sapp-http-httphttps-client-dll-for-sapp)
-    - [Coastal Peaks Air Service (CPAS)](#coastal-peaks-air-service-cpas)
-    - [SPCLib: Lua scripting for Halo PC/CE](#spclib-lua-scripting-for-halo-pcce)
-    - [Python Scripts: Self-contained utilities](#python-scripts-self-contained-utilities)
-    - [JeriCraft: Minecraft Server](#jericraft-minecraft-server)
-    - [Paper-AutoMessages (Java MC Plugin)](#paper-automessages-java-mc-plugin)
-    - [Paper-BigBrother (Java MC Plugin)](#paper-bigbrother-java-mc-plugin)
-    - [Paper-GameModeManager (Java MC Plugin)](#paper-gamemodemanager-java-mc-plugin)
-    - [Paper-VacuLoot (Java MC Plugin)](#paper-vaculoot-java-mc-plugin)
-    - [OBS-Lua-Scripts](#obs-lua-scripts)
+    - [1. JCBudgetBuddy: Personal finance tracker for Windows](#1-jcbudgetbuddy-personal-finance-tracker-for-windows)
+    - [2. SAPP-HTTP: HTTP/HTTPS client DLL for SAPP](#2-sapp-http-httphttps-client-dll-for-sapp)
+    - [3. Coastal Peaks Air Service (CPAS)](#3-coastal-peaks-air-service-cpas)
+    - [4. SPCLib: Lua scripting for Halo PC/CE](#4-spclib-lua-scripting-for-halo-pcce)
+    - [5. Python Scripts: Self-contained utilities](#5-python-scripts-self-contained-utilities)
+    - [6. JeriCraft: Minecraft Server](#6-jericraft-minecraft-server)
+    - [7. Paper-AutoMessages (Java MC Plugin)](#7-paper-automessages-java-mc-plugin)
+    - [8. Paper-BigBrother (Java MC Plugin)](#8-paper-bigbrother-java-mc-plugin)
+    - [9. Paper-GameModeManager (Java MC Plugin)](#9-paper-gamemodemanager-java-mc-plugin)
+    - [10. Paper-VacuLoot (Java MC Plugin)](#10-paper-vaculoot-java-mc-plugin)
+    - [11. OBS-Lua-Scripts](#11-obs-lua-scripts)
   - [contributing](#contributing)
   - [support](#support)
 
 ---
 
-## Server Structure
+## Community Roles:
 
-### INFO
+**Assigned automatically:**
+- @Chillager = 1556537346055217235
 
-| Channel             | Type  | Read-only | Description                                                                     |
-| ------------------- | ----- | --------- | ------------------------------------------------------------------------------- |
-| welcome             | Text  | Yes       | [See Below.](#welcome)                                                          |
-| role-selection      | Text  | Yes       | [See Below.](#role-selection)                                                   |
-| rules               | Text  | Yes       | [See Below.](#rules)                                                            |
-| introductions       | Forum | No        | [See Below.](#introductions)                                                    |
-| arrivals-departures | Text  | Yes       | @ChalwkBot will post notifications here when a user joins or leaves the server. |
-
-### SOCIAL
-
-| Channel     | Type | Read-only | Description                                          |
-| ----------- | ---- | --------- | ---------------------------------------------------- |
-| chatter-box | Text | No        | [See Below.](#chatter-box)                           |
-| gaming      | Text | No        | Halo, Minecraft and whatever else people are playing |
-
-### PROJECTS
-
-| Channel              | Type  | Read-only | Description                                                                              |
-| -------------------- | ----- | --------- | ---------------------------------------------------------------------------------------- |
-| releases-and-updates | Forum | No        | [See Below.](#releases-and-updates)                                                      |
-| contributing         | Forum | No        | [See Below.](#contributing)                                                              |
-| support              | Forum | No        | [See Below.](#support)                                                                   |
-| github-feed          | Text  | Yes       | GitHub notifications for my repos: pushes, pull requests, issues, commits, and releases. |
-
-### VOICE
-
-| Channel    | Type       | Read-only | Description                                                                                          |
-| ---------- | ---------- | --------- | ---------------------------------------------------------------------------------------------------- |
-| General    | Voice/Text | No        | Main public voice channel                                                                            |
-| Co-working | Voice/Text | No        | Quiet voice channel for working alongside others. Mics optional, keep chatter low, use text for chat |
-
-### COUNCIL CHAMBERS (hidden to the public)
-
-| Channel    | Type  | Read-only | Description                                              |
-| ---------- | ----- | --------- | -------------------------------------------------------- |
-| watchtower | Text  | No        | Admin logs, moderation notes, and server oversight       |
-| Admin Chat | Voice | No        | Private staff voice channel for discussions and planning |
+**Manual role selection:**
+- @Python = 1556578831630991471
+- @JavaScript = 1556579065719296041
+- @Java = 1556579134744829953
+- @C / C++ = 1556755380942405723
+- @Lua = 1556582143637979186
+- @C# / .NET = 1556579278466842724
+- @Game Dev = 1556579330170290228
+- @Security = 1556579401494306837
+- @Project Updates = 1556579451603652648
+- @Support Helper = 1556579662950441010
 
 ---
 
-## Backup of important server-specific messages in relevant channels:
+## Server Structure (5 categories)
+
+### INFO
+
+| Channel                                   | Type  | Read-only | Description                                                                     |
+| ----------------------------------------- | ----- | --------- | ------------------------------------------------------------------------------- |
+| welcome (1556486004070809602)             | Text  | Yes       | [See Below.](#welcome)                                                          |
+| role-selection (1556580502184534106)      | Text  | Yes       | [See Below.](#role-selection)                                                   |
+| rules (1556486004070809603)               | Text  | Yes       | [See Below.](#rules)                                                            |
+| introductions (1556495282517315614)       | Forum | No        | [See Below.](#introductions)                                                    |
+| arrivals-departures (1556536792038252686) | Text  | Yes       | @ChalwkBot will post notifications here when a user joins or leaves the server. |
+
+### SOCIAL
+
+| Channel                           | Type | Read-only | Description                                           |
+| --------------------------------- | ---- | --------- | ----------------------------------------------------- |
+| chatter-box (1556486004590907507) | Text | No        | [See Below.](#chatter-box)                            |
+| gaming (1556910476427006033)      | Text | No        | Halo, Minecraft and whatever else people are playing. |
+
+### PROJECTS
+
+| Channel                                    | Type  | Read-only | Description                                                                              |
+| ------------------------------------------ | ----- | --------- | ---------------------------------------------------------------------------------------- |
+| releases-and-updates (1556511374773850173) | Forum | No        | [See Below.](#releases-and-updates)                                                      |
+| contributing (1556486004909543486)         | Forum | No        | [See Below.](#contributing)                                                              |
+| support (1556486004590907510)              | Forum | No        | [See Below.](#support)                                                                   |
+| github-feed (1556509321138012212)          | Text  | Yes       | GitHub notifications for my repos: pushes, pull requests, issues, commits, and releases. |
+
+### VOICE
+
+| Channel                          | Type       | Read-only | Description                                                                                           |
+| -------------------------------- | ---------- | --------- | ----------------------------------------------------------------------------------------------------- |
+| General (1556486004922384512)    | Voice/Text | No        | Main public voice channel                                                                             |
+| Co-working (1556949688756731954) | Voice/Text | No        | Quiet voice channel for working alongside others. Mics optional, keep chatter low, use text for chat. |
+
+### COUNCIL CHAMBERS (hidden to the public)
+
+| Channel                          | Type  | Read-only | Description                                               |
+| -------------------------------- | ----- | --------- | --------------------------------------------------------- |
+| watchtower (1556486005098418227) | Text  | No        | Admin logs, moderation notes, and server oversight.       |
+| Admin Chat (1556486005098418228) | Voice | No        | Private staff voice channel for discussions and planning. |
+
+---
+
+## Backup of important server-specific messages in relevant channels
 
 ### welcome
 
@@ -105,8 +125,8 @@ While this server is code-focused, you **don't** have to be a programmer to belo
 **Website:** [chalwk.github.io](https://chalwk.github.io/)  
 
 ## Start here:
-1. **Read the <#1556486004070809603>**.
-2. **Pick your roles.** Visit the **role-selection** channel and use `/roles` to choose your interests and notifications.
+1. **Read the** <#1556486004070809603>.
+2. **Pick your roles.** Visit <#1556580502184534106> and use `/roles` to choose your interests and notifications.
 3. **Introduce yourself.** Say hi in <#1556495282517315614>.
 4. **Need help or found a bug?** Check the pins in <#1556486004590907510> first, then post there if you still need a hand.
 5. **Want to contribute?** PRs are welcome. Check `CONTRIBUTING.md` in the relevant repo.
@@ -128,7 +148,7 @@ Use the `/roles` command to assign or remove your roles at any time.
 **Interests** - pick whichever apply to you.
 
 <@&1556578831630991471>
--# Working in Python or following Python project updates <#1556511374773850173>
+-# Working in Python or following Python project updates in <#1556511374773850173>
 
 <@&1556579065719296041>
 -# JavaScript, TypeScript, and web development.
@@ -155,9 +175,6 @@ Use the `/roles` command to assign or remove your roles at any time.
 
 <@&1556579451603652648>
 -# Pinged when a new release or site update hits <#1556511374773850173>
-
-<@&1556579511360032799>
--# Pinged when someone posts a project in <#1556511374773850173>
 
 <@&1556579662950441010>
 -# Pinged when a new thread opens in <#1556486004590907510>
@@ -199,6 +216,7 @@ For anything involving API keys, tokens, or personal data, do not use `/report`.
 
 **Tags used in this forum:** 👋 hello; 🌱 new; 🔁 returning
 
+**This message outlines the forum guidelines:**
 ```
 - One thread per person. Use your handle as the title. Avoid using your real name.
 - If you're here just to hang out, that's welcome too. This isn't only for programmers.
@@ -223,6 +241,7 @@ Be kind, follow the rules, and keep it chill.
 
 ### releases-and-updates
 
+**This message outlines the forum guidelines:**
 ```
 **Built something you want to share?**
 
@@ -247,7 +266,9 @@ Everyone is welcome. First project, half-finished experiment, or something you h
 Need help with something you are building? Ask in <#1556486004590907510>
 ```
 
-#### JCBudgetBuddy: Personal finance tracker for Windows
+**All other subsections in releases-and-updates are backups of my (Chalwk) personal posts:**
+
+#### 1. JCBudgetBuddy: Personal finance tracker for Windows
 
 ```
 A Windows desktop personal finance tracker built with Qt Widgets, JSON persistence, and CMake. Manages weekly and monthly expenses, invoices, and payments.
@@ -270,7 +291,7 @@ GPL-3.0 licensed. Issues and PRs welcome.
 <@&1556755380942405723> <@&1556579451603652648>
 ```
 
-#### SAPP-HTTP: HTTP/HTTPS client DLL for SAPP
+#### 2. SAPP-HTTP: HTTP/HTTPS client DLL for SAPP
 
 ```
 A lightweight HTTP/HTTPS client DLL for SAPP that exposes a C API through LuaJIT FFI. Lets your Lua scripts make GET, POST, and PUT requests using libcurl.
@@ -295,7 +316,7 @@ MIT licensed. Issues and PRs welcome.
 <@&1556755380942405723> <@&1556582143637979186> <@&1556579451603652648>
 ```
 
-#### Coastal Peaks Air Service (CPAS)
+#### 3. Coastal Peaks Air Service (CPAS)
 
 ```
 A Virtual Charter (VC) and specialty flight operator for Microsoft Flight Simulator. We fly general aviation aircraft and helicopters across New Zealand's South Island, covering Canterbury, Christchurch, Banks Peninsula, and the Southern Alps.
@@ -321,7 +342,7 @@ Proprietary license. Applications are reviewed through the CPAS [Discord](https:
 <@&1556579330170290228> <@&1556579451603652648>
 ```
 
-#### SPCLib: Lua scripting for Halo PC/CE
+#### 4. SPCLib: Lua scripting for Halo PC/CE
 
 ```
 **SPCLib** *(SAPP, Phasor and Chimera Library)* is the largest public archive of Lua scripts and resources for the **SAPP** and **Phasor** dedicated server extensions, and the **Chimera** client-side mod, for Halo: PC/CE.
@@ -351,8 +372,8 @@ MIT licensed. Issues, PRs, and community script contributions are welcome.
 - [Scripting with Chimera](https://chalwk.github.io/blog/2026/05/17/halo-scripting-with-chimera/): Client-side Lua: event callbacks, script placement, version compat.
 
 **Alt References**
-- [SAPP Command Reference](https://chalwk.github.io/blog/2026/05/17/halo-sapp-command-reference): Server commands, admin levels, usage.
-- [Common Lua References](https://chalwk.github.io/blog/2026/05/17/halo-lua-common-references): Patterns, utilities, helpers for server & client scripting.
+- [SAPP Command Reference](https://chalwk.github.io/blog/2026/05/17/halo-sapp-command-reference/): Server commands, admin levels, usage.
+- [Common Lua References](https://chalwk.github.io/blog/2026/05/17/halo-lua-common-references/): Patterns, utilities, helpers for server & client scripting.
 - [Understanding Memory Offsets](https://chalwk.github.io/blog/2025/09/07/halo-understanding-memory-offsets/): Addresses, offsets, signature scanning, tools for Halo PC/CE.
 - [Modding References](https://chalwk.github.io/blog/2025/09/07/halo-modding-references/): Tag editing, map rebuilding, asset injection, community tools.
 
@@ -369,7 +390,7 @@ Share ideas here or submit through the GitHub **Feature Request Form**.
 Be clear and specific: include error messages, what you’ve tried, and any scripts or configs involved. This helps others help you faster.
 ```
 
-#### Python Scripts: Self-contained utilities
+#### 5. Python Scripts: Self-contained utilities
 
 ```
 A grab-bag of self-contained Python scripts.
@@ -384,7 +405,7 @@ MIT licensed. Issues and PRs welcome.
 <@&1556578831630991471> <@&1556579401494306837> <@&1556579451603652648>
 ```
 
-#### JeriCraft: Minecraft Server
+#### 6. JeriCraft: Minecraft Server
 
 ```
 A medieval-themed SMP/RPG Factions server for Minecraft Java Edition. This repository contains the Jekyll source code for the official public documentation site at [jericraft.net](https://jericraft.net), featuring server guides, tutorials, rules, and policies.
@@ -410,19 +431,17 @@ Proprietary license. Issues and PRs are reviewed through the [GitHub](https://gi
 <@&1556579330170290228> <@&1556579451603652648>
 ```
 
-#### Paper-AutoMessages (Java MC Plugin)
+#### 7. Paper-AutoMessages (Java MC Plugin)
 
 ```
 AutoMessages is a PaperMC plugin that automatically broadcasts rich, interactive messages to the JeriCraft server at configurable intervals. It supports colored text, clickable links, hover tooltips, and command execution.
-
-> Related discussion: <#1556743504699334708>
 
 Repo: https://github.com/Chalwk/Paper-AutoMessages
 
 **Key features**
 - **Periodic announcements:** Broadcast messages in sequential order at a configurable interval (default: 600 seconds)
 - **Rich text support:** Use Minecraft color codes (`&`) for colorful and formatted text
-- **Interactive components:** Embed clickable and hoverable elements using JSON chat components-click actions include `open_url`, `run_command`, `suggest_command`, and `change_page`; hover actions include `show_text`, `show_item`, and `show_entity`
+- **Interactive components:** Embed clickable and hoverable elements using JSON chat components—click actions include `open_url`, `run_command`, `suggest_command`, and `change_page`; hover actions include `show_text`, `show_item`, and `show_entity`
 - **Flexible configuration:** Define any number of messages; each message can have any number of lines, mixing plain text and JSON components
 - **Simple management:** `/automessages reload` to apply changes instantly, `/automessages status` to check current settings
 - **Lightweight & efficient:** Scheduler runs with minimal overhead; messages are parsed and cached on reload
@@ -442,7 +461,7 @@ MIT licensed. Issues and PRs are welcome.
 <@&1556579134744829953> <@&1556579330170290228> <@&1556579451603652648>
 ```
 
-#### Paper-BigBrother (Java MC Plugin)
+#### 8. Paper-BigBrother (Java MC Plugin)
 
 ```
 Monitor player interactions with anvils, books, commands, portals, signs, and private messages. BigBrother gives you fine-grained control with customizable filters and per-feature notifications.
@@ -482,7 +501,7 @@ MIT licensed. Issues and PRs are welcome.
 <@&1556579134744829953> <@&1556579330170290228> <@&1556579451603652648>
 ```
 
-#### Paper-GameModeManager (Java MC Plugin)
+#### 9. Paper-GameModeManager (Java MC Plugin)
 
 ```
 Store and restore player states per game mode. GameModeManager keeps separate inventories, health, hunger, experience, and potion effects for Creative and Survival modes.
@@ -511,7 +530,7 @@ MIT licensed. Issues and PRs are welcome.
 <@&1556579134744829953> <@&1556579330170290228> <@&1556579451603652648>
 ```
 
-#### Paper-VacuLoot (Java MC Plugin)
+#### 10. Paper-VacuLoot (Java MC Plugin)
 
 ```
 VacuLoot is an item magnet system that automatically attracts nearby items and experience orbs to players. Features toggleable settings, multiple power tiers, and optional economy integration.
@@ -559,7 +578,7 @@ MIT licensed. Issues and PRs are welcome.
 <@&1556579134744829953> <@&1556579330170290228> <@&1556579451603652648>
 ```
 
-#### OBS-Lua-Scripts
+#### 11. OBS-Lua-Scripts
 
 ```
 A collection of Lua scripts for OBS Studio, designed to automate and enhance your streaming setup.
@@ -578,8 +597,14 @@ MIT licensed. Issues and PRs are welcome.
 
 ### contributing
 
-**Tags used in this forum:** ❓ question; 💡 proposal; 🌱 first-pr; 🐍 script; 📝 docs; ⚙️ infra; ✅ answered; 🛠️ in-progress; 🔗 pr-open; 🎉 merged; ⏸️ on-hold; 🚫 wont-do; 💤 stale
+**Tags used in this forum:**
 
+- Public:
+  - ❓ question; 💡 proposal; 🌱 first-pr; 🐍 script; 📝 docs; ⚙️ infra;
+- Mods only:
+  - ✅ answered; 🛠️ in-progress; 🔗 pr-open; 🎉 merged; ⏸️ on-hold; 🚫 wont-do; 💤 stale
+
+**This message outlines the forum guidelines:**
 ```
 Want to help improve one of my projects?
 
@@ -602,8 +627,14 @@ Thanks for helping make my projects better for everyone.
 
 ### support
 
-**Tags used in this forum:** 🐛 bug; 💥 crash; 📝 docs; 🌐 website; ✅ confirmed; 🔍 investigating; 🛠️ fix-in-progress; 🎉 resolved; 🔎 needs-info; 🔗 duplicate; 🚫 wontfix; ❓ question; 🎮 spclib; 🧱 plugins; 🏰 jericraft; 💻 apps
+**Tags used in this forum:**
 
+- Public: 
+  - 🐛 bug; 💥 crash; 📝 docs; 🌐 website; 🎮 spclib; 🧱 plugins; 🏰 jericraft; 💻 apps
+- Mods only:
+  - ✅ confirmed; 🔍 investigating; 🛠️ fix-in-progress; 🎉 resolved; 🔎 needs-info; 🔗 duplicate; 🚫 wontfix; ❓ question;
+
+**This message outlines the forum guidelines:**
 ```
 **Need help or found a bug?**
 
@@ -634,3 +665,5 @@ Prefer GitHub? Each repo has a Bug Report template under Issues: https://github.
 
 Please don't DM moderators about regular questions. Posting here keeps it trackable and helps others. Everyone is welcome to share solutions. Replies may take a day or so.
 ```
+
+---
