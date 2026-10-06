@@ -1,1 +1,0 @@
-GitHub notifications (pull, push, commit, etc.).

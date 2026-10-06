@@ -1,1 +1,0 @@
-General discussion about coding, projects, and life
