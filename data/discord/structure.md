@@ -68,9 +68,10 @@ everything from scratch.
 
 ### VOICE
 
-| Channel | Type       | Read-only | Description               |
-| ------- | ---------- | --------- | ------------------------- |
-| General | Voice/Text | No        | Main public voice channel |
+| Channel    | Type       | Read-only | Description                                                                                          |
+| ---------- | ---------- | --------- | ---------------------------------------------------------------------------------------------------- |
+| General    | Voice/Text | No        | Main public voice channel                                                                            |
+| Co-working | Voice/Text | No        | Quiet voice channel for working alongside others. Mics optional, keep chatter low, use text for chat |
 
 ### COUNCIL CHAMBERS (hidden to the public)
 
@@ -101,7 +102,7 @@ While this server is code-focused, you **don't** have to be a programmer to belo
 - Casual chat, introductions, and community
 
 **Projects:** [github.com/Chalwk](https://github.com/Chalwk)  
-**Website:** [chalwk.github.io](https://chalwk.github.io/)
+**Website:** [chalwk.github.io](https://chalwk.github.io/)  
 
 ## Start here:
 1. **Read the <#1556486004070809603>**.
@@ -111,6 +112,8 @@ While this server is code-focused, you **don't** have to be a programmer to belo
 5. **Want to contribute?** PRs are welcome. Check `CONTRIBUTING.md` in the relevant repo.
 
 **Not here for code?** That's fine. Start in <#1556486004590907507> or just introduce yourself.
+
+**Response times:** I'm in New Zealand (NZST/NZDT, UTC+12/+13), so replies can take a day if you're on the other side of the world. Posting in the right channel means someone else may get to you first.
 
 *By joining, you agree to follow the rules. Breaking them gets you muted or removed - nothing personal.*
 ```
@@ -183,8 +186,10 @@ For anything involving API keys, tokens, or personal data, do not use `/report`.
 
 ### introductions
 
+**Tags used in this forum:** 👋 hello; 🌱 new; 🔁 returning
+
 ```
-- One thread per person. Use your name or handle as the title.
+- One thread per person. Use your handle as the title. Avoid using your real name.
 - If you're here just to hang out, that's welcome too. This isn't only for programmers.
 - No programming experience required. Seasoned developer, curious beginner, or never written a line of code: you're welcome here.
 - Be friendly. No hate, harassment, or discrimination.
@@ -194,8 +199,6 @@ For anything involving API keys, tokens, or personal data, do not use `/report`.
 - Reply to others to welcome them. I read every post.
 
 Keep it short and kind. Thanks for being here.
-
-**Tags used in this forum:** :wave: hello; :seedling: new; :repeat: returning
 ```
 
 ### chatter-box
@@ -230,7 +233,7 @@ One project per post. Updates to an existing project go in the original thread, 
 
 Everyone is welcome. First project, half-finished experiment, or something you have been working on for years. No gatekeeping here.
 
-Need help with something you are building? Ask in #🧰support
+Need help with something you are building? Ask in <#1556486004590907510>
 ```
 
 #### JCBudgetBuddy: Personal finance tracker for Windows
@@ -278,7 +281,7 @@ Repo: https://github.com/Chalwk/SAPP-HTTP
 
 MIT licensed. Issues and PRs welcome.
 
-<@&1556755380942405723> <@&1556579451603652648>
+<@&1556755380942405723> <@&1556582143637979186> <@&1556579451603652648>
 ```
 
 #### Coastal Peaks Air Service (CPAS)
@@ -367,7 +370,7 @@ Docs: https://chalwk.github.io/python-scripts/
 
 MIT licensed. Issues and PRs welcome.
 
-<@&1556578831630991471> <@&1556579451603652648>
+<@&1556578831630991471> <@&1556579401494306837> <@&1556579451603652648>
 ```
 
 #### JeriCraft: Minecraft Server
@@ -393,7 +396,7 @@ If you have questions, ask here!
 
 Proprietary license. Issues and PRs are reviewed through the [GitHub](https://github.com/Chalwk/JeriCraft) repository.
 
-<@&1556579134744829953> <@&1556579330170290228> <@&1556579451603652648>
+<@&1556579330170290228> <@&1556579451603652648>
 ```
 
 #### Paper-AutoMessages (Java MC Plugin)
@@ -564,6 +567,8 @@ MIT licensed. Issues and PRs are welcome.
 
 ### contributing
 
+**Tags used in this forum:** ❓ question; 💡 proposal; 🌱 first-pr; 🐍 script; 📝 docs; ⚙️ infra; ✅ answered; 🛠️ in-progress; 🔗 pr-open; 🎉 merged; ⏸️ on-hold; 🚫 wont-do; 💤 stale
+
 ```
 Want to help improve one of my projects?
 
@@ -582,49 +587,39 @@ Where a contributing guide exists, you'll find it at `CONTRIBUTING.md` in the re
 If you have questions, ask in this forum: <#1556486004909543486>
 
 Thanks for helping make my projects better for everyone.
-
-**Tags used in this forum:** ❓ question; 💡 proposal; 🌱 first-pr; 🐍 script; 📝 docs; ⚙️ infra; ✅ answered; 🛠️ in-progress; 🔗 pr-open; 🎉 merged; ⏸️ on-hold; 🚫 wont-do; 💤 stale
 ```
 
 ### support
 
+**Tags used in this forum:** 🐛 bug; 💥 crash; 📝 docs; 🌐 website; ✅ confirmed; 🔍 investigating; 🛠️ fix-in-progress; 🎉 resolved; 🔎 needs-info; 🔗 duplicate; 🚫 wontfix; ❓ question; 🎮 spclib; 🧱 plugins; 🏰 jericraft; 💻 apps
+
 ```
 **Need help or found a bug?**
 
-This forum handles both. Whether something is broken or you just need a hand, this is the place.
+This forum handles both. Add the tag for your project, then post.
 
-**For help questions**
-- Which project or repo
-- What you're trying to do
+**Always include**
+- Which project or repo (e.g. `SPCLib`, `Paper-VacuLoot`, `JeriCraft`, `python-scripts`)
+- What you're trying to do and what you expected
+- What actually happened, with the full error, traceback, or log
 - What you've already tried
-- The exact command, error, or behaviour that's confusing you
-- Python version and OS, if relevant to a script
 
-**For bug reports**
-- Which project or repo (e.g. `python-scripts`, `chalwk.github.io`)
-- Which script or page, if applicable (e.g. `netsec/ipqs_lookup.py`)
-- Version number, if applicable (scripts: check the file header or run `--help`)
-- The exact command you ran, if applicable
-- What you expected to happen
-- What actually happened, including the full error or traceback
-- Steps to reproduce
-- Python version and OS
-- Any relevant dependencies or config
+**Add what applies**
+- **Halo scripts (SAPP / Phasor / Chimera):** which one and its version, Halo version, script name, map and gametype, console or log output
+- **Minecraft plugins (Paper):** plugin, Paper and Minecraft versions, Java version, relevant `latest.log` excerpt
+- **Python scripts:** script name, Python version, OS, the exact command you ran
+- **Apps and DLLs (JCBudgetBuddy, SAPP-HTTP):** Windows version and app/DLL version
+- **Websites:** page URL, browser, and a screenshot if it's visual
 
-Keep it to one question or issue per post. If you have multiple, make separate posts.
+**For bugs, also:** steps to reproduce and any relevant config.
 
-If you're not sure whether something is a bug or just expected behaviour, still post. Just say you're unsure.
+One issue per post. Not sure it's a bug? Post anyway and say so.
 
-Prefer GitHub? Each repo has a Bug Report template under its Issues tab.
-[Browse my repositories](https://github.com/Chalwk?tab=repositories) to find the one you need.
+Before pasting logs, remove API keys, tokens, and real IP addresses.
 
-For security issues, or anything that could expose API keys or personal data, do not post details publicly.
-Use the private security report on the affected repo's Security tab, or DM a moderator instead.
+Prefer GitHub? Each repo has a Bug Report template under Issues: https://github.com/Chalwk?tab=repositories
 
-Please avoid DMing moderators about regular questions or bugs unless it's private or urgent.
-Posting here keeps everything trackable and may help others.
+**Security issues:** don't post details publicly. Use the private security report on the repo's Security tab, or DM a moderator.
 
-Everyone is welcome to jump in and share solutions.
-
-**Tags used in this forum:** 🐛 bug; 💥 crash; 📝 docs; 🌐 website; ✅ confirmed; 🔍 investigating; 🛠️ fix-in-progress; 🎉 resolved; 🔎 needs-info; 🔗 duplicate; 🚫 wontfix; ❓ question
+Please don't DM moderators about regular questions. Posting here keeps it trackable and helps others. Everyone is welcome to share solutions. Replies may take a day or so.
 ```
