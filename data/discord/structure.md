@@ -117,15 +117,17 @@ While this server is code-focused, you **don't** have to be a programmer to belo
 - A place to share what you've done with them
 - Casual chat, introductions, and community
 
-**Projects:** [github.com/Chalwk](https://github.com/Chalwk)
+**Projects:** [github.com/Chalwk](https://github.com/Chalwk)  
 **Website:** [chalwk.github.io](https://chalwk.github.io/)
 
-## Start here
-- **Rules:** <#1556486004070809603>
-- **New here?** Say hi in <#1556495282517315614>
-- **Need help / found a bug?** Check the pins in <#1556486004590907510> first.
-- **Want to contribute?** PRs welcome. Check `CONTRIBUTING.md` in the relevant repo.
-- **Not here for code?** That's fine. Start in `#chatter-box` or just introduce yourself.
+## Start here: your first 5 minutes
+1. **Read the <#1556486004070809603>**.
+2. **Pick your roles.** Visit the **role-selection** channel and use `/roles` to choose your interests and notifications.
+3. **Introduce yourself.** Say hi in <#1556495282517315614>.
+4. **Need help or found a bug?** Check the pins in <#1556486004590907510> first, then post there if you still need a hand.
+5. **Want to contribute?** PRs are welcome. Check `CONTRIBUTING.md` in the relevant repo.
+
+**Not here for code?** That's fine. Start in <#1556486004590907507> or just introduce yourself.
 
 *By joining, you agree to follow the rules. Breaking them gets you muted or removed - nothing personal.*
 ```
@@ -135,10 +137,12 @@ While this server is code-focused, you **don't** have to be a programmer to belo
 ```
 # Self-Assignable Roles
 
+Use the `/roles` command to assign or remove your roles at any time.
+
 **Interests** - pick whichever apply to you.
 
 <@&1556578831630991471>
--# Working in Python, or following Python project updates in <#1556511374773850173>.
+-# Working in Python or following Python project updates <#1556511374773850173>
 
 <@&1556579065719296041>
 -# JavaScript, TypeScript, and web development.
@@ -164,15 +168,13 @@ While this server is code-focused, you **don't** have to be a programmer to belo
 **Notifications** - opt in to the pings you actually want.
 
 <@&1556579451603652648>
--# Pinged when a new release or site update hits <#1556511374773850173>.
+-# Pinged when a new release or site update hits <#1556511374773850173>
 
 <@&1556579511360032799>
--# Pinged when someone posts a project in <#1556529500978946048>.
+-# Pinged when someone posts a project in <#1556511374773850173>
 
 <@&1556579662950441010>
--# Pinged when a new thread opens in <#1556486004590907510>.
-
-**Use the `/roles` command to assign or remove your roles at any time.**
+-# Pinged when a new thread opens in <#1556486004590907510>
 ```
 
 ### rules
@@ -399,7 +401,7 @@ Repo: https://github.com/Chalwk/Paper-AutoMessages
 **Key features**
 - **Periodic announcements:** Broadcast messages in sequential order at a configurable interval (default: 600 seconds)
 - **Rich text support:** Use Minecraft color codes (`&`) for colorful and formatted text
-- **Interactive components:** Embed clickable and hoverable elements using JSON chat components—click actions include `open_url`, `run_command`, `suggest_command`, and `change_page`; hover actions include `show_text`, `show_item`, and `show_entity`
+- **Interactive components:** Embed clickable and hoverable elements using JSON chat components-click actions include `open_url`, `run_command`, `suggest_command`, and `change_page`; hover actions include `show_text`, `show_item`, and `show_entity`
 - **Flexible configuration:** Define any number of messages; each message can have any number of lines, mixing plain text and JSON components
 - **Simple management:** `/automessages reload` to apply changes instantly, `/automessages status` to check current settings
 - **Lightweight & efficient:** Scheduler runs with minimal overhead; messages are parsed and cached on reload
