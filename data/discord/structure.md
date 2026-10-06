@@ -101,7 +101,7 @@ While this server is code-focused, you **don't** have to be a programmer to belo
 **Projects:** [github.com/Chalwk](https://github.com/Chalwk)  
 **Website:** [chalwk.github.io](https://chalwk.github.io/)
 
-## Start here: your first 5 minutes
+## Start here:
 1. **Read the <#1556486004070809603>**.
 2. **Pick your roles.** Visit the **role-selection** channel and use `/roles` to choose your interests and notifications.
 3. **Introduce yourself.** Say hi in <#1556495282517315614>.
