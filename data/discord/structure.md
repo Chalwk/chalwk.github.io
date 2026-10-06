@@ -170,18 +170,29 @@ All members are required to abide by the official **Chalwk - Code & Chill Rules*
 
 **[- Read the Full Rules -](https://chalwk.github.io/pages/community-rules/)**
 
-By joining the server or taking part in discussions on GitHub, you agree to follow these guidelines. Violations may result in a warning, mute, or removal from the server, and, where relevant, restrictions on GitHub.
+**The short version**
+- Be respectful. No harassment, hate, threats, or trolling.
+- Keep it clean. No NSFW, and no politics, religion, or drama in public channels.
+- No piracy, malware, or leaking private repos.
+- Credit people's work and respect licenses.
+- No spam, unsolicited DMs, mass pings, or ban/mute evasion.
+- Bugs and help requests go in <#1556486004590907510>.
 
 **Before posting logs or errors:** redact API keys, tokens, and real IP addresses. If you paste a secret by accident, rotate it immediately and alert a moderator.
 
-**Reporting a message**
+**What happens if you break them**
+Penalties are tiered: a warning or short mute for minor issues, a 1-2 week ban for moderate ones, and a permanent ban for severe ones (malware, piracy, threats, hate, doxxing, scams, NSFW). Repeat offences escalate, and conduct on GitHub counts too.
 
-If you see something that breaks the rules, use `/report`:
+**Reporting a message**
 - Right-click the offending message → **Copy Message Link**
 - Run `/report`, paste the link, and add a short reason
-- The report is DMed privately to the moderators. The reported user is not told, and nothing is posted publicly.
+- The report goes privately to the moderators. The reported user is not told, and nothing is posted publicly.
 
 For anything involving API keys, tokens, or personal data, do not use `/report`. Use the private security report on the affected repo's **Security** tab, or DM a moderator directly.
+
+**Logging:** Message edits and deletions are logged privately for moderation.
+
+**Appeals:** If you think a decision was wrong, message the owner directly. Do not argue it in public channels.
 ```
 
 ### introductions
