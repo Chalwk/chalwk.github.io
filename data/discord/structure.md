@@ -255,9 +255,10 @@ This channel is where **<@&1556543630259519540>** posts release announcements an
 - Project write-ups and community showcases - those go to <#1556511374773850173>
 
 **The ping**
-Want to be notified? Grab the <@&1556579451603652648> role from <#1556582184534106> with `/roles`. Remove it the same way if the pings get too frequent.
+Want to be notified? Grab the <@&1556579451603652648> role with `/roles`. Remove it the same way if the pings get too frequent.
 
-**This channel is read-only.** If something here sparks a question or you want to talk about a release, head to <#1556486004590907507> or open a thread in <#1556511374773850173>. For bugs and support, use <#1556486004590907510>.
+**This channel is read-only.** If something here sparks a question or you want to talk about a release, head to <#1556486004590907507> or open a thread in <#1556511374773850173>.
+For bugs and support, use <#1556486004590907510>.
 ```
 
 ### showcase
@@ -398,17 +399,19 @@ MIT licensed. Issues, PRs, and community script contributions are welcome.
 - [Understanding Memory Offsets](https://chalwk.github.io/blog/2025/09/07/halo-understanding-memory-offsets/): Addresses, offsets, signature scanning, tools for Halo PC/CE.
 - [Modding References](https://chalwk.github.io/blog/2025/09/07/halo-modding-references/): Tag editing, map rebuilding, asset injection, community tools.
 
-### Bug Reports
-Post in **this thread** with a clear description: steps to reproduce, error messages, and context (script, map, or game mode). Or use the GitHub **Bug Report Form**.
+### Help, Bugs & Feature Requests
 
-**Feature Requests**
-Share ideas here or submit through the GitHub **Feature Request Form**.
+**Found a bug or need help with a script?**
+Post in <#1556486004590907510> and add the `🎮 spclib` tag. Include the script name, SAPP/Phasor/Chimera version, Halo version, map/gametype, and any error or log output.
 
-**Submit via GitHub (optional):**
-- [Bug Report Form](https://github.com/Chalwk/SPCLib/issues/new?assignees=Chalwk&labels=Bug%2CNeeds+Triage&projects=&template=BUG_REPORT.yaml&title=%5BBUG%5D+%3Ctitle%3E)
+**Feature request?**
+Share the idea in this thread, or submit it on GitHub:
 - [Feature Request Form](https://github.com/Chalwk/SPCLib/issues/new?assignees=Chalwk&labels=Feature%2CNeeds+Review&projects=&template=FEATURE_REQUEST.yaml&title=%5BFEATURE%5D+%3Ctitle%3E)
 
-Be clear and specific: include error messages, what you’ve tried, and any scripts or configs involved. This helps others help you faster.
+**Prefer GitHub for bugs?**
+- [Bug Report Form](https://github.com/Chalwk/SPCLib/issues/new?assignees=Chalwk&labels=Bug%2CNeeds+Triage&projects=&template=BUG_REPORT.yaml&title=%5BBUG%5D+%3Ctitle%3E)
+
+Quick questions or comments about SPCLib are fine in this thread.
 ```
 
 #### 5. Python Scripts: Self-contained utilities
@@ -651,9 +654,9 @@ Thanks for helping make my projects better for everyone.
 **Tags used in this forum:**
 
 - Public: 
-  - 🐛 bug; 💥 crash; 📝 docs; 🌐 website; 🎮 spclib; 🧱 plugins; 🏰 jericraft; 💻 apps
+  - 🐛 bug; 💥 crash; 📝 docs; 🌐 website; 🎮 spclib; 🧱 plugins; 🏰 jericraft; 💻 apps;  ❓ question;
 - Mods only:
-  - ✅ confirmed; 🔍 investigating; 🛠️ fix-in-progress; 🎉 resolved; 🔎 needs-info; 🔗 duplicate; 🚫 wontfix; ❓ question;
+  - ✅ confirmed; 🔍 investigating; 🛠️ fix-in-progress; 🎉 resolved; 🔎 needs-info; 🔗 duplicate; 🚫 wontfix;
 
 **This message outlines the forum guidelines:**
 ```
