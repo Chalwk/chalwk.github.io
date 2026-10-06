@@ -1,13 +1,13 @@
 ## INFO
 
-| Channel                              | Description                                                                                                                              | Documentation                                   |
-| ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
-| `welcome` (text channel)             | Landing page. Start here for an introduction to the server                                                                               | [welcome.md](channels/welcome.md)               |
-| `rules` (text channel)               | Community rules and policies for all members                                                                                             | [rules.md](channels/rules.md)                   |
-| `my-projects` (forum)                | Project launches, releases, and site updates                                                                                             | [my-projects](channels/my-projects.md)          |
-| `introductions` (forum)              | Say hi and introduce yourself to the community                                                                                           | [introductions.md](channels/introductions.md)   |
-| `role-selection` (text channel)      | Self-assignable roles                                                                                                                    | [role-selection.md](channels/role-selection.md) |
-| `arrivals-departures` (text channel) | `@ChalwkBot` posts notifications automatically when users join or leave the server. It also automatically assigns the `@Chillager` role. |                                                 |
+| Channel                                         | Description                                                                                                                              | Documentation                                   |
+| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
+| `welcome` (text channel, read-only)             | Landing page. Start here for an introduction to the server                                                                               | [welcome.md](channels/welcome.md)               |
+| `rules` (text channel, read-only)               | Community rules and policies for all members                                                                                             | [rules.md](channels/rules.md)                   |
+| `my-projects` (forum)                           | Project launches, releases, and site updates                                                                                             | [my-projects](channels/my-projects.md)          |
+| `introductions` (forum)                         | Say hi and introduce yourself to the community                                                                                           | [introductions.md](channels/introductions.md)   |
+| `role-selection` (text channel, read-only)      | Self-assignable roles                                                                                                                    | [role-selection.md](channels/role-selection.md) |
+| `arrivals-departures` (text channel, read-only) | `@ChalwkBot` posts notifications automatically when users join or leave the server. It also automatically assigns the `@Chillager` role. |                                                 |
 
 ---
 
@@ -22,11 +22,11 @@
 
 ## PROJECTS
 
-| Channel                      | Description                                                          | Documentation                               |
-| ---------------------------- | -------------------------------------------------------------------- | ------------------------------------------- |
-| `github-feed` (text channel) | GitHub notifications (pull, push, commit, etc).                      | [github-feed.md](channels/github-feed.md)   |
-| `support` (forum)            | Ask for help, report bugs, or get support with any of my projects    | [support.md](channels/support.md)           |
-| `contributing` (forum)       | Learn how to contribute to my repos, ask questions, or propose ideas | [contributing.md](channels/contributing.md) |
+| Channel                                 | Description                                                          | Documentation                               |
+| --------------------------------------- | -------------------------------------------------------------------- | ------------------------------------------- |
+| `github-feed` (text channel, read-only) | GitHub notifications (pull, push, commit, etc).                      | [github-feed.md](channels/github-feed.md)   |
+| `support` (forum)                       | Ask for help, report bugs, or get support with any of my projects    | [support.md](channels/support.md)           |
+| `contributing` (forum)                  | Learn how to contribute to my repos, ask questions, or propose ideas | [contributing.md](channels/contributing.md) |
 
 ---
 
