@@ -14,7 +14,6 @@ to recreate the server, I won't have to remember or rewrite everything from scra
   - [PROJECTS](#projects)
   - [VOICE](#voice)
   - [COUNCIL CHAMBERS (hidden to the public)](#council-chambers-hidden-to-the-public)
-- [Discord Rules Summary (Server Settings → Access → Rules)](#discord-rules-summary-server-settings--access--rules)
 - [Backup of important server-specific messages in relevant channels:](#backup-of-important-server-specific-messages-in-relevant-channels)
   - [welcome](#welcome)
   - [role-selection](#role-selection)
@@ -77,24 +76,6 @@ to recreate the server, I won't have to remember or rewrite everything from scra
 | ---------- | ----- | --------- | -------------------------------------------------------- |
 | watchtower | Text  | No        | Admin logs, moderation notes, and server oversight       |
 | Admin Chat | Voice | No        | Private staff voice channel for discussions and planning |
-
----
-
-## Discord Rules Summary (Server Settings → Access → Rules)
-
-```
-1. **Read the Full Rules** - This list is a summary. The full, authoritative rules are here: <#1556486004070809603>
-2. **Be Respectful** - No harassment, hate, trolling, or personal attacks. Critique code and ideas, not people. No politics/religion drama in public channels. Voice: no mic spam or soundboard abuse.
-3. **Keep It Clean** - No NSFW, offensive language, usernames, or avatars.
-4. **No Spam or Advertising** - No spam, mass pings, unsolicited DMs, or unsolicited Discord invites. Don’t abuse bots or bypass filters.
-5. **Protect Privacy & Secrets** - Don’t share personal info. Redact API keys, tokens, and passwords before posting. If you leak a secret, rotate it and tell a moderator.
-6. **No Piracy or Malware** - Don’t share or request cracked software, leaked code, or harmful links.
-7. **Use the Right Channels** - Keep conversations relevant. Support and bug reports go in `#support`.
-8. **Respect Moderators** - Follow moderator instructions in channels, voice, DMs, and events. Don’t argue decisions publicly.
-9. **No Impersonation or Scamming** - Don’t pretend to be staff or mislead people about paid work, commissions, or services.
-10. **Respect Licenses & Attribution** - Credit others. Don’t remove copyright headers or relicense others’ work.
-11. **Cross-Platform Conduct** - These rules apply on Discord, GitHub, and DMs. Serious misconduct may affect your access to both.
-```
 
 ---
 
