@@ -1,8 +1,8 @@
 <!--
 This file documents the structure of the `Chalwk - Code & Chill` Discord server, and
 serves as a backup of important server-specific messages and my personal posts
-(#releases-and-updates). I'm keeping it so that if I ever need to recreate the server,
-I won't have to remember or rewrite everything from scratch.
+(#showcase). I'm keeping it so that if I ever need to recreate the server, I
+won't have to remember or rewrite everything from scratch.
 -->
 
 # Chalwk - Code & Chill <!-- omit from toc -->
@@ -22,7 +22,7 @@ I won't have to remember or rewrite everything from scratch.
   - [rules](#rules)
   - [introductions](#introductions)
   - [chatter-box](#chatter-box)
-  - [releases-and-updates](#releases-and-updates)
+  - [showcase](#showcase)
     - [1. JCBudgetBuddy: Personal finance tracker for Windows](#1-jcbudgetbuddy-personal-finance-tracker-for-windows)
     - [2. SAPP-HTTP: HTTP/HTTPS client DLL for SAPP](#2-sapp-http-httphttps-client-dll-for-sapp)
     - [3. Coastal Peaks Air Service (CPAS)](#3-coastal-peaks-air-service-cpas)
@@ -79,12 +79,13 @@ I won't have to remember or rewrite everything from scratch.
 
 ### PROJECTS
 
-| Channel                                    | Type  | Read-only | Description                                                                              |
-| ------------------------------------------ | ----- | --------- | ---------------------------------------------------------------------------------------- |
-| releases-and-updates (1556511374773850173) | Forum | No        | [See Below.](#releases-and-updates)                                                      |
-| contributing (1556486004909543486)         | Forum | No        | [See Below.](#contributing)                                                              |
-| support (1556486004590907510)              | Forum | No        | [See Below.](#support)                                                                   |
-| github-feed (1556509321138012212)          | Text  | Yes       | GitHub notifications for my repos: pushes, pull requests, issues, commits, and releases. |
+| Channel                             | Type  | Read-only | Description                                                                    |
+| ----------------------------------- | ----- | --------- | ------------------------------------------------------------------------------ |
+| announcements (1557113076711555113) | Text  | Yes       | @ChalwkBot cross-posts release announcements here and pings @Project Updates.  |
+| showcase (1556511374773850173)      | Forum | No        | [See Below.](#showcase)                                                        |
+| contributing (1556486004909543486)  | Forum | No        | [See Below.](#contributing)                                                    |
+| support (1556486004590907510)       | Forum | No        | [See Below.](#support)                                                         |
+| github-feed (1556509321138012212)   | Text  | Yes       | GitHub notifications for my repos: pushes, pull requests, issues, and commits. |
 
 ### VOICE
 
@@ -174,7 +175,7 @@ Use the `/roles` command to assign or remove your roles at any time.
 **Notifications** - opt in to the pings you actually want.
 
 <@&1556579451603652648>
--# Pinged when a new release or site update hits <#1556511374773850173>
+-# Pinged when a new release or site update goes live (posted by @ChalwkBot).
 
 <@&1556579662950441010>
 -# Pinged when a new thread opens in <#1556486004590907510>
@@ -239,7 +240,7 @@ No support requests here - use <#1556486004590907510>.
 Be kind, follow the rules, and keep it chill.
 ```
 
-### releases-and-updates
+### showcase
 
 **This message outlines the forum guidelines:**
 ```
@@ -266,7 +267,7 @@ Everyone is welcome. First project, half-finished experiment, or something you h
 Need help with something you are building? Ask in <#1556486004590907510>
 ```
 
-**All other subsections in releases-and-updates are backups of my (Chalwk) personal posts:**
+**All other subsections in showcase are backups of my (Chalwk) personal posts:**
 
 #### 1. JCBudgetBuddy: Personal finance tracker for Windows
 
