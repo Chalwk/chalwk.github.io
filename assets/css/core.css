@@ -844,6 +844,15 @@ footer p {
     padding: 15px 15px;
 }
 
+code:not(pre code) {
+    background-color: #f1f5f9 !important;
+    color: #1e293b !important;
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.25rem;
+    font-family: var(--font-mono), monospace;
+    border: 1px solid #cbd5e1;
+}
+
 /* responsive breakpoints */
 @media (max-width: 768px) {
     h1 {
