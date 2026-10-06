@@ -22,6 +22,7 @@ won't have to remember or rewrite everything from scratch.
   - [rules](#rules)
   - [introductions](#introductions)
   - [chatter-box](#chatter-box)
+  - [announcements](#announcements)
   - [showcase](#showcase)
     - [1. JCBudgetBuddy: Personal finance tracker for Windows](#1-jcbudgetbuddy-personal-finance-tracker-for-windows)
     - [2. SAPP-HTTP: HTTP/HTTPS client DLL for SAPP](#2-sapp-http-httphttps-client-dll-for-sapp)
@@ -64,27 +65,27 @@ won't have to remember or rewrite everything from scratch.
 
 | Channel                                   | Type  | Read-only | Description                                                                     |
 | ----------------------------------------- | ----- | --------- | ------------------------------------------------------------------------------- |
-| welcome (1556486004070809602)             | Text  | Yes       | [See Below.](#welcome)                                                          |
-| role-selection (1556580502184534106)      | Text  | Yes       | [See Below.](#role-selection)                                                   |
-| rules (1556486004070809603)               | Text  | Yes       | [See Below.](#rules)                                                            |
-| introductions (1556495282517315614)       | Forum | No        | [See Below.](#introductions)                                                    |
+| welcome (1556486004070809602)             | Text  | Yes       | [See #welcome](#welcome)                                                        |
+| role-selection (1556580502184534106)      | Text  | Yes       | [See #role-selection](#role-selection)                                          |
+| rules (1556486004070809603)               | Text  | Yes       | [See #rules](#rules)                                                            |
+| introductions (1556495282517315614)       | Forum | No        | [See #introductions](#introductions)                                            |
 | arrivals-departures (1556536792038252686) | Text  | Yes       | @ChalwkBot will post notifications here when a user joins or leaves the server. |
 
 ### SOCIAL
 
 | Channel                           | Type | Read-only | Description                                           |
 | --------------------------------- | ---- | --------- | ----------------------------------------------------- |
-| chatter-box (1556486004590907507) | Text | No        | [See Below.](#chatter-box)                            |
+| chatter-box (1556486004590907507) | Text | No        | [See #chatter-box](#chatter-box)                      |
 | gaming (1556910476427006033)      | Text | No        | Halo, Minecraft and whatever else people are playing. |
 
 ### PROJECTS
 
 | Channel                             | Type  | Read-only | Description                                                                    |
 | ----------------------------------- | ----- | --------- | ------------------------------------------------------------------------------ |
-| announcements (1557113076711555113) | Text  | Yes       | @ChalwkBot cross-posts release announcements here and pings @Project Updates.  |
-| showcase (1556511374773850173)      | Forum | No        | [See Below.](#showcase)                                                        |
-| contributing (1556486004909543486)  | Forum | No        | [See Below.](#contributing)                                                    |
-| support (1556486004590907510)       | Forum | No        | [See Below.](#support)                                                         |
+| announcements (1557113076711555113) | Text  | Yes       | [See #announcements](#announcements)                                           |
+| showcase (1556511374773850173)      | Forum | No        | [See #showcase](#showcase)                                                     |
+| contributing (1556486004909543486)  | Forum | No        | [See #contributing](#contributing)                                             |
+| support (1556486004590907510)       | Forum | No        | [See #support](#support)                                                       |
 | github-feed (1556509321138012212)   | Text  | Yes       | GitHub notifications for my repos: pushes, pull requests, issues, and commits. |
 
 ### VOICE
@@ -238,6 +239,25 @@ General discussion about coding, projects, and life.
 
 No support requests here - use <#1556486004590907510>.
 Be kind, follow the rules, and keep it chill.
+```
+
+### announcements
+
+```
+This channel is where **<@&1556543630259519540>** posts release announcements and site updates across my projects, so you don't have to watch ten repos to know when something ships.
+
+**What lands here**
+- New releases and pre-releases from my GitHub repos
+- Site or documentation updates worth flagging
+
+**What doesn't**
+- Routine commits, pushes, issues, and PRs - those go to <#1556509321138012212>
+- Project write-ups and community showcases - those go to <#1556511374773850173>
+
+**The ping**
+Want to be notified? Grab the <@&1556579451603652648> role from <#1556582184534106> with `/roles`. Remove it the same way if the pings get too frequent.
+
+**This channel is read-only.** If something here sparks a question or you want to talk about a release, head to <#1556486004590907507> or open a thread in <#1556511374773850173>. For bugs and support, use <#1556486004590907510>.
 ```
 
 ### showcase
