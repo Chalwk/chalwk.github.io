@@ -1,7 +1,8 @@
 <!--
 This file documents the server's channel structure and serves as a backup of important
-server-specific messages and my personal posts. I'm keeping it so that if I ever need
-to recreate the server, I won't have to remember or rewrite everything from scratch.
+server-specific messages and my personal posts (#releases-and-updates). I'm keeping it
+so that if I ever need to recreate the server, I won't have to remember or rewrite
+everything from scratch.
 -->
 
 # Chalwk - Code & Chill <!-- omit from toc -->
@@ -51,9 +52,10 @@ to recreate the server, I won't have to remember or rewrite everything from scra
 
 ### SOCIAL
 
-| Channel     | Type | Read-only | Description                |
-| ----------- | ---- | --------- | -------------------------- |
-| chatter-box | Text | No        | [See Below.](#chatter-box) |
+| Channel     | Type | Read-only | Description                                          |
+| ----------- | ---- | --------- | ---------------------------------------------------- |
+| chatter-box | Text | No        | [See Below.](#chatter-box)                           |
+| gaming      | Text | No        | Halo, Minecraft and whatever else people are playing |
 
 ### PROJECTS
 
@@ -206,6 +208,30 @@ Be kind, follow the rules, and keep it chill.
 ```
 
 ### releases-and-updates
+
+```
+**Built something you want to share?**
+
+Post it here. Anything you've made, at any skill level. First projects, half-finished experiments, and polished releases are all welcome.
+
+**What to post**
+- Projects that use one of my scripts or tools
+- Mods, plugins, or extensions for the same platforms
+- Screenshots, videos, or a live demo link
+- Lessons learned or interesting problems you hit
+
+**How to format your post**
+- **Title:** name of your project
+- **Body:** what it is, what it does, what you built it with
+- **Link:** repo, live demo, or download, if there is one
+- **Credit:** if you built on someone else's work, say so and link them
+
+One project per post. Updates to an existing project go in the original thread, not a new one.
+
+Everyone is welcome. First project, half-finished experiment, or something you have been working on for years. No gatekeeping here.
+
+Need help with something you are building? Ask in #🧰support
+```
 
 #### JCBudgetBuddy: Personal finance tracker for Windows
 
