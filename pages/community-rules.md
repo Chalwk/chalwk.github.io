@@ -40,6 +40,7 @@ to any GitHub discussions, issues, or pull requests connected to my repositories
 | **Keep Discussions Constructive**                | Critique code and ideas, not people. "This has a bug on line 42" is fine. "This is garbage" is not.                                                                                                                                         |
 | **No Leaking Private Repositories**              | Do not share code, credentials, or discussions from private repositories without permission.                                                                                                                                                |
 | **Follow GitHub's Community Guidelines**         | When interacting with repositories, follow GitHub's guidelines as well as these rules.                                                                                                                                                      |
+{: .rules-table}
 
 ---
 
@@ -79,6 +80,7 @@ issuing moderator.
 | **Impersonation of Staff or Server** | Pretending to be a moderator or representing yourself as the server.                    |
 | **Raid Coordination**                | Using the server to coordinate raids against other communities.                         |
 | **Scamming**                         | Deliberately misleading people about paid work, commissions, or services.               |
+{: .rules-table}
 
 ### Tier 2: Moderate Offenses - 1 to 2-Week Ban
 
@@ -92,6 +94,7 @@ issuing moderator.
 | **Bot or Feature Abuse**            | Misusing bots or Discord features to disrupt the server.                                                  |
 | **Sharing Another Member's Work**   | Reposting someone's code, art, or writing without credit or permission.                                   |
 | **Brigading Other Projects**        | Organising or participating in coordinated harassment against another person or project.                  |
+{: .rules-table}
 
 ### Tier 3: Minor Offenses - Warning or Up to 1-Week Mute
 
@@ -104,6 +107,7 @@ issuing moderator.
 | **Bypassing Filters**          | Circumventing chat filters or automated moderation.                                                        |
 | **Ignoring Redaction Advice**  | Posting secrets after being asked to redact them.                                                          |
 | **Repeated Low-Quality Posts** | Flooding channels with noise, low-effort questions, or duplicate threads.                                  |
+{: .rules-table}
 
 ---
 

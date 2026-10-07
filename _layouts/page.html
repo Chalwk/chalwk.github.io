@@ -131,4 +131,54 @@ layout: default
             white-space: nowrap;
         }
     }
+
+    @media (max-width: 768px) {
+
+        .page-content table.rules-table,
+        .page-content table.rules-table tbody {
+            display: block;
+            width: 100%;
+            overflow: visible;
+            white-space: normal;
+        }
+
+        .page-content table.rules-table thead {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+            clip: rect(0 0 0 0);
+            white-space: nowrap;
+        }
+
+        .page-content table.rules-table tr {
+            display: block;
+            margin: 0 0 0.75rem;
+            padding: 0.75rem 1rem;
+            background: #fff;
+            border: 1px solid var(--gray-light);
+            border-left: 4px solid var(--primary);
+            border-radius: var(--radius);
+        }
+
+        .page-content table.rules-table td {
+            display: block;
+            padding: 0;
+            border: 0;
+            white-space: normal;
+            overflow-wrap: anywhere;
+        }
+
+        .page-content table.rules-table td:first-child {
+            margin-bottom: 0.3rem;
+            color: var(--darker);
+            font-size: 1.02rem;
+        }
+
+        .page-content table.rules-table td:last-child {
+            color: var(--dark);
+            font-size: 0.95rem;
+            line-height: 1.55;
+        }
+    }
 </style>
