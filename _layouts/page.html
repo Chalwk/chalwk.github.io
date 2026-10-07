@@ -133,6 +133,12 @@ layout: default
     }
 
     @media (max-width: 768px) {
+        .section:has(> .container > .page-content) {
+            padding-top: 1.5rem;
+        }
+    }
+
+    @media (max-width: 768px) {
         .page-content table.rules-table,
         .page-content table.rules-table tbody {
             display: block;
