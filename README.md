@@ -31,5 +31,3 @@ For questions, licensing inquiries, or collaboration proposals:
 - **Discord:** https://discord.gg/VAEb4FXU5
 
 ---
-
----
