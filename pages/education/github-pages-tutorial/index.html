@@ -1,54 +1,124 @@
 ---
 layout: default
 title: Creating a GitHub Pages Website
-description: A step-by-step guide to hosting static websites for free using GitHub Pages.
+description: A complete, step-by-step guide to hosting static and Jekyll-powered websites for free using GitHub Pages.
 ---
 
+{% raw %}
 <!-- Copyright (c) 2024-2026 Jericho Crosby (Chalwk). All Rights Reserved. -->
 
 <link rel="stylesheet" href="style.css">
 
+<script>
+    (function () {
+        var os = 'windows';
+        try {
+            var saved = localStorage.getItem('ghp-guide-os');
+            if (saved === 'linux' || saved === 'windows') os = saved;
+        } catch (e) { /* storage blocked - fall back to Windows */ }
+        document.documentElement.setAttribute('data-os', os);
+    })();
+</script>
+
+<div class="progress-bar" aria-hidden="true"><span id="read-progress"></span></div>
+
 <main>
-    <!-- Hero banner: main title + tagline -->
+
     <div class="hero-banner">
         <div class="hero-content">
+            <span class="hero-kicker">The Complete Guide</span>
             <h1 class="page-title">Creating a GitHub Pages Website</h1>
-            <p class="tagline">A Step-by-Step Guide to Hosting Static Websites for Free</p>
+            <p class="tagline">Host static sites - or full Jekyll builds - for free, forever.</p>
+            <div class="hero-meta">
+                <span><i class="dot dot-green"></i> No server required</span>
+                <span><i class="dot dot-blue"></i> HTTPS by default</span>
+                <span><i class="dot dot-purple"></i> Custom domains supported</span>
+            </div>
         </div>
     </div>
 
     <div class="page-container">
-        <!-- SECTION: what is GitHub Pages? -->
+
+        <div class="os-toggle" role="group" aria-label="Operating system for command examples">
+            <span class="os-toggle-label">Commands for</span>
+
+            <button type="button" class="os-btn" data-os-set="windows" aria-pressed="true">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path
+                        d="M3 5.6 10.4 4.6v6.9H3V5.6zm8.6-1.2L21 3.1v8.4h-9.4V4.4zM3 12.5h7.4v6.9L3 18.4v-5.9zm8.6 0H21v8.4l-9.4-1.3v-7.1z" />
+                </svg>
+                Windows
+            </button>
+
+            <button type="button" class="os-btn" data-os-set="linux" aria-pressed="false">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path
+                        d="M3 4.5A1.5 1.5 0 0 1 4.5 3h15A1.5 1.5 0 0 1 21 4.5v15a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 19.5v-15zm2 1.2v12.6h14V5.7H5zm2.2 2.1 1.3-1.3L12.3 10l-3.8 3.8-1.3-1.3L9.7 10 7.2 7.8zM12.5 13h4.5v1.8h-4.5V13z" />
+                </svg>
+                Linux / macOS
+            </button>
+
+            <span class="os-toggle-note">Only terminal snippets change.</span>
+        </div>
+
+        <nav class="toc" aria-label="Table of contents">
+            <h2 class="toc-title">On this page</h2>
+            <ol class="toc-list">
+                <li><a href="#what-is-github-pages">What is GitHub Pages?</a></li>
+                <li><a href="#prerequisites">Prerequisites</a></li>
+                <li><a href="#choose-your-path">Choose Your Path</a></li>
+                <li><a href="#simple-site">Path A - Simple Static Site</a></li>
+                <li><a href="#jekyll">Path B - Jekyll-Powered Site</a>
+                    <ol class="toc-sublist">
+                        <li><a href="#install-jekyll">Install Jekyll locally</a></li>
+                        <li><a href="#project-structure">Project structure</a></li>
+                        <li><a href="#config-yml">The <code>_config.yml</code> file</a></li>
+                        <li><a href="#layouts-includes">Layouts &amp; includes</a></li>
+                        <li><a href="#data-files">Data files</a></li>
+                        <li><a href="#collections">Collections</a></li>
+                        <li><a href="#local-dev">Local development</a></li>
+                    </ol>
+                </li>
+                <li><a href="#actions">Deploying with GitHub Actions</a></li>
+                <li><a href="#custom-domain">Using a Custom Domain</a></li>
+                <li><a href="#troubleshooting">Troubleshooting</a></li>
+                <li><a href="#resources">Resources &amp; Further Learning</a></li>
+            </ol>
+        </nav>
+
         <section class="section page-section" id="what-is-github-pages">
             <h2>What is GitHub Pages?</h2>
-            <p>GitHub Pages is a free static site hosting service provided by GitHub that takes HTML, CSS, and
-                JavaScript files directly from a repository on GitHub, optionally runs them through a build process, and
-                publishes a website.</p>
+            <p>
+                GitHub Pages is a free static site hosting service provided by GitHub. It takes HTML, CSS, and
+                JavaScript files directly from a repository, optionally runs them through a build process (like
+                Jekyll), and publishes the result as a live website - complete with HTTPS.
+            </p>
 
             <div class="interactive-element">
                 <h3>Key Features</h3>
-                <ul style="padding-left: 1.5rem;">
+                <ul class="feature-list">
                     <li><strong>Free hosting</strong> for static websites</li>
                     <li><strong>Custom domain</strong> support (optional)</li>
-                    <li><strong>SSL encryption</strong> (HTTPS) by default</li>
-                    <li><strong>Git integration</strong> for version control</li>
-                    <li><strong>Jekyll support</strong> for static site generation</li>
-                    <li><strong>Unlimited bandwidth</strong> and traffic</li>
+                    <li><strong>SSL/HTTPS encryption</strong> enabled by default</li>
+                    <li><strong>Deep Git integration</strong> for version control</li>
+                    <li><strong>Jekyll support</strong> built into the platform</li>
+                    <li><strong>Unlimited bandwidth</strong> for reasonably-sized sites</li>
+                    <li><strong>GitHub Actions</strong> for custom build pipelines</li>
                 </ul>
             </div>
 
-            <!-- 3 cards: types, limitations, perfect use cases -->
             <div class="card-grid">
                 <div class="card">
                     <div class="card-header">Types of GitHub Pages</div>
                     <div class="card-body">
-                        <p>There are three main types:</p>
-                        <ul style="padding-left: 1.5rem;">
-                            <li><strong>User/Organization Pages:</strong> <code
-                                    class="code-inline">username.github.io</code></li>
-                            <li><strong>Project Pages:</strong> <code
-                                    class="code-inline">username.github.io/repository</code></li>
-                            <li><strong>Custom Domain:</strong> Your own domain name</li>
+                        <ul class="feature-list">
+                            <li><strong>User / Organization site</strong> -
+                                <code class="code-inline">username.github.io</code>
+                            </li>
+                            <li><strong>Project site</strong> -
+                                <code class="code-inline">username.github.io/repository</code>
+                            </li>
+                            <li><strong>Custom domain</strong> - your own domain name</li>
                         </ul>
                     </div>
                 </div>
@@ -56,13 +126,14 @@ description: A step-by-step guide to hosting static websites for free using GitH
                 <div class="card">
                     <div class="card-header">Limitations</div>
                     <div class="card-body">
-                        <p>What GitHub Pages <strong>can't</strong> do:</p>
-                        <ul style="padding-left: 1.5rem;">
-                            <li>Server-side code (PHP, Ruby, Python)</li>
-                            <li>Dynamic database-driven sites</li>
+                        <p>GitHub Pages <strong>cannot</strong> run:</p>
+                        <ul class="feature-list">
+                            <li>Server-side languages (PHP, Ruby, Python, Node)</li>
+                            <li>Databases or dynamic server logic</li>
                             <li>Server-side authentication</li>
-                            <li>Heavy processing on server</li>
-                            <li>More than 1GB bandwidth/month (rarely hit)</li>
+                            <li>Heavy background processing</li>
+                            <li>Sites larger than 1&nbsp;GB (soft limit)</li>
+                            <li>More than 100&nbsp;GB bandwidth/month (soft limit)</li>
                         </ul>
                     </div>
                 </div>
@@ -70,13 +141,13 @@ description: A step-by-step guide to hosting static websites for free using GitH
                 <div class="card">
                     <div class="card-header">Perfect For</div>
                     <div class="card-body">
-                        <p>GitHub Pages is ideal for:</p>
-                        <ul style="padding-left: 1.5rem;">
+                        <ul class="feature-list">
                             <li>Personal portfolios</li>
                             <li>Project documentation</li>
                             <li>Blogs (with Jekyll)</li>
-                            <li>Educational resources</li>
                             <li>Resume websites</li>
+                            <li>Educational resources</li>
+                            <li>Product landing pages</li>
                             <li>Small business sites</li>
                         </ul>
                     </div>
@@ -84,24 +155,23 @@ description: A step-by-step guide to hosting static websites for free using GitH
             </div>
         </section>
 
-        <!-- SECTION: prerequisites (account, knowledge, tools) -->
         <section class="section page-section" id="prerequisites">
             <h2>Prerequisites</h2>
-            <p>Before you start, make sure you have these basics covered:</p>
+            <p>Before you start, make sure you have the following covered:</p>
 
             <div class="card-grid">
                 <div class="card">
                     <div class="card-header">GitHub Account</div>
                     <div class="card-body">
-                        <p>You need a free GitHub account:</p>
-                        <ol style="padding-left: 1.5rem;">
-                            <li>Go to <a href="https://github.com" target="_blank">github.com</a></li>
-                            <li>Click "Sign up"</li>
-                            <li>Choose a username (this will be part of your URL)</li>
+                        <ol class="feature-list ordered">
+                            <li>Go to <a href="https://github.com" target="_blank" rel="noopener">github.com</a></li>
+                            <li>Click <strong>Sign up</strong></li>
+                            <li>Choose a username (this becomes part of your URL)</li>
                             <li>Verify your email address</li>
                         </ol>
-                        <p class="note-box">Your username becomes part of your GitHub Pages URL: <code
-                                class="code-inline">username.github.io</code>
+                        <p class="note-box">
+                            Your username becomes part of your GitHub Pages URL:
+                            <code class="code-inline">username.github.io</code>
                         </p>
                     </div>
                 </div>
@@ -109,377 +179,1235 @@ description: A step-by-step guide to hosting static websites for free using GitH
                 <div class="card">
                     <div class="card-header">Basic Knowledge</div>
                     <div class="card-body">
-                        <p>You should understand:</p>
-                        <ul style="padding-left: 1.5rem;">
-                            <li>Basic HTML and CSS</li>
-                            <li>How to create and edit text files</li>
-                            <li>Basic Git concepts (optional but helpful)</li>
-                            <li>File organization</li>
+                        <ul class="feature-list">
+                            <li>Basic HTML and CSS (JavaScript is helpful but not required)</li>
+                            <li>Creating and editing text files</li>
+                            <li>Basic Git concepts (helpful but optional)</li>
+                            <li>File organisation &amp; folder structure</li>
                         </ul>
-                        <p>Don't worry if you're new to Git - we'll cover the basics!</p>
+                        <p>New to Git? Don't worry - we cover everything you need.</p>
                     </div>
                 </div>
 
                 <div class="card">
                     <div class="card-header">Tools</div>
                     <div class="card-body">
-                        <p>Helpful tools to have:</p>
-                        <ul style="padding-left: 1.5rem;">
-                            <li>A code editor (VS Code, Sublime Text, etc.)</li>
-                            <li>Git installed on your computer (optional)</li>
-                            <li>A modern web browser</li>
-                            <li>File Explorer/Finder knowledge</li>
+                        <ul class="feature-list">
+                            <li>A code editor (<a href="https://code.visualstudio.com" target="_blank"
+                                    rel="noopener">VS&nbsp;Code</a> recommended)</li>
+                            <li>Git installed (required for Path&nbsp;B)</li>
+                            <li>A modern browser</li>
+                            <li>Ruby&nbsp;+&nbsp;Bundler (for Path&nbsp;B only)</li>
                         </ul>
-                        <p>You can do everything through the GitHub website if needed!</p>
+                        <p data-os="windows">
+                            On Windows, install
+                            <a href="https://git-scm.com/download/win" target="_blank" rel="noopener">Git for
+                                Windows</a> - it ships with <strong>Git Bash</strong>, which runs the Linux-style
+                            commands in this guide verbatim.
+                        </p>
+                        <p data-os="linux">
+                            macOS and Linux already have a usable terminal, so nothing extra is required.
+                        </p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION: step-by-step guide (numbered steps) -->
-        <section class="section page-section" id="step-by-step">
-            <h2>Step-by-Step Guide</h2>
-            <p>Follow these steps to create your first GitHub Pages site:</p>
+        <section class="section page-section" id="choose-your-path">
+            <h2>Choose Your Path</h2>
+            <p>There are two ways to build a GitHub Pages site, and you can mix them:</p>
+
+            <div class="path-grid">
+                <div class="path-card">
+                    <div class="path-tag">Path A</div>
+                    <h3>Simple Static Site</h3>
+                    <p>Plain HTML, CSS and JavaScript committed directly. Fastest to set up, no build step, no local
+                        tooling required.</p>
+                    <ul class="feature-list">
+                        <li>Perfect for landing pages and small sites</li>
+                        <li>No Ruby or Node needed</li>
+                        <li>Live in under 5 minutes</li>
+                    </ul>
+                    <a class="btn btn-small" href="#simple-site">Jump to Path A</a>
+                </div>
+
+                <div class="path-card path-card-featured">
+                    <div class="path-tag">Path B</div>
+                    <h3>Jekyll-Powered Site</h3>
+                    <p>Use <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a> to build a site from
+                        templates, data files, and Markdown. GitHub builds it for you on every push.</p>
+                    <ul class="feature-list">
+                        <li>Blogs, docs sites, portfolios</li>
+                        <li>Reusable layouts &amp; includes</li>
+                        <li>Data-driven pages from JSON/YAML</li>
+                    </ul>
+                    <a class="btn btn-small" href="#jekyll">Jump to Path B</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="section page-section" id="simple-site">
+            <h2>Path A - Simple Static Site</h2>
+            <p>Follow these steps to have a live website in under five minutes.</p>
 
             <ol class="step-list">
                 <li>
-                    <h3>Create a New Repository</h3>
-                    <p>On GitHub, create a new repository with this specific name:</p>
+                    <h3>Create a new repository</h3>
+                    <p>Create a <strong>public</strong> repository named exactly:</p>
                     <div class="code-block">
                         <pre><code class="language-bash">username.github.io</code></pre>
                     </div>
-                    <p>Replace "username" with your actual GitHub username. This naming convention is important!</p>
+                    <p>Replace <code class="code-inline">username</code> with your GitHub username. The naming
+                        convention is what tells GitHub to serve the repo as your root site.</p>
                     <div class="warning-box">
-                        <strong>Important:</strong> The repository <strong>must</strong> be public for the free version
-                        of GitHub Pages.
+                        <strong>Important:</strong> On free accounts the repository <strong>must be public</strong>
+                        for Pages to work.
                     </div>
                 </li>
 
                 <li>
-                    <h3>Initialize with README</h3>
-                    <p>When creating the repository:</p>
-                    <ul style="padding-left: 1.5rem;">
-                        <li>Check "Add a README file"</li>
-                        <li>Choose a licence if you want (optional)</li>
-                        <li>Click "Create repository"</li>
+                    <h3>Initialise with a README</h3>
+                    <ul class="feature-list">
+                        <li>Tick <strong>Add a README file</strong></li>
+                        <li>(Optional) Choose a licence</li>
+                        <li>Click <strong>Create repository</strong></li>
                     </ul>
-                    <p>The README file is your project's front page on GitHub.</p>
                 </li>
 
                 <li>
-                    <h3>Add Your First HTML File</h3>
-                    <p>Create a file named <code class="code-inline">index.html</code> in your repository:</p>
+                    <h3>Add your first HTML file</h3>
+                    <p>Create a file named <code class="code-inline">index.html</code> in the repository root:</p>
                     <div class="code-block">
+                        <div class="code-block-header"><span>index.html</span></div>
                         <pre><code class="language-html">&lt;!DOCTYPE html&gt;
 &lt;html lang="en"&gt;
 &lt;head&gt;
     &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
     &lt;title&gt;My GitHub Pages Site&lt;/title&gt;
     &lt;style&gt;
         body {
-            font-family: Arial, sans-serif;
+            font-family: system-ui, sans-serif;
             max-width: 800px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 2rem;
             line-height: 1.6;
+            color: #24292e;
         }
-        h1 {
-            color: #0366d6;
-        }
+        h1 { color: #0366d6; }
     &lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
     &lt;h1&gt;Hello World!&lt;/h1&gt;
-    &lt;p&gt;My GitHub Pages site is live!&lt;/p&gt;
+    &lt;p&gt;My GitHub Pages site is live.&lt;/p&gt;
     &lt;p&gt;Visit: &lt;code&gt;https://username.github.io&lt;/code&gt;&lt;/p&gt;
 &lt;/body&gt;
 &lt;/html&gt;</code></pre>
                     </div>
-                    <p>You can add this file directly on GitHub by clicking "Add file" → "Create new file".</p>
+                    <p>You can add it directly on GitHub: <strong>Add file &rarr; Create new file</strong>, paste the
+                        code, then commit.</p>
                 </li>
 
                 <li>
                     <h3>Enable GitHub Pages</h3>
-                    <p>Go to your repository Settings → Pages:</p>
-                    <ul style="padding-left: 1.5rem;">
-                        <li>Under "Source", select "Deploy from a branch"</li>
-                        <li>Choose "main" branch (or "master" if you have that)</li>
+                    <p>In your repository, go to <strong>Settings &rarr; Pages</strong>:</p>
+                    <ul class="feature-list">
+                        <li>Under <em>Source</em>, choose <strong>Deploy from a branch</strong></li>
+                        <li>Select the <strong>main</strong> branch</li>
                         <li>Select the <code class="code-inline">/ (root)</code> folder</li>
-                        <li>Click "Save"</li>
+                        <li>Click <strong>Save</strong></li>
                     </ul>
                     <div class="note-box">
-                        It may take 1-2 minutes for your site to deploy. You'll see a "Your site is published at..."
-                        message when it's ready.
+                        Deployment takes 1-2 minutes. You'll see <em>&ldquo;Your site is live
+                            at&hellip;&rdquo;</em>
+                        when it's ready.
                     </div>
                 </li>
 
                 <li>
-                    <h3>Visit Your Site</h3>
+                    <h3>Visit your site</h3>
                     <p>Open a new tab and go to:</p>
                     <div class="code-block">
                         <pre><code class="language-bash">https://username.github.io</code></pre>
                     </div>
-                    <p>Replace "username" with your GitHub username. You should see your "Hello World!" page!</p>
-
+                    <p>You should see your <em>Hello World</em> page in all its glory.</p>
                     <div class="note-box">
-                        <strong>Pro Tip:</strong> You can simply type <code
-                            class="code-inline">username.github.io</code> without the <code
-                            class="code-inline">https://</code> in your browser's address bar. Modern browsers will
-                        automatically use HTTPS, and GitHub will load your site securely. This is a great shorter way to
-                        access your site!
+                        <strong>Pro tip:</strong> Modern browsers will add <code class="code-inline">https://</code>
+                        for you - you can just type <code class="code-inline">username.github.io</code>.
                     </div>
-
-                    <p class="note-box">The URL is always <code class="code-inline">https://</code> - GitHub provides
-                        SSL certificates automatically.</p>
                 </li>
 
                 <li>
-                    <h3>Customize Your Site</h3>
+                    <h3>Customise it</h3>
                     <p>Add more files to your repository:</p>
-                    <ul style="padding-left: 1.5rem;">
-                        <li><code class="code-inline">style.css</code> - for styling</li>
-                        <li><code class="code-inline">script.js</code> - for interactivity</li>
-                        <li><code class="code-inline">about.html</code> - additional pages</li>
-                        <li><code class="code-inline">images/</code> folder - for images</li>
+                    <ul class="feature-list">
+                        <li><code class="code-inline">style.css</code> - external stylesheet</li>
+                        <li><code class="code-inline">script.js</code> - interactivity</li>
+                        <li><code class="code-inline">about.html</code> - extra pages</li>
+                        <li><code class="code-inline">images/</code> - image assets</li>
                     </ul>
-                    <p>Link to CSS files in your HTML:</p>
+                    <p>Link your CSS in HTML like so:</p>
                     <div class="code-block">
                         <pre><code class="language-html">&lt;link rel="stylesheet" href="style.css"&gt;</code></pre>
                     </div>
                 </li>
 
                 <li>
-                    <h3>Add Simple JavaScript (Beginner Example)</h3>
-                    <p>Create a file named <code class="code-inline">script.js</code> with this basic code:</p>
+                    <h3>Add a splash of JavaScript</h3>
+                    <p>Create <code class="code-inline">script.js</code>:</p>
                     <div class="code-block">
-                        <pre><code class="language-javascript">// This code adds interactivity to your website
-
-// Wait for the page to load
-document.addEventListener('DOMContentLoaded', function() {
-
-    // Get the button and message elements
-    const button = document.getElementById('demoButton');
+                        <div class="code-block-header"><span>script.js</span></div>
+                        <pre><code class="language-javascript">document.addEventListener('DOMContentLoaded', () =&gt; {
+    const button  = document.getElementById('demoButton');
     const message = document.getElementById('demoMessage');
 
-    // Add a click event to the button
-    button.addEventListener('click', function() {
-        // Change the text and color when clicked
-        message.textContent = 'Button clicked! JavaScript is working!';
+    button.addEventListener('click', () =&gt; {
+        message.textContent = 'Button clicked! JavaScript is working.';
         message.style.color = '#28a745';
 
-        // Add a simple animation
         button.style.transform = 'scale(0.95)';
-        setTimeout(() => {
-            button.style.transform = 'scale(1)';
-        }, 150);
+        setTimeout(() =&gt; { button.style.transform = 'scale(1)'; }, 150);
     });
-
-    // Simple console log to show it's working
-    console.log('GitHub Pages JavaScript loaded successfully!');
 });</code></pre>
                     </div>
-                    <p>Update your <code class="code-inline">index.html</code> to include the JavaScript:</p>
+                    <p>Then include it in your HTML just before <code class="code-inline">&lt;/body&gt;</code>:</p>
                     <div class="code-block">
-                        <pre><code class="language-html">&lt;!DOCTYPE html&gt;
-&lt;html lang="en"&gt;
-&lt;head&gt;
-    &lt;meta charset="UTF-8"&gt;
-    &lt;title&gt;My GitHub Pages Site&lt;/title&gt;
-    &lt;link rel="stylesheet" href="style.css"&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;h1&gt;Hello World!&lt;/h1&gt;
-    &lt;p id="demoMessage"&gt;Click the button to test JavaScript.&lt;/p&gt;
-    &lt;button id="demoButton"&gt;Click Me!&lt;/button&gt;
-    &lt;script src="script.js"&gt;&lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;</code></pre>
+                        <pre><code class="language-html">&lt;p id="demoMessage"&gt;Click the button to test JavaScript.&lt;/p&gt;
+&lt;button id="demoButton"&gt;Click Me!&lt;/button&gt;
+&lt;script src="script.js"&gt;&lt;/script&gt;</code></pre>
                     </div>
-                    <p>This simple example shows how to add interactivity to your GitHub Pages site.</p>
                 </li>
             </ol>
 
-            <!-- interactive tip with curl -->
             <div class="interactive-element">
-                <h3>Quick Test: Is Your Site Live?</h3>
-                <p>Copy and paste this command in your terminal (or use a web browser):</p>
-                <div class="code-block">
+                <h3>Quick sanity check</h3>
+                <p>
+                    From a terminal, verify your site is live. Note that Windows PowerShell aliases
+                    <code class="code-inline">curl</code> to <code class="code-inline">Invoke-WebRequest</code>,
+                    so use <code class="code-inline">curl.exe</code> to get the real thing.
+                </p>
+
+                <div class="code-block" data-os="windows">
+                    <pre><code class="language-powershell">curl.exe -I https://username.github.io</code></pre>
+                </div>
+
+                <div class="code-block" data-os="linux">
                     <pre><code class="language-bash">curl -I https://username.github.io</code></pre>
                 </div>
-                <p>You should see <code class="code-inline">HTTP/2 200</code> which means your site is successfully
-                    deployed!</p>
+
+                <p>Look for <code class="code-inline">HTTP/2 200</code>. If you see that, you're good to go.</p>
             </div>
         </section>
 
-        <!-- SECTION: custom domain (buy, CNAME, DNS) -->
+        <section class="section page-section" id="jekyll">
+            <h2>Path B - Jekyll-Powered Site</h2>
+            <p>
+                Jekyll is a static site generator written in Ruby. It's built into GitHub Pages, so you don't even
+                need to run a build step yourself - GitHub will build your site automatically when you push. The
+                benefit is that you can use layouts, includes, data files, Markdown, and Liquid templating to avoid
+                repeating yourself.
+            </p>
+
+            <div class="note-box">
+                <strong>Two ways to run Jekyll:</strong> locally (best for development - you see changes
+                instantly)
+                or entirely through GitHub's hosted builder (fine for simple sites). We cover both.
+            </div>
+
+            <h3 id="install-jekyll" class="subsection-heading">1. Install Jekyll locally</h3>
+            <p>Jekyll needs Ruby. Follow the guide for your operating system:</p>
+
+            <div class="card-grid">
+                <div class="card" data-os="windows">
+                    <div class="card-header">Windows</div>
+                    <div class="card-body">
+                        <ol class="feature-list ordered">
+                            <li>Install <a href="https://rubyinstaller.org" target="_blank" rel="noopener">RubyInstaller
+                                    for Windows</a> (Ruby+Devkit 3.x)</li>
+                            <li>Run the installer and keep <em>ridk install</em> ticked</li>
+                            <li>In the popup, choose option <strong>3</strong> (MSYS2 + MINGW)</li>
+                            <li>Open a <strong>new</strong> terminal and run:</li>
+                        </ol>
+                        <div class="code-block">
+                            <pre><code class="language-powershell">gem install jekyll bundler</code></pre>
+                        </div>
+                        <p class="note-box">
+                            If <code class="code-inline">gem</code> isn't recognised, your terminal was opened before
+                            the installer finished. Close it, open a fresh one, and try again.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card" data-os="linux">
+                    <div class="card-header">macOS / Linux</div>
+                    <div class="card-body">
+                        <p>Use your system package manager, then install the gems:</p>
+                        <div class="code-block">
+                            <pre><code class="language-bash"># macOS (with Homebrew)
+brew install ruby
+gem install jekyll bundler
+
+# Ubuntu / Debian
+sudo apt install ruby-full build-essential
+gem install jekyll bundler</code></pre>
+                        </div>
+                        <p class="note-box">
+                            On some distros <code class="code-inline">gem install</code> needs
+                            <code class="code-inline">sudo</code>, or you can install into your home directory with
+                            <code class="code-inline">gem install --user-install</code>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <p>Verify the install (this works the same on every platform):</p>
+            <div class="code-block">
+                <pre><code class="language-bash">jekyll -v
+bundle -v</code></pre>
+            </div>
+
+            <h3 id="project-structure" class="subsection-heading">2. Create your project</h3>
+            <p>Scaffold a new Jekyll site (or create the folders by hand):</p>
+            <div class="code-block">
+                <pre><code class="language-bash">jekyll new my-site --blank
+cd my-site</code></pre>
+            </div>
+            <p>The <code class="code-inline">--blank</code> flag gives you a bare scaffold - no theme, no
+                boilerplate - which is ideal if you want full control over the markup.</p>
+
+            <p>Here's a recommended structure. You don't need every folder - start with the ones you need:</p>
+            <div class="file-tree">
+                <pre>my-site/
+├── _data/                 # JSON / YAML / CSV files for templates
+│   └── navigation.yml
+├── _includes/             # Reusable partials
+│   ├── head.html
+│   ├── header.html
+│   └── footer.html
+├── _layouts/              # Page templates
+│   └── default.html
+├── _posts/                # Blog posts (Markdown)
+├── _sass/                 # SCSS partials (optional)
+├── assets/
+│   ├── css/
+│   │   └── style.css
+│   ├── js/
+│   │   └── scripts.js
+│   └── images/
+├── _config.yml            # Site config
+├── Gemfile
+├── Gemfile.lock
+├── .gitignore
+├── index.html             # Home page
+└── README.md</pre>
+            </div>
+
+            <p>Create the required files at the project root:</p>
+
+            <div class="code-block">
+                <div class="code-block-header"><span>Gemfile</span></div>
+                <pre><code class="language-ruby">source 'https://rubygems.org'
+
+gem 'jekyll', '~&gt; 4.3'
+gem 'jekyll-sitemap'
+gem 'jekyll-seo-tag'
+gem 'jekyll-relative-links'
+gem 'webrick'
+gem 'wdm', '&gt;= 0.1.0', platforms: [:mingw, :x64_mingw, :mswin]
+gem 'tzinfo'
+gem 'tzinfo-data'</code></pre>
+            </div>
+
+            <div class="note-box">
+                <strong>Windows note:</strong> <code class="code-inline">wdm</code>,
+                <code class="code-inline">tzinfo</code> and <code class="code-inline">tzinfo-data</code> exist to keep
+                file-watching and time zones working correctly on Windows and JRuby. They are harmless on other
+                platforms because the gems are platform-gated.
+            </div>
+
+            <div class="code-block">
+                <div class="code-block-header"><span>.gitignore</span></div>
+                <pre><code class="language-bash">_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+.bundle/
+vendor/
+.DS_Store</code></pre>
+            </div>
+
+            <p>Install the gems:</p>
+            <div class="code-block">
+                <pre><code class="language-bash">bundle install</code></pre>
+            </div>
+
+            <h3 id="config-yml" class="subsection-heading">3. Configure <code>_config.yml</code></h3>
+            <p>
+                This file is the control centre of your Jekyll site. Every time you change it, you must restart the
+                local server.
+            </p>
+
+            <div class="code-block">
+                <div class="code-block-header"><span>_config.yml</span></div>
+                <pre><code class="language-yaml"># ---------------------------------------------------------------------------
+# Identity
+# ---------------------------------------------------------------------------
+title: My Jekyll Site
+tagline: "Built with Jekyll, hosted on GitHub Pages"
+description: A site built with Jekyll and hosted for free on GitHub Pages.
+
+url: "https://username.github.io"   # production domain - no trailing slash
+baseurl: ""                         # "" for user sites, "/repo" for project sites
+
+lang: en-NZ
+locale: en_NZ
+og_locale: en_NZ
+timezone: Pacific/Auckland
+
+# ---------------------------------------------------------------------------
+# SEO / social metadata (consumed by jekyll-seo-tag)
+# ---------------------------------------------------------------------------
+title_separator: "|"
+twitter:
+  card: summary_large_image
+
+author:
+  name: Your Name
+  url: https://github.com/username
+
+favicon: /assets/images/favicon.ico
+
+# ---------------------------------------------------------------------------
+# Single source of truth for outbound links
+# Referenced in templates as {{ site.links.github }} etc.
+# ---------------------------------------------------------------------------
+links:
+  email: you@example.com
+  github: https://github.com/username
+  discord: https://discord.gg/xxxxxxxx
+
+# ---------------------------------------------------------------------------
+# Build behaviour
+# ---------------------------------------------------------------------------
+incremental: true
+
+markdown: kramdown
+kramdown:
+  input: GFM
+  hard_wrap: false
+  toc_levels: 2..6
+  syntax_highlighter: rouge   # or: nil to render plain &lt;code&gt; blocks
+
+sass:
+  style: compressed
+  quiet_deps: true
+
+permalink: pretty
+
+# ---------------------------------------------------------------------------
+# Plugins (GitHub Pages whitelist)
+# ---------------------------------------------------------------------------
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+  - jekyll-feed
+  - jekyll-relative-links
+
+relative_links:
+  enabled: true
+  collections: true
+
+# ---------------------------------------------------------------------------
+# Keep build/dev files out of the generated site
+# ---------------------------------------------------------------------------
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+  - README.md
+  - LICENSE
+  - run.bat
+
+# ---------------------------------------------------------------------------
+# Collections
+# ---------------------------------------------------------------------------
+collections:
+  projects:
+    output: true
+    permalink: /projects/:path/
+
+# ---------------------------------------------------------------------------
+# Front matter defaults - apply top to bottom, later rules win
+# ---------------------------------------------------------------------------
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: "default"
+      image:
+        path: /assets/images/social-card.png
+        alt: "My Jekyll Site"
+
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
+      permalink: /blog/:year/:month/:day/:title/
+
+  - scope:
+      path: "pages"
+    values:
+      permalink: /pages/:basename/</code></pre>
+            </div>
+
+            <div class="warning-box">
+                <strong>Important:</strong> Your <code class="code-inline">url</code> and <code
+                    class="code-inline">baseurl</code>
+                must match how GitHub serves the site. For a user site
+                (<code class="code-inline">username.github.io</code>), <code class="code-inline">baseurl</code> should
+                be
+                empty. For a project site (<code class="code-inline">username.github.io/repo</code>), set it to
+                <code class="code-inline">"/repo"</code>.
+            </div>
+
+            <div class="interactive-element">
+                <h3>What each block actually does</h3>
+
+                <ul class="feature-list">
+                    <li>
+                        <strong><code class="code-inline">url</code> + <code class="code-inline">baseurl</code></strong>
+                        - the two values every absolute link is built from. Getting these wrong is the single most
+                        common cause of "my CSS works locally but 404s on Pages".
+                    </li>
+                    <li>
+                        <strong><code class="code-inline">locale</code> / <code class="code-inline">lang</code> /
+                            <code class="code-inline">og_locale</code></strong> -
+                        <code class="code-inline">lang</code> sets the <code
+                            class="code-inline">&lt;html lang&gt;</code>
+                        attribute, <code class="code-inline">locale</code> and
+                        <code class="code-inline">og_locale</code> feed SEO tags. The
+                        <code class="code-inline">xx_YY</code> convention matters for OpenGraph.
+                    </li>
+                    <li>
+                        <strong><code class="code-inline">timezone</code></strong> - an IANA identifier
+                        (<code class="code-inline">Pacific/Auckland</code>,
+                        <code class="code-inline">Europe/London</code>). Affects every Liquid
+                        <code class="code-inline">date:</code> filter, including the copyright year in your footer.
+                    </li>
+                    <li>
+                        <strong><code class="code-inline">title_separator</code> + <code class="code-inline">twitter:
+                            card</code></strong> - formatting for the tags that
+                        <code class="code-inline">{% seo %}</code> emits. Set once, forget forever.
+                    </li>
+                    <li>
+                        <strong><code class="code-inline">links:</code></strong> - a single map of every outbound URL.
+                        Change a Discord invite in one place instead of hunting through twenty templates.
+                    </li>
+                    <li>
+                        <strong><code class="code-inline">kramdown.hard_wrap</code></strong> -
+                        <code class="code-inline">false</code> for hand-wrapped prose guides (single newlines are
+                        ignored); <code class="code-inline">true</code> when you want a single newline to become a
+                        <code class="code-inline">&lt;br&gt;</code>.
+                    </li>
+                    <li>
+                        <strong><code class="code-inline">kramdown.syntax_highlighter: nil</code></strong> - renders
+                        fenced code as plain <code class="code-inline">&lt;code&gt;</code> blocks with no colouring.
+                        Use <code class="code-inline">rouge</code> when you want highlighting.
+                    </li>
+                    <li>
+                        <strong><code class="code-inline">sass.style: compressed</code></strong> - minifies your SCSS
+                        output. <code class="code-inline">quiet_deps</code> silences deprecation warnings from
+                        third-party stylesheets.
+                    </li>
+                    <li>
+                        <strong><code class="code-inline">permalink: pretty</code></strong> - produces
+                        <code class="code-inline">/about/</code> instead of
+                        <code class="code-inline">/about.html</code>.
+                    </li>
+                    <li>
+                        <strong><code class="code-inline">exclude:</code></strong> - nothing here is secret (it's all
+                        still in the repo), but it keeps <code class="code-inline">Gemfile</code>,
+                        <code class="code-inline">node_modules/</code>, <code class="code-inline">vendor/</code> and
+                        local scripts out of the published <code class="code-inline">_site/</code>.
+                    </li>
+                    <li>
+                        <strong><code class="code-inline">defaults:</code></strong> - front matter applied by scope.
+                        Rules are evaluated top to bottom and the <em>last</em> matching rule wins, so put your
+                        broadest rule first and your most specific rule last.
+                    </li>
+                </ul>
+
+                <p class="note-box">
+                    <strong>Plugin whitelist:</strong> <code class="code-inline">jekyll-seo-tag</code>,
+                    <code class="code-inline">jekyll-sitemap</code>, <code class="code-inline">jekyll-feed</code>,
+                    <code class="code-inline">jekyll-relative-links</code> and friends are all on GitHub's approved
+                    list. If you build with GitHub Actions instead (see below), that list stops applying and you can
+                    use any plugin you like.
+                </p>
+            </div>
+
+            <p>
+                If you're publishing a blog, add <code class="code-inline">jekyll-feed</code> to the plugin list - it
+                generates <code class="code-inline">/feed.xml</code> automatically. On a project repo you may also
+                want <code class="code-inline">repository:</code> and
+                <code class="code-inline">github_username:</code> at the top level, which some plugins and themes read
+                when building absolute GitHub links.
+            </p>
+
+            <h3 id="layouts-includes" class="subsection-heading">4. Layouts &amp; includes</h3>
+            <p>
+                Layouts are the shells your pages get wrapped in. Includes are reusable snippets you drop inside
+                layouts (or pages). Together they eliminate nearly all repetition.
+            </p>
+
+            <div class="code-block">
+                <div class="code-block-header"><span>_layouts/default.html</span></div>
+                <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="{{ site.lang | default: 'en' }}"&gt;
+&lt;head&gt;
+  {% include head.html %}
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;a class="skip-link" href="#main-content"&gt;Skip to content&lt;/a&gt;
+
+  &lt;header class="header"&gt;{% include header.html %}&lt;/header&gt;
+
+  &lt;main id="main-content"&gt;{{ content }}&lt;/main&gt;
+
+  {% include footer.html %}
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+            </div>
+
+            <div class="code-block">
+                <div class="code-block-header"><span>_includes/head.html</span></div>
+                <pre><code class="language-html">&lt;meta charset="UTF-8"&gt;
+&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+&lt;title&gt;{{ page.title | default: site.title }}&lt;/title&gt;
+&lt;meta name="description" content="{{ page.description | default: site.description }}"&gt;
+
+{% seo %}
+
+&lt;link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}"&gt;</code></pre>
+            </div>
+
+            <div class="code-block">
+                <div class="code-block-header"><span>_includes/header.html</span></div>
+                <pre><code class="language-html">&lt;nav class="main-nav"&gt;
+  &lt;a href="{{ '/' | relative_url }}"&gt;Home&lt;/a&gt;
+  &lt;a href="{{ '/about/' | relative_url }}"&gt;About&lt;/a&gt;
+  &lt;a href="{{ '/blog/' | relative_url }}"&gt;Blog&lt;/a&gt;
+&lt;/nav&gt;</code></pre>
+            </div>
+
+            <div class="code-block">
+                <div class="code-block-header"><span>_includes/footer.html</span></div>
+                <pre><code class="language-html">&lt;footer&gt;
+  &lt;p&gt;&amp;copy; {{ site.time | date: '%Y' }} {{ site.title }}&lt;/p&gt;
+&lt;/footer&gt;</code></pre>
+            </div>
+
+            <p>Now any page can opt into the layout via front matter:</p>
+            <div class="code-block">
+                <div class="code-block-header"><span>index.html</span></div>
+                <pre><code class="language-html">---
+layout: default
+title: Home
+---
+
+&lt;h1&gt;Welcome&lt;/h1&gt;
+&lt;p&gt;This page is rendered inside the default layout.&lt;/p&gt;</code></pre>
+            </div>
+
+            <div class="note-box">
+                <strong>Liquid tip:</strong> <code class="code-inline">{{ content }}</code> is where each page's body
+                gets injected. <code class="code-inline">{% include file.html %}</code> pulls in a partial from
+                <code class="code-inline">_includes/</code>.
+            </div>
+
+            <h3 id="data-files" class="subsection-heading">5. Data files</h3>
+            <p>
+                Any JSON, YAML, or CSV file inside <code class="code-inline">_data/</code> is automatically available
+                in your templates. This is perfect for navigation menus, team lists, product catalogues, or any
+                content you'd rather keep separate from markup.
+            </p>
+
+            <div class="code-block">
+                <div class="code-block-header"><span>_data/navigation.yml</span></div>
+                <pre><code class="language-yaml">- title: Home
+  url: /
+- title: About
+  url: /about/
+- title: Blog
+  url: /blog/
+- title: Contact
+  url: /contact/</code></pre>
+            </div>
+
+            <p>Loop through it anywhere:</p>
+            <div class="code-block">
+                <pre><code class="language-html">&lt;ul&gt;
+  {% for item in site.data.navigation %}
+    &lt;li&gt;&lt;a href="{{ item.url | relative_url }}"&gt;{{ item.title }}&lt;/a&gt;&lt;/li&gt;
+  {% endfor %}
+&lt;/ul&gt;</code></pre>
+            </div>
+
+            <div class="note-box">
+                <strong>Real-world example:</strong> this site's Maps page reads every release from
+                <code class="code-inline">_data/releases.json</code>, which is generated by a GitHub Actions workflow.
+                Zero API calls from the visitor's browser.
+            </div>
+
+            <h3 id="collections" class="subsection-heading">6. Collections</h3>
+            <p>
+                Collections let you group related documents (projects, recipes, team members) and give them their own
+                templates - a bit like pages, but managed together.
+            </p>
+
+            <div class="code-block">
+                <div class="code-block-header"><span>_config.yml (add)</span></div>
+                <pre><code class="language-yaml">collections:
+  projects:
+    output: true
+    permalink: /projects/:path/</code></pre>
+            </div>
+
+            <p>Create <code class="code-inline">_projects/my-first-project.md</code>:</p>
+            <div class="code-block">
+                <pre><code class="language-markdown">---
+layout: project
+title: My First Project
+---
+
+A short description of the project goes here.</code></pre>
+            </div>
+
+            <p>Render it from anywhere:</p>
+            <div class="code-block">
+                <pre><code class="language-html">{% for project in site.projects %}
+  &lt;a href="{{ project.url | relative_url }}"&gt;{{ project.title }}&lt;/a&gt;
+{% endfor %}</code></pre>
+            </div>
+
+            <div class="note-box">
+                <strong>Permalink patterns:</strong> <code class="code-inline">/:collection/:path/</code> keeps every
+                collection neatly namespaced, while <code class="code-inline">/:name/</code> uses the filename. Pair
+                a collection with a scoped entry under <code class="code-inline">defaults:</code> so every document in
+                it gets the right layout automatically.
+            </div>
+
+            <h3 id="local-dev" class="subsection-heading">7. Local development</h3>
+            <p>Jekyll ships with a built-in dev server with live reload:</p>
+            <div class="code-block">
+                <pre><code class="language-bash">bundle exec jekyll serve --livereload</code></pre>
+            </div>
+            <p>Then open <a href="http://127.0.0.1:4000" target="_blank" rel="noopener">http://127.0.0.1:4000</a>.
+                Every saved change appears automatically.</p>
+
+            <div class="interactive-element">
+                <h3>Handy flags</h3>
+                <div class="code-block">
+                    <pre><code class="language-bash">--livereload            # auto-refresh the browser
+--drafts                # include files in _drafts/
+--future                # include posts dated in the future
+--unpublished           # include posts marked published: false
+--host 0.0.0.0          # expose the server to your LAN
+--port 4001             # use a different port
+--baseurl ""            # override baseurl temporarily</code></pre>
+                </div>
+                <p>
+                    These flags are identical on every platform - only the way you launch them tends to differ.
+                    A small launcher script saves a lot of typing:
+                </p>
+
+                <div class="code-block" data-os="windows">
+                    <div class="code-block-header"><span>run.bat</span></div>
+                    <pre><code class="language-batch">@echo off
+cd /d "%~dp0"
+
+echo Cleaning site...
+call bundle exec jekyll clean || exit /b
+
+echo Starting Jekyll server on 127.0.0.1:4000 with live reload...
+
+start cmd /k "cd /d "%~dp0" &amp;&amp; bundle exec jekyll serve --livereload --host 127.0.0.1 --baseurl="
+
+echo Waiting for server to start...
+set "PORT=4000"
+set "TIMEOUT=30"
+
+for /l %%i in (1,1,%TIMEOUT%) do (
+    timeout /t 1 /nobreak &gt;nul
+    netstat -an | find ":%PORT% " | find "LISTENING" &gt;nul &amp;&amp; goto :ready
+)
+
+echo WARNING: Server not responding after %TIMEOUT% seconds. Opening browser anyway.
+
+:ready
+start http://127.0.0.1:4000/</code></pre>
+                </div>
+
+                <div class="code-block" data-os="linux">
+                    <div class="code-block-header"><span>run.sh</span></div>
+                    <pre><code class="language-bash">#!/usr/bin/env bash
+set -e
+cd "$(dirname "$0")"
+
+if ! command -v bundle >/dev/null 2>&1; then
+    echo "Bundler not found. Install it first:"
+    echo "    gem install jekyll bundler"
+    exit 1
+fi
+
+bundle exec jekyll clean
+
+echo
+echo "Starting Jekyll with live reload."
+echo "Local address: http://127.0.0.1:4000"
+echo "Press Ctrl+C to stop."
+echo
+
+bundle exec jekyll serve --livereload --open-url</code></pre>
+                </div>
+
+                <p data-os="windows">
+                    Double-click <code class="code-inline">run.bat</code>, or run it from any terminal in the
+                    project folder - it switches to its own directory first, so the working directory doesn't
+                    matter. The script cleans the previous build, launches Jekyll in a separate console window,
+                    polls the port for up to 30&nbsp;seconds, then opens your browser once the server is
+                    actually listening. Add <code class="code-inline">run.bat</code> to
+                    <code class="code-inline">exclude:</code> in <code class="code-inline">_config.yml</code>
+                    so it never ends up in <code class="code-inline">_site/</code>.
+                </p>
+                <p data-os="linux">
+                    Make it executable once with <code class="code-inline">chmod +x run.sh</code>, then run
+                    <code class="code-inline">./run.sh</code>. Add <code class="code-inline">run.sh</code> to
+                    <code class="code-inline">exclude:</code> in <code class="code-inline">_config.yml</code>
+                    so it never ends up in <code class="code-inline">_site/</code>.
+                </p>
+            </div>
+        </section>
+
+        <section class="section page-section" id="actions">
+            <h2>Deploying with GitHub Actions</h2>
+            <p>
+                The easiest way to publish a Jekyll site is to let GitHub build it for you. You don't need to
+                commit the generated <code class="code-inline">_site/</code> folder - a workflow builds it on
+                every push and deploys it.
+            </p>
+
+            <ol class="step-list">
+                <li>
+                    <h3>Enable Pages</h3>
+                    <p>Go to <strong>Settings &rarr; Pages</strong> and set <em>Source</em> to
+                        <strong>GitHub Actions</strong>.
+                    </p>
+                </li>
+
+                <li>
+                    <h3>Add the deploy workflow</h3>
+                    <p>Create <code class="code-inline">.github/workflows/jekyll.yml</code>:</p>
+                    <div class="code-block">
+                        <div class="code-block-header"><span>.github/workflows/jekyll.yml</span></div>
+                        <pre><code class="language-yaml">name: Build and Deploy Jekyll Site
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.2"
+          bundler-cache: true
+
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v5
+
+      - name: Build with Jekyll
+        run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
+        env:
+          JEKYLL_ENV: production
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "_site"
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4</code></pre>
+                    </div>
+                </li>
+
+                <li>
+                    <h3>Push and watch</h3>
+                    <div class="code-block">
+                        <pre><code class="language-bash">git add .
+git commit -m "Add Jekyll site"
+git push origin main</code></pre>
+                    </div>
+                    <p>Open the <strong>Actions</strong> tab on GitHub to follow the build. When it's green, your site
+                        is live.</p>
+                    <div class="note-box">
+                        <strong>Windows tip:</strong> if Git reports <em>&ldquo;LF will be replaced by CRLF&rdquo;</em>
+                        warnings, that's normal and harmless. If you'd rather not see them, add a
+                        <code class="code-inline">.gitattributes</code> file with
+                        <code class="code-inline">* text=auto eol=lf</code>.
+                    </div>
+                </li>
+
+                <li>
+                    <h3>Going further: a data-fetching workflow</h3>
+                    <p>
+                        You can also use Actions to <em>generate data</em> that Jekyll reads at build time. This
+                        project does exactly that - a scheduled workflow pulls GitHub Releases into
+                        <code class="code-inline">_data/releases.json</code>, then triggers a rebuild.
+                    </p>
+                    <div class="code-block">
+                        <div class="code-block-header"><span>.github/workflows/fetch-releases.yml (excerpt)</span></div>
+                        <pre><code class="language-yaml">on:
+  schedule:
+    - cron: "0 */6 * * *"        # every 6 hours
+  release:
+    types: [published, edited]
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: main }
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const releases = await github.paginate(
+              github.rest.repos.listReleases,
+              { owner: context.repo.owner, repo: context.repo.repo, per_page: 100 }
+            );
+            fs.mkdirSync('_data', { recursive: true });
+            fs.writeFileSync('_data/releases.json',
+              JSON.stringify(releases, null, 2));
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add _data/releases.json
+          git diff --staged --quiet || git commit -m "chore: update data"
+          git push</code></pre>
+                    </div>
+                </li>
+            </ol>
+
+            <div class="note-box">
+                <strong>Why not just build locally?</strong> You can - commit the <code
+                    class="code-inline">_site/</code>
+                folder and point Pages at it. But Actions gives you reproducible builds, no local Ruby required, and
+                a clean repo. It's the recommended path.
+            </div>
+        </section>
+
         <section class="section page-section" id="custom-domain">
             <h2>Using a Custom Domain</h2>
-            <p>You can use your own domain name (like <code class="code-inline">yourdomain.com</code>) with GitHub
-                Pages:</p>
+            <p>
+                You can serve your site from your own domain (e.g.
+                <code class="code-inline">yourdomain.com</code>) instead of the default
+                <code class="code-inline">*.github.io</code> address.
+            </p>
 
             <div class="card-grid">
                 <div class="card">
-                    <div class="card-header">Step 1: Buy a Domain</div>
+                    <div class="card-header">Step 1 - Buy a domain</div>
                     <div class="card-body">
-                        <p>Purchase a domain from:</p>
-                        <ul style="padding-left: 1.5rem;">
+                        <ul class="feature-list">
                             <li>Namecheap</li>
-                            <li>GoDaddy</li>
-                            <li>Google Domains</li>
-                            <li>Cloudflare</li>
+                            <li>Cloudflare Registrar</li>
+                            <li>Porkbun</li>
+                            <li>Google Domains / Squarespace</li>
                         </ul>
-                        <p>Prices range from $10-15/year for a .com domain.</p>
+                        <p>Prices are typically <strong>$10-15/year</strong> for a <code
+                                class="code-inline">.com</code>.</p>
                     </div>
                 </div>
 
                 <div class="card">
-                    <div class="card-header">Step 2: Add CNAME File</div>
+                    <div class="card-header">Step 2 - Add a CNAME file</div>
                     <div class="card-body">
-                        <p>In your repository, create a file named <code class="code-inline">CNAME</code> (all caps)
-                            with one line:</p>
+                        <p>In your repo root, create a file called <code class="code-inline">CNAME</code> (no extension)
+                            containing just your domain:</p>
                         <div class="code-block">
                             <pre><code class="language-bash">yourdomain.com</code></pre>
                         </div>
-                        <p>Or if you want www:</p>
+                        <p>Or, if you want the <code class="code-inline">www</code> subdomain:</p>
                         <div class="code-block">
                             <pre><code class="language-bash">www.yourdomain.com</code></pre>
                         </div>
-                        <p>Commit this file to your repository.</p>
                     </div>
                 </div>
 
                 <div class="card">
-                    <div class="card-header">Step 3: Configure DNS</div>
+                    <div class="card-header">Step 3 - Configure DNS</div>
                     <div class="card-body">
-                        <p>In your domain registrar's DNS settings, add:</p>
-                        <ul style="padding-left: 1.5rem;">
-                            <li>
-                                <strong>A records</strong> pointing to:
-                                <div class="code-block">
-                                    <pre><code class="language-bash">185.199.108.153
+                        <p>At your registrar's DNS panel, add:</p>
+                        <p><strong>A records</strong> pointing to GitHub's IPs:</p>
+                        <div class="code-block">
+                            <pre><code class="language-bash">185.199.108.153
 185.199.109.153
 185.199.110.153
 185.199.111.153</code></pre>
-                                </div>
-                            </li>
-                            <li>
-                                Or a <strong>CNAME record</strong> pointing to:
-                                <div class="code-block">
-                                    <pre><code class="language-bash">username.github.io</code></pre>
-                                </div>
-                            </li>
-                        </ul>
+                        </div>
+                        <p>&hellip;or a <strong>CNAME record</strong> for <code class="code-inline">www</code> pointing
+                            to:</p>
+                        <div class="code-block">
+                            <pre><code class="language-bash">username.github.io</code></pre>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <div class="note-box">
-                <strong>Note:</strong> DNS changes can take up to 48 hours to propagate globally. GitHub will
-                automatically provision an SSL certificate for your custom domain.
+                <strong>HTTPS:</strong> GitHub will automatically provision a Let's Encrypt certificate for your
+                custom domain. This can take up to 24 hours after DNS propagates. Enable
+                <em>Enforce HTTPS</em> in <strong>Settings &rarr; Pages</strong> once it's available.
             </div>
 
             <div class="interactive-element">
-                <h3>Verify HTTPS on Custom Domain</h3>
-                <p>After setting up your custom domain, GitHub will automatically enable HTTPS. Check:</p>
-                <ol style="padding-left: 1.5rem;">
-                    <li>Wait a few minutes after DNS propagation</li>
-                    <li>Visit <code class="code-inline">https://yourdomain.com</code></li>
-                    <li>Look for the padlock icon in your browser's address bar</li>
-                    <li>If it doesn't work immediately, wait up to 24 hours for SSL provisioning</li>
-                </ol>
+                <h3>Verify it worked</h3>
+
+                <div class="code-block" data-os="windows">
+                    <pre><code class="language-powershell"># Should return the GitHub Pages IPs
+nslookup yourdomain.com
+
+# PowerShell-native alternative with more detail
+Resolve-DnsName yourdomain.com
+
+# Should return a 200
+curl.exe -I https://yourdomain.com
+
+# Should show the TLS certificate details
+curl.exe -vI https://yourdomain.com</code></pre>
+                </div>
+
+                <div class="code-block" data-os="linux">
+                    <pre><code class="language-bash"># Should return the GitHub Pages IPs
+dig +short yourdomain.com
+
+# Should return a 200
+curl -I https://yourdomain.com
+
+# Should return your SSL certificate details
+openssl s_client -connect yourdomain.com:443 -servername yourdomain.com &lt; /dev/null</code></pre>
+                </div>
             </div>
         </section>
 
-        <!-- SECTION: troubleshooting (404, CSS/JS, updates) -->
         <section class="section page-section" id="troubleshooting">
-            <h2>Common Issues & Troubleshooting</h2>
+            <h2>Common Issues &amp; Troubleshooting</h2>
 
             <div class="card-grid">
                 <div class="card">
-                    <div class="card-header" style="background: var(--danger);">404 Error</div>
+                    <div class="card-header card-header-danger">404 - Page Not Found</div>
                     <div class="card-body">
-                        <p><strong>Problem:</strong> "Page not found" when visiting your site.</p>
                         <p><strong>Solutions:</strong></p>
-                        <ul style="padding-left: 1.5rem;">
-                            <li>Make sure repository is named correctly: <code
-                                    class="code-inline">username.github.io</code></li>
-                            <li>Check that GitHub Pages is enabled in Settings → Pages</li>
-                            <li>Ensure you have an <code class="code-inline">index.html</code> file</li>
-                            <li>Wait 1-2 minutes after enabling Pages</li>
+                        <ul class="feature-list">
+                            <li>Repo must be named <code class="code-inline">username.github.io</code> (for user sites)
+                            </li>
+                            <li>Pages must be enabled under <strong>Settings &rarr; Pages</strong></li>
+                            <li>You need an <code class="code-inline">index.html</code> in the published folder</li>
+                            <li>Wait 1-2 minutes after first enabling Pages</li>
+                            <li>Check the <strong>Actions</strong> tab for build failures</li>
                         </ul>
                     </div>
                 </div>
 
                 <div class="card">
-                    <div class="card-header" style="background: var(--warning);">CSS/JS Not Loading</div>
+                    <div class="card-header card-header-warning">CSS / JS Not Loading</div>
                     <div class="card-body">
-                        <p><strong>Problem:</strong> Styles or scripts aren't working.</p>
                         <p><strong>Solutions:</strong></p>
-                        <ul style="padding-left: 1.5rem;">
-                            <li>Check file paths are correct (case-sensitive!)</li>
-                            <li>Use relative paths: <code class="code-inline">href="css/style.css"</code></li>
-                            <li>Clear browser cache (Ctrl+F5 or Cmd+Shift+R)</li>
-                            <li>Check browser console for errors (F12)</li>
+                        <ul class="feature-list">
+                            <li>Paths are <em>case-sensitive</em> on Linux servers</li>
+                            <li>Use <code class="code-inline">relative_url</code> in Jekyll:
+                                <code class="code-inline">{{ '/assets/css/style.css' | relative_url }}</code>
+                            </li>
+                            <li>Hard-refresh the browser (<kbd>Ctrl</kbd>+<kbd>F5</kbd> /
+                                <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>R</kbd>)
+                            </li>
+                            <li>Open DevTools (<kbd>F12</kbd>) &rarr; Console for errors</li>
+                        </ul>
+                        <p class="note-box" data-os="windows">
+                            Windows filesystems are <em>case-insensitive</em>. A file saved as
+                            <code class="code-inline">Style.css</code> will load fine locally and then 404 on GitHub
+                            Pages. Rename files in lowercase from the start.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header card-header-info">Updates Not Showing</div>
+                    <div class="card-body">
+                        <p><strong>Solutions:</strong></p>
+                        <ul class="feature-list">
+                            <li>Builds take 1-2 minutes - wait and refresh</li>
+                            <li>Check the <strong>Actions</strong> tab for the latest run</li>
+                            <li>Clear browser cache or try an incognito window</li>
+                            <li>Confirm your branch is the one Pages is deploying from</li>
                         </ul>
                     </div>
                 </div>
 
                 <div class="card">
-                    <div class="card-header" style="background: var(--info);">Updates Not Showing</div>
+                    <div class="card-header card-header-danger">Jekyll Build Failures</div>
                     <div class="card-body">
-                        <p><strong>Problem:</strong> Changes aren't visible on live site.</p>
-                        <p><strong>Solutions:</strong></p>
-                        <ul style="padding-left: 1.5rem;">
-                            <li>GitHub Pages builds take 1-2 minutes</li>
-                            <li>Check Actions tab for build status</li>
-                            <li>Clear browser cache</li>
-                            <li>Try incognito/private browsing mode</li>
+                        <p>Common causes and how to fix them:</p>
+                        <ul class="feature-list">
+                            <li><strong>YAML syntax error</strong> - check <code class="code-inline">_config.yml</code>
+                                and front matter for stray colons or tabs</li>
+                            <li><strong>Liquid tag mismatch</strong> - every <code class="code-inline">{% if %}</code>
+                                needs a matching <code class="code-inline">{% endif %}</code></li>
+                            <li><strong>Missing plugin</strong> - only plugins in
+                                <a href="https://pages.github.com/versions/" target="_blank" rel="noopener">this
+                                    list</a>
+                                are allowed with GitHub's hosted builder
+                            </li>
+                            <li><strong>Case-sensitive paths</strong> - <code class="code-inline">Layouts/</code>
+                                and <code class="code-inline">layouts/</code> are not the same thing</li>
+                        </ul>
+                        <p class="note-box">
+                            Using the Actions workflow above sidesteps the plugin whitelist entirely, because the
+                            build runs on your own runner rather than GitHub's Pages builder.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header card-header-warning">Custom Domain Not Working</div>
+                    <div class="card-body">
+                        <ul class="feature-list">
+                            <li>DNS propagation can take up to 48 hours</li>
+                            <li>Confirm the <code class="code-inline">CNAME</code> file is in the published folder</li>
+                            <li>Check for old A records pointing elsewhere</li>
+                            <li>Ensure you don't have conflicting <code class="code-inline">AAAA</code> records</li>
+                            <li>Re-run your DNS lookup to confirm the IPs have updated</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header card-header-info">Slow or Stale Builds</div>
+                    <div class="card-body">
+                        <ul class="feature-list">
+                            <li>Enable <code class="code-inline">incremental: true</code> in
+                                <code class="code-inline">_config.yml</code> (local only)
+                            </li>
+                            <li>Cache gems with <code class="code-inline">bundler-cache: true</code> in Actions</li>
+                            <li>Use <code class="code-inline">concurrency</code> in workflows to cancel outdated runs
+                            </li>
+                            <li>Keep <code class="code-inline">_site/</code> out of git via
+                                <code class="code-inline">.gitignore</code>
+                            </li>
                         </ul>
                     </div>
                 </div>
             </div>
 
-            <!-- debugging commands -->
             <div class="interactive-element">
-                <h3>Quick Debugging Commands</h3>
-                <p>Use these commands to check your site's status:</p>
-                <div class="code-block">
-                    <pre><code class="language-bash"># Check if site is accessible
+                <h3>Debugging cheat-sheet</h3>
+
+                <div class="code-block" data-os="windows">
+                    <pre><code class="language-powershell"># Is the site reachable?
+curl.exe -I https://username.github.io
+
+# Where does the DNS point?
+nslookup yourdomain.com
+Resolve-DnsName yourdomain.com
+
+# What certificate is being served?
+curl.exe -vI https://yourdomain.com
+
+# What does the local build produce?
+bundle exec jekyll build --trace
+
+# Serve with verbose output
+bundle exec jekyll serve --verbose</code></pre>
+                </div>
+
+                <div class="code-block" data-os="linux">
+                    <pre><code class="language-bash"># Is the site reachable?
 curl -I https://username.github.io
 
-# Check DNS for custom domain
-nslookup yourdomain.com
+# Where does the DNS point?
+dig +short yourdomain.com
 
-# Check SSL certificate
-openssl s_client -connect yourdomain.com:443</code></pre>
+# What certificate is being served?
+openssl s_client -connect yourdomain.com:443 -servername yourdomain.com &lt; /dev/null
+
+# What does the local build produce?
+bundle exec jekyll build --trace
+
+# Serve with verbose output
+bundle exec jekyll serve --verbose</code></pre>
                 </div>
-            </div>
 
-            <div class="warning-box">
-                <strong>Build Failures:</strong> If your site fails to build, check the Actions tab in your repository
-                for error messages. Common issues include Jekyll build errors or syntax errors in configuration files.
+                <p data-os="windows">
+                    Prefer the Unix tools? <strong>Git Bash</strong> (installed with Git for Windows) gives you
+                    <code class="code-inline">dig</code>, <code class="code-inline">openssl</code> and a real
+                    <code class="code-inline">curl</code> - the Linux column above works verbatim inside it.
+                </p>
             </div>
         </section>
 
-        <!-- SECTION: resources + further learning + final CTA button -->
         <section class="section page-section" id="resources">
-            <h2>Resources & Further Learning</h2>
+            <h2>Resources &amp; Further Learning</h2>
 
             <div class="card-grid">
                 <div class="card">
                     <div class="card-header">Official Documentation</div>
                     <div class="card-body">
                         <ul class="resources-list">
-                            <li><span class="github-icon"></span> <a href="https://pages.github.com"
-                                    target="_blank">GitHub
-                                    Pages Official Site</a></li>
-                            <li><span class="github-icon"></span> <a href="https://docs.github.com/en/pages"
-                                    target="_blank">GitHub Pages Docs</a></li>
-                            <li><span class="github-icon"></span> <a
-                                    href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site"
-                                    target="_blank">Custom Domain Guide</a></li>
-                            <li><span class="github-icon"></span> <a href="https://jekyllrb.com/docs/github-pages/"
-                                    target="_blank">Jekyll on GitHub Pages</a></li>
+                            <li><a href="https://pages.github.com" target="_blank" rel="noopener">GitHub Pages -
+                                    official site</a></li>
+                            <li><a href="https://docs.github.com/en/pages" target="_blank" rel="noopener">GitHub Pages
+                                    documentation</a></li>
+                            <li><a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site"
+                                    target="_blank" rel="noopener">Custom domain guide</a></li>
+                            <li><a href="https://jekyllrb.com/docs/" target="_blank" rel="noopener">Jekyll
+                                    documentation</a></li>
+                            <li><a href="https://jekyllrb.com/docs/github-pages/" target="_blank" rel="noopener">Jekyll
+                                    on GitHub Pages</a></li>
+                            <li><a href="https://pages.github.com/versions/" target="_blank" rel="noopener">Approved
+                                    GitHub Pages plugins</a></li>
                         </ul>
                     </div>
                 </div>
@@ -488,76 +1416,166 @@ openssl s_client -connect yourdomain.com:443</code></pre>
                     <div class="card-header">Learning Resources</div>
                     <div class="card-body">
                         <ul class="resources-list">
-                            <li><span class="github-icon"></span> <a href="https://www.w3schools.com/html/"
-                                    target="_blank">W3Schools HTML Tutorial</a></li>
-                            <li><span class="github-icon"></span> <a href="https://www.w3schools.com/css/"
-                                    target="_blank">W3Schools CSS Tutorial</a></li>
-                            <li><span class="github-icon"></span> <a
-                                    href="https://guides.github.com/activities/hello-world/" target="_blank">GitHub
-                                    Hello World Guide</a></li>
-                            <li><span class="github-icon"></span> <a
-                                    href="https://www.freecodecamp.org/news/git-and-github-for-beginners/"
-                                    target="_blank">Git & GitHub for Beginners</a></li>
+                            <li><a href="https://www.w3schools.com/html/" target="_blank" rel="noopener">W3Schools
+                                    - HTML</a></li>
+                            <li><a href="https://www.w3schools.com/css/" target="_blank" rel="noopener">W3Schools
+                                    - CSS</a></li>
+                            <li><a href="https://developer.mozilla.org/en-US/docs/Learn" target="_blank"
+                                    rel="noopener">MDN - Learn Web Development</a></li>
+                            <li><a href="https://guides.github.com/activities/hello-world/" target="_blank"
+                                    rel="noopener">GitHub Hello World guide</a></li>
+                            <li><a href="https://www.freecodecamp.org/news/git-and-github-for-beginners/"
+                                    target="_blank" rel="noopener">Git &amp; GitHub for beginners</a></li>
+                            <li><a href="https://shopify.github.io/liquid/" target="_blank" rel="noopener">Liquid
+                                    template language</a></li>
                         </ul>
                     </div>
                 </div>
 
                 <div class="card">
-                    <div class="card-header">Example Sites</div>
+                    <div class="card-header">Themes &amp; Examples</div>
                     <div class="card-body">
                         <ul class="resources-list">
-                            <li><span class="github-icon"></span> <a href="https://github.com/pages-themes"
-                                    target="_blank">GitHub Pages Themes</a></li>
-                            <li><span class="github-icon"></span> <a
-                                    href="https://github.com/collections/github-pages-examples" target="_blank">GitHub
-                                    Pages Examples</a></li>
-                            <li><span class="github-icon"></span> <a href="https://chalwk.github.io/" target="_blank">My
-                                    GitHub Pages Site</a> (this site!)
-                            </li>
-                            <li><span class="github-icon"></span> <a
-                                    href="https://jekyllthemes.io/github-pages-templates" target="_blank">Jekyll
-                                    Templates</a></li>
+                            <li><a href="https://github.com/pages-themes" target="_blank" rel="noopener">Official GitHub
+                                    Pages themes</a></li>
+                            <li><a href="https://github.com/collections/github-pages-examples" target="_blank"
+                                    rel="noopener">GitHub Pages examples</a></li>
+                            <li><a href="https://jekyllthemes.io/github-pages-templates" target="_blank"
+                                    rel="noopener">Jekyll themes gallery</a></li>
+                            <li><a href="https://github.com/jekyll/jekyll" target="_blank" rel="noopener">Jekyll on
+                                    GitHub</a></li>
+                            <li><a href="https://github.com/Chalwk/chalwk.github.io" target="_blank" rel="noopener">This project's source
+                                    (Chalwk)</a></li>
                         </ul>
                     </div>
                 </div>
             </div>
 
-            <!-- next steps / advanced features -->
             <div class="interactive-element">
                 <h3>Next Steps</h3>
-                <p>Once you have a basic site, consider:</p>
                 <div class="card-grid">
                     <div class="card">
                         <div class="card-header">Advanced Features</div>
                         <div class="card-body">
-                            <ul style="padding-left: 1.5rem;">
-                                <li>Using Jekyll for blogging</li>
-                                <li>Adding Google Analytics</li>
-                                <li>Implementing a contact form (with Formspree or similar)</li>
-                                <li>Adding a custom 404 page</li>
+                            <ul class="feature-list">
+                                <li>Use Jekyll for blogging (<code class="code-inline">_posts/</code>)</li>
+                                <li>Add Google Analytics or Plausible</li>
+                                <li>Wire up a contact form (Formspree, Netlify Forms)</li>
+                                <li>Create a custom <code class="code-inline">404.html</code></li>
+                                <li>Add an RSS feed via <code class="code-inline">jekyll-feed</code></li>
+                                <li>Enable <code class="code-inline">jekyll-seo-tag</code> and <code
+                                        class="code-inline">jekyll-sitemap</code></li>
+                                <li>Turn the site into a PWA with a <code class="code-inline">manifest.json</code>,
+                                    icon set, and a service worker</li>
                             </ul>
                         </div>
                     </div>
                     <div class="card">
                         <div class="card-header">Development Tips</div>
                         <div class="card-body">
-                            <ul style="padding-left: 1.5rem;">
-                                <li>Use Git locally for version control</li>
-                                <li>Set up a local development server</li>
-                                <li>Learn about responsive design</li>
-                                <li>Explore GitHub Actions for CI/CD</li>
+                            <ul class="feature-list">
+                                <li>Always work on a branch, merge via PR</li>
+                                <li>Test locally before pushing</li>
+                                <li>Keep <code class="code-inline">_site/</code> out of Git</li>
+                                <li>Use GitHub Actions for CI/CD</li>
+                                <li>Learn responsive design with <code class="code-inline">clamp()</code> and
+                                    CSS grid</li>
+                                <li>Prefer <code class="code-inline">relative_url</code> filters to hard-coded paths
+                                </li>
+                                <li>Route every outbound link through <code class="code-inline">site.links</code> so
+                                    URLs change in one place</li>
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- call-to-action button -->
-            <div style="text-align: center; margin: 2rem 0;">
-                <a class="page-btn" href="https://github.com/new" target="_blank">
-                    <i class="fab fa-github"></i> Create Your GitHub Pages Site Now
+            <div class="cta-row">
+                <a class="page-btn" href="https://github.com/new" target="_blank" rel="noopener">
+                    Create Your GitHub Pages Site Now
+                </a>
+                <a class="page-btn page-btn-outline" href="https://jekyllrb.com/docs/" target="_blank" rel="noopener">
+                    Read the Jekyll Docs
                 </a>
             </div>
         </section>
     </div>
 </main>
+
+<script>
+    (function () {
+        const bar = document.getElementById('read-progress');
+        if (!bar) return;
+
+        function update() {
+            const doc = document.documentElement;
+            const scrollable = doc.scrollHeight - doc.clientHeight;
+            const pct = scrollable > 0 ? (doc.scrollTop / scrollable) * 100 : 0;
+            bar.style.width = pct + '%';
+        }
+        document.addEventListener('scroll', update, { passive: true });
+        window.addEventListener('resize', update);
+        update();
+    })();
+
+    (function () {
+        const links = Array.from(document.querySelectorAll('.toc-list a[href^="#"]'));
+        const targets = links
+            .map(a => document.getElementById(a.getAttribute('href').slice(1)))
+            .filter(Boolean);
+        if (!targets.length || !('IntersectionObserver' in window)) return;
+
+        const linkFor = new Map();
+        targets.forEach((t, i) => linkFor.set(t, links[i]));
+
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const link = linkFor.get(entry.target);
+                if (!link) return;
+                if (entry.isIntersecting) {
+                    links.forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+                }
+            });
+        }, { rootMargin: '-20% 0px -70% 0px' });
+
+        targets.forEach(t => io.observe(t));
+    })();
+
+    (function () {
+        const root = document.documentElement;
+        const buttons = Array.from(document.querySelectorAll('.os-btn[data-os-set]'));
+        if (!buttons.length) return;
+
+        const STORAGE_KEY = 'ghp-guide-os';
+        const VALID = ['windows', 'linux'];
+
+        function apply(os, persist) {
+            if (VALID.indexOf(os) === -1) os = 'windows';
+
+            root.setAttribute('data-os', os);
+
+            buttons.forEach(function (btn) {
+                const active = btn.getAttribute('data-os-set') === os;
+                btn.classList.toggle('is-active', active);
+                btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+            });
+
+            if (persist) {
+                try { localStorage.setItem(STORAGE_KEY, os); } catch (e) { /* ignore */ }
+            }
+        }
+
+        let saved = null;
+        try { saved = localStorage.getItem(STORAGE_KEY); } catch (e) { /* ignore */ }
+
+        apply(VALID.indexOf(saved) !== -1 ? saved : 'windows', false);
+
+        buttons.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                apply(btn.getAttribute('data-os-set'), true);
+            });
+        });
+    })();
+</script>
+{% endraw %}
