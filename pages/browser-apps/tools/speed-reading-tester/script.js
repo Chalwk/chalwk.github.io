@@ -411,7 +411,7 @@
         });
         const minutes = storyElapsedSeconds / 60;
         const wpm = minutes > 0 ? Math.round(storyWordsCount / minutes) : 0;
-        comprehensionScore.innerHTML = `<span class="wpm-badge" style="background:var(--primary)">${wpm} WPM</span> &nbsp; Comprehension: ${correct}/${story.questions.length} correct.`;
+        comprehensionScore.innerHTML = `<span class="wpm-badge" style="background:var(--primary)">${wpm} WPM</span> Comprehension: ${correct}/${story.questions.length} correct.`;
     });
 
     tabRSVP.addEventListener('click', () => {
