@@ -6,9 +6,11 @@ permalink: /pages/privacy-policy/crisis-planner/
 
 <!-- Copyright (c) 2026 Jericho Crosby (Chalwk). All rights reserved. -->
 
-**Crisis Planner** is a personal crisis-planning app for Android. This policy
-explains exactly what the app does and does not do with your information. It
-applies to anyone who installs and uses the app.
+**Crisis Planner** is a personal crisis-planning app for Android, built for
+people in New Zealand. This policy explains exactly what the app does and
+does not do with your information, and which regions its built-in crisis
+resources are intended to serve. It applies to anyone who installs and uses
+the app.
 
 <div class="privacy-callout">
 <strong>Short version:</strong> Crisis Planner does not collect, transmit, or
@@ -17,13 +19,27 @@ contacts, safety information, and mood check-ins - is stored only on your
 device and never leaves it unless you deliberately export it.
 </div>
 
-| Detail             | Value                      |
-| ------------------ | -------------------------- |
-| **App**            | Crisis Planner (Android)   |
-| **Package**        | `com.chalwk.crisisplanner` |
-| **Developer**      | Jericho Crosby (Chalwk)    |
-| **Effective date** | 23 October 2026            |
-| **Last updated**   | 23 October 2026            |
+<div class="privacy-callout privacy-callout-nz">
+<strong>Designed for New Zealand.</strong> The crisis resources built into
+Crisis Planner - emergency services on <strong>111</strong>, the Need to Talk
+helpline on <strong>1737</strong>, the Suicide Crisis Helpline on
+<strong>0508 828 865</strong>, and the regional crisis lines and specialist
+helplines in the Resources tab - are all New Zealand services. They will not
+work outside New Zealand, and dialing <strong>111</strong> in other countries
+will not reach emergency services there. If you are outside New Zealand,
+please use your country's own emergency number and local crisis services.
+See <a href="#where-the-app-is-intended-to-be-used">Where the app is
+intended to be used</a> below.
+</div>
+
+| Detail              | Value                                               |
+| ------------------- | --------------------------------------------------- |
+| **App**             | Crisis Planner (Android)                            |
+| **Package**         | `com.chalwk.crisisplanner`                          |
+| **Developer**       | Jericho Crosby (Chalwk)                             |
+| **Intended region** | New Zealand (built-in crisis resources are NZ-only) |
+| **Effective date**  | 23 October 2026                                     |
+| **Last updated**    | 23 October 2026                                     |
 
 ---
 
@@ -34,6 +50,31 @@ mental health information, emergency contacts, medical notes. The app has
 been designed so that **no one, including the developer, can see any of it**.
 This page sets that out in detail, because a privacy claim is only meaningful
 if you can check it.
+
+## Where the app is intended to be used
+
+Crisis Planner is built specifically for people in New Zealand. The crisis
+resources it surfaces are New Zealand services:
+
+- emergency services on **111**;
+- the Need to Talk helpline on **1737** (free, 24/7 counselling);
+- the Suicide Crisis Helpline on **0508 828 865**;
+- Lifeline, Healthline, and the regional crisis lines and specialist
+  helplines listed in the app's Resources tab.
+
+These numbers do not work outside New Zealand, and the equivalent numbers in
+other countries are different. Dialing 111 in Australia, the United States,
+the United Kingdom, most of Europe, or anywhere else outside New Zealand
+will not connect you to emergency services. The app does not include, and
+cannot be used as a substitute for, crisis resources in any country other
+than New Zealand.
+
+The personal side of the app - your crisis plan, contacts, safety
+information, and mood history - can be used anywhere. But if you are outside
+New Zealand, you will need to ignore the built-in crisis numbers and use the
+appropriate services for your location instead.
+
+If you are in New Zealand and in immediate danger, call **111**.
 
 ## Information we collect
 
@@ -75,10 +116,10 @@ safety information, and mood history are **not** uploaded to Google's servers
 as part of Android Backup, and they are **not** included in any automatic
 cloud sync.
 
-Android's *device-to-device transfer* - the flow used when you set up a
-new phone - is permitted, so that you can move your plan to a new device
-without retyping it. That transfer goes directly between your two devices and
-does not pass through any server controlled by the developer.
+Android's *device-to-device transfer* - the flow used when you set up a new
+phone - is permitted, so that you can move your plan to a new device without
+retyping it. That transfer goes directly between your two devices and does
+not pass through any server controlled by the developer.
 
 ## Sharing and external actions
 
@@ -88,13 +129,13 @@ never transmits data off your device.
 The app provides features that can deliberately expose information when *you*
 choose to use them:
 
-| Feature                                | What happens                                                                                                                                                          |
-| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Call a number (hotlines, contacts)** | The app opens your phone's dialer with the number pre-filled. The app does not place the call and does not see whether you complete it.                               |
-| **Text a contact**                     | The app opens your messaging app with the number pre-filled. Nothing is sent until you press send inside your messaging app.                                          |
-| **Share or copy the handover summary** | Only when you tap Share or Copy. What you share, and with whom, is entirely your choice.                                                                              |
-| **Export plan as JSON**                | Only when you choose Export. You pick where the file goes using Android's standard file picker. The file contains the plan data in plain text - store it accordingly. |
-| **Import plan from JSON**              | Only when you choose Import and select a file. The app reads that file, and nothing else.                                                                             |
+| Feature                                | What happens                                                                                                                                                                                                                 |
+| -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Call a number (hotlines, contacts)** | The app opens your phone's dialer with the number pre-filled. The app does not place the call and does not see whether you complete it. The built-in crisis numbers are New Zealand services only and do not work elsewhere. |
+| **Text a contact**                     | The app opens your messaging app with the number pre-filled. Nothing is sent until you press send inside your messaging app.                                                                                                 |
+| **Share or copy the handover summary** | Only when you tap Share or Copy. What you share, and with whom, is entirely your choice.                                                                                                                                     |
+| **Export plan as JSON**                | Only when you choose Export. You pick where the file goes using Android's standard file picker. The file contains the plan data in plain text - store it accordingly.                                                        |
+| **Import plan from JSON**              | Only when you choose Import and select a file. The app reads that file, and nothing else.                                                                                                                                    |
 {: .rules-table}
 
 In every case above, the action is initiated by you. The developer receives
@@ -107,8 +148,8 @@ networks, no analytics providers, no crash reporting services, no
 social-media integrations, and no other SDKs that would process your data.
 
 The only third parties involved are the standard Android system components
-- your dialer, your messaging app, the system file picker, and the
-share sheet - that you already use for other apps on your phone.
+- your dialer, your messaging app, the system file picker, and the share
+sheet - that you already use for other apps on your phone.
 
 ## Data retention and deletion
 
@@ -117,11 +158,12 @@ it:
 
 - you can edit or delete individual plan items, contacts, and notes inside
   the app at any time;
-- you can reset the entire plan, or reset only the "what's happening right
-  now" section, from the app's menus;
+- you can reset the entire plan from the **Settings** dialog, or reset only
+  the "what's happening right now" section from the **Now** screen;
 - uninstalling the app removes all of its data from your device;
 - on Android 13 and later, you can also clear the app's storage from
-  **Settings &rarr; Apps &rarr; Crisis Planner &rarr; Storage &rarr; Clear storage**.
+  **Settings &rarr; Apps &rarr; Crisis Planner &rarr; Storage &rarr; Clear
+  storage**.
 
 No copy of your data exists anywhere else, so deletion is immediate and
 complete.
@@ -152,18 +194,21 @@ not a substitute for professional mental-health care, diagnosis, or treatment.
 It does not monitor you, does not detect a crisis, and does not contact
 anyone on your behalf.
 
-If you are in immediate danger, call **111**. If you need to talk to someone
-now, call or text **1737** (free, 24/7) or call the Suicide Crisis Helpline on
-**0508 828 865**.
+If you are in New Zealand and in immediate danger, call **111**. If you need
+to talk to someone now, call or text **1737** (free, 24/7) or call the
+Suicide Crisis Helpline on **0508 828 865**. These numbers are New Zealand
+services only - see "Where the app is intended to be used" above. If you are
+outside New Zealand, use your country's own emergency number and local
+crisis services instead.
 
 ## Changes to this policy
 
-If the app's data practices ever change - for example, if a future
-version adds an optional feature that transmits data - this policy will
-be updated before that version is published, and the "Last updated" date at
-the top of this page will change. The current version of this policy is
-always available at the URL you are reading now, and a link to it is also
-provided inside the app.
+If the app's data practices ever change - for example, if a future version
+adds an optional feature that transmits data, or adds crisis resources for
+another region - this policy will be updated before that version is
+published, and the "Last updated" date at the top of this page will change.
+The current version of this policy is always available at the URL you are
+reading now, and a link to it is also provided inside the app.
 
 ## Contact
 
@@ -191,5 +236,20 @@ document and does not itself set cookies, run scripts, or use analytics.*
 
 .privacy-callout strong {
     color: var(--darker);
+}
+
+.privacy-callout-nz {
+    background: rgba(217, 119, 6, 0.10);
+    border-left: 4px solid #D97706;
+}
+
+.privacy-callout-nz strong {
+    color: #92400E;
+}
+
+.privacy-callout a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
 }
 </style>
