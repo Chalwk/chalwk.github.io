@@ -14,22 +14,25 @@ the app.
 
 <div class="privacy-callout">
 <strong>Short version:</strong> Crisis Planner does not collect, transmit, or
-share any personal information. Everything you enter - your crisis plan,
-contacts, safety information, and mood check-ins - is stored only on your
-device and never leaves it unless you deliberately export it.
+share any personal information. Everything you enter, including your crisis
+plan, contacts, safety information, address, mood check-ins, and archived
+episodes, is stored only on your device and never leaves it unless you
+deliberately export it.
 </div>
 
 <div class="privacy-callout privacy-callout-nz">
 <strong>Designed for New Zealand.</strong> The crisis resources built into
-Crisis Planner - emergency services on <strong>111</strong>, the Need to Talk
-helpline on <strong>1737</strong>, the Suicide Crisis Helpline on
-<strong>0508 828 865</strong>, and the regional crisis lines and specialist
-helplines in the Resources tab - are all New Zealand services. They will not
-work outside New Zealand, and dialing <strong>111</strong> in other countries
-will not reach emergency services there. If you are outside New Zealand,
-please use your country's own emergency number and local crisis services.
-See <a href="#where-the-app-is-intended-to-be-used">Where the app is
-intended to be used</a> below.
+Crisis Planner, including emergency services on <strong>111</strong>, the
+Need to Talk helpline on <strong>1737</strong>, the Suicide Crisis Helpline
+on <strong>0508 828 865</strong>, and the regional crisis lines and
+specialist helplines in the Resources tab, are all New Zealand services. The
+app also explains the NZ emergency text service on 111 (registration
+required), but that is still an NZ service. These numbers will not work
+outside New Zealand, and dialing <strong>111</strong> in other countries will
+not reach emergency services there. If you are outside New Zealand, please
+use your country's own emergency number and local crisis services. See
+<a href="#where-the-app-is-intended-to-be-used">Where the app is intended to
+be used</a> below.
 </div>
 
 | Detail              | Value                                               |
@@ -45,11 +48,12 @@ intended to be used</a> below.
 
 ## Why this policy exists
 
-The content you put into a crisis-planning app is inherently sensitive -
-mental health information, emergency contacts, medical notes. The app has
-been designed so that **no one, including the developer, can see any of it**.
-This page sets that out in detail, because a privacy claim is only meaningful
-if you can check it.
+The content you put into a crisis-planning app is inherently sensitive:
+mental health information, emergency contacts, medical notes, and, if you
+choose to add it, your home address. The app has been designed so that
+**no one, including the developer, can see any of it**. This page sets that
+out in detail, because a privacy claim is only meaningful if you can check
+it.
 
 ## Where the app is intended to be used
 
@@ -69,12 +73,20 @@ will not connect you to emergency services. The app does not include, and
 cannot be used as a substitute for, crisis resources in any country other
 than New Zealand.
 
-The personal side of the app - your crisis plan, contacts, safety
-information, and mood history - can be used anywhere. But if you are outside
-New Zealand, you will need to ignore the built-in crisis numbers and use the
-appropriate services for your location instead.
+The app will show an in-app warning banner if your device region is not New
+Zealand, pointing out that the built-in numbers will not work locally. The
+banner is a heuristic, based on your device's default locale. It is a
+reminder, not a guarantee.
 
-If you are in New Zealand and in immediate danger, call **111**.
+The personal side of the app, including your crisis plan, contacts, safety
+information, address, and mood history, can be used anywhere. But if you are
+outside New Zealand, you will need to ignore the built-in crisis numbers and
+use the appropriate services for your location instead.
+
+If you are in New Zealand and in immediate danger, call **111**. If you
+cannot speak, New Zealand's emergency text service on 111 is available for
+Deaf, hard-of-hearing, and speech-impaired users who have registered in
+advance with Police.
 
 ## Information we collect
 
@@ -95,24 +107,37 @@ Specifically, the app:
   access to your data, and they are only referenced when the optional
   biometric lock is on. No other Android permissions are requested.
 
+The optional screen-hiding feature (`FLAG_SECURE`) does not require any
+permission. It only tells Android to blank the app's content in the recents
+screen and to block screenshots. It does not enable the app to read anything
+it could not already read.
+
 ## Information stored on your device
 
 Everything you create in the app is stored locally in the app's private
 storage area, which other apps cannot read. This includes:
 
-- the steps and suggestions in your crisis plan, across all levels;
-- emergency contacts you add (name, phone number, and relationship, if you
-  choose to enter it);
-- safety information you choose to record (GP or support-worker notes,
-  diagnoses, medications, means-restriction notes, and reasons for living);
+- the steps you have recorded in your crisis plan, across all levels;
+- emergency contacts you add (name, phone number, relationship, an optional
+  pre-written text message you choose to attach to them, and an optional
+  plan level telling the handover summary when to show the contact);
+- safety information you choose to record, including GP or support-worker
+  notes, diagnoses, medications, allergies, NHI number, means-restriction
+  notes, reasons for living, **your address, and a "how to help me" note**;
 - notes about what is happening right now, when you use that section;
-- your mood check-in history;
-- your display settings (theme, text size, contrast, and whether the
-  optional biometric lock is on);
+- your mood check-in history, including the optional tags and notes you
+  attach to each check-in;
+- **archived episodes**. When you tap "Start new episode", the currently
+  recorded steps and notes are copied into a past episode so the handover
+  for the next one starts clean;
+- your display settings (theme, text size, whether the optional
+  biometric lock is on, and whether the optional screen-hiding feature is
+  on);
 - your name, if you choose to enter it.
 
 This data is used **only** to display the plan back to you inside the app and
-to generate the handover summary, plan view, or pocket card that you ask for.
+to generate the handover summary, plan view, pocket card, or can't-speak
+script that you ask for.
 
 ## Optional biometric lock
 
@@ -141,15 +166,28 @@ described in this policy. It does not change what data the app stores, where
 it stores it, or whether that data ever leaves the device. Those answers
 remain the same whether the lock is on or off.
 
+## Optional screen hiding
+
+Crisis Planner offers an optional "Hide in recents" setting, off by default.
+When on, it applies Android's `FLAG_SECURE` to the app's window. This:
+
+- blanks the app's content in the recent-apps switcher;
+- blocks screenshots and screen recording of the app.
+
+It does not stop someone who has already unlocked your phone from opening
+the app. It only reduces the chance of your plan showing up in a screenshot
+or on the recents screen. It also does not add any permissions and does not
+change what the app stores.
+
 ## Android backup and device transfer
 
 The app explicitly opts out of Android's cloud backup. Your plan, contacts,
-safety information, and mood history are **not** uploaded to Google's servers
-as part of Android Backup, and they are **not** included in any automatic
-cloud sync.
+safety information, address, and mood history are **not** uploaded to
+Google's servers as part of Android Backup, and they are **not** included in
+any automatic cloud sync.
 
-Android's *device-to-device transfer* - the flow used when you set up a new
-phone - is permitted, so that you can move your plan to a new device without
+Android's *device-to-device transfer*, the flow used when you set up a new
+phone, is permitted, so that you can move your plan to a new device without
 retyping it. That transfer goes directly between your two devices and does
 not pass through any server controlled by the developer.
 
@@ -164,9 +202,10 @@ choose to use them:
 | Feature                                | What happens                                                                                                                                                                                                                 |
 | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Call a number (hotlines, contacts)** | The app opens your phone's dialer with the number pre-filled. The app does not place the call and does not see whether you complete it. The built-in crisis numbers are New Zealand services only and do not work elsewhere. |
-| **Text a contact**                     | The app opens your messaging app with the number pre-filled. Nothing is sent until you press send inside your messaging app.                                                                                                 |
+| **Text a contact**                     | The app opens your messaging app with the number and, if you have one, your pre-written message pre-filled. Nothing is sent until you press send inside your messaging app.                                                  |
+| **Show the can't-speak script**        | The app shows a full-screen card with the script text, your address, and your how-to-help note. It does not send anything. It is for you to show to someone in the room.                                                     |
 | **Share or copy the handover summary** | Only when you tap Share or Copy. What you share, and with whom, is entirely your choice.                                                                                                                                     |
-| **Export plan as JSON**                | Only when you choose Export. You pick where the file goes using Android's standard file picker. The file contains the plan data in plain text - store it accordingly.                                                        |
+| **Export plan as JSON**                | Only when you choose Export and dismiss the warning that the file is unencrypted. You pick where the file goes using Android's standard file picker. The file contains the plan data in plain text, so store it accordingly. |
 | **Import plan from JSON**              | Only when you choose Import and select a file. The app reads that file, and nothing else.                                                                                                                                    |
 {: .rules-table}
 
@@ -179,10 +218,11 @@ The app does not use any third-party services. It contains no advertising
 networks, no analytics providers, no crash reporting services, no
 social-media integrations, and no other SDKs that would process your data.
 
-The only third parties involved are the standard Android system components
-- your dialer, your messaging app, the system file picker, the share sheet,
-and the system biometric prompt - that you already use for other apps on
-your phone.
+The only third parties involved are the standard Android system components,
+specifically your dialer, your messaging app, the system file picker, the
+share sheet, the system biometric prompt, and the OS-level window flags that
+provide `FLAG_SECURE`. These are standard Android parts, not external
+services, and they do not receive copies of your data.
 
 ## Data retention and deletion
 
@@ -191,24 +231,32 @@ it:
 
 - you can edit or delete individual plan items, contacts, and notes inside
   the app at any time;
-- you can reset the entire plan from the **Settings** dialog, or reset only
+- you can archive the current episode from the Plan screen, or delete a past
+  episode from the Past episodes section;
+- you can clear all plan data from the **Settings** dialog, or reset only
   the "what's happening right now" section from the **Now** screen;
-- you can turn the optional biometric lock off from **Settings**;
+- you can turn the optional biometric lock and the optional screen-hiding
+  setting off from **Settings**;
 - uninstalling the app removes all of its data from your device;
-- on Android 13 and later, you can also clear the app's storage from
-  **Settings &rarr; Apps &rarr; Crisis Planner &rarr; Storage &rarr; Clear
-  storage**.
+- you can also clear the app's storage from **Settings &rarr; Apps &rarr;
+  Crisis Planner &rarr; Storage &rarr; Clear storage** (the exact wording
+  and menu path vary slightly by Android version).
 
 No copy of your data exists anywhere else, so deletion is immediate and
 complete.
 
 ## Children's privacy
 
-The app is not directed at children under 13. It does not knowingly collect
-personal information from anyone, including children, because it does not
-collect personal information at all. If you are a parent or guardian and
-believe a child has used the app to record crisis information, you can clear
-the app's data at any time from the device settings as described above.
+The app is not directed at children. It is a personal crisis-planning tool,
+written for adults and for people old enough to be managing their own mental
+health. It does not knowingly collect personal information from anyone,
+including children, because it does not collect personal information at all.
+Some of the crisis resources it lists are for young people (What's Up and
+Youthline), but that does not make the app itself a service for children.
+
+If you are a parent or guardian and believe a child has used the app to
+record crisis information, you can clear the app's data at any time from the
+device settings as described above.
 
 ## Security
 
@@ -219,14 +267,24 @@ Planner's private storage) are what protect your plan.
 
 The optional biometric lock adds a further layer: it prevents someone who has
 picked up your unlocked phone from opening Crisis Planner and reading your
-plan, contacts, or safety information. Because the check is performed by the
-Android system and nothing about it is recorded by the app, turning the lock
-on does not create any new place where your information, or any hint of it,
-is stored.
+plan, contacts, address, or safety information. Because the check is
+performed by the Android system and nothing about it is recorded by the app,
+turning the lock on does not create any new place where your information, or
+any hint of it, is stored.
+
+The optional screen-hiding setting reduces the risk of your plan appearing in
+a screenshot or on the recents screen. It does not replace the lock, and it
+is off by default.
+
+The app does **not** currently encrypt its local storage beyond the
+protection Android's app sandbox already provides. If you want
+defence-in-depth, keep your device's screen lock on and keep device
+encryption on (which is the default on modern Android).
 
 Please keep those protections in place. If you share your handover summary by
 text or email, or export your plan to a file, remember that the content is no
-longer protected by the app.
+longer protected by the app. Exported files are plain text JSON and are not
+encrypted.
 
 ## Medical disclaimer
 
@@ -238,15 +296,15 @@ anyone on your behalf.
 If you are in New Zealand and in immediate danger, call **111**. If you need
 to talk to someone now, call or text **1737** (free, 24/7) or call the
 Suicide Crisis Helpline on **0508 828 865**. These numbers are New Zealand
-services only - see "Where the app is intended to be used" above. If you are
+services only. See "Where the app is intended to be used" above. If you are
 outside New Zealand, use your country's own emergency number and local
 crisis services instead.
 
 ## Changes to this policy
 
-If the app's data practices ever change - for example, if a future version
+If the app's data practices ever change, for example if a future version
 adds an optional feature that transmits data, or adds crisis resources for
-another region - this policy will be updated before that version is
+another region, this policy will be updated before that version is
 published, and the "Last updated" date at the top of this page will change.
 The current version of this policy is always available at the URL you are
 reading now, and a link to it is also provided inside the app.
