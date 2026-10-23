@@ -89,7 +89,11 @@ Specifically, the app:
   SDKs of any kind;
 - does **not** access your location, camera, microphone, contacts list, photos,
   or files unless you explicitly select a file to import;
-- does **not** request any Android runtime permissions.
+- does **not** request any Android runtime permissions. The only permissions
+  the app declares are `USE_BIOMETRIC` and `USE_FINGERPRINT`. Both are
+  install-time normal permissions: they never prompt you, they grant no
+  access to your data, and they are only referenced when the optional
+  biometric lock is on. No other Android permissions are requested.
 
 ## Information stored on your device
 
@@ -103,11 +107,39 @@ storage area, which other apps cannot read. This includes:
   diagnoses, medications, means-restriction notes, and reasons for living);
 - notes about what is happening right now, when you use that section;
 - your mood check-in history;
-- your display settings (theme, text size, contrast, motion);
+- your display settings (theme, text size, contrast, and whether the
+  optional biometric lock is on);
 - your name, if you choose to enter it.
 
 This data is used **only** to display the plan back to you inside the app and
 to generate the handover summary, plan view, or pocket card that you ask for.
+
+## Optional biometric lock
+
+Crisis Planner offers an optional biometric lock, off by default. When it is
+on, opening the app asks Android to confirm your fingerprint, face, or
+device lock-screen credential before your plan is shown. The lock re-engages
+any time the app has been in the background, so briefly leaving the app and
+coming back is enough to require a new check.
+
+The check is handled entirely by the Android system on your device, through
+the platform's standard biometric prompt. The app never sees, receives,
+stores, or transmits your biometric data. There is no fingerprint image, no
+template, no pattern, and no PIN recorded by the app. The app only learns
+whether the system said "yes" or "no" to a particular unlock attempt, and
+that result is not logged, saved, or sent anywhere. Nothing about your
+authentication is attached to your plan, your contacts, or your mood history.
+
+You can turn the lock on or off at any time from **Settings**. Turning it on
+first checks that your device can actually authenticate you (a fingerprint,
+face, or screen lock is enrolled) and refuses with an inline message if it
+cannot, so the lock cannot be enabled in a state where you would be unable
+to get back in.
+
+The biometric lock is an extra layer on top of the protections already
+described in this policy. It does not change what data the app stores, where
+it stores it, or whether that data ever leaves the device. Those answers
+remain the same whether the lock is on or off.
 
 ## Android backup and device transfer
 
@@ -148,8 +180,9 @@ networks, no analytics providers, no crash reporting services, no
 social-media integrations, and no other SDKs that would process your data.
 
 The only third parties involved are the standard Android system components
-- your dialer, your messaging app, the system file picker, and the share
-sheet - that you already use for other apps on your phone.
+- your dialer, your messaging app, the system file picker, the share sheet,
+and the system biometric prompt - that you already use for other apps on
+your phone.
 
 ## Data retention and deletion
 
@@ -160,6 +193,7 @@ it:
   the app at any time;
 - you can reset the entire plan from the **Settings** dialog, or reset only
   the "what's happening right now" section from the **Now** screen;
+- you can turn the optional biometric lock off from **Settings**;
 - uninstalling the app removes all of its data from your device;
 - on Android 13 and later, you can also clear the app's storage from
   **Settings &rarr; Apps &rarr; Crisis Planner &rarr; Storage &rarr; Clear
@@ -182,6 +216,13 @@ Because the app never transmits data off the device, the main security
 boundary is your device itself: your screen lock, your device encryption, and
 Android's app sandboxing (which prevents other apps from reading Crisis
 Planner's private storage) are what protect your plan.
+
+The optional biometric lock adds a further layer: it prevents someone who has
+picked up your unlocked phone from opening Crisis Planner and reading your
+plan, contacts, or safety information. Because the check is performed by the
+Android system and nothing about it is recorded by the app, turning the lock
+on does not create any new place where your information, or any hint of it,
+is stored.
 
 Please keep those protections in place. If you share your handover summary by
 text or email, or export your plan to a file, remember that the content is no
