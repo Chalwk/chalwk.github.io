@@ -123,7 +123,8 @@ storage area, which other apps cannot read. This includes:
   plan level telling the handover summary when to show the contact);
 - safety information you choose to record, including GP or support-worker
   notes, diagnoses, medications, allergies, NHI number, means-restriction
-  notes, reasons for living, **your address, and a "how to help me" note**;
+  notes, reasons for living, **your address, a "how to help me" note, and
+  the editable headline and message shown on the can't-speak card**;
 - notes about what is happening right now, when you use that section;
 - your mood check-in history, including the optional tags and notes you
   attach to each check-in;
@@ -203,7 +204,7 @@ choose to use them:
 | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Call a number (hotlines, contacts)** | The app opens your phone's dialer with the number pre-filled. The app does not place the call and does not see whether you complete it. The built-in crisis numbers are New Zealand services only and do not work elsewhere. |
 | **Text a contact**                     | The app opens your messaging app with the number and, if you have one, your pre-written message pre-filled. Nothing is sent until you press send inside your messaging app.                                                  |
-| **Show the can't-speak script**        | The app shows a full-screen card with the script text, your address, and your how-to-help note. It does not send anything. It is for you to show to someone in the room.                                                     |
+| **Show the can't-speak script**        | The app shows a full-screen card with your custom headline and message, your address, and your how-to-help note. Nothing is sent; it is for you to show to someone in the room.                                              |
 | **Share or copy the handover summary** | Only when you tap Share or Copy. What you share, and with whom, is entirely your choice.                                                                                                                                     |
 | **Export plan as JSON**                | Only when you choose Export and dismiss the warning that the file is unencrypted. You pick where the file goes using Android's standard file picker. The file contains the plan data in plain text, so store it accordingly. |
 | **Import plan from JSON**              | Only when you choose Import and select a file. The app reads that file, and nothing else.                                                                                                                                    |
