@@ -17,6 +17,7 @@ app is licensed to you.
 | --------------- | ------------------------------------------------------- | -------------------------------------------------- |
 | HearMeOut-AAC   | [View policy](/pages/policies/HearMeOut-AAC/PRIVACY/)   | [View EULA](/pages/policies/HearMeOut-AAC/EULA/)   |
 | CrisisPlannerNZ | [View policy](/pages/policies/CrisisPlannerNZ/PRIVACY/) | [View EULA](/pages/policies/CrisisPlannerNZ/EULA/) |
+| PooDiction      | [View policy](/pages/policies/PooDiction/PRIVACY/)      | [View EULA](/pages/policies/PooDiction/EULA/)      |
 
 If you have a question that isn't answered in the relevant policy or EULA, email
 <{{ site.links.Email }}>.
