@@ -1,4 +1,8 @@
-# HearMeOut-AAC End User Licence Agreement
+---
+layout: page
+title: End User Licence Agreement - HearMeOut-AAC
+permalink: /pages/policies/HearMeOut-AAC/EULA/
+---
 
 **Version 1.0 - Last updated: 2 November 2026**
 

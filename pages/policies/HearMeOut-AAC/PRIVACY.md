@@ -1,4 +1,8 @@
-# Privacy Policy - HearMeOut-AAC
+---
+layout: page
+title: Privacy Policy - HearMeOut-AAC
+permalink: /pages/policies/HearMeOut-AAC/PRIVACY/
+---
 
 **Last updated: 2 November 2026**
 
