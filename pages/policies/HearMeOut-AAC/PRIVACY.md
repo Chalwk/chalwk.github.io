@@ -4,11 +4,11 @@ title: Privacy Policy - HearMeOut-AAC
 permalink: /pages/policies/HearMeOut-AAC/PRIVACY/
 ---
 
-**Last updated: 2 November 2026**
+**Last updated: 3 November 2026**
 
 This policy applies to HearMeOut-AAC, published by Jericho Crosby (Chalwk)
-("the Developer") on Google Play and as release files on the project's GitHub
-Releases page. The app is an augmentative and alternative communication (AAC) tool.
+("the Developer") on Google Play. The app is an augmentative and alternative
+communication (AAC) tool.
 
 ## Summary
 
@@ -50,9 +50,7 @@ activity occurs. In particular:
 - The app does not contact any server operated by the Developer.
 - The app does not send crash reports, diagnostics, or usage data.
 - The app does not download updates, remote configuration, or advertising. It
-  never updates itself. If you installed it from Google Play, updates come
-  through Google Play. If you installed it from GitHub, you install updates
-  yourself by downloading a newer release.
+  never updates itself. Updates come through Google Play.
 
 If you add an image by URL, your device requests that image from whoever hosts
 it. That host can see your device's IP address and normal request details, as
@@ -63,7 +61,7 @@ clear the app's storage or uninstall it.
 
 If you never paste a remote image URL, the app never opens a network connection.
 
-The About screen has links to this policy, the EULA, and the source licence.
+The About screen has links to this policy and the End User Licence Agreement.
 They open in your web browser, which makes its own network connection. The app
 itself does not.
 
@@ -76,8 +74,8 @@ locally or remotely is decided by the engine and its provider, not by this app.
 The app passes only the plain text of your phrase to the engine. If you are
 concerned, check your engine's settings and privacy policy.
 
-Google Play and GitHub, where you can download the app, handle your downloads
-under their own privacy policies. The app does not send them anything.
+Google Play, where you download the app, handles your download under its own
+privacy policy. The app does not send it anything.
 
 ## Backup, export, and data transfer
 
@@ -116,9 +114,8 @@ New Zealand Privacy Act 2020), please get in touch using the contact below.
 
 ## Changes to this policy
 
-If this policy changes, the "Last updated" date at the top will change and the
-previous version will remain available in the project's public Git history at
-<https://github.com/Chalwk/HearMeOut-AAC>
+If this policy changes, the "Last updated" date at the top will change. Earlier
+versions are available on request from the contact below.
 
 ## Contact
 
