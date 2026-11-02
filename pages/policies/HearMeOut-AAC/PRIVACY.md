@@ -1,15 +1,10 @@
----
-layout: page
-title: HearMeOut-AAC Privacy Policy
-permalink: /pages/policies/HearMeOut-AAC/PRIVACY/
----
+# Privacy Policy - HearMeOut-AAC
 
 **Last updated: 2 November 2026**
 
-This policy applies to HearMeOut-AAC, distributed by Jericho Crosby (Chalwk)
-("the Developer") through Google Play and, for invited individuals, through
-the official GitHub Releases page of the Developer's private repository. The
-app is an augmentative and alternative communication (AAC) tool.
+This policy applies to HearMeOut-AAC, published by Jericho Crosby (Chalwk)
+("the Developer") on Google Play and as release files on the project's GitHub
+Releases page. The app is an augmentative and alternative communication (AAC) tool.
 
 ## Summary
 
@@ -50,9 +45,10 @@ activity occurs. In particular:
 
 - The app does not contact any server operated by the Developer.
 - The app does not send crash reports, diagnostics, or usage data.
-- The app does not download updates, remote configuration, or advertising.
-  Updates come only through Google Play or, if you were given access to the
-  Developer's private repository, through its official GitHub Releases page.
+- The app does not download updates, remote configuration, or advertising. It
+  never updates itself. If you installed it from Google Play, updates come
+  through Google Play. If you installed it from GitHub, you install updates
+  yourself by downloading a newer release.
 
 If you add an image by URL, your device requests that image from whoever hosts
 it. That host can see your device's IP address and normal request details, as
@@ -63,6 +59,10 @@ clear the app's storage or uninstall it.
 
 If you never paste a remote image URL, the app never opens a network connection.
 
+The About screen has links to this policy, the EULA, and the source licence.
+They open in your web browser, which makes its own network connection. The app
+itself does not.
+
 ## Third-party services
 
 The app uses no analytics, advertising, or tracking services. It uses your
@@ -71,6 +71,9 @@ by a voice engine you have installed. Whether that engine processes speech
 locally or remotely is decided by the engine and its provider, not by this app.
 The app passes only the plain text of your phrase to the engine. If you are
 concerned, check your engine's settings and privacy policy.
+
+Google Play and GitHub, where you can download the app, handle your downloads
+under their own privacy policies. The app does not send them anything.
 
 ## Backup, export, and data transfer
 
@@ -110,8 +113,8 @@ New Zealand Privacy Act 2020), please get in touch using the contact below.
 ## Changes to this policy
 
 If this policy changes, the "Last updated" date at the top will change and the
-previous version will remain available in the public Git history of this policy
-at https://chalwk.github.io/pages/policies/HearMeOut-AAC/PRIVACY/
+previous version will remain available in the project's public Git history at
+<https://github.com/Chalwk/HearMeOut-AAC>
 
 ## Contact
 
@@ -120,4 +123,4 @@ Questions about privacy: **chalwk.dev@gmail.com**
 ---
 
 *This privacy policy forms part of the HearMeOut-AAC End User Licence
-Agreement (https://chalwk.github.io/pages/policies/HearMeOut-AAC/EULA/).*
+Agreement (<https://chalwk.github.io/pages/policies/HearMeOut-AAC/EULA/>).*
