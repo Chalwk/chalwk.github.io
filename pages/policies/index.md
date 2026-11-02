@@ -13,10 +13,10 @@ app - not a shared template. A privacy policy describes what an app does and
 does not do with your information; an EULA sets out the terms on which that
 app is licensed to you.
 
-| App           | Privacy policy                                        | End User Licence Agreement                       |
-| ------------- | ----------------------------------------------------- | ------------------------------------------------ |
-| HearMeOut-AAC | [View policy](/pages/policies/HearMeOut-AAC/PRIVACY/) | [View EULA](/pages/policies/HearMeOut-AAC/EULA/) |
-| CrisisPlanner | [View policy](/pages/policies/CrisisPlanner/PRIVACY/) | -                                                |
+| App             | Privacy policy                                          | End User Licence Agreement                         |
+| --------------- | ------------------------------------------------------- | -------------------------------------------------- |
+| HearMeOut-AAC   | [View policy](/pages/policies/HearMeOut-AAC/PRIVACY/)   | [View EULA](/pages/policies/HearMeOut-AAC/EULA/)   |
+| CrisisPlannerNZ | [View policy](/pages/policies/CrisisPlannerNZ/PRIVACY/) | [View EULA](/pages/policies/CrisisPlannerNZ/EULA/) |
 
 If you have a question that isn't answered in the relevant policy or EULA, email
 <{{ site.links.Email }}>.
