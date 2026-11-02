@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Crisis Planner Privacy Policy
-permalink: /pages/privacy-policy/crisis-planner/
+permalink: /pages/policies/CrisisPlanner/PRIVACY/
 ---
 
 <!-- Copyright (c) 2026 Jericho Crosby (Chalwk). All rights reserved. -->
