@@ -8,8 +8,8 @@ permalink: /pages/policies/CrisisPlannerNZ/EULA/
 
 This End User Licence Agreement ("EULA") governs your use of the compiled
 CrisisPlannerNZ application distributed by Jericho Crosby (Chalwk) through
-Google Play (the "App"). It licenses the compiled App only and grants no
-rights in the App's source code, which is not published.
+Google Play (the "App"). It licenses the compiled App only and grants no rights
+in the App's source code, which is not published.
 
 By installing or using the App, you agree to this EULA. If you do not agree, do
 not install or use the App.
@@ -20,45 +20,44 @@ under it.
 
 ## 1. Licence granted
 
-Subject to your compliance with this EULA, the Developer grants you a **personal,
-non-exclusive, non-transferable, non-sublicensable** licence to install and run
-the App on devices that you own or control, for personal crisis planning and
-for other non-commercial purposes. The App is free, and the Developer does not
-charge for this licence.
+Subject to your compliance with this EULA, the Developer grants you a
+**personal, non-exclusive, non-transferable, non-sublicensable** licence to
+install and run the App on devices that you own or control, or that an
+organisation supporting you controls (including by using device-management
+tools), for personal crisis planning and for other non-commercial purposes. The
+App is free, and the Developer does not charge for this licence.
 
-You may obtain the App only from Google Play. You may install it on any devices
-that you own or control, or that an organisation supporting you controls
-(including by using device-management tools). Copies from any other source are
+You may obtain the App only from Google Play. Copies from any other source are
 not licensed under this EULA.
 
 For the avoidance of doubt, this licence includes the right to:
 
 (a) use the App to record and maintain your personal crisis plan, including by
-allowing a family member, carer, therapist, counsellor, support worker,
-teacher, or other person operating the device at your direction to interact
-with the App on your behalf;
+allowing a family member, carer, therapist, counsellor, support worker, teacher,
+or other person operating the device at your direction to interact with the App
+on your behalf;
 
-(b) use the App in your everyday life, including at work or school, for
-personal crisis planning; and
+(b) use the App in your everyday life, including at work or school, for personal
+crisis planning; and
 
 (c) install the App on shared devices owned or controlled by you, your
-household, or an organisation that supports you (such as a school, clinic,
-or care provider), so that the App can be used by the people that
-organisation serves, provided the App itself is provided free of charge.
+household, or an organisation that supports you (such as a school, clinic, or
+care provider), so that the App can be used by the people that organisation
+serves, provided the App itself is provided free of charge.
 
 Professionals such as therapists, counsellors, mental-health workers, and
 support workers may use the App as a tool in their work with clients. They may
-charge for their own services, but may not charge for the App itself or sell
-it, bundle it, or make access to it a paid feature.
+charge for their own services, but may not charge for the App itself or sell it,
+bundle it, or make access to it a paid feature.
 
 ## 2. Restrictions
 
-You may not, except to the extent that applicable law expressly permits and
-that cannot be excluded by agreement:
+You may not, except to the extent that applicable law expressly permits and that
+cannot be excluded by agreement:
 
-(a) copy, reproduce, distribute, sublicense, rent, lease, lend, or sell the
-App or any part of it, other than installing it from Google Play as
-described in Section 1;
+(a) copy, reproduce, distribute, sublicense, rent, lease, lend, or sell the App
+or any part of it, other than installing it from Google Play as described in
+Section 1;
 
 (b) modify, adapt, translate, or create derivative works of the App;
 
@@ -71,9 +70,9 @@ notice in or on the App;
 (e) sell, charge for, or otherwise commercialise the App or access to it, or
 include it as part of a paid product or service; or
 
-(f) use the name "CrisisPlannerNZ" (or any confusingly similar name), the
-App's icon, or other brand assets in connection with any modified version,
-derivative work, or other product or service.
+(f) use the name "CrisisPlannerNZ" (or any confusingly similar name), the App's
+icon, or other brand assets in connection with any modified version, derivative
+work, or other product or service.
 
 ## 3. Ownership and third-party components
 
@@ -88,8 +87,8 @@ Nothing in this EULA limits your rights under those licences.
 ## 4. Privacy
 
 The App collects no personal data. See the Privacy Policy
-(<https://chalwk.github.io/pages/policies/CrisisPlannerNZ/PRIVACY/>), which forms
-part of this EULA.
+(<https://chalwk.github.io/pages/policies/CrisisPlannerNZ/PRIVACY/>), which
+forms part of this EULA.
 
 ## 5. Updates and changes
 
@@ -117,16 +116,19 @@ AVAILABLE", without warranty of any kind, express or implied, including the
 warranties of merchantability, fitness for a particular purpose, and
 non-infringement.
 
-**The App is a personal crisis-planning tool, not a medical device, and must
-not be relied upon as a substitute for professional mental-health care or as a
-sole means of responding to a crisis.** It is not a substitute for professional
+**The App is a personal crisis-planning tool, not a medical device, and must not
+be relied upon as a substitute for professional mental-health care or as a sole
+means of responding to a crisis.** It is not a substitute for professional
 assessment or advice. In an emergency, call **111** (or your local emergency
 number if you are outside New Zealand), or contact one of the crisis lines
-listed in the App. The Developer does not warrant that the App will be
-uninterrupted, error-free, or available at any particular time, or that its
-built-in crisis resources will always be current or accurate. Pre-release (beta)
-builds, such as those offered through Google Play testing tracks, are provided
-for testing and may be less stable than full releases.
+listed in the App.
+
+The Developer does not warrant that the App will be uninterrupted, error-free,
+or available at any particular time, or that its built-in crisis resources will
+always be current or accurate.
+
+Pre-release (beta) builds, such as those offered through Google Play testing
+tracks, are provided for testing and may be less stable than full releases.
 
 ## 8. Limitation of liability
 
@@ -157,5 +159,6 @@ have under the laws of the country where you live.
 ## 11. Contact
 
 Jericho Crosby (Chalwk)
-Email: chalwk.dev@gmail.com
-Discord: chalwk
+
+- Email: chalwk.dev@gmail.com
+- Discord: chalwk

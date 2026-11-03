@@ -4,20 +4,20 @@ title: Privacy Policy - CrisisPlannerNZ
 permalink: /pages/policies/CrisisPlannerNZ/PRIVACY/
 ---
 
-**Last updated: 3 November 2026**
+**Version 1.0 - Last updated: 3 November 2026**
 
 This policy applies to CrisisPlannerNZ, published by Jericho Crosby (Chalwk)
 ("the Developer") on Google Play. The app is a personal crisis-planning app for
 Android, built for people in New Zealand.
 
-## Summary
+## 1. Summary
 
-**The app collects no personal information about anyone.**
-There is no account system, no analytics, no advertising, and no telemetry. The
-app does not transmit anything you enter off your device. Everything you enter,
-including your crisis plan, contacts, safety information, address, mood
-check-ins, and archived episodes, is stored only on your device and never leaves
-it unless you deliberately export or share it.
+**The app collects no personal information about anyone.** There is no account
+system, no analytics, no advertising, and no telemetry. The app does not
+transmit anything you enter off your device. Everything you enter, including
+your crisis plan, contacts, safety information, address, mood check-ins, and
+archived episodes, is stored only on your device and never leaves it unless you
+deliberately export or share it.
 
 **Designed for New Zealand.** The built-in crisis resources, including emergency
 services on **111**, the Need to Talk helpline on **1737**, the Suicide Crisis
@@ -39,7 +39,7 @@ speak, New Zealand's emergency text service on 111 is available for Deaf,
 hard-of-hearing, and speech-impaired users who have registered in advance with
 Police.
 
-## Data stored on your device
+## 2. Data stored on your device
 
 The app stores the following in its own private storage area, which Android
 protects from other apps:
@@ -65,13 +65,9 @@ protects from other apps:
 
 None of this is sent anywhere by the app. It is used only to display the plan
 back to you inside the app and to generate the handover summary, plan view,
-pocket card, or can't-speak script that you ask for. When you uninstall the app,
-Android removes its data from your device. On some Android versions the uninstall
-flow may offer to keep the app's data; if you accept, it stays on your device
-until you delete it. To remove it before then, clear the app's storage in
-Android's settings (Settings → Apps → CrisisPlannerNZ → Storage → Clear
-storage; the exact wording and menu path vary slightly by Android version). No
-copy of your data exists anywhere else, so deletion is immediate and complete.
+pocket card, or can't-speak script that you ask for.
+
+## 3. Device access and security
 
 Anyone who can unlock and use your device can use the app and see this
 information, unless you turn on the optional biometric lock. The biometric lock,
@@ -87,24 +83,25 @@ The optional "Hide in recents" setting, also off by default, applies Android's
 block screenshots and screen recording. It does not stop someone who has already
 unlocked your phone from opening the app.
 
-The only permissions the app declares are `USE_BIOMETRIC` and
-`USE_FINGERPRINT`. Both are install-time normal permissions: they never prompt
-you, they grant no access to your data, and they are only referenced when the
-optional biometric lock is on. No other Android permissions are requested. The
-optional screen-hiding feature does not require any permission.
-
 The app does not currently encrypt its local storage beyond the protection
 Android's app sandbox already provides. If you want defence-in-depth, keep your
 device's screen lock on and keep device encryption on, which is the default on
 modern Android.
 
-## Network activity
+## 4. Permissions
+
+The only permissions the app declares are `USE_BIOMETRIC` and `USE_FINGERPRINT`.
+Both are install-time normal permissions: they never prompt you, they grant no
+access to your data, and they are only referenced when the optional biometric
+lock is on. No other Android permissions are requested. The optional
+screen-hiding feature does not require any permission.
+
+## 5. Network activity
 
 The app does not request any network permission and does not open any network
-connection. It does not contact any server operated by the Developer. It does
-not send crash reports, diagnostics, or usage data. It does not download
-updates, remote configuration, or advertising. It never updates itself. Updates
-come through Google Play.
+connection. It does not contact any server operated by the Developer, send crash
+reports, diagnostics, or usage data, or download updates, remote configuration,
+or advertising. It never updates itself; updates come through Google Play.
 
 Some features deliberately hand off to other apps on your device. Calling a
 number opens your phone's dialer with the number pre-filled; the app does not
@@ -123,10 +120,10 @@ Nothing is sent; it is for you to show to someone in the room.
 The Settings dialog has a link to this policy. It opens in your web browser,
 which makes its own network connection. The app itself does not.
 
-## Third-party services
+## 6. Third-party services
 
-The app uses no analytics, advertising, or tracking services. It uses no crash
-reporting services, social-media integrations, or other SDKs that would process
+The app uses no analytics, advertising, or tracking services, no crash reporting
+services, no social-media integrations, and no other SDKs that would process
 your data. The only third parties involved are standard Android system
 components: your dialer, your messaging app, the system file picker, the share
 sheet, the system biometric prompt, and the OS-level window flags that provide
@@ -136,7 +133,7 @@ do not receive copies of your data.
 Google Play, where you download the app, handles your download under its own
 privacy policy. The app does not send it anything.
 
-## Backup, export, and data transfer
+## 7. Backup, export, and data transfer
 
 The app excludes all of its data from Android cloud backup, so Android's backup
 system (for example, backup to your Google account) does not upload it.
@@ -153,40 +150,57 @@ after you dismiss a warning that the file is unencrypted. That file contains
 your plan, contacts, safety information, mood history, archived episodes, and
 settings in plain text. If you save it to a cloud-synced folder, send it to
 someone, or store it somewhere shared, it is then handled by that service or
-person, not by this app. Treat the file as personal.
-
-The **Import** feature reads only the file you select.
+person, not by this app. Treat the file as personal. The **Import** feature
+reads only the file you select.
 
 If you share or copy the handover summary, what you share and with whom is
 entirely your choice. Once shared, it is handled by the app or service you
-shared it with, not by this app. Exported files are plain text JSON and are not
-encrypted.
+shared it with, not by this app.
 
-## Children
+## 8. Children
 
-The app can be used by children and adults. Because it does not collect personal
-information from anyone, it does not collect personal information from
+The app can be used by children and adults. Because the app does not collect
+personal information from anyone, it does not collect personal information from
 children. It includes no advertising, no accounts, and no automatic sharing
-features. Parents, carers, and teachers should be aware of the export behaviour
-described above if they set up the app for a child.
+features.
 
-## Your rights
+Parents, carers, and teachers should be aware of the export behaviour described
+in Section 7 if they set up the app for a child. Parents and guardians can clear
+the app's data at any time from Android's settings, as described in Section 9.
+
+## 9. Your rights
 
 Because the Developer holds no data about you, there is nothing to access,
 correct, or delete on the Developer's side. You control everything stored on
-your device. You can delete it by clearing the app's storage, or by choosing to
-delete the app's data when you uninstall it. If you have a privacy question, or
-believe privacy law gives you rights that apply here (for example under the
-New Zealand Privacy Act 2020), please get in touch using the contact below.
+your device.
 
-## Changes to this policy
+When you uninstall the app, Android removes its data from your device. The the
+uninstall flow on some Android versions may offer to keep the app's data; if you
+accept, it stays on your device (and comes back if you reinstall the app) until
+you delete it. To remove it for good, choose to delete the data when
+uninstalling, or clear the app's storage in Android's settings (Settings → Apps
+→ CrisisPlannerNZ → Storage → Clear storage; the exact wording and menu path
+vary slightly by Android version).
+
+Files you have exported are separate copies, which you must delete yourself.
+Apart from those, no copy of your data exists anywhere else, so deletion is
+immediate and complete.
+
+If you have a privacy question, or believe privacy law gives you rights that
+apply here (for example under the New Zealand Privacy Act 2020), please get in
+touch using the contact in Section 11.
+
+## 10. Changes to this policy
 
 If this policy changes, the "Last updated" date at the top will change. Earlier
 versions are available on request from the contact below.
 
-## Contact
+## 11. Contact
 
-Questions about privacy: **chalwk.dev@gmail.com**
+Questions about privacy can be sent to Jericho Crosby (Chalwk):
+
+- Email: chalwk.dev@gmail.com
+- Discord: chalwk
 
 ---
 

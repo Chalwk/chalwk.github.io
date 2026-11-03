@@ -7,9 +7,9 @@ permalink: /pages/policies/HearMeOut-AAC/EULA/
 **Version 1.0 - Last updated: 3 November 2026**
 
 This End User Licence Agreement ("EULA") governs your use of the compiled
-HearMeOut-AAC application distributed by Jericho Crosby (Chalwk) through
-Google Play (the "App"). It licenses the compiled App only and grants no
-rights in the App's source code, which is not published.
+HearMeOut-AAC application distributed by Jericho Crosby (Chalwk) through Google
+Play (the "App"). It licenses the compiled App only and grants no rights in the
+App's source code, which is not published.
 
 By installing or using the App, you agree to this EULA. If you do not agree, do
 not install or use the App.
@@ -20,30 +20,29 @@ under it.
 
 ## 1. Licence granted
 
-Subject to your compliance with this EULA, the Developer grants you a **personal,
-non-exclusive, non-transferable, non-sublicensable** licence to install and run
-the App on devices that you own or control, to communicate and for other
-non-commercial purposes. The App is free, and the Developer does not charge for
-this licence.
+Subject to your compliance with this EULA, the Developer grants you a
+**personal, non-exclusive, non-transferable, non-sublicensable** licence to
+install and run the App on devices that you own or control, or that an
+organisation supporting you controls (including by using device-management
+tools), to communicate and for other non-commercial purposes. The App is free,
+and the Developer does not charge for this licence.
 
-You may obtain the App only from Google Play. You may install it on any devices
-that you own or control, or that an organisation supporting you controls
-(including by using device-management tools). Copies from any other source are
+You may obtain the App only from Google Play. Copies from any other source are
 not licensed under this EULA.
 
 For the avoidance of doubt, this licence includes the right to:
 
 (a) use the App to communicate, including by allowing a family member, carer,
-therapist, support worker, teacher, or other person operating the device
-at your direction to interact with the App on your behalf;
+therapist, support worker, teacher, or other person operating the device at your
+direction to interact with the App on your behalf;
 
 (b) use the App in your everyday life, including at work or school, to
 communicate; and
 
 (c) install the App on shared devices owned or controlled by you, your
-household, or an organisation that supports you (such as a school, clinic,
-or care provider), so that the App can be used by the people that
-organisation serves, provided the App itself is provided free of charge.
+household, or an organisation that supports you (such as a school, clinic, or
+care provider), so that the App can be used by the people that organisation
+serves, provided the App itself is provided free of charge.
 
 Professionals such as speech-language therapists, teachers, and support workers
 may use the App as a tool in their work with clients. They may charge for their
@@ -52,12 +51,12 @@ make access to it a paid feature.
 
 ## 2. Restrictions
 
-You may not, except to the extent that applicable law expressly permits and
-that cannot be excluded by agreement:
+You may not, except to the extent that applicable law expressly permits and that
+cannot be excluded by agreement:
 
-(a) copy, reproduce, distribute, sublicense, rent, lease, lend, or sell the
-App or any part of it, other than installing it from Google Play as
-described in Section 1;
+(a) copy, reproduce, distribute, sublicense, rent, lease, lend, or sell the App
+or any part of it, other than installing it from Google Play as described in
+Section 1;
 
 (b) modify, adapt, translate, or create derivative works of the App;
 
@@ -70,9 +69,9 @@ notice in or on the App;
 (e) sell, charge for, or otherwise commercialise the App or access to it, or
 include it as part of a paid product or service; or
 
-(f) use the name "HearMeOut-AAC" (or any confusingly similar name), the
-App's icon, or other brand assets in connection with any modified version,
-derivative work, or other product or service.
+(f) use the name "HearMeOut-AAC" (or any confusingly similar name), the App's
+icon, or other brand assets in connection with any modified version, derivative
+work, or other product or service.
 
 ## 3. Ownership and third-party components
 
@@ -118,9 +117,12 @@ non-infringement.
 
 **The App is a communication aid, not a medical device, and must not be relied
 upon as a sole means of communication in an emergency.** It is not a substitute
-for professional assessment or advice. The Developer does not warrant that the
-App will be uninterrupted, error-free, or available at any particular time, or
-that its text-to-speech output or word suggestions will always be accurate.
+for professional assessment or advice.
+
+The Developer does not warrant that the App will be uninterrupted, error-free,
+or available at any particular time, or that its text-to-speech output or word
+suggestions will always be accurate.
+
 Pre-release (beta) builds, such as those offered through Google Play testing
 tracks, are provided for testing and may be less stable than full releases.
 
@@ -153,5 +155,6 @@ have under the laws of the country where you live.
 ## 11. Contact
 
 Jericho Crosby (Chalwk)
-Email: chalwk.dev@gmail.com
-Discord: chalwk
+
+- Email: chalwk.dev@gmail.com
+- Discord: chalwk
