@@ -4,7 +4,7 @@ title: End User Licence Agreement - CrisisPlannerNZ
 permalink: /pages/policies/CrisisPlannerNZ/EULA/
 ---
 
-**Version 1.0 - Last updated: 3 November 2026**
+**Version 1.0 - Last updated: 5 November 2026**
 
 This End User Licence Agreement ("EULA") governs your use of the compiled
 CrisisPlannerNZ application distributed by Jericho Crosby (Chalwk) through

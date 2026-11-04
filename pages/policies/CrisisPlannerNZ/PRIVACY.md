@@ -4,7 +4,7 @@ title: Privacy Policy - CrisisPlannerNZ
 permalink: /pages/policies/CrisisPlannerNZ/PRIVACY/
 ---
 
-**Version 1.0 - Last updated: 3 November 2026**
+**Version 1.0 - Last updated: 5 November 2026**
 
 This policy applies to CrisisPlannerNZ, published by Jericho Crosby (Chalwk)
 ("the Developer") on Google Play. The app is a personal crisis-planning app for
@@ -58,9 +58,9 @@ protects from other apps:
 - **Archived episodes**. When you tap "Start new episode", the currently
   recorded steps and notes are copied into a past episode so the handover for
   the next one starts clean.
-- **Your settings** (theme, text size, high contrast, whether the optional
-  biometric lock is on, whether the optional screen-hiding feature is on, and
-  feature toggles).
+- **Your settings** (theme, text size, high contrast, reduce motion, whether the
+  optional biometric lock is on, whether the optional screen-hiding feature is on,
+  and feature toggles).
 - **Your name**, if you choose to enter it.
 
 None of this is sent anywhere by the app. It is used only to display the plan
@@ -76,7 +76,9 @@ device lock-screen credential before your plan is shown. The check is handled
 entirely by the Android system. The app never sees, receives, stores, or
 transmits your biometric data. It only learns whether the system said "yes" or
 "no" to a particular unlock attempt, and that result is not logged, saved, or
-sent anywhere.
+sent anywhere. If your device no longer has a screen lock or biometrics set up,
+the app turns its own lock off rather than leave you locked out of your plan.
+The lock screen also has buttons to call 111 and 1737 without unlocking.
 
 The optional "Hide in recents" setting, also off by default, applies Android's
 `FLAG_SECURE` to blank the app's content in the recent-apps switcher and to
@@ -93,7 +95,9 @@ modern Android.
 The only permissions the app declares are `USE_BIOMETRIC` and `USE_FINGERPRINT`.
 Both are install-time normal permissions: they never prompt you, they grant no
 access to your data, and they are only referenced when the optional biometric
-lock is on. No other Android permissions are requested. The optional
+lock is on. No other Android permissions are requested. (Android's build tools
+may also add an internal, app-private permission that Android's support libraries
+use; it grants no access to your data and other apps cannot use it.) The optional
 screen-hiding feature does not require any permission.
 
 ## 5. Network activity
@@ -131,27 +135,32 @@ sheet, the system biometric prompt, and the OS-level window flags that provide
 do not receive copies of your data.
 
 Google Play, where you download the app, handles your download under its own
-privacy policy. The app does not send it anything.
+privacy policy. The app does not send it anything. Google Play may separately
+collect crash and performance reports from devices whose owners have chosen to
+share diagnostics with Google. That is done by Google Play, not by this app.
 
 ## 7. Backup, export, and data transfer
 
 The app excludes all of its data from Android cloud backup, so Android's backup
 system (for example, backup to your Google account) does not upload it.
 
-The app's Android data-extraction rules for device-to-device transfer currently
-include only the app's file directory. The plan, contacts, safety information,
-mood history, archived episodes, and settings are stored in Android's
-shared-preferences storage, which those rules do not include, so that flow does
-not move your plan. Use the app's **Export** and **Import** features to move
+The app also excludes all of its data from Android's device-to-device transfer
+(for example, when setting up a new phone from an old one), so that flow does
+not move your plan, contacts, safety information, mood history, archived
+episodes, or settings. Use the app's **Export** and **Import** features to move
 your setup to a new device.
 
-The **Export** feature saves your setup to a JSON file in a location you choose,
-after you dismiss a warning that the file is unencrypted. That file contains
+The **Export** feature saves your setup to a JSON file in a location you choose.
+The first time you export, the app warns you that the file is unencrypted and
+continues only after you dismiss the warning. That file contains
 your plan, contacts, safety information, mood history, archived episodes, and
 settings in plain text. If you save it to a cloud-synced folder, send it to
 someone, or store it somewhere shared, it is then handled by that service or
 person, not by this app. Treat the file as personal. The **Import** feature
-reads only the file you select.
+reads only the file you select. Importing replaces your current plan, mood
+history, and archived episodes with the file's contents (you can Undo straight
+afterwards). Appearance settings in the file are applied, but the biometric lock
+and screen-hiding settings on your device are left as they are.
 
 If you share or copy the handover summary, what you share and with whom is
 entirely your choice. Once shared, it is handled by the app or service you
@@ -174,13 +183,17 @@ Because the Developer holds no data about you, there is nothing to access,
 correct, or delete on the Developer's side. You control everything stored on
 your device.
 
-When you uninstall the app, Android removes its data from your device. The the
+When you uninstall the app, Android removes its data from your device. The
 uninstall flow on some Android versions may offer to keep the app's data; if you
 accept, it stays on your device (and comes back if you reinstall the app) until
 you delete it. To remove it for good, choose to delete the data when
 uninstalling, or clear the app's storage in Android's settings (Settings → Apps
 → CrisisPlannerNZ → Storage → Clear storage; the exact wording and menu path
 vary slightly by Android version).
+
+Inside the app, **Settings → Clear plan data** clears your plan, contacts, and
+safety information, and lets you also delete your mood history and past
+episodes. Individual past episodes can also be deleted from the Plan tab.
 
 Files you have exported are separate copies, which you must delete yourself.
 Apart from those, no copy of your data exists anywhere else, so deletion is
