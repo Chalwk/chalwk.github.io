@@ -16,11 +16,16 @@ app is licensed to you.
 | App                     | Privacy policy                                                  | End User Licence Agreement                                 |
 | ----------------------- | --------------------------------------------------------------- | ---------------------------------------------------------- |
 | CrisisPlannerNZ         | [View policy](/pages/policies/CrisisPlannerNZ/PRIVACY/)         | [View EULA](/pages/policies/CrisisPlannerNZ/EULA/)         |
-| HearMeOut-AAC           | [View policy](/pages/policies/HearMeOut-AAC/PRIVACY/)           | [View EULA](/pages/policies/HearMeOut-AAC/EULA/)           |
 | DeadEndDungeonRoguelite | [View policy](/pages/policies/DeadEndDungeonRoguelite/PRIVACY/) | [View EULA](/pages/policies/DeadEndDungeonRoguelite/EULA/) |
+| DinoDash                | [View policy](/pages/policies/DinoDash/PRIVACY/)                | [View EULA](/pages/policies/DinoDash/EULA/)                |
+| DotsAndBoxes            | [View policy](/pages/policies/DotsAndBoxes/PRIVACY/)            | [View EULA](/pages/policies/DotsAndBoxes/EULA/)            |
+| GlyphHunt               | [View policy](/pages/policies/GlyphHunt/PRIVACY/)               | [View EULA](/pages/policies/GlyphHunt/EULA/)               |
+| HearMeOut-AAC           | [View policy](/pages/policies/HearMeOut-AAC/PRIVACY/)           | [View EULA](/pages/policies/HearMeOut-AAC/EULA/)           |
 | KnotAgain               | [View policy](/pages/policies/KnotAgain/PRIVACY/)               | [View EULA](/pages/policies/KnotAgain/EULA/)               |
+| Neverendoodle           | [View policy](/pages/policies/Neverendoodle/PRIVACY/)           | [View EULA](/pages/policies/Neverendoodle/EULA/)           |
+| PaletteLedger           | [View policy](/pages/policies/PaletteLedger/PRIVACY/)           | [View EULA](/pages/policies/PaletteLedger/EULA/)           |
 | PocketTools             | [View policy](/pages/policies/PocketTools/PRIVACY/)             | [View EULA](/pages/policies/PocketTools/EULA/)             |
-| PooDiction              | [View policy](/pages/policies/PooDiction/PRIVACY/)              | [View EULA](/pages/policies/PooDiction/EULA/)              |
+| Recall                  | [View policy](/pages/policies/Recall/PRIVACY/)                  | [View EULA](/pages/policies/Recall/EULA/)                  |
 | Whodentify              | [View policy](/pages/policies/Whodentify/PRIVACY/)              | [View EULA](/pages/policies/Whodentify/EULA/)              |
 
 If you have a question that isn't answered in the relevant policy or EULA, email

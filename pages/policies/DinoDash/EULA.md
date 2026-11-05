@@ -1,15 +1,15 @@
 ---
 layout: page
-title: End User Licence Agreement - PooDiction
-permalink: /pages/policies/PooDiction/EULA/
+title: End User Licence Agreement - DinoDash
+permalink: /pages/policies/DinoDash/EULA/
 ---
 
-**Version 1.0 - Last updated: 3 November 2026**
+**Version 1.0 - Last updated: 5 November 2026**
 
 This End User Licence Agreement ("EULA") governs your use of the compiled
-PooDiction application distributed by Jericho Crosby (Chalwk) through Google
-Play (the "App"). It licenses the compiled App only and grants no rights in the
-App's source code, which is not published.
+DinoDash application distributed by Jericho Crosby (Chalwk) through Google Play
+(the "App"). It licenses the compiled App only and grants no rights in the App's
+source code, which is not published.
 
 By installing or using the App, you agree to this EULA. If you do not agree, do
 not install or use the App.
@@ -24,33 +24,34 @@ Subject to your compliance with this EULA, the Developer grants you a
 **personal, non-exclusive, non-transferable, non-sublicensable** licence to
 install and run the App on devices that you own or control, or that an
 organisation supporting you controls (including by using device-management
-tools), for personal health tracking and for other non-commercial purposes. The
-App is free, and the Developer does not charge for this licence.
+tools), for personal entertainment and gameplay, and for other non-commercial
+purposes. The App is free, and the Developer does not charge for this licence.
 
 You may obtain the App only from Google Play. Copies from any other source are
 not licensed under this EULA.
 
 For the avoidance of doubt, this licence includes the right to:
 
-(a) use the App to record and track your own bowel movements and related health
-and hygiene data, including by allowing a family member, carer, continence
-nurse, support worker, or other person operating the device at your direction to
-interact with the App on your behalf;
+(a) use the App to play the game, including by allowing a family member or
+other person operating the device at your direction to interact with the App on
+your behalf;
 
-(b) use the App in your everyday life, including at work or school, for personal
-health tracking; and
+(b) use the App in your everyday life, including at work or school; and
 
-(c) install the App on shared devices owned or controlled by you, your
-household, or an organisation that supports you (such as a clinic, care
-provider, or residential service), so that the App can be used by the people
-that organisation serves, provided the App itself is provided free of charge.
+(c) install the App on shared devices owned or controlled by you or your
+household, so that the App can be used by the people in that household,
+provided the App itself is provided free of charge.
 
-Professionals such as continence nurses, carers, and support workers may use the
-App as a tool in their work with clients. They may charge for their own
-services, but may not charge for the App itself or sell it, bundle it, or make
-access to it a paid feature.
+## 2. Virtual items
 
-## 2. Restrictions
+The App includes virtual currency (coins) and cosmetic items (skins) that can be
+earned through gameplay. These virtual items have no real-world monetary value,
+cannot be exchanged for cash or real goods, and are licensed to you solely for
+use within the App. The Developer does not sell virtual items for real money,
+and no in-app purchases are currently offered. If this changes in a future
+update, additional terms will apply.
+
+## 3. Restrictions
 
 You may not, except to the extent that applicable law expressly permits and that
 cannot be excluded by agreement:
@@ -70,11 +71,11 @@ notice in or on the App;
 (e) sell, charge for, or otherwise commercialise the App or access to it, or
 include it as part of a paid product or service; or
 
-(f) use the name "PooDiction" (or any confusingly similar name), the App's icon,
+(f) use the name "DinoDash" (or any confusingly similar name), the App's icon,
 or other brand assets in connection with any modified version, derivative work,
 or other product or service.
 
-## 3. Ownership and third-party components
+## 4. Ownership and third-party components
 
 The App, including all intellectual property rights in it, is and remains the
 property of the Developer. This EULA grants you a limited licence to use the
@@ -84,13 +85,13 @@ The App includes third-party open-source software, which is licensed under its
 own terms. Notices for that software are available in the App's About screen.
 Nothing in this EULA limits your rights under those licences.
 
-## 4. Privacy
+## 5. Privacy
 
 The App collects no personal data. See the Privacy Policy
-(<https://chalwk.github.io/pages/policies/PooDiction/PRIVACY/>), which forms
-part of this EULA.
+(<https://chalwk.github.io/pages/policies/DinoDash/PRIVACY/>), which forms part
+of this EULA.
 
-## 5. Updates and changes
+## 6. Updates and changes
 
 The Developer may release updates, bug fixes, or new versions of the App at any
 time and at their sole discretion. The Developer is not obliged to provide
@@ -102,63 +103,54 @@ the version you have (subject to any changes required by Google Play's terms),
 or stop using the App and uninstall it. Continued use of an updated version
 after you are shown the new EULA constitutes acceptance of it.
 
-## 6. Termination
+## 7. Termination
 
 This EULA is effective until terminated. You may terminate it at any time by
 uninstalling the App. The Developer may terminate it only if you materially
 breach it. On termination you must stop using the App and delete all copies in
-your possession or control. Sections 2, 3, 7, 8, 9, and 10 survive termination.
+your possession or control. Sections 3, 4, 8, 9, 10, and 11 survive termination.
 
-## 7. No warranty
+## 8. No warranty
 
 To the maximum extent permitted by law, the App is provided "AS IS" and "AS
 AVAILABLE", without warranty of any kind, express or implied, including the
 warranties of merchantability, fitness for a particular purpose, and
 non-infringement.
 
-**The App is a personal health-tracking tool, not a medical device, and its
-predictions are statistical estimates based on your own logged history, not
-medical advice, diagnosis, or treatment.** Do not rely on the App's predictions
-to decide whether to seek medical care, take or change medication, or change
-your treatment. Consult a qualified healthcare professional for any medical
-concern. If you are in a medical emergency, call **111** (in New Zealand) or
-your local emergency number.
-
 The Developer does not warrant that the App will be uninterrupted, error-free,
-or available at any particular time, that its predictions will be accurate,
-complete, or clinically appropriate, or that its product catalogue, inventory
-guidance, or buy-ahead suggestions will match the products you actually use.
+or available at any particular time, or that your saved progress will never be
+lost due to device failure, operating system changes, or software bugs.
 
 Pre-release (beta) builds, such as those offered through Google Play testing
 tracks, are provided for testing and may be less stable than full releases.
 
-## 8. Limitation of liability
+## 9. Limitation of liability
 
 To the maximum extent permitted by law, the Developer is not liable for any
 indirect, incidental, special, consequential, or punitive damages, or any loss
-of data, health information, or opportunity, arising out of or in connection
-with your use of or inability to use the App.
+of data, game progress, virtual items, or opportunity, arising out of or in
+connection with your use of or inability to use the App.
 
 Nothing in this EULA excludes or limits liability that cannot be excluded or
 limited under applicable law, including (where applicable) the New Zealand
 Consumer Guarantees Act 1993 and the Fair Trading Act 1986, or consumer laws in
 the country where you live.
 
-## 9. General
+## 10. General
 
 If any provision of this EULA is found unenforceable, it will be applied to the
 maximum extent permitted and the remaining provisions stay in effect. Failure to
 enforce a provision is not a waiver of it. This EULA, together with the Privacy
 Policy, is the entire agreement between you and the Developer about the App.
 
-## 10. Governing law
+## 11. Governing law
 
 This EULA is governed by the laws of New Zealand. Any dispute arising out of or
 in connection with it is subject to the non-exclusive jurisdiction of the New
 Zealand courts. This does not take away any mandatory consumer protections you
 have under the laws of the country where you live.
 
-## 11. Contact
+## 12. Contact
 
 Jericho Crosby (Chalwk)
 
