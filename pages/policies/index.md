@@ -26,6 +26,7 @@ app is licensed to you.
 | PaletteLedger           | [View policy](/pages/policies/PaletteLedger/PRIVACY/)           | [View EULA](/pages/policies/PaletteLedger/EULA/)           |
 | PocketTools             | [View policy](/pages/policies/PocketTools/PRIVACY/)             | [View EULA](/pages/policies/PocketTools/EULA/)             |
 | Recall                  | [View policy](/pages/policies/Recall/PRIVACY/)                  | [View EULA](/pages/policies/Recall/EULA/)                  |
+| RollAway                | [View policy](/pages/policies/RollAway/PRIVACY/)                | [View EULA](/pages/policies/RollAway/EULA/)                |
 | Whodentify              | [View policy](/pages/policies/Whodentify/PRIVACY/)              | [View EULA](/pages/policies/Whodentify/EULA/)              |
 
 If you have a question that isn't answered in the relevant policy or EULA, email

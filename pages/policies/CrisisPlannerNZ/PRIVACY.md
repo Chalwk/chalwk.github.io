@@ -159,7 +159,7 @@ someone, or store it somewhere shared, it is then handled by that service or
 person, not by this app. Treat the file as personal. The **Import** feature
 reads only the file you select. Importing replaces your current plan, mood
 history, and archived episodes with the file's contents (you can Undo straight
-afterwards). Appearance settings in the file are applied, but the biometric lock
+afterward). Appearance settings in the file are applied, but the biometric lock
 and screen-hiding settings on your device are left as they are.
 
 If you share or copy the handover summary, what you share and with whom is
