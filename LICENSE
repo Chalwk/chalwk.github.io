@@ -1,37 +1,84 @@
-Jericho Crosby (Chalwk) - Proprietary License
-
 Copyright (c) 2024-2026 Jericho Crosby (Chalwk). All rights reserved.
 
-This repository and all its contents, including but not limited to source code, software projects, scripts, HTML files,
-Cascading Style Sheets (CSS), JavaScript, images, graphics, design elements, documentation, configuration files, and any
-other materials (collectively, the "Proprietary Assets"), are the exclusive intellectual property of Jericho Crosby
-(Chalwk).
+PROPRIETARY COPYRIGHT AND USAGE NOTICE
 
-The Proprietary Assets are made available solely for personal viewing and interaction through the official
-chalwk.github.io website and its associated GitHub repository. No license or right to use, copy, modify, distribute,
-publish, transmit, display, sublicense, create derivative works from, reverse engineer, decompile, or disassemble any
-part of the Proprietary Assets is granted, implied, or otherwise conferred.
+1. Ownership and Scope
 
-1. Strictly Prohibited Actions. You are expressly prohibited from:
+   This notice applies to the original materials in this repository and the website
+   at https://chalwk.github.io that were created by and are owned by Jericho Crosby (Chalwk),
+   collectively referred to as the "Owner Materials".
 
-   * Copying, reproducing, or downloading any Proprietary Asset.
-   * Distributing, sharing, publishing, or making available any Proprietary Asset to any third party.
-   * Modifying, adapting, translating, or creating derivative works based upon the Proprietary Assets.
-   * Using any Proprietary Asset as part of another project, website, software product, service, or repository.
-   * Attempting to extract source code, designs, algorithms, concepts, or functionality for independent use.
+   Owner Materials may include original source code, software projects, scripts, HTML, Cascading
+   Style Sheets (CSS), JavaScript, images, graphics, artwork, design elements, documentation,
+   configuration files, and other original creative works.
 
-2. No Warranty. The Proprietary Assets are provided "AS IS," without warranty of any kind, express or implied, including
-   but not limited to the warranties of merchantability, fitness for a particular purpose, and non-infringement.
+   This notice does not claim ownership of third-party materials, including open-source software,
+   frameworks, libraries, themes, fonts, icons, externally sourced images, trademarks, logos, or
+   other materials owned by third parties. Such materials remain subject to their respective owners'
+   intellectual property rights and applicable licences.
 
-3. Limitation of Liability. In no event shall the copyright holder be liable for any claim, damages, or other liability,
-   whether in an action of contract, tort, or otherwise, arising from, out of, or in connection with the Proprietary Assets
-   or the use or dealings in them.
+   Content contributed by other individuals is excluded unless the relevant rights have been
+   assigned or licensed to the copyright holder.
 
-4. Violations. Any unauthorized use of the Proprietary Assets constitutes a violation of this license and applicable
-   copyright laws. The copyright holder reserves the right to pursue all legal and equitable remedies available, including
-   injunctive relief and monetary damages.
+2. Permitted Public Access and GitHub Permissions
 
-For licensing inquiries, collaboration proposals, or to report usage concerns, please contact Jericho Crosby (Chalwk):
+   This repository is publicly accessible on GitHub. Visitors may view the repository and access and
+   interact with the official website through ordinary browser functionality.
 
-Primary Contact (email): chalwk.dev@gmail.com
+   By making this repository public, the copyright holder acknowledges and permits the rights
+   granted to GitHub and other GitHub users under the GitHub Terms of Service, including the right
+   to view and fork public repositories and the associated rights to use, display, perform, and
+   reproduce content through GitHub's functionality.
+
+   Nothing in this notice is intended to restrict, withdraw, or contradict permissions granted under
+   the GitHub Terms of Service or rights otherwise provided by applicable law.
+
+   All activity through GitHub remains subject to GitHub's applicable terms, policies, and
+   functionality.
+
+3. Reservation of Rights
+
+   Except for the permissions described above, permissions expressly granted in writing by the
+   copyright holder, and uses permitted by applicable law, all rights in the Owner Materials are
+   reserved.
+
+   No additional licence or permission is granted to independently reuse, modify, adapt, translate,
+   distribute, republish, sublicense, incorporate into another project, or create derivative works
+   from the Owner Materials.
+
+   The Owner Materials may not be incorporated into another website, application, software product,
+   service, or repository without prior written permission from the copyright holder, except where
+   otherwise permitted by the rights described in Section 2 or applicable law.
+
+   Nothing in this notice claims exclusive rights over abstract ideas, information, algorithms,
+   concepts, methods, or functionality as such, or restricts conduct that applicable law permits.
+
+4. No Warranty
+
+   To the fullest extent permitted by applicable law, the Owner Materials are provided "AS IS",
+   without warranties or guarantees of any kind, whether express or implied, including warranties of
+   merchantability, fitness for a particular purpose, and non-infringement.
+
+5. Limitation of Liability
+
+   To the fullest extent permitted by applicable law, the copyright holder shall not be liable for
+   any claims, damages, losses, or other liabilities arising from the use of, inability to use, or
+   dealings with the Owner Materials, whether arising in contract, tort, or otherwise.
+
+   Nothing in this notice excludes or limits any liability or rights that cannot lawfully be
+   excluded or limited under applicable law.
+
+6. Enforcement and Violations
+
+   Unauthorised use of copyright-protected Owner Materials beyond the permissions described in this
+   notice may constitute copyright infringement or other actionable conduct under applicable law.
+
+   The copyright holder reserves all rights and remedies available under applicable law, including
+   seeking appropriate injunctive relief and monetary damages where legally available.
+
+For licensing inquiries, collaboration proposals, or to report usage concerns, please contact:
+
+Jericho Crosby (Chalwk)
+
+Email: chalwk.dev@gmail.com
 Discord: chalwk

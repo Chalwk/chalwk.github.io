@@ -1,33 +1,39 @@
 # chalwk.github.io
 
-This repository contains the source code and content for the official **chalwk.github.io** website, built with Jekyll and hosted on GitHub Pages.
+This repository contains the source code and content for the official **chalwk.github.io** website,
+built with Jekyll and hosted on GitHub Pages.
 
 **Live website:** [https://chalwk.github.io](https://chalwk.github.io)
 
 ---
 
-## Copyright & License
+## Copyright & Usage
 
-**© 2024-2026 Jericho Crosby (Chalwk). All Rights Reserved.**
+Copyright (c) 2024-2026 Jericho Crosby (Chalwk). All rights reserved.
 
-This repository and all its contents are **proprietary assets**.  
-You are permitted to **view** the website and this repository for informational purposes only.
+Unless otherwise identified, the original materials in this repository and its associated website
+are proprietary works owned by Jericho Crosby (Chalwk).
 
-No part of this repository may be:
-- Copied, reproduced, or downloaded
-- Modified, adapted, or translated
-- Distributed, shared, or published elsewhere
-- Used in any other project, product, or service
+This repository is publicly accessible, and GitHub's Terms of Service permit users to view and fork
+public repositories through GitHub's functionality. This notice does not restrict or contradict
+those platform permissions.
 
-For the full legal terms, please read the [LICENSE](LICENSE) file.
+However, no additional licence is granted for independent reuse, modification, adaptation,
+redistribution, republication, or incorporation of the original materials into other projects,
+products, websites, or services.
+
+Third-party materials remain subject to their respective owners' licences and terms.
+
+For complete licensing terms, ownership information, permitted uses, and limitations, please read
+the [LICENSE](LICENSE) file.
 
 ---
 
 ## Contact
 
-For questions, licensing inquiries, or collaboration proposals:
+For licensing inquiries, collaboration proposals, or other questions:
 
-- **Email:** chalwk.dev@gmail.com  
-- **Discord:** https://discord.gg/VAEb4FXU5
+- **Email:** chalwk.dev@gmail.com
+- **Discord:** [Chalwk's Code & Chill](https://discord.gg/VAEb4FXU5)
 
 ---

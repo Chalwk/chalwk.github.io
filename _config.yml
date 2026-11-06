@@ -90,7 +90,7 @@ relative_links:
 # ------------------------------------------------------------------------------
 defaults:
 
-  # Global defaults (apply to all pages, posts, and collections)
+  # Global defaults (apply to all pages, and posts)
   - scope:
       path: ""
     values:
