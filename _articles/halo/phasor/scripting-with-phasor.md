@@ -1,36 +1,39 @@
 ---
 title: "Scripting with Phasor - Server-Side Lua"
+permalink: /halo/phasor/scripting-with-phasor/
 date: 2026-05-17
-last-updated: 2026-09-29
+last-updated: 2026-11-09
 categories: [ education, halo, modding ]
 tags: [ phasor, lua, scripting, server, tutorial ]
 ---
 
-Phasor is a **server-side** extension for Halo PC/Custom Edition. It exposes a Lua Scripting API, anti-cheat tools,
-event hooks, command handling, player management, logging, and numerous under-the-hood features. **This guide focuses on
-its Lua API**, walks through the core scripting model and practical examples so you can build your Lua scripts.
+Phasor is a **server-side** extension for Halo PC/Custom Edition. It exposes a Lua Scripting API,
+anti-cheat tools,
+event hooks, command handling, player management, logging, and numerous under-the-hood features.
+**This guide focuses on
+its Lua API**, walks through the core scripting model and practical examples so you can build your
+Lua scripts.
 
 **Important:** <u>Phasor's Lua API is based on <strong>Lua 5.2</strong>.</u>
 
 This guide assumes you have read:
 
-- [Common Lua References](2026-05-17-halo-lua-common-references.md)
-- [Memory Offsets Deep Dive](2025-09-07-halo-understanding-memory-offsets.md).
+- [Common References](../common-reference.md)
 
 ---
 
 ## Script Skeleton & Version Check
 
-See [full blank script](https://github.com/Chalwk/SPCLib/blob/master/phasor/blank_script_template.lua) for a complete
+See [full blank script](https://github.com/Chalwk/SPCLib/blob/master/phasor/blank_script_template.lua)
+for a complete
 example.
 
 Every Phasor Lua script must define both `GetRequiredVersion()` and `OnScriptLoad()`.
-`GetRequiredVersion()` must return `200`. Without these definitions, Phasor will not load the script.
+`GetRequiredVersion()` must return `200`. Without these definitions, Phasor will not load the
+script.
 
 ```lua
-function GetRequiredVersion()  -- Required or script will not load
-    return 200
-end
+function GetRequiredVersion() return 200 end
 
 function OnScriptLoad(processId, game, persistent) -- Required or script will not load
     -- processId  : number (the process ID of the server)
@@ -38,9 +41,8 @@ function OnScriptLoad(processId, game, persistent) -- Required or script will no
     -- persistent : boolean (true if script is persistent)
 end
 
-function OnScriptUnload() -- Optional, but recommended to avoid Lua errors on unload
-    -- Cleanup code (optional)
-end
+-- Optional, but recommended to avoid Lua errors on unload
+function OnScriptUnload() end
 ```
 
 ---
@@ -62,9 +64,9 @@ Phasor looks for Lua scripts in its `scripts` folder. Typical path: `./cg/script
 
 ## Handling Game Version (PC vs CE)
 
-Because Phasor cannot scan signatures, you must use the `game` parameter to select the correct hardcoded addresses.
-The [Common Lua References](2026-05-17-halo-lua-common-references.md) provides many offsets - here's a practical
-example:
+Because Phasor cannot scan signatures, you must use the `game` parameter to select the correct
+hardcoded addresses. The [Common Lua References](../common-reference.md) provides many offsets -
+here's a practical example:
 
 ```lua
 local gametype_base
@@ -89,7 +91,7 @@ end
 ### General Functions
 
 | Function                    | Description                                                                                                           |
-| --------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+|-----------------------------|-----------------------------------------------------------------------------------------------------------------------|
 | `hprintf(message)`          | Prints text to the server terminal.                                                                                   |
 | `resolveplayer(player)`     | Converts a memory ID (0-based) to an RCON/player ID (1-based).                                                        |
 | `rresolveplayer(player)`    | Converts an RCON ID (1-based) back to a memory ID (0-based).                                                          |
@@ -100,7 +102,7 @@ end
 ### Memory Reading
 
 | Function                                 | Description                                                                  |
-| ---------------------------------------- | ---------------------------------------------------------------------------- |
+|------------------------------------------|------------------------------------------------------------------------------|
 | `readbit(data, data_offset, bit_offset)` | Reads a single bit (0 or 1) from `data + data_offset` at `bit_offset` (0-7). |
 | `readbyte(address)`                      | Reads an unsigned 8-bit byte (0-255).                                        |
 | `readchar(address)`                      | Reads a signed 8-bit byte (-128 to 127).                                     |
@@ -116,7 +118,7 @@ end
 ### Memory Writing
 
 | Function                                            | Description                               |
-| --------------------------------------------------- | ----------------------------------------- |
+|-----------------------------------------------------|-------------------------------------------|
 | `writebit(data_addr, data_offset, bit_offset, bit)` | Writes a bit to memory.                   |
 | `writebyte(address, value)`                         | Writes an unsigned 8-bit byte.            |
 | `writechar(address, value)`                         | Writes a signed 8-bit byte.               |
@@ -132,7 +134,7 @@ end
 ### Player & Team Functions
 
 | Function                      | Description                                                                                   |
-| ----------------------------- | --------------------------------------------------------------------------------------------- |
+|-------------------------------|-----------------------------------------------------------------------------------------------|
 | `getplayer(player)`           | Returns the memory address of a player table entry (0-based).                                 |
 | `getname(player)`             | Returns the player's name (ASCII).                                                            |
 | `gethash(player)`             | Returns the player's CD-key hash (unique identifier).                                         |
@@ -147,7 +149,7 @@ end
 ### Object Functions
 
 | Function                                                               | Description                                                                                                                                                                                                                                                                                                                                                                                                         |
-| ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `getobject(m_objId)`                                                   | Converts an object ID into its memory address for reading/writing.                                                                                                                                                                                                                                                                                                                                                  |
 | `getplayerobjectid(player)`                                            | Returns the object ID of the player's biped (`0xFFFFFFFF` if dead/invalid).                                                                                                                                                                                                                                                                                                                                         |
 | `getobjectcoords(m_objectId)`                                          | Returns the (x, y, z) coordinates of an object. If a player is in a vehicle, returns the vehicle's coordinates.                                                                                                                                                                                                                                                                                                     |
@@ -164,7 +166,7 @@ end
 ### Chat & Console Output
 
 | Function                  | Description                                   |
-| ------------------------- | --------------------------------------------- |
+|---------------------------|-----------------------------------------------|
 | `say(msg)`                | Broadcasts a message to all players.          |
 | `privatesay(player, msg)` | Sends a private message to a specific player. |
 | `respond(msg)`            | Sends a message to the server terminal.       |
@@ -174,12 +176,12 @@ end
 ### Timer Functions
 
 | Function                              | Description                                                                                                                                                                                         |
-| ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|---------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `registertimer(delay, callback, ...)` | Creates a timer that calls `callback` after `delay` milliseconds. The callback can return `1` to repeat or `0` to stop. Extra arguments are passed to the callback as userdata. Returns a timer ID. |
 | `removetimer(id)`                     | Stops and removes a timer created by `registertimer`.                                                                                                                                               |
 
-**Callback signature:** `function callback(id, count, userdata1, userdata2, ...)`, `count` is the number of times the
-timer has fired.
+**Callback signature:** `function callback(id, count, userdata1, userdata2, ...)`, `count` is the
+number of times the timer has fired.
 
 **Example:**
 
@@ -203,10 +205,11 @@ removetimer(timer_id)
 
 ## Utility Functions Library
 
-The following functions are user-defined Lua helpers that build on the Phasor API. They simplify common tasks such as
-player state queries, object manipulation, memory I/O, and gametype handling.  
-**Note:** Many functions rely on global variables like `gametype_base`, `map_pointer`, `ctf_globals`, etc. You must set
-these in `OnScriptLoad` based on the game version (PC or CE) using the offsets from the Common Lua References.
+The following functions are user-defined Lua helpers that build on the Phasor API. They simplify
+common tasks such as player state queries, object manipulation, memory I/O, and gametype handling.
+**Note:** Many functions rely on global variables like `gametype_base`, `map_pointer`,
+`ctf_globals`, etc. You must set these in `OnScriptLoad` based on the game version (PC or CE) using
+the offsets from the Common Lua References.
 
 ### Player State & Info
 
@@ -216,7 +219,8 @@ these in `OnScriptLoad` based on the game version (PC or CE) using the offsets f
 `id` - Player index (0-based memory ID)
 
 **Returns:**  
-`object_struct` (table), `object_id` (number) - The player's biped object and its ID, or `nil` if dead/invalid.
+`object_struct` (table), `object_id` (number) - The player's biped object and its ID, or `nil` if
+dead/invalid.
 
 ```lua
 local function get_player_biped(id)
@@ -264,7 +268,8 @@ end
 `id` - Player index (0-based)
 
 **Returns:**  
-`x`, `y`, `z` (numbers) - World coordinates compensating for crouch, or `nil` if the player is invalid.
+`x`, `y`, `z` (numbers) - World coordinates compensating for crouch, or `nil` if the player is
+invalid.
 
 ```lua
 local function get_player_pos(id)
@@ -313,7 +318,8 @@ end
 `id` - Player index (0-based)
 
 **Returns:**  
-`table` or `nil` - Contains keys: `kills`, `deaths`, `assists`, `streaks`, `flag_captures`, `flag_returns`,
+`table` or `nil` - Contains keys: `kills`, `deaths`, `assists`, `streaks`, `flag_captures`,
+`flag_returns`,
 `flag_grabs`.
 
 ```lua
@@ -475,7 +481,8 @@ hprintf(string.format("%s ping: %d ms", getname(0), ping))
 
 **Parameters:**  
 `id` - Player index (0-based)  
-`slot` (optional) - Weapon slot 1-4. If omitted, returns the current weapon (or vehicle weapon if in vehicle).
+`slot` (optional) - Weapon slot 1-4. If omitted, returns the current weapon (or vehicle weapon if in
+vehicle).
 
 **Returns:**  
 `number` - Weapon object ID, or `0xFFFFFFFF` if none.
@@ -509,9 +516,11 @@ end
 #### get_players_by_expression
 
 **Parameters:**  
-`expression` - String (e.g., `"*"`, `"me"`, `"red"`, `"blue"`, `"random"`, `"nearest"`, `"farthest"`, color name,
+`expression` - String (e.g., `"*"`, `"me"`, `"red"`, `"blue"`, `"random"`, `"nearest"`,
+`"farthest"`, color name,
 wildcard name, or numeric ID 1-16)  
-`self_id` (optional) - Player index used for `"me"`, `"random"` exclusion, and as reference for `"nearest"`/
+`self_id` (optional) - Player index used for `"me"`, `"random"` exclusion, and as reference for
+`"nearest"`/
 `"farthest"`.
 
 **Returns:**  
@@ -663,7 +672,8 @@ end
 
 **Parameters:**  
 `id` - Player index (0-based)  
-`color` - color index (0-17) or color name string (e.g., `"white"`, `"yellow"`). A respawn is usually required for
+`color` - color index (0-17) or color name string (e.g., `"white"`, `"yellow"`). A respawn is
+usually required for
 the change to fully apply.
 
 ```lua
@@ -773,7 +783,8 @@ end
 `object_id` - Object ID (e.g., from `getplayerobjectid`)
 
 **Returns:**  
-`x`, `y`, `z` - Coordinates of the object (if attached to a parent vehicle, returns parent's coordinates).
+`x`, `y`, `z` - Coordinates of the object (if attached to a parent vehicle, returns parent's
+coordinates).
 
 ```lua
 local function get_object_coords(object_id)
@@ -796,7 +807,8 @@ end
 `object_id` - Object ID
 
 **Returns:**  
-`tag_name`, `tag_class` - The tag name (e.g., `"vehicles\\ghost\\ghost_mp"`) and class (e.g., `"vehi"`), or `nil`.
+`tag_name`, `tag_class` - The tag name (e.g., `"vehicles\\ghost\\ghost_mp"`) and class (e.g.,
+`"vehi"`), or `nil`.
 
 ```lua
 local tag_lookup_cache
@@ -928,7 +940,8 @@ end
 
 ### Memory Utilities
 
-The following helpers extend Phasor's memory functions with safer writes and convenient string/bit operations.
+The following helpers extend Phasor's memory functions with safer writes and convenient string/bit
+operations.
 
 #### read_string
 
@@ -1112,7 +1125,8 @@ end
 
 #### safe_write_byte / safe_write_char / safe_write_short / safe_write_word / safe_write_int / safe_write_dword / safe_write_float
 
-These functions clamp values to the valid range of the target type before writing, preventing out-of-range crashes.
+These functions clamp values to the valid range of the target type before writing, preventing
+out-of-range crashes.
 
 **Example signature:**
 

@@ -1,11 +1,11 @@
 ---
 title: "Halo: How to host a Linux VPS (Ubuntu 22.04)"
+permalink: /halo/ubuntu-vps-hosting/
 date: 2025-08-29
 last-updated: 2026-10-09
 description: "Step-by-step guide to hosting a secure Halo PC / Custom Edition dedicated server (SAPP or Phasor) on a Vultr Ubuntu 22.04 VPS using Wine, TightVNC, UFW and fail2ban."
 categories: [ education, halo, vps, linux, server ]
 tags: [ ubuntu, wine, vnc, ssh, hosting, tutorial, ufw, fail2ban, vultr ]
-toc: false
 ---
 
 This guide walks you through setting up a **Halo** server on a Linux VPS, from a fresh Ubuntu 22.04 LTS installation to

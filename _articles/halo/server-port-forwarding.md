@@ -1,5 +1,6 @@
 ---
 title: "Halo: Server Port Forwarding"
+permalink: /halo/server-port-forwarding/
 date: 2025-08-31
 last-updated: 2026-05-05
 categories: [ education, halo, server ]
