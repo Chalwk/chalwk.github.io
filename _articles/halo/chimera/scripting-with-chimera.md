@@ -11,6 +11,9 @@ downloads, and dozens of quality-of-life fixes. This guide focuses on its Lua AP
 core scripting model and practical examples so you can build your own HUDs, gameplay tweaks, and
 quality-of-life mods using Chimera's event-driven Lua environment.
 
+Memory offsets, game constants, shared helpers, and Chimera's hardcoded pointers are in
+[Common Reference](../common-reference.md).
+
 ---
 
 ## Where to Put Your Scripts
@@ -188,37 +191,13 @@ end
 ## Detecting PC vs. CE
 
 Chimera has no equivalent to SAPP's `halo_type` global. There is no function that tells you which
-client you are running on. When you need a version-specific address, you have to work it out
-yourself.
+client you are running on. The SAPP hardcoded pointers do not work in Chimera, and Chimera cannot
+scan for signatures, so version-specific addresses are hardcoded per platform.
 
-The approach: pick an address that differs between PC and CE, put both variants in a candidates
-table, then probe each one and check the value you read against what the field is supposed to hold.
-
-```lua
--- Same logical pointer, different address on each platform.
-local candidates = {
-    { gametype = 0x6F1C88, race_globals = 0x87A520 }, -- PC
-    { gametype = 0x68CC48, race_globals = 0x64C1C0 }  -- CE
-}
-
-local gametype_base, race_globals
-
-local function detectPlatform()
-    for _, cand in ipairs(candidates) do
-        -- pcall: an address valid on one platform may be unmapped on the other.
-        local ok, game_type = pcall(function()
-            return read_byte(cand.gametype + 0x30)
-        end)
-
-        -- 5 = Race. The value, not just a successful read, identifies the platform.
-        if ok and game_type == 5 then
-            gametype_base = cand.gametype
-            race_globals = cand.race_globals
-            return
-        end
-    end
-end
-```
+The candidates table, the probe code, and the other documented addresses are in
+[Chimera Pointers](../common-reference.md#chimera-pointers). Relative offsets after you hold a
+pointer
+work the same on both platforms.
 
 ## Persistent Data Storage
 
@@ -334,6 +313,16 @@ velocity, health, shields, and other object data. Returns `nil` if the player is
 `get_player()` returns a pointer to the player's persistent player data structure. Use this for
 player-related data that exists independently of the live object (team, kills, deaths, ping, name).
 
+Field offsets for both pointers are in [Memory Offsets](../common-reference.md#memory-offsets).
+
+Chimera has no `read_vector3d` or `write_vector3d`. Read the position as three floats:
+
+```lua
+local x = read_float(dyn + 0x5C)
+local y = read_float(dyn + 0x60)
+local z = read_float(dyn + 0x64)
+```
+
 ### Example - Position HUD
 
 ```lua
@@ -345,7 +334,8 @@ function OnTick()
     local y = read_float(dyn + 0x60)
     local z = read_float(dyn + 0x64)
     
-    local name = getPlayerName(local_player_index) -- see definition below
+    local static_player = get_player(local_player_index)
+    local name = static_player and readPlayerName(static_player) -- see Get player name
     execute_script("cls")
     
     hud_message(string.format("Pos: %s, %.1f, %.1f, %.1f", name or "?", x, y, z))
@@ -354,24 +344,14 @@ end
 
 ## Get player name
 
-Player names are stored as a wide-character string (2 bytes per character, UTF-16). Because Halo
-names are limited to ASCII characters, each character's high byte is `0x00`. So you can read every
-other byte (the low bytes) and stop at a single `0x00` byte that marks the null terminator.
+Player names are stored as a wide-character string (2 bytes per character, UTF-16). Use
+`readWideString` and `readPlayerName` from [Wide Strings](../common-reference.md#wide-strings). The
+name
+sits at static player offset `0x4` and is at most 12 characters.
 
 ```lua
-local function getPlayerName(id)
-    local static_p = get_player(id)
-    if not static_p then return nil end
-
-    local addr = static_p + 0x4
-    local name_chars = {}
-    for i = 1, 12 do
-        local b = read_byte(addr + (i - 1) * 2)
-        if b == 0 then break end
-        name_chars[#name_chars + 1] = string.char(b)
-    end
-    return table.concat(name_chars)
-end
+local static_player = get_player(id)
+local name = static_player and readPlayerName(static_player)
 ```
 
 ## Camera Manipulation (OnPreCamera)
@@ -427,18 +407,16 @@ end
 ### Example 2: Reading the tag path from a spawned object
 
 Once you have an object, you can retrieve its tag path (e.g. `"vehicles\\ghost\\ghost_mp"`) by
-reading the tag pointer and then the string at offset `0x10`.
+reading the tag pointer and then the string at offset `0x10`. `readTagPath` in
+[Tag Entry Helpers](../common-reference.md#tag-entry-helpers) does the second part.
 
 ```lua
 local function getTagName(obj)
     if not obj then return nil end
 
-    local tag_id = read_dword(obj)        -- first dword of an object is its tag ID
-    local tag_ptr = get_tag(tag_id)       -- tag_id -> tag pointer (2nd overload)
-    if not tag_ptr then return nil end
-
-    local name_ptr = read_dword(tag_ptr + 0x10)
-    return read_string(name_ptr)
+    local tag_id = read_dword(obj)  -- first dword of an object is its tag ID
+    local tag_ptr = get_tag(tag_id) -- tag_id -> tag pointer (2nd overload)
+    return tag_ptr and readTagPath(tag_ptr) -- see Tag Entry Helpers in Common Reference
 end
 
 local ghost = spawn_object("vehi", "vehicles\\ghost\\ghost_mp", 0, 0, 0)
@@ -450,10 +428,12 @@ if object then console_out(getTagName(object)) end
 ## Get object name (e.g. weapon name)
 
 Gets the display name of an object (e.g. weapon, vehicle, equipment) by resolving its tag and
-extracting the tag path. The function reads the object's tag ID, converts it to a tag pointer, reads
-the tag path string, and then strips the directory path to return only the object name (e.g.
-"weapons\\assault_rifle" → "assault_rifle"). Returns "N/A" if the object is invalid, "???" if the
-tag cannot be resolved, or the raw path if parsing fails.
+extracting the tag path. It uses `readTagPath` and `getShortName`
+from [Tag Entry Helpers](../common-reference.md#tag-entry-helpers). The function reads the object's
+tag ID, converts it to a tag pointer, reads the tag path string, and then strips the directory path
+to return only the object name (e.g. `"weapons\\assault_rifle"` -> `"assault_rifle"`). Returns
+`"N/A"` if the object is invalid, `"???"` if the tag cannot be resolved, or the raw path if parsing
+fails.
 
 ```lua
 local function getObjectName(obj)
@@ -461,9 +441,8 @@ local function getObjectName(obj)
 
     local tag = get_tag(read_dword(obj))
     if not tag then return "???" end
-	
-    local path = read_string(read_dword(tag + 0x10)) or "unknown"
-    return path:match(".*\\([^\\]+)$") or path
+
+    return getShortName(readTagPath(tag) or "unknown")
 end
 
 function OnTick()
@@ -480,22 +459,8 @@ end
 ## Enumerating Objects
 
 To scan for all objects in the world (projectiles, vehicles, weapons, etc.), you need to read the
-global object table.
-
-```lua
-local object_table = read_dword(read_dword(0x401192 + 2))
-if object_table == 0 then return end
-
-local object_count = read_word(object_table + 0x2E)
-local first_object = read_dword(object_table + 0x34)
-
-for i = 0, object_count - 1 do
-    local object = read_dword(first_object + i * 0xC + 0x8)
-    if object ~= 0 then
-        -- Now you have a valid object pointer
-    end
-end
-```
+global object table. The address and the loop are
+in [Object Table](../common-reference.md#object-table).
 
 ## Spawning Objects (Client-Side Spawning)
 

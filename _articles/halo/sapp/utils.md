@@ -6,28 +6,26 @@ categories: [ education, halo, modding ]
 tags: [ sapp, lua, scripting, server, tutorial ]
 ---
 
-Helpers, notes, and gotchas for SAPP Lua scripting. Lookup tables (offsets, signatures, variables,
-commands) are documented in [SAPP Cheat Sheet](cheat-sheet.md).
+Helpers, notes, and gotchas for SAPP Lua scripting. Lookup tables (pointers, signatures, variables,
+commands) are documented in [SAPP Cheat Sheet](cheat-sheet.md). Offsets, unit conversions, and the
+helpers shared with Chimera are in [Common Reference](../common-reference.md).
 
 ---
 
 ## Conventions
 
-- Function arguments use `snake_case`.
-- Local functions use `lowerCamelCase`.
-- Callbacks are global functions named in PascalCase (`OnJoin`).
+Naming conventions are shared with Chimera. See [Conventions](../common-reference.md#conventions).
 
 ### Ternary Emulation
 
-Lua has no ternary operator. Use `condition and value_if_true or value_if_false`.
+SAPP picks PC or CE values with `halo_type`. The `and` / `or` rules are in
+[Ternary Emulation](../common-reference.md#ternary-emulation).
 
 ```lua
 local var1, var2 = halo_type == 'PC' and 1 or 2, halo_type == 'PC' and 3 or 4
 ```
 
-Safe only when `value_if_true` is never `false` or `nil` (`0` and `""` are truthy in Lua, so they
-are fine). When several values change together, index a lookup table instead of repeating the
-condition:
+When several values change together, index a lookup table instead of repeating the condition:
 
 ```lua
 local version = ({ PC = { 1, 2 }, CE = { 3, 4 } })[halo_type]
@@ -169,6 +167,8 @@ Notes:
   where the address moves but not when the instruction shape changed (as with `gametype_base` on
   PC).
 
+- `readWideString` is defined under [Wide Strings](../common-reference.md#wide-strings).
+
 - Some pointers have no signature at all. `map_pointer` is a static data slot the map loader
   writes once per load; no fixed instruction references it. Pick the value by `halo_type` from
   Hardcoded Pointers.
@@ -220,20 +220,6 @@ end
 ```
 
 Use case: announce "Player X found the secret" without revealing it to X.
-
-### In Vehicle Check
-
-Fast test for whether a player is riding in any vehicle.
-
-```lua
----@param dyn_player number Dynamic player memory address.
----@return boolean in_vehicle True if riding in a vehicle.
-local function inVehicle(dyn_player)
-    return read_dword(dyn_player + 0x11C) ~= 0xFFFFFFFF
-end
-```
-
-`0xFFFFFFFF` means no vehicle. The check is cheap, so it suits per-tick logic.
 
 ### Get Player Vehicle
 
@@ -324,7 +310,9 @@ the physics fix under Known SAPP Quirks.
 
 ### Get Player Position
 
-Returns the player's eye-level position, accounting for vehicles and crouching.
+Returns the player's eye-level position, accounting for vehicles and crouching. `read_vector3d` is
+SAPP only; Chimera reads three floats
+(see [Position and Aim](../common-reference.md#position-and-aim)).
 
 ```lua
 ---@param dyn_player number Dynamic player address.
@@ -344,93 +332,22 @@ local function getPlayerPosition(dyn_player)
 end
 ```
 
-### Get Aim Vector
+### Shared Helpers
 
-Returns the camera's facing direction.
+These work on a pointer and are the same on SAPP and Chimera, so they live in the
+[Common Reference](../common-reference.md#offset-helpers):
 
-```lua
----@param dyn_player number Dynamic player address.
----@return number aim_x
----@return number aim_y
----@return number aim_z
-local function getAimVector(dyn_player)
-    local aim_x = read_float(dyn_player + 0x230)
-    local aim_y = read_float(dyn_player + 0x234)
-    local aim_z = read_float(dyn_player + 0x238)
-    return aim_x, aim_y, aim_z
-end
-```
+- `inVehicle`, `getWeaponSlot`,
+  `isLowAmmo`: [Vehicle and Weapon](../common-reference.md#vehicle-and-weapon)
+- `getAimVector`: [Position and Aim](../common-reference.md#position-and-aim)
+- `getHealthAndShields`, `getHealthPercent`,
+  `getShieldsPercent`: [Health and Shields](../common-reference.md#health-and-shields)
+- `getSpeed`: [Speed](../common-reference.md#speed)
+- `getTeamName`, `getKdRatio`,
+  `getColorName`: [Static Player Fields](../common-reference.md#static-player-fields)
+- `readPlayerName`: [Wide Strings](../common-reference.md#wide-strings)
 
-### Get Player Health and Shields
-
-```lua
----@param dyn_player number Dynamic player address.
-local function getHealthAndShields(dyn_player)
-    return read_float(dyn_player + 0xE0), read_float(dyn_player + 0xE4)
-end
-
--- Get as percentage:
-local function getHealthPercent(dyn_player)
-    return math.floor(read_float(dyn_player + 0xE0) * 100)
-end
-
-local function getShieldsPercent(dyn_player)
-    return math.floor(read_float(dyn_player + 0xE4) * 100)
-end
-```
-
-### Get Player Name
-
-Prefer `get_var(player_id, "$name")`. The memory read below is useful when you need the raw UTF-16LE
-bytes.
-
-```lua
-local function getPlayerName(player_id)
-    local static_p = get_player(player_id)
-    if not static_p then return nil end
-    return readWideString(static_p + 0x4, 12)
-end
-```
-
-### Get Team Name
-
-Prefer `get_var(player_id, "$team")`.
-
-```lua
-local function getTeamName(player_id)
-    local static_p = get_player(player_id)
-    if not static_p then return "None" end
-    return read_byte(static_p + 0x20) == 0 and "Red" or "Blue"
-end
-```
-
-### Get K/D Ratio
-
-```lua
-local function getKDRatio(player_id)
-    local static_p = get_player(player_id)
-    if not static_p then return 0 end
-    local kills = read_word(static_p + 0x9C)
-    local deaths = read_word(static_p + 0xAE)
-    return deaths == 0 and kills or kills / deaths
-end
-```
-
-### Speedometer
-
-Returns speed in km/h from the object's velocity offsets. Velocity is in world units per tick.
-
-See [Timing and Units](cheat-sheet.md#timing-and-units) (SAPP Cheat Sheet).
-
-```lua
-local function getSpeed(dyn_player)
-    local vx = read_float(dyn_player + 0x68)
-    local vy = read_float(dyn_player + 0x6C)
-    local vz = read_float(dyn_player + 0x70)
-    local speed_wu_per_tick = math.sqrt(vx * vx + vy * vy + vz * vz)
-    return speed_wu_per_tick * 30 * 3.048 * 3.6
-end
-```
+For names and teams, prefer `get_var(player_id, "$name")` and `get_var(player_id, "$team")`.
 
 ### Get Player Ping
 
@@ -441,21 +358,13 @@ local function getPlayerPing(player_id)
 end
 ```
 
-### Get and Set Player Color
+### Set Player Color
+
+A respawn is usually required for the change to fully apply. Color values are listed under
+[Team and Color](../common-reference.md#team-and-color).
 
 ```lua
-local function getPlayerColor(player_id)
-    local static = get_player(player_id)
-    return static and read_byte(static + 0x60)
-end
-
--- A respawn is usually required for the change to fully apply.
 ---@param color number Color index (0-17)
---- Color table:
----    0 =  white   1 = black    2 = red     3 = blue    4 = gray
----    5 =  yellow  6 = green    7 = pink    8 = purple  9 = cyan
----    10 = cobalt  11 = orange  12 = teal   13 = sage   14 = brown
----    15 = tan     16 = maroon  17 = salmon
 local function setPlayerColor(player_id, color)
     local static = get_player(player_id)
     write_byte(static + 0x60, color)
@@ -636,48 +545,12 @@ local function getInventory(dyn_player)
 end
 ```
 
-### Get Weapon Slot
-
-Returns the player's current weapon slot index (0-3).
-
-```lua
----@param dyn_player number Dynamic player address.
----@return number slot
-local function getWeaponSlot(dyn_player)
-    return read_byte(dyn_player + 0x2F2)
-end
-```
-
-### Low Ammo Warning
-
-Checks the loaded magazine against a threshold. Offset `0x2B8` is rounds in the magazine; `0x2B6`
-is reserve ammo.
-
-```lua
-local function isLowAmmo(dyn_player, threshold)
-    local weapon_id = read_dword(dyn_player + 0x118)
-    if weapon_id == 0 then return false end
-    local weapon_obj = get_object_memory(weapon_id)
-    if weapon_obj == 0 then return false end
-    return read_word(weapon_obj + 0x2B8) <= threshold
-end
-```
-
----
-
 ## Tag and Map Helpers
 
-The tag table layout is documented under [Tag Table](cheat-sheet.md#tag-table) (SAPP Cheat Sheet).
+The tag table base is documented under [Tag Table](cheat-sheet.md#tag-table) (SAPP Cheat Sheet) and
+the entry layout under [Tag Entry](../common-reference.md#tag-entry).
 
-```lua
---- Converts a four-letter tag class (e.g. "weap") to the dword stored in the tag table.
----@param class string Four-letter tag class.
----@return number class_dword
-local function classToDword(class)
-    local a, b, c, d = class:byte(1, 4)
-    return a * 0x1000000 + b * 0x10000 + c * 0x100 + d
-end
-```
+`classToDword` is defined under [Tag Entry Helpers](../common-reference.md#tag-entry-helpers).
 
 ### Find Tag
 
@@ -789,40 +662,15 @@ end
 
 ## Distance Helpers
 
-Unit conversions (ticks, world units, meters) are documented in
-[Timing and Units](cheat-sheet.md#timing-and-units) (SAPP Cheat Sheet).
+`distance3d` and `distanceMeters` are shared with Chimera.
+See [Distance](../common-reference.md#distance).
+Unit conversions are under [Timing and Units](../common-reference.md#timing-and-units).
 
-```lua
-local WU_TO_M = 3.048
-
---- Returns the 3D distance between two points in world units.
----@return number distance
-local function distance3d(x1, y1, z1, x2, y2, z2)
-    local dx = x2 - x1
-    local dy = y2 - y1
-    local dz = z2 - z1
-    return math.sqrt(dx * dx + dy * dy + dz * dz)
-end
-
---- Returns the distance in meters between a point and a target table.
----@param x number
----@param y number
----@param z number
----@param target table {x, y, z} in world units.
----@return number distance_m
-local function distanceMeters(x, y, z, target)
-    local wu = distance3d(x, y, z, target[1], target[2], target[3])
-    return wu * WU_TO_M
-end
-```
-
-Example:
+On SAPP, read the position with `read_vector3d`:
 
 ```lua
 local px, py, pz = read_vector3d(dynamic_player + 0x5C)
-local loc = { 0, 0, 0 }
-local distance_wu = distance3d(px, py, pz, loc[1], loc[2], loc[3])
-local distance_m = distanceMeters(px, py, pz, loc)
+local distance_m = distanceMeters(px, py, pz, { 0, 0, 0 })
 ```
 
 ---
@@ -1019,369 +867,15 @@ end
 
 ## Platform-Independent Helpers
 
-Copy them into scripts as needed.
-
-### Table Utilities
-
-```lua
--- deepCopy({a = 1, b = {c = 2}}) -> fully independent copy
--- Warning: does not handle circular references
-local function deepCopy(original)
-    if type(original) ~= "table" then return original end
-    local copy = {}
-    for k, v in pairs(original) do copy[deepCopy(k)] = deepCopy(v) end
-    return setmetatable(copy, deepCopy(getmetatable(original)))
-end
-
--- shuffleArray({10, 20, 30, 40}) -> shuffles in place (Fisher-Yates)
--- Call math.randomseed(os.time()) once at script load.
-local function shuffleArray(array)
-    for i = #array, 2, -1 do
-        local j = math.random(i)
-        array[i], array[j] = array[j], array[i]
-    end
-end
-
--- tableLength({10, 20, name = "Chalwk", 30}) -> 4
-local function tableLength(t)
-    local count = 0
-    for _ in pairs(t) do count = count + 1 end
-    return count
-end
-```
-
-### String Utilities
-
-```lua
--- parseArgs("/give weapon sniper", " ") -> {"/give", "weapon", "sniper"}
--- The delimiter goes into a Lua pattern, so escape special characters (e.g. "%.").
-local function parseArgs(input, delimiter)
-    local t = {}
-    for substring in input:gmatch("([^" .. delimiter .. "]+)") do t[#t + 1] = substring end
-    return t
-end
-
--- isChatCommand("/kick") -> true; isChatCommand("hello") -> false
-local function isChatCommand(str)
-    if not str then return false end
-    local first = string.sub(str, 1, 1)
-    return first == "/" or first == "\\"
-end
-
--- stripPrefix("//give") -> "give"
-local function stripPrefix(message)
-    if not message then return "" end
-    return (string.gsub(message, "^[\\/]+", ""))
-end
-
--- splitString("a,b;c", ",", ";") -> {"a", "b", "c"}
--- Longer delimiters take precedence.
-local function splitString(str, ...)
-    local delims = { ... }
-    if #delims == 0 then return { str } end
-
-    -- Split into individual characters if any delimiter is empty
-    for _, d in ipairs(delims) do
-        if d == "" then
-            local chars = {}
-            for i = 1, #str do
-                chars[#chars + 1] = string.sub(str, i, i)
-            end
-            return chars
-        end
-    end
-
-    -- Sort delimiters by length descending so the longest match wins
-    table.sort(delims, function(a, b) return #a > #b end)
-
-    -- Escape magic characters in each delimiter for Lua pattern
-    local escaped = {}
-    for _, d in ipairs(delims) do
-        escaped[#escaped + 1] = string.gsub(d, "([%^%$%(%)%%%.%[%]%*%+%-%?])", "%%%1")
-    end
-    local sep_pattern = table.concat(escaped, "|")
-
-    -- Split using the complement of the delimiter pattern
-    local tokens = {}
-    for token in string.gmatch(str, "([^" .. sep_pattern .. "]+)") do
-        tokens[#tokens + 1] = token
-    end
-
-    -- Strip all delimiter characters from each token (legacy behavior)
-    for i = 1, #tokens do
-        local token = tokens[i]
-        for _, d in ipairs(delims) do
-            token = string.gsub(token, string.gsub(d, "([%^%$%(%)%%%.%[%]%*%+%-%?])", "%%%1"), "")
-        end
-        tokens[i] = token
-    end
-
-    return tokens
-end
-
--- tokenizeCmdString('say "hello world" foo') -> {"say", "hello world", "foo"}
-local function tokenizeCmdString(str)
-    local tokens = {}
-    str = str:gsub("^%s*(.-)%s*$", "%1") .. " " -- trim and add sentinel
-    local pos = 1
-    while pos <= #str do
-        local token, newPos
-        -- try double-quoted string
-        token, newPos = str:match('^"([^"]*)"%s+()', pos)
-        if not token then
-            token, newPos = str:match('^([^%s]+)%s+()', pos)
-        end
-        if not token then break end
-        tokens[#tokens + 1] = token
-        pos = newPos
-    end
-    return tokens
-end
-
--- findChar("hello world", "l") -> 3, 4, 10
-local function findChar(str, character)
-    local indices = {}
-    for i = 1, #str do
-        if string.sub(str, i, i) == character then
-            indices[#indices + 1] = i
-        end
-    end
-    return unpack(indices) -- do not use table.unpack
-end
-
--- wildcardMatch("hello", "he?lo") -> true
--- wildcardMatch("test123", "test*") -> true
-local function wildcardMatch(str, pattern, case_sensitive)
-    if not case_sensitive then
-        str = str:lower()
-        pattern = pattern:lower()
-    end
-
-    -- Handle leading/trailing '?' by substituting the actual character.
-    if string.sub(pattern, 1, 1) == "?" then
-        pattern = string.sub(str, 1, 1) .. string.sub(pattern, 2)
-    end
-    if string.sub(pattern, -1) == "?" then
-        pattern = string.sub(pattern, 1, -2) .. string.sub(str, -1)
-    end
-
-    -- No wildcards -> simple equality check
-    if not pattern:find("*", 1, true) and not pattern:find("?", 1, true) then
-        return str == pattern
-    end
-
-    -- Quick mismatch checks
-    if string.sub(pattern, 1, 1) ~= string.sub(str, 1, 1) and string.sub(pattern, 1, 1) ~= "*" then
-        return false
-    end
-    if string.sub(pattern, -1) ~= string.sub(str, -1) and string.sub(pattern, -1) ~= "*" then
-        return false
-    end
-
-    -- Split pattern into subpatterns by '*'
-    local subpatterns = {}
-    local plen = #pattern
-    local cur = ""
-    for i = 1, plen do
-        local c = string.sub(pattern, i, i)
-        if c == "*" then
-            if cur ~= "" then
-                subpatterns[#subpatterns + 1] = cur
-                cur = ""
-            end
-        else
-            cur = cur .. c
-        end
-    end
-    if cur ~= "" then
-        subpatterns[#subpatterns + 1] = cur
-    end
-
-    -- Greedy match for each subpattern
-    local start = 1
-    local slen = #str
-    for _, subp in ipairs(subpatterns) do
-        local sublen = #subp
-        local found = false
-        local ts = start
-        local te = start + sublen - 1
-        while te <= slen do
-            local match = true
-            for j = 1, sublen do
-                local pc = string.sub(subp, j, j)
-                if pc ~= "?" and pc ~= string.sub(str, ts + j - 1, ts + j - 1) then
-                    match = false
-                    break
-                end
-            end
-            if match then
-                found = true
-                start = ts + sublen
-                break
-            end
-            ts = ts + 1
-            te = te + 1
-        end
-        if not found then return false end
-    end
-    return true
-end
-
--- Reads a UTF-16LE string. Stops at the first null code unit.
-local function readWideString(address, max_chars)
-    local chars = {}
-    for i = 0, (max_chars - 1) * 2, 2 do
-        local lo = read_byte(address + i)
-        if lo == 0 then break end
-        chars[#chars + 1] = string.char(lo)
-    end
-    return table.concat(chars)
-end
-```
+Table, string, message formatting, time, and math helpers work on any platform and are shared with
+Chimera. See [Pure Lua Helpers](../common-reference.md#pure-lua-helpers) in the Common Reference,
+including the [math.atan2 guard](../common-reference.md#mathatan2-guard).
 
 Many Halo strings are UTF-16LE: player name (`get_player(id) + 0x4`), server name
 (`network_struct + 0x8`), gametype name (`network_struct + 0x10C`), and map display name
-(`map_name_address`). `read_string` returns `""` for these fields; use `readWideString` instead.
-The narrow (8-bit) form is used only for filenames and paths (e.g. `map_name_address2`,
-`server_path_address`).
-
-### Message Formatting
-
-Three approaches. Pick the one that fits:
-
-```lua
--- V1: string.format wrapper
--- formatMessage("Player %s joined.", "Chalwk") -> "Player Chalwk joined."
-local function formatMessage(message, ...)
-    return select('#', ...) > 0 and message:format(...) or message
-end
-
--- V2: $placeholder substitution
--- formatMessageVars("Hello $name", {name = "Chalwk"}) -> "Hello Chalwk"
-local function formatMessageVars(message, vars)
-    return (message:gsub("%$(%w+)", function(key)
-        return vars[key] or "$" .. key
-    end))
-end
-
--- V3: case-insensitive placeholders with fallback
--- formatTemplate("Welcome $NAME", {name = "Chalwk"}) -> "Welcome Chalwk"
-local function formatTemplate(template, args)
-    if not args then return template end
-    return (template:gsub("%$([%w_]+)", function(key)
-        local value = args[key] or args[key:lower()] or args[key:upper()]
-        return value ~= nil and tostring(value) or "$" .. key
-    end))
-end
-```
-
-### Time Utilities
-
-```lua
--- wordToTime("1m30s") -> 90 | ("2h") -> 7200 | ("1d12h") -> 129600
-local function wordToTime(time_string)
-    if not time_string then return -1 end
-    local total, num = 0, ""
-    for i = 1, #time_string do
-        local c = string.sub(time_string, i, i)
-        if tonumber(c) then
-            num = num .. c
-        else
-            local amount = tonumber(num) or 0
-            if c == "s" then
-                total = total + amount
-            elseif c == "m" then
-                total = total + amount * 60
-            elseif c == "h" then
-                total = total + amount * 3600
-            elseif c == "d" then
-                total = total + amount * 86400
-            end
-            num = ""
-        end
-    end
-    return total > 0 and total or -1
-end
-
--- timeToWord(3665) -> "1h 1m 5s" | (-1) -> "-1" | (0) -> "0s"
-local function timeToWord(seconds)
-    if seconds == -1 or not tonumber(seconds) then return "-1" end
-    seconds = tonumber(seconds)
-    local days = math.floor(seconds / 86400)
-    seconds = seconds % 86400
-    local hours = math.floor(seconds / 3600)
-    seconds = seconds % 3600
-    local mins = math.floor(seconds / 60)
-    local secs = seconds % 60
-    local parts = {}
-
-    if days > 0 then parts[#parts + 1] = days .. "d" end
-    if hours > 0 then parts[#parts + 1] = hours .. "h" end
-    if mins > 0 then parts[#parts + 1] = mins .. "m" end
-    if secs > 0 or #parts == 0 then parts[#parts + 1] = secs .. "s" end
-
-    return table.concat(parts, " ")
-end
-
--- formatDuration(125) -> "00:02:05"
-local function formatDuration(seconds)
-    seconds = tonumber(seconds) or 0
-    local h = math.floor(seconds / 3600)
-    local m = math.floor((seconds % 3600) / 60)
-    local s = math.floor(seconds % 60)
-    return string.format("%02d:%02d:%02d", h, m, s)
-end
-```
-
-### Math and Geometry
-
-```lua
-local function inSphere(px, py, pz, ox, oy, oz, radius)
-    local dx, dy, dz = ox - px, oy - py, oz - pz
-    return (dx * dx + dy * dy + dz * dz) <= radius * radius
-end
-
-local function checkInCircle(px, py, cx, cy, radius)
-    return (px - cx) ^ 2 + (py - cy) ^ 2 <= radius ^ 2
-end
-
--- Needs the math.atan2 guard below.
-local function directionToCardinal(forward_x, forward_y)
-    local angle = (90 - math.deg(math.atan2(forward_y, forward_x))) % 360
-    local dirs = { "N", "NE", "E", "SE", "S", "SW", "W", "NW" }
-    local idx = math.floor((angle + 22.5) / 45) % 8 + 1
-    return dirs[idx]
-end
-
-local function round(value, decimals)
-    local factor = 10 ^ (decimals or 0)
-    return math.floor(value * factor + 0.5) / factor
-end
-
-local function toDecimal(hex_string) return tonumber(hex_string, 16) end
-```
-
-#### math.atan2 Guard
-
-SAPP's LuaJIT environment has no `math.atan2`. Define this once at the top of any script that needs
-it, or that uses a helper that calls it such as `directionToCardinal`:
-
-```lua
-if not math.atan2 then
-    local pi = math.pi
-    math.atan2 = function(y, x)
-        if x > 0 then
-            return math.atan(y / x)
-        elseif x < 0 then
-            return y >= 0 and math.atan(y / x) + pi or math.atan(y / x) - pi
-        else
-            if y > 0 then return pi / 2
-            elseif y < 0 then return -pi / 2
-            else return 0 end
-        end
-    end
-end
-```
+(`map_name_address`). `read_string` returns `""` for these fields; use `readWideString` from
+[Wide Strings](../common-reference.md#wide-strings) instead. The narrow (8-bit) form is used only
+for filenames and paths (e.g. `map_name_address2`, `server_path_address`).
 
 ---
 
@@ -1556,8 +1050,8 @@ count: `tonumber(get_var(0, "$pn")) - 1`.
 
 ### math.atan2 Is Missing
 
-Define the guard from Math and Geometry before using it, or before using any helper that calls it
-such as `directionToCardinal`.
+Define the guard from [Math and Geometry](../common-reference.md#math-and-geometry) before using it,
+or before using any helper that calls it such as `directionToCardinal`.
 
 ### Vehicle Physics Fix
 

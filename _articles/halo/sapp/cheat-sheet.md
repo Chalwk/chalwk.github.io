@@ -6,55 +6,16 @@ categories: [ education, halo, modding ]
 tags: [ sapp, lua, scripting, server, tutorial ]
 ---
 
-Lookup tables for SAPP (server) Lua scripting: memory addresses and offsets, pointers, signatures,
-variables, commands, console colors, and unit conversions.
-
----
-
-## Finding Offsets
-
-A memory address is a location in the game's memory. An offset is added to a base address to reach a
-specific field. For example, base `0x40440000` plus offset `0x28` gives `0x40440028`.
-
-Dynamic addresses change between sessions. Find a stable base (module handle, pointer table) and
-apply offsets to reach the data.
-
-Tools used in the Halo PC/CE modding community:
-
-| Tool             | Use                                                             |
-|------------------|-----------------------------------------------------------------|
-| Cheat Engine     | Real-time memory scanner and modifier.                          |
-| IDA Pro          | Professional disassembler and debugger for the Halo executable. |
-| Halo Map Tools 3 | Utility for finding and modifying offsets within map files.     |
-
-### Practical Tips
-
-Start with a known value (health, ammo, shield). Scan in Cheat Engine, change it in-game, scan
-again, repeat until few candidates remain. Verify by writing the candidate address.
-
-For stable pointers, right-click the working address and use "Pointer scan for this address".
-Restart the game and compare results to find a consistent chain. Pointer scans can generate
-thousands of results; reload a few times to filter.
-
-Document each discovered offset with its type and purpose.
-
-### Further Reading
-
-- [How To Find Offsets, Entity Addresses & Pointers](https://www.youtube.com/watch?v=YaFlh2pIKAg)
-  walks through locating offsets using Cheat Engine.
-- [Finding Offsets /w Cheat Engine - UnKnoWnCheaTs](https://www.unknowncheats.me/forum/general-programming-and-reversing/200702-finding-offsets-using-cheat-engine.html)
-  is a written guide on using Cheat Engine for offset discovery.
-- [Halo Map Tools - Bungie Forums](https://forums.bungie.org/halo/archive13.pl?read=390998)
-  covers offset manipulation with Halo Map Tools 3.
+Lookup tables for SAPP (server) Lua scripting: pointers, signatures, variables, commands, and
+console colors. Memory offsets, game constants, unit conversions, and stock Halo commands are shared
+with Chimera and live in [Common Reference](../common-reference.md).
 
 ---
 
 ## Hardcoded Pointers
 
 Addresses below apply to both PC and CE. The `halo_type` global is defined by SAPP; the snippet
-below probes when it is absent.
-
-Use these pointers when no reliable signature exists
+below probes when it is absent. Use these pointers when no reliable signature exists
 (see [Signature Reference](#signature-reference)). Addresses are hex and `-` means unavailable. Pick
 PC or CE with `halo_type` (`"PC"` or `"CE"`):
 
@@ -121,9 +82,10 @@ local timelimit_address = halo_type == "PC" and 0x626630 or 0x5AA5B0
 
 Notes:
 
-- `gametype_base + 0x0` is the gametype name as UTF-16LE. Use `readWideString`, not `read_string`.
-  `+0x30` is game type (1=CTF 2=Slayer 3=Oddball 4=KOTH 5=Race), `+0x34` is team play, `+0x58` is
-  score limit. There is no working PC sig for this pointer; use `0x671320`.
+- `gametype_base + 0x0` is the gametype name as UTF-16LE. Use `readWideString`, not `read_string`
+  (see [Wide Strings](../common-reference.md#wide-strings)). The other fields are listed under
+  [Gametype Struct](../common-reference.md#gametype-struct). There is no working PC sig for this
+  pointer; use `0x671320`.
 
 - `map_name_address` is UTF-16LE. Use `readWideString`. For the map filename, use
   `read_string(network_struct + 0x8C, 0x80)`. `map_name_address2` is not populated on the dedi.
@@ -131,11 +93,10 @@ Notes:
 - `map_pointer` resolves to `0x40440000` on both PC and CE. If you only need the tag table, use
   `0x40440000` directly (tag array at `0x40440028`, tag count at `0x4044000C`).
 
-- `race_globals + 0x0` is the course checkpoint mask (popcount = checkpoints required).
-  `race_globals + 0x44 + to_real_index(i) * 4` is the per-player progress mask (bit 0 = checkpoint
-  1, bit 1 = checkpoint 2, etc.). `race_locs` is not required for lap timing.
+- The `race_globals` fields are listed under [Race Globals](../common-reference.md#race-globals). On
+  SAPP the player index is `to_real_index(i)`. `race_locs` is not required for lap timing.
 
-- `ctf_globals + 0x0` is a pointer to the red flag spawn coords (vector3d). `+0x4` is a pointer to
+- `ctf_globals + 0x0` is a pointer to the red flag spawn coords (`vector3d`). `+0x4` is a pointer to
   the blue flag spawn coords. Read with `read_vector3d(read_dword(ctf_globals + team * 4))`, where
   `team = 0` is red and `team = 1` is blue.
 
@@ -143,117 +104,19 @@ Notes:
 
 ## Memory Offsets
 
+Player, object, weapon, vehicle, and tag entry offsets are shared with Chimera. See
+[Memory Offsets](../common-reference.md#memory-offsets) in the Common Reference.
+
 SAPP player API indices run 1-16, and any memory array indexed 0-15 must be reached through
 `to_real_index(i)`. `get_dynamic_player(i)` returns `0` when the player is dead, and
-`get_object_memory(object_id)` returns `0` when the id is invalid, so test with `if not player then`
-rather than comparing to `0`. Loop from `1` to `16`.
-
-### Base Object
-
-Fields shared by every object (players, weapons, vehicles). Get the address with
-`get_object_memory(objectId)`.
-
-| Offset           | Type  | Field                                                 |
-|------------------|-------|-------------------------------------------------------|
-| `0x0`            | dword | Tag ID (the low word is the index into the tag array) |
-| `0x10`           | bits  | Flags (bit 0 = no collision, bit 5 = ignore physics)  |
-| `0x5C/0x60/0x64` | float | World X / Y / Z                                       |
-| `0x68/0x6C/0x70` | float | Velocity X / Y / Z (world units per tick)             |
-| `0x74/0x78/0x7C` | float | Forward vector X / Y / Z                              |
-| `0xB4`           | byte  | Object type                                           |
-
-### Dynamic Player Object
-
-`get_dynamic_player(i)` returns the live player object. It uses the Base Object fields above plus
-the ones below. Check `dyn ~= 0` before reading; `0` means dead or invalid.
-
-| Offset              | Type  | Field                                                      |
-|---------------------|-------|------------------------------------------------------------|
-| `0xE0`              | float | Health (0.0-1.0)                                           |
-| `0xE4`              | float | Shields (0.0-1.0)                                          |
-| `0x106`             | bits  | Dynamic player flags (bit 11 = no damage/invulnerable)     |
-| `0x118`             | dword | Current weapon object ID                                   |
-| `0x11C`             | dword | Vehicle object ID (`0xFFFFFFFF` = on foot)                 |
-| `0x208`             | word  | Key/action input flags (bit 4 = flashlight)                |
-| `0x230/0x234/0x238` | float | Aim vector X / Y / Z                                       |
-| `0x2A3`             | byte  | Movement key input state                                   |
-| `0x2A4`             | byte  | Reload key input state                                     |
-| `0x2F0`             | word  | Vehicle seat index (0 = driver, 1 = passenger, 2 = gunner) |
-| `0x2F2`             | byte  | Current weapon slot (0-3)                                  |
-| `0x2F8-0x304`       | dword | Weapon slots 1-4 object IDs (`0x2F8 + (slot - 1) * 4`)     |
-| `0x31E`             | byte  | Frag grenades                                              |
-| `0x31F`             | byte  | Plasma grenades                                            |
-| `0x37C`             | float | Invisibility (1.0 = invisible)                             |
-| `0x47C`             | byte  | Weapon switch key input state                              |
-| `0x47E`             | byte  | Grenade switch key input state                             |
-| `0x480`             | word  | Zoom state (0 = unzoomed)                                  |
-| `0x490`             | float | Primary trigger / shooting state                           |
-| `0x50C`             | float | Crouch scale (0.0 = standing, 1.0 = crouched)              |
-
-### Static Player Data
-
-`get_player(i)` returns the persistent player structure.
-
-| Offset            | Type    | Field                                                      |
-|-------------------|---------|------------------------------------------------------------|
-| `0x4`             | wchar[] | Name (UTF-16LE, low bytes readable as ASCII, max 12 chars) |
-| `0x20`            | byte    | Team (0 = Red, 1 = Blue)                                   |
-| `0x2C`            | dword   | Respawn timer (ticks)                                      |
-| `0x34`            | dword   | Player unit / biped object ID                              |
-| `0x60`            | byte    | Player FFA color index (0-17)                              |
-| `0x68`            | word    | Active camouflage timer/state (> 0 = camouflaged)          |
-| `0x6C`            | float   | Player speed multiplier (1.0 = normal)                     |
-| `0x9C`            | word    | Kills                                                      |
-| `0xA4`            | word    | Assists / secondary kills                                  |
-| `0xAE`            | word    | Deaths                                                     |
-| `0xC4`            | word    | King of the Hill hill time (ticks)                         |
-| `0xC6`            | word    | Race score / laps                                          |
-| `0xC8`            | word    | CTF score / flag returns                                   |
-| `0xDC`            | dword   | Ping (ms)                                                  |
-| `0xF8/0xFC/0x100` | float   | Alternate world X / Y / Z                                  |
-
-### Weapon Object
-
-Base Object fields plus the ones below.
-
-| Offset  | Type  | Field                        |
-|---------|-------|------------------------------|
-| `0x240` | float | Overheat (0-1)               |
-| `0x2B6` | word  | Reserve ammo                 |
-| `0x2B8` | word  | Rounds in magazine           |
-| `0x2C6` | word  | Secondary reserve ammo       |
-| `0x2C8` | word  | Secondary rounds in magazine |
-
-### Vehicle Object
-
-Same lookup as weapons. Position and velocity use the Base Object offsets. A seated player's
-position is the vehicle's position.
-
-| Offset  | Type  | Field                                                      |
-|---------|-------|------------------------------------------------------------|
-| `0x324` | dword | Driver seat occupant unit object ID (`0xFFFFFFFF` = empty) |
-
-[//]: # (Todo: Add missing Vehicle Object offsets)
+`get_object_memory(object_id)` returns `0` when the id is invalid, so compare against `0` before
+reading. Loop from `1` to `16`.
 
 ### Tag Table
 
 The tag table base is `0x40440000` on both PC and CE. Read the tag array pointer from the base and
-the tag count from `base + 0xC`. Each tag entry is `0x20` bytes. You can reach the base directly
-without `map_pointer`.
-
-| Entry offset | Type  | Field                                                                           |
-|--------------|-------|---------------------------------------------------------------------------------|
-| `0x0`        | dword | Tag class (`weap` = `0x77656170`, `vehi` = `0x76656869`, `eqip` = `0x65716970`) |
-| `0xC`        | dword | Meta ID                                                                         |
-| `0x10`       | dword | Pointer to the tag name string                                                  |
-| `0x14`       | dword | Pointer to the tag data                                                         |
-
-Weapon tag data: bit 3 of `+0x308` is set for objective weapons (flag, oddball), and the byte at
-`+0x2` tells them apart (`0` = flag, `4` = oddball). `hasObjective` and `getFlagData`
-in [SAPP Utils](utils.md) rely on this.
-
-Vehicle tag data (`vehi`): word at `+0x2F4` controls vehicle motion/physics type (`0` = ground,
-`1` = flying banshee, `3` = flying vehicle).
+the tag count from `base + 0xC`. You can reach the base directly without `map_pointer`. The entry
+layout is under [Tag Entry](../common-reference.md#tag-entry).
 
 ---
 
@@ -387,25 +250,6 @@ Scope: G = global (use index `0`), P = per player.
 
 ---
 
-## Timing and Units
-
-- 1 tick = 1/30 s, about 33.333 ms
-- 1 world unit (WU) = 10 ft = 3.048 m
-- Velocity offsets are in WU per tick; scripts often quote speeds in WU per second
-
-| From    | To              | Formula                    |
-|---------|-----------------|----------------------------|
-| WU/s    | WU/tick         | `speed / 30`               |
-| WU/s    | m/s             | `speed * 3.048`            |
-| WU/s    | km/h            | `speed * 3.048 * 3.6`      |
-| WU/tick | km/h            | `speed * 30 * 3.048 * 3.6` |
-| WU/s    | meters per tick | `(speed / 30) * 3.048`     |
-
-Example: an object moving at 15 WU/s covers `15 / 30 = 0.5` WU per tick, which is
-`0.5 * 3.048 = 1.524` m. See [Distance Helpers](utils.md#distance-helpers) for the code.
-
----
-
 ## Console Colors
 
 `cprint` writes to the server console with classic Windows console color attributes.
@@ -481,47 +325,8 @@ Number expressions (`<int_expr>`, `<decimal_expr>`). A `<decimal_expr>` is a flo
 
 ### Stock Halo Commands (Vanilla)
 
-These are Halo's built-in server commands. SAPP enhances or overrides some.
-
-| Command                    | Usage                                  | Description                                                         |
-|----------------------------|----------------------------------------|---------------------------------------------------------------------|
-| quit                       | `quit`                                 | Close the server application.                                       |
-| sv_ban                     | `sv_ban <player> [length]`             | Ban a player (optional duration).                                   |
-| sv_ban_penalty             | `sv_ban_penalty [1] [2] [3] [4]`       | Set ban lengths for TK penalties. Default: `5m, 1d, 10d, 0`.        |
-| sv_banlist                 | `sv_banlist`                           | Display ban list.                                                   |
-| sv_banlist_file            | `sv_banlist_file`                      | Locate ban list file.                                               |
-| sv_end_game                | `sv_end_game`                          | End game without starting a new one.                                |
-| sv_friendly_fire           | `sv_friendly_fire [0-3]`               | 0=default,1=off,2=shield only,3=on.                                 |
-| sv_gamelist                | `sv_gamelist`                          | List game variants in `savegames` folder.                           |
-| sv_kick                    | `sv_kick <player>`                     | Remove a player.                                                    |
-| sv_log_echo_chat           | `sv_log_echo_chat [enabled]`           | Echo chat to non-SAPP log (CE only).                                |
-| sv_log_enabled             | `sv_log_enabled [enabled]`             | Enable non-SAPP server log (CE only).                               |
-| sv_log_file                | `sv_log_file [path]`                   | Set log file path (CE only). Default: `haloserver.log`.             |
-| sv_log_note                | `sv_log_note [string]`                 | Write note to non-SAPP log (CE only).                               |
-| sv_log_rotation_threshold  | `sv_log_rotation_threshold [KiB]`      | Set log rotation size (CE only). Default: `4096`.                   |
-| sv_map                     | `sv_map <map> <game variant>`          | Change map and/or game variant.                                     |
-| sv_map_next                | `sv_map_next`                          | End current game, load next.                                        |
-| sv_map_reset               | `sv_map_reset`                         | Reset game (scores, kills, objects).                                |
-| sv_mapcycle                | `sv_mapcycle`                          | Display non-SAPP map cycle.                                         |
-| sv_mapcycle_add            | `sv_mapcycle_add <map> <game variant>` | Add entry to non-SAPP map cycle.                                    |
-| sv_mapcycle_begin          | `sv_mapcycle_begin`                    | Start non-SAPP map cycle from beginning.                            |
-| sv_mapcycle_del            | `sv_mapcycle_del <#>`                  | Remove entry from non-SAPP map cycle.                               |
-| sv_mapcycle_timeout        | `sv_mapcycle_timeout [time]`           | Set time between games (seconds). Default: `10`.                    |
-| sv_maplist                 | `sv_maplist`                           | Display all loaded maps.                                            |
-| sv_maxplayers              | `sv_maxplayers [players]`              | Get/set max players (1-16). Default: `16`.                          |
-| sv_motd                    | `sv_motd [motd.txt]`                   | Set path for server motd (CE only).                                 |
-| sv_name                    | `sv_name [name]`                       | Get/set server name (max 63 chars). Default: `"Halo"`.              |
-| sv_password                | `sv_password [password]`               | Get/set join password (max 8 chars).                                |
-| sv_players                 | `sv_players`                           | List players with indices, team, ping, score, betrayals, TK timer.  |
-| sv_public                  | `sv_public [public]`                   | Set server visibility to master server. Default: `true`.            |
-| sv_rcon_password           | `sv_rcon_password [password]`          | Set cron password (max 8 chars).                                    |
-| sv_single_flag_force_reset | `sv_single_flag_force_reset [enabled]` | Allow flag reset while held in single-flag games. Default: `false`. |
-| sv_status                  | `sv_status`                            | Display current map, player count, max players.                     |
-| sv_timelimit               | `sv_timelimit [minutes]`               | Set time limit (`0`=indefinite, `-1`=use variant).                  |
-| sv_tk_ban                  | `sv_tk_ban [bans]`                     | Team kills required for ban. Default: `4`.                          |
-| sv_tk_cooldown             | `sv_tk_cooldown [time]`                | Time before TK point lost (seconds). Default: `300`.                |
-| sv_tk_grace                | `sv_tk_grace [time]`                   | Grace period between TK points (seconds). Default: `3`.             |
-| sv_unban                   | `sv_unban <#>`                         | Unban a player and remove from ban list.                            |
+The stock `sv_*` command table is shared with Chimera. See
+[Stock Halo Commands](../common-reference.md#stock-halo-commands).
 
 ### SAPP Loader Commands
 
@@ -836,63 +641,3 @@ scripts cannot call each other directly, a custom variable is the way to share d
 | var_del  | 4     | `var_del <name>`                              | Delete a variable.                                                                                                    |
 | var_list | 4     | `var_list`                                    | List all custom variables.                                                                                            |
 | var_set  | 4     | `var_set <name> <value_expr> [player number]` | Set a custom variable (player number required for player variables).                                                  |
-
----
-
-## The default Halo profile name: `New001`
-
-This is the name Halo uses when:
-
-- The game is launched for the first time and no profile exists yet.
-- A new player profile is created automatically.
-- Halo cannot find an existing player profile to load.
-
-The profile itself is stored inside the game's `savegames` directory and the profile folder is also
-named `New001`.
-
-### What are the temporary placeholder names?
-
-Halo PC and CE contain a built-in list of fallback multiplayer names commonly referred to as the
-"temporary profile name pool" or "placeholder name pool".
-
-These names are embedded in the game's `globals.globals` tag and ship with the stock multiplayer
-maps.
-
-Because every stock multiplayer map contains this tag, the default pool is normally identical across
-the retail Halo PC and CE multiplayer maps.
-
-Modded or rebuilt maps can change the list entirely.
-
-```text
-Butcher, Caboose, Crazy, Cupid, Darling, Dasher, Disco, Donut, Dopey,
-Ghost, Goat, Grumpy, Hambone, Hollywood, Howard, Jack, Killer, King,
-Noodle, Penguin, Pirate, Prancer, Saucy, Shadow, Sleepy, Snake, Sneak,
-Stompy, Stumpy, The Bear, The Big L, Tooth, Walla Walla, Weasel, Whicker,
-Wheezy, Whisp, Wilshire
-```
-
-These names are not normally used during standard single-instance gameplay. Instead, they exist as
-fallback identities used by the multiplayer networking system.
-
-### When does Halo assign a placeholder name?
-
-The placeholder pool is primarily used when Halo cannot safely use the requested multiplayer profile
-name.
-
-The most common example is:
-
-- A player joining a multiplayer server where another player is already using the same profile name.
-
-Halo PC and CE do not allow duplicate active player names within the same multiplayer session. If
-the requested name is already in use by another connected player, Halo automatically assigns a
-temporary placeholder name from the pool instead.
-
-For example:
-
-1. A player joins a server using `New001`.
-2. Another player joins using a profile also named `New001`.
-3. Halo detects the duplicate name conflict.
-4. The second player is assigned a temporary placeholder name such as `Caboose`, `Snake`, or
-   `Wheezy`.
-
----

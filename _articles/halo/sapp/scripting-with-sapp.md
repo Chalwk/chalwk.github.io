@@ -15,8 +15,10 @@ commands, player management, and direct memory access. Scripts run on dedicated 
 ## Reference Files
 
 - [utils.md](utils.md): Conventions, helper functions, and known quirks.
-- [cheat-sheet.md](cheat-sheet.md): Pointers, memory offsets, `sig_scan` patterns, `get_var`
-  variables, commands, console colors, and unit conversions.
+- [../common-reference.md](../common-reference.md): Memory offsets, game constants, unit
+  conversions, shared helpers, and stock Halo commands.
+- [cheat-sheet.md](cheat-sheet.md): Pointers, `sig_scan` patterns, `get_var` variables, SAPP
+  commands, and console colors.
 - [template.md](template.md): Script skeleton and callback reference.
 
 SAPP Lua scripts cannot talk to each other directly. The only shared channel is custom variables
@@ -33,11 +35,11 @@ SAPP Lua scripts cannot talk to each other directly. The only shared channel is 
 | `ffi` library               | Available via `require("ffi")`                                                                                       |
 | `bit` library               | Available via `require("bit")` (NOT `bit32`)                                                                         |
 | `table.new` / `table.clear` | Available via `require("table.new")` / `require("table.clear")`                                                      |
-| `math.atan2`                | NOT available; use the guard in [Math and Geometry](utils.md#math-and-geometry)                                      |
+| `math.atan2`                | NOT available; use the guard in [Math and Geometry](../common-reference.md#math-and-geometry)                        |
 | Sandboxing                  | Scripts run sandboxed; unsafe memory ops can crash the server                                                        |
 | Global platform values      | `cb`, `halo_type`                                                                                                    |
 | Player index convention     | SAPP API uses 1-16; Halo internal memory uses 0-15 (see [Player Index Convention](utils.md#player-index-convention)) |
-| Tick rate                   | 30 ticks/sec (1 tick ~ 33.3 ms); 1 WU = 3.048 m; more in [Timing and Units](cheat-sheet.md#timing-and-units)         |
+| Tick rate                   | 30 ticks/sec (1 tick ~ 33.3 ms); 1 WU = 3.048 m; more in [Timing and Units](../common-reference.md#timing-and-units) |
 
 ---
 
@@ -115,13 +117,14 @@ available callback. Register only the ones the script uses.
 | Safety          | `safe_write(true/false)` (toggles memory write-protection bypass)        |
 
 Bad addresses crash the server. Leave safe mode off unless you need it (it costs performance) and
-test memory operations off production. Pointers are in Hardcoded Pointers and Signature Reference,
-and player, weapon, and vehicle offsets are in Memory Offsets, all
-in [SAPP Cheat Sheet](cheat-sheet.md).
+test memory operations off production. Pointers are in Hardcoded Pointers and Signature Reference
+in [SAPP Cheat Sheet](cheat-sheet.md). Player, weapon, and vehicle offsets are
+in [Memory Offsets](../common-reference.md#memory-offsets) in the Common Reference, since Chimera
+uses the same ones.
 
 Halo also stores many strings as UTF-16LE (player names, server name, gametype name, map display
 name). SAPP has no built-in wide-string reader. Use the `readWideString` helper
-in [SAPP Utils](utils.md). `read_string` returns `""` for these fields.
+in [Wide Strings](../common-reference.md#wide-strings). `read_string` returns `""` for these fields.
 
 ### Messaging
 
