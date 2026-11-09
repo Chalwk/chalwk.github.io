@@ -216,11 +216,16 @@ Base Object fields plus the ones below.
 Position and velocity use the Base Object offsets. A seated player's position is the vehicle's
 position.
 
-| Offset  | Type  | Field                                                      |
-|---------|-------|------------------------------------------------------------|
-| `0x324` | dword | Driver seat occupant unit object ID (`0xFFFFFFFF` = empty) |
-
-[//]: # (Todo: Add missing Vehicle Object offsets)
+| Offset        | Type  | Field                                                            |
+|---------------|-------|------------------------------------------------------------------|
+| `0x324`       | dword | Driver seat occupant unit object ID (`0xFFFFFFFF` = empty)       |
+| `0x328`       | dword | Master of weapons / gunner unit object ID (`0xFFFFFFFF` = empty) |
+| `0x32C`       | dword | Passenger unit object ID (`0xFFFFFFFF` = empty)                  |
+| `0x330`       | dword | Time abandoned parent (ticks)                                    |
+| `0x338`       | float | Vehicle entry scale                                              |
+| `0x340`       | float | Flashlight intensity scale                                       |
+| `0x344`       | float | Flashlight energy remaining                                      |
+| `0x348/0x34C` | float | Vehicle position X / Y                                           |
 
 ### Tag Entry
 
@@ -246,12 +251,15 @@ Vehicle tag data (`vehi`): word at `+0x2F4` controls vehicle motion/physics type
 Relative to the gametype struct base. On Chimera that is `gametype` from the
 [Candidates Table](#candidates-table).
 
-| Offset | Field                                                                         |
-|--------|-------------------------------------------------------------------------------|
-| `0x0`  | Gametype name, UTF-16LE (see [Wide Strings](#wide-strings))                   |
-| `0x30` | Game type code, read with `read_byte` (see [Gametype Codes](#gametype-codes)) |
-| `0x34` | Team play                                                                     |
-| `0x58` | Score limit, read with `read_byte`                                            |
+| Offset | Type    | Field                                                                         |
+|--------|---------|-------------------------------------------------------------------------------|
+| `0x0`  | wchar[] | Gametype name, UTF-16LE (see [Wide Strings](#wide-strings))                   |
+| `0x30` | byte    | Game type code, read with `read_byte` (see [Gametype Codes](#gametype-codes)) |
+| `0x34` | byte    | Team play (0 = Off, 1 = On)                                                   |
+| `0x38` | bits    | Gametype rules flags (radar, shields, infinite grenades, etc.)                |
+| `0x3C` | byte    | Indicator mode                                                                |
+| `0x58` | byte    | Score limit, read with `read_byte`                                            |
+| `0x68` | dword   | Vehicle respawn time (ticks)                                                  |
 
 ### Race Globals
 
