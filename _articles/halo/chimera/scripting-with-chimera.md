@@ -35,7 +35,8 @@ they live:
 
 - Map Scripts: Put scripts into `chimera\lua\scripts\maps`. These only load when their associated
   map is active and unload automatically when you leave. Perfect for map-specific features. Map
-  scripts are sandboxed by default, unless loaded from the script folder.
+  scripts are sandboxed by default. Global scripts, and map scripts explicitly placed in the global
+  folder, run without sandbox restrictions.
 
 By default, the chimera data folder will be located in
 `C:\Users\<user>\Documents\My Games\Halo CE\chimera`.
@@ -111,6 +112,7 @@ Exact event strings accepted by `set_callback`:
 - `"preframe"` - called before rendering each frame
 - `"precamera"` - called immediately before camera calculations are applied
 - `"map load"` - called after the map has fully loaded; use it to reset state
+- `"map preload"` - called before the map begins loading
 - `"command"` - called for any console command (see below)
 - `"rcon_message"` - called when an RCON message is received
 - `"prespawn"` - called before a player spawns; receives the player index
@@ -129,6 +131,17 @@ Draw calls such as `draw_text` belong in the per-frame callbacks (`"preframe"` o
 - `"precamera"`: must return all ten camera values (see Camera Manipulation).
 - `"unload"`: fired when the script unloads (map change or manual reload). The map may already have
   changed by then.
+
+### Sandbox Restrictions (Map Scripts)
+
+Sandboxed scripts (map scripts by default) run with a stripped environment. Chimera disables
+`io`, `dofile`, `getfenv`, `load`, `loadfile`, `loadstring`, `require`, `os.execute`, `os.exit`,
+`os.remove`, `os.rename`, and `os.tmpname` before your code runs.
+
+Memory read/write functions (`read_int`, `write_float`, `read_string`, etc.) are also restricted to
+the address range `0x40000000`–`0x41B00000`. Outside that range, a sandboxed script will raise an
+error. If you need file access or unrestricted memory access, place the script in the `global`
+folder instead.
 
 ### Embedded Scripts (Advanced)
 
@@ -248,6 +261,7 @@ pointer work the same on both platforms.
 
 Note: Sandboxed scripts (map scripts) cannot use `io.*` functions. If you need file access in a map
 script, you must place the script in the `global` folder instead.
+See [Sandbox Restrictions](#sandbox-restrictions-map-scripts).
 
 ```lua
 local SAVE_FILE = "my_data.txt" -- file will appear in Halo's root installation folder
