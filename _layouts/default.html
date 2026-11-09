@@ -37,6 +37,41 @@
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-lua.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll("blockquote").forEach(bq => {
+                if (bq.classList.contains("markdown-alert")) return;
+                const firstP = bq.querySelector("p");
+                if (!firstP) return;
+                const text = firstP.textContent.trim();
+                const match = text.match(/^\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]/i);
+                if (match) {
+                    const type = match[1].toUpperCase();
+                    bq.classList.add("markdown-alert", `markdown-alert-${type.toLowerCase()}`);
+
+                    firstP.innerHTML = firstP.innerHTML.replace(/^\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]\s*/i, '');
+
+                    const titleDiv = document.createElement("div");
+                    titleDiv.className = "markdown-alert-title";
+
+                    let svgContent = "";
+                    let titleText = type.charAt(0) + type.slice(1).toLowerCase();
+
+                    if (type === "NOTE") {
+                        svgContent = '<svg viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"></path></svg>';
+                    } else if (type === "TIP") {
+                        svgContent = '<svg viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="M8 1.5c-2.363 0-4 1.69-4 3.75 0 1.532.83 2.825 2 3.5v1.75c0 .414.336.75.75.75h2.5c.414 0 .75-.336.75-.75V8.75c1.17-.625 2-1.918 2-3.5 0-2.06-1.637-3.75-4-3.75ZM4.25 12c-.414 0-.75.336-.75.75s.336.75.75.75h7.5c.414 0 .75-.336.75-.75s-.336-.75-.75-.75h-7.5Z"></path></svg>';
+                    } else if (type === "IMPORTANT") {
+                        svgContent = '<svg viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5ZM8 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"></path></svg>';
+                    } else if (type === "WARNING") {
+                        svgContent = '<svg viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575ZM8 5a.75.75 0 0 0-.75.75v2.5a.75.75 0 0 0 1.5 0v-2.5A.75.75 0 0 0 8 5Zm0 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2Z"></path></svg>';
+                    } else if (type === "CAUTION") {
+                        svgContent = '<svg viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="M4.47.22A.749.749 0 0 1 5 0h6c.199 0 .389.079.53.22l4.25 4.25c.141.14.22.331.22.53v6a.749.749 0 0 1-.22.53l-4.25 4.25A.749.749 0 0 1 11 16H5a.749.749 0 0 1-.53-.22L.22 11.53A.749.749 0 0 1 0 11V5c0-.199.079-.389.22-.53Zm.84 1.28L1.5 5.31v5.38l3.81 3.81h5.38l3.81-3.81V5.31L10.69 1.5ZM8 4a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5A.75.75 0 0 1 8 4Zm0 8a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"></path></svg>';
+                    }
+
+                    titleDiv.innerHTML = svgContent + '<span>' + titleText + '</span>';
+                    bq.insertBefore(titleDiv, firstP);
+                }
+            });
+
             if (typeof Prism !== 'undefined') {
                 Prism.hooks.add('after-highlight', function(env) {
                     if (env.language === 'lua' || (env.element && env.element.className.includes('language-lua'))) {
