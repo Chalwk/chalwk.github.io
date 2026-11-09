@@ -13,6 +13,7 @@ clua_version = 2.056
 set_callback("command", "OnCommand")
 set_callback("frame", "OnFrame")
 set_callback("map load", "OnMapLoad")
+set_callback("map preload", "OnMapPreload")
 set_callback("precamera", "OnPreCamera")
 set_callback("preframe", "OnPreFrame")
 set_callback("prespawn", "OnPreSpawn")
@@ -43,6 +44,9 @@ function OnTick() end
 
 --- Called immediately before the main tick update.
 function OnPreTick() end
+
+--- Called before a map begins loading.
+function OnMapPreload() end
 
 --- Called after a map has fully loaded.
 --- Use this to reset or initialize gameplay state.
