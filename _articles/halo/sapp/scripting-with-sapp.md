@@ -21,7 +21,7 @@ commands, player management, and direct memory access. Scripts run on dedicated 
   conversions, shared helpers, and stock Halo commands.
 - [cheat-sheet.md](cheat-sheet.md): Pointers, `sig_scan` patterns, `get_var` variables, SAPP
   commands, and console colors.
-- [template.md](template.md): Script skeleton and callback reference.
+- [template.md](sapp-lua-template.md.md): Script skeleton and callback reference.
 
 SAPP Lua scripts cannot talk to each other directly. The only shared channel is custom variables
 (see Custom Variables in [cheat-sheet.md](cheat-sheet.md)).
@@ -96,7 +96,7 @@ end
 ## Callbacks
 
 `register_callback(cb.EVENT_NAME, "GlobalFnName")` registers a global callback and
-`unregister_callback(cb.EVENT_NAME)` removes it. See [SAPP Lua Template](template.md) for every
+`unregister_callback(cb.EVENT_NAME)` removes it. See [SAPP Lua Template](sapp-lua-template.md.md) for every
 available callback. Register only the ones the script uses.
 
 ---

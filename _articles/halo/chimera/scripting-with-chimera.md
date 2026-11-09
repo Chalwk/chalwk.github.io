@@ -46,7 +46,7 @@ To reload all scripts without restarting the game, type `chimera_lua_scripts_rel
 
 ## Script Skeleton
 
-See [Chimera Lua Template](template.md) for every available callbacks. Register only the ones the
+See [Chimera Lua Template](chimera-lua-template.md) for every available callbacks. Register only the ones the
 script uses.
 
 Every Chimera Lua script must define `clua_version` and set it to the appropriate Chimera API
@@ -80,7 +80,7 @@ only when the declared version is compatible:
 | Higher                         | 2.06               | No     |
 | Lower, different major version | 1.5                | No     |
 
-See [Chimera Lua Template](template.md) for the script skeleton, event names, and callback
+See [Chimera Lua Template](chimera-lua-template.md) for the script skeleton, event names, and callback
 signatures. Register only the ones the script uses.
 
 ### Event Priorities
