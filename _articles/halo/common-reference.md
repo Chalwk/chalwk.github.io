@@ -374,7 +374,7 @@ end
 ---@param local_player_index number|nil Player memory index (0-15).
 ---@return number|nil address Checkpoint address for the player, or nil if the index is unavailable.
 local function getCheckpointAddress(race_globals, local_player_index)
-    if not local_player_index then return nil end
+    if not local_player_index then return nil end -- 0 is a valid index (truthy in Lua)
     return race_globals + 0x44 + (local_player_index * 4)
 end
 
@@ -816,14 +816,14 @@ local function stripPrefix(message)
     return (string.gsub(message, "^[\\/]+", ""))
 end
 
--- splitString("a,b;c", ",", ";") -> {"a", "b", "c"}
--- Longer delimiters take precedence.
+-- splitString("a, bXYc", ", ", "XY") -> {"a", "b", "c"}
+-- Supports multi-character delimiters and sorts longest-first.
 ---@param str string Input string to split.
 ---@param ... string One or more delimiters.
 ---@return string[] tokens Extracted string segments.
 local function splitString(str, ...)
     local delims = { ... }
-    if #delims == 0 then return { str } end
+    if #delims == 0 or str == "" then return { str } end
 
     -- Split into individual characters if any delimiter is empty
     for _, d in ipairs(delims) do
@@ -836,29 +836,33 @@ local function splitString(str, ...)
         end
     end
 
-    -- Sort delimiters by length descending so the longest match wins
+    -- Sort delimiters by length descending so longer delimiters take precedence
     table.sort(delims, function(a, b) return #a > #b end)
 
-    -- Escape magic characters in each delimiter for Lua pattern
-    local escaped = {}
-    for _, d in ipairs(delims) do
-        escaped[#escaped + 1] = string.gsub(d, "([%^%$%(%)%%%.%[%]%*%+%-%?])", "%%%1")
-    end
-    local sep_pattern = table.concat(escaped, "|")
-
-    -- Split using the complement of the delimiter pattern
     local tokens = {}
-    for token in string.gmatch(str, "([^" .. sep_pattern .. "]+)") do
-        tokens[#tokens + 1] = token
-    end
+    local start = 1
+    while start <= #str do
+        local earliest_match = nil
+        local match_len = 0
 
-    -- Strip all delimiter characters from each token
-    for i = 1, #tokens do
-        local token = tokens[i]
+        -- Find the earliest occurring delimiter among all choices
         for _, d in ipairs(delims) do
-            token = string.gsub(token, string.gsub(d, "([%^%$%(%)%%%.%[%]%*%+%-%?])", "%%%1"), "")
+            local s, e = string.find(str, d, start, true)
+            if s and (not earliest_match or s < earliest_match) then
+                earliest_match = s
+                match_len = e - s + 1
+            end
         end
-        tokens[i] = token
+
+        if earliest_match then
+            if earliest_match > start then
+                tokens[#tokens + 1] = string.sub(str, start, earliest_match - 1)
+            end
+            start = earliest_match + match_len
+        else
+            tokens[#tokens + 1] = string.sub(str, start)
+            break
+        end
     end
 
     return tokens

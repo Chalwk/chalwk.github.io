@@ -485,7 +485,7 @@ local function getTagFromObject(object)
     local object_type = read_byte(object + 0xB4)
     local tag_index = read_word(object)
     local tag_array = read_dword(0x40440000)
-    local tag_address = tag_index * 32 + tag_array
+    local tag_address = tag_index * 0x20 + tag_array
     local tag_name = read_string(read_dword(tag_address + 0x10))
     return object_type, tag_name
 end
@@ -666,7 +666,9 @@ functions. `lookup_tag` returns `0` when the tag does not exist.
 ---@return number|nil tag_id Tag meta ID, or nil if the tag does not exist.
 local function getTagId(class, name)
     local tag = lookup_tag(class, name)
-    return tag ~= 0 and read_dword(tag + 0xC) or nil
+    if tag == 0 then return nil end
+    local meta_id = read_dword(tag + 0xC)
+    return meta_id ~= 0 and meta_id or nil
 end
 ```
 

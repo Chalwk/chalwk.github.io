@@ -95,8 +95,8 @@ Notes:
 - `map_name_address` is UTF-16LE. Use `readWideString`. For the map filename, use
   `read_string(network_struct + 0x8C, 0x80)`. `map_name_address2` is not populated on the dedi.
 
-- `map_pointer` resolves to `0x40440000` on both PC and CE. If you only need the tag table, use
-  `0x40440000` directly (tag array at `0x40440028`, tag count at `0x4044000C`).
+- `map_pointer` resolves to `0x40440000` on both PC and CE. Read the tag array pointer from the base
+  (`read_dword(0x40440000)`) and the tag count from `0x4044000C`.
 
 - The `race_globals` fields are listed under [Race Globals](../common-reference.md#race-globals). On
   SAPP the player index is `to_real_index(i)`. `race_locs` is not required for lap timing.
@@ -281,7 +281,7 @@ Names usable in `events.txt` and targetable with `cevent`. Event-only variables
 
 | Event              | Event vars        | Fires when                                                            |
 |--------------------|-------------------|-----------------------------------------------------------------------|
-| `event_enter`      | `$area`           | A player enters a custom area.                                        |
+| `event_aenter`     | `$area`           | A player enters a custom area.                                        |
 | `event_aexit`      | `$area`           | A player exits a custom area.                                         |
 | `event_alive`      |                   | Once per second while a player is alive.                              |
 | `event_assist`     |                   | A player gains an assist.                                             |

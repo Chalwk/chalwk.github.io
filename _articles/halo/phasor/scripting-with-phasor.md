@@ -366,7 +366,7 @@ calls around them change:
 | `write_byte`, `write_float`, ... (SAPP / Chimera)        | `writebyte`, `writefloat`, ...                                              |
 | `read_bit(address, bit)` (SAPP only)                     | `readbit(address, 0, bit)`                                                  |
 | `read_vector3d(address)` (SAPP only)                     | One `readfloat` per axis, as in [Position and Aim][position_aim]            |
-| `readWideString(address, max_chars)` (Common helper)     | `readwidestring(address, [length])`                                         |
+| `readWideString` (Custom helper)                         | `readwidestring(address, [length])` (Built-in API)                          |
 | `get_player(id)` (SAPP / Chimera)                        | `getplayer(player)`                                                         |
 | `get_dynamic_player(id)` (SAPP / Chimera)                | `getDynamicPlayer(player)` from [Reading Player Data](#reading-player-data) |
 | `get_object_memory(object_id)` (SAPP only)               | `getobject(object_id)`                                                      |
@@ -374,6 +374,11 @@ calls around them change:
 | `spawn_object(...)` (SAPP / Chimera)                     | `createobject(...)`                                                         |
 | `execute_command(cmd)` (SAPP only)                       | `svcmd(cmd)`                                                                |
 | `to_real_index(id)` (SAPP only)                          | Not needed, Phasor already uses 0-15                                        |
+
+> [!NOTE]
+> On SAPP and Chimera, `readWideString` is not a built-in API function, it is a custom helper
+> function that must be copied from the [Common Reference](../common-reference.md). Phasor, by
+> contrast, provides `readwidestring` natively as a built-in API function.
 
 ---
 

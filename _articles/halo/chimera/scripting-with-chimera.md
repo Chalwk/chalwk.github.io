@@ -316,11 +316,11 @@ Syntax: `set_timer(interval_ms, "function_name", [arg1, arg2, ...])`
 Returns: a numeric timer ID.
 
 ```lua
-function showMessage(text)
+function ShowMessage(text)
     console_out(text)
 end
 
-local timer_id = set_timer(2000, "showMessage", "Hello from the timer!") -- runs every 2s
+local timer_id = set_timer(2000, "ShowMessage", "Hello from the timer!") -- runs every 2s
 ```
 
 ### `stop_timer`
@@ -350,11 +350,11 @@ execute_script("sv_players")
 execute_script("cls")
 
 -- Change the map after 5 seconds
-function changeMap()
+function ChangeMap()
     execute_script("map bloodgulch ctf")
     return false
 end
-set_timer(5000, "changeMap")
+set_timer(5000, "ChangeMap")
 
 -- Display a message using Halo script syntax
 execute_script('(print "Welcome to the server!")')
@@ -438,7 +438,7 @@ renders. The below example zooms the FOV while holding a sniper.
 -- ox2,oy2,oz2: up vector
 function OnPreCamera(x, y, z, fov, ox1, oy1, oz1, ox2, oy2, oz2)
     local dyn = get_dynamic_player(local_player_index)
-    if not dyn then return end
+    if not dyn then return x, y, z, fov, ox1, oy1, oz1, ox2, oy2, oz2 end
 
     local weapon_id = read_dword(dyn + 0x118)
     if weapon_id ~= 0xFFFFFFFF then

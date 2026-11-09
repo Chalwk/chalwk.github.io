@@ -37,7 +37,20 @@ function OnFrame() end
 function OnPreFrame() end
 
 -- Called immediately before camera calculations are applied.
-function OnPreCamera() end
+---@param x number
+---@param y number
+---@param z number
+---@param fov number
+---@param ox1 number
+---@param oy1 number
+---@param oz1 number
+---@param ox2 number
+---@param oy2 number
+---@param oz2 number
+---@return number, number, number, number, number, number, number, number, number, number
+function OnPreCamera(x, y, z, fov, ox1, oy1, oz1, ox2, oy2, oz2)
+    return x, y, z, fov, ox1, oy1, oz1, ox2, oy2, oz2
+end
 
 -- Called approximately 30 times per second.
 -- Main gameplay update loop.
