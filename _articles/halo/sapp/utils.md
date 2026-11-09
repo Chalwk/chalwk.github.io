@@ -848,8 +848,8 @@ local function spawnWeapon(player_id, weapon_name, slot)
     local weapon_mem = get_object_memory(weapon)
     if weapon_mem == 0 then return end
 
-    write_word(weapon_mem + 0x2B6, attributes.ammo) -- primary
-    write_word(weapon_mem + 0x2B8, attributes.clip) -- secondary
+    write_word(weapon_mem + 0x2B6, attributes.ammo) -- reserve ammo
+    write_word(weapon_mem + 0x2B8, attributes.clip) -- rounds in magazine
     sync_ammo(weapon) -- sync before assigning
 
     if slot <= 2 then

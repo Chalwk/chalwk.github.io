@@ -109,10 +109,8 @@ The simplest way to talk to the player is `hud_message("your text")`, `console_o
 
 ```lua
 function OnTick()
-    hud_message(string.format("Pos: %.1f, %.1f, %.1f", x, y, z))
-end
-
-function OnTick()
+    hud_message("Chimera Rocks!")                     -- standard hud message
+    
     console_out("Chimera Rocks!")                     -- standard console output
     console_out("Chimera Rocks!", 1.0, 0.35, 0.35)    -- w/RGB colors (red, green, blue)
     console_out("Chimera Rocks!", 1, 1.0, 0.35, 0.35) -- w/ARGB colors (alpha, red, green, blue)
@@ -132,8 +130,8 @@ function OnPreFrame()
 end
 ```
 
-`draw_text()` draws text inside a rectangular screen region, with the following supported fonts and
-alignment values: `"small"`, `"large"`, `"ticker"`, / `"left"`, `"center"`, `"right"`"
+`draw_text()` draws text inside a rectangular screen region. Supported fonts: `"small"`, `"large"`,
+`"ticker"`. Supported alignments: `"left"`, `"center"`, `"right"`.
 
 ```lua
 draw_text(text, left, top, width, height, font, align, a, r, g, b)
@@ -207,21 +205,26 @@ script, you must place the script in the `global` folder instead.
 ```lua
 local SAVE_FILE = "my_data.txt" -- file will appear in Halo's root installation folder
 
-local function save_stats(stats)
+local function saveStats(stats)
     local f = io.open(SAVE_FILE, "w")
     if f then
-        f:write(string.format("%d;%d;%d", stats.kills, stats.deaths))
+        f:write(string.format("%d;%d;%d", stats.kills, stats.deaths, stats.credits))
         f:close()
     end
 end
 
-local function load_stats()
+local function loadStats()
     local f = io.open(SAVE_FILE, "r")
-    if not f then return {kills=0, deaths=0, credits=0} end
+    if not f then return { kills = 0, deaths = 0, credits = 0 } end
     local content = f:read("*l")
     f:close()
-    local kills, deaths = content:match("(%d+);(%d+)")
-    return {kills=tonumber(kills), deaths=tonumber(deaths)}
+
+    local kills, deaths, credits = (content or ""):match("(%d+);(%d+);(%d+)")
+    return {
+        kills = tonumber(kills) or 0,
+        deaths = tonumber(deaths) or 0,
+        credits = tonumber(credits) or 0
+    }
 end
 ```
 
@@ -250,7 +253,7 @@ function showMessage(text)
     console_out(text)
 end
 
-local timer_id = set_timer(2000, "showMessage", "Hello from the timer!") -- runs ever 2s
+local timer_id = set_timer(2000, "showMessage", "Hello from the timer!") -- runs every 2s
 ```
 
 ### `stop_timer`
@@ -315,15 +318,9 @@ player-related data that exists independently of the live object (team, kills, d
 
 Field offsets for both pointers are in [Memory Offsets](../common-reference.md#memory-offsets).
 
-Chimera has no `read_vector3d` or `write_vector3d`. Read the position as three floats:
-
-```lua
-local x = read_float(dyn + 0x5C)
-local y = read_float(dyn + 0x60)
-local z = read_float(dyn + 0x64)
-```
-
 ### Example - Position HUD
+
+Chimera has no `read_vector3d` or `write_vector3d`. Read the position as three floats:
 
 ```lua
 function OnTick()
@@ -448,10 +445,12 @@ end
 function OnTick()
     local dynamic_player = get_dynamic_player()
     if not dynamic_player then return end -- dead
-    
-    local weapon_id = get_object(read_dword(dynamic_player + 0x118))
-    local weapon_name = getObjectName(weapon_id) -- returns "Weapon Name" (e.g. "Assault Rifle")
-    
+
+    local weapon_object_id = read_dword(dynamic_player + 0x118)
+    if weapon_object_id == 0xFFFFFFFF then return end -- nothing held
+
+    local weapon_object = get_object(weapon_object_id)
+    local weapon_name = getObjectName(weapon_object) -- e.g. "assault rifle"
     console_out("Weapon: " .. weapon_name)
 end
 ```
@@ -484,20 +483,25 @@ Create console toggles to enable/disable features. Type `my_command` in the cons
 toggle.
 
 ```lua
-local ENABLED = true
+clua_version = 2.056
+
+local enabled = true
 local command_name = "my_command"
+
+set_callback("command", "OnCommand")
+set_callback("tick", "OnTick")
 
 function OnCommand(cmd)
     if cmd:lower() == command_name then
-        ENABLED = not ENABLED
-        console_out("My Feature " .. (ENABLED and "ON" or "OFF"))
-        return false  -- prevents Halo error message
+        enabled = not enabled
+        console_out("My Feature " .. (enabled and "ON" or "OFF"))
+        return false -- prevents Halo error message
     end
     return true -- allow other commands
 end
 
 function OnTick()
-    if not ENABLED then return end
+    if not enabled then return end
     -- ... do something ...
 end
 ```
