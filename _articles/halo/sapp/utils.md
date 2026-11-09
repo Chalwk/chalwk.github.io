@@ -437,7 +437,7 @@ end
 ```lua
 local function getPlayerPing(player_id)
     local static = get_player(player_id)
-    return static and read_word(static + 0xDC) or nil
+    return static and read_dword(static + 0xDC) or nil
 end
 ```
 
