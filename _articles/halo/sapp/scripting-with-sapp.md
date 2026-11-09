@@ -15,6 +15,7 @@ commands, player management, and direct memory access. Scripts run on dedicated 
 ## Reference Files
 
 - [utils.md](utils.md): Conventions, helper functions, and known quirks.
+- [server-guide.md](server-guide.md): Complete guide to setting up, configuring, and running SAPP on a server.
 - [../common-reference.md](../common-reference.md): Memory offsets, game constants, unit
   conversions, shared helpers, and stock Halo commands.
 - [cheat-sheet.md](cheat-sheet.md): Pointers, `sig_scan` patterns, `get_var` variables, SAPP

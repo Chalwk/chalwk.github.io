@@ -641,3 +641,5 @@ scripts cannot call each other directly, a custom variable is the way to share d
 | var_del  | 4     | `var_del <name>`                              | Delete a variable.                                                                                                    |
 | var_list | 4     | `var_list`                                    | List all custom variables.                                                                                            |
 | var_set  | 4     | `var_set <name> <value_expr> [player number]` | Set a custom variable (player number required for player variables).                                                  |
+
+---
