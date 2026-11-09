@@ -22,69 +22,45 @@ set_callback("spawn", "OnSpawn")
 set_callback("tick", "OnTick")
 set_callback("unload", "OnScriptUnload")
 
---- `command`
--- Called when a command is typed into the console.
--- Open the console with the `~` key.
----@param cmd string The command entered into the console.
-function OnCommand(cmd)
-end
+--- Called when a command is typed into the console.
+--- Open the console with the `~` key.
+---@param cmd string The command entered into the console
+function OnCommand(cmd) end
 
---- `frame`
--- Called once per rendered frame.
--- Runs after `preframe`.
-function OnFrame()
-end
+--- Called once per rendered frame.
+--- Runs after `preframe`.
+function OnFrame() end
 
---- `preframe`
--- Called before rendering each frame.
-function OnPreFrame()
-end
+--- Called before rendering each frame.
+function OnPreFrame() end
 
---- `precamera`
--- Called immediately before camera calculations are applied.
-function OnPreCamera()
-end
+--- Called immediately before camera calculations are applied.
+function OnPreCamera() end
 
---- `tick`
--- Called approximately 30 times per second.
--- Main gameplay update loop.
-function OnTick()
-end
+--- Called approximately 30 times per second.
+--- Main gameplay update loop.
+function OnTick() end
 
---- `pretick`
--- Called immediately before the main tick update.
-function OnPreTick()
-end
+--- Called immediately before the main tick update.
+function OnPreTick() end
 
---- `map load`
--- Called after a map has fully loaded.
--- Use this to reset or initialize gameplay state.
-function OnMapLoad()
-end
+--- Called after a map has fully loaded.
+--- Use this to reset or initialize gameplay state.
+function OnMapLoad() end
 
---- `prespawn`
--- Called before a player spawns.
----@param player number The player index.
-function OnPreSpawn(player)
-end
+--- Called before a player spawns.
+---@param player number The player index
+function OnPreSpawn(player) end
 
---- `spawn`
--- Called when a player finishes spawning.
----@param player number The player index.
-function OnSpawn(player)
-end
+--- Called when a player finishes spawning.
+---@param player number The player index
+function OnSpawn(player) end
 
---- `rcon_message`
--- Called when an incoming RCON message is received.
--- Return false to block the message.
----@param msg string The RCON message.
----@return boolean allow
-function OnRconMessage(msg)
-return true
-end
+--- Called when an incoming RCON message is received.
+---@param msg string The RCON message
+---@return boolean|nil allow # Return `false` to block the message
+function OnRconMessage(msg) return true end
 
---- `unload`
--- Called when the script is unloaded.
-function OnScriptUnload()
-end
+--- Called when the script is unloaded.
+function OnScriptUnload() end
 ```

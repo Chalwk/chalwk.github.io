@@ -7,22 +7,6 @@ tags: [ sapp, lua, scripting, server, tutorial ]
 ---
 
 ```lua
---[[
-=====================================================================================
-SCRIPT NAME:      file_name.lua
-DESCRIPTION:      Short description here
-
-                  Mid-length description here.
-
-                  Command Syntax here (if applicable):
-                  - /cmd [args]
-
-Copyright (c) {year} Jericho Crosby (Chalwk)
-LICENSE:          MIT License
-https://github.com/Chalwk/SPCLib/blob/master/LICENSE
-=====================================================================================
-]]
-
 -- TECHNICAL NOTE:
 -- Some function arguments are strings, despite representing numerical values.
 -- These are not typos.
