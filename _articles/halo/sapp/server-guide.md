@@ -144,32 +144,30 @@ it.
 ## Run a Single Server
 
 1. Extract the zip anywhere, for example `C:\HaloServer` or `~/haloserver`.
-
 2. Optional: open `cg\init.txt` and change `sv_name "your_server_name_here"` to your server name.
-
-3. Launch the server.
-
-- Windows: double-click `run.bat`.
-- Linux or macOS with Wine: run `chmod +x run.sh`, then `./run.sh`.
+3. Launch the server:
+    - Windows: double-click `run.bat`.
+    - Linux or macOS with Wine: run `chmod +x run.sh`, then `./run.sh`.
 
 `run.bat` looks like this:
 
-```batch
+```bat
 @ECHO OFF
 set port=2302
 set root=%~dp0
-set cg_path=%root%cg\
-set exec=%cg_path%init.txt
+set path=%root%\cg\
+set exec=%path%\init.txt
 
 rem Use haloded.exe for PC Retail, haloceded.exe for CE
-"%root%haloded.exe" -cg_path %cg_path% -exec %exec% -port %port%
+"%root%haloded.exe" -path %path% -exec %exec% -port %port%
 ```
 
 - `%~dp0` expands to the folder the script sits in, with a trailing backslash. That keeps the script
   portable.
-- `-cg_path` points at the instance configs (`cg\`).
+- `-path` points at the instance configs (`cg\`).
 - `-exec` points at that instance's `init.txt`.
-- `-port` sets the UDP port. The default is 2302.
+- `-port` Specifies the UDP port the server listens on (default Halo port is `2302`, but custom
+  ports like `2310` are commonly used to avoid conflicts or run multiple servers).
 
 `run.sh` does the same through `wine`.
 
@@ -189,7 +187,7 @@ beside it:
 
 1. Create `cg\myserver\` (use any name).
 2. Move `init.txt`, `sapp\`, and `savegames\` from `cg\` into `cg\myserver\`.
-3. In `run.bat`, change `set cg_path=%root%cg\` to `set cg_path=%root%cg\myserver\`.
+3. In `run.bat`, change `set path=%root%cg\` to `set path=%root%cg\myserver\`.
 
 ### Step 2: Copy the Instance
 
@@ -229,39 +227,29 @@ Edit these files inside `cg\gun_game\`:
 
 Each instance needs its own UDP port. Create `run_gun_game.bat` next to `run.bat`:
 
-```batch
+```bat
 @ECHO OFF
 rem 2302 is taken by the first instance
 set port=2303
 set root=%~dp0
-set cg_path=%root%cg\gun_game\
-set exec=%cg_path%init.txt
+set path=%root%\cg\gun_game\
+set exec=%path%\init.txt
 
 rem Use haloded.exe for PC Retail, haloceded.exe for CE
-"%root%haloded.exe" -cg_path %cg_path% -exec %exec% -port %port%
+"%root%haloded.exe" -path %path% -exec %exec% -port %port%
 ```
-
-On Linux, copy `run.sh` to `run_gun_game.sh`, then change its port and its instance folder path the
-same way.
 
 ### Step 5: Launch Everything
 
 - Manually: run each script. Each server gets its own console window.
 - All at once on Windows: use a master batch file with Windows Terminal:
 
-```batch
+```bat
 @ECHO OFF
 cd /d "%~dp0"
 wt.exe cmd /k "run.bat" ^
  ; new-tab cmd /k "run_gun_game.bat"
 ```
-
-### Checklist
-
-- The new instance has its own port.
-- `-cg_path` points at the new instance folder, not the original.
-- `load` is the last line of the new `init.txt`.
-- The root `sapp\` and `maps\` folders are untouched.
 
 ---
 

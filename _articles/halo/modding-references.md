@@ -23,7 +23,7 @@ Official docs, forums, map repositories, and community knowledge bases.
 - [Scripting with SAPP](sapp/scripting-with-sapp.md): Comprehensive guide to server-side Lua
   scripting using SAPP's Lua API, including signature scanning, global variables, and core
   functions.
-- [Scripting with Phasor](phasor/scripting-with-phasor):
+- [Scripting with Phasor](phasor/scripting-with-phasor.md):
   Server-side Lua scripting with Phasor, covering version handling and hardcoded addresses.
 - [Phasor (legacy)](https://phasor.halonet.net/): Legacy server extension and documentation; useful
   for older scripts and historical examples.
@@ -79,8 +79,8 @@ require some patience on modern versions of Windows.
 
 > [!WARNING]
 > Classic HEK tools are 32-bit applications and may require setting compatibility mode (such as
-Windows 7 mode) or running with administrator rights. Using `dgVoodoo2` as a DirectX wrapper can
-also improve stability on modern Windows versions.
+> Windows 7 mode) or running with administrator rights. Using `dgVoodoo2` as a DirectX wrapper can
+> also improve stability on modern Windows versions.
 
 ### Modern and Community Toolchains
 

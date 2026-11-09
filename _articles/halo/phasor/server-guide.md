@@ -96,25 +96,21 @@ The `run.bat` script automates launching the server with recommended parameters:
 
 ```bat
 @ECHO OFF
-set port=2310
+set port=2302
 set root=%~dp0
+set path=%root%\cg\
+set exec=%path%\init.txt
 
-"%root%haloceded.exe" -port %port% -path "%root%cg"
+rem Use haloded.exe for PC Retail, haloceded.exe for CE
+"%root%haloded.exe" -path %path% -exec %exec% -port %port%
 ```
 
-- `set port=2310`: Specifies the UDP port the server listens on (default Halo port is `2302`, but
-  custom ports like `2310` are commonly used to avoid conflicts or run multiple servers).
-- `set root=%~dp0`: Dynamically determines the root directory where the script and server binaries
-  reside.
-- `-path "%root%cg"`: Tells Halo to use the `cg` folder as the instance configuration and working
-  directory. This isolates instance-specific files such as logs, scripts, saved games, and admin
-  lists (`access.ini` and `admin.txt`).
-- `init.txt`: Executed automatically on startup to configure server settings, map cycles, and
-  persistent scripts.
-
-> [!IMPORTANT]
-> Always ensure the `-path` parameter points to a valid instance folder (`cg`) containing your
-> configuration files (`access.ini`, `admin.txt`) so that admin permissions and logs load correctly.
+- `%~dp0` expands to the folder the script sits in, with a trailing backslash. That keeps the script
+  portable.
+- `-path` points at the instance configs (`cg\`).
+- `-exec` points at that instance's `init.txt`.
+- `-port` Specifies the UDP port the server listens on (default Halo port is `2302`, but custom
+  ports like `2310` are commonly used to avoid conflicts or run multiple servers).
 
 ### Phasor Command-Line Options
 

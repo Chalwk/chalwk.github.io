@@ -1062,7 +1062,8 @@ end
 ---@param seconds number|string|nil Duration in seconds.
 ---@return string duration Human-readable duration, or "-1" if the input is invalid.
 local function timeToWord(seconds)
-    if seconds == -1 or not tonumber(seconds) then return "-1" end
+    local n = tonumber(seconds)
+    if n == -1 or not n then return "-1" end
 
     seconds = tonumber(seconds)
 
