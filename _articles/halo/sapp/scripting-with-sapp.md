@@ -82,11 +82,14 @@ end
 
 function OnStart()
     if get_var(0, "$gt") == "n/a" then return end
-      sniper_rifle = getTagId("weap", "weapons\\sniper rifle\\sniper rifle")
+
+    sniper_rifle = getTagId("weap", "weapons\\sniper rifle\\sniper rifle")
 end
 
+---@param player_id number Player index.
 function OnSpawn(player_id)
     if not sniper_rifle then return end
+
     local weapon = spawn_object("", "", 0, 0, 0, 0, sniper_rifle)
     if weapon ~= 0 then assign_weapon(weapon, player_id) end
 end
@@ -190,8 +193,7 @@ Applies to anything driven by player input.
 
 `EVENT_TICK` runs 30 times per second, so keep it lean.
 
-- Queue or debounce frequent events (damage, weapon fire) and drain them with short timers (50-200
-  ms).
+- Queue or debounce frequent events (damage, weapon fire) and drain them with short timers (50-200 ms).
 - Use separate queues for different priorities (score updates vs. log writes).
 - Localize frequently used globals at file scope:
 
@@ -205,10 +207,12 @@ local math_random = math.random
 ```lua
 local pool = {}
 
+---@return table t Reusable table from the pool, or a new empty table.
 local function newTable()
     return table.remove(pool) or {}
 end
 
+---@param t table Table to clear and return to the pool.
 local function freeTable(t)
     for k in pairs(t) do t[k] = nil end
     pool[#pool + 1] = t

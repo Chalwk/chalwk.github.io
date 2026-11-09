@@ -307,3 +307,11 @@
     color: #f8f8f2;
     background-color: #49483e;
 }
+
+/* Lua LDoc / LuaCATS annotations */
+.highlight .token.ldoc-tag,
+.token.ldoc-tag {
+    color: #66d9ef;
+    font-weight: bold;
+    font-style: normal;
+}

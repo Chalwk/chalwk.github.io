@@ -119,12 +119,16 @@ the same code. The `gametype_base` sig is one example. Always use the version-fa
 rather than returning early on sig failure.
 
 ```lua
---- Returns the pointer at sig_scan(sig) + offset, or nil if invalid.
---- Guards against sig_scan returning 0 and against read_dword returning
---- something outside Halo's data range (0x400000-0x800000).
+-- Returns the pointer at sig_scan(sig) + offset, or nil if invalid.
+-- Guards against sig_scan returning 0 and against read_dword returning
+-- something outside Halo's data range (0x400000-0x800000).
+---@param sig string Signature byte pattern to scan for.
+---@param offset number Offset from the signature match to the pointer.
+---@return number|nil ptr Resolved pointer, or nil if invalid.
 local function safeScan(sig, offset)
     local hit = sig_scan(sig)
     if hit == 0 then return nil end
+
     local ptr = read_dword(hit + offset)
     if not ptr or ptr < 0x400000 or ptr > 0x800000 then return nil end
     return ptr
@@ -142,13 +146,15 @@ function OnScriptLoad()
         or (halo_type == 'PC' and 0x671320 or 0x5F5478)
 end
 
---- Returns the current server's name (UTF-16LE).
+-- Returns the current server's name (UTF-16LE).
+---@return string|nil server_name Server name, or nil if the network struct pointer is unavailable.
 local function getServerName()
     if not network_struct_address then return nil end
     return readWideString(network_struct_address + 0x8, 0x42)
 end
 
---- Returns the current gametype's score limit.
+-- Returns the current gametype's score limit.
+---@return number|nil score_limit Score limit, or nil if the gametype pointer is unavailable.
 local function getScoreLimit()
     if not gametype_base_address then return nil end
     return read_byte(gametype_base_address + 0x58)
@@ -189,10 +195,12 @@ Notes:
 - SAPP API functions are globals, so `timer` can call them directly (see Assigning Weapons).
 
 ```lua
+---@param player_id number Player index (1-16).
 function OnJoin(player_id)
     timer(3000, "Welcome", player_id)
 end
 
+---@param player_id number Player index (1-16).
 function Welcome(player_id)
     if player_present(player_id) then -- They may have left during the delay.
         say(player_id, "Welcome!")
@@ -317,9 +325,9 @@ SAPP only; Chimera reads three floats
 
 ```lua
 ---@param dyn_player number Dynamic player address.
----@return number|nil x
----@return number|nil y
----@return number|nil z
+---@return number|nil x Player X coordinate, or nil if the object is invalid.
+---@return number|nil y Player Y coordinate, or nil if the object is invalid.
+---@return number|nil z Player eye-level Z coordinate, or nil if the object is invalid.
 local function getPlayerPosition(dyn_player)
     local crouch = read_float(dyn_player + 0x50C) -- 0 = standing, 1 = fully crouched
     local vehicle_id = read_dword(dyn_player + 0x11C)
@@ -353,6 +361,8 @@ For names and teams, prefer `get_var(player_id, "$name")` and `get_var(player_id
 ### Get Player Ping
 
 ```lua
+---@param player_id number Player index (1-16).
+---@return number|nil ping Player ping in milliseconds, or nil if unavailable.
 local function getPlayerPing(player_id)
     local static = get_player(player_id)
     return static and read_dword(static + 0xDC) or nil
@@ -365,7 +375,8 @@ A respawn is usually required for the change to fully apply. Color values are li
 [Team and Color](../common-reference.md#team-and-color).
 
 ```lua
----@param color number Color index (0-17)
+---@param player_id number Player index (1-16).
+---@param color number Color index (0-17).
 local function setPlayerColor(player_id, color)
     local static = get_player(player_id)
     write_byte(static + 0x60, color)
@@ -428,7 +439,7 @@ Finds the Halo server folder at runtime, so no hardcoded paths.
 
 ```lua
 ---@param folder string|nil Subfolder to append. Defaults to "".
----@return string base_path
+---@return string base_path Halo server directory path, optionally including the subfolder.
 local function getBaseDir(folder)
     folder = folder or ""
     local exe_path = read_string(read_dword(sig_scan('0000BE??????005657C605') + 0x3))
@@ -436,7 +447,7 @@ local function getBaseDir(folder)
     return base_path .. folder
 end
 
----@return string config_path
+---@return string config_path Path to the SAPP configuration file.
 local function getProfilePath()
     return read_string(read_dword(sig_scan('68??????008D54245468') + 0x1))
 end
@@ -460,8 +471,8 @@ Returns the object type byte and the tag name of any object.
 
 ```lua
 ---@param object number Memory address of the object.
----@return number object_type
----@return string tag_name
+---@return number object_type Object type identifier (byte at offset 0xB4).
+---@return string tag_name Full tag path associated with the object.
 local function getTagFromObject(object)
     local object_type = read_byte(object + 0xB4)
     local tag_index = read_word(object)
@@ -475,6 +486,7 @@ end
 Example:
 
 ```lua
+---@param player_id number Player index (1-16).
 function OnVehicleEnter(player_id)
     local dyn = get_dynamic_player(player_id)
     if dyn == 0 then return end
@@ -503,10 +515,15 @@ local BASE_TAG_TABLE = 0x40440000 -- same for PC and CE
 local function hasObjective(dyn_player, objective_type)
     objective_type = objective_type or "any"
 
-    local weapon_obj = get_object_memory(read_dword(dyn_player + 0x118))
+    local weapon_id = read_dword(dyn_player + 0x118)
+    local weapon_obj = get_object_memory(weapon_id)
     if not weapon_obj or weapon_obj == 0 then return false end
 
-    local tag_data = read_dword(read_dword(0x40440000) + read_word(weapon_obj) * 0x20 + 0x14)
+    local tag_array = read_dword(BASE_TAG_TABLE)
+    local tag_index = read_word(weapon_obj)
+    local tag_entry = tag_array + tag_index * 0x20
+    local tag_data = read_dword(tag_entry + 0x14)
+
     if read_bit(tag_data + 0x308, 3) ~= 1 then return false end
 
     local obj_byte = read_byte(tag_data + 2)
@@ -522,8 +539,18 @@ Returns a table of all weapon slots (1-4) with detailed stats. Empty slots are o
 counts belong to the player, so they are repeated on every slot entry.
 
 ```lua
+---@class WeaponInventoryEntry
+---@field id number Weapon tag ID.
+---@field ammo number Primary reserve ammunition.
+---@field clip number Primary magazine ammunition.
+---@field ammo2 number Secondary reserve ammunition.
+---@field clip2 number Secondary magazine ammunition.
+---@field heat number Weapon overheat value (0-1).
+---@field frags number Player frag grenade count.
+---@field plasmas number Player plasma grenade count.
+
 ---@param dyn_player number Dynamic player address.
----@return table inventory Keys are slot numbers (1-4).
+---@return table<number, WeaponInventoryEntry> inventory Weapon inventory indexed by slot (1-4).
 local function getInventory(dyn_player)
     local inv = {}
     for slot = 0, 3 do
@@ -600,8 +627,8 @@ Finds the flag (objective) tag on the current map. Returns its meta id and tag n
 there is no flag.
 
 ```lua
----@return number|nil meta_id
----@return string|nil tag_name
+---@return number|nil meta_id Flag weapon tag meta ID, or nil if no flag exists.
+---@return string|nil tag_name Flag weapon tag path, or nil if no flag exists.
 local function getFlagData()
     local tag_array = read_dword(BASE_TAG_TABLE)
     local tag_count = read_dword(BASE_TAG_TABLE + 0xC)
@@ -628,7 +655,7 @@ functions. `lookup_tag` returns `0` when the tag does not exist.
 ```lua
 ---@param class string Tag class, e.g. "weap".
 ---@param name string Tag path, e.g. "weapons\\pistol\\pistol".
----@return number|nil tag_id
+---@return number|nil tag_id Tag meta ID, or nil if the tag does not exist.
 local function getTagId(class, name)
     local tag = lookup_tag(class, name)
     return tag ~= 0 and read_dword(tag + 0xC) or nil
@@ -642,17 +669,32 @@ development. It will not work on protected maps or some custom maps.
 
 ```lua
 local function scanMapObjects()
+    -- Read the tag table base address and total number of entries.
     local tag_array = read_dword(BASE_TAG_TABLE)
     local tag_count = read_dword(BASE_TAG_TABLE + 0xC)
-    local class_names = { [0x76656869] = "vehi", [0x77656170] = "weap", [0x65716970] = "eqip" }
 
+    -- Map-specific tag class dwords to their four-letter identifiers.
+    local class_names = {
+        [0x76656869] = "vehi",
+        [0x77656170] = "weap",
+        [0x65716970] = "eqip"
+    }
+
+    -- Iterate through every tag entry (each entry is 0x20 bytes).
     for i = 0, tag_count - 1 do
         local tag = tag_array + 0x20 * i
+
+        -- Identify the tag class and skip anything other than vehicles, weapons, and equipment.
         local class_name = class_names[read_dword(tag)]
         if class_name then
+            -- Resolve the tag name through its string pointer at offset 0x10.
             local name_ptr = read_dword(tag + 0x10)
             local name = name_ptr ~= 0 and read_string(name_ptr) or "<no-name>"
+
+            -- Read the tag's metadata ID from offset 0xC.
             local meta = read_dword(tag + 0xC)
+
+            -- Print the tag class, metadata ID, and name to the server console.
             cprint(string.format("%s meta=%u name=%s", class_name, meta, name), 12)
         end
     end
@@ -687,6 +729,8 @@ local bit = require("bit")
 
 -- validateIpv4("192.168.*.*") -> "192.168.*.*"
 -- validateIpv4("10.0.0.1-10.0.0.255") -> "10.0.0.1-10.0.0.255"
+---@param ip string|nil IPv4 address, wildcard, CIDR, or range string.
+---@return string|boolean normalized_ip Normalized IPv4 expression, or false if rejected.
 local function validateIpv4(ip)
     if not ip then return false end
     ip = string.gsub(string.gsub(ip, "[%s]*", ""), "x+", "*")
@@ -696,6 +740,7 @@ local function validateIpv4(ip)
     c = c == "" and "*" or c:match("[%d%*]+")
     slash = slash ~= ""
     d = d or ""
+
     if slash then
         if d:find("/") or not d:match("[%d%*]+") then return false end
         d = "0/" .. d
@@ -712,6 +757,7 @@ local function validateIpv4(ip)
     elseif slash then
         return false
     end
+
     a2 = a2 == "" and "*" or a2:match("[%d%*]+")
     b2 = b2 == "" and "*" or b2:match("[%d%*]+")
     c2 = c2 == "" and "*" or c2:match("[%d%*]+")
@@ -723,14 +769,21 @@ local function validateIpv4(ip)
 end
 
 -- Returns an unsigned 32-bit value, or nil if the address is invalid.
+---@param ip_addr string Dotted-decimal IPv4 address.
+---@return number|nil address Unsigned 32-bit integer, or nil if the input cannot be parsed.
 local function ipToLong(ip_addr)
     local a, b, c, d = ip_addr:match("^(%d+)%.(%d+)%.(%d+)%.(%d+)$")
     if not a then return nil end
+
     a, b, c, d = tonumber(a), tonumber(b), tonumber(c), tonumber(d)
     if not (a and b and c and d) then return nil end
+
     return bit.bor(bit.lshift(a, 24), bit.lshift(b, 16), bit.lshift(c, 8), d) % 0x100000000
 end
 
+-- Converts an unsigned 32-bit IPv4 value to dotted-decimal notation.
+---@param addr number Unsigned 32-bit IPv4 address.
+---@return string ip_addr Dotted-decimal IPv4 address.
 local function longToIp(addr)
     local a = bit.rshift(bit.band(addr, 0xFF000000), 24)
     local b = bit.rshift(bit.band(addr, 0x00FF0000), 16)
@@ -740,6 +793,8 @@ local function longToIp(addr)
 end
 
 -- wildcardToCidr("10.*.*.*") -> "10.0.0.0/8"
+---@param addr string IPv4 address containing wildcard octets.
+---@return string cidr_address CIDR representation of the wildcard address.
 local function wildcardToCidr(addr)
     local count = select(2, addr:gsub("%*", "*"))
     if count == 1 then
@@ -755,6 +810,9 @@ local function wildcardToCidr(addr)
 end
 
 -- ipMatchesNetwork("192.168.1.0/24", "192.168.1.100") -> true
+---@param network string Network definition in CIDR, wildcard, or range notation.
+---@param ip string|nil IPv4 address or wildcard notation to check.
+---@return boolean matches True if the IP matches the network definition.
 local function ipMatchesNetwork(network, ip)
     network = validateIpv4(network)
     if not ip then return false end
@@ -771,10 +829,12 @@ local function ipMatchesNetwork(network, ip)
         mask_len = tonumber(mask_len) or 32
         local net_long = ipToLong(net_part)
         if not net_long then return false end
+
         local ip_part, ip_mask_len = ip:match("^(.-)/(%d+)$")
         ip_mask_len = tonumber(ip_mask_len) or 32
         local ip_long = ipToLong(ip_part)
         if not ip_long then return false end
+
         local mask = bit.lshift(0xFFFFFFFF, (32 - mask_len))
         local ip_mask = bit.lshift(0xFFFFFFFF, (32 - ip_mask_len))
         return bit.band(net_long, mask, ip_mask) == bit.band(ip_long, mask, ip_mask)
@@ -782,8 +842,10 @@ local function ipMatchesNetwork(network, ip)
         local from = ipToLong(network:sub(1, dash - 1))
         local to = ipToLong(network:sub(dash + 1))
         if not from or not to then return false end
+
         local ip_long = ipToLong(ip)
         if not ip_long then return false end
+
         return ip_long >= from and ip_long <= to
     end
 end
@@ -797,6 +859,8 @@ Note: Assigning 3 or more weapons at once makes the third and fourth drop on the
 by at least 250 ms. `assign_weapon` silently fails if the player is dead.
 
 ```lua
+---@param weapon_id number|nil Spawned weapon object ID.
+---@param player_id number Player index (1-16).
 function AssignWeapon(weapon_id, player_id) -- used in both examples below
     if weapon_id then assign_weapon(weapon_id, player_id) end
 end
@@ -819,24 +883,33 @@ local WEAPONS = {
 }
 
 local weapon_datums = {}
-local function cacheWeaponDatums() -- during EVENT_GAME_START. Clear `weapon_datums` every start.
+local function cacheWeaponDatums()
     for name, data in pairs(WEAPONS) do
-		local tag_id = getTagId("weap", data.tag_name)
-		if tag_id then
-			weapon_datums[name] = { tag_id = tag_id, attributes = data.attributes }
-		end
+        local tag_id = getTagId("weap", data.tag_name)
+        if tag_id then
+            weapon_datums[name] = {
+                tag_id = tag_id,
+                attributes = data.attributes
+            }
+        end
     end
 end
 
+---@param dyn_player number Dynamic player address.
+---@param frags number Frag grenade count.
+---@param plasmas number Plasma grenade count.
 local function setGrenades(dyn_player, frags, plasmas)
     write_byte(dyn_player + 0x31E, frags)
     write_byte(dyn_player + 0x31F, plasmas)
 end
 
+---@param player_id number Player index (1-16).
+---@param weapon_name string Weapon name key in weapon_datums.
+---@param slot number Weapon slot (1-4).
 local function spawnWeapon(player_id, weapon_name, slot)
     local dyn = get_dynamic_player(player_id)
     if dyn == 0 then return end
-    
+
     local tag_datum = weapon_datums[weapon_name]
     if not tag_datum then return end
 
@@ -911,13 +984,16 @@ api_version = '1.12.0.0'
 
 local ffi = require("ffi")
 
+-- Declare the Windows API function signature for LuaJIT FFI.
 ffi.cdef[[
     unsigned long GetTickCount(void);
 ]]
 
+-- Tracks elapsed EVENT_TICK callbacks.
 local tick_count = 0
 
 function OnScriptLoad()
+    -- Display the system uptime immediately when the script loads.
     cprint(string.format("Ticks since boot: %d", ffi.C.GetTickCount()), 10)
     register_callback(cb.EVENT_TICK, "OnTick")
 end
@@ -977,8 +1053,8 @@ cprint("Has entries after clear: " .. tostring(next(scores) ~= nil))
 local sandbox_env = { cprint = cprint, math = math }
 
 ---@param fn function Function to run inside the sandbox.
----@return boolean success
----@return any result_or_error
+---@return boolean success True if the function executed without an error.
+---@return any result_or_error Function result on success, or error value on failure.
 local function runInSandbox(fn)
     setfenv(fn, sandbox_env)
     return pcall(fn)
@@ -997,28 +1073,38 @@ SAPP Lua does not support `require("bit32")` (use `require("bit")`), the native 
 ```lua
 local bit = require("bit")
 
+-- Initialize an empty set of flags.
 local flags = 0
 
+-- Set bits 2 and 5 using bitwise OR.
 flags = bit.bor(flags, 4, 32)
 
+-- Check whether bit 2 is set using bitwise AND.
 if bit.band(flags, 4) ~= 0 then
     cprint("Bit 2 is set")
 end
 
+-- Clear bit 5 using NOT to invert its mask, then AND to remove it.
 flags = bit.band(flags, bit.bnot(32))
 
+-- Shift 1 three positions to the left (equivalent to 1 * 2^3).
 local shifted = bit.lshift(1, 3)
 cprint("1 << 3 = " .. shifted)
 
+-- Shift 8 three positions to the right (equivalent to 8 / 2^3).
 local original = bit.rshift(8, 3)
 cprint("8 >> 3 = " .. original)
 
+-- Pack two 16-bit values into a single 32-bit value.
 local high = 0xABCD
 local low = 0x1234
 local packed = bit.bor(bit.lshift(high, 16), low)
 cprint(string.format("Packed: 0x%08X", packed))
 
+-- Extract the upper 16 bits by shifting right.
 local high_unpacked = bit.rshift(packed, 16)
+
+-- Extract the lower 16 bits using a 16-bit mask.
 local low_unpacked = bit.band(packed, 0xFFFF)
 cprint(string.format("Unpacked: 0x%04X, 0x%04X", high_unpacked, low_unpacked))
 ```

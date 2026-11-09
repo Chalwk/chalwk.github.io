@@ -35,6 +35,21 @@
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-lua.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof Prism !== 'undefined') {
+                Prism.hooks.add('after-highlight', function(env) {
+                    if (env.language === 'lua' || (env.element && env.element.className.includes('language-lua'))) {
+                        var comments = env.element.querySelectorAll('.token.comment');
+                        comments.forEach(function(el) {
+                            el.innerHTML = el.innerHTML.replace(/(@[a-zA-Z_-]+)/g, '<span class="token ldoc-tag">$1</span>');
+                        });
+                    }
+                });
+                Prism.highlightAll();
+            }
+        });
+    </script>
 
     {% if page.pwa %}
     <script>

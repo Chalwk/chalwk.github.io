@@ -391,14 +391,17 @@ give separate PC and CE values for it.
 
 ```lua
 local function scanObjects()
-    local object_table = read_dword(read_dword(0x401192 + 2))
+    local object_table_address = read_dword(0x401192 + 2)
+    local object_table = read_dword(object_table_address)
     if object_table == 0 then return end
 
     local object_count = read_word(object_table + 0x2E)
     local first_object = read_dword(object_table + 0x34)
 
     for i = 0, object_count - 1 do
-        local object = read_dword(first_object + i * 0xC + 0x8)
+        local object_entry = first_object + i * 0xC + 0x8
+        local object = read_dword(object_entry)
+
         if object ~= 0 then
             -- Valid object pointer.
         end
@@ -421,6 +424,9 @@ the gametype name (gametype struct `+0x0`). Names are ASCII, so the high byte of
 
 ```lua
 -- Reads a UTF-16LE string. Stops at the first null code unit.
+---@param address number Memory address of the UTF-16LE string.
+---@param max_chars number Maximum number of characters to read.
+---@return string value Decoded ASCII string.
 local function readWideString(address, max_chars)
     local chars = {}
     for i = 0, (max_chars - 1) * 2, 2 do
@@ -431,6 +437,8 @@ local function readWideString(address, max_chars)
     return table.concat(chars)
 end
 
+---@param static_player number Static player address.
+---@return string player_name Player name (maximum 12 characters).
 local function readPlayerName(static_player)
     return readWideString(static_player + 0x4, 12)
 end
@@ -446,7 +454,10 @@ Position is read as three floats because Chimera has no `read_vector3d`.
 ---@return number y
 ---@return number z
 local function getObjectPosition(object)
-    return read_float(object + 0x5C), read_float(object + 0x60), read_float(object + 0x64)
+    local x = read_float(object + 0x5C)
+    local y = read_float(object + 0x60)
+    local z = read_float(object + 0x64)
+    return x,y,z
 end
 
 ---@param dyn_player number Dynamic player address.
@@ -454,7 +465,10 @@ end
 ---@return number aim_y
 ---@return number aim_z
 local function getAimVector(dyn_player)
-    return read_float(dyn_player + 0x230), read_float(dyn_player + 0x234), read_float(dyn_player + 0x238)
+    local aim_x = read_float(dyn_player + 0x230)
+    local aim_y = read_float(dyn_player + 0x234)
+    local aim_z = read_float(dyn_player + 0x238)
+    return aim_x,aim_y,aim_z
 end
 ```
 
@@ -462,16 +476,28 @@ end
 
 ```lua
 ---@param dyn_player number Dynamic player address.
+---@return number health Current health value (0.0-1.0).
+---@return number shields Current shield value (0.0-1.0).
 local function getHealthAndShields(dyn_player)
-    return read_float(dyn_player + 0xE0), read_float(dyn_player + 0xE4)
+    local health = read_float(dyn_player + 0xE0)
+    local shields = read_float(dyn_player + 0xE4)
+    return health, shields
 end
 
+---@param dyn_player number Dynamic player address.
+---@return number percentage Health as an integer percentage (0-100).
 local function getHealthPercent(dyn_player)
-    return math.floor(read_float(dyn_player + 0xE0) * 100)
+    local health = read_float(dyn_player + 0xE0)
+    local percentage = math.floor(health * 100)
+    return percentage
 end
 
+---@param dyn_player number Dynamic player address.
+---@return number percentage Shields as an integer percentage (0-100).
 local function getShieldsPercent(dyn_player)
-    return math.floor(read_float(dyn_player + 0xE4) * 100)
+    local shields = read_float(dyn_player + 0xE4)
+    local percentage = math.floor(shields * 100)
+    return percentage
 end
 ```
 
@@ -479,38 +505,44 @@ end
 
 ```lua
 ---@param dyn_player number Dynamic player address.
----@return boolean in_vehicle True if riding in a vehicle.
+---@return boolean is_in_vehicle True if riding in a vehicle.
 local function inVehicle(dyn_player)
-    return read_dword(dyn_player + 0x11C) ~= 0xFFFFFFFF
+    local vehicle_id = read_dword(dyn_player + 0x11C)
+    local is_in_vehicle = vehicle_id ~= 0xFFFFFFFF
+    return vehicle_id ~= 0xFFFFFFFF
 end
 
 ---@param dyn_player number Dynamic player address.
----@return number slot Current weapon slot (0-3).
+---@return number weapon_slot Current weapon slot (0-3).
 local function getWeaponSlot(dyn_player)
-    return read_byte(dyn_player + 0x2F2)
+    local weapon_slot = read_byte(dyn_player + 0x2F2)
+    return weapon_slot
 end
 
 ---@param weapon_object number Weapon object address.
 ---@param threshold number Magazine count at or below which ammo is low.
----@return boolean low_ammo
+---@return boolean low_ammo True if ammunition is low.
 local function isLowAmmo(weapon_object, threshold)
-    return read_word(weapon_object + 0x2B8) <= threshold
+    local mag_count = read_word(weapon_object + 0x2B8)
+    local low_ammo = mag_count <= threshold
+    return low_ammo
 end
 ```
-
-`0xFFFFFFFF` means no vehicle. The vehicle check is cheap, so it suits per-tick logic.
 
 ### Speed
 
 Returns km/h. Velocity is in world units per tick, see [Timing and Units](#timing-and-units).
 
 ```lua
+---@param dyn_player number Dynamic player address.
+---@return number speed Speed in kilometres per hour (km/h).
 local function getSpeed(dyn_player)
     local vx = read_float(dyn_player + 0x68)
     local vy = read_float(dyn_player + 0x6C)
     local vz = read_float(dyn_player + 0x70)
     local speed_wu_per_tick = math.sqrt(vx * vx + vy * vy + vz * vz)
-    return speed_wu_per_tick * 30 * 3.048 * 3.6
+    local speed_kmh = speed_wu_per_tick * 30 * 3.048 * 3.6
+    return speed_kmh
 end
 ```
 
@@ -520,14 +552,20 @@ end
 local team_names = { [0] = "Red", [1] = "Blue" }
 
 ---@param static_player number Static player address.
+---@return string team_name Team name ("Red", "Blue", or "None").
 local function getTeamName(static_player)
-    return team_names[read_byte(static_player + 0x20)] or "None"
+    local team_id = read_byte(static_player + 0x20)
+    local team_name = team_names[team_id] or "None"
+    return team_name
 end
 
+---@param static_player number Static player address.
+---@return number kd_ratio Kill/death ratio. Returns kills if deaths are zero.
 local function getKdRatio(static_player)
     local kills = read_word(static_player + 0x9C)
     local deaths = read_word(static_player + 0xAE)
-    return deaths == 0 and kills or kills / deaths
+    local kd_ratio = deaths == 0 and kills or kills / deaths
+    return kd_ratio
 end
 
 local color_names = {
@@ -535,32 +573,43 @@ local color_names = {
     "cyan", "cobalt", "orange", "teal", "sage", "brown", "tan", "maroon", "salmon"
 }
 
+---@param static_player number Static player address.
+---@return string color_name Player color name, or "unknown" if unrecognized.
 local function getColorName(static_player)
-    return color_names[read_byte(static_player + 0x60)] or "unknown"
+    local color_id = read_byte(static_player + 0x60)
+    local color_name = color_names[color_id] or "unknown"
+    return color_name
 end
 ```
 
 ### Tag Entry Helpers
 
 ```lua
---- Converts a four-letter tag class (e.g. "weap") to the dword stored in the tag entry.
+-- Converts a four-letter tag class (e.g. "weap") to the dword stored in the tag entry.
 ---@param class string Four-letter tag class.
----@return number class_dword
+---@return number class_dword Encoded tag class as a 32-bit integer.
 local function classToDword(class)
     local a, b, c, d = class:byte(1, 4)
-    return a * 0x1000000 + b * 0x10000 + c * 0x100 + d
+    local class_dword = a * 0x1000000 + b * 0x10000 + c * 0x100 + d
+    return class_dword
 end
 
---- Reads the tag path from a tag entry pointer.
+-- Reads the tag path from a tag entry pointer.
 ---@param tag_entry number Tag entry address.
----@return string tag_path
+---@return string tag_path Full tag path.
 local function readTagPath(tag_entry)
-    return read_string(read_dword(tag_entry + 0x10))
+    local tag_path_address = read_dword(tag_entry + 0x10)
+    local tag_path = read_string(tag_path_address)
+    return tag_path
 end
 
 -- getShortName("weapons\\assault rifle\\assault rifle") -> "assault rifle"
+-- Extracts the final component of a tag path.
+---@param tag_path string Full tag path.
+---@return string short_name Final path component, or the original path if no separator exists.
 local function getShortName(tag_path)
-    return tag_path:match(".*\\([^\\]+)$") or tag_path
+    local short_name = tag_path:match(".*\\([^\\]+)$") or tag_path
+    return short_name
 end
 ```
 
@@ -574,16 +623,26 @@ No game API calls. Copy them into scripts as needed.
 
 ```lua
 -- deepCopy({a = 1, b = {c = 2}}) -> fully independent copy
--- Warning: does not handle circular references
+-- Warning: does not handle circular references.
+---@generic T
+---@param original T Value to copy.
+---@return T copy Independent copy of the original value.
 local function deepCopy(original)
     if type(original) ~= "table" then return original end
+
     local copy = {}
-    for k, v in pairs(original) do copy[deepCopy(k)] = deepCopy(v) end
+    for k, v in pairs(original) do
+        copy[deepCopy(k)] = deepCopy(v)
+    end
+
     return setmetatable(copy, deepCopy(getmetatable(original)))
 end
 
 -- shuffleArray({10, 20, 30, 40}) -> shuffles in place (Fisher-Yates)
 -- Call math.randomseed(os.time()) once at script load.
+---@generic T
+---@param array T[] Array to shuffle in place.
+---@return nil
 local function shuffleArray(array)
     for i = #array, 2, -1 do
         local j = math.random(i)
@@ -592,9 +651,13 @@ local function shuffleArray(array)
 end
 
 -- tableLength({10, 20, name = "Chalwk", 30}) -> 4
+---@param t table Table to count.
+---@return number count Number of key-value pairs in the table.
 local function tableLength(t)
     local count = 0
-    for _ in pairs(t) do count = count + 1 end
+    for _ in pairs(t) do
+        count = count + 1
+    end
     return count
 end
 ```
@@ -604,13 +667,20 @@ end
 ```lua
 -- parseArgs("/give weapon sniper", " ") -> {"/give", "weapon", "sniper"}
 -- The delimiter goes into a Lua pattern, so escape special characters (e.g. "%.").
+---@param input string Input string to parse.
+---@param delimiter string Lua pattern used to separate arguments.
+---@return string[] args Parsed arguments.
 local function parseArgs(input, delimiter)
     local t = {}
-    for substring in input:gmatch("([^" .. delimiter .. "]+)") do t[#t + 1] = substring end
+    for substring in input:gmatch("([^" .. delimiter .. "]+)") do
+        t[#t + 1] = substring
+    end
     return t
 end
 
 -- isChatCommand("/kick") -> true; isChatCommand("hello") -> false
+---@param str string|nil Input string to check.
+---@return boolean is_command True if the string begins with "/" or "\".
 local function isChatCommand(str)
     if not str then return false end
     local first = string.sub(str, 1, 1)
@@ -618,6 +688,8 @@ local function isChatCommand(str)
 end
 
 -- stripPrefix("//give") -> "give"
+---@param message string|nil Message to strip the prefix from.
+---@return string stripped_message Message without leading slashes or backslashes.
 local function stripPrefix(message)
     if not message then return "" end
     return (string.gsub(message, "^[\\/]+", ""))
@@ -625,6 +697,9 @@ end
 
 -- splitString("a,b;c", ",", ";") -> {"a", "b", "c"}
 -- Longer delimiters take precedence.
+---@param str string Input string to split.
+---@param ... string One or more delimiters.
+---@return string[] tokens Extracted string segments.
 local function splitString(str, ...)
     local delims = { ... }
     if #delims == 0 then return { str } end
@@ -656,7 +731,7 @@ local function splitString(str, ...)
         tokens[#tokens + 1] = token
     end
 
-    -- Strip all delimiter characters from each token (legacy behavior)
+    -- Strip all delimiter characters from each token
     for i = 1, #tokens do
         local token = tokens[i]
         for _, d in ipairs(delims) do
@@ -669,18 +744,22 @@ local function splitString(str, ...)
 end
 
 -- tokenizeCmdString('say "hello world" foo') -> {"say", "hello world", "foo"}
+---@param str string Command string to tokenize.
+---@return string[] tokens Extracted command arguments.
 local function tokenizeCmdString(str)
     local tokens = {}
     str = str:gsub("^%s*(.-)%s*$", "%1") .. " " -- trim and add sentinel
     local pos = 1
     while pos <= #str do
         local token, next_pos
+
         -- try double-quoted string
         token, next_pos = str:match('^"([^"]*)"%s+()', pos)
         if not token then
             token, next_pos = str:match('^([^%s]+)%s+()', pos)
         end
         if not token then break end
+
         tokens[#tokens + 1] = token
         pos = next_pos
     end
@@ -689,6 +768,10 @@ end
 
 -- findChar("hello world", "l") -> 3, 4, 10
 local unpack = unpack or table.unpack
+
+---@param str string String to search.
+---@param character string Character to find.
+---@return integer ... One-based position for each occurrence.
 local function findChar(str, character)
     local indices = {}
     for i = 1, #str do
@@ -701,6 +784,10 @@ end
 
 -- wildcardMatch("hello", "he?lo") -> true
 -- wildcardMatch("test123", "test*") -> true
+---@param str string String to compare against the pattern.
+---@param pattern string Wildcard pattern. Supports "*" and "?".
+---@param case_sensitive boolean|nil Whether matching is case-sensitive (defaults to false).
+---@return boolean matches True if the string matches the wildcard pattern.
 local function wildcardMatch(str, pattern, case_sensitive)
     if not case_sensitive then
         str = str:lower()
@@ -755,6 +842,7 @@ local function wildcardMatch(str, pattern, case_sensitive)
         local found = false
         local ts = start
         local te = start + sublen - 1
+
         while te <= slen do
             local match = true
             for j = 1, sublen do
@@ -785,12 +873,18 @@ Three approaches. Pick the one that fits:
 ```lua
 -- V1: string.format wrapper
 -- formatMessage("Player %s joined.", "Chalwk") -> "Player Chalwk joined."
+---@param message string Format string containing standard Lua format specifiers.
+---@param ... any Arguments passed to string.format.
+---@return string formatted_message Formatted message, or the original message if no arguments are supplied.
 local function formatMessage(message, ...)
     return select('#', ...) > 0 and message:format(...) or message
 end
 
 -- V2: $placeholder substitution
 -- formatMessageVars("Hello $name", {name = "Chalwk"}) -> "Hello Chalwk"
+---@param message string Message containing named placeholders.
+---@param vars table<string, string|number> Values to substitute into matching placeholders.
+---@return string formatted_message Message with placeholders replaced.
 local function formatMessageVars(message, vars)
     return (message:gsub("%$(%w+)", function(key)
         return vars[key] or "$" .. key
@@ -799,8 +893,12 @@ end
 
 -- V3: case-insensitive placeholders with fallback
 -- formatTemplate("Welcome $NAME", {name = "Chalwk"}) -> "Welcome Chalwk"
+---@param template string Message template containing named placeholders.
+---@param args table<string, any>|nil Values to substitute into matching placeholders.
+---@return string formatted_message Message with placeholders replaced, or the original template if args is nil.
 local function formatTemplate(template, args)
     if not args then return template end
+
     return (template:gsub("%$([%w_]+)", function(key)
         local value = args[key] or args[key:lower()] or args[key:upper()]
         return value ~= nil and tostring(value) or "$" .. key
@@ -812,8 +910,11 @@ end
 
 ```lua
 -- wordToTime("1m30s") -> 90 | ("2h") -> 7200 | ("1d12h") -> 129600
+---@param time_string string|nil Duration string containing s, m, h, and d units.
+---@return number total_seconds Parsed duration in seconds, or -1 if no positive duration is parsed.
 local function wordToTime(time_string)
     if not time_string then return -1 end
+
     local total, num = 0, ""
     for i = 1, #time_string do
         local c = string.sub(time_string, i, i)
@@ -837,13 +938,19 @@ local function wordToTime(time_string)
 end
 
 -- timeToWord(3665) -> "1h 1m 5s" | (-1) -> "-1" | (0) -> "0s"
+---@param seconds number|string|nil Duration in seconds.
+---@return string duration Human-readable duration, or "-1" if the input is invalid.
 local function timeToWord(seconds)
     if seconds == -1 or not tonumber(seconds) then return "-1" end
+
     seconds = tonumber(seconds)
+
     local days = math.floor(seconds / 86400)
     seconds = seconds % 86400
+
     local hours = math.floor(seconds / 3600)
     seconds = seconds % 3600
+
     local mins = math.floor(seconds / 60)
     local secs = seconds % 60
     local parts = {}
@@ -857,11 +964,15 @@ local function timeToWord(seconds)
 end
 
 -- formatDuration(125) -> "00:02:05"
+---@param seconds number|string|nil Duration in seconds.
+---@return string formatted_duration Duration formatted as HH:MM:SS.
 local function formatDuration(seconds)
     seconds = tonumber(seconds) or 0
+
     local h = math.floor(seconds / 3600)
     local m = math.floor((seconds % 3600) / 60)
     local s = math.floor(seconds % 60)
+
     return string.format("%02d:%02d:%02d", h, m, s)
 end
 ```
@@ -869,16 +980,33 @@ end
 ### Math and Geometry
 
 ```lua
+---@param px number Point X coordinate.
+---@param py number Point Y coordinate.
+---@param pz number Point Z coordinate.
+---@param ox number Origin X coordinate.
+---@param oy number Origin Y coordinate.
+---@param oz number Origin Z coordinate.
+---@param radius number Sphere radius.
+---@return boolean inside True if the point is within or on the sphere.
 local function inSphere(px, py, pz, ox, oy, oz, radius)
     local dx, dy, dz = ox - px, oy - py, oz - pz
     return (dx * dx + dy * dy + dz * dz) <= radius * radius
 end
 
+---@param px number Point X coordinate.
+---@param py number Point Y coordinate.
+---@param cx number Circle centre X coordinate.
+---@param cy number Circle centre Y coordinate.
+---@param radius number Circle radius.
+---@return boolean inside True if the point is within or on the circle.
 local function checkInCircle(px, py, cx, cy, radius)
     return (px - cx) ^ 2 + (py - cy) ^ 2 <= radius ^ 2
 end
 
 -- Needs the math.atan2 guard below.
+---@param forward_x number Forward vector X component.
+---@param forward_y number Forward vector Y component.
+---@return string direction Nearest cardinal or intercardinal direction (N, NE, E, SE, S, SW, W, NW).
 local function directionToCardinal(forward_x, forward_y)
     local angle = (90 - math.deg(math.atan2(forward_y, forward_x))) % 360
     local dirs = { "N", "NE", "E", "SE", "S", "SW", "W", "NW" }
@@ -886,12 +1014,19 @@ local function directionToCardinal(forward_x, forward_y)
     return dirs[idx]
 end
 
+---@param value number Value to round.
+---@param decimals number|nil Number of decimal places (defaults to 0).
+---@return number rounded_value Rounded value.
 local function round(value, decimals)
     local factor = 10 ^ (decimals or 0)
     return math.floor(value * factor + 0.5) / factor
 end
 
-local function toDecimal(hex_string) return tonumber(hex_string, 16) end
+---@param hex_string string Hexadecimal string to convert.
+---@return number|nil decimal_value Converted decimal number, or nil if the string is invalid.
+local function toDecimal(hex_string)
+    return tonumber(hex_string, 16)
+end
 ```
 
 #### math.atan2 Guard
@@ -903,6 +1038,10 @@ safe to paste on any platform.
 ```lua
 if not math.atan2 then
     local pi = math.pi
+
+    ---@param y number Y coordinate or vector component.
+    ---@param x number X coordinate or vector component.
+    ---@return number angle_radians Angle in radians, ranging from -pi to pi.
     math.atan2 = function(y, x)
         if x > 0 then
             return math.atan(y / x)
@@ -924,8 +1063,14 @@ Unit conversions are under [Timing and Units](#timing-and-units).
 ```lua
 local WU_TO_M = 3.048
 
---- Returns the 3D distance between two points in world units.
----@return number distance
+-- Returns the 3D distance between two points in world units.
+---@param x1 number Starting point X coordinate.
+---@param y1 number Starting point Y coordinate.
+---@param z1 number Starting point Z coordinate.
+---@param x2 number Target point X coordinate.
+---@param y2 number Target point Y coordinate.
+---@param z2 number Target point Z coordinate.
+---@return number distance Distance between the two points in world units.
 local function distance3d(x1, y1, z1, x2, y2, z2)
     local dx = x2 - x1
     local dy = y2 - y1
@@ -933,12 +1078,12 @@ local function distance3d(x1, y1, z1, x2, y2, z2)
     return math.sqrt(dx * dx + dy * dy + dz * dz)
 end
 
---- Returns the distance in meters between a point and a target table.
----@param x number
----@param y number
----@param z number
----@param target table {x, y, z} in world units.
----@return number distance_m
+-- Returns the distance in meters between a point and a target table.
+---@param x number Starting point X coordinate.
+---@param y number Starting point Y coordinate.
+---@param z number Starting point Z coordinate.
+---@param target number[] Target position {x, y, z} in world units.
+---@return number distance_m Distance between the points in meters.
 local function distanceMeters(x, y, z, target)
     local wu = distance3d(x, y, z, target[1], target[2], target[3])
     return wu * WU_TO_M
@@ -950,6 +1095,7 @@ Example:
 ```lua
 local px, py, pz = getObjectPosition(dynamic_player)
 local loc = { 0, 0, 0 }
+
 local distance_wu = distance3d(px, py, pz, loc[1], loc[2], loc[3])
 local distance_m = distanceMeters(px, py, pz, loc)
 ```
