@@ -1,5 +1,6 @@
 ---
 title: "SAPP Utils"
+permalink: /halo/sapp/utils/
 date: 2026-11-09
 last-updated: 2026-11-09
 categories: [ education, halo, modding ]
@@ -7,7 +8,7 @@ tags: [ sapp, lua, scripting, server, tutorial ]
 ---
 
 Helpers, notes, and gotchas for SAPP Lua scripting. Lookup tables (pointers, signatures, variables,
-commands) are documented in [SAPP Cheat Sheet](sapp-cheat-sheet.md). Offsets, unit conversions, and the
+commands) are documented in [SAPP Cheat Sheet](cheat-sheet.md). Offsets, unit conversions, and the
 helpers shared with Chimera are in [Common Reference](../common-reference.md).
 
 ---
@@ -110,8 +111,8 @@ match-start address or `0`. Add the offset, then `read_dword` to get the pointer
 
 - `halo_type` is a case-sensitive string: `"PC"` or `"CE"`. Use it only as a fallback when no
   reliable signature exists.
-- Pre-computed signatures: [Signature Reference](sapp-cheat-sheet.md#signature-reference).
-- Hardcoded PC/CE pointer table: [Hardcoded Pointers](sapp-cheat-sheet.md#hardcoded-pointers).
+- Pre-computed signatures: [Signature Reference](cheat-sheet.md#signature-reference).
+- Hardcoded PC/CE pointer table: [Hardcoded Pointers](cheat-sheet.md#hardcoded-pointers).
 
 Some CE patterns do not match on PC because the compilers emitted different instruction shapes for
 the same code. The `gametype_base` sig is one example. Always use the version-fallback form below
@@ -547,7 +548,7 @@ end
 
 ## Tag and Map Helpers
 
-The tag table base is documented under [Tag Table](sapp-cheat-sheet.md#tag-table) (SAPP Cheat Sheet) and
+The tag table base is documented under [Tag Table](cheat-sheet.md#tag-table) (SAPP Cheat Sheet) and
 the entry layout under [Tag Entry](../common-reference.md#tag-entry).
 
 `classToDword` is defined under [Tag Entry Helpers](../common-reference.md#tag-entry-helpers).

@@ -1,5 +1,6 @@
 ---
 title: "Halo: SAPP Server Guide"
+permalink: /halo/sapp/server-guide/
 date: 2026-04-02
 last-updated: 2026-11-09
 categories: [ education, halo, modding, server ]

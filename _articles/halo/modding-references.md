@@ -1,5 +1,6 @@
 ---
 title: "Halo: Modding References & Tools"
+permalink: /halo/modding-references/
 date: 2026-11-09
 last-updated: 2026-11-09
 categories: [ education, halo, modding ]
