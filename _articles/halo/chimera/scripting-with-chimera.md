@@ -39,6 +39,11 @@ they live:
   scripts are sandboxed by default. Global scripts, and map scripts explicitly placed in the global
   folder, run without sandbox restrictions.
 
+> [!WARNING]
+> Map scripts are sandboxed by default and restricted from file access (`io.*`) and memory
+> operations outside `0x40000000`–`0x41B00000`. Place your script in the `global` folder if you need
+> unrestricted access or file persistence.
+
 By default, the chimera data folder will be located in
 `C:\Users\<user>\Documents\My Games\Halo CE\chimera`.
 
@@ -363,6 +368,10 @@ execute_script("(object_teleport (player0) teleport_flag)")
 Because Chimera is client-side, you can read any player's data (the server sends it to you), but you
 can only write to memory for your own local player (writing to others will desync or crash).
 
+> [!WARNING]
+> Never write memory for remote players or global game state in multiplayer. Doing so causes
+> immediate client desyncs, crashes, or anti-cheat bans.
+
 ### Get the player object
 
 Note: If no ID is passed, the local player is used.
@@ -418,6 +427,10 @@ local name = static_player and readPlayerName(static_player)
 Chimera allows you to modify the camera position, orientation, and field of view before the game
 renders. The below example zooms the FOV while holding a sniper.
 
+> [!IMPORTANT]
+> The `OnPreCamera` callback must return all ten camera parameters. Omitting or returning a
+> partial list will cause the camera to lock up or freeze.
+
 ```lua
 -- x,y,z: camera position
 -- fov: field of view in degrees
@@ -439,7 +452,6 @@ function OnPreCamera(x, y, z, fov, ox1, oy1, oz1, ox2, oy2, oz2)
         end
     end
 
-    -- Returning the values is mandatory; otherwise the camera will not update.
     return x, y, z, fov, ox1, oy1, oz1, ox2, oy2, oz2
 end
 ```
@@ -525,8 +537,12 @@ in [Object Table](../common-reference.md#object-table).
 
 ## Spawning Objects (Client-Side Spawning)
 
-Chimera's `spawn_object` takes either a tag ID or a class+name. Note: Spawning objects client-side
-only affects your own game. Others in multiplayer will not see them; Useful in Single Player.
+Chimera's `spawn_object` takes either a tag ID or a class+name.
+
+> [!NOTE]
+> Objects spawned client-side via Chimera in multiplayer sessions are local-only and will not be
+> visible to other players. They are primarily useful for single-player custom mods and client-side
+> testing.
 
 ```lua
 -- By tag ID

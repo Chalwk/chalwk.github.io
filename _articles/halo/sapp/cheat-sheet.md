@@ -24,6 +24,10 @@ PC or CE with `halo_type` (`"PC"` or `"CE"`):
 local timelimit_address = halo_type == "PC" and 0x626630 or 0x5AA5B0
 ```
 
+> [!IMPORTANT]
+> Hardcoded pointers differ between PC and CE builds. Always check `halo_type` (`"PC"` or `"CE"`) to
+> select the correct memory address or rely on signature scanning.
+
 | Pointer Name                  | PC Address | CE Address | Description                                                                                                   |
 |-------------------------------|------------|------------|---------------------------------------------------------------------------------------------------------------|
 | `banlist_header`              | `0x641280` | `0x5C52A0` | Banlist structure header                                                                                      |
@@ -124,9 +128,8 @@ layout is under [Tag Entry](../common-reference.md#tag-entry).
 ## Signature Reference
 
 Signatures below use `sig_scan`, which works on both PC and CE. Use the
-[hardcoded pointers](#hardcoded-pointers) above as a fallback. `halo_type` is a
-case-sensitive string (`"PC"` or `"CE"`) and is the correct way to pick a fallback when
-`sig_scan` returns `0`.
+[hardcoded pointers](#hardcoded-pointers) above as a fallback. `halo_type` is a case-sensitive
+string (`"PC"` or `"CE"`) and is the correct way to pick a fallback when `sig_scan` returns `0`.
 
 | Pointer name                | Expression                                                                                       |
 |-----------------------------|--------------------------------------------------------------------------------------------------|
@@ -203,6 +206,11 @@ A signature is a byte string with wildcards (`??`) where values vary. Example:
 - Global variables: Use `0` as the target ID.
 - Player variables: Use the player's index as the target ID.
 - Numeric values: Wrap the result in `tonumber()` because `get_var` returns strings.
+
+> [!NOTE]
+> `get_var()` always returns string values. Always wrap the result in `tonumber()` when performing
+> numeric comparisons or math operations.
+
 - Examples:
     - `get_var(1, "$name")`
     - `tonumber(get_var(0, "$gt"))` - Returns the gametype string (e.g., `ctf`, `slayer`).

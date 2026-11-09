@@ -76,6 +76,11 @@ pointer.
 | Memory writes                        | Any valid address                 | Local player only; writing to others desyncs             |
 | Run a console command                | `execute_command`                 | `execute_script`                                         |
 
+> [!WARNING]
+> On Chimera (client-side), memory writes should be strictly restricted to the local player. Writing
+> to remote player structures or global game state can cause immediate client desyncs, crashes, or
+> server anti-cheat kicks.
+
 `get_player(i)` and `get_dynamic_player(i)` exist on both. On Chimera, omitting the index uses the
 local player.
 
@@ -232,6 +237,10 @@ position.
 Each tag entry is `0x20` bytes. On Chimera, `get_tag(tag_id)` returns the entry pointer, and the
 Chimera guide reads the name pointer at `+0x10`. On SAPP, the table base and lookup are covered in
 the Tag Table section of the [SAPP Cheat Sheet](sapp/cheat-sheet.md#tag-table).
+
+> [!NOTE]
+> Each tag entry is exactly `0x20` bytes wide. Make sure to dereference the tag data pointer at
+> offset `+0x14` correctly when inspecting or modifying tag classes and attributes.
 
 | Entry offset | Type  | Field                                                                           |
 |--------------|-------|---------------------------------------------------------------------------------|

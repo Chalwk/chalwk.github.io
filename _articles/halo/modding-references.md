@@ -23,7 +23,7 @@ Official docs, forums, map repositories, and community knowledge bases.
 - [Scripting with SAPP](sapp/scripting-with-sapp.md): Comprehensive guide to server-side Lua
   scripting using SAPP's Lua API, including signature scanning, global variables, and core
   functions.
-- [Scripting with Phasor](https://chalwk.github.io/blog/2026/05/17/halo-scripting-with-phasor):
+- [Scripting with Phasor](phasor/scripting-with-phasor):
   Server-side Lua scripting with Phasor, covering version handling and hardcoded addresses.
 - [Phasor (legacy)](https://phasor.halonet.net/): Legacy server extension and documentation; useful
   for older scripts and historical examples.
@@ -77,8 +77,10 @@ require some patience on modern versions of Windows.
 - Tool: Command-line asset compiler used for bitmaps, models, sounds, and map builds.
 - Tag Test (`tag_test.exe`): Launch and debug maps locally without a dedicated server.
 
-> Warning: Classic HEK tools are 32-bit and may need compatibility settings (Windows 7 mode, admin
-> rights). Some users report improved stability with `dgVoodoo2` as a DirectX wrapper.
+> [!WARNING]
+> Classic HEK tools are 32-bit applications and may require setting compatibility mode (such as
+Windows 7 mode) or running with administrator rights. Using `dgVoodoo2` as a DirectX wrapper can
+also improve stability on modern Windows versions.
 
 ### Modern and Community Toolchains
 
@@ -94,9 +96,9 @@ These tools are cross-platform, scriptable, and actively maintained by the commu
 - [OpenSauce](https://c20.reclaimers.net/h1/community-tools/opensauce): Advanced Halo CE engine
   extension adding expanded scripting, rendering, and engine-level modding features.
 
-> Tip: Use Invader if you need batch workflows, CI integration, or want to avoid many of the classic
-> HEK quirks. Assembly is ideal for quick testing and lightweight map edits, while larger projects
-> are generally easier to maintain through proper tag-based rebuild workflows.
+> [!TIP]
+> Use `Invader` for automated build pipelines, batch workflows, and CI/CD integration. Use
+> `Assembly` for rapid on-the-fly map patching and lightweight experimentation.
 
 ---
 
@@ -122,8 +124,9 @@ These libraries and utilities make writing and distributing CE Lua scripts easie
 - [Mercury](https://github.com/Sledmine/mercury): Package manager for Halo CE mods. Helps package,
   install, remove, and distribute addons cleanly.
 
-> Best Practice: Use Mercury to organize reusable mods, scripts, and dependencies for easier sharing
-> and deployment.
+> [!NOTE]
+> Use `Mercury` to manage and distribute reusable mods, scripts, and dependencies cleanly across
+> projects.
 
 ---
 

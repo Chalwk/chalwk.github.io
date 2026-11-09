@@ -42,6 +42,10 @@ local var1, var2 = version[1], version[2]
 - `get_dynamic_player(i) == 0` means the player is dead. It is redundant if `player_alive(i)` is
   already checked.
 
+> [!IMPORTANT]
+> SAPP API functions use 1-16 player indices, whereas internal Halo memory tables and arrays are
+> 0-15. Always convert indices using `to_real_index()` when accessing zero-based memory arrays.
+
 ```lua
 if player_present(player_id) and player_alive(player_id) then
     local dyn = get_dynamic_player(player_id)
@@ -108,6 +112,10 @@ end
 `sig_scan` finds byte patterns (`??` = wildcard) and works on both PC and CE. It returns the
 match-start address or `0`. Add the offset, then `read_dword` to get the pointer. Always check for
 `0`.
+
+> [!WARNING]
+> Calling `read_dword()` on an unguarded `sig_scan()` result will crash the server if the signature
+> returns `0`. Always validate that `sig_scan` matches successfully before dereferencing pointers.
 
 - `halo_type` is a case-sensitive string: `"PC"` or `"CE"`. Use it only as a fallback when no
   reliable signature exists.

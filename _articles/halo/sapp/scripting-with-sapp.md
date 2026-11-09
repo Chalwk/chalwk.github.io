@@ -16,8 +16,8 @@ commands, player management, and direct memory access. Scripts run on dedicated 
 ## Reference Files
 
 - [Utils](utils.md): Conventions, helper functions, and known quirks.
-- [Server Guide](server-guide.md): Complete guide to setting up, configuring, and running SAPP on
-  a server.
+- [Server Guide](server-guide.md): Complete guide to setting up, configuring, and running SAPP on a
+  server.
 - [Common References](../common-reference.md): Memory offsets, game constants, unit
   conversions, shared helpers, and stock Halo commands.
 - [Cheat Sheet](cheat-sheet.md): Pointers, `sig_scan` patterns, `get_var` variables, SAPP
@@ -43,6 +43,10 @@ SAPP Lua scripts cannot talk to each other directly. The only shared channel is 
 | Global platform values      | `cb`, `halo_type`, `pid`, `lua_api_version`, `sapp_version`                                                          |
 | Player index convention     | SAPP API uses 1-16; Halo internal memory uses 0-15 (see [Player Index Convention](utils.md#player-index-convention)) |
 | Tick rate                   | 30 ticks/sec (1 tick ~ 33.3 ms); 1 WU = 3.048 m; more in [Timing and Units](../common-reference.md#timing-and-units) |
+
+> [!WARNING]
+> Scripts run sandboxed, but unsafe memory operations or invalid pointers will immediately crash the
+> dedicated server. Always test memory-writing code in a non-production environment.
 
 ---
 
@@ -193,8 +197,15 @@ Applies to anything driven by player input.
 
 `EVENT_TICK` runs 30 times per second, so keep it lean.
 
-- Queue or debounce frequent events (damage, weapon fire) and drain them with short timers (50-200 ms).
+- Queue or debounce frequent events (damage, weapon fire) and drain them with short timers (50-200
+  ms).
 - Use separate queues for different priorities (score updates vs. log writes).
+
+> [!TIP]
+> Localize frequently used globals at file scope and reuse tables from pools in hot paths (like
+> `EVENT_TICK`) to significantly minimize garbage collection (GC) pressure and avoid performance
+> stalls.
+
 - Localize frequently used globals at file scope:
 
 ```lua

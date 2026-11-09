@@ -208,7 +208,9 @@ cg\
     \---init.txt
 ```
 
-> Note: Do not copy the root `sapp\` folder. It is global and shared.
+> [!CAUTION]
+> Do not copy the root `sapp\` folder when creating new instances. The root `sapp\` folder is global
+> and shared across all server instances.
 
 ### Step 3: Customize the Copy
 
@@ -219,7 +221,9 @@ Edit these files inside `cg\gun_game\`:
 - `sapp\mapcycle.txt` or `sapp\mapvotes.txt`: Set the map rotation for this mode.
 - `sapp\lua\`: Put the mode's Lua scripts here.
 
-> Note: `load` must stay the last line of `init.txt`.
+> [!IMPORTANT]
+> `load` must always remain the final command in your instance `init.txt` file. Placing commands
+> after `load` will cause them to be ignored.
 
 ### Step 4: Pick a Port
 

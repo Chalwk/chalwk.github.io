@@ -7,11 +7,10 @@ categories: [ education, halo, modding ]
 tags: [ sapp, lua, scripting, server, tutorial ]
 ---
 
-```lua
--- TECHNICAL NOTE:
--- Some function arguments are strings, despite representing numerical values.
--- These are not typos.
+> [!NOTE]
+> Some function arguments are strings, despite representing numerical values. These are not typos.
 
+```lua
 api_version = "1.12.0.0"
 
 function OnScriptLoad()
