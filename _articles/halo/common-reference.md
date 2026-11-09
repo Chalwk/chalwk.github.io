@@ -9,7 +9,7 @@ tags: [ sapp, chimera, lua, scripting, reference, tutorial ]
 Shared reference for SAPP (server) and Chimera (client) Lua scripting: relative memory offsets, game
 constants, platform-independent helpers, and stock Halo commands. Anything that only one platform
 can use stays in its own guide: [Scripting with SAPP](sapp/scripting-with-sapp.md),
-[SAPP Cheat Sheet](sapp/cheat-sheet.md), [SAPP Utils](sapp/utils.md), and
+[SAPP Cheat Sheet](sapp/sapp-cheat-sheet.md), [SAPP Utils](sapp/sapp-utils.md), and
 [Scripting with Chimera](chimera/scripting-with-chimera.md).
 
 The one exception is [Chimera Pointers](#chimera-pointers), which lives here until Chimera gets a
@@ -225,7 +225,7 @@ position.
 
 Each tag entry is `0x20` bytes. On Chimera, `get_tag(tag_id)` returns the entry pointer, and the
 Chimera guide reads the name pointer at `+0x10`. On SAPP, the table base and lookup are covered in
-the Tag Table section of the [SAPP Cheat Sheet](sapp/cheat-sheet.md#tag-table).
+the Tag Table section of the [SAPP Cheat Sheet](sapp/sapp-cheat-sheet.md#tag-table).
 
 | Entry offset | Type  | Field                                                                           |
 |--------------|-------|---------------------------------------------------------------------------------|
@@ -960,7 +960,7 @@ local distance_m = distanceMeters(px, py, pz, loc)
 These are Halo's built-in server commands. SAPP enhances or overrides some. Run them from a script
 with `execute_command` on SAPP or `execute_script` on Chimera. Stock `sv_*` commands need a plain
 player index. SAPP-only commands and player expressions are in the
-[SAPP Cheat Sheet](sapp/cheat-sheet.md#command-reference).
+[SAPP Cheat Sheet](sapp/sapp-cheat-sheet.md#command-reference).
 
 | Command                    | Usage                                  | Description                                                         |
 |----------------------------|----------------------------------------|---------------------------------------------------------------------|

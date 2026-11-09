@@ -14,17 +14,17 @@ commands, player management, and direct memory access. Scripts run on dedicated 
 
 ## Reference Files
 
-- [utils.md](utils.md): Conventions, helper functions, and known quirks.
-- [server-guide.md](server-guide.md): Complete guide to setting up, configuring, and running SAPP on
+- [Utils](sapp-utils.md): Conventions, helper functions, and known quirks.
+- [Server Guide](server-guide.md): Complete guide to setting up, configuring, and running SAPP on
   a server.
-- [../common-reference.md](../common-reference.md): Memory offsets, game constants, unit
+- [Common References](../common-reference.md): Memory offsets, game constants, unit
   conversions, shared helpers, and stock Halo commands.
-- [cheat-sheet.md](cheat-sheet.md): Pointers, `sig_scan` patterns, `get_var` variables, SAPP
+- [Cheat Sheet](sapp-cheat-sheet.md): Pointers, `sig_scan` patterns, `get_var` variables, SAPP
   commands, and console colors.
-- [template.md](sapp-lua-template.md.md): Script skeleton and callback reference.
+- [SAPP Lua Template](sapp-lua-template.md): Script skeleton and callback reference.
 
 SAPP Lua scripts cannot talk to each other directly. The only shared channel is custom variables
-(see Custom Variables in [cheat-sheet.md](cheat-sheet.md)).
+(see Custom Variables in [Cheat Sheet](sapp-cheat-sheet.md)).
 
 ---
 
@@ -40,7 +40,7 @@ SAPP Lua scripts cannot talk to each other directly. The only shared channel is 
 | `math.atan2`                | NOT available; use the guard in [Math and Geometry](../common-reference.md#math-and-geometry)                        |
 | Sandboxing                  | Scripts run sandboxed; unsafe memory ops can crash the server                                                        |
 | Global platform values      | `cb`, `halo_type`, `pid`, `lua_api_version`, `sapp_version`                                                          |
-| Player index convention     | SAPP API uses 1-16; Halo internal memory uses 0-15 (see [Player Index Convention](utils.md#player-index-convention)) |
+| Player index convention     | SAPP API uses 1-16; Halo internal memory uses 0-15 (see [Player Index Convention](sapp-utils.md#player-index-convention)) |
 | Tick rate                   | 30 ticks/sec (1 tick ~ 33.3 ms); 1 WU = 3.048 m; more in [Timing and Units](../common-reference.md#timing-and-units) |
 
 ---
@@ -96,7 +96,7 @@ end
 ## Callbacks
 
 `register_callback(cb.EVENT_NAME, "GlobalFnName")` registers a global callback and
-`unregister_callback(cb.EVENT_NAME)` removes it. See [SAPP Lua Template](sapp-lua-template.md.md) for every
+`unregister_callback(cb.EVENT_NAME)` removes it. See [SAPP Lua Template](sapp-lua-template.md) for every
 available callback. Register only the ones the script uses.
 
 ---
@@ -120,7 +120,7 @@ available callback. Register only the ones the script uses.
 
 Bad addresses crash the server. Leave safe mode off unless you need it (it costs performance) and
 test memory operations off production. Pointers are in Hardcoded Pointers and Signature Reference
-in [SAPP Cheat Sheet](cheat-sheet.md). Player, weapon, and vehicle offsets are
+in [SAPP Cheat Sheet](sapp-cheat-sheet.md). Player, weapon, and vehicle offsets are
 in [Memory Offsets](../common-reference.md#memory-offsets) in the Common Reference, since Chimera
 uses the same ones.
 
@@ -149,7 +149,7 @@ Do not mix these up.
 | `get_object_memory(object_id)`                                                              | Returns object address, or `0` if invalid                                                                                                                                 |
 | `to_real_index(id)`, `to_player_index(real_index)`                                          | Convert between SAPP (1-16) and Halo (0-15) indices                                                                                                                       |
 | `get_var(id, "$name")`, `set_var(id, "name", value, [copy_id])`                             | `get_var` returns strings; global vars use ID `0`. `set_var` returns `false` if undefined                                                                                 |
-| `add_var(name, type)`, `del_var(name)`                                                      | Manage custom variables (types 0-5; see [Variables](cheat-sheet.md#variables))                                                                                            |
+| `add_var(name, type)`, `del_var(name)`                                                      | Manage custom variables (types 0-5; see [Variables](sapp-cheat-sheet.md#variables))                                                                                            |
 | `kill(id)`                                                                                  | Adds a death and applies respawn time                                                                                                                                     |
 | `assign_weapon(object_id, id)`                                                              | Returns success; silently fails if dead or unable to take it (max 4 weapons)                                                                                              |
 | `drop_weapon(id)`                                                                           | Drops current weapon                                                                                                                                                      |
@@ -164,14 +164,14 @@ Do not mix these up.
 | `intersect(x, y, z, vx, vy, vz, [ignore_object_id])`                                        | Returns `success, cx, cy, cz, hit_object_id`; `0xFFFFFFFF` = no hit                                                                                                       |
 | `lookup_tag("weap", "weapons\\pistol\\pistol")` / `lookup_tag(tag_id)`                      | Returns tag address (`0` if not found); use the tag-ID form on protected maps                                                                                             |
 | `execute_command(cmd, [id], [echo])`, `execute_command_sequence("cmd1;cmd2", [id], [echo])` | `id` runs commands on a player's behalf. Sequence splits on `;`. `echo = true` raises `EVENT_ECHO` with output.                                                           |
-| `rand([min, max])`                                                                          | `max` is exclusive (see [Known SAPP Quirks](utils.md#known-sapp-quirks))                                                                                                  |
-| `sig_scan("signature")`                                                                     | Returns match address, or `0` (see [Signature Scanning](utils.md#signature-scanning))                                                                                     |
-| `timer(ms, "GlobalFn", [args...])`                                                          | See [SAPP timer()](utils.md#sapp-timer-)                                                                                                                                  |
+| `rand([min, max])`                                                                          | `max` is exclusive (see [Known SAPP Quirks](sapp-utils.md#known-sapp-quirks))                                                                                                  |
+| `sig_scan("signature")`                                                                     | Returns match address, or `0` (see [Signature Scanning](sapp-utils.md#signature-scanning))                                                                                     |
+| `timer(ms, "GlobalFn", [args...])`                                                          | See [SAPP timer()](sapp-utils.md#sapp-timer-)                                                                                                                                  |
 
 Tag class codes are the four-letter Halo class (`weap`, `vehi`, `eqip`, ...), not full words.
 
 `get_var` names (`$gt`, `$map`, `$name`, `$score`, ...) are listed
-in [Variables](cheat-sheet.md#variables). Global variables use player index `0`, and every value
+in [Variables](sapp-cheat-sheet.md#variables). Global variables use player index `0`, and every value
 comes back as a string.
 
 ## Script Hygiene

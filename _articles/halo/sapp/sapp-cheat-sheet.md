@@ -239,7 +239,7 @@ callback or event fires, see [Callbacks](scripting-with-sapp.md#callbacks)).
 | `$name`        | P     | Player name                                                                                         |
 | `$oteam`       | P     | Opposite team name                                                                                  |
 | `$ping`        | P     | Ping in ms                                                                                          |
-| `$pn`          | G     | Players on server (stale during `EVENT_LEAVE`, see [Known SAPP Quirks](utils.md#known-sapp-quirks)) |
+| `$pn`          | G     | Players on server (stale during `EVENT_LEAVE`, see [Known SAPP Quirks](sapp-utils.md#known-sapp-quirks)) |
 | `$rand`        | G     | Random number 1-16                                                                                  |
 | `$reds`        | G     | Players on red team                                                                                 |
 | `$redscore`    | G     | Red team score                                                                                      |
@@ -260,7 +260,7 @@ callback or event fires, see [Callbacks](scripting-with-sapp.md#callbacks)).
 Notes:
 
 - `w8` and `wait` only work inside an event command sequence. In Lua use `timer()`
-  (see [SAPP timer ()](utils.md#sapp-timer-)).
+  (see [SAPP timer ()](sapp-utils.md#sapp-timer-)).
 - Player-scoped variables (types 3-5) clear when the player leaves.
 - Custom variables are the only channel for sharing state between Lua scripts
   (see [Reference Files](scripting-with-sapp.md#reference-files)).
@@ -579,7 +579,7 @@ formats follow the tables.
 | Variable | `var_conv`  | 4          | `var_conv <name>`                                          | Convert between integer and float types.                                                                                                                                                       |
 | Variable | `var_del`   | 4          | `var_del <name>`                                           | Delete a custom variable.                                                                                                                                                                      |
 | Variable | `var_list`  | 4          | `var_list`                                                 | List all custom variables.                                                                                                                                                                     |
-| Variable | `var_set`   | 4          | `var_set <name> <value_expr> [player number]`              | Set a custom variable. `value_expr` supports `+`, `-`, `*`, `/`, `%`, and `:` prefixes (see [Expressions](cheat-sheet.md#expressions)). Player number is required for player-scoped variables. |
+| Variable | `var_set`   | 4          | `var_set <name> <value_expr> [player number]`              | Set a custom variable. `value_expr` supports `+`, `-`, `*`, `/`, `%`, and `:` prefixes (see [Expressions](sapp-cheat-sheet.md#expressions)). Player number is required for player-scoped variables. |
 
 ### Admin Management Commands (`users.txt`)
 
