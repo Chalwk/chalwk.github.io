@@ -24,48 +24,48 @@ set_callback("spawn", "OnSpawn")
 set_callback("tick", "OnTick")
 set_callback("unload", "OnScriptUnload")
 
---- Called when a command is typed into the console.
---- Open the console with the `~` key.
+-- Called when a command is typed into the console.
+-- Open the console with the `~` key.
 ---@param cmd string The command entered into the console
 function OnCommand(cmd) end
 
---- Called once per rendered frame.
---- Runs after `preframe`.
+-- Called once per rendered frame.
+-- Runs after `preframe`.
 function OnFrame() end
 
---- Called before rendering each frame.
+-- Called before rendering each frame.
 function OnPreFrame() end
 
---- Called immediately before camera calculations are applied.
+-- Called immediately before camera calculations are applied.
 function OnPreCamera() end
 
---- Called approximately 30 times per second.
---- Main gameplay update loop.
+-- Called approximately 30 times per second.
+-- Main gameplay update loop.
 function OnTick() end
 
---- Called immediately before the main tick update.
+-- Called immediately before the main tick update.
 function OnPreTick() end
 
---- Called before a map begins loading.
+-- Called before a map begins loading.
 function OnMapPreload() end
 
---- Called after a map has fully loaded.
---- Use this to reset or initialize gameplay state.
+-- Called after a map has fully loaded.
+-- Use this to reset or initialize gameplay state.
 function OnMapLoad() end
 
---- Called before a player spawns.
+-- Called before a player spawns.
 ---@param player number The player index
 function OnPreSpawn(player) end
 
---- Called when a player finishes spawning.
+-- Called when a player finishes spawning.
 ---@param player number The player index
 function OnSpawn(player) end
 
---- Called when an incoming RCON message is received.
+-- Called when an incoming RCON message is received.
 ---@param msg string The RCON message
 ---@return boolean|nil allow # Return `false` to block the message
 function OnRconMessage(msg) return true end
 
---- Called when the script is unloaded.
+-- Called when the script is unloaded.
 function OnScriptUnload() end
 ```
