@@ -21,7 +21,7 @@ ready-to-use packages:
 Choose the package that matches the version of Halo you are running.
 
 You will learn what every file and folder does, and how to launch your server. Then, without
-repeating file descriptions, you will learn how to convert the single instance into a multi-server
+repeating file descriptions, you will learn how to convert the single instance into a multiserver
 cluster - adding more game modes on different ports while sharing admin settings, maps, and SAPP
 binaries.
 
@@ -95,7 +95,7 @@ executable (`haloded.exe` for PC vs `haloceded.exe` for CE).
   Required for certain SAPP features (e.g., remote console encryption).
 
 - `motd.txt`: Message of the Day - displayed to players when they join. This is for Halo CE only
-  (Custom Edition uses `sv_motd` pointing to a file; the package includes it for convenience but it
+  (Custom Edition uses `sv_motd` pointing to a file; the package includes it for convenience, but it
   only works on CE).
 
 - `run.bat`: (Windows) and `run.sh` (Linux/Wine): Launch scripts that start the server with the
@@ -128,7 +128,7 @@ same platform. This gives you unified administration.
 The folder `cg\` holds configuration for your single server instance. Everything inside is
 unique to this server.
 
-- `cg\init.txt`: "The main startup script executed by `haloceded.exe`. Contains basic settings
+- `cg\init.txt`: The main startup script executed by `haloceded.exe`. Contains basic settings
   (`sv_name`, `sv_public`, `sv_password`) and must end with the `load` command to activate SAPP.
 
 - `cg\sapp\init.txt`: The SAPP configuration file for this instance. Controls Lua scripting, map
@@ -226,7 +226,7 @@ cg\
 
 Important: Do not copy the root `sapp\` folder - that one is global and shared.
 
-### Step 2: Customise the New Instance
+### Step 2: Customize the New Instance
 
 Edit the following files inside `cg\gun_game\` to give the new server its own identity:
 
@@ -277,7 +277,7 @@ share:
 - `areas.txt`, `locations.txt` - Shared world definitions.
 - All map files - No wasted disk space.
 
-Only the small `cg\<mode>\` folders (a few kilobytes each) are duplicated and customised.
+Only the small `cg\<mode>\` folders (a few kilobytes each) are duplicated and customized.
 
 ---
 
