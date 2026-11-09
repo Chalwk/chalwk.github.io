@@ -14,40 +14,40 @@ tags: [ sapp, lua, scripting, server, tutorial ]
 api_version = "1.12.0.0"
 
 function OnScriptLoad()
-register_callback(cb.EVENT_ALIVE, "OnAlive")
-register_callback(cb.EVENT_AREA_ENTER, "OnAreaEnter")
-register_callback(cb.EVENT_AREA_EXIT, "OnAreaExit")
-register_callback(cb.EVENT_ASSIST, "OnAssist")
-register_callback(cb.EVENT_BETRAY, "OnBetray")
-register_callback(cb.EVENT_CAMP, "OnCamp")
-register_callback(cb.EVENT_CHAT, "OnChat")
-register_callback(cb.EVENT_COMMAND, "OnCommand")
-register_callback(cb.EVENT_CUSTOM, "OnCustom")
-register_callback(cb.EVENT_DAMAGE_APPLICATION, "OnDamageApplication")
-register_callback(cb.EVENT_DIE, "OnDie")
-register_callback(cb.EVENT_ECHO, "OnEcho")
-register_callback(cb.EVENT_GAME_END, "OnGameEnd")
-register_callback(cb.EVENT_GAME_START, "OnGameStart")
-register_callback(cb.EVENT_JOIN, "OnJoin")
-register_callback(cb.EVENT_KILL, "OnKill")
-register_callback(cb.EVENT_LEAVE, "OnLeave")
-register_callback(cb.EVENT_LOGIN, "OnLogin")
-register_callback(cb.EVENT_MAP_RESET, "OnMapReset")
-register_callback(cb.EVENT_OBJECT_SPAWN, "OnObjectSpawn")
-register_callback(cb.EVENT_PREJOIN, "OnPreJoin")
-register_callback(cb.EVENT_PRESPAWN, "OnPreSpawn")
-register_callback(cb.EVENT_SCORE, "OnScore")
-register_callback(cb.EVENT_SNAP, "OnSnap")
-register_callback(cb.EVENT_SPAWN, "OnSpawn")
-register_callback(cb.EVENT_STICK, "OnStick")
-register_callback(cb.EVENT_SUICIDE, "OnSuicide")
-register_callback(cb.EVENT_TEAM_SWITCH, "OnTeamSwitch")
-register_callback(cb.EVENT_TICK, "OnTick")
-register_callback(cb.EVENT_VEHICLE_ENTER, "OnVehicleEnter")
-register_callback(cb.EVENT_VEHICLE_EXIT, "OnVehicleExit")
-register_callback(cb.EVENT_WARP, "OnWarp")
-register_callback(cb.EVENT_WEAPON_DROP, "OnWeaponDrop")
-register_callback(cb.EVENT_WEAPON_PICKUP, "OnWeaponPickup")
+    register_callback(cb.EVENT_ALIVE, "OnAlive")
+    register_callback(cb.EVENT_AREA_ENTER, "OnAreaEnter")
+    register_callback(cb.EVENT_AREA_EXIT, "OnAreaExit")
+    register_callback(cb.EVENT_ASSIST, "OnAssist")
+    register_callback(cb.EVENT_BETRAY, "OnBetray")
+    register_callback(cb.EVENT_CAMP, "OnCamp")
+    register_callback(cb.EVENT_CHAT, "OnChat")
+    register_callback(cb.EVENT_COMMAND, "OnCommand")
+    register_callback(cb.EVENT_CUSTOM, "OnCustom")
+    register_callback(cb.EVENT_DAMAGE_APPLICATION, "OnDamageApplication")
+    register_callback(cb.EVENT_DIE, "OnDie")
+    register_callback(cb.EVENT_ECHO, "OnEcho")
+    register_callback(cb.EVENT_GAME_END, "OnGameEnd")
+    register_callback(cb.EVENT_GAME_START, "OnGameStart")
+    register_callback(cb.EVENT_JOIN, "OnJoin")
+    register_callback(cb.EVENT_KILL, "OnKill")
+    register_callback(cb.EVENT_LEAVE, "OnLeave")
+    register_callback(cb.EVENT_LOGIN, "OnLogin")
+    register_callback(cb.EVENT_MAP_RESET, "OnMapReset")
+    register_callback(cb.EVENT_OBJECT_SPAWN, "OnObjectSpawn")
+    register_callback(cb.EVENT_PREJOIN, "OnPreJoin")
+    register_callback(cb.EVENT_PRESPAWN, "OnPreSpawn")
+    register_callback(cb.EVENT_SCORE, "OnScore")
+    register_callback(cb.EVENT_SNAP, "OnSnap")
+    register_callback(cb.EVENT_SPAWN, "OnSpawn")
+    register_callback(cb.EVENT_STICK, "OnStick")
+    register_callback(cb.EVENT_SUICIDE, "OnSuicide")
+    register_callback(cb.EVENT_TEAM_SWITCH, "OnTeamSwitch")
+    register_callback(cb.EVENT_TICK, "OnTick")
+    register_callback(cb.EVENT_VEHICLE_ENTER, "OnVehicleEnter")
+    register_callback(cb.EVENT_VEHICLE_EXIT, "OnVehicleExit")
+    register_callback(cb.EVENT_WARP, "OnWarp")
+    register_callback(cb.EVENT_WEAPON_DROP, "OnWeaponDrop")
+    register_callback(cb.EVENT_WEAPON_PICKUP, "OnWeaponPickup")
 end
 
 --- Optional error handler.
@@ -67,9 +67,10 @@ function OnEcho(PlayerIndex, Message) end
 ---@param TagID number The object's tag id
 ---@param ParentObjectID number Parent object id (`0xFFFFFFFF` if none)
 ---@param NewObjectID number The new object id
+---@param SappSpawning number `1` if the object was spawned by SAPP, `0` if by Halo
 ---@return boolean|nil allow # Return `false` to block spawn
 ---@return number|nil newTagID # Return new tag ID if replacing object type (if allow is true)
-function OnObjectSpawn(PlayerIndex, TagID, ParentObjectID, NewObjectID) return true end
+function OnObjectSpawn(PlayerIndex, TagID, ParentObjectID, NewObjectID, SappSpawning) return true end
 
 --- `EVENT_DIE`
 --- Called when a player dies. Called AFTER `EVENT_KILL`.
@@ -123,9 +124,9 @@ function OnStick(PlayerIndex, VictimIndex, Object, VictimObject, Where) end
 ---@return boolean|nil allow # Return `false` to block damage
 ---@return number|nil newDamage # Return modified damage amount (if allow is true)
 function OnDamageApplication(VictimIndex, CauserIndex, DamageTagID, Damage, CollisionMaterial, Backtap)
-return true
--- Example format 1.5x damage buff:
--- return true, Damage * 1.5
+    return true
+    -- Example format 1.5x damage buff:
+    -- return true, Damage * 1.5
 end
 
 --- `EVENT_PREJOIN`

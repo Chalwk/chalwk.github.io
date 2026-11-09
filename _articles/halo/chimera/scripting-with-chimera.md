@@ -14,6 +14,14 @@ quality-of-life mods using Chimera's event-driven Lua environment.
 Memory offsets, game constants, shared helpers, and Chimera's hardcoded pointers are in
 [Common Reference](../common-reference.md).
 
+| Property           | Value                                                                                     |
+|--------------------|-------------------------------------------------------------------------------------------|
+| Lua runtime        | Lua 5.5                                                                                   |
+| Lua 5.2+ syntax    | Available: `goto`, `_ENV`, integer division `//`, native bitwise operators `& \| ~ << >>` |
+| Sandboxing         | Global scripts: not sandboxed. Map scripts: sandboxed by default.                         |
+| Reload all scripts | Console command `chimera_lua_scripts_reload` (`~` opens the console)                      |
+| Player index       | 0-15 everywhere                                                                           |
+
 ---
 
 ## Where to Put Your Scripts
@@ -47,14 +55,34 @@ version (for example: `2.056`). Without this definition, Chimera will not load t
 clua_version = 2.056
 
 set_callback("map load", "OnMapLoad")
+set_callback("tick",     "OnTick")
 
 function OnMapLoad()
-    -- Output the current map name
     console_out("Map: (" .. map .. ")")
 end
+
+function OnTick() end -- runs every tick; keep this lean
 ```
 
-## Event Priorities
+## Callbacks and Event Priorities
+
+`set_callback("event", "GlobalFnName" [, priority])`. The callback function must be global (not
+local or anonymous).
+
+Scripts declare `clua_version` to match the Chimera API version they target. Chimera loads a script
+only when the declared version is compatible:
+
+| Script version                 | Example (vs 2.056) | Loads? |
+|--------------------------------|--------------------|--------|
+| Same                           | 2.056              | Yes    |
+| Lower, same major version      | 2.04               | Yes    |
+| Higher                         | 2.06               | No     |
+| Lower, different major version | 1.5                | No     |
+
+See [Chimera Lua Template](template.md) for the script skeleton, event names, and callback
+signatures. Register only the ones the script uses.
+
+### Event Priorities
 
 When setting a callback with `set_callback`, you can specify a priority as the third argument.
 Priorities determine the order in which multiple scripts' callbacks run. If multiple scripts use the
@@ -73,14 +101,34 @@ set_callback("tick", "OnTickMain", "default")
 set_callback("tick", "OnTickLate", "after")
 ```
 
-## Advanced Event Details
+### Events
 
-- `rcon_message`: Called when an RCON message is received. Return `false` to block the message.
-- `command`: Called for any console command except Chimera internal commands and `rcon`. Return
-  `false` to prevent the command from executing (and suppress error messages). Note: The
-  `command` callback cannot intercept Chimera's own commands or the `rcon` command.
-- `unload`: Called when the script is unloaded (e.g., map change or manual reload). Note that the
-  map may have already changed by this point.
+Exact event strings accepted by `set_callback`:
+
+- `"tick"` - called approximately 30 times per second (main gameplay loop)
+- `"pretick"` - called immediately before `"tick"`
+- `"frame"` - called once per rendered frame (runs after `"preframe"`)
+- `"preframe"` - called before rendering each frame
+- `"precamera"` - called immediately before camera calculations are applied
+- `"map load"` - called after the map has fully loaded; use it to reset state
+- `"command"` - called for any console command (see below)
+- `"rcon_message"` - called when an RCON message is received
+- `"prespawn"` - called before a player spawns; receives the player index
+- `"spawn"` - called when a player finishes spawning; receives the player index
+- `"unload"` - called when the script is unloaded (usually wired to `OnScriptUnload`)
+
+Draw calls such as `draw_text` belong in the per-frame callbacks (`"preframe"` or `"frame"`), not
+`"tick"`.
+
+### Return Values and Event-Specific Notes
+
+- `"command"`: called for any console command except Chimera-internal commands and `rcon`. Return
+  `false` to block the command and suppress the "unknown command" error; return `true` or nothing to
+  allow it. The `command` callback cannot intercept Chimera's own commands or `rcon`.
+- `"rcon_message"`: return `false` to block the message.
+- `"precamera"`: must return all ten camera values (see Camera Manipulation).
+- `"unload"`: fired when the script unloads (map change or manual reload). The map may already have
+  changed by then.
 
 ### Embedded Scripts (Advanced)
 
@@ -155,7 +203,7 @@ game state, your script's environment, and the Chimera version.
 | `script_type`        | `"global"` or `"map"`.                                                                           |
 | `server_type`        | `"none"` (single player), `"local"` (hosting), or `"dedicated"` (joined a server).               |
 
-Chimera has no `halo_type` global. See Detecting PC vs. CE below.
+Chimera has no `halo_type` global. See [Detecting PC vs. CE](#detecting-pc-vs-ce) below.
 
 ### Example - only run on dedicated server:
 
@@ -194,8 +242,7 @@ scan for signatures, so version-specific addresses are hardcoded per platform.
 
 The candidates table, the probe code, and the other documented addresses are in
 [Chimera Pointers](../common-reference.md#chimera-pointers). Relative offsets after you hold a
-pointer
-work the same on both platforms.
+pointer work the same on both platforms.
 
 ## Persistent Data Storage
 
