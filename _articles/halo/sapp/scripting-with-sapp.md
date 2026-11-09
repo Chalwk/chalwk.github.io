@@ -15,7 +15,8 @@ commands, player management, and direct memory access. Scripts run on dedicated 
 ## Reference Files
 
 - [utils.md](utils.md): Conventions, helper functions, and known quirks.
-- [server-guide.md](server-guide.md): Complete guide to setting up, configuring, and running SAPP on a server.
+- [server-guide.md](server-guide.md): Complete guide to setting up, configuring, and running SAPP on
+  a server.
 - [../common-reference.md](../common-reference.md): Memory offsets, game constants, unit
   conversions, shared helpers, and stock Halo commands.
 - [cheat-sheet.md](cheat-sheet.md): Pointers, `sig_scan` patterns, `get_var` variables, SAPP
@@ -38,7 +39,7 @@ SAPP Lua scripts cannot talk to each other directly. The only shared channel is 
 | `table.new` / `table.clear` | Available via `require("table.new")` / `require("table.clear")`                                                      |
 | `math.atan2`                | NOT available; use the guard in [Math and Geometry](../common-reference.md#math-and-geometry)                        |
 | Sandboxing                  | Scripts run sandboxed; unsafe memory ops can crash the server                                                        |
-| Global platform values      | `cb`, `halo_type`                                                                                                    |
+| Global platform values      | `cb`, `halo_type`, `pid`, `lua_api_version`, `sapp_version`                                                          |
 | Player index convention     | SAPP API uses 1-16; Halo internal memory uses 0-15 (see [Player Index Convention](utils.md#player-index-convention)) |
 | Tick rate                   | 30 ticks/sec (1 tick ~ 33.3 ms); 1 WU = 3.048 m; more in [Timing and Units](../common-reference.md#timing-and-units) |
 
@@ -104,18 +105,18 @@ available callback. Register only the ones the script uses.
 
 ### Memory Read/Write
 
-| Category        | Functions                                                                |
-|-----------------|--------------------------------------------------------------------------|
-| Byte            | `read_byte`, `write_byte`, `read_char`, `write_char`                     |
-| 16-bit          | `read_word`, `write_word`, `read_short`, `write_short`                   |
-| 32-bit unsigned | `read_dword`, `write_dword`                                              |
-| 32-bit signed   | `read_int`, `write_int`                                                  |
-| 32-bit float    | `read_float`, `write_float`                                              |
-| 64-bit float    | `read_double`, `write_double`                                            |
-| String          | `read_string`, `write_string` (null-terminated 8-bit)                    |
-| Bit             | `read_bit(addr, bit)`, `write_bit(addr, bit, val)`                       |
-| Vector          | `read_vector3d(addr)` returns `x, y, z`; `write_vector3d(addr, x, y, z)` |
-| Safety          | `safe_write(true/false)` (toggles memory write-protection bypass)        |
+| Category        | Functions                                                                                  |
+|-----------------|--------------------------------------------------------------------------------------------|
+| Byte            | `read_byte`, `write_byte`, `read_char`, `write_char`                                       |
+| 16-bit          | `read_word`, `write_word`, `read_short`, `write_short`                                     |
+| 32-bit unsigned | `read_dword`, `write_dword`                                                                |
+| 32-bit signed   | `read_int`, `write_int`                                                                    |
+| 32-bit float    | `read_float`, `write_float`                                                                |
+| 64-bit float    | `read_double`, `write_double`                                                              |
+| String          | `read_string`, `write_string` (null-terminated 8-bit)                                      |
+| Bit             | `read_bit(addr, bit)`, `write_bit(addr, bit, val)`                                         |
+| Vector          | `read_vector3d(addr)` returns `x, y, z`; `write_vector3d(addr, x, y, z)`                   |
+| Safety          | `safe_read(true/false)`, `safe_write(true/false)` (toggles memory write-protection bypass) |
 
 Bad addresses crash the server. Leave safe mode off unless you need it (it costs performance) and
 test memory operations off production. Pointers are in Hardcoded Pointers and Signature Reference
@@ -156,13 +157,14 @@ Do not mix these up.
 | `camo(id, ticks)`                                                                           | No effect if already camouflaged                                                                                                                                          |
 | `powerup_interact(object_id, id)`                                                           | Returns success                                                                                                                                                           |
 | `spawn_object("class", "path", x, y, z, rotation, tag_id)`                                  | Returns object ID. `class`/`path` are required strings (pass `""`, `""` when spawning by `tag_id`). `x`/`y`/`z`/`rotation` default to `0`; `tag_id` overrides class/path. |
+| `spawn_object_location("class", "path", "location", [rotation], [tag_id])`                  | Returns object ID. Spawns at a named location (see `loc_add`) instead of coordinates. `rotation` is radians. `tag_id` overrides class/path.                               |
 | `spawn_projectile(tag_id, player_id, x, y, z, [rx, ry, rz])`                                | Returns object ID. `player_id` is the parent/owner; `rx`/`ry`/`rz` are optional rotation values (radians).                                                                |
 | `destroy_object(object_id)`                                                                 | Destroying flags, oddballs, or non-SAPP vehicles may crash the server                                                                                                     |
 | `sync_ammo(object_id)`                                                                      | Syncs loaded/unloaded ammo                                                                                                                                                |
 | `intersect(x, y, z, vx, vy, vz, [ignore_object_id])`                                        | Returns `success, cx, cy, cz, hit_object_id`; `0xFFFFFFFF` = no hit                                                                                                       |
 | `lookup_tag("weap", "weapons\\pistol\\pistol")` / `lookup_tag(tag_id)`                      | Returns tag address (`0` if not found); use the tag-ID form on protected maps                                                                                             |
 | `execute_command(cmd, [id], [echo])`, `execute_command_sequence("cmd1;cmd2", [id], [echo])` | `id` runs commands on a player's behalf. Sequence splits on `;`. `echo = true` raises `EVENT_ECHO` with output.                                                           |
-| `rand([min, max])`                                                                          | `max` is exclusive (see [Known SAPP Quirks](utils.md#known-sapp-quirks)                                                                                                   |
+| `rand([min, max])`                                                                          | `max` is exclusive (see [Known SAPP Quirks](utils.md#known-sapp-quirks))                                                                                                  |
 | `sig_scan("signature")`                                                                     | Returns match address, or `0` (see [Signature Scanning](utils.md#signature-scanning))                                                                                     |
 | `timer(ms, "GlobalFn", [args...])`                                                          | See [SAPP timer()](utils.md#sapp-timer-)                                                                                                                                  |
 

@@ -199,37 +199,46 @@ A signature is a byte string with wildcards (`??`) where values vary. Example:
 
 ## Variables
 
-Read event variables with `get_var(player_id, "$name")`. Use player index `0` for global variables.
+- Global variables: Use `0` as the target ID.
+- Player variables: Use the player's index as the target ID.
+- Numeric values: Wrap the result in `tonumber()` because `get_var` returns strings.
+- Examples:
+    - `get_var(1, "$name")`
+    - `tonumber(get_var(0, "$gt"))` - Returns the gametype string (e.g., `ctf`, `slayer`).
 
-### Event Variables
-
-Scope: G = global (use index `0`), P = per player.
+Scope: G = global (index `0`), P = per player, E = event-only (populated only while the matching
+callback or event fires, see [Callbacks](scripting-with-sapp.md#callbacks)).
 
 | Variable       | Scope | Description                                                                                         |
 |----------------|-------|-----------------------------------------------------------------------------------------------------|
 | `$afk`         | P     | Seconds the player has been AFK                                                                     |
-| `$app`         | P     | Bitfield of client apps: 1 SAPP, 2 Anticheat, 4 HAC2, 8 RefleX                                      |
+| `$app`         | P     | Bitfield: 1 SAPP, 2 Anticheat, 4 HAC2, 8 RefleX                                                     |
+| `$area`        | E     | Area name for `EVENT_AREA_ENTER` / `EVENT_AREA_EXIT`                                                |
 | `$assists`     | P     | Assist count                                                                                        |
 | `$blues`       | G     | Players on blue team                                                                                |
 | `$bluescore`   | G     | Blue team score                                                                                     |
-| `$botscore`    | P     | Player's aimbot score                                                                               |
-| `$campkills`   | P     | Kills made while camping                                                                            |
+| `$botscore`    | P     | Aimbot score                                                                                        |
+| `$campkills`   | P     | Kills while camping                                                                                 |
 | `$combo`       | P     | Current kill combo (resets after 4 s without a kill)                                                |
 | `$deaths`      | P     | Deaths this game                                                                                    |
+| `$ename`       | E     | Name passed to `cevent` for `EVENT_CUSTOM`                                                          |
 | `$ffa`         | G     | `1` if FFA, `0` if teams                                                                            |
 | `$gt`          | G     | Gametype: `ctf`, `slayer`, `king`, `race`, `oddball`; `n/a` when no game is running                 |
 | `$hash`        | P     | CD-key hash                                                                                         |
 | `$hp`          | P     | Health as a decimal                                                                                 |
+| `$index`       | E     | Weapon slot index for `EVENT_WEAPON_DROP` / `EVENT_WEAPON_PICKUP`                                   |
 | `$invis`       | P     | `1` if active camo                                                                                  |
 | `$ip`          | P     | `IP:Port`                                                                                           |
+| `$killed`      | E     | Victim player index for `EVENT_KILL` / `EVENT_BETRAY`                                               |
+| `$killer`      | E     | Killer player index for `EVENT_DIE`; -1 unknown, 0 AI/vehicle/world                                 |
 | `$kills`       | P     | Kills this game                                                                                     |
 | `$lvl`         | P     | Admin level                                                                                         |
 | `$map`         | G     | Loaded map                                                                                          |
-| `$mode`        | G     | Game variant name (e.g. `Team Slayer` or a custom name)                                             |
+| `$mode`        | G     | Game variant name                                                                                   |
 | `$n`           | P     | Player index                                                                                        |
 | `$name`        | P     | Player name                                                                                         |
-| `$oteam`       | P     | Name of the opposite team                                                                           |
-| `$ping`        | P     | Ping (ms)                                                                                           |
+| `$oteam`       | P     | Opposite team name                                                                                  |
+| `$ping`        | P     | Ping in ms                                                                                          |
 | `$pn`          | G     | Players on server (stale during `EVENT_LEAVE`, see [Known SAPP Quirks](utils.md#known-sapp-quirks)) |
 | `$rand`        | G     | Random number 1-16                                                                                  |
 | `$reds`        | G     | Players on red team                                                                                 |
@@ -237,25 +246,86 @@ Scope: G = global (use index `0`), P = per player.
 | `$running`     | G     | `1` if a game is running                                                                            |
 | `$score`       | P     | Player score                                                                                        |
 | `$sh`          | P     | Shield as a decimal                                                                                 |
+| `$snapscore`   | E     | Aimbot score from the snap for `EVENT_SNAP`                                                         |
 | `$streak`      | P     | Kills since last respawn                                                                            |
 | `$suicides`    | P     | Suicides this game                                                                                  |
 | `$svname`      | G     | Server name                                                                                         |
 | `$team`        | P     | `red` / `blue`                                                                                      |
 | `$ticks`       | G     | Ticks since match start                                                                             |
 | `$tk`          | P     | Team kills this game                                                                                |
+| `$type`        | E     | Picked-up type for `EVENT_WEAPON_PICKUP`; `1` weapon, `2` grenade                                   |
 | `$valid`       | P     | Whether the CD key is valid                                                                         |
 | `$x` `$y` `$z` | P     | Player coordinates                                                                                  |
 
-`get_var` returns strings. Wrap numeric reads in `tonumber()`.
+Notes:
+
+- `w8` and `wait` only work inside an event command sequence. In Lua use `timer()`
+  (see [SAPP timer ()](utils.md#sapp-timer-)).
+- Player-scoped variables (types 3-5) clear when the player leaves.
+- Custom variables are the only channel for sharing state between Lua scripts
+  (see [Reference Files](scripting-with-sapp.md#reference-files)).
+
+### Event Types
+
+Names usable in `events.txt` and targetable with `cevent`. Event-only variables
+(see [Variables](#variables)) are populated only while the matching event fires.
+
+| Event              | Event vars        | Fires when                                                            |
+|--------------------|-------------------|-----------------------------------------------------------------------|
+| `event_enter`      | `$area`           | A player enters a custom area.                                        |
+| `event_aexit`      | `$area`           | A player exits a custom area.                                         |
+| `event_alive`      |                   | Once per second while a player is alive.                              |
+| `event_assist`     |                   | A player gains an assist.                                             |
+| `event_camp`       |                   | A player kills while `anticamp` is enabled.                           |
+| `event_custom`     | `$ename`          | `cevent` is invoked.                                                  |
+| `event_die`        | `$killer`         | A player dies.                                                        |
+| `event_end`        |                   | The game ends.                                                        |
+| `event_join`       |                   | A player joins.                                                       |
+| `event_kill`       | `$killed`         | A player kills another player.                                        |
+| `event_leave`      |                   | A player disconnects.                                                 |
+| `event_login`      |                   | An admin logs in via `login`.                                         |
+| `event_prejoin`    |                   | A player is joining (not yet announced).                              |
+| `event_prespawn`   |                   | A player has spawned (not yet announced).                             |
+| `event_reset`      |                   | `sv_map_reset` was executed.                                          |
+| `event_score`      |                   | A player scores.                                                      |
+| `event_snap`       | `$snapscore`      | A player snaps while `aimbot_ban` is enabled.                         |
+| `event_spawn`      |                   | A player has finished spawning.                                       |
+| `event_start`      |                   | The game starts.                                                      |
+| `event_suicide`    |                   | A player suicides.                                                    |
+| `event_teamswitch` |                   | A player switches teams.                                              |
+| `event_tick`       |                   | Every tick (1/30 s).                                                  |
+| `event_tk`         | `$killed`         | A player team-kills.                                                  |
+| `event_venter`     |                   | A player enters a vehicle.                                            |
+| `event_vexit`      |                   | A player exits a vehicle.                                             |
+| `event_warp`       |                   | A player warps past the `antiwarp` threshold.                         |
+| `event_wdrop`      | `$index`          | A player drops a weapon.                                              |
+| `event_wpickup`    | `$index`, `$type` | A player picks up a weapon or grenade (`$type`: 1 weapon, 2 grenade). |
+
+### File Formats
+
+- events.txt: `event_name 'conditional 1' 'conditional 2' 'command1;command2'`
+
+Quotes optional unless a section contains spaces. Conditionals optional. Example:
+
+```
+event_join 'var_set money 100 $n'
+event_score 'var_set money +50 $n; say $n "+50 ($money)"'
+event_custom $name=buynades $money<100 'say $n "Insufficient funds ($money)"'
+event_custom $name=buynades $money>=100 'var_set money -100 $n; nades $n 4; say $n "Nades maxed ($money)"'
+```
+
+- commands.txt: `command_name #arg1 #arg2 'command1;command2' level`
+
+Arguments use `#` (not `$`). Level optional, defaults to `4`. Example:
+`buynades 'cevent buynades $n' -1`
 
 ---
 
 ## Console Colors
 
-`cprint` writes to the server console with classic Windows console color attributes.
-
-`cprint(msg, color)` uses the classic Windows console color attributes.
-`color_number = foreground + (background * 16)`
+- `cprint` writes to the server console with classic Windows console color attributes.
+- `cprint(msg, color)` uses the classic Windows console color attributes.
+- `color_number = foreground + (background * 16)`
 
 Both foreground and background take a value from 0 to 15. Examples: green text on black is
 `10 + (0 * 16) = 10`, and red on light aqua is `12 + (11 * 16) = 188`.
@@ -350,12 +420,12 @@ Available to all players.
 | list      | -1    | `list ['generic'/'player'/'custom']` | List commands available to the player.                                                          |
 | login     | -1    | `login <password>`                   | Log into a V2 (name/password) admin account.                                                    |
 | report    | -1    | `report [message]`                   | Send a report (requires anticheat).                                                             |
-| stats     | 0     | `stats`                              | Show player's kills, deaths, and K/D ratio.                                                     |
+| stats     | -1    | `stats`                              | Show player's kills, deaths, and K/D ratio.                                                     |
 | stfu      | 0     | `stfu`                               | Block messages from `say` and scripted rcon messages.                                           |
 | sv_stats  | 0     | `sv_stats`                           | Display server statistics (queries, joins, commands, events, games, etc.).                      |
 | unstfu    | 0     | `unstfu`                             | Disable `stfu`.                                                                                 |
 | usage     | -1    | `usage <command>`                    | Show usage for a command.                                                                       |
-| whatsnext | 0     | `whatsnext`                          | Show the next game in the mapcycle.                                                             |
+| whatsnext | -1    | `whatsnext`                          | Show the next game in the mapcycle.                                                             |
 
 ### General Commands (Admin Moderation)
 
@@ -394,74 +464,75 @@ Available to all players.
 
 Used to configure server behavior. Settings lost on reload unless placed in `init.txt`.
 
-| Command               | Level | Usage                                            | Description                                                                         |
-|-----------------------|-------|--------------------------------------------------|-------------------------------------------------------------------------------------|
-| admin_prefix          | 4     | `admin_prefix <prefix>`                          | Prefix for admin messages via `say`. Default: `SAPP`.                               |
-| adminadd_samelevel    | 4     | `adminadd_samelevel [0-2]`                       | Allow admins to add V1 admins: `0`=no, `1`=lower, `2`=lower/equal. Default: `0`.    |
-| adminban              | 4     | `adminban [0-2]`                                 | Admin ban permissions: `0`=any, `1`=no higher, `2`=only lower. Default: `0`.        |
-| admindel_samelevel    | 4     | `admindel_samelevel [0-2]`                       | Allow admins to delete V1 admins: `0`=no, `1`=lower, `2`=lower/equal. Default: `0`. |
-| afk_kick              | 4     | `afk_kick [seconds]`                             | Auto-kick AFK players after given seconds (`0`=disabled).                           |
-| aimbot_ban            | 4     | `aimbot_ban [length] [type]`                     | Auto kick/ban aimbotters. Type: `0`=CD hash,`1`=IP,`2`=both,`3`=kick. Default: `0`. |
-| alias                 | 4     | `alias <player_id>`                              | Search for aliases in `aliases.txt`.                                                |
-| anticamp              | 4     | `anticamp [time] [distance]`                     | Raise `event_camp` if player kills while camping. Disabled by default.              |
-| anticaps              | 4     | `anticaps [enabled]`                             | Prevent excessive capital letters. Default: `false`.                                |
-| anticheat             | 4     | `anticheat [enabled]`                            | Require anticheat client. Must be set in `init.txt`. Default: `false`.              |
-| antiglitch            | 4     | `antiglitch [enabled]`                           | Kill players who leave map BSP. Default: `false`.                                   |
-| antihalofp            | 4     | `antihalofp [enabled]`                           | IP ban (5 min) for too-frequent join attempts. Default: `false`.                    |
-| antilagspawn          | 4     | `antilagspawn [enable]`                          | Prevent lag-spawning. Default: `false`.                                             |
-| antispam              | 4     | `antispam [type]`                                | Auto mute spammers: `0`=disabled,`1`=CD-key,`2`=IP. Default: `0`.                   |
-| antiwarp              | 4     | `antiwarp [warp_num]`                            | Raise `event_warp` after given warps. `0`=disabled.                                 |
-| auto_update           | 4     | `auto_update [enabled]`                          | Auto-update SAPP when available. Default: `true`.                                   |
-| network_thread        | 4     | `network_thread [enabled]`                       | Disable to stop SAPP server list, map download, anticheat. Default: `true`.         |
-| block_tc              | 4     | `block_tc [enabled]`                             | Block team changing. Default: `false`.                                              |
-| chat_console_echo     | 4     | `chat_console_echo [enabled]`                    | Output chat to console. Default: `false`.                                           |
-| cmdstart1             | 4     | `cmdstart1 [character]`                          | Primary command prefix in chat. Default: `\`.                                       |
-| cmdstart2             | 4     | `cmdstart2 [character]`                          | Secondary command prefix. Default: `/`.                                             |
-| collect_aliases       | 4     | `collect_aliases [enabled] [valid CD keys only]` | Collect aliases into `alias.txt`. Default: `false`.                                 |
-| console_input         | 4     | `console_input [enabled]`                        | Allow console to accept input. Default: `true`.                                     |
-| custom_sleep          | 4     | `custom_sleep [ms]`                              | Modify Halo thread sleep per cycle (ms). Default: `8`.                              |
-| disable_timer_offsets | 4     | `disable_timer_offsets [enabled]`                | Use fixed Xbox-style spawn timers. Default: `false`.                                |
-| dns                   | 4     | `dns [url]`                                      | Master server address for broadcasting.                                             |
-| full_ipban            | 4     | `full_ipban [enabled]`                           | Block all traffic from banned IPs (may reduce performance). Default: `false`.       |
-| hide_admin            | 4     | `hide_admin [enabled]`                           | Hide admin names when using kick/ban commands. Default: `false`.                    |
-| hill_timer            | 4     | `hill_timer [int_expr]`                          | Seconds hill changes in "Crazy King". Default: `60`.                                |
-| log                   | 4     | `log [enabled]`                                  | Log events to file. Default: `false`.                                               |
-| log_rotation          | 4     | `log rotation [kb]`                              | Max log size (kB) before archiving. Default: `4096`.                                |
-| log_name              | 4     | `log_name [name]`                                | Log file name (`.log` appended). Default: `log`.                                    |
-| lua                   | 4     | `lua [enabled]`                                  | Enable Lua scripting. Default: `false`.                                             |
-| lua_api_v             | 4     | `lua_api_v`                                      | Display current Lua API version.                                                    |
-| lua_call              | 4     | `lua_call <script> <function> [arguments...]`    | Call a function in a loaded Lua script.                                             |
-| lua_load              | 4     | `lua_load <script>`                              | Load a Lua script and call `OnScriptLoad()`.                                        |
-| lua_unload            | 4     | `lua_unload <script>`                            | Unload a Lua script and call `OnScriptUnload()`.                                    |
-| map_skip              | 4     | `map_skip [%]`                                   | Enable skip command when % of players want skip. `0`=disabled.                      |
-| mapvote               | 4     | `mapvote [enabled]`                              | Enable map voting at end of game. Default: `false`.                                 |
-| max_idle              | 4     | `max_idle [time]`                                | Restart mapcycle if server idle for this many seconds. Default: `60`.               |
-| max_votes             | 4     | `max_votes [count]`                              | Maximum displayed votes per round. Default: `5`.                                    |
-| motd                  | 4     | `motd [string]`                                  | Set the server Message of the Day.                                                  |
-| msg_prefix            | 4     | `msg_prefix <string>`                            | Prefix used in server messages. Default: `SAPP`.                                    |
-| mtv                   | 4     | `mtv [enabled]`                                  | Enable multi-team vehicles (requires anticheat/HAC2). Default: `false`.             |
-| no_lead               | 4     | `no_lead [enabled]`                              | Enable no-lead mode (ping compensation). Default: `false`.                          |
-| packet_limit          | 4     | `packet_limit [amount]`                          | Max packets per second from an IP. Default: `1000`.                                 |
-| ping_kick             | 4     | `ping_kick [ping]`                               | Kick players with ping exceeding this value (ms). `0`=disabled.                     |
-| reload_gametypes      | 4     | `reload_gametypes`                               | Reload game variants from `savegames` folder.                                       |
-| remote_console        | 4     | `remote_console [enabled]`                       | Enable remote console (TCP). Default: `false`.                                      |
-| remote_console_list   | 4     | `remote_console_list`                            | List connected remote console clients.                                              |
-| remote_console_port   | 4     | `remote_console_port [port]`                     | Set TCP port for remote console (requires restart).                                 |
-| sapp_console          | 4     | `sapp_console [enabled]`                         | Suppress periodic `sv_status`; show join/leave/game start. Default: `false`.        |
-| sapp_mapcycle         | 4     | `sapp_mapcycle [enabled]`                        | Enable SAPP's map cycle. Default: `false`.                                          |
-| sapp_rcon             | 4     | `sapp_rcon [enabled]`                            | Require rcon users to be SAPP admins. Default: `false`.                             |
-| save_scores           | 4     | `save_scores [enabled]`                          | Prevent score reset when player leaves. Default: `false`.                           |
-| say_prefix            | 4     | `say_prefix [enabled]`                           | Enable `SERVER ` prefix on server messages (CE only). Default: `true`.              |
-| scorelimit            | 4     | `scorelimit [int_expr]`                          | Get or edit current game's score limit.                                             |
-| scrim_mode            | 4     | `scrim_mode [enabled]`                           | Disable naughty commands, Lua scripts, sightjacking. Default: `false`.              |
-| set_ccolor            | 4     | `set_ccolor [value]`                             | Set console color (foreground + background x 16).                                   |
-| setcmd                | 4     | `setcmd <command> <name/level>`                  | Change name or required admin level of a command.                                   |
-| sj_level              | 4     | `sj_level [level]`                               | Minimum level to use HAC2 sightjacker. Default: `-1` (everyone).                    |
-| spawn_protection      | 4     | `spawn_protection [time]`                        | Invulnerability time (seconds) upon spawn. `0`=disabled.                            |
-| timelimit             | 4     | `timelimit [int_expr]`                           | Get or edit time limit on the fly (minutes).                                        |
-| unlock_console_log    | 4     | `unlock_console_log <enabled>`                   | Make console more verbose (CE only). Default: `false`.                              |
-| v                     | 4     | `v [version]`                                    | View or modify Halo version string.                                                 |
-| zombies               | 4     | `zombies [team]`                                 | Enable zombies medals for HAC2: `0`=none,`1`=red,`2`=blue. Default: `0`.            |
+| Command               | Level | Usage                                            | Description                                                                               |
+|-----------------------|-------|--------------------------------------------------|-------------------------------------------------------------------------------------------|
+| admin_prefix          | 4     | `admin_prefix <prefix>`                          | Prefix for admin messages via `say`. Default: `** ADMIN **`.                              |
+| adminadd_samelevel    | 4     | `adminadd_samelevel [0-2]`                       | Allow admins to add V1 admins: `0`=no, `1`=lower, `2`=lower/equal. Default: `0`.          |
+| adminban              | 4     | `adminban [0-2]`                                 | Admin ban permissions: `0`=any, `1`=no higher, `2`=only lower. Default: `0`.              |
+| admindel_samelevel    | 4     | `admindel_samelevel [0-2]`                       | Allow admins to delete V1 admins: `0`=no, `1`=lower, `2`=lower/equal. Default: `0`.       |
+| afk_kick              | 4     | `afk_kick [seconds]`                             | Auto-kick AFK players after given seconds (`0`=disabled).                                 |
+| aimbot_ban            | 4     | `aimbot_ban [length] [type]`                     | Auto kick/ban aimbotters. Type: `0`=CD hash,`1`=IP,`2`=both,`3`=kick. Default: `0 (off)`. |
+| alias                 | 4     | `alias <player_id>`                              | Search for aliases in `aliases.txt`.                                                      |
+| anticamp              | 4     | `anticamp [time] [distance]`                     | Raise `event_camp` if player kills while camping. Disabled by default.                    |
+| anticaps              | 4     | `anticaps [enabled]`                             | Prevent excessive capital letters. Default: `false`.                                      |
+| anticheat             | 4     | `anticheat [enabled]`                            | Require anticheat client. Must be set in `init.txt`. Default: `false`.                    |
+| antiglitch            | 4     | `antiglitch [enabled]`                           | Kill players who leave map BSP. Default: `false`.                                         |
+| antihalofp            | 4     | `antihalofp [enabled]`                           | IP ban (5 min) for too-frequent join attempts. Default: `false`.                          |
+| antilagspawn          | 4     | `antilagspawn [enable]`                          | Prevent lag-spawning. Default: `false`.                                                   |
+| antispam              | 4     | `antispam [type]`                                | Auto mute spammers: `0`=disabled,`1`=CD-key,`2`=IP. Default: `0`.                         |
+| antiwarp              | 4     | `antiwarp [warp_num]`                            | Raise `event_warp` after given warps. `0`=disabled.                                       |
+| auto_update           | 4     | `auto_update [enabled]`                          | Auto-update SAPP when available. Default: `true`.                                         |
+| network_thread        | 4     | `network_thread [enabled]`                       | Disable to stop SAPP server list, map download, anticheat. Default: `true`.               |
+| block_tc              | 4     | `block_tc [enabled]`                             | Block team changing. Default: `false`.                                                    |
+| chat_console_echo     | 4     | `chat_console_echo [enabled]`                    | Output chat to console. Default: `false`.                                                 |
+| cmdstart1             | 4     | `cmdstart1 [character]`                          | Primary command prefix in chat. Default: `\`.                                             |
+| cmdstart2             | 4     | `cmdstart2 [character]`                          | Secondary command prefix. Default: `/`.                                                   |
+| collect_aliases       | 4     | `collect_aliases [enabled] [valid CD keys only]` | Collect aliases into `alias.txt`. Default: `false`.                                       |
+| console_input         | 4     | `console_input [enabled]`                        | Allow console to accept input. Default: `true`.                                           |
+| custom_sleep          | 4     | `custom_sleep [ms]`                              | Modify Halo thread sleep per cycle (ms). Default: `8`.                                    |
+| disable_backtap       | 4     | `disable_backtap [enabled]`                      | When enabled, backtapping won't insta-kill.                                               |
+| disable_timer_offsets | 4     | `disable_timer_offsets [enabled]`                | Use fixed Xbox-style spawn timers. Default: `false`.                                      |
+| dns                   | 4     | `dns [url]`                                      | Master server address for broadcasting.                                                   |
+| full_ipban            | 4     | `full_ipban [enabled]`                           | Block all traffic from banned IPs (may reduce performance). Default: `false`.             |
+| hide_admin            | 4     | `hide_admin [enabled]`                           | Hide admin names when using kick/ban commands. Default: `false`.                          |
+| hill_timer            | 4     | `hill_timer [int_expr]`                          | Seconds hill changes in "Crazy King". Default: `60`.                                      |
+| log                   | 4     | `log [enabled]`                                  | Log events to file. Default: `false`.                                                     |
+| log_rotation          | 4     | `log rotation [kb]`                              | Max log size (kB) before archiving. Default: `4096`.                                      |
+| log_name              | 4     | `log_name [name]`                                | Log file name (`.log` appended). Default: `log`.                                          |
+| lua                   | 4     | `lua [enabled]`                                  | Enable Lua scripting. Default: `false`.                                                   |
+| lua_api_v             | 4     | `lua_api_v`                                      | Display current Lua API version.                                                          |
+| lua_call              | 4     | `lua_call <script> <function> [arguments...]`    | Call a function in a loaded Lua script.                                                   |
+| lua_load              | 4     | `lua_load <script>`                              | Load a Lua script and call `OnScriptLoad()`.                                              |
+| lua_unload            | 4     | `lua_unload <script>`                            | Unload a Lua script and call `OnScriptUnload()`.                                          |
+| map_skip              | 4     | `map_skip [%]`                                   | Enable skip command when % of players want skip. `0`=disabled.                            |
+| mapvote               | 4     | `mapvote [enabled]`                              | Enable map voting at end of game. Default: `false`.                                       |
+| max_idle              | 4     | `max_idle [time]`                                | Restart mapcycle if server idle for this many seconds. Default: `60`.                     |
+| max_votes             | 4     | `max_votes [count]`                              | Maximum displayed votes per round. Default: `5`.                                          |
+| motd                  | 4     | `motd [string]`                                  | Set the server Message of the Day.                                                        |
+| msg_prefix            | 4     | `msg_prefix <string>`                            | Prefix used in server messages. Default: `**SAPP**`.                                      |
+| mtv                   | 4     | `mtv [enabled]`                                  | Enable multi-team vehicles (requires anticheat/HAC2). Default: `false`.                   |
+| no_lead               | 4     | `no_lead [enabled]`                              | Enable no-lead mode (ping compensation). Default: `false`.                                |
+| packet_limit          | 4     | `packet_limit [amount]`                          | Max packets per second from an IP. Default: `1000`.                                       |
+| ping_kick             | 4     | `ping_kick [ping]`                               | Kick players with ping exceeding this value (ms). `0`=disabled.                           |
+| reload_gametypes      | 4     | `reload_gametypes`                               | Reload game variants from `savegames` folder.                                             |
+| remote_console        | 4     | `remote_console [enabled]`                       | Enable remote console (TCP). Default: `false`.                                            |
+| remote_console_list   | 4     | `remote_console_list`                            | List connected remote console clients.                                                    |
+| remote_console_port   | 4     | `remote_console_port [port]`                     | Set TCP port for remote console (requires restart).                                       |
+| sapp_console          | 4     | `sapp_console [enabled]`                         | Suppress periodic `sv_status`; show join/leave/game start. Default: `false`.              |
+| sapp_mapcycle         | 4     | `sapp_mapcycle [enabled]`                        | Enable SAPP's map cycle. Default: `false`.                                                |
+| sapp_rcon             | 4     | `sapp_rcon [enabled]`                            | Require rcon users to be SAPP admins. Default: `false`.                                   |
+| save_scores           | 4     | `save_scores [enabled]`                          | Prevent score reset when player leaves. Default: `false`.                                 |
+| say_prefix            | 4     | `say_prefix [enabled]`                           | Enable `SERVER ` prefix on server messages (CE only). Default: `true`.                    |
+| scorelimit            | 4     | `scorelimit [int_expr]`                          | Get or edit current game's score limit.                                                   |
+| scrim_mode            | 4     | `scrim_mode [enabled]`                           | Disable naughty commands, Lua scripts, sightjacking. Default: `false`.                    |
+| set_ccolor            | 4     | `set_ccolor [value]`                             | Set console color (foreground + background x 16).                                         |
+| setcmd                | 4     | `setcmd <command> <name/level>`                  | Change name or required admin level of a command.                                         |
+| sj_level              | 4     | `sj_level [level]`                               | Minimum level to use HAC2 sightjacker. Default: `-1` (everyone).                          |
+| spawn_protection      | 4     | `spawn_protection [time]`                        | Invulnerability time (seconds) upon spawn. `0`=disabled.                                  |
+| timelimit             | 4     | `timelimit [int_expr]`                           | Get or edit time limit on the fly (minutes).                                              |
+| unlock_console_log    | 4     | `unlock_console_log <enabled>`                   | Make console more verbose (CE only). Default: `false`.                                    |
+| v                     | 4     | `v [version]`                                    | View or modify Halo version string.                                                       |
+| zombies               | 4     | `zombies [team]`                                 | Enable zombies medals for HAC2: `0`=none,`1`=red,`2`=blue. Default: `0`.                  |
 
 ### Map Cycle Commands
 
@@ -490,27 +561,25 @@ Manage map voting (stored in `mapvotes.txt`). Enabling map voting disables the m
 | mapvotes    | 4     | `mapvotes`                                                                    | List map votes.                                        |
 | max_votes   | 4     | `max_votes [count]`                                                           | Maximum votes displayed per round (see Configuration). |
 
-### Event Management Commands
+## Event and Custom Commands
 
-Events allow basic scripting without Lua. Defined in `events.txt`.
+Commands for events (`events.txt`), custom commands (`commands.txt`), and custom variables. File
+formats follow the tables.
 
-| Command   | Level        | Usage                           | Description                                             |
-|-----------|--------------|---------------------------------|---------------------------------------------------------|
-| cevent    | 4            | `cevent <name> [player number]` | Raise `event_custom`, set `$ename` and optional player. |
-| events    | 4            | `events`                        | List all events and their indices.                      |
-| eventsdel | 4            | `eventsdel <index>`             | Delete an event by index.                               |
-| w8        | (event only) | `w8 <seconds>`                  | Delay the current event by seconds.                     |
-| wait      | (event only) | `wait <milliseconds>`           | Delay the current event by milliseconds.                |
-
-### Custom Commands
-
-Create your own commands (stored in `commands.txt`). Format:  
-`command_name #arg1 #arg2... 'command1;command2...' level`
-
-| Command | Level | Usage                                                      | Description                  |
-|---------|-------|------------------------------------------------------------|------------------------------|
-| cmd_add | 4     | `cmd_add <command> [arguments] <command sequence> [level]` | Create a new custom command. |
-| cmd_del | 4     | `cmd_del <command>`                                        | Remove a custom command.     |
+| Category | Command     | Level      | Usage                                                      | Description                                                                                                                                                                                    |
+|----------|-------------|------------|------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Event    | `cevent`    | 4          | `cevent <name> [player number]`                            | Raise `event_custom`, set `$ename`, and optionally the triggering player. See [Event Types](#event-types) and [Event Variables](#event-variables).                                             |
+| Event    | `events`    | 4          | `events`                                                   | List all events and their indices.                                                                                                                                                             |
+| Event    | `eventsdel` | 4          | `eventsdel <index>`                                        | Delete an event by index.                                                                                                                                                                      |
+| Event    | `w8`        | event only | `w8 <seconds>`                                             | Delay the current event by N seconds. Only valid inside an event command sequence.                                                                                                             |
+| Event    | `wait`      | event only | `wait <milliseconds>`                                      | Delay the current event by N milliseconds. Only valid inside an event command sequence.                                                                                                        |
+| Command  | `cmd_add`   | 4          | `cmd_add <command> [arguments] <command sequence> [level]` | Append a custom command to `commands.txt`. Defaults to level `4` when omitted.                                                                                                                 |
+| Command  | `cmd_del`   | 4          | `cmd_del <command>`                                        | Remove a custom command from `commands.txt`.                                                                                                                                                   |
+| Variable | `var_add`   | 4          | `var_add <name> <type>`                                    | Create a custom variable. Types: `0` global str, `1` global int, `2` global float, `3` player str, `4` player int, `5` player float.                                                           |
+| Variable | `var_conv`  | 4          | `var_conv <name>`                                          | Convert between integer and float types.                                                                                                                                                       |
+| Variable | `var_del`   | 4          | `var_del <name>`                                           | Delete a custom variable.                                                                                                                                                                      |
+| Variable | `var_list`  | 4          | `var_list`                                                 | List all custom variables.                                                                                                                                                                     |
+| Variable | `var_set`   | 4          | `var_set <name> <value_expr> [player number]`              | Set a custom variable. `value_expr` supports `+`, `-`, `*`, `/`, `%`, and `:` prefixes (see [Expressions](cheat-sheet.md#expressions)). Player number is required for player-scoped variables. |
 
 ### Admin Management Commands (`users.txt`)
 
@@ -562,10 +631,10 @@ Directly modify player attributes. Cannot be used when `scrim_mode` is enabled.
 | area_del             | `area_del <name>`                                            | Remove an area.                                                                 |
 | area_list            | `area_list`                                                  | List areas for loaded map.                                                      |
 | area_listall         | `area_listall`                                               | List areas for all maps.                                                        |
-| assist               | `assist <player_id> [int_expr]`                              | Change player's assist count.                                                   |
+| assists              | `assists <player_id> [int_expr]`                             | Change player's assist count.                                                   |
 | battery              | `battery <player_id> [decimal_expr] [weapon]`                | Change weapon battery (weapon index as in `ammo`).                              |
 | boost                | `boost <player_id>`                                          | Move player to location they are looking at.                                    |
-| camo                 | `camo <player_id> [time]`                                    | Apply active camouflage for time (seconds). No effect if already camo.          |
+| camo                 | `camo <player_id> [time]`                                    | Apply active camouflage for time (ticks). No effect if already camo.            |
 | color                | `color <player_id> [index]`                                  | Change player's FFA color.                                                      |
 | coord                | `coord <player_id>`                                          | Return player's coordinates.                                                    |
 | deaths               | `deaths <player_id> [amount]`                                | Change player's death count.                                                    |
