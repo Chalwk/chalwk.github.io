@@ -279,6 +279,110 @@ local function getRaceProgress(race_globals, memory_index)
 end
 ```
 
+#### Checkpoint Parsing and Bitmask Helpers
+
+```lua
+-- Precompute the number of set bits for every possible 8-bit value (0-255).
+local popcnt8 = {}
+for i = 0, 255 do
+    local count, value = 0, i
+
+    -- Count set bits by repeatedly checking the lowest bit and shifting right.
+    while value > 0 do
+        count = count + (value % 2)
+        value = math.floor(value / 2)
+    end
+
+    popcnt8[i] = count
+end
+
+-- Performs bitwise AND on two non-negative integers.
+---@param a number First integer operand.
+---@param b number Second integer operand.
+---@return number result Bitwise AND result.
+local function bit_band(a, b)
+    local result, bitval = 0, 1
+
+    -- Process each bit position until both operands are exhausted.
+    while a > 0 and b > 0 do
+        if a % 2 == 1 and b % 2 == 1 then
+            result = result + bitval
+        end
+
+        a = math.floor(a / 2)
+        b = math.floor(b / 2)
+        bitval = bitval * 2
+    end
+
+    return result
+end
+
+-- Performs a logical right shift by dividing by a power of two.
+---@param x number Integer value to shift.
+---@param n number Number of bit positions to shift.
+---@return number shifted Shifted integer value.
+local function bit_rshift(x, n)
+    return math.floor(x / (2 ^ n))
+end
+
+-- Get current checkpoint index (0-indexed) from player's bitmask.
+---@param bitmask number Player checkpoint bitmask.
+---@return number index Current checkpoint index (0-indexed).
+local function getCheckpointIndex(bitmask)
+    if bitmask == 0 then return 0 end
+
+    -- Extract each byte from the 32-bit checkpoint mask.
+    local byte0 = bit_band(bitmask, 0xFF)
+    local byte1 = bit_band(bit_rshift(bitmask, 8), 0xFF)
+    local byte2 = bit_band(bit_rshift(bitmask, 16), 0xFF)
+    local byte3 = bit_band(bit_rshift(bitmask, 24), 0xFF)
+
+    -- Sum the number of set bits across all four bytes.
+    local index = popcnt8[byte0] + popcnt8[byte1] +
+                  popcnt8[byte2] + popcnt8[byte3]
+
+    return index
+end
+
+-- Get total checkpoints from course mask.
+---@param mask number Course checkpoint mask.
+---@return number count Total number of checkpoints.
+local function getCheckpointCount(mask)
+    local count = 0
+
+    -- Brian Kernighan's algorithm: clear the lowest set bit on each iteration.
+    while mask ~= 0 do
+        mask = bit_band(mask, mask - 1)
+        count = count + 1
+    end
+
+    -- Include the initial checkpoint in the total.
+    return count + 1
+end
+
+-- Resolve per-player checkpoint memory address.
+---@param race_globals number Race globals base address.
+---@param local_player_index number|nil Player memory index (0-15).
+---@return number|nil address Checkpoint address for the player, or nil if the index is unavailable.
+local function getCheckpointAddress(race_globals, local_player_index)
+    if not local_player_index then return nil end
+    return race_globals + 0x44 + (local_player_index * 4)
+end
+
+-- Retrieve total checkpoints for the course.
+---@param race_globals number Race globals base address.
+---@return number|nil total Total checkpoints, or nil if no checkpoint mask is available.
+local function getTotalCheckpoints(race_globals)
+    local total_mask = read_dword(race_globals)
+
+    if total_mask and total_mask ~= 0 then
+        return getCheckpointCount(total_mask)
+    end
+
+    return nil
+end
+```
+
 ---
 
 ## Game Constants

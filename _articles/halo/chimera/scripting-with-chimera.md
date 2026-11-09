@@ -567,3 +567,19 @@ function OnTick()
     -- ... do something ...
 end
 ```
+
+## Exponential Moving Average (EMA) for Network Ping
+
+To smooth out jittery ping values and detect sudden latency spikes, apply an exponential moving
+average:
+
+```lua
+local ema_ping = nil
+
+local function update_ping(raw_ping)
+    ema_ping = ema_ping and (ema_ping * 0.85 + raw_ping * 0.15) or raw_ping
+    local avg = math.floor(ema_ping + 0.5)
+    local delta = math.floor(raw_ping - ema_ping + 0.5)
+    return avg, delta
+end
+```
