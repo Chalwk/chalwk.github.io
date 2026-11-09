@@ -86,6 +86,14 @@ relative_links:
   collections: true
 
 # ------------------------------------------------------------------------------
+# Collections
+# ------------------------------------------------------------------------------
+collections:
+  articles:
+    output: true
+    permalink: /blog/:year/:month/:day/:title/
+
+# ------------------------------------------------------------------------------
 # Default front matter (for the sake of DRY)
 # ------------------------------------------------------------------------------
 defaults:
@@ -97,6 +105,16 @@ defaults:
       image:
         path: /assets/images/avatar.png
         alt: "Jericho Crosby"
+
+  # Blog articles (collections)
+  - scope:
+      path: ""
+      type: articles
+    values:
+      layout: post
+      author: "Jericho Crosby"
+      permalink: /blog/:year/:month/:day/:title/
+      toc: true
 
   # Blog posts
   - scope:

@@ -2,8 +2,9 @@
 layout: none
 ---
 {% comment %} Copyright (c) 2024-2026 Jericho Crosby (Chalwk). All Rights Reserved. {% endcomment %}
+{% assign all_posts = site.articles | sort: "date" | reverse %}
 [
-  {% for post in site.posts %}
+  {% for post in all_posts %}
     {
       "title": {{ post.title | jsonify }},
       "url": {{ post.url | relative_url | jsonify }},

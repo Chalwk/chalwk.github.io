@@ -46,7 +46,8 @@ description: Blog Landing page
 
             <!-- post list (source of truth; hidden by JS after init) -->
             <ul class="post-list original-posts">
-                {% for post in site.posts %}
+                {% assign all_posts = site.articles | sort: "date" | reverse %}
+                {% for post in all_posts %}
                 <li class="post-item" data-categories="{{ post.categories | join: ',' }}"
                     data-tags="{{ post.tags | join: ',' }}">
                     <h2 class="post-title">
