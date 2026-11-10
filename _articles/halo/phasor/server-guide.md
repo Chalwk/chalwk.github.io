@@ -96,20 +96,44 @@ The `run.bat` script automates launching the server with recommended parameters:
 
 ```bat
 @ECHO OFF
-set port=2302
-set root=%~dp0
-set path=%root%\cg\
-set exec=%path%\init.txt
 
-rem Use haloded.exe for PC Retail, haloceded.exe for CE
-"%root%haloded.exe" -path %path% -exec %exec% -port %port%
+rem Set the server port (default: 2302)
+set PORT=2302
+
+rem Get the absolute path of the directory where this script resides
+set ROOT=%~dp0
+
+rem Define instance config path and startup execution script
+set CG_PATH=%ROOT%\cg\
+set EXEC=%CG_PATH%\init.txt
+
+rem Launch the server. Use haloded.exe for PC Retail, haloceded.exe for CE
+"%ROOT%haloceded.exe" -path %CG_PATH% -exec %EXEC% -port %PORT%
 ```
 
-- `%~dp0` expands to the folder the script sits in, with a trailing backslash. That keeps the script
-  portable.
+And `run.sh` for Linux/Wine:
+
+```bash
+#!/usr/bin/env bash
+
+# Set the server port (default: 2302)
+PORT=2302
+
+# Get the absolute path of the directory where this script resides
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Define instance config path and startup execution script
+CG_PATH="${DIR}/cg"
+EXEC="${CG_PATH}/init.txt"
+
+# Launch the server. Use haloded.exe for PC Retail, haloceded.exe for CE
+wine "${DIR}/haloceded.exe" -path "${CG_PATH}" -exec "${EXEC}" -port "${PORT}"
+```
+
+- `%~dp0` / `$DIR` expands to the folder the script sits in. That keeps the script portable.
 - `-path` points at the instance configs (`cg\`).
 - `-exec` points at that instance's `init.txt`.
-- `-port` Specifies the UDP port the server listens on (default Halo port is `2302`, but custom
+- `-port` specifies the UDP port the server listens on (default Halo port is `2302`, but custom
   ports like `2310` are commonly used to avoid conflicts or run multiple servers).
 
 ### Phasor Command-Line Options
