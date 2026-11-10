@@ -25,8 +25,10 @@ commands, player management, and direct memory access. Scripts run on dedicated 
   commands, and console colors.
 - [SAPP Lua Template](template.md): Script skeleton and callback reference.
 
-SAPP Lua scripts cannot talk to each other directly. The only shared channel is custom variables
-(see Custom Variables in [Cheat Sheet](cheat-sheet.md)).
+SAPP Lua scripts have separate Lua environments, so they cannot directly access each other's
+globals. The `lua_call <script> <function> [arguments...]` server command can invoke a function in a
+loaded script; use custom variables to share state between scripts
+(see [Custom Variables](cheat-sheet.md#custom-variables)).
 
 ---
 

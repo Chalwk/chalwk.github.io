@@ -710,8 +710,10 @@ Add custom fields to Halo's query response.
 
 ### Custom Variables
 
-Custom variables come from these commands, or from `add_var`, `del_var`, and `set_var` in Lua. Since
-scripts cannot call each other directly, a custom variable is the way to share data between them.
+Custom variables come from these commands, or from `add_var`, `del_var`, and `set_var` in Lua. SAPP
+scripts have separate Lua environments, so they cannot directly access each other's globals. Use
+`lua_call <script> <function> [arguments...]` to invoke a function in a loaded script, and custom
+variables when scripts need to share state.
 
 | Command  | Level | Usage                                         | Description                                                                                                           |
 |----------|-------|-----------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|
