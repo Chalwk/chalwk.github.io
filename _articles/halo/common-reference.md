@@ -617,9 +617,7 @@ Position is read as three floats because Chimera has no `read_vector3d`.
 
 ```lua
 ---@param object number Object memory address.
----@return number x
----@return number y
----@return number z
+---@return number x, number y, number z
 local function getObjectPosition(object)
     local x = read_float(object + 0x5C)
     local y = read_float(object + 0x60)
@@ -628,9 +626,7 @@ local function getObjectPosition(object)
 end
 
 ---@param dyn_player number Dynamic player address.
----@return number aim_x
----@return number aim_y
----@return number aim_z
+---@return number aim_x, number aim_y, number aim_z
 local function getAimVector(dyn_player)
     local aim_x = read_float(dyn_player + 0x230)
     local aim_y = read_float(dyn_player + 0x234)
@@ -643,8 +639,7 @@ end
 
 ```lua
 ---@param dyn_player number Dynamic player address.
----@return number health Current health value (0.0-1.0).
----@return number shields Current shield value (0.0-1.0).
+---@return number health, number shields Current health and shield values (0.0-1.0).
 local function getHealthAndShields(dyn_player)
     local health = read_float(dyn_player + 0xE0)
     local shields = read_float(dyn_player + 0xE4)

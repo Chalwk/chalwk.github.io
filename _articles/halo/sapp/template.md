@@ -70,8 +70,7 @@ function OnEcho(player_id, message) end
 ---@param parent_object_id number Parent object id (`0xFFFFFFFF` if none)
 ---@param new_object_id number The new object id
 ---@param sapp_spawning number `1` if the object was spawned by SAPP, `0` if by Halo
----@return boolean|nil allow # Return `false` to block spawn
----@return number|nil new_tag_id # Return new tag ID if replacing object type (if allow is true)
+---@return boolean|nil allow, number|nil new_tag_id # Return `false` to block spawn, or new tag ID if replacing object type (if allow is true)
 function OnObjectSpawn(player_id, tag_id, parent_object_id, new_object_id, sapp_spawning)
     return true
     -- To replace the object type, return allow and the new tag ID:
@@ -128,8 +127,7 @@ function OnStick(player_id, victim_id, object_id, victim_object_id, body_part) e
 ---@param damage number Damage amount
 ---@param collision_material string Material hit
 ---@param backtap number 0|1 Whether the hit was a backtap (1 = true)
----@return boolean|nil allow # Return `false` to block damage
----@return number|nil new_damage # Return modified damage amount (if allow is true)
+---@return boolean|nil allow, number|nil new_damage # Return `false` to block damage, or modified damage amount (if allow is true)
 function OnDamageApplication(victim_id, causer_id, damage_tag_id, damage, collision_material, backtap)
     return true
     -- To modify the damage amount, return allow and the new damage value:

@@ -334,9 +334,7 @@ SAPP only; Chimera reads three floats
 
 ```lua
 ---@param dyn_player number Dynamic player address.
----@return number|nil x Player X coordinate, or nil if the object is invalid.
----@return number|nil y Player Y coordinate, or nil if the object is invalid.
----@return number|nil z Player eye-level Z coordinate, or nil if the object is invalid.
+---@return number|nil x, number|nil y, number|nil z Player X, Y, and eye-level Z coordinates, or nil if the object is invalid.
 local function getPlayerPosition(dyn_player)
     local crouch = read_float(dyn_player + 0x50C) -- 0 = standing, 1 = fully crouched
     local vehicle_id = read_dword(dyn_player + 0x11C)
@@ -480,8 +478,7 @@ Returns the object type byte and the tag name of any object.
 
 ```lua
 ---@param object number Memory address of the object.
----@return number object_type Object type identifier (byte at offset 0xB4).
----@return string tag_name Full tag path associated with the object.
+---@return number object_type, string tag_name Object type identifier (byte at offset 0xB4) and full tag path.
 local function getTagFromObject(object)
     local object_type = read_byte(object + 0xB4)
     local tag_index = read_word(object)
@@ -636,8 +633,7 @@ Finds the flag (objective) tag on the current map. Returns its meta id and tag n
 there is no flag.
 
 ```lua
----@return number|nil meta_id Flag weapon tag meta ID, or nil if no flag exists.
----@return string|nil tag_name Flag weapon tag path, or nil if no flag exists.
+---@return number|nil meta_id, string|nil tag_name Flag weapon tag meta ID and path, or nil if no flag exists.
 local function getFlagData()
     local tag_array = read_dword(BASE_TAG_TABLE)
     local tag_count = read_dword(BASE_TAG_TABLE + 0xC)
@@ -1134,8 +1130,7 @@ cprint("Has entries after clear: " .. tostring(next(scores) ~= nil))
 local sandbox_env = { cprint = cprint, math = math }
 
 ---@param fn function Function to run inside the sandbox.
----@return boolean success True if the function executed without an error.
----@return any result_or_error Function result on success, or error value on failure.
+---@return boolean success, any result_or_error True if executed without error and function result, or false and error value.
 local function runInSandbox(fn)
     setfenv(fn, sandbox_env)
     return pcall(fn)

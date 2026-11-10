@@ -48,9 +48,7 @@ end
 ---@param player number The player's index id
 ---@param chat_type number 0|1|2 (global, team, vehicle)
 ---@param message string The chat message
----@return boolean allow
----@return string|nil new_message
----@return number|nil new_type
+---@return boolean allow, string|nil new_message, number|nil new_type
 function OnServerChat(player, chat_type, message)
     -- Return values:
     --     true                        = allow the message
@@ -77,8 +75,7 @@ function OnServerCommandAttempt(player, command, password) return true end
 -- Called when a player requests a name during connection.
 ---@param hash string The hash of the requesting machine
 ---@param name string The requested name
----@return boolean allow
----@return string|nil new_name
+---@return boolean allow, string|nil new_name
 function OnNameRequest(hash, name)
     -- If `allow` is false, the player is kicked. If `new_name` is returned,
     -- the player's name is changed.
@@ -213,8 +210,7 @@ end
 ---@param map_id number The damage tag id
 ---@param location number The body part hit
 ---@param backtap boolean Whether the hit was a backtap
----@return boolean allow
----@return number|nil new_damage
+---@return boolean allow, number|nil new_damage
 function OnDamageApplication(receiver, causer, map_id, location, backtap)
     -- Return `false` to block the damage, or a new damage value to override it.
     return true

@@ -663,8 +663,7 @@ spot:
 local ema_ping = nil
 
 ---@param raw_ping number Latest ping sample in milliseconds.
----@return number avg Smoothed ping in milliseconds.
----@return number delta Difference between the latest sample and the average.
+---@return number avg, number delta Smoothed ping in milliseconds and difference from the average.
 local function updatePing(raw_ping)
     ema_ping = ema_ping and (ema_ping * 0.85 + raw_ping * 0.15) or raw_ping
     local avg = math.floor(ema_ping + 0.5)
