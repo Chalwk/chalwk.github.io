@@ -181,7 +181,10 @@ no dynamic object: check for `0` on SAPP and `nil` on Chimera before reading.
 | `0x2F8-0x307`       | dword | Weapon slots 1-4 object IDs (`0x2F8 + (slot - 1) * 4`)                                                                                          |
 | `0x31E`             | byte  | Frag grenades                                                                                                                                   |
 | `0x31F`             | byte  | Plasma grenades                                                                                                                                 |
+| `0x320`             | byte  | Biped weapon zoom level (0xFF = unzoomed, 0-254 = active zoom level)                                                                            |
 | `0x37C`             | float | Invisibility (1.0 = invisible)                                                                                                                  |
+| `0x43C`             | dword | Most recent damager player object ID                                                                                                            |
+| `0x4FC`             | dword | Bumped object ID                                                                                                                                |
 | `0x47C`             | byte  | Weapon switch key input state                                                                                                                   |
 | `0x47E`             | byte  | Grenade switch key input state                                                                                                                  |
 | `0x480`             | word  | Zoom state (0 = unzoomed)                                                                                                                       |
@@ -500,6 +503,13 @@ Only the pointers below are documented for Chimera so far.
 | `announcer_address`              | `0x64C020`                   | `0x64C020`                   | Client-side multiplayer announcer sound queue (+0x8 delay, +0x14 sound tag ID)                       |
 | `first_person_animation_address` | `0x40000EB8`                 | `0x40000EB8`                 | First-person animation structure (+0x1E base anim ID, +0x20 base anim frame)                         |
 | `game_state_address`             | `0x400002E8`                 | `0x400002E8`                 | Screen render and pause state (+0x0 screen render, +0x1 game running, +0x2 game paused)              |
+| `game_paused_address`            | `0x004ACA79`                 | `0x004ACA79`                 | Game pause byte (1 = paused, 0 = running)                                                            |
+| `game_on_menus_address`          | `0x00622058`                 | `0x00622058`                 | Game menu state byte (1 = in menu/console, 0 = gameplay)                                             |
+| `joystick_input_address`         | `0x0064D998`                 | `0x0064D998`                 | Controller/joystick input structure array (0xA0 bytes per controller)                                |
+| `object_table_address`           | `0x400506B4`                 | `0x4005062C`                 | Global object table header (CE client = 0x400506B4, SAPP server = 0x4005062C)                        |
+| `device_groups_table`            | `0x00816110`                 | `0x006E1C50`                 | Scenario device groups table (CE client = 0x00816110, SAPP server = 0x006E1C50)                      |
+| `widgets_instance`               | `0x006B401C`                 | `0x006B401C`                 | UI widget instance structure                                                                         |
+| `synced_network_objects`         | `0x006226F0`                 | `0x00598020`                 | Synced network objects table pointer (CE client = 0x006226F0, SAPP server = 0x00598020)              |
 | `gravity_global`                 | `0x637BE4`                   | `0x637BE4`                   | World gravity float multiplier (default ~ 0.003565)                                                  |
 | `ctf_flag_red`                   | `0x40492F1C`                 | `0x40492F1C`                 | Red flag world spawn coordinates structure                                                           |
 | `ctf_flag_blue`                  | `0x40492FB0`                 | `0x40492FB0`                 | Blue flag world spawn coordinates structure                                                          |
