@@ -1,31 +1,45 @@
 ---
 title: "Halo: Modding References & Tools"
 permalink: /halo/modding-references/
-description: "Essential references and tools for Halo PC and Custom Edition modding, from classic HEK utilities to modern toolchains and asset pipelines."
+description: "References and tools for Halo PC and Custom Edition modding, from the classic HEK to modern toolchains and asset pipelines."
 date: 2026-11-09
-last-updated: 2026-11-09
+last-updated: 2026-11-10
 categories: [ education, halo, modding ]
-tags: [ hek, tools, sapp, lua, scripting, tutorial, reference ]
+tags: [ hek, tools, sapp, phasor, chimera, lua, scripting, tutorial, reference ]
 ---
 
-Essential references and tools for Halo PC and Custom Edition (CE) modding, from classic HEK
-utilities to modern cross-platform toolchains. Covers weapon stat tweaking, custom multiplayer maps,
-and server-side Lua scripting.
+References and tools for Halo PC and Custom Edition (CE) modding, from the classic HEK to modern
+cross-platform toolchains. Covers weapon stat tweaking, custom multiplayer maps, and Lua scripting.
 
 ---
 
-## Official Documentation and Community Hubs
+## Guides
+
+Guides on this site.
+
+- [Common Reference](common-reference.md): Memory offsets, game constants, shared helpers, and stock
+  Halo commands for SAPP, Phasor, and Chimera.
+- [SAPP Server Guide](sapp/server-guide.md): Set up and run single and multi-instance SAPP servers.
+- [Scripting with SAPP](sapp/scripting-with-sapp.md): Server-side Lua with SAPP.
+- [SAPP Cheat Sheet](sapp/cheat-sheet.md): Pointers, signatures, variables, and commands.
+- [SAPP Utils](sapp/utils.md): Helper functions and known quirks.
+- [SAPP Lua Template](sapp/template.md): Script skeleton and callback reference.
+- [Phasor Server Guide](phasor/server-guide.md): Set up and run a Phasor 2.0 server.
+- [Scripting with Phasor](phasor/scripting-with-phasor.md): Server-side Lua with Phasor.
+- [Phasor Lua Template](phasor/template.md): Script skeleton and event reference.
+- [Scripting with Chimera](chimera/scripting-with-chimera.md): Client-side Lua with Chimera.
+- [Chimera Lua Template](chimera/template.md): Script skeleton and callback reference.
+
+---
+
+## Documentation
 
 Official docs, forums, map repositories, and community knowledge bases.
 
-- [SAPP Documentation (mirror)](https://github.com/Chalwk/SPCLib/blob/master/docs/sapp_docs_revision_2.4.pdf):
 - [Official SAPP Docs](https://halo-sapp.readthedocs.io/): Lua API, events, commands, and examples
   for the SAPP server extension.
-- [Scripting with SAPP](sapp/scripting-with-sapp.md): Comprehensive guide to server-side Lua
-  scripting using SAPP's Lua API, including signature scanning, global variables, and core
-  functions.
-- [Scripting with Phasor](phasor/scripting-with-phasor.md):
-  Server-side Lua scripting with Phasor, covering version handling and hardcoded addresses.
+- [SAPP Documentation (mirror)](https://github.com/Chalwk/SPCLib/blob/master/docs/sapp_docs_revision_2.4.pdf):
+  PDF copy of the SAPP docs, revision 2.4.
 - [Phasor (legacy)](https://phasor.halonet.net/): Legacy server extension and documentation; useful
   for older scripts and historical examples.
 - [Phasor V1 Docs](http://phasor.halonet.net/archive/docs/05x.html): Documentation for Phasor V1.
@@ -33,19 +47,17 @@ Official docs, forums, map repositories, and community knowledge bases.
 - [The Reclaimers Library (c20)](https://c20.reclaimers.net/): Community-maintained technical
   reference covering the Halo Editing Kit, engine internals, map-making workflows, and modern
   tooling.
-- [Halopedia - Halo: Combat Evolved](https://www.halopedia.org/Halo:_Combat_Evolved):
+- [Halopedia: Halo: Combat Evolved](https://www.halopedia.org/Halo:_Combat_Evolved):
   Community-maintained wiki with detailed information about gameplay systems, tags, weapons,
   vehicles, and campaign content.
-- [Halopedia - Weapons category](https://www.halopedia.org/Halo:_Combat_Evolved#Weapons): Full list
-  of Halo: CE weapons and related articles.
 - [OpenCarnage](https://opencarnage.net/): Forums, HEK help, scripts, and CE community discussions.
-- [Elite Game Servers - SAPP overview](https://www.elitegameservers.net/sapp/): Practical SAPP usage
+- [Elite Game Servers: SAPP overview](https://www.elitegameservers.net/sapp/): Practical SAPP usage
   notes and examples.
 - [HAC2 Map Repo](https://maps.halonet.net/): Custom maps for Halo PC and Custom Edition.
 - [HaloMaps.org](https://www.halomaps.org/hce/): Large archive of Halo Custom Edition maps and
   releases.
 
-## Deep Dives and Networking
+## Networking
 
 When you need to understand netcode, packet loss, memory offsets, or the Halo 1 system link
 protocol:
@@ -64,10 +76,10 @@ protocol:
 
 There are two main eras of tooling: the classic HEK suite and modern community replacements.
 
-### Classic HEK (Halo Editing Kit)
+### Classic HEK
 
-These are the original tools Bungie released for Halo Custom Edition. They still work, but may
-require some patience on modern versions of Windows.
+These are the original Halo Editing Kit tools Bungie released for Halo Custom Edition. They still
+work, but may need some patience on modern versions of Windows.
 
 - [HEK on Nexus Mods](https://www.nexusmods.com/halo/mods/6): The original Halo Editing Kit
   installer.
@@ -83,7 +95,7 @@ require some patience on modern versions of Windows.
 > Windows 7 mode) or running with administrator rights. Using `dgVoodoo2` as a DirectX wrapper can
 > also improve stability on modern Windows versions.
 
-### Modern and Community Toolchains
+### Modern Toolchains
 
 These tools are cross-platform, scriptable, and actively maintained by the community.
 
@@ -103,20 +115,18 @@ These tools are cross-platform, scriptable, and actively maintained by the commu
 
 ---
 
-## Client-Side Mods and Scripting Platforms
+## Client Mods
 
 Enhance your local game or test scripts without needing a dedicated server.
 
 - [Chimera](https://github.com/SnowyMouse/chimera): Halo CE client modification with Lua support,
   quality-of-life features, and modding APIs.
-- [Scripting with Chimera](chimera/scripting-with-chimera.md): Client-side Lua scripting with
-  Chimera, including event callbacks, script placement, and version compatibility.
 - [Balltze](https://github.com/MangoFizz/balltze): Plugin loader and mod platform for Halo CE.
   Documentation: [balltze.shadowmods.net](https://balltze.shadowmods.net/)
 
 ---
 
-## Lua Scripting Helpers and Package Management
+## Lua Helpers
 
 These libraries and utilities make writing and distributing CE Lua scripts easier.
 
@@ -125,13 +135,9 @@ These libraries and utilities make writing and distributing CE Lua scripts easie
 - [Mercury](https://github.com/Sledmine/mercury): Package manager for Halo CE mods. Helps package,
   install, remove, and distribute addons cleanly.
 
-> [!NOTE]
-> Use `Mercury` to manage and distribute reusable mods, scripts, and dependencies cleanly across
-> projects.
-
 ---
 
-## Asset Pipelines and Blender Tools
+## Blender Tools
 
 If you are creating custom models or importing assets, these Blender addons and utilities are
 essential.

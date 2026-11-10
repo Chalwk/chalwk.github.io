@@ -1,12 +1,16 @@
 ---
 title: "Chimera Lua Template"
 permalink: /halo/chimera/template/
-description: "Ready-to-use Chimera client-side Lua script template and complete callback event signature reference."
+description: "Chimera client-side Lua script template and callback signature reference."
 date: 2026-11-09
-last-updated: 2026-11-09
+last-updated: 2026-11-10
 categories: [ education, halo, modding ]
 tags: [ chimera, lua, scripting, client, tutorial ]
 ---
+
+> [!NOTE]
+> Every Chimera script must define `clua_version`, or Chimera will not load it. Callbacks must be
+> global functions. Register only the events your script uses.
 
 ```lua
 clua_version = 2.056
@@ -28,7 +32,8 @@ set_callback("unload", "OnScriptUnload")
 -- Called when a command is typed into the console.
 -- Open the console with the `~` key.
 ---@param cmd string The command entered into the console
-function OnCommand(cmd) end
+---@return boolean|nil allow # Return `false` to block the command
+function OnCommand(cmd) return true end
 
 -- Called once per rendered frame.
 -- Runs after `preframe`.

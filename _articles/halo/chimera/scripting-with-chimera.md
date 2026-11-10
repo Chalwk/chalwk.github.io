@@ -1,17 +1,16 @@
 ---
-title: "Scripting with Chimera - Client-Side Lua"
+title: "Scripting with Chimera: Client-Side Lua"
 permalink: /halo/chimera/scripting-with-chimera/
-description: "Comprehensive guide to client-side Lua scripting with Chimera, covering event callbacks, HUD rendering, camera manipulation, and memory offsets."
+description: "Guide to client-side Lua scripting with Chimera, covering event callbacks, HUD rendering, camera manipulation, and memory offsets."
 date: 2026-11-09
-last-updated: 2026-11-09
+last-updated: 2026-11-10
 categories: [ education, halo, modding ]
 tags: [ chimera, lua, scripting, client, tutorial ]
 ---
 
 Chimera is a client-side mod for Halo PC/CE. It provides event hooks, commands, built-in map
-downloads, and dozens of quality-of-life fixes. This guide focuses on its Lua API, walks through the
-core scripting model and practical examples so you can build your own HUDs, gameplay tweaks, and
-quality-of-life mods using Chimera's event-driven Lua environment.
+downloads, and a lot of quality-of-life fixes. This guide covers its Lua API, with practical
+examples for HUDs and gameplay tweaks.
 
 Memory offsets, game constants, shared helpers, and Chimera's hardcoded pointers are in
 [Common Reference](../common-reference.md).
@@ -28,36 +27,31 @@ Memory offsets, game constants, shared helpers, and Chimera's hardcoded pointers
 
 ## Where to Put Your Scripts
 
-Chimera looks for Lua scripts in two specific places, and treats them differently depending on where
-they live:
+Chimera looks for Lua scripts in two folders and treats them differently:
 
-- Global Scripts: Drop your `.lua` files in the main `chimera\lua\scripts\global` folder. These load
-  when Chimera starts up and stay active until you manually reload them. Great for tools or HUD mods
-  you use all the time. Global scripts are not sandboxed.
+- Global scripts: Put `.lua` files in `chimera\lua\scripts\global`. They load when Chimera starts
+  and stay active until you reload them. Use this for tools and HUD mods you want all the time.
+  Global scripts are not sandboxed.
 
-- Map Scripts: Put scripts into `chimera\lua\scripts\maps`. These only load when their associated
-  map is active and unload automatically when you leave. Perfect for map-specific features. Map
-  scripts are sandboxed by default. Global scripts, and map scripts explicitly placed in the global
-  folder, run without sandbox restrictions.
+- Map scripts: Put scripts in `chimera\lua\scripts\maps`. They load when their map is active and
+  unload when you leave it. Map scripts are sandboxed by default (see
+  [Sandbox Restrictions](#sandbox-restrictions-map-scripts)).
 
-> [!WARNING]
-> Map scripts are sandboxed by default and restricted from file access (`io.*`) and memory
-> operations outside `0x40000000`–`0x41B00000`. Place your script in the `global` folder if you need
-> unrestricted access or file persistence.
+By default, the Chimera folder is located inside your Halo data folder:
 
-By default, the chimera data folder will be located in
-`C:\Users\<user>\Documents\My Games\Halo CE\chimera`.
+- **Halo Custom Edition (CE):** `%USERPROFILE%\Documents\My Games\Halo CE\chimera`
+- **Halo PC:** `%USERPROFILE%\Documents\My Games\Halo\chimera`
 
-To reload all scripts without restarting the game, type `chimera_lua_scripts_reload` in console
-(press `~`).
+**Linux:** `~/Documents/My Games/Halo CE/chimera` or `~/Documents/My Games/Halo/chimera`, depending
+on your setup.
 
 ## Script Skeleton
 
-See [Chimera Lua Template](template.md) for every available callbacks. Register only the ones the
-script uses.
+See [Chimera Lua Template](template.md) for every callback. Register only the ones the script
+uses.
 
-Every Chimera Lua script must define `clua_version` and set it to the appropriate Chimera API
-version (for example: `2.056`). Without this definition, Chimera will not load the script.
+Every Chimera Lua script must define `clua_version` as the Chimera API version it targets (for
+example `2.056`). Without it, Chimera will not load the script.
 
 ```lua
 clua_version = 2.056
@@ -87,19 +81,16 @@ only when the declared version is compatible:
 | Higher                         | 2.06               | No     |
 | Lower, different major version | 1.5                | No     |
 
-See [Chimera Lua Template](template.md) for the script skeleton, event names, and callback
-signatures. Register only the ones the script uses.
-
 ### Event Priorities
 
 When setting a callback with `set_callback`, you can specify a priority as the third argument.
 Priorities determine the order in which multiple scripts' callbacks run. If multiple scripts use the
 same priority, they run in script load order.
 
-- `"before"` - runs before default callbacks
-- `"default"` - normal priority (used if omitted)
-- `"after"` - runs after default callbacks
-- `"final"` - runs last; any return values are ignored (useful for monitoring)
+- `"before"`: runs before default callbacks
+- `"default"`: normal priority (used if omitted)
+- `"after"`: runs after default callbacks
+- `"final"`: runs last; any return values are ignored (useful for monitoring)
 
 Example:
 
@@ -111,29 +102,15 @@ set_callback("tick", "OnTickLate", "after")
 
 ### Events
 
-Exact event strings accepted by `set_callback`:
-
-- `"tick"` - called approximately 30 times per second (main gameplay loop)
-- `"pretick"` - called immediately before `"tick"`
-- `"frame"` - called once per rendered frame (runs after `"preframe"`)
-- `"preframe"` - called before rendering each frame
-- `"precamera"` - called immediately before camera calculations are applied
-- `"map load"` - called after the map has fully loaded; use it to reset state
-- `"map preload"` - called before the map begins loading
-- `"command"` - called for any console command (see below)
-- `"rcon_message"` - called when an RCON message is received
-- `"prespawn"` - called before a player spawns; receives the player index
-- `"spawn"` - called when a player finishes spawning; receives the player index
-- `"unload"` - called when the script is unloaded (usually wired to `OnScriptUnload`)
-
-Draw calls such as `draw_text` belong in the per-frame callbacks (`"preframe"` or `"frame"`), not
+The [Chimera Lua Template](template.md) lists every event string with its callback signature. Draw
+calls such as `draw_text` belong in the per-frame callbacks (`"preframe"` or `"frame"`), not
 `"tick"`.
 
 ### Return Values and Event-Specific Notes
 
-- `"command"`: called for any console command except Chimera-internal commands and `rcon`. Return
+- `"command"`: called for any console command except Chimera's own commands and `rcon`. Return
   `false` to block the command and suppress the "unknown command" error; return `true` or nothing to
-  allow it. The `command` callback cannot intercept Chimera's own commands or `rcon`.
+  allow it.
 - `"rcon_message"`: return `false` to block the message.
 - `"precamera"`: must return all ten camera values (see Camera Manipulation).
 - `"unload"`: fired when the script unloads (map change or manual reload). The map may already have
@@ -146,29 +123,25 @@ Sandboxed scripts (map scripts by default) run with a stripped environment. Chim
 `os.remove`, `os.rename`, and `os.tmpname` before your code runs.
 
 Memory read/write functions (`read_int`, `write_float`, `read_string`, etc.) are also restricted to
-the address range `0x40000000`–`0x41B00000`. Outside that range, a sandboxed script will raise an
+the address range `0x40000000` to `0x41B00000`. Outside that range, a sandboxed script will raise an
 error. If you need file access or unrestricted memory access, place the script in the `global`
 folder instead.
 
 ### Embedded Scripts (Advanced)
 
-Mapmakers can actually bake Lua scripts directly into their `.map` files using tools like Harbinger.
-Chimera can load these embedded scripts if you enable `load_embedded_lua = 1` in your `chimera.ini`.
-The script then runs automatically when players load that map - no separate file needed. This is
-great for distributing map-specific mods without extra install steps.
+Mapmakers can bake Lua scripts into their `.map` files with tools like Harbinger. Chimera loads
+these embedded scripts when `load_embedded_lua = 1` is set in `chimera.ini`. The script runs when
+players load that map, so there is no separate file to install.
 
 ### Hotkeys: Running Scripts with Keystrokes
 
-Chimera lets you bind any command - including your custom script commands - to keyboard keys through
-the `chimera.ini` file. The hotkeys section lets you execute:
+Chimera can bind commands to keyboard keys in `chimera.ini`. You can bind:
 
 - Chimera's native commands
 - Halo's built-in console commands
-- Your custom script commands (like `/wpninfo` or `/compass`)
+- Your own script commands (like `wpninfo` or `compass`)
 
-For example, you could bind `F5` to `/compass` so players can toggle the compass without typing. Set
-this up in `chimera.ini` and your scripts can respond to single key presses instead of forcing
-players to type chat commands.
+For example, bind `F5` to `compass` to toggle a compass HUD without typing in the console.
 
 ## Displaying Information on Screen
 
@@ -178,7 +151,7 @@ The simplest way to talk to the player is `hud_message("your text")`, `console_o
 ```lua
 function OnTick()
     hud_message("Chimera Rocks!")                     -- standard hud message
-    
+
     console_out("Chimera Rocks!")                     -- standard console output
     console_out("Chimera Rocks!", 1.0, 0.35, 0.35)    -- w/RGB colors (red, green, blue)
     console_out("Chimera Rocks!", 1, 1.0, 0.35, 0.35) -- w/ARGB colors (alpha, red, green, blue)
@@ -210,22 +183,22 @@ draw_text(text, left, top, width, height, font, align, a, r, g, b)
 Chimera exposes several read-only global variables that provide useful information about the current
 game state, your script's environment, and the Chimera version.
 
-| Variable             | Description                                                                                      |
-|----------------------|--------------------------------------------------------------------------------------------------|
-| `build`              | Chimera build number. Negative = alpha/pre-release; positive = public release.                   |
-| `full_build`         | If `build` is negative, contains the next public release build number; otherwise equals `build`. |
-| `gametype`           | Current gametype: `"ctf"`, `"slayer"`, `"oddball"`, `"king"`, or `"race"`.                       |
-| `local_player_index` | Local player index (0-15). May be `nil` until assigned after joining a server.                   |
-| `map`                | Currently loaded map name.                                                                       |
-| `map_is_protected`   | `true` if the map uses protected tag data (e.g., `"h3mt-foundry"`).                              |
-| `sandboxed`          | `true` if the script is running in a sandboxed environment (see "Sandboxed Scripts").            |
-| `script_name`        | Filename for global scripts, or map name for map scripts.                                        |
-| `script_type`        | `"global"` or `"map"`.                                                                           |
-| `server_type`        | `"none"` (single player), `"local"` (hosting), or `"dedicated"` (joined a server).               |
+| Variable             | Description                                                                                                                 |
+|----------------------|-----------------------------------------------------------------------------------------------------------------------------|
+| `build`              | Chimera build number. Negative = alpha/pre-release; positive = public release.                                              |
+| `full_build`         | If `build` is negative, contains the next public release build number; otherwise equals `build`.                            |
+| `gametype`           | Current gametype: `"ctf"`, `"slayer"`, `"oddball"`, `"king"`, or `"race"`.                                                  |
+| `local_player_index` | Local player index (0-15). May be `nil` until assigned after joining a server.                                              |
+| `map`                | Currently loaded map name.                                                                                                  |
+| `map_is_protected`   | `true` if the map uses protected tag data (e.g., `"h3mt-foundry"`).                                                         |
+| `sandboxed`          | `true` if the script is running in a sandboxed environment (see [Sandbox Restrictions](#sandbox-restrictions-map-scripts)). |
+| `script_name`        | Filename for global scripts, or map name for map scripts.                                                                   |
+| `script_type`        | `"global"` or `"map"`.                                                                                                      |
+| `server_type`        | `"none"` (single player), `"local"` (hosting), or `"dedicated"` (joined a server).                                          |
 
 Chimera has no `halo_type` global. See [Detecting PC vs. CE](#detecting-pc-vs-ce) below.
 
-### Example - only run on dedicated server:
+### Server Type Check
 
 ```lua
 function OnTick()
@@ -256,9 +229,9 @@ end
 
 ## Detecting PC vs. CE
 
-Chimera has no equivalent to SAPP's `halo_type` global. There is no function that tells you which
-client you are running on. The SAPP hardcoded pointers do not work in Chimera, and Chimera cannot
-scan for signatures, so version-specific addresses are hardcoded per platform.
+Chimera has no equivalent to SAPP's `halo_type` global and no function that reports which client
+you are on. The SAPP hardcoded pointers do not apply, and Chimera cannot scan for signatures, so
+version-specific addresses are hardcoded per platform.
 
 The candidates table, the probe code, and the other documented addresses are in
 [Chimera Pointers](../common-reference.md#chimera-pointers). Relative offsets after you hold a
@@ -266,13 +239,14 @@ pointer work the same on both platforms.
 
 ## Persistent Data Storage
 
-Note: Sandboxed scripts (map scripts) cannot use `io.*` functions. If you need file access in a map
-script, you must place the script in the `global` folder instead.
-See [Sandbox Restrictions](#sandbox-restrictions-map-scripts).
+> [!NOTE]
+> Sandboxed scripts (map scripts) cannot use `io.*`. Put the script in the `global` folder if it
+> needs file access. See [Sandbox Restrictions](#sandbox-restrictions-map-scripts).
 
 ```lua
 local SAVE_FILE = "my_data.txt" -- file will appear in Halo's root installation folder
 
+---@param stats table Table with kills, deaths, and credits.
 local function saveStats(stats)
     local f = io.open(SAVE_FILE, "w")
     if f then
@@ -281,10 +255,11 @@ local function saveStats(stats)
     end
 end
 
+---@return table stats Table with kills, deaths, and credits.
 local function loadStats()
     local f = io.open(SAVE_FILE, "r")
     if not f then return { kills = 0, deaths = 0, credits = 0 } end
-    local content = f:read("*l")
+    local content = f:read("l")
     f:close()
 
     local kills, deaths, credits = (content or ""):match("(%d+);(%d+);(%d+)")
@@ -296,16 +271,15 @@ local function loadStats()
 end
 ```
 
-## Using Timers: `set_timer` and `stop_timer`
+## Timers
 
-Sometimes you need to run code after a delay, or repeat an action at a fixed interval without
-relying on `tick` and manual counters. Chimera provides two functions for this: `set_timer` and
-`stop_timer`.
+Use `set_timer` and `stop_timer` to run code after a delay or at a fixed interval instead of
+counting ticks.
 
 ### `set_timer`
 
-Registers a repeating timer and returns a timer ID that you can later cancel with `stop_timer`.  
-The specified function will execute repeatedly at the given interval (in milliseconds) until either:
+Registers a repeating timer and returns a timer ID that you can later cancel with `stop_timer`. The
+function runs at the given interval (in milliseconds) until either:
 
 - it returns `false`, or
 - you manually remove it with `stop_timer`.
@@ -326,18 +300,17 @@ local timer_id = set_timer(2000, "ShowMessage", "Hello from the timer!") -- runs
 
 ### `stop_timer`
 
-Stops a running timer using its ID. If the timer no longer exists, an error will occur. Syntax:
-`stop_timer(timer_id)`
+Stops a running timer by ID. Stopping a timer that no longer exists raises an error.
+
+Syntax: `stop_timer(timer_id)`
 
 ## Deleting Objects
 
 Use `delete_object(object_id)` to delete objects from the game.
 
-## Executing Console Commands and Scripts: `execute_script()`
+## Console Commands
 
-Chimera's `execute_script()` function lets you run any Halo console command or a full Lisp-formatted
-Halo script block directly from Lua. This is useful for changing settings, displaying information,
-triggering built-in game functionality, or executing custom Halo script logic at runtime.
+`execute_script()` runs any Halo console command or Halo script expression (Lisp syntax) from Lua.
 
 Syntax: `execute_script("command or script")`
 
@@ -366,20 +339,20 @@ execute_script("(object_teleport (player0) teleport_flag)")
 
 ## Reading Player Data
 
-Because Chimera is client-side, you can read any player's data (the server sends it to you), but you
-can only write to memory for your own local player (writing to others will desync or crash).
+Chimera is client-side. You can read any player's data because the server sends it to you, but you
+can only write to your own local player.
 
 > [!WARNING]
-> Never write memory for remote players or global game state in multiplayer. Doing so causes
-> immediate client desyncs, crashes, or anti-cheat bans.
+> Never write memory for remote players or global game state in multiplayer. It causes client
+> desyncs, crashes, or server anti-cheat kicks.
 
-### Get the player object
+### Player Pointers
 
-Note: If no ID is passed, the local player is used.
+Both functions use the local player when you pass no index.
 
 ```lua
-local dynamic_player = get_dynamic_player(id)
-local static_player = get_player(id)
+local dyn_player = get_dynamic_player(player)
+local static_player = get_player(player)
 ```
 
 `get_dynamic_player()` returns a pointer to the player's current object. Use this for position,
@@ -390,43 +363,44 @@ player-related data that exists independently of the live object (team, kills, d
 
 Field offsets for both pointers are in [Memory Offsets](../common-reference.md#memory-offsets).
 
-### Example - Position HUD
+### Position HUD
 
-Chimera has no `read_vector3d` or `write_vector3d`. Read the position as three floats:
+Chimera has no `read_vector3d` or `write_vector3d`. Read the position as three floats (or use
+`getObjectPosition` from [Position and Aim](../common-reference.md#position-and-aim)):
 
 ```lua
 function OnTick()
-    local dyn = get_dynamic_player()
-    if not dyn then return end -- player is dead
-    
-    local x = read_float(dyn + 0x5C)
-    local y = read_float(dyn + 0x60)
-    local z = read_float(dyn + 0x64)
-    
+    local dyn_player = get_dynamic_player()
+    if not dyn_player then return end -- player is dead
+
+    local x = read_float(dyn_player + 0x5C)
+    local y = read_float(dyn_player + 0x60)
+    local z = read_float(dyn_player + 0x64)
+
     local static_player = get_player(local_player_index)
-    local name = static_player and readPlayerName(static_player) -- see Get player name
+    local name = static_player and readPlayerName(static_player) -- see Player Name
     execute_script("cls")
-    
+
     hud_message(string.format("Pos: %s, %.1f, %.1f, %.1f", name or "?", x, y, z))
 end
 ```
 
-## Get player name
+## Player Name
 
 Player names are stored as a wide-character string (2 bytes per character, UTF-16). Use
 `readWideString` and `readPlayerName` from [Wide Strings](../common-reference.md#wide-strings). The
-name
-sits at static player offset `0x4` and is at most 12 characters.
+name sits at static player offset `0x4` and is at most 12 characters.
 
 ```lua
-local static_player = get_player(id)
+local static_player = get_player(player)
 local name = static_player and readPlayerName(static_player)
 ```
 
-## Camera Manipulation (OnPreCamera)
+## Camera Manipulation
 
 Chimera allows you to modify the camera position, orientation, and field of view before the game
-renders. The below example zooms the FOV while holding a sniper.
+renders. The example below zooms the FOV while holding a sniper. `readTagPath` is in
+[Tag Entry Helpers](../common-reference.md#tag-entry-helpers).
 
 > [!IMPORTANT]
 > The `OnPreCamera` callback must return all ten camera parameters. Omitting or returning a
@@ -438,15 +412,15 @@ renders. The below example zooms the FOV while holding a sniper.
 -- ox1,oy1,oz1: camera look-at point (forward vector)
 -- ox2,oy2,oz2: up vector
 function OnPreCamera(x, y, z, fov, ox1, oy1, oz1, ox2, oy2, oz2)
-    local dyn = get_dynamic_player(local_player_index)
-    if not dyn then return x, y, z, fov, ox1, oy1, oz1, ox2, oy2, oz2 end
+    local dyn_player = get_dynamic_player(local_player_index)
+    if not dyn_player then return x, y, z, fov, ox1, oy1, oz1, ox2, oy2, oz2 end
 
-    local weapon_id = read_dword(dyn + 0x118)
+    local weapon_id = read_dword(dyn_player + 0x118)
     if weapon_id ~= 0xFFFFFFFF then
         local weapon = get_object(weapon_id)
         if weapon then
-            local tag = get_tag(read_dword(weapon))
-            local weapon_name = read_string(read_dword(tag + 0x10)):lower()
+            local tag_entry = get_tag(read_dword(weapon))
+            local weapon_name = readTagPath(tag_entry):lower()
             if weapon_name:find("sniper") then
                 fov = 20 -- zoom
             end
@@ -457,10 +431,11 @@ function OnPreCamera(x, y, z, fov, ox1, oy1, oz1, ox2, oy2, oz2)
 end
 ```
 
-## Zoom Control and Descoping Fix
+## Zoom Control
 
-Reads weapon zoom levels from tag metadata at offset `0x3DA` and writes zoom states directly to
-memory, avoiding forced descoping when taking damage.
+Reads a weapon's zoom level count from its tag data (offset `0x3DA`) and writes the zoom state
+directly to memory. The zoom pointer is `zoom_address` in
+[Chimera Pointers](../common-reference.md#candidates-table).
 
 ```lua
 local ZOOM_ADDRESS = 0x815918
@@ -469,7 +444,7 @@ local ZOOM_ADDRESS = 0x815918
 local function setZoomLevel(level)
     local zoom_ptr = read_dword(ZOOM_ADDRESS)
     if zoom_ptr and zoom_ptr ~= 0 then
-        write_word(zoom_ptr + 204, level)
+        write_word(zoom_ptr + 0xCC, level)
     end
 end
 
@@ -485,15 +460,15 @@ local function getWeaponZoomLevels(weapon_object)
 end
 ```
 
-## Reading the tag path of an object
+## Tag Paths
 
 Chimera provides two overloads of `get_tag`:
 
-- `get_tag(class, name)` - looks up a tag by its class and asset path, returning the tag ID.
-- `get_tag(tag_id)` - converts a tag ID into a pointer to the tag entry, so you can read the tag's
+- `get_tag(class, name)`: looks up a tag by its class and asset path, returning the tag ID.
+- `get_tag(tag_id)`: converts a tag ID into a pointer to the tag entry, so you can read the tag's
   internal data.
 
-### Example 1: Getting a tag ID from class + name
+### Tag ID from Class and Name
 
 ```lua
 local ghost_tag = get_tag("vehi", "vehicles\\ghost\\ghost_mp")
@@ -504,52 +479,47 @@ else
 end
 ```
 
-### Example 2: Reading the tag path from a spawned object
+### Tag Path from an Object
 
-Once you have an object, you can retrieve its tag path (e.g. `"vehicles\\ghost\\ghost_mp"`) by
-reading the tag pointer and then the string at offset `0x10`. `readTagPath` in
-[Tag Entry Helpers](../common-reference.md#tag-entry-helpers) does the second part.
+Once you have an object, read its tag ID (the first dword), convert it with `get_tag(tag_id)`, then
+read the path string at offset `0x10`. `readTagPath` in
+[Tag Entry Helpers](../common-reference.md#tag-entry-helpers) does the last step.
 
 ```lua
-local function getTagName(obj)
-    if not obj then return nil end
+local ghost_id = spawn_object("vehi", "vehicles\\ghost\\ghost_mp", 0, 0, 0)
+local object = get_object(ghost_id) -- raw object pointer
 
-    local tag_id = read_dword(obj)  -- first dword of an object is its tag ID
-    local tag_ptr = get_tag(tag_id) -- tag_id -> tag pointer (2nd overload)
-    return tag_ptr and readTagPath(tag_ptr) -- see Tag Entry Helpers in Common Reference
+if object then
+    local tag_entry = get_tag(read_dword(object))
+    if tag_entry then console_out(readTagPath(tag_entry)) end -- vehicles\ghost\ghost_mp
 end
-
-local ghost = spawn_object("vehi", "vehicles\\ghost\\ghost_mp", 0, 0, 0)
-local object = get_object(ghost) -- get_object returns the raw object pointer
-
-if object then console_out(getTagName(object)) end
 ```
 
-## Get object name (e.g. weapon name)
+## Object Names
 
-Gets the display name of an object (e.g. weapon, vehicle, equipment) by resolving its tag and
-extracting the tag path. It uses `readTagPath` and `getShortName`
-from [Tag Entry Helpers](../common-reference.md#tag-entry-helpers). The function reads the object's
-tag ID, converts it to a tag pointer, reads the tag path string, and then strips the directory path
-to return only the object name (e.g. `"weapons\\assault_rifle"` -> `"assault_rifle"`). Returns
-`"N/A"` if the object is invalid, `"???"` if the tag cannot be resolved, or the raw path if parsing
-fails.
+Gets the display name of an object (weapon, vehicle, equipment) from its tag path, using
+`readTagPath` and `getShortName` from
+[Tag Entry Helpers](../common-reference.md#tag-entry-helpers). `getShortName` drops the directory
+part, so `weapons\assault rifle\assault rifle` becomes `assault rifle`. It returns `"N/A"` for an
+invalid object and `"???"` if the tag cannot be resolved.
 
 ```lua
-local function getObjectName(obj)
-    if not obj then return "N/A" end
+---@param object number|nil Object memory address.
+---@return string name Short object name, "N/A", or "???".
+local function getObjectName(object)
+    if not object then return "N/A" end
 
-    local tag = get_tag(read_dword(obj))
-    if not tag then return "???" end
+    local tag_entry = get_tag(read_dword(object))
+    if not tag_entry then return "???" end
 
-    return getShortName(readTagPath(tag) or "unknown")
+    return getShortName(readTagPath(tag_entry))
 end
 
 function OnTick()
-    local dynamic_player = get_dynamic_player()
-    if not dynamic_player then return end -- dead
+    local dyn_player = get_dynamic_player()
+    if not dyn_player then return end -- dead
 
-    local weapon_object_id = read_dword(dynamic_player + 0x118)
+    local weapon_object_id = read_dword(dyn_player + 0x118)
     if weapon_object_id == 0xFFFFFFFF then return end -- nothing held
 
     local weapon_object = get_object(weapon_object_id)
@@ -613,15 +583,18 @@ function OnTick()
 end
 ```
 
-## Exponential Moving Average (EMA) for Network Ping
+## Ping Smoothing
 
-To smooth out jittery ping values and detect sudden latency spikes, apply an exponential moving
-average:
+An exponential moving average smooths jittery ping values and makes sudden latency spikes easy to
+spot:
 
 ```lua
 local ema_ping = nil
 
-local function update_ping(raw_ping)
+---@param raw_ping number Latest ping sample in milliseconds.
+---@return number avg Smoothed ping in milliseconds.
+---@return number delta Difference between the latest sample and the average.
+local function updatePing(raw_ping)
     ema_ping = ema_ping and (ema_ping * 0.85 + raw_ping * 0.15) or raw_ping
     local avg = math.floor(ema_ping + 0.5)
     local delta = math.floor(raw_ping - ema_ping + 0.5)

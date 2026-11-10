@@ -1,9 +1,9 @@
 ---
-title: "Scripting with SAPP - Server-Side Lua"
+title: "Scripting with SAPP: Server-Side Lua"
 permalink: /halo/sapp/scripting-with-sapp/
-description: "Complete guide to server-side Lua scripting using SAPP, covering runtime environments, callbacks, memory API, player actions, and hygiene."
+description: "Guide to server-side Lua scripting using SAPP, covering the runtime environment, callbacks, memory API, player actions, and script hygiene."
 date: 2026-11-09
-last-updated: 2026-11-09
+last-updated: 2026-11-10
 categories: [ education, halo, modding ]
 tags: [ sapp, lua, scripting, server, tutorial ]
 ---
@@ -73,19 +73,20 @@ function OnScriptUnload() end
 
 SAPP API functions only work after `OnScriptLoad()` starts. Run signature scans inside
 `OnScriptLoad()` or a function it calls, never at file scope. Do `get_var` and tag lookups in a
-runtime callback such as `OnStart` or `OnJoin`. Calling `OnStart()` from `OnScriptLoad()` is fine
-(it covers a script loaded mid-game) as long as it bails out when no game is running.
+runtime callback such as `OnGameStart` or `OnJoin`. Calling `OnGameStart()` from `OnScriptLoad()`
+is fine (it covers a script loaded mid-game) as long as it bails out when no game is running.
+`getTagId` is defined in [Get Tag ID](utils.md#get-tag-id).
 
 ```lua
 local sniper_rifle
 
 function OnScriptLoad()
-    register_callback(cb.EVENT_GAME_START, "OnStart")
+    register_callback(cb.EVENT_GAME_START, "OnGameStart")
     register_callback(cb.EVENT_SPAWN, "OnSpawn")
-    OnStart() -- in case the script was loaded mid-game
+    OnGameStart() -- in case the script was loaded mid-game
 end
 
-function OnStart()
+function OnGameStart()
     if get_var(0, "$gt") == "n/a" then return end
 
     sniper_rifle = getTagId("weap", "weapons\\sniper rifle\\sniper rifle")
@@ -127,8 +128,8 @@ available callback. Register only the ones the script uses.
 | Vector          | `read_vector3d(addr)` returns `x, y, z`; `write_vector3d(addr, x, y, z)`                   |
 | Safety          | `safe_read(true/false)`, `safe_write(true/false)` (toggles memory write-protection bypass) |
 
-Bad addresses crash the server. Leave safe mode off unless you need it (it costs performance) and
-test memory operations off production. Pointers are in Hardcoded Pointers and Signature Reference
+Bad addresses crash the server. Leave safe mode off unless you need it, since it costs performance.
+Pointers are in Hardcoded Pointers and Signature Reference
 in [SAPP Cheat Sheet](cheat-sheet.md). Player, weapon, and vehicle offsets are
 in [Memory Offsets](../common-reference.md#memory-offsets) in the Common Reference, since Chimera
 uses the same ones.
@@ -202,11 +203,6 @@ Applies to anything driven by player input.
   ms).
 - Use separate queues for different priorities (score updates vs. log writes).
 
-> [!TIP]
-> Localize frequently used globals at file scope and reuse tables from pools in hot paths (like
-> `EVENT_TICK`) to significantly minimize garbage collection (GC) pressure and avoid performance
-> stalls.
-
 - Localize frequently used globals at file scope:
 
 ```lua
@@ -232,15 +228,5 @@ end
 ```
 
 - Avoid forcing garbage collection. If you must, do it at a quiet moment (round end, idle).
-
----
-
-## Deploying a Script
-
-Depending on the project folder you are working in, do one of the following:
-
-- SPCLib: Place the script in `sapp/<category>/`.
-- SAPP_CE: Place the script in `cg/sapp/lua/` and register it in `cg/sapp/init.txt` with
-  `lua_load "filename"` (leave off the `.lua` extension).
 
 ---

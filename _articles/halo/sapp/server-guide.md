@@ -14,8 +14,8 @@ packages in the [SAPP Server Templates][sapp_server_template] release:
 - `SAPP_PC.zip`: Halo PC (Retail)
 - `SAPP_CE.zip`: Halo Custom Edition (CE)
 
-Pick the package that matches your version of Halo. Both have the same layout; only the server
-executable differs.
+Pick the package that matches your version of Halo. Both have the same layout, apart from the server
+executable and `motd.txt`, which ships in the CE package only.
 
 First you get a single server running and learn what every file does. Then you convert it into a
 multiserver setup: more game modes on more ports, all sharing one set of admin files, maps, and
@@ -35,7 +35,7 @@ This is the folder structure after extracting either zip.
 |   run.bat                              Windows launch script
 |   run.sh                               Linux/Wine launch script
 |   sapp.dll                             SAPP binary
-|   Strings.dll                          SAPP loader
+|   strings.dll                          SAPP loader
 |
 +---cg                                   Instance configs
 |   |   init.txt                         Server startup commands (run with -exec)
@@ -80,7 +80,7 @@ depends on the difference.
 
 - `haloded.exe` / `haloceded.exe`: The dedicated server executable (PC or CE).
 - `sapp.dll`: The SAPP binary. Halo loads it when the `load` command runs.
-- `Strings.dll`: The SAPP loader. The `load` command needs it enabled and `sapp.dll` present.
+- `strings.dll`: The SAPP loader. The `load` command needs it enabled and `sapp.dll` present.
 - `motd.txt`: Message of the Day shown to joining players. CE only. It is set with `sv_motd`, and
   the package includes the file for convenience.
 - `run.bat` / `run.sh`: Launch scripts for Windows and Linux/Wine. See
@@ -120,11 +120,11 @@ The `cg\` folder holds the config for one server instance.
 api_version = "1.12.0.0"
 
 function OnScriptLoad()
-    register_callback(cb.EVENT_JOIN, "OnPlayerJoin")
+    register_callback(cb.EVENT_JOIN, "OnJoin")
 end
 
-function OnPlayerJoin(playerIndex)
-    print("sample_script.lua -> Hello, ", get_var(playerIndex, "$name"))
+function OnJoin(player_id)
+    cprint("sample_script.lua: Hello, " .. get_var(player_id, "$name"))
 end
 
 function OnScriptUnload() end
@@ -232,7 +232,8 @@ beside it:
 
 1. Create `cg\myserver\` (use any name).
 2. Move `init.txt`, `sapp\`, and `savegames\` from `cg\` into `cg\myserver\`.
-3. In `run.bat`, change `set path=%ROOT%\cg\` to `set path=%ROOT%\cg\myserver\`.
+3. In `run.bat`, change `set CG_PATH=%ROOT%\cg\` to `set CG_PATH=%ROOT%\cg\myserver\`. In `run.sh`,
+   change `CG_PATH="${DIR}/cg"` to `CG_PATH="${DIR}/cg/myserver"`.
 
 ### Step 2: Copy the Instance
 
@@ -286,15 +287,16 @@ set CG_PATH=%ROOT%\cg\gun_game\
 set EXEC=%CG_PATH%\init.txt
 
 rem Launch the server. Use haloded.exe for PC Retail, haloceded.exe for CE
-"%ROOT%haloded.exe" -path %CG_PATH% -exec %EXEC% -port %PORT%
+"%ROOT%haloceded.exe" -path %CG_PATH% -exec %EXEC% -port %PORT%
 ```
+
+Open each UDP port in your firewall. On Linux, copy `run.sh` the same way and change `CG_PATH` and
+`PORT`.
 
 ### Step 5: Launch Everything
 
-- Manually: run each script. Each server gets its own console window.
-- All at once on Windows using Windows Terminal (`wt.exe`):
-
-- Batch script (`run_all.bat`):
+Run each script by hand and each server gets its own console window. To start them all at once on
+Windows, open one Windows Terminal (`wt.exe`) tab per server with `run_all.bat`:
 
 ```bat
 @ECHO OFF
@@ -303,8 +305,17 @@ wt.exe cmd /k "run.bat" ^
  ; new-tab cmd /k "run_gun_game.bat"
 ```
 
-- Command Prompt one-liner: `wt.exe cmd /k "run.bat" ; new-tab cmd /k "run_gun_game.bat"`
-- PowerShell one-liner: `wt.exe cmd /k "run.bat" `;` new-tab cmd /k "run_gun_game.bat"`
+Or from a Command Prompt:
+
+```bat
+wt.exe cmd /k "run.bat" ; new-tab cmd /k "run_gun_game.bat"
+```
+
+Or from PowerShell, where the semicolon needs a backtick:
+
+```powershell
+wt.exe cmd /k "run.bat" `; new-tab cmd /k "run_gun_game.bat"
+```
 
 ---
 
@@ -312,7 +323,7 @@ wt.exe cmd /k "run.bat" ^
 
 | Item                                                     | Location                   | Scope        |
 |----------------------------------------------------------|----------------------------|--------------|
-| Server executable, `sapp.dll`, `Strings.dll`, other DLLs | Root                       | Shared       |
+| Server executable, `sapp.dll`, `strings.dll`, other DLLs | Root                       | Shared       |
 | `.map` files                                             | `maps\`                    | Shared       |
 | `admins.txt`, `users.txt`, `ipbans.txt`                  | `sapp\`                    | Shared       |
 | `areas.txt`, `locations.txt`                             | `sapp\`                    | Shared       |
@@ -336,7 +347,7 @@ What the split gives you:
 
 ## Updating
 
-- SAPP: Replace `sapp.dll` and `Strings.dll` in the root folder. Every instance uses the new
+- SAPP: Replace `sapp.dll` and `strings.dll` in the root folder. Every instance uses the new
   version on its next start.
 - Maps: Drop the `.map` file into the root `maps\` folder. Every instance can run it.
 - Moving the installation: The scripts use `%~dp0`, so you can move the whole folder anywhere
@@ -347,6 +358,7 @@ What the split gives you:
 ## Related Guides
 
 - [Scripting with SAPP](scripting-with-sapp.md): Writing and deploying Lua scripts.
+- [SAPP Lua Template](template.md): Script skeleton and callback reference.
 - [SAPP Cheat Sheet](cheat-sheet.md): The commands behind the settings above, including
   [Configuration](cheat-sheet.md#configuration-commands),
   [Map Cycle](cheat-sheet.md#map-cycle-commands),

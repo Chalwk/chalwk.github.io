@@ -1,11 +1,11 @@
 ---
 title: "Phasor Lua Template"
 permalink: /halo/phasor/template/
-description: "Ready-to-use Phasor 2.0 server-side Lua script template and event callback signature reference."
+description: "Phasor 2.0 server-side Lua script template and event callback signature reference."
 date: 2026-11-09
-last-updated: 2026-11-09
+last-updated: 2026-11-10
 categories: [ education, halo, modding ]
-tags: [ sapp, lua, scripting, server, tutorial ]
+tags: [ phasor, lua, scripting, server, tutorial ]
 ---
 
 > [!NOTE]
@@ -147,18 +147,18 @@ function OnPlayerSpawnEnd(player) end
 ---@param player number The player's index id
 ---@param object_id number The object id of the owner
 ---@param slot number The weapon slot
----@param weapon_id number The weapon's tag id
----@return number new_weapon_id
-function OnWeaponAssignment(player, object_id, slot, weapon_id)
-    -- Return a new weapon id to change the spawned weapon.
-    return weapon_id
+---@param weapon_map_id number The weapon's tag id
+---@return number new_weapon_map_id
+function OnWeaponAssignment(player, object_id, slot, weapon_map_id)
+    -- Return a new tag id to change the spawned weapon.
+    return weapon_map_id
 end
 
 -- Called when a weapon is reloaded.
 ---@param player number The player reloading
----@param weapon_id number The object id of the weapon being reloaded
+---@param weapon_object_id number The object id of the weapon being reloaded
 ---@return boolean|nil allow # Return `false` to block the reload
-function OnWeaponReload(player, weapon_id) return true end
+function OnWeaponReload(player, weapon_object_id) return true end
 
 -- Called before an object is created.
 ---@param map_id number The tag id of the object being created
