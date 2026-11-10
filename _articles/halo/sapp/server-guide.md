@@ -92,16 +92,20 @@ Every server instance of the same platform reads these files from the root `sapp
 - `admins.txt`: Name and password admins (V2). Each line holds a name, an MD5-hashed password, and a
   level, for example `AdminName;<md5_hash>;4`. Entries are normally created with `admin_add` or
   `admin_add_manually`. Log in once, admin everywhere.
+
+- `areas.txt`: Custom rectangular or spherical areas, used by `event_aenter` / `event_aexit` and Lua
+  events. Shared so triggers behave the same on every instance.
+
+- `ipbans.txt`: IP bans, with CIDR ranges supported. A ban added on one instance applies to all
+  instances of the same platform.
+
+- `locations.txt`: Named X, Y, Z coordinates for teleport commands such as
+  `t <player_id> <location_name>`.
+
 - `users.txt`: CD-key admins (V1). Each entry holds a CD-key hash and a level, for example
   `AdminName;<admin index>;<cd_key_hash>;4:`, and can be limited to IP ranges. If a hash is cracked,
   anyone using that CD-key gets the admin level on join, so use IP ranges where you can. You can
   check a hash with the [Hash Checker tool][hash_checker_tool].
-- `ipbans.txt`: IP bans, with CIDR ranges supported. A ban added on one instance applies to all
-  instances of the same platform.
-- `areas.txt`: Custom rectangular or spherical areas, used by `event_aenter` / `event_aexit` and Lua
-  events. Shared so triggers behave the same on every instance.
-- `locations.txt`: Named X, Y, Z coordinates for teleport commands such as
-  `t <player_id> <location_name>`.
 
 ### Instance Configs (`cg\`)
 
