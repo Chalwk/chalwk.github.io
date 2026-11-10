@@ -172,7 +172,7 @@ no dynamic object: check for `0` on SAPP and `nil` on Chimera before reading.
 | `0x2A4`             | byte  | Reload key input state                                     |
 | `0x2F0`             | word  | Vehicle seat index (0 = driver, 1 = passenger, 2 = gunner) |
 | `0x2F2`             | byte  | Current weapon slot (0-3)                                  |
-| `0x2F8-0x304`       | dword | Weapon slots 1-4 object IDs (`0x2F8 + (slot - 1) * 4`)     |
+| `0x2F8-0x307`       | dword | Weapon slots 1-4 object IDs (`0x2F8 + (slot - 1) * 4`)     |
 | `0x31E`             | byte  | Frag grenades                                              |
 | `0x31F`             | byte  | Plasma grenades                                            |
 | `0x37C`             | float | Invisibility (1.0 = invisible)                             |

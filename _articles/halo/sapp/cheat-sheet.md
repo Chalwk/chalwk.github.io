@@ -430,9 +430,9 @@ Available to all players.
 | login     | -1    | `login <password>`                   | Log into a V2 (name/password) admin account.                                                    |
 | report    | -1    | `report [message]`                   | Send a report (requires anticheat).                                                             |
 | stats     | -1    | `stats`                              | Show player's kills, deaths, and K/D ratio.                                                     |
-| stfu      | 0     | `stfu`                               | Block messages from `say` and scripted rcon messages.                                           |
-| sv_stats  | 0     | `sv_stats`                           | Display server statistics (queries, joins, commands, events, games, etc.).                      |
-| unstfu    | 0     | `unstfu`                             | Disable `stfu`.                                                                                 |
+| stfu      | -1    | `stfu`                               | Block messages from `say` and scripted rcon messages.                                           |
+| sv_stats  | -1    | `sv_stats`                           | Display server statistics (queries, joins, commands, events, games, etc.).                      |
+| unstfu    | -1    | `unstfu`                             | Disable `stfu`.                                                                                 |
 | usage     | -1    | `usage <command>`                    | Show usage for a command.                                                                       |
 | whatsnext | -1    | `whatsnext`                          | Show the next game in the mapcycle.                                                             |
 
