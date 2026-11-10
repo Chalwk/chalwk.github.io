@@ -194,8 +194,10 @@ sv_admin_add 3 chalwk 0
 
 ## Writing init.txt
 
-`init.txt` runs when the server starts. This walkthrough builds one up, starting with a plain
-mapcycle:
+`init.txt` is executed automatically when the server starts. It configures server identity
+(`sv_name`, `sv_rcon_password`), map rotation (either fixed map cycles or map voting), script
+loading (`sv_script_load`), Phasor core settings (such as hash checks and AFK kicking), and logging
+options. This walkthrough builds one up step-by-step, starting with a plain mapcycle:
 
 ```text
 sv_public 1
