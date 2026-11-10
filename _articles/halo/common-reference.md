@@ -152,35 +152,41 @@ local z = read_float(dyn + 0x64)
 | `0x5C/0x60/0x64` | float | World X / Y / Z                                       |
 | `0x68/0x6C/0x70` | float | Velocity X / Y / Z (world units per tick)             |
 | `0x74/0x78/0x7C` | float | Forward vector X / Y / Z                              |
+| `0xAC`           | float | Bounding radius                                       |
 | `0xB4`           | byte  | Object type                                           |
+| `0xB8`           | word  | Object team (0 = Red, 1 = Blue, -1 = non-game object) |
+| `0xC0`           | dword | Player object owner ID                                |
+| `0xC4`           | dword | Parent object ID                                      |
+| `0xD8`           | float | Maximum health                                        |
+| `0xDC`           | float | Maximum shields                                       |
 
 ### Dynamic Player Object
 
 The live player object. It uses the Base Object fields above plus the ones below. A dead player has
 no dynamic object: check for `0` on SAPP and `nil` on Chimera before reading.
 
-| Offset              | Type  | Field                                                      |
-|---------------------|-------|------------------------------------------------------------|
-| `0xE0`              | float | Health (0.0-1.0)                                           |
-| `0xE4`              | float | Shields (0.0-1.0)                                          |
-| `0x106`             | bits  | Dynamic player flags (bit 11 = no damage/invulnerable)     |
-| `0x118`             | dword | Current weapon object ID                                   |
-| `0x11C`             | dword | Vehicle object ID (`0xFFFFFFFF` = on foot)                 |
-| `0x208`             | word  | Key/action input flags (bit 4 = flashlight)                |
-| `0x230/0x234/0x238` | float | Aim vector X / Y / Z                                       |
-| `0x2A3`             | byte  | Movement key input state                                   |
-| `0x2A4`             | byte  | Reload key input state                                     |
-| `0x2F0`             | word  | Vehicle seat index (0 = driver, 1 = passenger, 2 = gunner) |
-| `0x2F2`             | byte  | Current weapon slot (0-3)                                  |
-| `0x2F8-0x307`       | dword | Weapon slots 1-4 object IDs (`0x2F8 + (slot - 1) * 4`)     |
-| `0x31E`             | byte  | Frag grenades                                              |
-| `0x31F`             | byte  | Plasma grenades                                            |
-| `0x37C`             | float | Invisibility (1.0 = invisible)                             |
-| `0x47C`             | byte  | Weapon switch key input state                              |
-| `0x47E`             | byte  | Grenade switch key input state                             |
-| `0x480`             | word  | Zoom state (0 = unzoomed)                                  |
-| `0x490`             | float | Primary trigger / shooting state                           |
-| `0x50C`             | float | Crouch scale (0.0 = standing, 1.0 = crouched)              |
+| Offset              | Type  | Field                                                                                                                                           |
+|---------------------|-------|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| `0xE0`              | float | Health (0.0-1.0)                                                                                                                                |
+| `0xE4`              | float | Shields (0.0-1.0)                                                                                                                               |
+| `0x106`             | bits  | Dynamic player flags (bit 2 = health empty, bit 3 = shield empty, bit 4 = overshield active, bit 11 = invulnerable, bit 12 = shield recharging) |
+| `0x118`             | dword | Current weapon object ID                                                                                                                        |
+| `0x11C`             | dword | Vehicle object ID (`0xFFFFFFFF` = on foot)                                                                                                      |
+| `0x208`             | word  | Key/action input flags (bit 4 = flashlight)                                                                                                     |
+| `0x230/0x234/0x238` | float | Aim vector X / Y / Z                                                                                                                            |
+| `0x2A3`             | byte  | Movement key input state                                                                                                                        |
+| `0x2A4`             | byte  | Reload key input state                                                                                                                          |
+| `0x2F0`             | word  | Vehicle seat index (0 = driver, 1 = passenger, 2 = gunner)                                                                                      |
+| `0x2F2`             | byte  | Current weapon slot (0-3)                                                                                                                       |
+| `0x2F8-0x307`       | dword | Weapon slots 1-4 object IDs (`0x2F8 + (slot - 1) * 4`)                                                                                          |
+| `0x31E`             | byte  | Frag grenades                                                                                                                                   |
+| `0x31F`             | byte  | Plasma grenades                                                                                                                                 |
+| `0x37C`             | float | Invisibility (1.0 = invisible)                                                                                                                  |
+| `0x47C`             | byte  | Weapon switch key input state                                                                                                                   |
+| `0x47E`             | byte  | Grenade switch key input state                                                                                                                  |
+| `0x480`             | word  | Zoom state (0 = unzoomed)                                                                                                                       |
+| `0x490`             | float | Primary trigger / shooting state                                                                                                                |
+| `0x50C`             | float | Crouch scale (0.0 = standing, 1.0 = crouched)                                                                                                   |
 
 ### Static Player Data
 
@@ -191,17 +197,24 @@ The persistent player structure.
 | `0x4`             | wchar[] | Name (UTF-16LE, low bytes readable as ASCII, max 12 chars) |
 | `0x20`            | byte    | Team (0 = Red, 1 = Blue)                                   |
 | `0x2C`            | dword   | Respawn timer (ticks)                                      |
+| `0x30`            | dword   | Respawn time growth (ticks)                                |
 | `0x34`            | dword   | Player unit / biped object ID                              |
+| `0x38`            | dword   | Last biped / unit object ID                                |
 | `0x60`            | byte    | Player FFA color index (0-17)                              |
 | `0x68`            | word    | Active camouflage timer/state (> 0 = camouflaged)          |
 | `0x6C`            | float   | Player speed multiplier (1.0 = normal)                     |
+| `0x96`            | word    | Lifetime killstreak count                                  |
 | `0x9C`            | word    | Kills                                                      |
 | `0xA4`            | word    | Assists / secondary kills                                  |
+| `0xAC`            | word    | Betrays (+ suicides count)                                 |
 | `0xAE`            | word    | Deaths                                                     |
-| `0xC4`            | word    | King of the Hill hill time (ticks)                         |
-| `0xC6`            | word    | Race score / laps                                          |
-| `0xC8`            | word    | CTF score / flag returns                                   |
+| `0xB0`            | word    | Suicides                                                   |
+| `0xC4`            | word    | King of the Hill hill time (ticks) / CTF flag steals       |
+| `0xC6`            | word    | Race score / laps / CTF flag returns                       |
+| `0xC8`            | word    | CTF score / flag scores / Oddball kills                    |
 | `0xDC`            | dword   | Ping (ms)                                                  |
+| `0xE0`            | dword   | Teamkill count                                             |
+| `0xE4`            | dword   | Teamkill timer (ticks since last betrayal)                 |
 | `0xF8/0xFC/0x100` | float   | Alternate world X / Y / Z                                  |
 
 ### Weapon Object
@@ -260,15 +273,25 @@ Vehicle tag data (`vehi`): word at `+0x2F4` controls vehicle motion/physics type
 Relative to the gametype struct base. On Chimera that is `gametype` from the
 [Candidates Table](#candidates-table).
 
-| Offset | Type    | Field                                                                         |
-|--------|---------|-------------------------------------------------------------------------------|
-| `0x0`  | wchar[] | Gametype name, UTF-16LE (see [Wide Strings](#wide-strings))                   |
-| `0x30` | byte    | Game type code, read with `read_byte` (see [Gametype Codes](#gametype-codes)) |
-| `0x34` | byte    | Team play (0 = Off, 1 = On)                                                   |
-| `0x38` | bits    | Gametype rules flags (radar, shields, infinite grenades, etc.)                |
-| `0x3C` | byte    | Indicator mode                                                                |
-| `0x58` | byte    | Score limit, read with `read_byte`                                            |
-| `0x68` | dword   | Vehicle respawn time (ticks)                                                  |
+| Offset | Type    | Field                                                                                        |
+|--------|---------|----------------------------------------------------------------------------------------------|
+| `0x0`  | wchar[] | Gametype name, UTF-16LE (see [Wide Strings](#wide-strings))                                  |
+| `0x30` | byte    | Game type code, read with `read_byte` (see [Gametype Codes](#gametype-codes))                |
+| `0x34` | byte    | Team play (0 = Off, 1 = On)                                                                  |
+| `0x38` | bits    | Gametype rules flags (radar, shields, infinite grenades, etc.)                               |
+| `0x3C` | byte    | Indicator mode                                                                               |
+| `0x44` | dword   | Respawn time growth (ticks)                                                                  |
+| `0x48` | dword   | Respawn time (ticks)                                                                         |
+| `0x4C` | dword   | Suicide penalty (ticks)                                                                      |
+| `0x50` | byte    | Lives (0 = unlimited)                                                                        |
+| `0x54` | float   | Maximum health scale                                                                         |
+| `0x58` | byte    | Score limit, read with `read_byte`                                                           |
+| `0x5C` | byte    | Weapon set code (0 = Normal, 1 = Pistols, 4 = Sniper, 6 = Rockets, 7 = Shotguns, 12 = Heavy) |
+| `0x68` | dword   | Vehicle respawn time (ticks)                                                                 |
+| `0x6C` | byte    | Friendly fire (0 = Off, 1 = On)                                                              |
+| `0x70` | dword   | Friendly fire penalty (ticks)                                                                |
+| `0x74` | byte    | Auto team balance (0 = Off, 1 = On)                                                          |
+| `0x78` | dword   | Time limit (ticks)                                                                           |
 
 ### Race Globals
 
@@ -464,10 +487,24 @@ Only the pointers below are documented for Chimera so far.
 
 ### Candidates Table
 
-| Pointer        | PC         | CE         | Description                                |
-|----------------|------------|------------|--------------------------------------------|
-| `gametype`     | `0x6F1C88` | `0x68CC48` | Gametype struct base (see Gametype Struct) |
-| `race_globals` | `0x87A520` | `0x64C1C0` | Race global data base (see Race Globals)   |
+| Pointer                          | PC Address                   | CE Address                   | Description                                                                                          |
+|----------------------------------|------------------------------|------------------------------|------------------------------------------------------------------------------------------------------|
+| `gametype`                       | `0x6F1C88`                   | `0x68CC48`                   | Gametype struct base (see Gametype Struct)                                                           |
+| `race_globals`                   | `0x87A520`                   | `0x64C1C0`                   | Race global data base (see Race Globals)                                                             |
+| `camera_address`                 | `0x647498`                   | `0x647498`                   | Camera state mode (30400 = First Person, 31952 = Third Person, 30704 = Devcam)                       |
+| `camera_interpolation`           | `0x647494`                   | `0x647494`                   | Camera interpolation scale when entering or leaving vehicles                                         |
+| `zoom_address`                   | `read_dword(0x815918) + 204` | `read_dword(0x815918) + 204` | Local player camera zoom level pointer                                                               |
+| `mouse_input_address`            | `0x64C73C`                   | `0x64C73C`                   | Mouse input state (+0x0 delta X, +0x4 delta Y, +0x8 scroll wheel, +0xC left click, +0xE right click) |
+| `keyboard_input_address`         | `0x64C550`                   | `0x64C550`                   | Keyboard key state array indexed by key code                                                         |
+| `chat_open_address`              | `0x64E788`                   | `0x64E788`                   | Chat input window state (1 = open, 0 = closed)                                                       |
+| `announcer_address`              | `0x64C020`                   | `0x64C020`                   | Client-side multiplayer announcer sound queue (+0x8 delay, +0x14 sound tag ID)                       |
+| `first_person_animation_address` | `0x40000EB8`                 | `0x40000EB8`                 | First-person animation structure (+0x1E base anim ID, +0x20 base anim frame)                         |
+| `game_state_address`             | `0x400002E8`                 | `0x400002E8`                 | Screen render and pause state (+0x0 screen render, +0x1 game running, +0x2 game paused)              |
+| `gravity_global`                 | `0x637BE4`                   | `0x637BE4`                   | World gravity float multiplier (default ~ 0.003565)                                                  |
+| `ctf_flag_red`                   | `0x40492F1C`                 | `0x40492F1C`                 | Red flag world spawn coordinates structure                                                           |
+| `ctf_flag_blue`                  | `0x40492FB0`                 | `0x40492FB0`                 | Blue flag world spawn coordinates structure                                                          |
+| `koth_globals`                   | `0x64BDF0`                   | `0x64BDF0`                   | King of the Hill global data (+0x90 marker count, +0x94 marker coords, +0x184 center coords)         |
+| `race_locs`                      | `0x68C848`                   | `0x68C848`                   | Race checkpoint world coordinates array (0x20 bytes per checkpoint)                                  |
 
 ### Probing the Platform
 

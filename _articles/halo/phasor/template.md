@@ -44,7 +44,7 @@ function OnGameEnd(stage)
 end
 
 -- Called when a player sends a chat message.
----@param player number The player's memory id
+---@param player number The player's index id
 ---@param chat_type number 0|1|2 (global, team, vehicle)
 ---@param message string The chat message
 ---@return boolean allow
@@ -60,14 +60,14 @@ function OnServerChat(player, chat_type, message)
 end
 
 -- Called when a player executes a server command.
----@param player number The player's memory id
+---@param player number The player's index id
 ---@param command string The command being executed
 ---@return boolean|nil allow # Return `false` to block the command
 function OnServerCommand(player, command) return true end
 
 -- Called when a player without the correct password attempts to execute
 -- a server command.
----@param player number The player's memory id
+---@param player number The player's index id
 ---@param command string The command being executed
 ---@param password string The password provided
 ---@return boolean|nil allow # Return `false` to block the command
@@ -94,7 +94,7 @@ function OnBanCheck(hash, ip)
 end
 
 -- Called when a player successfully joins the game.
----@param player number The joining player's memory id
+---@param player number The joining player's index id
 function OnPlayerJoin(player) end
 
 -- Called when a player quits.
@@ -117,7 +117,7 @@ function OnPlayerKill(killer, victim, mode)
 end
 
 -- Called when a player gets a kill streak.
----@param player number The player's memory id
+---@param player number The player's index id
 ---@param multiplier number The kill streak value
 function OnKillMultiplier(player, multiplier)
     -- `multiplier` values:
@@ -143,7 +143,7 @@ function OnPlayerSpawn(player) end
 function OnPlayerSpawnEnd(player) end
 
 -- Called when an object is being assigned its spawn weapons.
----@param player number The player's memory id
+---@param player number The player's index id
 ---@param object_id number The object id of the owner
 ---@param slot number The weapon slot
 ---@param weapon_id number The weapon's tag id
@@ -162,7 +162,7 @@ function OnWeaponReload(player, weapon_id) return true end
 -- Called before an object is created.
 ---@param map_id number The tag id of the object being created
 ---@param parent_id number The object id of the parent
----@param player number The player's memory id, if the object belongs to a player
+---@param player number The player's index id, if the object belongs to a player
 ---@return boolean|number allow # `false` blocks, a number replaces the tag id
 function OnObjectCreationAttempt(map_id, parent_id, player)
     -- Return `false` to block creation, or a new map id to change the object type.
@@ -189,7 +189,7 @@ function OnTeamDecision(team)
 end
 
 -- Called when a player changes team.
----@param player number The player's memory id
+---@param player number The player's index id
 ---@param old_team number The player's old team
 ---@param new_team number The player's new team
 ---@param voluntary boolean Whether the player changed voluntarily
@@ -220,7 +220,7 @@ function OnDamageApplication(receiver, causer, map_id, location, backtap)
 end
 
 -- Called when a player attempts to enter a vehicle.
----@param player number The player's memory id
+---@param player number The player's index id
 ---@param vehicle_id number The vehicle object id
 ---@param seat number The seat index
 ---@param map_id number The vehicle tag id
@@ -229,14 +229,14 @@ end
 function OnVehicleEntry(player, vehicle_id, seat, map_id, voluntary) return true end
 
 -- Called when a player leaves a vehicle.
----@param player number The player's memory id
+---@param player number The player's index id
 ---@param voluntary boolean Whether the player is leaving voluntarily
 ---@return boolean|nil allow # Return `false` to prevent exiting
 function OnVehicleEject(player, voluntary) return true end
 
 -- Called when a client sends its update packet.
 -- Runs 30 times per second for every player, so keep it light.
--- Receives the player's memory id, not their object id.
----@param player number The player's memory id
+-- Receives the player's index id, not their object id.
+---@param player number The player's index id
 function OnClientUpdate(player) end
 ```

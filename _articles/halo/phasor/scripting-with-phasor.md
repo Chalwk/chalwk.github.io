@@ -135,7 +135,7 @@ Phasor has two index spaces:
 back. Use them whenever you build a command string from a player index.
 
 ```lua
----@param player number Player index (0-15).
+---@param player number Player index.
 local function kickPlayer(player)
     svcmd("sv_kick " .. resolveplayer(player))
 end
@@ -326,7 +326,7 @@ Phasor has no `get_dynamic_player`. Build one from `getplayerobjectid` and `geto
 player's object ID is `0xFFFFFFFF`, so check for that before you touch the address.
 
 ```lua
----@param player number Player index (0-15).
+---@param player number Player index.
 ---@return number|nil dyn_player Dynamic player address, or nil if the player is dead.
 local function getDynamicPlayer(player)
     local object_id = getplayerobjectid(player)
@@ -340,7 +340,7 @@ From there, field offsets come straight from [Dynamic Player Object][dynamic_pla
 tops up a player who drops below 30% health:
 
 ```lua
----@param player number Player index (0-15).
+---@param player number Player index.
 local function healIfLow(player)
     local dyn_player = getDynamicPlayer(player)
     if not dyn_player then return end
@@ -382,13 +382,124 @@ calls around them change:
 
 ---
 
+## Helper Functions
+
+### Vehicle Occupants
+
+Retrieves the driver or gunner occupying a vehicle object.
+
+```lua
+---@param vehicle_object number Vehicle memory address.
+---@return number|nil driver_player Player index ID (0-15), or nil if seat is empty.
+local function getDriverPlayer(vehicle_object)
+    local unit_id = readdword(vehicle_object + 0x324)
+    if unit_id == 0xFFFFFFFF then return nil end
+    for player = 0, 15 do
+        if getplayerobjectid(player) == unit_id then return player end
+    end
+    return nil
+end
+
+---@param vehicle_object number Vehicle memory address.
+---@return number|nil gunner_player Player index ID (0-15), or nil if seat is empty.
+local function getGunnerPlayer(vehicle_object)
+    local unit_id = readdword(vehicle_object + 0x328)
+    if unit_id == 0xFFFFFFFF then return nil end
+    for player = 0, 15 do
+        if getplayerobjectid(player) == unit_id then return player end
+    end
+    return nil
+end
+```
+
+### Player Lookup by Hash or IP
+
+Finds a player's ID by their CD-key hash or IP address.
+
+```lua
+---@param hash string CD-key hash to search for.
+---@return number|nil player Player index ID (0-15), or nil if not found.
+local function hashToPlayer(hash)
+    for player = 0, 15 do
+        if getplayer(player) and gethash(player) == hash then return player end
+    end
+    return nil
+end
+
+---@param ip string IP address to search for.
+---@return number|nil player Player index ID (0-15), or nil if not found.
+local function ipToPlayer(ip)
+    for player = 0, 15 do
+        if getplayer(player) and getip(player) and getip(player) == ip then return player end
+    end
+    return nil
+end
+```
+
+### Weapon Slot Helpers
+
+Retrieves the weapon object ID for a specific inventory slot (0-3) or the active weapon slot index.
+
+```lua
+---@param player number Player index ID (0-15).
+---@param slot number Weapon slot (0-3).
+---@return number|nil weapon_id Weapon object ID, or nil if slot is empty or player is dead.
+local function getWeaponObjectID(player, slot)
+    local dyn_player = getDynamicPlayer(player)
+    if not dyn_player then return nil end
+    local weapon_id = readdword(dyn_player + 0x2F8 + (slot * 4))
+    return weapon_id ~= 0xFFFFFFFF and weapon_id or nil
+end
+
+---@param player number Player index ID (0-15).
+---@return number|nil slot Active weapon slot index (0-3), or nil if dead.
+local function getActiveWeaponSlot(player)
+    local dyn_player = getDynamicPlayer(player)
+    return dyn_player and readword(dyn_player + 0x2F2) or nil
+end
+```
+
+### Gametype Score Calculator
+
+Calculates a player's score according to the active gametype rules (CTF flag captures, Slayer net
+kills, KOTH hill time, Race laps, or Oddball hold time).
+
+```lua
+---@param player number Player index ID (0-15).
+---@param gametype_base number Address of the gametype struct.
+---@return number score Calculated score.
+local function getPlayerScore(player, gametype_base)
+    local static_player = getplayer(player)
+    if not static_player then return 0 end
+
+    local gametype = readbyte(gametype_base + 0x30)
+    if gametype == 1 then     -- CTF (flag scores)
+        return readword(static_player + 0xC8)
+    elseif gametype == 2 then -- Slayer (kills minus betrays/suicides)
+        local kills = readword(static_player + 0x9C)
+        local team_play = readbyte(gametype_base + 0x34)
+        local penalties = readword(static_player + (team_play == 1 and 0xAC or 0xB0))
+        return kills - penalties
+    elseif gametype == 3 then -- Oddball (time with ball in seconds)
+        return math.floor(readword(static_player + 0xC8) / 30)
+    elseif gametype == 4 then -- KOTH (hill time in seconds)
+        return math.floor(readword(static_player + 0xC4) / 30)
+    elseif gametype == 5 then -- Race (laps completed)
+        return readword(static_player + 0xC6)
+    end
+    return 0
+end
+```
+
+---
+
 ## Creating Objects
 
 Spawn a weapon on the player and hand it over. `-1` for `parent_id` means no parent, `0` for
 `respawn_time` means never respawn, and `false` for `recycle` destroys it instead of respawning it.
 
 ```lua
----@param player number Player index (0-15).
+---@param player number Player index.
 local function giveSniper(player)
     local object_id = getplayerobjectid(player)
     if object_id == 0xFFFFFFFF then return end
@@ -455,7 +566,7 @@ end
 --- `OnClientUpdate`
 --- Called when a client sends its update packet.
 --- Runs 30 times per second for every player, so keep it light.
----@param player number The player's memory id
+---@param player number The player's index id
 function OnClientUpdate(player)
     local static_player = getplayer(player)
     if not static_player then return end
@@ -471,7 +582,7 @@ end
 ```lua
 --- `OnPlayerJoin`
 --- Called when a player successfully joins the game.
----@param player number The joining player's memory id
+---@param player number The joining player's index id
 function OnPlayerJoin(player)
     privatesay(player, "Welcome to the server, " .. getname(player) .. "!")
 end
@@ -495,7 +606,7 @@ end
 
 --- `OnObjectInteraction`
 --- Called when a player interacts with an object.
----@param player number The interacting player's memory id
+---@param player number The interacting player's index id
 ---@param object_id number The object being interacted with
 ---@param map_id number The object's tag id
 ---@return boolean|nil allow # Return `false` to block the interaction
@@ -514,7 +625,7 @@ local cooldowns = {}
 
 --- `OnServerCommand`
 --- Called when a player executes a server command.
----@param player number The player's memory id
+---@param player number The player's index id
 ---@param command string The command being executed
 ---@return boolean|nil allow # Return `false` to block the command
 function OnServerCommand(player, command)

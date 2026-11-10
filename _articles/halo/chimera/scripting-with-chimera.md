@@ -456,6 +456,34 @@ function OnPreCamera(x, y, z, fov, ox1, oy1, oz1, ox2, oy2, oz2)
 end
 ```
 
+## Zoom Control and Descoping Fix
+
+Reads weapon zoom levels from tag metadata at offset `0x3DA` and writes zoom states directly to
+memory, avoiding forced descoping when taking damage.
+
+```lua
+local ZOOM_ADDRESS = 0x815918
+
+---@param level number Zoom level (0 for level 1, 1 for level 2, 0xFFFF to unzoom).
+local function setZoomLevel(level)
+    local zoom_ptr = read_dword(ZOOM_ADDRESS)
+    if zoom_ptr and zoom_ptr ~= 0 then
+        write_word(zoom_ptr + 204, level)
+    end
+end
+
+---@param weapon_object number Memory address of the weapon.
+---@return number zoom_levels Number of zoom levels available on the weapon.
+local function getWeaponZoomLevels(weapon_object)
+    local tag_id = read_dword(weapon_object)
+    local tag_ptr = get_tag(tag_id)
+    if not tag_ptr then return 0 end
+
+    local tag_data = read_dword(tag_ptr + 0x14)
+    return tag_data ~= 0 and read_word(tag_data + 0x3DA) or 0
+end
+```
+
 ## Reading the tag path of an object
 
 Chimera provides two overloads of `get_tag`:
