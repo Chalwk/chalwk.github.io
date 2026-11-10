@@ -37,25 +37,23 @@ pointer table of its own.
 - Local functions use `lowerCamelCase`.
 - Callbacks are global functions named in PascalCase (`OnJoin`, `OnTick`).
 
-### Ternary Emulation
+### Ternary emulation
 
-Lua has no ternary operator. Use `condition and value_if_true or value_if_false`.
-
-```lua
-local label = enabled and "ON" or "OFF"
-```
-
-Safe only when `value_if_true` is never `false` or `nil` (`0` and `""` are truthy in Lua, so they
-are fine). When more than two outcomes exist, or several values change together, index a lookup
-table instead:
+Lua has no native ternary operator. Use `and`/`or` for simple cases, and a table when both branches
+must be evaluated, or you need consistent types:
 
 ```lua
-local team_names = { [0] = "Red", [1] = "Blue" }
-local team_name = team_names[team_index] or "None"
-```
+-- Simple cases
+local team = is_enemy and "red" or "blue"
+local speed = is_vehicle and 2.0 or 1.0
 
-SAPP picks PC or CE values with `halo_type`, for example `halo_type == "PC" and 1 or 2`. Chimera has
-no `halo_type`; see [Probing the Platform](#probing-the-platform).
+-- Multiple values
+local x, y = is_pc and 1 or 2, is_pc and 3 or 4
+
+-- Table form when branches have different types or need evaluation
+local values = ({ PC = {1, 2}, CE = {3, 4} })[platform]
+local x, y = values[1], values[2]
+```
 
 ---
 
