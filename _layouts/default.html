@@ -35,8 +35,12 @@
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-lua.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-batch.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('code[class*="language-bat"], pre[class*="language-bat"]').forEach(el => {
+                el.className = el.className.replace(/\blanguage-bat\b/g, 'language-batch');
+            });
             document.querySelectorAll("blockquote").forEach(bq => {
                 if (bq.classList.contains("markdown-alert")) return;
                 const firstP = bq.querySelector("p");
