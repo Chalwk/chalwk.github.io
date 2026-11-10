@@ -38,6 +38,19 @@
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-batch.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('div[class*="language-"]').forEach(div => {
+                const match = div.className.match(/\blanguage-([a-zA-Z0-9_-]+)\b/);
+                if (!match) return;
+                let lang = match[1].toLowerCase();
+                if (lang === 'bat') lang = 'batch';
+                const code = div.querySelector('code');
+                if (code) {
+                    code.classList.add('language-' + lang);
+                    if (code.parentElement && code.parentElement.tagName === 'PRE') {
+                        code.parentElement.classList.add('language-' + lang);
+                    }
+                }
+            });
             document.querySelectorAll('code[class*="language-bat"], pre[class*="language-bat"]').forEach(el => {
                 el.className = el.className.replace(/\blanguage-bat\b/g, 'language-batch');
             });
