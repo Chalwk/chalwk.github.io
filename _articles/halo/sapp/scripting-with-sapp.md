@@ -1,6 +1,7 @@
 ---
 title: "Scripting with SAPP - Server-Side Lua"
 permalink: /halo/sapp/scripting-with-sapp/
+description: "Complete guide to server-side Lua scripting using SAPP, covering runtime environments, callbacks, memory API, player actions, and hygiene."
 date: 2026-11-09
 last-updated: 2026-11-09
 categories: [ education, halo, modding ]

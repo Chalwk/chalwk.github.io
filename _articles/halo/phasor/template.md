@@ -1,6 +1,7 @@
 ---
 title: "Phasor Lua Template"
 permalink: /halo/phasor/template/
+description: "Ready-to-use Phasor 2.0 server-side Lua script template and event callback signature reference."
 date: 2026-11-09
 last-updated: 2026-11-09
 categories: [ education, halo, modding ]

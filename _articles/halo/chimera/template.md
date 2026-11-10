@@ -1,6 +1,7 @@
 ---
 title: "Chimera Lua Template"
 permalink: /halo/chimera/template/
+description: "Ready-to-use Chimera client-side Lua script template and complete callback event signature reference."
 date: 2026-11-09
 last-updated: 2026-11-09
 categories: [ education, halo, modding ]

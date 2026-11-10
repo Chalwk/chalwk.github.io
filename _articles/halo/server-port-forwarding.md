@@ -1,6 +1,7 @@
 ---
 title: "Halo: Server Port Forwarding"
 permalink: /halo/server-port-forwarding/
+description: "Complete guide to router port forwarding and firewall setup for hosting Halo PC and Custom Edition dedicated servers."
 date: 2025-08-31
 last-updated: 2026-05-05
 categories: [ education, halo, server ]

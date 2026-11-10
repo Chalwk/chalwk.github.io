@@ -1,6 +1,7 @@
 ---
 title: "Scripting with Phasor - Server-Side Lua"
 permalink: /halo/phasor/scripting-with-phasor/
+description: "Complete guide to server-side Lua scripting with Phasor 2.0, covering version handling, event hooks, player data, and helper functions."
 date: 2026-11-09
 last-updated: 2026-11-09
 categories: [ education, halo, modding ]

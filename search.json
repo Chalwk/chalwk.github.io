@@ -5,11 +5,12 @@ layout: none
 {% assign all_posts = site.articles | sort: "date" | reverse %}
 [
   {% for post in all_posts %}
+    {% if post.description %}{% assign excerpt_text = post.description | strip_html %}{% else %}{% assign excerpt_text = post.excerpt | strip_html | truncatewords: 30 %}{% endif %}
     {
       "title": {{ post.title | jsonify }},
       "url": {{ post.url | relative_url | jsonify }},
       "date": {{ post.date | date: "%B %-d, %Y" | jsonify }},
-      "excerpt": {{ post.excerpt | strip_html | truncatewords: 30 | jsonify }},
+      "excerpt": {{ excerpt_text | jsonify }},
       "categories": {{ post.categories | default: empty | jsonify }},
       "tags": {{ post.tags | default: empty | jsonify }}
     }{% unless forloop.last %},{% endunless %}

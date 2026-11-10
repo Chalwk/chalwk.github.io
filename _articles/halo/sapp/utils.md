@@ -1,6 +1,7 @@
 ---
 title: "SAPP Utils"
 permalink: /halo/sapp/utils/
+description: "Conventions, helper functions, signature scanning patterns, and known quirks for SAPP server-side Lua scripting."
 date: 2026-11-09
 last-updated: 2026-11-09
 categories: [ education, halo, modding ]

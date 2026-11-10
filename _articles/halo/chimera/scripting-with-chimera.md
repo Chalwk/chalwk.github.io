@@ -1,6 +1,7 @@
 ---
 title: "Scripting with Chimera - Client-Side Lua"
 permalink: /halo/chimera/scripting-with-chimera/
+description: "Comprehensive guide to client-side Lua scripting with Chimera, covering event callbacks, HUD rendering, camera manipulation, and memory offsets."
 date: 2026-11-09
 last-updated: 2026-11-09
 categories: [ education, halo, modding ]

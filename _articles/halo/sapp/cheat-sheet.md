@@ -1,6 +1,7 @@
 ---
 title: "SAPP Cheat Sheet"
 permalink: /halo/sapp/cheat-sheet/
+description: "Essential lookup tables for SAPP server Lua scripting: hardcoded pointers, signature patterns, global variables, admin levels, and console colors."
 date: 2026-11-09
 last-updated: 2026-11-09
 categories: [ education, halo, modding ]

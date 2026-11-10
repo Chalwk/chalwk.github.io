@@ -1,5 +1,6 @@
 ---
 title: "So you want to be a programmer?"
+description: "Practical advice and mindset guidance for aspiring software developers beginning their programming journey."
 date: 2026-05-28
 last-updated: 2026-05-28
 categories: [ programming ]

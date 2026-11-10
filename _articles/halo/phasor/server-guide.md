@@ -1,6 +1,7 @@
 ---
 title: "Halo: Phasor Server Guide"
 permalink: /halo/phasor/server-guide/
+description: "Complete walkthrough for setting up, configuring, running, and managing dedicated Halo servers using Phasor 2.0."
 date: 2026-11-09
 last-updated: 2026-11-09
 categories: [ education, halo, modding ]

@@ -1,6 +1,7 @@
 ---
 title: "Halo: Modding References & Tools"
 permalink: /halo/modding-references/
+description: "Essential references and tools for Halo PC and Custom Edition modding, from classic HEK utilities to modern toolchains and asset pipelines."
 date: 2026-11-09
 last-updated: 2026-11-09
 categories: [ education, halo, modding ]

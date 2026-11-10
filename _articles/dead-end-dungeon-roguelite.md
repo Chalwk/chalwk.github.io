@@ -1,5 +1,6 @@
 ---
 title: "Dead End - Dungeon Roguelite"
+description: "A turn-based, procedurally generated dungeon roguelite. Explore fog-covered floors, battle distinct enemies, collect weapons and boons, and escape."
 date: 2026-09-21
 last-updated: 2026-09-24
 categories: [ programming, guide, web-app ]

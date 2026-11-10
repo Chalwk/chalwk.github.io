@@ -1,6 +1,7 @@
 ---
 title: "Halo: SAPP Server Guide"
 permalink: /halo/sapp/server-guide/
+description: "Complete guide to setting up, configuring, running, and expanding multi-instance dedicated Halo servers using SAPP."
 date: 2026-04-02
 last-updated: 2026-11-10
 categories: [ education, halo, modding, server ]

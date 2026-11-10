@@ -1,5 +1,6 @@
 ---
 title: "Comprehensive Markdown Tutorial"
+description: "Comprehensive guide to Markdown formatting, covering basic syntax, GitHub Flavored Markdown extensions, code blocks, tables, and alerts."
 date: 2026-04-07
 last-updated: 2026-04-07
 categories: [ tutorial, documentation, web ]

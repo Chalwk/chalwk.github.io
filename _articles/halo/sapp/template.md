@@ -1,6 +1,7 @@
 ---
 title: "SAPP Lua Template"
 permalink: /halo/sapp/template/
+description: "Ready-to-use SAPP server-side Lua script template and event callback signature reference."
 date: 2026-11-09
 last-updated: 2026-11-09
 categories: [ education, halo, modding ]
