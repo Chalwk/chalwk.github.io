@@ -729,6 +729,76 @@ local distance_m = distanceMeters(px, py, pz, { 0, 0, 0 })
 
 ---
 
+## Raycasting with intersect
+
+The `intersect()` function casts a 3D ray from an origin coordinate `(x, y, z)` along a direction
+vector `(vx, vy, vz)`. It tests for collisions against map geometry (terrain, structures, BSP) and
+dynamic objects (bipeds, vehicles, weapons, equipment, devices).
+
+```lua
+local success, hit_x, hit_y, hit_z, hit_object_id = intersect(x, y, z, vx, vy, vz, ignore_object_id)
+```
+
+### Parameters
+
+- **`x, y, z`** (`number`): Starting 3D coordinates of the raycast in World Units (WU). To raycast
+  from a player's line of sight, use their eye-level position (`read_vector3d(dyn + 0x5C)` with
+  vertical offset `+0.65` when standing or `+0.35` when crouching).
+- **`vx, vy, vz`** (`number`): Direction vector multiplied by maximum reach distance in WU. Camera
+  vectors read from `dyn + 0x230` are normalized unit vectors (length 1), so multiplying by `1000`
+  casts a ray up to 1000 WU away.
+- **`ignore_object_id`** (`number`, optional): Object ID to ignore during collision testing. Pass
+  the casting player's biped Object ID (`read_dword(get_player(player_id) + 0x34)`) so the ray does
+  not hit the player's own body.
+
+### Return Values
+
+- **`success`** (`boolean`): `true` if the ray intersected any surface or dynamic object before
+  reaching the maximum vector distance; `false` if no collision occurred.
+- **`hit_x, hit_y, hit_z`** (`number`): 3D World Unit coordinates of the intersection point.
+- **`hit_object_id`** (`number`): Object ID of the dynamic object hit. Returns `0xFFFFFFFF`
+  (`4294967295`) if static map geometry (BSP/structure) or nothing was hit.
+
+> [!TIP]
+> Use `get_object_memory(hit_object_id)` to verify whether a valid dynamic object was hit. If
+> non-zero, read byte `object + 0xB4` to check its object type (`1` = Vehicle, `4` = Equipment,
+`5` = Weapon, `6` = Device).
+
+### Example: Aim Target Raycasting
+
+```lua
+---@param player_id number SAPP player index (1-16).
+---@param max_distance number Maximum raycast distance in World Units.
+---@return number|nil hit_object_id Object ID of the targeted dynamic object, or nil if none hit.
+local function getTargetObject(player_id, max_distance)
+    local dyn = get_dynamic_player(player_id)
+    if dyn == 0 or not player_alive(player_id) then return nil end
+
+    -- Eye position (accounting for crouching)
+    local crouching = read_float(dyn + 0x50C)
+    local px, py, pz = read_vector3d(dyn + 0x5C)
+    pz = pz + (crouching == 0 and 0.65 or 0.35)
+
+    -- Aim vector scaled by max reach distance
+    local cx, cy, cz = read_vector3d(dyn + 0x230)
+    cx, cy, cz = cx * max_distance, cy * max_distance, cz * max_distance
+
+    -- Ignore casting player's biped
+    local ignore_biped = read_dword(get_player(player_id) + 0x34)
+
+    local success, hit_x, hit_y, hit_z, hit_object_id = intersect(px, py, pz, cx, cy, cz, ignore_biped)
+    if success and hit_object_id ~= 0xFFFFFFFF then
+        local object = get_object_memory(hit_object_id)
+        if object ~= 0 then
+            return hit_object_id
+        end
+    end
+    return nil
+end
+```
+
+---
+
 ## IP and Network Helpers
 
 SAPP uses `bit`, not `bit32`. These helpers validate IPv4 strings, convert between dotted and
