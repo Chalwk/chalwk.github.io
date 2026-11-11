@@ -13,8 +13,11 @@
     <!-- main site header (header.html emits its own <header class="header">) -->
     {% include header.html %}
 
-    <!-- page content injected here -->
+    {% if content contains '<main' %}
+    <div id="main-content">{{ content }}</div>
+    {% else %}
     <main id="main-content">{{ content }}</main>
+    {% endif %}
 
     <!-- PWA install button container -->
     {% if page.pwa %}
@@ -32,12 +35,15 @@
     <script defer src="{{ site.baseurl }}/assets/js/pwa-install.js"></script>
     {% endif %}
 
+    {% if content contains 'language-' %}
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-lua.min.js"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-batch.min.js"></script>
+    {% endif %}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            {% if content contains 'language-' %}
             document.querySelectorAll('div[class*="language-"]').forEach(div => {
                 const match = div.className.match(/\blanguage-([a-zA-Z0-9_-]+)\b/);
                 if (!match) return;
@@ -54,6 +60,7 @@
             document.querySelectorAll('code[class*="language-bat"], pre[class*="language-bat"]').forEach(el => {
                 el.className = el.className.replace(/\blanguage-bat\b/g, 'language-batch');
             });
+            {% endif %}
             document.querySelectorAll("blockquote").forEach(bq => {
                 if (bq.classList.contains("markdown-alert")) return;
                 const firstP = bq.querySelector("p");
@@ -89,6 +96,7 @@
                 }
             });
 
+            {% if content contains 'language-' %}
             if (typeof Prism !== 'undefined') {
                 Prism.hooks.add('after-highlight', function(env) {
                     if (env.language === 'lua' || (env.element && env.element.className.includes('language-lua'))) {
@@ -100,6 +108,7 @@
                 });
                 Prism.highlightAll();
             }
+            {% endif %}
         });
     </script>
 
