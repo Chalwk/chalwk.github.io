@@ -1,9 +1,9 @@
 ---
-title: "Scripting with Chimera: Client-Side Lua"
-permalink: /halo/chimera/scripting-with-chimera/
-description: "Guide to client-side Lua scripting with Chimera, covering event callbacks, HUD rendering, camera manipulation, and memory offsets."
-date: 2026-11-09
-last-updated: 2026-11-10
+title: "Halo: Scripting with Chimera (Client-Side Lua)"
+permalink: /halo/chimera/guide/
+description: "Complete Guide to client-side Lua scripting with Chimera."
+date: 2026-11-12
+last-updated: 2026-11-12
 categories: [ education, halo, modding ]
 tags: [ chimera, lua, scripting, client, tutorial ]
 ---
@@ -12,11 +12,8 @@ Chimera is a client-side mod for Halo PC/CE. It provides event hooks, commands, 
 downloads, and a lot of quality-of-life fixes. This guide covers its Lua API, with practical
 examples for HUDs and gameplay tweaks.
 
-Memory offsets, game constants, shared helpers, and Chimera's hardcoded pointers are in
-[Common Reference](../common-reference.md).
-
 | Property           | Value                                                                                     |
-|--------------------|-------------------------------------------------------------------------------------------|
+| ------------------ | ----------------------------------------------------------------------------------------- |
 | Lua runtime        | Lua 5.5.1                                                                                 |
 | Lua 5.2+ syntax    | Available: `goto`, `_ENV`, integer division `//`, native bitwise operators `& \| ~ << >>` |
 | Sandboxing         | Global scripts: not sandboxed. Map scripts: sandboxed by default.                         |
@@ -46,12 +43,13 @@ By default, the Chimera folder is located inside your Halo data folder:
 Linux: `~/Documents/My Games/Halo CE/chimera` or `~/Documents/My Games/Halo/chimera`, depending
 on your setup.
 
+---
+
 ## Script skeleton
 
-See [Chimera Lua Template](template.md) for every callback. Register only the ones the script uses.
-
 Every Chimera Lua script must define `clua_version` as the Chimera API version it targets (for
-example `2.056`). Without it, Chimera will not load the script.
+example `2.056`). Without it, Chimera will not load the script. See [Chimera Lua API](#chimera-lua-api)
+for every callback and function.
 
 ```lua
 clua_version = 2.056
@@ -66,7 +64,547 @@ end
 function OnTick() end -- runs every tick; keep this lean
 ```
 
-## Callbacks and priorities
+---
+
+## Chimera Lua API
+
+This doubles as an API reference and EmmyLua / LuaLS script for Lua-aware editors (such as VS Code).
+
+```lua
+---@meta
+-- Chimera Lua API for EmmyLua and lua-language-server.
+-- Runtime is Lua 5.5.
+--
+-- Copyright (c) 2026 Jericho Crosby (Chalwk).
+--
+
+---@alias ChimeraEvent
+--- | "command"      # (cmd: string): boolean|nil. Return false to block.
+--- | "frame"        # Each rendered frame. Draw calls go here or in preframe.
+--- | "preframe"     # Before frame processing.
+--- | "map_load"     # A map is being loaded.
+--- | "map_preload"  # Before map loading.
+--- | "precamera"    # (x, y, z, fov, fx, fy, fz, ux, uy, uz). Must return all ten values.
+--- | "rcon_message" # (message: string): boolean|nil. Return false to block.
+--- | "tick"         # Each game tick (1/30 s).
+--- | "pretick"      # Before each game tick.
+--- | "unload"       # The script is unloading.
+
+---@alias ChimeraPriority "before" | "default" | "after" | "final"
+
+---@alias ChimeraGametype "ctf" | "slayer" | "oddball" | "king" | "race"
+
+-- Script lifecycle -------------------------------------------------------------------------
+
+--- Required. The script refuses to load without it.
+---@type number
+clua_version = nil
+
+-- Globals ----------------------------------------------------------------------------------
+
+--- Chimera build number (Git commit count).
+---@type integer
+build = 0
+
+--- Chimera version string.
+---@type string
+full_build = ""
+
+--- Current gametype.
+---@type ChimeraGametype
+gametype = "slayer"
+
+--- Local player index (0-15). nil until assigned after joining a server.
+---@type number | nil
+local_player_index = nil
+
+--- Currently loaded map name.
+---@type string
+map = ""
+
+--- True if the map uses protected tag data.
+---@type boolean
+map_is_protected = false
+
+--- True if the script runs sandboxed.
+---@type boolean
+sandboxed = false
+
+--- Filename for global scripts, map name for map scripts.
+---@type string
+script_name = ""
+
+---@type "global" | "map"
+script_type = "global"
+
+--- "none" is single player, "local" is hosting, "dedicated" is joined to a server.
+---@type "none" | "local" | "dedicated"
+server_type = "none"
+
+-- Callbacks and timers ---------------------------------------------------------------------
+--
+-- NOTE: "spawn" and "prespawn" are accepted by set_callback at runtime but are not hooked
+-- into any engine event by the current Chimera build.
+
+--- Callback names for set_callback. These are the global function names.
+---@alias ChimeraCallbackName
+--- | "OnCommand"
+--- | "OnFrame"
+--- | "OnMapLoad"
+--- | "OnMapPreload"
+--- | "OnPreCamera"
+--- | "OnPreFrame"
+--- | "OnPreTick"
+--- | "OnRconMessage"
+--- | "OnScriptUnload"
+--- | "OnTick"
+
+--- Event names for set_callback. Hover a field for the callback signature.
+---@class ChimeraCallbackIds
+---@field command      ChimeraEvent OnCommand(cmd: string): boolean|nil. Return false to block.
+---@field frame        ChimeraEvent OnFrame(). Each rendered frame. Draw calls go here or in preframe.
+---@field map_load     ChimeraEvent OnMapLoad(). A map is being loaded.
+---@field map_preload  ChimeraEvent OnMapPreload(). Before map loading.
+---@field precamera    ChimeraEvent OnPreCamera(x, y, z, fov, fx, fy, fz, ux, uy, uz). Must return all ten values.
+---@field preframe     ChimeraEvent OnPreFrame(). Before frame processing. Draw calls go here or in frame.
+---@field pretick      ChimeraEvent OnPreTick(). Before each game tick.
+---@field rcon_message ChimeraEvent OnRconMessage(message: string): boolean|nil. Return false to block.
+---@field tick         ChimeraEvent OnTick(). Each game tick (1/30 s).
+---@field unload       ChimeraEvent OnScriptUnload(). The script is unloading.
+
+--- The callback must be a global function. Priorities decide the order between scripts.
+---@param event         ChimeraEvent | string
+---@param callback_name ChimeraCallbackName | string Name of a global function
+---@param priority?     ChimeraPriority
+function set_callback(event, callback_name, priority) end
+
+--- Runs the callback every interval until it returns false or the timer is stopped.
+---@param interval_ms   number
+---@param callback_name string                          Name of a global function
+---@param ...           boolean | number | string | nil Forwarded to the callback
+---@return integer timer_id
+function set_timer(interval_ms, callback_name, ...) end
+
+--- Stopping a timer that no longer exists raises an error.
+---@param timer_id number
+function stop_timer(timer_id) end
+
+-- Output -----------------------------------------------------------------------------------
+
+---@param message string
+function hud_message(message) end
+
+---@overload fun(message: string, red: number, green: number, blue: number)
+---@overload fun(message: string, alpha: number, red: number, green: number, blue: number)
+---@param message string
+function console_out(message) end
+
+--- Draws inside a screen rectangle. Call it from preframe or frame.
+---@param text   string
+---@param left   number
+---@param top    number
+---@param right  number
+---@param bottom number
+---@param font   "small" | "large" | "ticker"
+---@param align  "left" | "center" | "right"
+---@param alpha  number
+---@param red    number
+---@param green  number
+---@param blue   number
+function draw_text(text, left, top, right, bottom, font, align, alpha, red, green, blue) end
+
+-- Console and scripting --------------------------------------------------------------------
+
+--- Runs a Halo console command or a Halo script expression (Lisp syntax).
+---@param script string
+function execute_script(script) end
+
+--- Reads a Halo scripting global.
+---@param name string
+---@return boolean | number
+function get_global(name) end
+
+--- The value type is validated.
+---@param name  string
+---@param value boolean | number
+function set_global(name, value) end
+
+--- Only allow-listed Chimera commands work.
+---@param command string
+---@param save    boolean
+function execute_chimera_command(command, save) end
+
+-- Players, objects and tags ----------------------------------------------------------------
+
+--- Player table pointer, or nil. No index returns the local player.
+---@param index? number
+---@return integer | nil address
+function get_player(index) end
+
+--- Pointer to the player's current object, or nil if the player is dead. No index returns the local player.
+---@param index? number
+---@return integer | nil address
+function get_dynamic_player(index) end
+
+--- Dynamic object pointer for an object id, or nil.
+---@param object_id number
+---@return integer | nil address
+function get_object(object_id) end
+
+--- Raises an error if the id is invalid.
+---@param object_id number
+function delete_object(object_id) end
+
+--- Spawned client side only in multiplayer. Other players do not see the object.
+---@overload fun(tag_class: string, tag_path: string, x: number, y: number, z: number): integer
+---@param tag_id  number
+---@param x       number
+---@param y       number
+---@param z       number
+---@param parent? number
+---@return integer object_id
+function spawn_object(tag_id, x, y, z, parent) end
+
+--- With a class and path, returns the tag id. With a tag id, returns the tag entry pointer.
+---@overload fun(tag_id: number): integer | nil
+---@param tag_class string Four-letter class, e.g. "weap"
+---@param tag_path  string
+---@return integer | nil tag
+function get_tag(tag_class, tag_path) end
+
+-- Memory -----------------------------------------------------------------------------------
+
+--- Reads a signed 8-bit integer.
+---@param address number
+---@return integer
+function read_i8(address) end
+
+--- Reads an unsigned 8-bit integer.
+---@param address number
+---@return integer
+function read_u8(address) end
+
+--- Reads a signed 16-bit integer.
+---@param address number
+---@return integer
+function read_i16(address) end
+
+--- Reads an unsigned 16-bit integer.
+---@param address number
+---@return integer
+function read_u16(address) end
+
+--- Reads a signed 32-bit integer.
+---@param address number
+---@return integer
+function read_i32(address) end
+
+--- Reads an unsigned 32-bit integer.
+---@param address number
+---@return integer
+function read_u32(address) end
+
+--- Reads an unsigned 8-bit integer.
+---@param address number
+---@return integer
+function read_byte(address) end
+
+--- Reads an unsigned 16-bit integer.
+---@param address number
+---@return integer
+function read_word(address) end
+
+--- Reads an unsigned 32-bit integer.
+---@param address number
+---@return integer
+function read_dword(address) end
+
+--- Reads a signed 8-bit integer.
+---@param address number
+---@return integer
+function read_char(address) end
+
+--- Reads a signed 16-bit integer.
+---@param address number
+---@return integer
+function read_short(address) end
+
+--- Reads a signed 32-bit integer.
+---@param address number
+---@return integer
+function read_int(address) end
+
+--- Reads an integer.
+---@param address number
+---@return integer
+function read_long(address) end
+
+--- Reads a 32-bit float.
+---@param address number
+---@return number
+function read_f32(address) end
+
+--- Reads a 64-bit float.
+---@param address number
+---@return number
+function read_f64(address) end
+
+--- Reads a 32-bit float.
+---@param address number
+---@return number
+function read_float(address) end
+
+--- Reads a 64-bit float.
+---@param address number
+---@return number
+function read_double(address) end
+
+--- Writes a signed 8-bit integer.
+---@param address number
+---@param value   number
+function write_i8(address, value) end
+
+--- Writes an unsigned 8-bit integer.
+---@param address number
+---@param value   number
+function write_u8(address, value) end
+
+--- Writes a signed 16-bit integer.
+---@param address number
+---@param value   number
+function write_i16(address, value) end
+
+--- Writes an unsigned 16-bit integer.
+---@param address number
+---@param value   number
+function write_u16(address, value) end
+
+--- Writes a signed 32-bit integer.
+---@param address number
+---@param value   number
+function write_i32(address, value) end
+
+--- Writes an unsigned 32-bit integer.
+---@param address number
+---@param value   number
+function write_u32(address, value) end
+
+--- Writes an unsigned 8-bit integer.
+---@param address number
+---@param value   number
+function write_byte(address, value) end
+
+--- Writes an unsigned 16-bit integer.
+---@param address number
+---@param value   number
+function write_word(address, value) end
+
+--- Writes an unsigned 32-bit integer.
+---@param address number
+---@param value   number
+function write_dword(address, value) end
+
+--- Writes a signed 8-bit integer.
+---@param address number
+---@param value   number
+function write_char(address, value) end
+
+--- Writes a signed 16-bit integer.
+---@param address number
+---@param value   number
+function write_short(address, value) end
+
+--- Writes a signed 32-bit integer.
+---@param address number
+---@param value   number
+function write_int(address, value) end
+
+--- Writes an integer.
+---@param address number
+---@param value   number
+function write_long(address, value) end
+
+--- Writes a 32-bit float.
+---@param address number
+---@param value   number
+function write_f32(address, value) end
+
+--- Writes a 64-bit float.
+---@param address number
+---@param value   number
+function write_f64(address, value) end
+
+--- Writes a 32-bit float.
+---@param address number
+---@param value   number
+function write_float(address, value) end
+
+--- Writes a 64-bit float.
+---@param address number
+---@param value   number
+function write_double(address, value) end
+
+---@param address   number
+---@param bit_index number Less than 32
+---@return integer bit 0 or 1
+function read_bit(address, bit_index) end
+
+---@param address   number
+---@param bit_index number           Less than 32
+---@param value     boolean | number
+function write_bit(address, bit_index, value) end
+
+--- Reads a null-terminated string.
+---@param address number
+---@return string
+function read_string8(address) end
+
+--- Writes a null-terminated string.
+---@param address number
+---@param value   string
+function write_string8(address, value) end
+
+--- Alias of read_string8.
+---@param address number
+---@return string
+function read_string(address) end
+
+--- Alias of write_string8.
+---@param address number
+---@param value   string
+function write_string(address, value) end
+
+-- Filesystem -------------------------------------------------------------------------------
+-- Confined to chimera/lua/data/<script_type>/<script_name>/. Paths outside raise a scope error.
+
+---@param path string
+---@return boolean ok True if created or already present
+function create_directory(path) end
+
+---@param path string
+---@return boolean ok
+function remove_directory(path) end
+
+--- Directory entries end in a backslash.
+---@param path string
+---@return string[] | false entries
+function list_directory(path) end
+
+---@param path string
+---@return boolean
+function directory_exists(path) end
+
+---@param path    string
+---@param content string
+---@param append? boolean
+---@return boolean ok
+function write_file(path, content, append) end
+
+---@param path string
+---@return string | nil content nil if the file cannot be opened
+function read_file(path) end
+
+---@param path string
+---@return boolean ok
+function delete_file(path) end
+
+---@param path string
+---@return boolean
+function file_exists(path) end
+```
+
+### Memory Addresses & Offsets
+
+| Pointer                          | PC Address                   | CE Address                   | Description                                                                                          |
+| -------------------------------- | ---------------------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `gametype`                       | `0x6F1C88`                   | `0x68CC48`                   | Gametype struct base (see Gametype Struct)                                                           |
+| `race_globals`                   | `0x87A520`                   | `0x64C1C0`                   | Race global data base (see Race Globals)                                                             |
+| `camera_address`                 | `0x647498`                   | `0x647498`                   | Camera state mode (30400 = First Person, 31952 = Third Person, 30704 = Devcam)                       |
+| `camera_interpolation`           | `0x647494`                   | `0x647494`                   | Camera interpolation scale when entering or leaving vehicles                                         |
+| `zoom_address`                   | `read_dword(0x815918) + 204` | `read_dword(0x815918) + 204` | Local player camera zoom level pointer                                                               |
+| `mouse_input_address`            | `0x64C73C`                   | `0x64C73C`                   | Mouse input state (+0x0 delta X, +0x4 delta Y, +0x8 scroll wheel, +0xC left click, +0xE right click) |
+| `keyboard_input_address`         | `0x64C550`                   | `0x64C550`                   | Keyboard key state array indexed by key code                                                         |
+| `chat_open_address`              | `0x64E788`                   | `0x64E788`                   | Chat input window state (1 = open, 0 = closed)                                                       |
+| `announcer_address`              | `0x64C020`                   | `0x64C020`                   | Client-side multiplayer announcer sound queue (+0x8 delay, +0x14 sound tag ID)                       |
+| `first_person_animation_address` | `0x40000EB8`                 | `0x40000EB8`                 | First-person animation structure (+0x1E base anim ID, +0x20 base anim frame)                         |
+| `game_state_address`             | `0x400002E8`                 | `0x400002E8`                 | Screen render and pause state (+0x0 screen render, +0x1 game running, +0x2 game paused)              |
+| `game_paused_address`            | `0x004ACA79`                 | `0x004ACA79`                 | Game pause byte (1 = paused, 0 = running)                                                            |
+| `game_on_menus_address`          | `0x00622058`                 | `0x00622058`                 | Game menu state byte (1 = in menu/console, 0 = gameplay)                                             |
+| `joystick_input_address`         | `0x0064D998`                 | `0x0064D998`                 | Controller/joystick input structure array (0xA0 bytes per controller)                                |
+| `object_table_address`           | `0x400506B4`                 | `0x4005062C`                 | Global object table header                                                                           |
+| `device_groups_table`            | `0x00816110`                 | `0x006E1C50`                 | Scenario device groups table                                                                         |
+| `widgets_instance`               | `0x006B401C`                 | `0x006B401C`                 | UI widget instance structure                                                                         |
+| `synced_network_objects`         | `0x006226F0`                 | `0x00598020`                 | Synced network objects table pointer                                                                 |
+| `gravity_global`                 | `0x637BE4`                   | `0x637BE4`                   | World gravity float multiplier (default ~ 0.003565)                                                  |
+| `ctf_flag_red`                   | `0x40492F1C`                 | `0x40492F1C`                 | Red flag world spawn coordinates structure                                                           |
+| `ctf_flag_blue`                  | `0x40492FB0`                 | `0x40492FB0`                 | Blue flag world spawn coordinates structure                                                          |
+| `koth_globals`                   | `0x64BDF0`                   | `0x64BDF0`                   | King of the Hill global data (+0x90 marker count, +0x94 marker coords, +0x184 center coords)         |
+| `race_locs`                      | `0x68C848`                   | `0x68C848`                   | Race checkpoint world coordinates array (0x20 bytes per checkpoint)                                  |
+
+### Probing the Platform
+
+Chimera has no `halo_type` and no function that reports which client you are on. Put both variants
+in a candidates table, probe each one, and check the value you read against what the field should
+hold.
+
+```lua
+-- Same logical pointer, different address on each platform.
+local candidates = {
+    { gametype = 0x6F1C88, race_globals = 0x87A520 }, -- PC
+    { gametype = 0x68CC48, race_globals = 0x64C1C0 }  -- CE
+}
+
+local gametype_base, race_globals
+
+local function detectPlatform()
+    for _, cand in ipairs(candidates) do
+        -- pcall: an address valid on one platform may be unmapped on the other.
+        local ok, game_type = pcall(function()
+            return read_byte(cand.gametype + 0x30)
+        end)
+
+        -- 5 = Race. The value, not just a successful read, identifies the platform.
+        if ok and game_type == 5 then
+            gametype_base = cand.gametype
+            race_globals = cand.race_globals
+            return
+        end
+    end
+end
+```
+
+The check compares against `5`, so it only resolves while a race gametype is loaded. A script for
+another gametype would compare against that gametype's code instead. If both probes fail, both
+pointers stay `nil`, so check before using them.
+
+### Object Table
+
+The Chimera guide enumerates objects from a hardcoded address instead of a signature. It does not
+give separate PC and CE values for it.
+
+```lua
+local function scanObjects()
+    local object_table_address = read_dword(0x401192 + 2)
+    local object_table = read_dword(object_table_address)
+    if object_table == 0 then return end
+
+    local object_count = read_word(object_table + 0x2E)
+    local first_object = read_dword(object_table + 0x34)
+
+    for i = 0, object_count - 1 do
+        local object_entry = first_object + i * 0xC + 0x8
+        local object = read_dword(object_entry)
+
+        if object ~= 0 then
+            -- Valid object pointer.
+        end
+    end
+end
+```
+
+---
+
+### Callbacks and priorities
 
 `set_callback("event", "GlobalFnName" [, priority])`. The callback function must be global (not
 local or anonymous).
@@ -74,13 +612,13 @@ local or anonymous).
 Chimera loads a script only when the declared `clua_version` is compatible:
 
 | Script version                 | Example (vs 2.056) | Loads? |
-|--------------------------------|--------------------|--------|
+| ------------------------------ | ------------------ | ------ |
 | Same                           | 2.056              | Yes    |
 | Lower, same major version      | 2.04               | Yes    |
 | Higher                         | 2.06               | No     |
 | Lower, different major version | 1.5                | No     |
 
-### Event priorities
+#### Event priorities
 
 When setting a callback with `set_callback`, you can specify a priority as the third argument.
 Priorities determine the order in which multiple scripts' callbacks run. If multiple scripts use the
@@ -99,13 +637,13 @@ set_callback("tick", "OnTickMain", "default")
 set_callback("tick", "OnTickLate", "after")
 ```
 
-### Events
+#### Events
 
 The callback names are matched after converting underscores to spaces, so `"map_load"` and
 `"map load"` are equivalent.
 
 | Callback name  | When it runs                          | Arguments                                                                     | Return value                                                          |
-|----------------|---------------------------------------|-------------------------------------------------------------------------------|-----------------------------------------------------------------------|
+| -------------- | ------------------------------------- | ----------------------------------------------------------------------------- | --------------------------------------------------------------------- |
 | `command`      | A console command is about to execute | `command` string                                                              | `false` to block; `true` or nothing to allow                          |
 | `frame`        | Each rendered frame                   | none                                                                          | -                                                                     |
 | `preframe`     | Before frame processing               | none                                                                          | -                                                                     |
@@ -159,13 +697,13 @@ Chimera can bind commands to keyboard keys in `chimera.ini`. You can bind:
 
 For example, bind `F5` to `compass` to toggle a compass HUD without typing in the console.
 
-## Global variables
+### Global variables
 
 Chimera exposes several read-only global variables that provide useful information about the current
 game state, your script's environment, and the Chimera version.
 
 | Variable             | Description                                                                                                     |
-|----------------------|-----------------------------------------------------------------------------------------------------------------|
+| -------------------- | --------------------------------------------------------------------------------------------------------------- |
 | `build`              | Chimera build number (Git commit count).                                                                        |
 | `full_build`         | Chimera version string.                                                                                         |
 | `gametype`           | Current gametype: `"ctf"`, `"slayer"`, `"oddball"`, `"king"`, or `"race"`.                                      |
@@ -178,10 +716,10 @@ game state, your script's environment, and the Chimera version.
 | `server_type`        | `"none"` (single player), `"local"` (hosting), or `"dedicated"` (joined a server).                              |
 
 > [!NOTE] Chimera has no equivalent to SAPP’s `halo_type` global and no function that reports which
-> client you are on. See [Probing the Platform](../common-reference.md#probing-the-platform) for
+> client you are on. See [Probing the Platform](#probing-the-platform) for
 > details on how to do this.
 
-### Server type check
+#### Server type check
 
 ```lua
 function OnTick()
@@ -206,7 +744,7 @@ function OnTick()
 end
 ```
 
-## Output and HUD
+### Output and HUD
 
 The simplest way to talk to the player is `hud_message`, `console_out`, or `draw_text`:
 
@@ -243,12 +781,12 @@ draw_text(text, left, top, right, bottom, font, align, a, r, g, b)
 `console_out` accepts one argument (message only), four arguments (message, red, green, blue), or
 five arguments (message, alpha, red, green, blue).
 
-## Timers
+### Timers
 
 Use `set_timer` and `stop_timer` to run code after a delay or at a fixed interval instead of
 counting ticks.
 
-### set_timer
+#### set_timer
 
 Registers a repeating timer and returns a timer ID that you can later cancel with `stop_timer`. The
 function runs at the given interval (in milliseconds) until either:
@@ -270,16 +808,16 @@ end
 local timer_id = set_timer(2000, "ShowMessage", "Hello from the timer!") -- runs every 2s
 ```
 
-### stop_timer
+#### stop_timer
 
 Stops a running timer by ID. Stopping a timer that no longer exists raises an error.
 
 Syntax: `stop_timer(timer_id)`
 
-## Console and scripting functions
+### Console and scripting functions
 
 | Function                  | Signature                                | Notes                                                                |
-|---------------------------|------------------------------------------|----------------------------------------------------------------------|
+| ------------------------- | ---------------------------------------- | -------------------------------------------------------------------- |
 | `execute_script`          | `execute_script(script)`                 | Runs a Halo console command or Halo script expression (Lisp syntax). |
 | `get_global`              | `get_global(name)`                       | Reads a Halo scripting global. Returns boolean, number, or integer.  |
 | `set_global`              | `set_global(name, value)`                | Writes a Halo scripting global. The value type is validated.         |
@@ -312,10 +850,10 @@ execute_script('(print "Welcome to the server!")')
 execute_script("(object_teleport (player0) teleport_flag)")
 ```
 
-## Player and object functions
+### Player and object functions
 
 | Function             | Signature                                                                          | Notes                                                                                                                               |
-|----------------------|------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------|
+| -------------------- | ---------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
 | `get_player`         | `get_player([index])`                                                              | Returns a player pointer (integer) or `nil`. With no argument, returns the local client player. With an index, looks up by RCON ID. |
 | `get_dynamic_player` | `get_dynamic_player([index])`                                                      | Returns the dynamic object pointer for the local player or the player at the given RCON index, or `nil`.                            |
 | `get_object`         | `get_object(id)`                                                                   | Returns a dynamic object pointer for an object ID, or `nil`.                                                                        |
@@ -323,7 +861,7 @@ execute_script("(object_teleport (player0) teleport_flag)")
 | `spawn_object`       | `spawn_object(tag_id, x, y, z [, parent])` or `spawn_object(class, path, x, y, z)` | Spawns an object. Returns the new object ID.                                                                                        |
 | `get_tag`            | `get_tag(id)` or `get_tag(class, path)`                                            | Returns a tag pointer (integer) or `nil`.                                                                                           |
 
-### Player pointers
+#### Player pointers
 
 Both functions use the local player when you pass no index.
 
@@ -340,7 +878,7 @@ player-related data that exists independently of the live object (team, kills, d
 
 Field offsets for both pointers are in [Memory Offsets](../common-reference.md#memory-offsets).
 
-### Position HUD
+#### Position HUD
 
 Chimera has no `read_vector3d` or `write_vector3d`. Read the position as three floats (or use
 `getObjectPosition` from [Position and Aim](../common-reference.md#position-and-aim)):
@@ -362,7 +900,7 @@ function OnTick()
 end
 ```
 
-### Player name
+#### Player name
 
 Player names are stored as a wide-character string (2 bytes per character, UTF-16). Use
 `readWideString` and `readPlayerName` from [Wide Strings](../common-reference.md#wide-strings). The
@@ -373,12 +911,12 @@ local static_player = get_player(player_index)
 local name = static_player and readPlayerName(static_player)
 ```
 
-## Memory access
+### Memory access
 
 Chimera exposes raw memory reads and writes. These are useful for working with Halo's structures
 when no higher-level API exists.
 
-### Integer reads and writes
+#### Integer reads and writes
 
 Registered names include sized aliases:
 
@@ -397,7 +935,7 @@ read_long / write_long
 
 Signature: `read_*(address)` returns an integer; `write_*(address, value)` writes an integer.
 
-### Float reads and writes
+#### Float reads and writes
 
 ```text
 read_f32 / write_f32    read_f64 / write_f64
@@ -407,10 +945,10 @@ read_double / write_double
 
 Signature: `read_*(address)` returns a number; `write_*(address, value)` writes a number.
 
-### Bits and strings
+#### Bits and strings
 
 | Function        | Signature                              | Notes                                                 |
-|-----------------|----------------------------------------|-------------------------------------------------------|
+| --------------- | -------------------------------------- | ----------------------------------------------------- |
 | `read_bit`      | `read_bit(address, bit_index)`         | Returns `0` or `1`. `bit_index` must be less than 32. |
 | `write_bit`     | `write_bit(address, bit_index, value)` | `value` may be a boolean or `0`/`1`.                  |
 | `read_string8`  | `read_string8(address)`                | Reads a null-terminated string.                       |
@@ -421,7 +959,7 @@ respectively. They call the same underlying implementation and behave identicall
 
 In sandbox mode, addresses outside `0x40000000`-`0x41B00000` are rejected.
 
-## Filesystem access
+### Filesystem access
 
 Chimera registers a set of filesystem functions that are always confined to the script's private
 data directory: `chimera/lua/data/<script_type>/<script_name>/`
@@ -430,7 +968,7 @@ data directory: `chimera/lua/data/<script_type>/<script_name>/`
 that resolves outside this directory raises a scope error.
 
 | Function           | Signature                              | Returns                                                          |
-|--------------------|----------------------------------------|------------------------------------------------------------------|
+| ------------------ | -------------------------------------- | ---------------------------------------------------------------- |
 | `create_directory` | `create_directory(path)`               | `true` if created (or already exists), `false` otherwise         |
 | `remove_directory` | `remove_directory(path)`               | `true` if removed, `false` otherwise                             |
 | `list_directory`   | `list_directory(path)`                 | Table of filenames (directories have a trailing `\`), or `false` |
@@ -467,7 +1005,7 @@ local function loadStats()
 end
 ```
 
-## Tag paths
+### Tag paths
 
 Chimera provides two overloads of `get_tag`:
 
@@ -475,7 +1013,7 @@ Chimera provides two overloads of `get_tag`:
 - `get_tag(tag_id)`: converts a tag ID into a pointer to the tag entry, so you can read the tag's
   internal data.
 
-### Tag ID from class and name
+#### Tag ID from class and name
 
 ```lua
 local ghost_tag = get_tag("vehi", "vehicles\\ghost\\ghost_mp")
@@ -486,7 +1024,7 @@ else
 end
 ```
 
-### Tag path from an object
+#### Tag path from an object
 
 Once you have an object, read its tag ID (the first dword), convert it with `get_tag(tag_id)`, then
 read the path string at offset `0x10`. `readTagPath` in
@@ -502,7 +1040,7 @@ if object then
 end
 ```
 
-## Object names
+### Object names
 
 Gets the display name of an object (weapon, vehicle, equipment) from its tag path, using
 `readTagPath` and `getShortName` from
@@ -512,7 +1050,7 @@ invalid object and `"???"` if the tag cannot be resolved.
 
 ```lua
 ---@param object number|nil Object memory address.
----@return string name Short object name, "N/A", or "???". 
+---@return string name Short object name, "N/A", or "???".
 local function getObjectName(object)
     if not object then return "N/A" end
 
@@ -535,13 +1073,12 @@ function OnTick()
 end
 ```
 
-## Enumerating objects
+### Enumerating objects
 
 To scan for all objects in the world (projectiles, vehicles, weapons, etc.), you need to read the
-global object table. The address and the loop are in
-[Object Table](../common-reference.md#object-table).
+global object table. The address and the loop are in [Object Table](#object-table).
 
-## Spawning objects
+### Spawning objects
 
 Chimera's `spawn_object` takes either a tag ID or a class and name.
 
@@ -560,7 +1097,7 @@ end
 local weapon = spawn_object("weap", "weapons\\assault rifle\\assault rifle", x, y, z)
 ```
 
-## Camera manipulation
+### Camera manipulation
 
 Chimera allows you to modify the camera position, orientation, and field of view before the game
 renders. The example below zooms the FOV while holding a sniper. `readTagPath` is in
@@ -594,11 +1131,10 @@ function OnPreCamera(x, y, z, fov, ox1, oy1, oz1, ox2, oy2, oz2)
 end
 ```
 
-## Zoom control
+### Zoom control
 
 Reads a weapon's zoom level count from its tag data (offset `0x3DA`) and writes the zoom state
-directly to memory. The zoom pointer is `zoom_address` in
-[Chimera Pointers](../common-reference.md#candidates-table).
+directly to memory. The zoom pointer is `zoom_address` in [Memory Addresses & Offsets](#chimera-address-table).
 
 ```lua
 local ZOOM_ADDRESS = 0x815918
@@ -623,7 +1159,7 @@ local function getWeaponZoomLevels(weapon_object)
 end
 ```
 
-## Toggle commands
+### Toggle commands
 
 Create console toggles to enable/disable features. Type `my_command` in the console (press `~`) to
 toggle.
@@ -652,7 +1188,7 @@ function OnTick()
 end
 ```
 
-## Ping smoothing
+### Ping smoothing
 
 An exponential moving average smooths jittery ping values and makes sudden latency spikes easy to
 spot:

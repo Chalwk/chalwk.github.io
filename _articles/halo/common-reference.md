@@ -1,5 +1,5 @@
 ---
-title: "Halo Lua Common Reference"
+title: "Halo: Common Reference"
 permalink: /halo/common-reference/
 description: "Shared reference for SAPP, Phasor and Chimera Lua scripting: memory offsets, game constants, platform-independent helpers, and stock Halo commands."
 date: 2026-11-09
@@ -8,26 +8,10 @@ categories: [ education, halo, modding ]
 tags: [ sapp, chimera, lua, scripting, reference, tutorial ]
 ---
 
-Shared reference for SAPP (server) and Chimera (client) Lua scripting: relative memory offsets, game
+Shared reference for SAPP, Phasor and Chimera Lua scripting: relative memory offsets, game
 constants, platform-independent helpers, and stock Halo commands. Anything that only one platform
-can use stays in its own guide: [Scripting with SAPP](sapp/scripting-with-sapp.md),
-[SAPP Cheat Sheet](sapp/cheat-sheet.md), [SAPP Utils](sapp/utils.md), and
-[Scripting with Chimera](chimera/scripting-with-chimera.md).
-
-The one exception is [Chimera Pointers](#chimera-pointers), which lives here until Chimera gets a
-pointer table of its own.
-
----
-
-## What Carries Over
-
-- Relative offsets are shared. Once you hold a player, object, or tag pointer, the field offsets
-  from that pointer are identical on SAPP and Chimera.
-- Absolute addresses are not shared. The SAPP Hardcoded Pointers belong to the dedicated server
-  (`haloded.exe` / `haloceded.exe`). Chimera runs inside the game client, so those addresses do not
-  apply.
-- Chimera cannot scan for signatures. Every Chimera address has to be hardcoded per platform (PC or
-  CE).
+can use stays in its own guide: [SAPP Guide](sapp/guide.md), [Phasor Guide](phasor/guide.md), and
+[Chimera Guide](chimera/guide.md).
 
 ---
 
@@ -54,34 +38,6 @@ local x, y = is_pc and 1 or 2, is_pc and 3 or 4
 local values = ({ PC = {1, 2}, CE = {3, 4} })[platform]
 local x, y = values[1], values[2]
 ```
-
----
-
-## Platform Differences
-
-The offsets in this file work on both platforms. What changes is the API call you use to obtain the
-pointer.
-
-| Topic                                | SAPP                              | Chimera                                                  |
-| ------------------------------------ | --------------------------------- | -------------------------------------------------------- |
-| Runs on                              | Dedicated server                  | Game client                                              |
-| Player index in the API              | 1-16                              | 0-15                                                     |
-| `get_dynamic_player` for dead player | Returns `0`                       | Returns `nil`                                            |
-| Object ID to address                 | `get_object_memory(object_id)`    | `get_object(object_id)`                                  |
-| Tag ID to tag entry                  | `lookup_tag(tag_id)`              | `get_tag(tag_id)`                                        |
-| Platform detection                   | `halo_type` global                | None, probe candidate addresses                          |
-| Signature scanning                   | `sig_scan`                        | Not available                                            |
-| 3D vector access                     | `read_vector3d`, `write_vector3d` | Not available, use `read_float` / `write_float` per axis |
-| Memory writes                        | Any valid address                 | Local player only; writing to others desyncs             |
-| Run a console command                | `execute_command`                 | `execute_script`                                         |
-
-> [!WARNING]
-> On Chimera (client-side), memory writes should be strictly restricted to the local player. Writing
-> to remote player structures or global game state can cause immediate client desyncs, crashes, or
-> server anti-cheat kicks.
-
-`get_player(i)` and `get_dynamic_player(i)` exist on both. On Chimera, omitting the index uses the
-local player.
 
 ---
 
@@ -251,7 +207,7 @@ position.
 
 Each tag entry is `0x20` bytes. On Chimera, `get_tag(tag_id)` returns the entry pointer, and the
 Chimera guide reads the name pointer at `+0x10`. On SAPP, the table base and lookup are covered in
-the Tag Table section of the [SAPP Cheat Sheet](sapp/cheat-sheet.md#tag-table).
+the Tag Table section of the [SAPP Guide](sapp/guide.md#tag-table).
 
 > [!NOTE]
 > Each tag entry is exactly `0x20` bytes wide. Make sure to dereference the tag data pointer at
@@ -479,105 +435,6 @@ Example: an object moving at 15 WU/s covers `15 / 30 = 0.5` WU per tick, which i
 
 ---
 
-## Chimera Pointers
-
-The SAPP Hardcoded Pointers do not work in Chimera. They point into the dedicated server, Chimera
-runs on the game client, and Chimera has no `sig_scan` to find the new locations. Each Chimera
-pointer is hardcoded per platform. Relative offsets from a pointer you already hold are unaffected.
-
-Only the pointers below are documented for Chimera so far.
-
-### Candidates Table
-
-| Pointer                          | PC Address                   | CE Address                   | Description                                                                                          |
-| -------------------------------- | ---------------------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------- |
-| `gametype`                       | `0x6F1C88`                   | `0x68CC48`                   | Gametype struct base (see Gametype Struct)                                                           |
-| `race_globals`                   | `0x87A520`                   | `0x64C1C0`                   | Race global data base (see Race Globals)                                                             |
-| `camera_address`                 | `0x647498`                   | `0x647498`                   | Camera state mode (30400 = First Person, 31952 = Third Person, 30704 = Devcam)                       |
-| `camera_interpolation`           | `0x647494`                   | `0x647494`                   | Camera interpolation scale when entering or leaving vehicles                                         |
-| `zoom_address`                   | `read_dword(0x815918) + 204` | `read_dword(0x815918) + 204` | Local player camera zoom level pointer                                                               |
-| `mouse_input_address`            | `0x64C73C`                   | `0x64C73C`                   | Mouse input state (+0x0 delta X, +0x4 delta Y, +0x8 scroll wheel, +0xC left click, +0xE right click) |
-| `keyboard_input_address`         | `0x64C550`                   | `0x64C550`                   | Keyboard key state array indexed by key code                                                         |
-| `chat_open_address`              | `0x64E788`                   | `0x64E788`                   | Chat input window state (1 = open, 0 = closed)                                                       |
-| `announcer_address`              | `0x64C020`                   | `0x64C020`                   | Client-side multiplayer announcer sound queue (+0x8 delay, +0x14 sound tag ID)                       |
-| `first_person_animation_address` | `0x40000EB8`                 | `0x40000EB8`                 | First-person animation structure (+0x1E base anim ID, +0x20 base anim frame)                         |
-| `game_state_address`             | `0x400002E8`                 | `0x400002E8`                 | Screen render and pause state (+0x0 screen render, +0x1 game running, +0x2 game paused)              |
-| `game_paused_address`            | `0x004ACA79`                 | `0x004ACA79`                 | Game pause byte (1 = paused, 0 = running)                                                            |
-| `game_on_menus_address`          | `0x00622058`                 | `0x00622058`                 | Game menu state byte (1 = in menu/console, 0 = gameplay)                                             |
-| `joystick_input_address`         | `0x0064D998`                 | `0x0064D998`                 | Controller/joystick input structure array (0xA0 bytes per controller)                                |
-| `object_table_address`           | `0x400506B4`                 | `0x4005062C`                 | Global object table header                                                                           |
-| `device_groups_table`            | `0x00816110`                 | `0x006E1C50`                 | Scenario device groups table                                                                         |
-| `widgets_instance`               | `0x006B401C`                 | `0x006B401C`                 | UI widget instance structure                                                                         |
-| `synced_network_objects`         | `0x006226F0`                 | `0x00598020`                 | Synced network objects table pointer                                                                 |
-| `gravity_global`                 | `0x637BE4`                   | `0x637BE4`                   | World gravity float multiplier (default ~ 0.003565)                                                  |
-| `ctf_flag_red`                   | `0x40492F1C`                 | `0x40492F1C`                 | Red flag world spawn coordinates structure                                                           |
-| `ctf_flag_blue`                  | `0x40492FB0`                 | `0x40492FB0`                 | Blue flag world spawn coordinates structure                                                          |
-| `koth_globals`                   | `0x64BDF0`                   | `0x64BDF0`                   | King of the Hill global data (+0x90 marker count, +0x94 marker coords, +0x184 center coords)         |
-| `race_locs`                      | `0x68C848`                   | `0x68C848`                   | Race checkpoint world coordinates array (0x20 bytes per checkpoint)                                  |
-
-### Probing the Platform
-
-Chimera has no `halo_type` and no function that reports which client you are on. Put both variants
-in a candidates table, probe each one, and check the value you read against what the field should
-hold.
-
-```lua
--- Same logical pointer, different address on each platform.
-local candidates = {
-    { gametype = 0x6F1C88, race_globals = 0x87A520 }, -- PC
-    { gametype = 0x68CC48, race_globals = 0x64C1C0 }  -- CE
-}
-
-local gametype_base, race_globals
-
-local function detectPlatform()
-    for _, cand in ipairs(candidates) do
-        -- pcall: an address valid on one platform may be unmapped on the other.
-        local ok, game_type = pcall(function()
-            return read_byte(cand.gametype + 0x30)
-        end)
-
-        -- 5 = Race. The value, not just a successful read, identifies the platform.
-        if ok and game_type == 5 then
-            gametype_base = cand.gametype
-            race_globals = cand.race_globals
-            return
-        end
-    end
-end
-```
-
-The check compares against `5`, so it only resolves while a race gametype is loaded. A script for
-another gametype would compare against that gametype's code instead. If both probes fail, both
-pointers stay `nil`, so check before using them.
-
-### Object Table
-
-The Chimera guide enumerates objects from a hardcoded address instead of a signature. It does not
-give separate PC and CE values for it.
-
-```lua
-local function scanObjects()
-    local object_table_address = read_dword(0x401192 + 2)
-    local object_table = read_dword(object_table_address)
-    if object_table == 0 then return end
-
-    local object_count = read_word(object_table + 0x2E)
-    local first_object = read_dword(object_table + 0x34)
-
-    for i = 0, object_count - 1 do
-        local object_entry = first_object + i * 0xC + 0x8
-        local object = read_dword(object_entry)
-
-        if object ~= 0 then
-            -- Valid object pointer.
-        end
-    end
-end
-```
-
----
-
 ## Offset Helpers
 
 These take a pointer, so they behave the same on both platforms. Get the pointer first (see
@@ -670,7 +527,6 @@ end
 ---@return boolean is_in_vehicle True if riding in a vehicle.
 local function inVehicle(dyn_player)
     local vehicle_id = read_dword(dyn_player + 0x11C)
-    local is_in_vehicle = vehicle_id ~= 0xFFFFFFFF
     return vehicle_id ~= 0xFFFFFFFF
 end
 
@@ -1274,7 +1130,7 @@ local distance_m = distanceMeters(px, py, pz, loc)
 These are Halo's built-in server commands. SAPP enhances or overrides some. Run them from a script
 with `execute_command` on SAPP or `execute_script` on Chimera. Stock `sv_*` commands need a plain
 player index. SAPP-only commands and player expressions are in the
-[SAPP Cheat Sheet](sapp/cheat-sheet.md#command-reference).
+[SAPP Guide](sapp/guide.md#command-reference).
 
 | Command                    | Usage                                  | Description                                                         |
 | -------------------------- | -------------------------------------- | ------------------------------------------------------------------- |
@@ -1372,5 +1228,3 @@ For example:
 2. Another player joins using a profile also named `New001`.
 3. Halo detects the duplicate name conflict.
 4. The second player is assigned a temporary placeholder name such as `Caboose`, or `Wheezy`.
-
----
