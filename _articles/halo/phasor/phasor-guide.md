@@ -960,7 +960,7 @@ function gettaginfo(map_id) end
 --- recycle is ignored and respawn_time becomes the delay before the object is destroyed.
 ---@param tag_type     string      Four-letter class
 ---@param tag_name     string
----@param parent_id    integer     -1 for none
+---@param parent_id    integer - 1 for none
 ---@param respawn_time number
 ---@param recycle      boolean     true respawns, false destroys
 ---@param x            number

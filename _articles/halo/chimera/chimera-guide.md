@@ -172,12 +172,12 @@ server_type = "none"
 ---@field unload       ChimeraEvent OnScriptUnload(). The script is unloading.
 
 --- Register a global callback, or clear it by omitting callback_name.
----@param event         ChimeraEvent | string
+---@param event          ChimeraEvent | string
 ---@param callback_name? ChimeraCallbackName | string Name of a global function
 function set_callback(event, callback_name) end
 
 --- Runs the callback every interval until it returns false or the timer is stopped.
----@param interval_ms   number Minimum 0.1
+---@param interval_ms   number                          Minimum 0.1
 ---@param callback_name string                          Name of a global function
 ---@param ...           boolean | number | string | nil Forwarded to the callback
 ---@return integer timer_id
@@ -229,10 +229,10 @@ function draw_text(text, left, top, right, bottom, font, align, alpha, red, gree
 function load_ui_widget(tag_path_or_id) end
 
 --- Overrides a font tag's family, size, weight, shadow, and offset.
----@param tag_id integer
----@param family string
----@param size integer
----@param weight integer
+---@param tag_id   integer
+---@param family   string
+---@param size     integer
+---@param weight   integer
 ---@param shadow_x integer
 ---@param shadow_y integer
 ---@param offset_x integer
@@ -283,10 +283,10 @@ function delete_object(object_id) end
 
 --- Spawns an object. In multiplayer, other players do not see client-side spawned objects.
 ---@overload fun(tag_class: string, tag_path: string, x: number, y: number, z: number): integer
----@param tag_id  number
----@param x       number
----@param y       number
----@param z       number
+---@param tag_id number
+---@param x      number
+---@param y      number
+---@param z      number
 ---@return integer object_id
 function spawn_object(tag_id, x, y, z) end
 
