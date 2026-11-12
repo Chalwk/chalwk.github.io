@@ -835,6 +835,7 @@ function safe_write(enabled) end
 --- | "EB1F8B482085C9750C"                                                                 # color_patch2: patch address, use sig as is
 --- | "68??????0068??????0068000401006A00"                                                 # computer_name_address: read_dword(sig + 0x1)
 --- | "8B3C85????????3BF9741FE8????????8B8E2C0200008B4610"                                 # ctf_globals: read_dword(sig + 3)
+--- | "A1????????8B88080100008B410C"                                                       # game_globals_tag_slot: read_dword(sig + 1)
 --- | "A1????????8B480C894D00"                                                             # gameinfo_header: read_dword(sig + 0x1)
 --- | "B9360000008BF3BF????????"                                                           # gametype_base (CE only): read_dword(sig + 0x8), PC needs the hardcoded 0x671320
 --- | "BE??????008BC68B4DF064890D000000005F5E5B8BE55DC36A0C"                               # hardware_info_address: read_dword(sig + 0x1)
@@ -2368,6 +2369,7 @@ Signatures below use `sig_scan`, which works on both PC and CE. Use the [hardcod
 | `color_patch`               | `sig_scan("741F8B482085C9750C")` or `sig_scan("EB1F8B482085C9750C")` if already patched          |
 | `computer_name_address`     | `read_dword(sig_scan("68??????0068??????0068000401006A00") + 0x1)`                               |
 | `ctf_globals`               | `read_dword(sig_scan("8B3C85????????3BF9741FE8????????8B8E2C0200008B4610") + 3)`                 |
+| `game_globals_tag_slot`     | `read_dword(sig_scan("A1????????8B88080100008B410C") + 1)`                                       |
 | `gameinfo_header`           | `read_dword(sig_scan("A1????????8B480C894D00") + 0x1)`                                           |
 | `gametype_base`             | `read_dword(sig_scan("B9360000008BF3BF????????") + 0x8)` (CE only; see note below)               |
 | `hardware_info_address`     | `read_dword(sig_scan("BE??????008BC68B4DF064890D000000005F5E5B8BE55DC36A0C") + 0x1)`             |
