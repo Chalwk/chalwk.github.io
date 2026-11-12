@@ -1431,6 +1431,35 @@ local function getPlayerPing(player_id)
 end
 ```
 
+#### Get Player Score
+
+Reads the player's score for the current gametype. Define `oddball_globals` as described under [Pointers](#pointers) before using this helper.
+
+```lua
+local function getPlayerScore(player_id)
+    local static_player = get_player(player_id)
+    if not static_player then return 0 end
+
+    local gametype = get_var(0, "$gt")
+    if gametype == "ctf" then -- CTF (flag scores)
+        return read_word(static_player + 0xC8)
+    elseif gametype == "slayer" then -- Slayer (kills minus betrays/suicides)
+        local kills = read_word(static_player + 0x9C)
+        local ffa = get_var(0, "$ffa") == "1"
+        local penalties = read_word(static_player + (ffa and 0xAC or 0xB0))
+        return kills - penalties
+    elseif gametype == "oddball" then -- Oddball (time with ball in seconds)
+        local ticks = read_dword(oddball_globals + 0x44 + to_real_index(player_id) * 4)
+        return math.floor(ticks / 30)
+    elseif gametype == "king" then -- KOTH (hill time in seconds)
+        return math.floor(read_word(static_player + 0xC4) / 30)
+    elseif gametype == "race" then -- Race (laps completed)
+        return read_word(static_player + 0xC6)
+    end
+    return 0
+end
+```
+
 #### Set Player Color
 
 A respawn is usually required for the change to fully apply. Color values are listed under [Team and Color](../common-reference.md#team-and-color).

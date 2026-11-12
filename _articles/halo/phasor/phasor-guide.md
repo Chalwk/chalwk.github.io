@@ -584,7 +584,7 @@ Do not mix these up.
 | `gettagid(tag_type, tag_name)`                                                | Map ID of a tag, e.g. `gettagid("weap", "weapons\\pistol\\pistol")`                        |
 | `createobject(tag_type, tag_name, parent_id, respawn_time, recycle, x, y, z)` | Returns the new object ID (see below)                                                      |
 | `destroyobject(object_id)`                                                    | Deletes an object. An invalid ID can crash the server                                      |
-| `movobjcoords(object_id, x, y, z)`                                            | Teleports an object to absolute coordinates                                                |
+| `movobjectcoords(object_id, x, y, z)`                                         | Teleports an object to absolute coordinates                                                |
 | `movobjname(object_id, name)`                                                 | Teleports an object to a named location such as `"redbase"`                                |
 | `assignweapon(player, object_id)`                                             | Gives a weapon to a player who has fewer than 4                                            |
 | `updateammo(weapon_id)`                                                       | Forces ammo changes on a weapon to sync                                                    |
@@ -1176,7 +1176,7 @@ end
 ---@return number|nil slot Active weapon slot index (0-3), or nil if dead.
 local function getActiveWeaponSlot(player)
     local dyn_player = getDynamicPlayer(player)
-    return dyn_player and readword(dyn_player + 0x2F2) or nil
+    return dyn_player and readbyte(dyn_player + 0x2F2) or nil
 end
 ```
 
@@ -1197,11 +1197,12 @@ local function getPlayerScore(player, gametype_base)
         return readword(static_player + 0xC8)
     elseif gametype == 2 then -- Slayer (kills minus betrays/suicides)
         local kills = readword(static_player + 0x9C)
-        local team_play = readbyte(gametype_base + 0x34)
-        local penalties = readword(static_player + (team_play == 1 and 0xAC or 0xB0))
+        local ffa = readbyte(gametype_base + 0x34) == 1
+        local penalties = readword(static_player + (ffa and 0xAC or 0xB0))
         return kills - penalties
     elseif gametype == 3 then -- Oddball (time with ball in seconds)
-        return math.floor(readword(static_player + 0xC8) / 30)
+        local ticks = readdword(oddball_globals + 0x44 + player * 4)
+        return math.floor(ticks / 30)
     elseif gametype == 4 then -- KOTH (hill time in seconds)
         return math.floor(readword(static_player + 0xC4) / 30)
     elseif gametype == 5 then -- Race (laps completed)
