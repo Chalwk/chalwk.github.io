@@ -9,8 +9,7 @@ tags: [ sapp, lua, scripting, server, tutorial ]
 ---
 
 > [!NOTE]
-> Some callback arguments are strings even though they hold numbers. The annotations below show the
-> real type.
+> Some callback arguments are strings even though they represent numbers - this is not a typo.
 
 ```lua
 ---@type SappApiVersion
