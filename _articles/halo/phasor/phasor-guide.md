@@ -1182,7 +1182,7 @@ end
 
 #### Gametype Score Calculator
 
-Calculates a player's score according to the active gametype rules (CTF flag captures, Slayer net kills, KOTH hill time, Race laps, or Oddball hold time).
+Reads the player's score for the current gametype. See `oddball_globals` in [Pointers](../sapp/sapp-guide.md#pointers) before using this helper.
 
 ```lua
 ---@param player number Player index ID (0-15).
@@ -1197,11 +1197,11 @@ local function getPlayerScore(player, gametype_base)
         return readword(static_player + 0xC8)
     elseif gametype == 2 then -- Slayer (kills minus betrays/suicides)
         local kills = readword(static_player + 0x9C)
-        local ffa = readbyte(gametype_base + 0x34) == 1
-        local penalties = readword(static_player + (ffa and 0xAC or 0xB0))
+        local team_play = readbyte(gametype_base + 0x34) == 1
+        local penalties = readword(static_player + (team_play and 0xAC or 0xB0))
         return kills - penalties
     elseif gametype == 3 then -- Oddball (time with ball in seconds)
-        local ticks = readdword(oddball_globals + 0x44 + player * 4)
+        local ticks = readdword(oddball_globals + 0x44 + player * 4) -- See 
         return math.floor(ticks / 30)
     elseif gametype == 4 then -- KOTH (hill time in seconds)
         return math.floor(readword(static_player + 0xC4) / 30)

@@ -556,11 +556,11 @@ function file_exists(path) end
 | `game_paused_address`            | `0x004ACA79`                 | `0x004ACA79`                 | Game pause byte (1 = paused, 0 = running)                                                            |
 | `game_on_menus_address`          | `0x00622058`                 | `0x00622058`                 | Game menu state byte (1 = in menu/console, 0 = gameplay)                                             |
 | `joystick_input_address`         | `0x0064D998`                 | `0x0064D998`                 | Controller/joystick input structure array (0xA0 bytes per controller)                                |
-| `object_table_address`           | `0x400506B4`                 | `0x4005062C`                 | Global object table header                                                                           |
+| `object_table_address`           | `0x400506B4`                 | `0x4005062C`                 | Pointer to the global object table header                                                            |
 | `device_groups_table`            | `0x00816110`                 | `0x006E1C50`                 | Scenario device groups table                                                                         |
 | `widgets_instance`               | `0x006B401C`                 | `0x006B401C`                 | UI widget instance structure                                                                         |
 | `synced_network_objects`         | `0x006226F0`                 | `0x00598020`                 | Synced network objects table pointer                                                                 |
-| `gravity_global`                 | `0x637BE4`                   | `0x637BE4`                   | World gravity float multiplier (default ~ 0.003565)                                                  |
+| `gravity_global`                 | `0x637BE4`                   | `0x637BE4`                   | World gravity float multiplier (default ~ 0.003656)                                                  |
 | `ctf_flag_red`                   | `0x40492F1C`                 | `0x40492F1C`                 | Red flag world spawn coordinates structure                                                           |
 | `ctf_flag_blue`                  | `0x40492FB0`                 | `0x40492FB0`                 | Blue flag world spawn coordinates structure                                                          |
 | `koth_globals`                   | `0x64BDF0`                   | `0x64BDF0`                   | King of the Hill global data (+0x90 marker count, +0x94 marker coords, +0x184 center coords)         |
@@ -874,14 +874,14 @@ execute_script("(object_teleport (player0) teleport_flag)")
 
 ### Player and object functions
 
-| Function             | Signature                                                               | Notes                                                                                                    |
-| -------------------- | ----------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| `get_player`         | `get_player([index])`                                                   | Returns a player pointer (integer) or `nil`. With no argument, returns the local client player.          |
-| `get_dynamic_player` | `get_dynamic_player([index])`                                           | Returns the dynamic object pointer for the local player or the player at the given RCON index, or `nil`. |
-| `get_object`         | `get_object(id)`                                                        | Returns a dynamic object pointer for an object ID, or `nil`.                                             |
-| `delete_object`      | `delete_object(object_id)`                                              | Deletes the object. Raises an error if the ID is null.                                                   |
-| `spawn_object`       | `spawn_object(tag_id, x, y, z)` or `spawn_object(class, path, x, y, z)` | Spawns an object. Returns the new object ID.                                                             |
-| `get_tag`            | `get_tag(id)` or `get_tag(class, path)`                                 | Returns a tag pointer (integer) or `nil`.                                                                |
+| Function             | Signature                                                               | Notes                                                                                           |
+| -------------------- | ----------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `get_player`         | `get_player([index])`                                                   | Returns a player pointer (integer) or `nil`. With no argument, returns the local client player. |
+| `get_dynamic_player` | `get_dynamic_player([index])`                                           | Returns the dynamic object pointer for the local player or the player at the given index.       |
+| `get_object`         | `get_object(id)`                                                        | Returns a dynamic object pointer for an object ID, or `nil`.                                    |
+| `delete_object`      | `delete_object(object_id)`                                              | Deletes the object. Raises an error if the ID is null.                                          |
+| `spawn_object`       | `spawn_object(tag_id, x, y, z)` or `spawn_object(class, path, x, y, z)` | Spawns an object. Returns the new object ID.                                                    |
+| `get_tag`            | `get_tag(id)` or `get_tag(class, path)`                                 | Returns a tag pointer (integer) or `nil`.                                                       |
 
 #### Player pointers
 

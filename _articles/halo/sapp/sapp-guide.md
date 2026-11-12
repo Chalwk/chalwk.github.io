@@ -1433,7 +1433,7 @@ end
 
 #### Get Player Score
 
-Reads the player's score for the current gametype. Define `oddball_globals` as described under [Pointers](#pointers) before using this helper.
+Reads the player's score for the current gametype. See `oddball_globals` in [Pointers](#pointers) before using this helper.
 
 ```lua
 local function getPlayerScore(player_id)
@@ -1445,8 +1445,8 @@ local function getPlayerScore(player_id)
         return read_word(static_player + 0xC8)
     elseif gametype == "slayer" then -- Slayer (kills minus betrays/suicides)
         local kills = read_word(static_player + 0x9C)
-        local ffa = get_var(0, "$ffa") == "1"
-        local penalties = read_word(static_player + (ffa and 0xAC or 0xB0))
+        local team_play = get_var(0, "$ffa") ~= "1"
+        local penalties = read_word(static_player + (team_play and 0xAC or 0xB0))
         return kills - penalties
     elseif gametype == "oddball" then -- Oddball (time with ball in seconds)
         local ticks = read_dword(oddball_globals + 0x44 + to_real_index(player_id) * 4)
