@@ -22,10 +22,8 @@ set_callback("map load", "OnMapLoad")
 set_callback("map preload", "OnMapPreload")
 set_callback("precamera", "OnPreCamera")
 set_callback("preframe", "OnPreFrame")
-set_callback("prespawn", "OnPreSpawn")
 set_callback("pretick", "OnPreTick")
 set_callback("rcon_message", "OnRconMessage")
-set_callback("spawn", "OnSpawn")
 set_callback("tick", "OnTick")
 set_callback("unload", "OnScriptUnload")
 
@@ -71,14 +69,6 @@ function OnMapPreload() end
 -- Called after a map has fully loaded.
 -- Use this to reset or initialize gameplay state.
 function OnMapLoad() end
-
--- Called before a player spawns.
----@param player number The player index
-function OnPreSpawn(player) end
-
--- Called when a player finishes spawning.
----@param player number The player index
-function OnSpawn(player) end
 
 -- Called when an incoming RCON message is received.
 ---@param msg string The RCON message

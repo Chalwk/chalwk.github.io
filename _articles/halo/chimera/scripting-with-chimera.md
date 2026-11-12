@@ -113,8 +113,6 @@ The callback names are matched after converting underscores to spaces, so `"map_
 | `map_preload`  | Before map loading                    | none                                                                          | -                                                                     |
 | `precamera`    | Before the camera is applied          | 10 numbers: `x, y, z, fov, forward.x, forward.y, forward.z, up.x, up.y, up.z` | Up to 10 numbers to override the camera (ignored at `final` priority) |
 | `rcon_message` | An RCON message is received           | `message` string                                                              | `false` to block; `true` or nothing to allow                          |
-| `spawn`        | An object spawns                      | none                                                                          | -                                                                     |
-| `prespawn`     | Before an object spawns               | none                                                                          | -                                                                     |
 | `tick`         | Each game tick                        | none                                                                          | -                                                                     |
 | `pretick`      | Before each game tick                 | none                                                                          | -                                                                     |
 | `unload`       | Script is being unloaded              | none                                                                          | -                                                                     |
