@@ -13,6 +13,7 @@ tags: [ sapp, lua, scripting, server, tutorial ]
 > real type.
 
 ```lua
+---@type SappApiVersion
 api_version = "1.12.0.0"
 
 function OnScriptLoad()
