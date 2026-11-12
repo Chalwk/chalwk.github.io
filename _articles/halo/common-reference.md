@@ -226,16 +226,15 @@ The "candidate" pointers below are the commonly used base addresses for the same
 Chimera. They are referenced throughout the offset tables when a struct is exposed as a live global
 instead of being resolved from a signature or pointer chain.
 
-| Struct         | Typical global / candidate | Notes                                               |
-| -------------- | -------------------------- | --------------------------------------------------- |
-| Gametype       | `gametype`                 | Base of the active gametype configuration           |
-| Race globals   | `race_globals`             | Base of the current race/session state              |
-| Dynamic player | `getDynamicPlayer(player)` | Access the live per-player object for a given index |
+| Struct         | Typical global / candidate | Notes                                                                                              |
+| -------------- | -------------------------- | -------------------------------------------------------------------------------------------------- |
+| Gametype       | `gametype_base`            | Base of the active gametype configuration.                                                         |
+| Race globals   | `race_globals`             | Base of the current race/session state. Address differs between Chimera and SAPP (see note below). |
+| Dynamic player | `getDynamicPlayer(player)` | Access the live per-player object for a given index                                                |
 
 ### Gametype Struct
 
-Relative to the gametype struct base. On Chimera that is `gametype` from the
-[Candidates Table](#candidates-table).
+Relative to the gametype struct base. On Chimera that is `gametype_base` from the [Candidates Table](#candidates-table).
 
 | Offset | Type    | Field                                                                                              |
 | ------ | ------- | -------------------------------------------------------------------------------------------------- |
@@ -259,8 +258,7 @@ Relative to the gametype struct base. On Chimera that is `gametype` from the
 
 ### Race Globals
 
-Relative to the race globals base. On Chimera that is `race_globals` from the
-[Candidates Table](#candidates-table).
+Relative to the race globals base. On Chimera that is `race_globals` from the [Candidates Table](#candidates-table).
 
 | Offset             | Field                                                                      |
 | ------------------ | -------------------------------------------------------------------------- |

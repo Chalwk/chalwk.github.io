@@ -540,31 +540,31 @@ function file_exists(path) end
 
 ### Memory addresses and offsets
 
-| Pointer                          | PC Address                   | CE Address                   | Description                                                                                          |
-| -------------------------------- | ---------------------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------- |
-| `gametype`                       | `0x6F1C88`                   | `0x68CC48`                   | Gametype struct base (see Gametype Struct)                                                           |
-| `race_globals`                   | `0x87A520`                   | `0x64C1C0`                   | Race global data base (see Race Globals)                                                             |
-| `camera_address`                 | `0x647498`                   | `0x647498`                   | Camera state mode (30400 = First Person, 31952 = Third Person, 30704 = Devcam)                       |
-| `camera_interpolation`           | `0x647494`                   | `0x647494`                   | Camera interpolation scale when entering or leaving vehicles                                         |
-| `zoom_address`                   | `read_dword(0x815918) + 204` | `read_dword(0x815918) + 204` | Local player camera zoom level pointer                                                               |
-| `mouse_input_address`            | `0x64C73C`                   | `0x64C73C`                   | Mouse input state (+0x0 delta X, +0x4 delta Y, +0x8 scroll wheel, +0xC left click, +0xE right click) |
-| `keyboard_input_address`         | `0x64C550`                   | `0x64C550`                   | Keyboard key state array indexed by key code                                                         |
-| `chat_open_address`              | `0x64E788`                   | `0x64E788`                   | Chat input window state (1 = open, 0 = closed)                                                       |
-| `announcer_address`              | `0x64C020`                   | `0x64C020`                   | Client-side multiplayer announcer sound queue (+0x8 delay, +0x14 sound tag ID)                       |
-| `first_person_animation_address` | `0x40000EB8`                 | `0x40000EB8`                 | First-person animation structure (+0x1E base anim ID, +0x20 base anim frame)                         |
-| `game_state_address`             | `0x400002E8`                 | `0x400002E8`                 | Screen render and pause state (+0x0 screen render, +0x1 game running, +0x2 game paused)              |
-| `game_paused_address`            | `0x004ACA79`                 | `0x004ACA79`                 | Game pause byte (1 = paused, 0 = running)                                                            |
-| `game_on_menus_address`          | `0x00622058`                 | `0x00622058`                 | Game menu state byte (1 = in menu/console, 0 = gameplay)                                             |
-| `joystick_input_address`         | `0x0064D998`                 | `0x0064D998`                 | Controller/joystick input structure array (0xA0 bytes per controller)                                |
-| `object_table_address`           | `0x400506B4`                 | `0x4005062C`                 | Pointer to the global object table header                                                            |
-| `device_groups_table`            | `0x00816110`                 | `0x006E1C50`                 | Scenario device groups table                                                                         |
-| `widgets_instance`               | `0x006B401C`                 | `0x006B401C`                 | UI widget instance structure                                                                         |
-| `synced_network_objects`         | `0x006226F0`                 | `0x00598020`                 | Synced network objects table pointer                                                                 |
-| `gravity_global`                 | `0x637BE4`                   | `0x637BE4`                   | World gravity float multiplier (default ~ 0.003656)                                                  |
-| `ctf_flag_red`                   | `0x40492F1C`                 | `0x40492F1C`                 | Red flag world spawn coordinates structure                                                           |
-| `ctf_flag_blue`                  | `0x40492FB0`                 | `0x40492FB0`                 | Blue flag world spawn coordinates structure                                                          |
-| `koth_globals`                   | `0x64BDF0`                   | `0x64BDF0`                   | King of the Hill global data (+0x90 marker count, +0x94 marker coords, +0x184 center coords)         |
-| `race_locs`                      | `0x68C848`                   | `0x68C848`                   | Race checkpoint world coordinates array (0x20 bytes per checkpoint)                                  |
+| Pointer                          | PC Address                   | CE Address                   | Description                                                                                                                                           |
+| -------------------------------- | ---------------------------- | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `gametype_base`                  | `0x6F1C88`                   | `0x68CC48`                   | Gametype struct base (see Gametype Struct).                                                                                                           |
+| `race_globals`                   | `0x87A520`                   | `0x64C1C0`                   | Race global data base (see Race Globals)                                                                                                              |
+| `camera_address`                 | `0x647498`                   | `0x647498`                   | Camera state mode (30400 = First Person, 31952 = Third Person, 30704 = Devcam)                                                                        |
+| `camera_interpolation`           | `0x647494`                   | `0x647494`                   | Camera interpolation scale when entering or leaving vehicles                                                                                          |
+| `zoom_address`                   | `read_dword(0x815918) + 204` | `read_dword(0x815918) + 204` | Local player camera zoom level pointer                                                                                                                |
+| `mouse_input_address`            | `0x64C73C`                   | `0x64C73C`                   | Mouse input state (+0x0 delta X, +0x4 delta Y, +0x8 scroll wheel, +0xC left click, +0xE right click)                                                  |
+| `keyboard_input_address`         | `0x64C550`                   | `0x64C550`                   | Keyboard key state array indexed by key code                                                                                                          |
+| `chat_open_address`              | `0x64E788`                   | `0x64E788`                   | Chat input window state (1 = open, 0 = closed)                                                                                                        |
+| `announcer_address`              | `0x64C020`                   | `0x64C020`                   | Client-side multiplayer announcer sound queue (+0x8 delay, +0x14 sound tag ID)                                                                        |
+| `first_person_animation_address` | `0x40000EB8`                 | `0x40000EB8`                 | First-person animation structure (+0x1E base anim ID, +0x20 base anim frame)                                                                          |
+| `game_state_address`             | `0x400002E8`                 | `0x400002E8`                 | Screen render and pause state (+0x0 screen render, +0x1 game running, +0x2 game paused)                                                               |
+| `game_paused_address`            | `0x004ACA79`                 | `0x004ACA79`                 | Game pause byte (1 = paused, 0 = running)                                                                                                             |
+| `game_on_menus_address`          | `0x00622058`                 | `0x00622058`                 | Game menu state byte (1 = in menu/console, 0 = gameplay)                                                                                              |
+| `joystick_input_address`         | `0x0064D998`                 | `0x0064D998`                 | Controller/joystick input structure array (0xA0 bytes per controller)                                                                                 |
+| `object_table_header`            | `0x400506B4`                 | `0x400506B4`                 | Object table header. Same address on both platforms. Use `read_dword(0x401192 + 2)` and dereference once to resolve it at runtime (see Object Table). |
+| `device_groups_table`            | `0x00816110`                 | `0x006E1C50`                 | Scenario device groups table                                                                                                                          |
+| `widgets_instance`               | `0x006B401C`                 | `0x006B401C`                 | UI widget instance structure                                                                                                                          |
+| `synced_network_objects`         | `0x006226F0`                 | `0x00598020`                 | Synced network objects table pointer                                                                                                                  |
+| `gravity_global`                 | `0x637BE4`                   | `0x637BE4`                   | World gravity float multiplier (default ~ 0.003656)                                                                                                   |
+| `ctf_flag_red`                   | `0x40492F1C`                 | `0x40492F1C`                 | Red flag world spawn coordinates structure                                                                                                            |
+| `ctf_flag_blue`                  | `0x40492FB0`                 | `0x40492FB0`                 | Blue flag world spawn coordinates structure                                                                                                           |
+| `koth_globals`                   | `0x64BDF0`                   | `0x64BDF0`                   | King of the Hill global data (+0x90 marker count, +0x94 marker coords, +0x184 center coords)                                                          |
+| `race_locs`                      | `0x68C848`                   | `0x68C848`                   | Race checkpoint world coordinates array (0x20 bytes per checkpoint)                                                                                   |
 
 ### Probing the Platform
 
@@ -575,8 +575,8 @@ hold.
 ```lua
 -- Same logical pointer, different address on each platform.
 local candidates = {
-    { gametype = 0x6F1C88, race_globals = 0x87A520 }, -- PC
-    { gametype = 0x68CC48, race_globals = 0x64C1C0 }  -- CE
+    { gametype_base = 0x6F1C88, race_globals = 0x87A520 }, -- PC
+    { gametype_base = 0x68CC48, race_globals = 0x64C1C0 }  -- CE
 }
 
 local gametype_base, race_globals
@@ -585,12 +585,12 @@ local function detectPlatform()
     for _, cand in ipairs(candidates) do
         -- pcall: an address valid on one platform may be unmapped on the other.
         local ok, game_type = pcall(function()
-            return read_byte(cand.gametype + 0x30)
+            return read_byte(cand.gametype_base + 0x30)
         end)
 
         -- 5 = Race. The value, not just a successful read, identifies the platform.
         if ok and game_type == 5 then
-            gametype_base = cand.gametype
+            gametype_base = cand.gametype_base
             race_globals = cand.race_globals
             return
         end
@@ -598,20 +598,22 @@ local function detectPlatform()
 end
 ```
 
-The check compares against `5`, so it only resolves while a race gametype is loaded. A script for
-another gametype would compare against that gametype's code instead. If both probes fail, both
-pointers stay `nil`, so check before using them.
-
 ### Object Table
 
 ```lua
 local function scanObjects()
-    local object_table_address = read_dword(0x401192 + 2)
-    local object_table = read_dword(object_table_address)
+    -- 0x401194 holds a per-platform static pointer (0x7FB710 on CE,
+    -- 0x8603B0 on PC). Dereferencing it yields the object-table header,
+    -- which lives at 0x400506B4 on BOTH platforms.
+    local header_ptr = read_dword(0x401192 + 2)
+    if header_ptr == 0 then return end
+
+    local object_table = read_dword(header_ptr)
     if object_table == 0 then return end
 
     local object_count = read_word(object_table + 0x2E)
     local first_object = read_dword(object_table + 0x34)
+    if object_count == 0 or first_object == 0 then return end
 
     for i = 0, object_count - 1 do
         local object_entry = first_object + i * 0xC + 0x8
