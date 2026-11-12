@@ -82,12 +82,6 @@ Document each discovered offset with its type and purpose.
 
 ## Memory Offsets
 
-Every table below is relative to a pointer you already hold. Obtain the pointer with the call listed
-in [Platform Differences](#platform-differences).
-
-Memory arrays are indexed 0-15. SAPP's API takes 1-16, so convert with `to_real_index(i)` before
-using an index in an array offset. Chimera's API already takes 0-15, so pass the index through.
-
 ### Base Object
 
 Fields shared by every object (players, weapons, vehicles).

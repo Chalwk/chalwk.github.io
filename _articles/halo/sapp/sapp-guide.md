@@ -21,12 +21,11 @@ First you get a single server running and learn what every file does. Then you c
 
 ### Package Contents
 
-This is the folder structure after extracting either zip.
+This is the folder structure after extracting either zip:
 
 ```text
 .                                        Root of the extracted server
-|   haloded.exe                          Dedicated server executable (PC package)
-|   haloceded.exe                        Dedicated server executable (CE package)
+|   haloded.exe or haloceded.exe         Dedicated server executable
 |   motd.txt                             Message of the Day (CE only)
 |   run.bat                              Windows launch script
 |   run.sh                               Linux/Wine launch script
@@ -822,7 +821,6 @@ function safe_read(enabled) end
 function safe_write(enabled) end
 
 --- Known signatures. The comment shows the pointer name and how to resolve it from the match.
---- slayer_globals is left out on purpose: its pattern embeds a CE address, use the hardcoded pointer.
 ---@alias SappSignature
 --- | "A3??????00A1??????0033DB3BC3"                                                       # banlist_header: read_dword(sig + 1)
 --- | "68??????00E8??????0083C41068"                                                       # banlist_path_address: read_dword(sig + 0x1)
@@ -1123,27 +1121,6 @@ function timer(delay, callback_name, ...) end
 ---
 
 ## Utilities and Helpers
-
-Helpers, notes, and gotchas for SAPP Lua scripting. Lookup tables (pointers, signatures, variables, commands) are documented in [Reference Tables](#reference-tables). Offsets, unit conversions, and the helpers shared with Chimera are in [Common Reference](../common-reference.md).
-
-### Conventions
-
-Naming conventions are shared with Chimera. See [Conventions](../common-reference.md#conventions).
-
-#### Ternary Emulation
-
-SAPP picks PC or CE values with `halo_type`. The `and` / `or` rules are in [Ternary Emulation](../common-reference.md#ternary-emulation).
-
-```lua
-local var1, var2 = halo_type == 'PC' and 1 or 2, halo_type == 'PC' and 3 or 4
-```
-
-When several values change together, index a lookup table instead of repeating the condition:
-
-```lua
-local version = ({ PC = { 1, 2 }, CE = { 3, 4 } })[halo_type]
-local var1, var2 = version[1], version[2]
-```
 
 ### Player Index Convention
 
@@ -1817,7 +1794,7 @@ local px, py, pz = read_vector3d(dynamic_player + 0x5C)
 local distance_m = distanceMeters(px, py, pz, { 0, 0, 0 })
 ```
 
-### Raycasting with intersect
+#### Raycasting with intersect
 
 The `intersect()` function casts a 3D ray from an origin coordinate `(x, y, z)` along a direction vector `(vx, vy, vz)`. It tests for collisions against map geometry (terrain, structures, BSP) and dynamic objects (bipeds, vehicles, weapons, equipment, devices).
 
@@ -1825,13 +1802,13 @@ The `intersect()` function casts a 3D ray from an origin coordinate `(x, y, z)` 
 local success, hit_x, hit_y, hit_z, hit_object_id = intersect(x, y, z, vx, vy, vz, ignore_object_id)
 ```
 
-### Parameters
+##### Parameters
 
 - **`x, y, z`** (`number`): Starting 3D coordinates of the raycast in World Units (WU). To raycast from a player's line of sight, use their eye-level position (`read_vector3d(dyn + 0x5C)` with vertical offset `+0.65` when standing or `+0.35` when crouching).
 - **`vx, vy, vz`** (`number`): Direction vector multiplied by maximum reach distance in WU. Camera vectors read from `dyn + 0x230` are normalized unit vectors (length 1), so multiplying by `1000` casts a ray up to 1000 WU away.
 - **`ignore_object_id`** (`number`, optional): Object ID to ignore during collision testing. Pass the casting player's biped Object ID (`read_dword(get_player(player_id) + 0x34)`) so the ray does not hit the player's own body.
 
-#### Return Values
+##### Return Values
 
 - **`success`** (`boolean`): `true` if the ray intersected any surface or dynamic object before reaching the maximum vector distance; `false` if no collision occurred.
 - **`hit_x, hit_y, hit_z`** (`number`): 3D World Unit coordinates of the intersection point.
@@ -1840,7 +1817,7 @@ local success, hit_x, hit_y, hit_z, hit_object_id = intersect(x, y, z, vx, vy, v
 > [!TIP]
 > Use `get_object_memory(hit_object_id)` to verify whether a valid dynamic object was hit. If non-zero, read byte `object + 0xB4` to check its object type (`1` = Vehicle, `4` = Equipment, `5` = Weapon, `6` = Device).
 
-#### Example: Aim Target Raycasting
+##### Example: Aim Target Raycasting
 
 ```lua
 ---@param player_id number SAPP player index (1-16).
@@ -2260,15 +2237,15 @@ For chained commands (e.g. `say_all`), use single-quoted Lua strings, double-quo
 - `execute_command_sequence('say_all "Hello world";god 1')`
 - `execute_command_sequence("camo 1;god 1")`
 
-###@ $pn Is Stale During EVENT_LEAVE
+#### $pn Is Stale During EVENT_LEAVE
 
 During `EVENT_LEAVE`, `get_var(0, "$pn")` has not updated yet. Subtract `1` to get the right player count: `tonumber(get_var(0, "$pn")) - 1`.
 
-#@## math.atan2 Is Missing
+#### math.atan2 Is Missing
 
 Define the guard from [Math and Geometry](../common-reference.md#math-and-geometry) before using it, or before using any helper that calls it such as `directionToCardinal`.
 
-#@## Vehicle Physics Fix
+#### Vehicle Physics Fix
 
 Writing a vehicle's position with `write_vector3d()` can cause glitchy physics. This reduces the teleport glitches but does not remove them completely.
 
@@ -2284,7 +2261,7 @@ write_bit(object + 0x10, 5, 0)          -- unset ignore-physics
 
 ---
 
-### Memory Address & Offsets
+### Memory addresses and offsets
 
 Lookup tables for SAPP (server) Lua scripting: pointers, signatures, variables, commands, and console colors. Memory offsets, game constants, unit conversions, and stock Halo commands are shared with Chimera and live in [Common Reference](../common-reference.md).
 
@@ -2728,7 +2705,7 @@ Used to configure server behavior. Settings lost on reload unless placed in `ini
 | hide_admin            | 4     | `hide_admin [enabled]`                           | Hide admin names when using kick/ban commands. Default: `false`.                          |
 | hill_timer            | 4     | `hill_timer [int_expr]`                          | Seconds hill changes in "Crazy King". Default: `60`.                                      |
 | log                   | 4     | `log [enabled]`                                  | Log events to file. Default: `false`.                                                     |
-| log_rotation          | 4     | `log rotation [kb]`                              | Max log size (kB) before archiving. Default: `4096`.                                      |
+| log_rotation          | 4     | `log_rotation [kb]`                              | Max log size (kB) before archiving. Default: `4096`.                                      |
 | log_name              | 4     | `log_name [name]`                                | Log file name (`.log` appended). Default: `log`.                                          |
 | lua                   | 4     | `lua [enabled]`                                  | Enable Lua scripting. Default: `false`.                                                   |
 | lua_api_v             | 4     | `lua_api_v`                                      | Display current Lua API version.                                                          |

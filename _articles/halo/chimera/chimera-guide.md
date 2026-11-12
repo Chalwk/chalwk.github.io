@@ -84,7 +84,7 @@ This doubles as an API reference and EmmyLua / LuaLS script for Lua-aware editor
 --- | "preframe"     # Before frame processing.
 --- | "map_load"     # A map is being loaded.
 --- | "map_preload"  # Before map loading.
---- | "precamera"    # (x, y, z, fov, fx, fy, fz, ux, uy, uz). Must return all ten values.
+--- | "precamera"    # (x, y, z, fov, fx, fy, fz, ux, uy, uz). Memory Addresses & Offsets
 --- | "rcon_message" # (message: string): boolean|nil. Return false to block.
 --- | "tick"         # Each game tick (1/30 s).
 --- | "pretick"      # Before each game tick.
@@ -165,7 +165,7 @@ server_type = "none"
 ---@field frame        ChimeraEvent OnFrame(). Each rendered frame. Draw calls go here or in preframe.
 ---@field map_load     ChimeraEvent OnMapLoad(). A map is being loaded.
 ---@field map_preload  ChimeraEvent OnMapPreload(). Before map loading.
----@field precamera    ChimeraEvent OnPreCamera(x, y, z, fov, fx, fy, fz, ux, uy, uz). Must return all ten values.
+---@field precamera    ChimeraEvent OnPreCamera(x, y, z, fov, fx, fy, fz, ux, uy, uz).
 ---@field preframe     ChimeraEvent OnPreFrame(). Before frame processing. Draw calls go here or in frame.
 ---@field pretick      ChimeraEvent OnPreTick(). Before each game tick.
 ---@field rcon_message ChimeraEvent OnRconMessage(message: string): boolean|nil. Return false to block.
@@ -513,7 +513,7 @@ function delete_file(path) end
 function file_exists(path) end
 ```
 
-### Memory Addresses & Offsets
+### Memory addresses and offsets
 
 | Pointer                          | PC Address                   | CE Address                   | Description                                                                                          |
 | -------------------------------- | ---------------------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------- |
@@ -578,9 +578,6 @@ another gametype would compare against that gametype's code instead. If both pro
 pointers stay `nil`, so check before using them.
 
 ### Object Table
-
-The Chimera guide enumerates objects from a hardcoded address instead of a signature. It does not
-give separate PC and CE values for it.
 
 ```lua
 local function scanObjects()
@@ -852,14 +849,14 @@ execute_script("(object_teleport (player0) teleport_flag)")
 
 ### Player and object functions
 
-| Function             | Signature                                                                          | Notes                                                                                                                               |
-| -------------------- | ---------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `get_player`         | `get_player([index])`                                                              | Returns a player pointer (integer) or `nil`. With no argument, returns the local client player. With an index, looks up by RCON ID. |
-| `get_dynamic_player` | `get_dynamic_player([index])`                                                      | Returns the dynamic object pointer for the local player or the player at the given RCON index, or `nil`.                            |
-| `get_object`         | `get_object(id)`                                                                   | Returns a dynamic object pointer for an object ID, or `nil`.                                                                        |
-| `delete_object`      | `delete_object(object_id)`                                                         | Deletes the object. Raises an error if the ID is invalid.                                                                           |
-| `spawn_object`       | `spawn_object(tag_id, x, y, z [, parent])` or `spawn_object(class, path, x, y, z)` | Spawns an object. Returns the new object ID.                                                                                        |
-| `get_tag`            | `get_tag(id)` or `get_tag(class, path)`                                            | Returns a tag pointer (integer) or `nil`.                                                                                           |
+| Function             | Signature                                                                          | Notes                                                                                                    |
+| -------------------- | ---------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `get_player`         | `get_player([index])`                                                              | Returns a player pointer (integer) or `nil`. With no argument, returns the local client player.          |
+| `get_dynamic_player` | `get_dynamic_player([index])`                                                      | Returns the dynamic object pointer for the local player or the player at the given RCON index, or `nil`. |
+| `get_object`         | `get_object(id)`                                                                   | Returns a dynamic object pointer for an object ID, or `nil`.                                             |
+| `delete_object`      | `delete_object(object_id)`                                                         | Deletes the object. Raises an error if the ID is invalid.                                                |
+| `spawn_object`       | `spawn_object(tag_id, x, y, z [, parent])` or `spawn_object(class, path, x, y, z)` | Spawns an object. Returns the new object ID.                                                             |
+| `get_tag`            | `get_tag(id)` or `get_tag(class, path)`                                            | Returns a tag pointer (integer) or `nil`.                                                                |
 
 #### Player pointers
 
@@ -1103,9 +1100,6 @@ Chimera allows you to modify the camera position, orientation, and field of view
 renders. The example below zooms the FOV while holding a sniper. `readTagPath` is in
 [Tag Entry Helpers](../common-reference.md#tag-entry-helpers).
 
-> [!IMPORTANT] The `precamera` callback must return all ten camera parameters. Omitting
-> or returning a partial list will cause the camera to lock up or freeze.
-
 ```lua
 -- x,y,z: camera position
 -- fov: field of view in degrees
@@ -1134,7 +1128,7 @@ end
 ### Zoom control
 
 Reads a weapon's zoom level count from its tag data (offset `0x3DA`) and writes the zoom state
-directly to memory. The zoom pointer is `zoom_address` in [Memory Addresses & Offsets](#chimera-address-table).
+directly to memory. The zoom pointer is `zoom_address` in [Memory addresses and offsets](#memory-addresses-and-offsets).
 
 ```lua
 local ZOOM_ADDRESS = 0x815918

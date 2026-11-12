@@ -403,8 +403,6 @@ Phasor only loads `.lua` files. A script saved as `.txt` needs renaming first. W
 | `scripts/`            | Loaded on request, unloaded at the end of each game             |
 | `scripts/persistent/` | Loaded when Phasor starts, stays loaded until the server closes |
 
-The scripts folder lives in the data folder, not next to `haloded.exe`: `My Games/Halo/scripts` for PC and `My Games/Halo CE/scripts` for CE. To use a different folder, start the server with `-scriptpath <path>`. Not every script supports persistence, so check its docs before you put it in `persistent`.
-
 ### Script Commands
 
 Install steps, and the full command list are in [Command Reference](#command-reference).
@@ -969,7 +967,7 @@ function movobjectcoords(object_id, x, y, z) end
 --- recycle is ignored and respawn_time becomes the delay before the object is destroyed.
 ---@param tag_type     string      Four-letter class
 ---@param tag_name     string
----@param parent_id    integer - 1 for none
+---@param parent_id    integer     -1 for none
 ---@param respawn_time number
 ---@param recycle      boolean     true respawns, false destroys
 ---@param x            number
