@@ -63,11 +63,7 @@ latter receives Lua errors.
 api_version = "1.12.0.0"
 
 function OnScriptLoad()
-    register_callback(cb.EVENT_JOIN, "OnJoin")
-end
-
-function OnJoin(player_id)
-    say(player_id, "Hello, World!")
+    -- register event callbacks here
 end
 
 function OnScriptUnload() end
