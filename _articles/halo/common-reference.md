@@ -3,15 +3,15 @@ title: "Halo: Common Reference"
 permalink: /halo/common-reference/
 description: "Shared reference for SAPP, Phasor and Chimera Lua scripting: memory offsets, game constants, platform-independent helpers, and stock Halo commands."
 date: 2026-11-09
-last-updated: 2026-11-09
+last-updated: 2026-11-13
 categories: [ education, halo, modding ]
 tags: [ sapp, chimera, lua, scripting, reference, tutorial ]
 ---
 
 Shared reference for SAPP, Phasor and Chimera Lua scripting: relative memory offsets, game
 constants, platform-independent helpers, and stock Halo commands. Anything that only one platform
-can use stays in its own guide: [SAPP Guide](sapp/guide.md), [Phasor Guide](phasor/guide.md), and
-[Chimera Guide](chimera/guide.md).
+can use stays in its own guide: [SAPP Guide](sapp/sapp-guide.md), [Phasor Guide](phasor/phasor-guide.md), and
+[Chimera Guide](chimera/chimera-guide.md).
 
 ---
 
@@ -201,7 +201,7 @@ position.
 
 Each tag entry is `0x20` bytes. On Chimera, `get_tag(tag_id)` returns the entry pointer, and the
 Chimera guide reads the name pointer at `+0x10`. On SAPP, the table base and lookup are covered in
-the Tag Table section of the [SAPP Guide](sapp/guide.md#tag-table).
+the Tag Table section of the [SAPP Guide](sapp/sapp-guide.md#tag-table).
 
 > [!NOTE]
 > Each tag entry is exactly `0x20` bytes wide. Make sure to dereference the tag data pointer at
@@ -219,6 +219,18 @@ Weapon tag data: bit 3 of `+0x308` is set for objective weapons (flag, oddball),
 
 Vehicle tag data (`vehi`): word at `+0x2F4` controls vehicle motion/physics type (`0` = ground,
 `1` = flying banshee, `3` = flying vehicle).
+
+### Candidates Table
+
+The "candidate" pointers below are the commonly used base addresses for the same runtime structs on
+Chimera. They are referenced throughout the offset tables when a struct is exposed as a live global
+instead of being resolved from a signature or pointer chain.
+
+| Struct         | Typical global / candidate | Notes                                               |
+| -------------- | -------------------------- | --------------------------------------------------- |
+| Gametype       | `gametype`                 | Base of the active gametype configuration           |
+| Race globals   | `race_globals`             | Base of the current race/session state              |
+| Dynamic player | `getDynamicPlayer(player)` | Access the live per-player object for a given index |
 
 ### Gametype Struct
 
@@ -431,8 +443,20 @@ Example: an object moving at 15 WU/s covers `15 / 30 = 0.5` WU per tick, which i
 
 ## Offset Helpers
 
-These take a pointer, so they behave the same on both platforms. Get the pointer first (see
-[Platform Differences](#platform-differences)).
+These take a pointer, so they behave the same on both platforms. Get the pointer first from the
+matching platform-specific base address before calling them.
+
+### Platform Differences
+
+The memory layout is the same across SAPP, Phasor, and Chimera. The difference is only how each
+runtime exposes the base pointer:
+
+- SAPP usually resolves base addresses with `sig_scan`, pointer chains, or hardcoded offsets.
+- Phasor exposes the same data through its built-in helpers and event data.
+- Chimera commonly exposes globals such as `gametype`, `race_globals`, and `getDynamicPlayer`.
+
+The helper functions in this section always operate on the final pointer once the correct base has
+been located.
 
 ### Wide Strings
 
@@ -1124,7 +1148,7 @@ local distance_m = distanceMeters(px, py, pz, loc)
 These are Halo's built-in server commands. SAPP enhances or overrides some. Run them from a script
 with `execute_command` on SAPP or `execute_script` on Chimera. Stock `sv_*` commands need a plain
 player index. SAPP-only commands and player expressions are in the
-[SAPP Guide](sapp/guide.md#command-reference).
+[SAPP Guide](sapp/sapp-guide.md#command-reference).
 
 | Command                    | Usage                                  | Description                                                         |
 | -------------------------- | -------------------------------------- | ------------------------------------------------------------------- |

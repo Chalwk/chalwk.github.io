@@ -3,7 +3,7 @@ title: "Halo: Phasor Server and Lua API Guide"
 permalink: /halo/phasor/guide/
 description: "Complete guide to setting up, configuring, and running Phasor dedicated servers and writing server-side Lua scripts."
 date: 2026-11-12
-last-updated: 2026-11-12
+last-updated: 2026-11-13
 categories: [ education, halo, modding, server ]
 tags: [ phasor, lua, scripting, hosting, server, tutorial ]
 ---
@@ -24,7 +24,7 @@ This is the folder structure after extracting either zip.
 ```text
 .                                        Root of the extracted PhasorCE server
 |   dbghelp.dll                          Windows debug/crash-dump helper library
-|   haloceded.exe                        Halo Custom Edition dedicated server executable
+|   haloded.exe or haloceded.exe         Halo dedicated server executable (PC or CE)
 |   init.txt                             Server startup / PhasorCE init commands
 |   libcurl.dll                          cURL library for HTTP/FTP modules
 |   lua5.22.dll                          Lua 5.2 runtime library
@@ -461,7 +461,7 @@ end
 
 ### Game Version
 
-Phasor cannot scan signatures, so you pick addresses yourself from the `game` argument. Phasor runs on the same dedicated server executable as SAPP, so the addresses in [Hardcoded Pointers][hardcoded_pointers] apply. Use `and` / `or` for a single value:
+Phasor cannot scan signatures, so you pick addresses yourself from the `game` argument. Phasor runs on the same dedicated server executable as SAPP, so the addresses in [Memory addresses and offsets][hardcoded_pointers] apply. Use `and` / `or` for a single value:
 
 ```lua
 local gametype_base
@@ -956,13 +956,6 @@ function gettagid(tag_type, tag_name) end
 ---@return string | nil tag_type
 function gettaginfo(map_id) end
 
---- Moves an object to absolute coordinates.
----@param object_id integer
----@param x         number
----@param y         number
----@param z         number
-function movobjectcoords(object_id, x, y, z) end
-
 --- respawn_time: seconds, 0 never, -1 gametype default. For weapons, grenades and powerups
 --- recycle is ignored and respawn_time becomes the delay before the object is destroyed.
 ---@param tag_type     string      Four-letter class
@@ -980,11 +973,12 @@ function createobject(tag_type, tag_name, parent_id, respawn_time, recycle, x, y
 ---@param object_id integer
 function destroyobject(object_id) end
 
+--- Moves an object to absolute coordinates.
 ---@param object_id integer
 ---@param x         number
 ---@param y         number
 ---@param z         number
-function movobjcoords(object_id, x, y, z) end
+function movobjectcoords(object_id, x, y, z) end
 
 --- Teleports to a named location such as "redbase".
 ---@param object_id integer
@@ -1366,12 +1360,10 @@ end
 
 ---
 
-[common_ref]: ../common-reference.md
 [dynamic_player_object]: ../common-reference.md#dynamic-player-object
-[hardcoded_pointers]: ../sapp/guide.md#pointers
+[hardcoded_pointers]: ../sapp/sapp-guide.md#memory-addresses-and-offsets
 [offset_helpers]: ../common-reference.md#offset-helpers
 [position_aim]: ../common-reference.md#position-and-aim
-[sapp_guide]: ../sapp/guide.md
 [script_archive]: https://github.com/Chalwk/SPCLib/tree/master/phasor
 [static_player_data]: ../common-reference.md#static-player-data
 [ternary_emulation]: ../common-reference.md#ternary-emulation

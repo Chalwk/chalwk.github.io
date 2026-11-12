@@ -3,7 +3,7 @@ title: "Halo: SAPP Server and Lua API Guide"
 permalink: /halo/sapp/guide
 description: "Complete guide to setting up, configuring, and running SAPP dedicated servers and writing server-side Lua scripts."
 date: 2026-11-12
-last-updated: 2026-11-12
+last-updated: 2026-11-13
 categories: [ education, halo, modding, server ]
 tags: [ sapp, lua, scripting, hosting, multiserver, server, tutorial ]
 ---
@@ -44,6 +44,7 @@ This is the folder structure after extracting either zip:
 |   |   |
 |   |   \---lua                          Lua scripts
 |   |           sample_script.lua        Example Lua script
+|   +---saved                            Server save data (profiles, playlists, hdmu.map)
 |   |
 |   \---savegames                        Game variant files
 |
@@ -190,21 +191,23 @@ Each extra instance is a small copy of `cg\` plus its own launch script and port
 The original instance lives directly in `cg\`. Give it its own folder so more instances can sit beside it:
 
 1. Create `cg\myserver\` (use any name).
-2. Move `init.txt`, `sapp\`, and `savegames\` from `cg\` into `cg\myserver\`.
+2. Move `init.txt`, `sapp\`, `saved\`, and `savegames\` from `cg\` into `cg\myserver\`.
 3. In `run.bat`, change `set CG_PATH=%ROOT%\cg\` to `set CG_PATH=%ROOT%\cg\myserver\`. In `run.sh`, change `CG_PATH="${DIR}/cg"` to `CG_PATH="${DIR}/cg/myserver"`.
 
 #### Step 2: Copy the Instance
 
-Copy `cg\myserver\` to a new folder named after the game mode, such as `cg\gun_game\`. Copying `savegames\` is optional: bring it only if the new instance needs the same variants.
+Copy `cg\myserver\` to a new folder named after the game mode, such as `cg\gun_game\`. Copying `saved\` and `savegames\` is optional: bring them only if the new instance needs the same save data or variants.
 
 ```text
 cg\
 +---myserver\           Original instance
 |   +---sapp\
+|   +---saved\          (optional)
 |   +---savegames\      (optional)
 |   \---init.txt
 \---gun_game\           New instance, copied from myserver
     +---sapp\
+    +---saved\          (optional)
     +---savegames\      (optional)
     \---init.txt
 ```
@@ -283,6 +286,7 @@ wt.exe cmd /k "run.bat" `; new-tab cmd /k "run_gun_game.bat"
 | `mapcycle.txt`, `mapvotes.txt`                           | `cg\<instance>\sapp\`      | Per instance |
 | Lua scripts                                              | `cg\<instance>\sapp\lua\`  | Per instance |
 | Game variants                                            | `cg\<instance>\savegames\` | Per instance |
+| Server save data (profiles, playlists)                   | `cg\<instance>\saved\`     | Per instance |
 
 What the split gives you:
 
@@ -1421,7 +1425,8 @@ For names and teams, prefer `get_var(player_id, "$name")` and `get_var(player_id
 ---@return number|nil ping Player ping in milliseconds, or nil if unavailable.
 local function getPlayerPing(player_id)
     local static = get_player(player_id)
-    return static and read_dword(static + 0xDC) or nil
+    if not static then return nil end
+    return read_dword(static + 0xDC)
 end
 ```
 
@@ -1804,15 +1809,15 @@ local success, hit_x, hit_y, hit_z, hit_object_id = intersect(x, y, z, vx, vy, v
 
 ##### Parameters
 
-- **`x, y, z`** (`number`): Starting 3D coordinates of the raycast in World Units (WU). To raycast from a player's line of sight, use their eye-level position (`read_vector3d(dyn + 0x5C)` with vertical offset `+0.65` when standing or `+0.35` when crouching).
-- **`vx, vy, vz`** (`number`): Direction vector multiplied by maximum reach distance in WU. Camera vectors read from `dyn + 0x230` are normalized unit vectors (length 1), so multiplying by `1000` casts a ray up to 1000 WU away.
-- **`ignore_object_id`** (`number`, optional): Object ID to ignore during collision testing. Pass the casting player's biped Object ID (`read_dword(get_player(player_id) + 0x34)`) so the ray does not hit the player's own body.
+- `x, y, z` (`number`): Starting 3D coordinates of the raycast in World Units (WU). To raycast from a player's line of sight, use their eye-level position (`read_vector3d(dyn + 0x5C)` with vertical offset `+0.65` when standing or `+0.35` when crouching).
+- `vx, vy, vz` (`number`): Direction vector multiplied by maximum reach distance in WU. Camera vectors read from `dyn + 0x230` are normalized unit vectors (length 1), so multiplying by `1000` casts a ray up to 1000 WU away.
+- `ignore_object_id` (`number`, optional): Object ID to ignore during collision testing. Pass the casting player's biped Object ID (`read_dword(get_player(player_id) + 0x34)`) so the ray does not hit the player's own body.
 
 ##### Return Values
 
-- **`success`** (`boolean`): `true` if the ray intersected any surface or dynamic object before reaching the maximum vector distance; `false` if no collision occurred.
-- **`hit_x, hit_y, hit_z`** (`number`): 3D World Unit coordinates of the intersection point.
-- **`hit_object_id`** (`number`): Object ID of the dynamic object hit. Returns `0xFFFFFFFF` (`4294967295`) if static map geometry (BSP/structure) or nothing was hit.
+- `success` (`boolean`): `true` if the ray intersected any surface or dynamic object before reaching the maximum vector distance; `false` if no collision occurred.
+- `hit_x, hit_y, hit_z` (`number`): 3D World Unit coordinates of the intersection point.
+- `hit_object_id` (`number`): Object ID of the dynamic object hit. Returns `0xFFFFFFFF` (`4294967295`) if static map geometry (BSP/structure) or nothing was hit.
 
 > [!TIP]
 > Use `get_object_memory(hit_object_id)` to verify whether a valid dynamic object was hit. If non-zero, read byte `object + 0xB4` to check its object type (`1` = Vehicle, `4` = Equipment, `5` = Weapon, `6` = Device).
@@ -1994,7 +1999,7 @@ end
 ```
 
 ```lua
-execute_command("wdel " .. player_id) -- clear their inventory first (for both examples)
+execute_command("wdel " .. player_id .. " 5") -- clear their inventory first (for both examples)
 
 -- Example 1 (simple):
 AssignWeapon(spawn_object(...), player_id) -- x2 (receive now)

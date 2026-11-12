@@ -3,7 +3,7 @@ title: "Halo: Modding References & Tools"
 permalink: /halo/modding-references/
 description: "References and tools for Halo PC and Custom Edition modding, from the classic HEK to modern toolchains and asset pipelines."
 date: 2026-11-09
-last-updated: 2026-11-10
+last-updated: 2026-11-13
 categories: [ education, halo, modding ]
 tags: [ hek, tools, sapp, phasor, chimera, lua, scripting, tutorial, reference ]
 ---
@@ -19,16 +19,9 @@ Guides on this site.
 
 - [Common Reference](common-reference.md): Memory offsets, game constants, shared helpers, and stock
   Halo commands for SAPP, Phasor, and Chimera.
-- [SAPP Server Guide](sapp/server-guide.md): Set up and run single and multi-instance SAPP servers.
-- [Scripting with SAPP](sapp/scripting-with-sapp.md): Server-side Lua with SAPP.
-- [SAPP Cheat Sheet](sapp/cheat-sheet.md): Pointers, signatures, variables, and commands.
-- [SAPP Utils](sapp/utils.md): Helper functions and known quirks.
-- [SAPP Lua Template](sapp/template.md): Script skeleton and callback reference.
-- [Phasor Server Guide](phasor/server-guide.md): Set up and run a Phasor 2.0 server.
-- [Scripting with Phasor](phasor/scripting-with-phasor.md): Server-side Lua with Phasor.
-- [Phasor Lua Template](phasor/template.md): Script skeleton and event reference.
-- [Scripting with Chimera](chimera/scripting-with-chimera.md): Client-side Lua with Chimera.
-- [Chimera Lua Template](chimera/template.md): Script skeleton and callback reference.
+- [SAPP Guide](sapp/sapp-guide.md): Setup, server behavior, signatures, and Lua scripting for SAPP.
+- [Phasor Guide](phasor/phasor-guide.md): Lua scripting, events, and server setup for Phasor.
+- [Chimera Guide](chimera/chimera-guide.md): Client-side Lua scripting and memory helpers for Chimera.
 
 ---
 
