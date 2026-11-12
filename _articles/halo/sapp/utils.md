@@ -442,30 +442,65 @@ end
 
 ### Get Base Directory
 
-Finds the Halo server folder at runtime, so no hardcoded paths.
+Finds the Halo server folder at runtime.
 
 ```lua
+-- Resolves the pointer at sig_scan(sig) + offset, or returns nil if the scan
+-- missed or the dereferenced value is outside Halo's data range.
+---@param sig string Signature byte pattern to scan for.
+---@param offset number Offset from the signature match to the pointer.
+---@return number|nil ptr Resolved pointer, or nil if invalid.
+local function resolvePointer(sig, offset)
+    local hit = sig_scan(sig)
+    if hit == 0 then return nil end
+
+    local ptr = read_dword(hit + offset)
+    if not ptr or ptr < 0x400000 or ptr > 0x800000 then return nil end
+
+    return ptr
+end
+
 ---@param folder string|nil Subfolder to append. Defaults to "".
----@return string base_path Halo server directory path, optionally including the subfolder.
+---@return string|nil base_path Halo server directory path (with optional subfolder), or nil if the lookup failed.
 local function getBaseDir(folder)
     folder = folder or ""
-    local exe_path = read_string(read_dword(sig_scan('0000BE??????005657C605') + 0x3))
+
+    local exe_path_ptr = resolvePointer("0000BE??????005657C605", 0x3)
+    if not exe_path_ptr then return nil end
+
+    local exe_path = read_string(exe_path_ptr)
+    if not exe_path or exe_path == "" then return nil end
+
     local base_path = exe_path:match("(.*\\)")
+    if not base_path then return nil end
+
     return base_path .. folder
 end
 
----@return string config_path Path to the SAPP configuration file.
+---@return string|nil config_path Path to the SAPP configuration file, or nil if the lookup failed.
 local function getProfilePath()
-    return read_string(read_dword(sig_scan('68??????008D54245468') + 0x1))
+    local ptr = resolvePointer("68??????008D54245468", 0x1)
+    if not ptr then return nil end
+    return read_string(ptr)
 end
 ```
 
-Examples:
+Both functions can return `nil`, so check before concatenating:
 
 ```lua
 local base = getBaseDir()
 local maps = getBaseDir("maps")
 local sapp_cg = getProfilePath()
+
+if base then cprint("Server dir: " .. base) end
+if maps then cprint("Maps dir: " .. maps) end
+if sapp_cg then cprint("SAPP cfg: " .. sapp_cg) end
+```
+
+Or fall back to a relative path in one expression:
+
+```lua
+local maps = getBaseDir("maps") or "maps\\"
 ```
 
 ---
@@ -1023,8 +1058,9 @@ Chimera. See [Pure Lua Helpers](../common-reference.md#pure-lua-helpers) in the 
 including the [math.atan2 guard](../common-reference.md#mathatan2-guard).
 
 Many Halo strings are UTF-16LE: player name (`get_player(id) + 0x4`), server name
-(`network_struct + 0x8`), gametype name (`network_struct + 0x10C`), and map display name
-(`map_name_address`). `read_string` returns `""` for these fields; use `readWideString` from
+(`network_struct + 0x8`), gametype display name (`gametype_base + 0x0`; a mirror of the same
+value also lives at `network_struct + 0x10C`), and map display name (`map_name_address`).
+`read_string` returns `""` for these fields; use `readWideString` from
 [Wide Strings](../common-reference.md#wide-strings) instead. The narrow (8-bit) form is used only
 for filenames and paths (e.g. `map_name_address2`, `server_path_address`).
 

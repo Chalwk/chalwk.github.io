@@ -63,7 +63,7 @@ The offsets in this file work on both platforms. What changes is the API call yo
 pointer.
 
 | Topic                                | SAPP                              | Chimera                                                  |
-|--------------------------------------|-----------------------------------|----------------------------------------------------------|
+| ------------------------------------ | --------------------------------- | -------------------------------------------------------- |
 | Runs on                              | Dedicated server                  | Game client                                              |
 | Player index in the API              | 1-16                              | 0-15                                                     |
 | `get_dynamic_player` for dead player | Returns `0`                       | Returns `nil`                                            |
@@ -97,7 +97,7 @@ apply offsets to reach the data.
 Tools used in the Halo PC/CE modding community:
 
 | Tool             | Use                                                             |
-|------------------|-----------------------------------------------------------------|
+| ---------------- | --------------------------------------------------------------- |
 | Cheat Engine     | Real-time memory scanner and modifier.                          |
 | IDA Pro          | Professional disassembler and debugger for the Halo executable. |
 | Halo Map Tools 3 | Utility for finding and modifying offsets within map files.     |
@@ -145,7 +145,7 @@ local z = read_float(dyn + 0x64)
 ```
 
 | Offset           | Type  | Field                                                 |
-|------------------|-------|-------------------------------------------------------|
+| ---------------- | ----- | ----------------------------------------------------- |
 | `0x0`            | dword | Tag ID (the low word is the index into the tag array) |
 | `0x10`           | bits  | Flags (bit 0 = no collision, bit 5 = ignore physics)  |
 | `0x5C/0x60/0x64` | float | World X / Y / Z                                       |
@@ -165,7 +165,7 @@ The live player object. It uses the Base Object fields above plus the ones below
 no dynamic object: check for `0` on SAPP and `nil` on Chimera before reading.
 
 | Offset              | Type  | Field                                                                                                                                           |
-|---------------------|-------|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| ------------------- | ----- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
 | `0xE0`              | float | Health (0.0-1.0)                                                                                                                                |
 | `0xE4`              | float | Shields (0.0-1.0)                                                                                                                               |
 | `0x106`             | bits  | Dynamic player flags (bit 2 = health empty, bit 3 = shield empty, bit 4 = overshield active, bit 11 = invulnerable, bit 12 = shield recharging) |
@@ -195,7 +195,7 @@ no dynamic object: check for `0` on SAPP and `nil` on Chimera before reading.
 The persistent player structure.
 
 | Offset            | Type    | Field                                                      |
-|-------------------|---------|------------------------------------------------------------|
+| ----------------- | ------- | ---------------------------------------------------------- |
 | `0x4`             | wchar[] | Name (UTF-16LE, low bytes readable as ASCII, max 12 chars) |
 | `0x20`            | byte    | Team (0 = Red, 1 = Blue)                                   |
 | `0x2C`            | dword   | Respawn timer (ticks)                                      |
@@ -224,7 +224,7 @@ The persistent player structure.
 Base Object fields plus the ones below.
 
 | Offset  | Type  | Field                        |
-|---------|-------|------------------------------|
+| ------- | ----- | ---------------------------- |
 | `0x240` | float | Overheat (0-1)               |
 | `0x2B6` | word  | Reserve ammo                 |
 | `0x2B8` | word  | Rounds in magazine           |
@@ -237,7 +237,7 @@ Position and velocity use the Base Object offsets. A seated player's position is
 position.
 
 | Offset        | Type  | Field                                                            |
-|---------------|-------|------------------------------------------------------------------|
+| ------------- | ----- | ---------------------------------------------------------------- |
 | `0x324`       | dword | Driver seat occupant unit object ID (`0xFFFFFFFF` = empty)       |
 | `0x328`       | dword | Master of weapons / gunner unit object ID (`0xFFFFFFFF` = empty) |
 | `0x32C`       | dword | Passenger unit object ID (`0xFFFFFFFF` = empty)                  |
@@ -258,7 +258,7 @@ the Tag Table section of the [SAPP Cheat Sheet](sapp/cheat-sheet.md#tag-table).
 > offset `+0x14` correctly when inspecting or modifying tag classes and attributes.
 
 | Entry offset | Type  | Field                                                                           |
-|--------------|-------|---------------------------------------------------------------------------------|
+| ------------ | ----- | ------------------------------------------------------------------------------- |
 | `0x0`        | dword | Tag class (`weap` = `0x77656170`, `vehi` = `0x76656869`, `eqip` = `0x65716970`) |
 | `0xC`        | dword | Meta ID                                                                         |
 | `0x10`       | dword | Pointer to the tag name string                                                  |
@@ -275,25 +275,25 @@ Vehicle tag data (`vehi`): word at `+0x2F4` controls vehicle motion/physics type
 Relative to the gametype struct base. On Chimera that is `gametype` from the
 [Candidates Table](#candidates-table).
 
-| Offset | Type    | Field                                                                                        |
-|--------|---------|----------------------------------------------------------------------------------------------|
-| `0x0`  | wchar[] | Gametype name, UTF-16LE (see [Wide Strings](#wide-strings))                                  |
-| `0x30` | byte    | Game type code, read with `read_byte` (see [Gametype Codes](#gametype-codes))                |
-| `0x34` | byte    | Team play (0 = Off, 1 = On)                                                                  |
-| `0x38` | bits    | Gametype rules flags (radar, shields, infinite grenades, etc.)                               |
-| `0x3C` | byte    | Indicator mode                                                                               |
-| `0x44` | dword   | Respawn time growth (ticks)                                                                  |
-| `0x48` | dword   | Respawn time (ticks)                                                                         |
-| `0x4C` | dword   | Suicide penalty (ticks)                                                                      |
-| `0x50` | byte    | Lives (0 = unlimited)                                                                        |
-| `0x54` | float   | Maximum health scale                                                                         |
-| `0x58` | byte    | Score limit, read with `read_byte`                                                           |
-| `0x5C` | byte    | Weapon set code (0 = Normal, 1 = Pistols, 4 = Sniper, 6 = Rockets, 7 = Shotguns, 12 = Heavy) |
-| `0x68` | dword   | Vehicle respawn time (ticks)                                                                 |
-| `0x6C` | byte    | Friendly fire (0 = Off, 1 = On)                                                              |
-| `0x70` | dword   | Friendly fire penalty (ticks)                                                                |
-| `0x74` | byte    | Auto team balance (0 = Off, 1 = On)                                                          |
-| `0x78` | dword   | Time limit (ticks)                                                                           |
+| Offset | Type    | Field                                                                                              |
+| ------ | ------- | -------------------------------------------------------------------------------------------------- |
+| `0x0`  | wchar[] | Gametype variant display name, UTF-16LE (e.g. `"Team Slayer"`; see [Wide Strings](#wide-strings)). |
+| `0x30` | byte    | Game type code, read with `read_byte` (see [Gametype Codes](#gametype-codes))                      |
+| `0x34` | byte    | Team play (0 = Off, 1 = On)                                                                        |
+| `0x38` | bits    | Gametype rules flags (radar, shields, infinite grenades, etc.)                                     |
+| `0x3C` | byte    | Indicator mode                                                                                     |
+| `0x44` | dword   | Respawn time growth (ticks)                                                                        |
+| `0x48` | dword   | Respawn time (ticks)                                                                               |
+| `0x4C` | dword   | Suicide penalty (ticks)                                                                            |
+| `0x50` | byte    | Lives (0 = unlimited)                                                                              |
+| `0x54` | float   | Maximum health scale                                                                               |
+| `0x58` | byte    | Score limit, read with `read_byte`                                                                 |
+| `0x5C` | byte    | Weapon set code (0 = Normal, 1 = Pistols, 4 = Sniper, 6 = Rockets, 7 = Shotguns, 12 = Heavy)       |
+| `0x68` | dword   | Vehicle respawn time (ticks)                                                                       |
+| `0x6C` | byte    | Friendly fire (0 = Off, 1 = On)                                                                    |
+| `0x70` | dword   | Friendly fire penalty (ticks)                                                                      |
+| `0x74` | byte    | Auto team balance (0 = Off, 1 = On)                                                                |
+| `0x78` | dword   | Time limit (ticks)                                                                                 |
 
 ### Race Globals
 
@@ -301,7 +301,7 @@ Relative to the race globals base. On Chimera that is `race_globals` from the
 [Candidates Table](#candidates-table).
 
 | Offset             | Field                                                                      |
-|--------------------|----------------------------------------------------------------------------|
+| ------------------ | -------------------------------------------------------------------------- |
 | `0x0`              | Course checkpoint mask (popcount = checkpoints required)                   |
 | `0x44 + index * 4` | Per-player progress mask (bit 0 = checkpoint 1, bit 1 = checkpoint 2, ...) |
 
@@ -427,7 +427,7 @@ The byte at gametype struct `+0x30` maps to the same strings SAPP exposes throug
 exposes through the `gametype` global.
 
 | Code | Gametype         | String    |
-|------|------------------|-----------|
+| ---- | ---------------- | --------- |
 | `1`  | CTF              | `ctf`     |
 | `2`  | Slayer           | `slayer`  |
 | `3`  | Oddball          | `oddball` |
@@ -446,7 +446,7 @@ Team byte (static player `+0x20`): `0` = Red, `1` = Blue.
 Player FFA color index (static player `+0x60`), range 0-17:
 
 | Value | Color  | Value | Color  |
-|-------|--------|-------|--------|
+| ----- | ------ | ----- | ------ |
 | `0`   | White  | `9`   | Cyan   |
 | `1`   | Black  | `10`  | Cobalt |
 | `2`   | Red    | `11`  | Orange |
@@ -467,7 +467,7 @@ local player.
 - Velocity offsets are in WU per tick; scripts often quote speeds in WU per second
 
 | From    | To              | Formula                    |
-|---------|-----------------|----------------------------|
+| ------- | --------------- | -------------------------- |
 | WU/s    | WU/tick         | `speed / 30`               |
 | WU/s    | m/s             | `speed * 3.048`            |
 | WU/s    | km/h            | `speed * 3.048 * 3.6`      |
@@ -490,7 +490,7 @@ Only the pointers below are documented for Chimera so far.
 ### Candidates Table
 
 | Pointer                          | PC Address                   | CE Address                   | Description                                                                                          |
-|----------------------------------|------------------------------|------------------------------|------------------------------------------------------------------------------------------------------|
+| -------------------------------- | ---------------------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------- |
 | `gametype`                       | `0x6F1C88`                   | `0x68CC48`                   | Gametype struct base (see Gametype Struct)                                                           |
 | `race_globals`                   | `0x87A520`                   | `0x64C1C0`                   | Race global data base (see Race Globals)                                                             |
 | `camera_address`                 | `0x647498`                   | `0x647498`                   | Camera state mode (30400 = First Person, 31952 = Third Person, 30704 = Devcam)                       |
@@ -505,10 +505,10 @@ Only the pointers below are documented for Chimera so far.
 | `game_paused_address`            | `0x004ACA79`                 | `0x004ACA79`                 | Game pause byte (1 = paused, 0 = running)                                                            |
 | `game_on_menus_address`          | `0x00622058`                 | `0x00622058`                 | Game menu state byte (1 = in menu/console, 0 = gameplay)                                             |
 | `joystick_input_address`         | `0x0064D998`                 | `0x0064D998`                 | Controller/joystick input structure array (0xA0 bytes per controller)                                |
-| `object_table_address`           | `0x400506B4`                 | `0x4005062C`                 | Global object table header (CE client = 0x400506B4, SAPP server = 0x4005062C)                        |
-| `device_groups_table`            | `0x00816110`                 | `0x006E1C50`                 | Scenario device groups table (CE client = 0x00816110, SAPP server = 0x006E1C50)                      |
+| `object_table_address`           | `0x400506B4`                 | `0x4005062C`                 | Global object table header                                                                           |
+| `device_groups_table`            | `0x00816110`                 | `0x006E1C50`                 | Scenario device groups table                                                                         |
 | `widgets_instance`               | `0x006B401C`                 | `0x006B401C`                 | UI widget instance structure                                                                         |
-| `synced_network_objects`         | `0x006226F0`                 | `0x00598020`                 | Synced network objects table pointer (CE client = 0x006226F0, SAPP server = 0x00598020)              |
+| `synced_network_objects`         | `0x006226F0`                 | `0x00598020`                 | Synced network objects table pointer                                                                 |
 | `gravity_global`                 | `0x637BE4`                   | `0x637BE4`                   | World gravity float multiplier (default ~ 0.003565)                                                  |
 | `ctf_flag_red`                   | `0x40492F1C`                 | `0x40492F1C`                 | Red flag world spawn coordinates structure                                                           |
 | `ctf_flag_blue`                  | `0x40492FB0`                 | `0x40492FB0`                 | Blue flag world spawn coordinates structure                                                          |
@@ -1277,7 +1277,7 @@ player index. SAPP-only commands and player expressions are in the
 [SAPP Cheat Sheet](sapp/cheat-sheet.md#command-reference).
 
 | Command                    | Usage                                  | Description                                                         |
-|----------------------------|----------------------------------------|---------------------------------------------------------------------|
+| -------------------------- | -------------------------------------- | ------------------------------------------------------------------- |
 | quit                       | `quit`                                 | Close the server application.                                       |
 | sv_ban                     | `sv_ban <player> [length]`             | Ban a player (optional duration).                                   |
 | sv_ban_penalty             | `sv_ban_penalty [1] [2] [3] [4]`       | Set ban lengths for TK penalties. Default: `5m, 1d, 10d, 0`.        |

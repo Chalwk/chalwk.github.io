@@ -117,18 +117,19 @@ available callback. Register only the ones the script uses.
 
 ### Memory Read/Write
 
-| Category        | Functions                                                                                  |
-| --------------- | ------------------------------------------------------------------------------------------ |
-| Byte            | `read_byte`, `write_byte`, `read_char`, `write_char`                                       |
-| 16-bit          | `read_word`, `write_word`, `read_short`, `write_short`                                     |
-| 32-bit unsigned | `read_dword`, `write_dword`                                                                |
-| 32-bit signed   | `read_int`, `write_int`                                                                    |
-| 32-bit float    | `read_float`, `write_float`                                                                |
-| 64-bit float    | `read_double`, `write_double`                                                              |
-| String          | `read_string`, `write_string` (null-terminated 8-bit)                                      |
-| Bit             | `read_bit(addr, bit)`, `write_bit(addr, bit, val)`                                         |
-| Vector          | `read_vector3d(addr)` returns `x, y, z`; `write_vector3d(addr, x, y, z)`                   |
-| Safety          | `safe_read(true/false)`, `safe_write(true/false)` (toggles memory write-protection bypass) |
+| Category        | Functions                                                                                                                                                                                                                 |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Byte            | `read_byte`, `write_byte`, `read_char`, `write_char`                                                                                                                                                                      |
+| 16-bit          | `read_word`, `write_word`, `read_short`, `write_short`                                                                                                                                                                    |
+| 32-bit unsigned | `read_dword`, `write_dword`                                                                                                                                                                                               |
+| 32-bit signed   | `read_int`, `write_int`                                                                                                                                                                                                   |
+| 32-bit float    | `read_float`, `write_float`                                                                                                                                                                                               |
+| 64-bit float    | `read_double`, `write_double`                                                                                                                                                                                             |
+| String          | `read_string`, `write_string` (null-terminated 8-bit)                                                                                                                                                                     |
+| Bit             | `read_bit(addr, bit)`, `write_bit(addr, bit, val)`                                                                                                                                                                        |
+| Vector          | `read_vector3d(addr)` returns `x, y, z`; `write_vector3d(addr, x, y, z)`                                                                                                                                                  |
+| Safety (read)   | `safe_read(true/false)` prevents segfault on invalid reads; read functions return `nil` on failure; performance penalty                                                                                                   |
+| Safety (write)  | `safe_write(true/false)` prevents segfault on invalid writes; allows writing to read-only memory (Halo's instructions); write functions return `true`/`false`; performance penalty; undo code patches in `OnScriptUnload` |
 
 Bad addresses crash the server. Leave safe mode off unless you need it, since it costs performance.
 Pointers are in Hardcoded Pointers and Signature Reference

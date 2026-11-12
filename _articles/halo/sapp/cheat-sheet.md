@@ -30,7 +30,7 @@ local timelimit_address = halo_type == "PC" and 0x626630 or 0x5AA5B0
 > select the correct memory address or rely on signature scanning.
 
 | Pointer Name                  | PC Address | CE Address | Description                                                                                                   |
-|-------------------------------|------------|------------|---------------------------------------------------------------------------------------------------------------|
+| ----------------------------- | ---------- | ---------- | ------------------------------------------------------------------------------------------------------------- |
 | `banlist_header`              | `0x641280` | `0x5C52A0` | Banlist structure header                                                                                      |
 | `banlist_path_address`        | `0x69B950` | `0x61FB80` | Banlist file path                                                                                             |
 | `broadcast_game_address`      | `0x5E4768` | `0x569EAC` | Broadcast type (PC/CE/Trial)                                                                                  |
@@ -88,10 +88,12 @@ local timelimit_address = halo_type == "PC" and 0x626630 or 0x5AA5B0
 
 Notes:
 
-- `gametype_base + 0x0` is the gametype name as UTF-16LE. Use `readWideString`, not `read_string`
-  (see [Wide Strings](../common-reference.md#wide-strings)). The other fields are listed under
-  [Gametype Struct](../common-reference.md#gametype-struct). There is no working PC sig for this
-  pointer; use `0x671320`.
+- `gametype_base + 0x0` is the gametype variant display name as UTF-16LE (e.g. `"Team Slayer"`,
+  not the base identifier `$gt` returns). Use `readWideString`, not `read_string`
+  (see [Wide Strings](../common-reference.md#wide-strings)). The base identifier comes from the
+  code byte at `+0x30` (see [Gametype Codes](../common-reference.md#gametype-codes)). The other
+  fields are listed under [Gametype Struct](../common-reference.md#gametype-struct). There is no
+  working PC sig for this pointer; use `0x671320`.
 
 - `map_name_address` is UTF-16LE. Use `readWideString`. For the map filename, use
   `read_string(network_struct + 0x8C, 0x80)`. `map_name_address2` is not populated on the dedi.
@@ -133,14 +135,13 @@ Signatures below use `sig_scan`, which works on both PC and CE. Use the
 string (`"PC"` or `"CE"`) and is the correct way to pick a fallback when `sig_scan` returns `0`.
 
 | Pointer name                | Expression                                                                                       |
-|-----------------------------|--------------------------------------------------------------------------------------------------|
+| --------------------------- | ------------------------------------------------------------------------------------------------ |
 | `banlist_header`            | `read_dword(sig_scan("A3??????00A1??????0033DB3BC3") + 1)`                                       |
 | `banlist_path_address`      | `read_dword(sig_scan("68??????00E8??????0083C41068") + 0x1)`                                     |
 | `banlist_path_address2`     | `read_dword(sig_scan("CCCCC605??????0000E8??????0085C0") + 0x4)`                                 |
 | `broadcast_game_address`    | `read_dword(sig_scan("CCCCBA??????002BD08A08") + 0x3)`                                           |
 | `broadcast_version_address` | `read_dword(sig_scan("751768??????0068??????00BA") + 0x3)`                                       |
-| `color_patch1`              | `read_dword(sig_scan("741F8B482085C9750C"))`                                                     |
-| `color_patch2`              | `read_dword(sig_scan("EB1F8B482085C9750C"))`                                                     |
+| `color_patch`               | `sig_scan("741F8B482085C9750C")` or `sig_scan("EB1F8B482085C9750C")` if already patched          |
 | `computer_name_address`     | `read_dword(sig_scan("68??????0068??????0068000401006A00") + 0x1)`                               |
 | `ctf_globals`               | `read_dword(sig_scan("8B3C85????????3BF9741FE8????????8B8E2C0200008B4610") + 3)`                 |
 | `gameinfo_header`           | `read_dword(sig_scan("A1????????8B480C894D00") + 0x1)`                                           |
@@ -184,7 +185,7 @@ The `gametype_base` signature is CE only. Use the hardcoded PC value `0x671320`.
 ### Generating Signatures
 
 | Tool         | Plugin / Method                      | Output                                                                                        |
-|--------------|--------------------------------------|-----------------------------------------------------------------------------------------------|
+| ------------ | ------------------------------------ | --------------------------------------------------------------------------------------------- |
 | IDA Pro      | SigMaker (e.g., `IDA_SigMaker.dll`)  | Right-click on assembly, generate AOB signature, copy from output window.                     |
 | Ghidra       | MakeSig script                       | Right-click a function, "Generate Signature", copy pattern.                                   |
 | Cheat Engine | Array of bytes scan + Auto Assembler | Find the instruction in memory disassembler, use `aobscan` or generate AOB from context menu. |
@@ -209,18 +210,18 @@ A signature is a byte string with wildcards (`??`) where values vary. Example:
 - Numeric values: Wrap the result in `tonumber()` because `get_var` returns strings.
 
 > [!NOTE]
-> `get_var()` always returns string values. Always wrap the result in `tonumber()` when performing
+> `get_var()` always returns string values. Wrap the result in `tonumber()` when performing
 > numeric comparisons or math operations.
 
 - Examples:
     - `get_var(1, "$name")`
-    - `tonumber(get_var(0, "$gt"))` - Returns the gametype string (e.g., `ctf`, `slayer`).
+    - `get_var(0, "$gt")` - Returns the gametype string (e.g., `ctf`, `slayer`).
 
 Scope: G = global (index `0`), P = per player, E = event-only (populated only while the matching
 callback or event fires, see [Callbacks](scripting-with-sapp.md#callbacks)).
 
 | Variable       | Scope | Description                                                                                         |
-|----------------|-------|-----------------------------------------------------------------------------------------------------|
+| -------------- | ----- | --------------------------------------------------------------------------------------------------- |
 | `$afk`         | P     | Seconds the player has been AFK                                                                     |
 | `$app`         | P     | Bitfield: 1 SAPP, 2 Anticheat, 4 HAC2, 8 RefleX                                                     |
 | `$area`        | E     | Area name for `EVENT_AREA_ENTER` / `EVENT_AREA_EXIT`                                                |
@@ -281,7 +282,7 @@ Names usable in `events.txt` and targetable with `cevent`. Event-only variables
 (see [Variables](#variables)) are populated only while the matching event fires.
 
 | Event              | Event vars        | Fires when                                                            |
-|--------------------|-------------------|-----------------------------------------------------------------------|
+| ------------------ | ----------------- | --------------------------------------------------------------------- |
 | `event_aenter`     | `$area`           | A player enters a custom area.                                        |
 | `event_aexit`      | `$area`           | A player exits a custom area.                                         |
 | `event_alive`      |                   | Once per second while a player is alive.                              |
@@ -341,7 +342,7 @@ Both foreground and background take a value from 0 to 15. Examples: green text o
 `10 + (0 * 16) = 10`, and red on light aqua is `12 + (11 * 16) = 188`.
 
 | Value | Color       | Value | Color        |
-|-------|-------------|-------|--------------|
+| ----- | ----------- | ----- | ------------ |
 | `0`   | Black       | `8`   | Gray         |
 | `1`   | Dark Blue   | `9`   | Blue         |
 | `2`   | Dark Green  | `10`  | Green        |
@@ -360,7 +361,7 @@ cprint("ERROR: Invalid command!", 12 + (14 * 16))
 Common picks:
 
 | Use     | Color                        |
-|---------|------------------------------|
+| ------- | ---------------------------- |
 | Success | Green (`10`)                 |
 | Info    | Aqua (`11`) or yellow (`14`) |
 | Warning | Yellow (`14`)                |
@@ -383,7 +384,7 @@ re-leveled, or run through `execute_command`.
 Player expressions (`<player_expr>`):
 
 | Expression             | Matches                          |
-|------------------------|----------------------------------|
+| ---------------------- | -------------------------------- |
 | `1`-`16`               | Player index                     |
 | `*`                    | Wildcard in names; alone = all   |
 | `me`                   | The player executing the command |
@@ -397,7 +398,7 @@ Number expressions (`<int_expr>`, `<decimal_expr>`). A `<decimal_expr>` is a flo
 100% (1% = `0.01`).
 
 | Expression      | Effect                                               |
-|-----------------|------------------------------------------------------|
+| --------------- | ---------------------------------------------------- |
 | `:<n>`          | Set exact value (required for negatives, e.g. `:-5`) |
 | `+<n>` / `-<n>` | Add to / subtract from current value                 |
 | `*<n>` / `/<n>` | Multiply / divide current value                      |
@@ -411,7 +412,7 @@ The stock `sv_*` command table is shared with Chimera. See
 ### SAPP Loader Commands
 
 | Command | Usage    | Description                                                      |
-|---------|----------|------------------------------------------------------------------|
+| ------- | -------- | ---------------------------------------------------------------- |
 | load    | `load`   | Load SAPP (requires `strings.dll` enabled, `sapp.dll` present).  |
 | reload  | `reload` | Reload SAPP configuration and scripts (faster than unload+load). |
 | unload  | `unload` | Unload SAPP - reverts to stock. Console/cron only.               |
@@ -421,7 +422,7 @@ The stock `sv_*` command table is shared with Chimera. See
 Available to all players.
 
 | Command   | Level | Usage                                | Description                                                                                     |
-|-----------|-------|--------------------------------------|-------------------------------------------------------------------------------------------------|
+| --------- | ----- | ------------------------------------ | ----------------------------------------------------------------------------------------------- |
 | about     | -1    | `about`                              | Display current SAPP version.                                                                   |
 | afk       | 0     | `afk`                                | Mark player as AFK - disables future respawns.                                                  |
 | clead     | -1    | `clead [ping]`                       | Set player lead at a certain ping (requires `no_lead` enabled, `lead` disabled). Default: 0 ms. |
@@ -440,7 +441,7 @@ Available to all players.
 ### General Commands (Admin Moderation)
 
 | Command       | Level | Usage                                          | Description                                                                                                                                                                  |
-|---------------|-------|------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ------------- | ----- | ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | afks          | 0     | `afks`                                         | List AFK players.                                                                                                                                                            |
 | b             | 3     | `b <player_id> [reason] [time]`                | Hash-ban a player. Avoid using this command where possible: many players use cracked clients with shared CD keys, which can result in innocent players being banned as well. |
 | balance_teams | 2     | `balance_teams`                                | Balance teams based on stats.                                                                                                                                                |
@@ -475,7 +476,7 @@ Available to all players.
 Used to configure server behavior. Settings lost on reload unless placed in `init.txt`.
 
 | Command               | Level | Usage                                            | Description                                                                               |
-|-----------------------|-------|--------------------------------------------------|-------------------------------------------------------------------------------------------|
+| --------------------- | ----- | ------------------------------------------------ | ----------------------------------------------------------------------------------------- |
 | admin_prefix          | 4     | `admin_prefix <prefix>`                          | Prefix for admin messages via `say`. Default: `** ADMIN **`.                              |
 | adminadd_samelevel    | 4     | `adminadd_samelevel [0-2]`                       | Allow admins to add V1 admins: `0`=no, `1`=lower, `2`=lower/equal. Default: `0`.          |
 | adminban              | 4     | `adminban [0-2]`                                 | Admin ban permissions: `0`=any, `1`=no higher, `2`=only lower. Default: `0`.              |
@@ -549,7 +550,7 @@ Used to configure server behavior. Settings lost on reload unless placed in `ini
 Manage SAPP's map cycle (stored in `mapcycle.txt`).
 
 | Command        | Level | Usage                                                                   | Description                                   |
-|----------------|-------|-------------------------------------------------------------------------|-----------------------------------------------|
+| -------------- | ----- | ----------------------------------------------------------------------- | --------------------------------------------- |
 | map_next       | 4     | `map_next`                                                              | Start the next game in the map cycle.         |
 | map_prev       | 4     | `map_prev`                                                              | Start the previous game in the map cycle.     |
 | map_spec       | 4     | `map_spec <index>`                                                      | Skip to a specific map cycle entry.           |
@@ -564,7 +565,7 @@ Manage SAPP's map cycle (stored in `mapcycle.txt`).
 Manage map voting (stored in `mapvotes.txt`). Enabling map voting disables the map cycle.
 
 | Command     | Level | Usage                                                                         | Description                                            |
-|-------------|-------|-------------------------------------------------------------------------------|--------------------------------------------------------|
+| ----------- | ----- | ----------------------------------------------------------------------------- | ------------------------------------------------------ |
 | mapvote     | 4     | `mapvote [enabled]`                                                           | Enable map voting at end of game.                      |
 | mapvote_add | 4     | `mapvote_add <map> <game variant> <name> [min players] [max players] [index]` | Add a map vote entry.                                  |
 | mapvote_del | 4     | `mapvote_del <index>`                                                         | Delete a map vote entry.                               |
@@ -577,7 +578,7 @@ Commands for events (`events.txt`), custom commands (`commands.txt`), and custom
 formats follow the tables.
 
 | Category | Command     | Level      | Usage                                                      | Description                                                                                                                                                                                    |
-|----------|-------------|------------|------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| -------- | ----------- | ---------- | ---------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Event    | `cevent`    | 4          | `cevent <name> [player number]`                            | Raise `event_custom`, set `$ename`, and optionally the triggering player. See [Event Types](#event-types) and [Event Variables](#variables).                                                   |
 | Event    | `events`    | 4          | `events`                                                   | List all events and their indices.                                                                                                                                                             |
 | Event    | `eventsdel` | 4          | `eventsdel <index>`                                        | Delete an event by index.                                                                                                                                                                      |
@@ -607,7 +608,7 @@ You can validate whether a hash is cracked, use
 the [Hash Checker tool](https://chalwk.github.io/SPCLib/tools/hash-checker).
 
 | Command    | Level | Usage                                                 | Description                                                                                                                       |
-|------------|-------|-------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
+| ---------- | ----- | ----------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
 | adminadd   | 0     | `adminadd <player_id> <level> [allowed IP ranges...]` | Add a CD-key based admin using the player's current CD-key hash. Optional IP ranges can restrict where the admin may log in from. |
 | adminlevel | 0     | `adminlevel <index> <level>`                          | Set new level for a CD-key admin.                                                                                                 |
 | admindel   | 0     | `admindel <index>`                                    | Remove a CD-key admin (requires `admindel_samelevel`).                                                                            |
@@ -619,7 +620,7 @@ Name/password admins authenticate using their current in-game name and assigned 
 When using `admin_add`, the player's current username is saved to `admins.txt`.
 
 | Command            | Level | Usage                                           | Description                                                                              |
-|--------------------|-------|-------------------------------------------------|------------------------------------------------------------------------------------------|
+| ------------------ | ----- | ----------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | admin_add          | 4     | `admin_add <player_name> <password> <level>`    | Add name/password admin using the player's current in-game name (player must be online). |
 | admin_add_manually | 4     | `admin_add_manually <name> <password> <level>`  | Add name/password admin without player being present.                                    |
 | admin_change_pw    | 4     | `admin_change_pw <index> <password>`            | Change password of name/password admin.                                                  |
@@ -634,7 +635,7 @@ When using `admin_add`, the player's current username is saved to `admins.txt`.
 Directly modify player attributes. Cannot be used when `scrim_mode` is enabled.
 
 | Command              | Usage                                                        | Description                                                                     |
-|----------------------|--------------------------------------------------------------|---------------------------------------------------------------------------------|
+| -------------------- | ------------------------------------------------------------ | ------------------------------------------------------------------------------- |
 | ammo                 | `ammo <player_id> [int_expr] [weapon]`                       | Change unloaded ammo (`0`=current,`1`-`4`=weapon slots,`5`=all).                |
 | area_add_cuboid      | `area_add_cuboid <name> <a_x> <a_y> <a_z> <b_x> <b_y> <b_z>` | Add a rectangular area.                                                         |
 | area_add_sphere      | `area_add_sphere <name> <x> <y> <z> <r>`                     | Add a spherical area.                                                           |
@@ -693,7 +694,7 @@ Directly modify player attributes. Cannot be used when `scrim_mode` is enabled.
 Manage the TCP remote console.
 
 | Command             | Level | Usage                        | Description                                         |
-|---------------------|-------|------------------------------|-----------------------------------------------------|
+| ------------------- | ----- | ---------------------------- | --------------------------------------------------- |
 | remote_console      | 4     | `remote_console [enabled]`   | Enable remote console. Default: `false`.            |
 | remote_console_list | 4     | `remote_console_list`        | List connected remote console clients.              |
 | remote_console_port | 4     | `remote_console_port [port]` | Set TCP port for remote console (requires restart). |
@@ -703,7 +704,7 @@ Manage the TCP remote console.
 Add custom fields to Halo's query response.
 
 | Command    | Level | Usage                       | Description                              |
-|------------|-------|-----------------------------|------------------------------------------|
+| ---------- | ----- | --------------------------- | ---------------------------------------- |
 | query_add  | 4     | `query_add <key> <value>`   | Add or overwrite a query key/value pair. |
 | query_del  | 4     | `query_del <index or name>` | Remove a query entry.                    |
 | query_list | 4     | `query_list`                | List custom query entries.               |
@@ -716,7 +717,7 @@ scripts have separate Lua environments, so they cannot directly access each othe
 variables when scripts need to share state.
 
 | Command  | Level | Usage                                         | Description                                                                                                           |
-|----------|-------|-----------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|
+| -------- | ----- | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
 | var_add  | 4     | `var_add <name> <type>`                       | Type: `0` = global str, `1` = global int, `2` = global float, `3` = player str, `4` = player int, `5` = player float. |
 | var_conv | 4     | `var_conv <name>`                             | Convert between integer and float variable.                                                                           |
 | var_del  | 4     | `var_del <name>`                              | Delete a variable.                                                                                                    |

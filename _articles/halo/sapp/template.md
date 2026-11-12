@@ -150,8 +150,7 @@ function OnJoin(player_id) end
 function OnLeave(player_id) end
 
 -- `EVENT_PRESPAWN`
--- Called before a player spawns.
--- Move/rotate a player or change armor colour before spawn (i.e., custom spawns)
+-- Biped exists, spawn not yet announced; move/rotate or set armor color here.
 ---@param player_id number The player's index
 function OnPreSpawn(player_id) end
 
