@@ -35,7 +35,7 @@ loaded script; use custom variables to share state between scripts
 ## Runtime Environment
 
 | Feature                     | Details                                                                                                              |
-|-----------------------------|----------------------------------------------------------------------------------------------------------------------|
+| --------------------------- | -------------------------------------------------------------------------------------------------------------------- |
 | Lua runtime                 | LuaJIT based on Lua 5.1                                                                                              |
 | Lua 5.2+ syntax             | Partial (LuaJIT extensions): `goto` works, `_ENV` does not (use `setfenv`)                                           |
 | `ffi` library               | Available via `require("ffi")`                                                                                       |
@@ -118,7 +118,7 @@ available callback. Register only the ones the script uses.
 ### Memory Read/Write
 
 | Category        | Functions                                                                                  |
-|-----------------|--------------------------------------------------------------------------------------------|
+| --------------- | ------------------------------------------------------------------------------------------ |
 | Byte            | `read_byte`, `write_byte`, `read_char`, `write_char`                                       |
 | 16-bit          | `read_word`, `write_word`, `read_short`, `write_short`                                     |
 | 32-bit unsigned | `read_dword`, `write_dword`                                                                |
@@ -145,7 +145,7 @@ in [Wide Strings](../common-reference.md#wide-strings). `read_string` returns `"
 Do not mix these up.
 
 | Function               | Destination                                |
-|------------------------|--------------------------------------------|
+| ---------------------- | ------------------------------------------ |
 | `say(id, msg)`         | In-game chat, one player (1-16)            |
 | `say_all(msg)`         | In-game chat, everyone                     |
 | `rprint(id, msg)`      | One player's console (`~`)                 |
@@ -154,10 +154,10 @@ Do not mix these up.
 ### Players, Objects, and Actions
 
 | Function                                                                                    | Notes                                                                                                                                                                     |
-|---------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `player_present(id)`, `player_alive(id)`                                                    | Return booleans                                                                                                                                                           |
 | `get_player(id)`                                                                            | Returns player table address                                                                                                                                              |
-| `get_dynamic_player(id)`                                                                    | Returns object address, or `0` if dead                                                                                                                                    |
+| `get_dynamic_player(id)`                                                                    | Returns dynamic memory address of the player, or `0` if dead                                                                                                              |
 | `get_object_memory(object_id)`                                                              | Returns object address, or `0` if invalid                                                                                                                                 |
 | `to_real_index(id)`, `to_player_index(real_index)`                                          | Convert between SAPP (1-16) and Halo (0-15) indices                                                                                                                       |
 | `get_var(id, "$name")`, `set_var(id, "name", value, [copy_id])`                             | `get_var` returns strings; global vars use ID `0`. `set_var` returns `false` if undefined                                                                                 |
