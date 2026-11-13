@@ -3,7 +3,7 @@ title: "Halo: SAPP Server and Lua API Guide"
 permalink: /halo/sapp/guide
 description: "Complete guide to setting up, configuring, and running SAPP dedicated servers and writing server-side Lua scripts."
 date: 2026-11-12
-last-updated: 2026-11-13
+last-updated: 2026-11-14
 categories: [ education, halo, modding, server ]
 tags: [ sapp, lua, scripting, hosting, multiserver, server, tutorial ]
 ---
