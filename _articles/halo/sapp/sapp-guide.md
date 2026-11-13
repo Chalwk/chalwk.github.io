@@ -379,39 +379,6 @@ Do not mix these up.
 | `rprint(id, msg)`      | One player's console (`~`)                 |
 | `cprint(msg, [color])` | Server console only (players never see it) |
 
-### Players, Objects, and Actions
-
-| Function                                                                                    | Notes                                                                                                                                                                     |
-| ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `player_present(id)`, `player_alive(id)`                                                    | Return booleans                                                                                                                                                           |
-| `get_player(id)`                                                                            | Returns player table address                                                                                                                                              |
-| `get_dynamic_player(id)`                                                                    | Returns dynamic memory address of the player, or `0` if dead                                                                                                              |
-| `get_object_memory(object_id)`                                                              | Returns object address, or `0` if invalid                                                                                                                                 |
-| `to_real_index(id)`, `to_player_index(real_index)`                                          | Convert between SAPP (1-16) and Halo (0-15) indices                                                                                                                       |
-| `get_var(id, "$name")`, `set_var(id, "name", value, [copy_id])`                             | `get_var` returns strings; global vars use ID `0`. `set_var` returns `false` if undefined                                                                                 |
-| `add_var(name, type)`, `del_var(name)`                                                      | Manage custom variables (types 0-5; see [Variables](#variables))                                                                                                          |
-| `kill(id)`                                                                                  | Adds a death and applies respawn time                                                                                                                                     |
-| `assign_weapon(object_id, id)`                                                              | Returns success; silently fails if dead or unable to take it (max 4 weapons)                                                                                              |
-| `drop_weapon(id)`                                                                           | Drops current weapon                                                                                                                                                      |
-| `enter_vehicle(vehicle_id, id, "seat")`, `exit_vehicle(id)`                                 | Supports multiple occupants per seat                                                                                                                                      |
-| `camo(id, ticks)`                                                                           | No effect if already camouflaged                                                                                                                                          |
-| `powerup_interact(object_id, id)`                                                           | Returns success                                                                                                                                                           |
-| `spawn_object("class", "path", x, y, z, rotation, tag_id)`                                  | Returns object ID. `class`/`path` are required strings (pass `""`, `""` when spawning by `tag_id`). `x`/`y`/`z`/`rotation` default to `0`; `tag_id` overrides class/path. |
-| `spawn_object_location("class", "path", "location", [rotation], [tag_id])`                  | Returns object ID. Spawns at a named location (see `loc_add`) instead of coordinates. `rotation` is radians. `tag_id` overrides class/path.                               |
-| `spawn_projectile(tag_id, player_id, x, y, z, [rx, ry, rz])`                                | Returns object ID. `player_id` is the parent/owner; `rx`/`ry`/`rz` are optional rotation values (radians).                                                                |
-| `destroy_object(object_id)`                                                                 | Destroying flags, oddballs, or non-SAPP vehicles may crash the server                                                                                                     |
-| `sync_ammo(object_id)`                                                                      | Syncs loaded/unloaded ammo                                                                                                                                                |
-| `intersect(x, y, z, vx, vy, vz, [ignore_object_id])`                                        | Performs 3D raycast collision test. See [Raycasting with intersect](#raycasting-with-intersect).                                                                          |
-| `lookup_tag("weap", "weapons\\pistol\\pistol")` / `lookup_tag(tag_id)`                      | Returns tag address (`0` if not found); use the tag-ID form on protected maps                                                                                             |
-| `execute_command(cmd, [id], [echo])`, `execute_command_sequence("cmd1;cmd2", [id], [echo])` | `id` runs commands on a player's behalf. Sequence splits on `;`. `echo = true` raises `EVENT_ECHO` with output.                                                           |
-| `rand([min, max])`                                                                          | `max` is exclusive (see [Known SAPP Quirks](#known-sapp-quirks))                                                                                                          |
-| `sig_scan("signature")`                                                                     | Returns match address, or `0` (see [Signature Scanning](#signature-scanning))                                                                                             |
-| `timer(ms, "GlobalFn", [args...])`                                                          | See [SAPP timer()](#sapp-timer)                                                                                                                                           |
-
-Tag class codes are the four-letter Halo class (`weap`, `vehi`, `eqip`, ...), not full words.
-
-`get_var` names (`$gt`, `$map`, `$name`, `$score`, ...) are listed in [Variables](#variables). Global variables use player index `0`, and every value comes back as a string.
-
 ---
 
 ## Script Hygiene
@@ -825,6 +792,7 @@ function OnWeaponPickup(player_id, weapon_slot, weapon_type) end
 --- | "$z"         # (P: player) Player Z coordinate
 
 --- Always returns a string. Wrap in tonumber() for math.
+--- See [Variables](#variables) for the full list.
 ---@param player_id number                0 for globals; 1-16 for players
 ---@param variable  SappVariable | string
 ---@return string
@@ -847,7 +815,7 @@ function set_var(player_id, name, value, copy_id) end
 --- | 4 # Player integer
 --- | 5 # Player float
 
---- Creates a custom variable.
+--- Creates a custom variable. See [Variables](#variables).
 ---@param name string
 ---@param type SappVarType
 function add_var(name, type) end
@@ -1100,19 +1068,16 @@ function player_present(player_id) end
 function player_alive(player_id) end
 
 --- Static player table address.
---- See [Players, Objects, and Actions](#players-objects-and-actions).
 ---@param player_id number
 ---@return number address
 function get_player(player_id) end
 
 --- Dynamic player object address, or 0 if the player is dead.
---- See [Players, Objects, and Actions](#players-objects-and-actions).
 ---@param player_id number
 ---@return number address
 function get_dynamic_player(player_id) end
 
 --- Object address, or 0 if the id is invalid.
---- See [Players, Objects, and Actions](#players-objects-and-actions).
 ---@param object_id number
 ---@return number address
 function get_object_memory(object_id) end
@@ -1147,6 +1112,7 @@ function assign_weapon(object_id, player_id) end
 ---@param player_id number
 function drop_weapon(player_id) end
 
+--- Supports multiple occupants per seat.
 ---@param vehicle_id number
 ---@param player_id  number
 ---@param seat       string
@@ -1176,6 +1142,7 @@ function camo(player_id, ticks) end
 function powerup_interact(object_id, player_id) end
 
 --- Returns the object id (0 on failure). Pass "" for class and path when spawning by tag_id.
+--- x, y, z and rotation default to 0.
 --- Example:
 --- ```lua
 --- local object_id = spawn_object("weap", "weapons\\pistol\\pistol", 0, 0, 0)
@@ -1255,7 +1222,6 @@ function sync_ammo(object_id) end
 function intersect(x, y, z, vx, vy, vz, ignore_object_id) end
 
 --- Returns the tag address, or 0 if not found. Use the tag id form on protected maps.
---- See [Players, Objects, and Actions](#players-objects-and-actions).
 ---@overload fun(tag_id: number): number
 ---@param tag_class TagClass | string Four-letter class, e.g. "weap"
 ---@param tag_name  string
@@ -1271,6 +1237,7 @@ function lookup_tag(tag_class, tag_name) end
 function execute_command(command, player_id, echo) end
 
 --- Splits on ";". Use single-quoted Lua strings with double-quoted arguments.
+--- See [execute_command_sequence() Quoting](#execute_command_sequence-quoting).
 --- Example:
 --- ```lua
 --- execute_command_sequence('say_all "Hello world";god 1')
@@ -1281,12 +1248,14 @@ function execute_command(command, player_id, echo) end
 function execute_command_sequence(commands, player_id, echo) end
 
 --- The upper bound is exclusive: rand(1, 4) returns 1-3.
+--- See [rand() Upper Bound](#rand-upper-bound).
 ---@param min? number
 ---@param max? number
 ---@return number
 function rand(min, max) end
 
 --- Calls a global function once after delay ms. The callback returns true to repeat. Returns nil.
+--- See [SAPP timer()](#sapp-timer).
 ---@param delay         number Milliseconds
 ---@param callback_name string Name of a global function
 ---@param ...           any    Forwarded to the callback
