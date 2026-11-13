@@ -325,7 +325,7 @@ Every script must define a global `api_version` and `OnScriptLoad()` or SAPP ref
 **Skeleton script:**
 
 ```lua
-api_version = "1.12.0.0
+api_version = "1.12.0.0"
 
 function OnScriptLoad()
     -- register callbacks here
@@ -367,62 +367,6 @@ function OnSpawn(player_id)
     if weapon ~= 0 then assign_weapon(weapon, player_id) end
 end
 ```
-
-### Messaging
-
-Do not mix these up.
-
-| Function               | Destination                                |
-| ---------------------- | ------------------------------------------ |
-| `say(id, msg)`         | In-game chat, one player (1-16)            |
-| `say_all(msg)`         | In-game chat, everyone                     |
-| `rprint(id, msg)`      | One player's console (`~`)                 |
-| `cprint(msg, [color])` | Server console only (players never see it) |
-
----
-
-## Script Hygiene
-
-### Security
-
-Applies to anything driven by player input.
-
-- Validate player indices, admin levels, numeric ranges, and types. Never `loadstring` or `load` player input.
-- Rate-limit costly actions with per-player cooldowns.
-- Treat client input as untrusted and log suspicious behavior for review.
-
-### Performance
-
-`EVENT_TICK` runs 30 times per second, so keep it lean.
-
-- Queue or debounce frequent events (damage, weapon fire) and drain them with short timers (50-200 ms).
-- Use separate queues for different priorities (score updates vs. log writes).
-
-- Localize frequently used globals at file scope:
-
-```lua
-local table_insert = table.insert
-local math_random = math.random
-```
-
-- Reuse tables from a pool to cut GC churn in hot paths:
-
-```lua
-local pool = {}
-
----@return table t Reusable table from the pool, or a new empty table.
-local function newTable()
-    return table.remove(pool) or {}
-end
-
----@param t table Table to clear and return to the pool.
-local function freeTable(t)
-    for k in pairs(t) do t[k] = nil end
-    pool[#pool + 1] = t
-end
-```
-
-- Avoid forcing garbage collection. If you must, do it at a quiet moment (round end, idle).
 
 ---
 
@@ -1268,7 +1212,6 @@ function timer(delay, callback_name, ...) end
 
 ### Player Index Convention
 
-- SAPP API functions use player indices 1-16; Halo memory tables and arrays use 0-15.
 - Check `player_present(i)` and `player_alive(i)` before accessing player data.
 - `get_dynamic_player(i) == 0` means the player is dead. It is redundant if `player_alive(i)` is already checked.
 
@@ -1389,7 +1332,6 @@ end
 
 Notes:
 
-- Calling `read_dword(sig_scan(...) + offset)` unguarded crashes the server when `sig_scan` returns `0`. The `safeScan` helper above checks `sig_scan ~= 0`, that `read_dword` returns a number, and that the number is in Halo's data range.
 - Do not return early when a sig fails. A single-platform miss disables the entire script on the other platform. Fall back to the hardcoded value via the `or` expression shown above.
 - Wildcard the address bytes rather than embedding a specific immediate. This survives builds where the address moves but not when the instruction shape changed (as with `gametype_base` on PC).
 - `readWideString` is defined under [Wide Strings](../common-reference.md#wide-strings).
@@ -2157,7 +2099,7 @@ end
 
 ### Assigning Weapons
 
-Note: Assigning 3 or more weapons at once makes the third and fourth drop on the ground. Delay them by at least 250 ms. `assign_weapon` silently fails if the player is dead.
+Note: Assigning 3 or more weapons at once makes the third and fourth drop on the ground. Delay them by at least 250 ms.
 
 ```lua
 ---@param weapon_id number|nil Spawned weapon object ID.
@@ -2246,11 +2188,11 @@ Many Halo strings are UTF-16LE: player name (`get_player(id) + 0x4`), server nam
 
 ### LuaJIT and FFI
 
-- Lua 5.1 compatible, plus LuaJIT extensions: `goto`, `bit`, `table.new`, `table.clear`.
-- `_ENV` is not supported. Use `setfenv` and `getfenv` for environments.
+Lua version, supported syntax, and sandboxing are covered in [Runtime Environment](#runtime-environment).
+
 - `ffi` gives you C interop and raw memory access.
 - The JIT speeds up math-heavy and iterative code.
-- Scripts are sandboxed, so some OS APIs may be blocked. Unsafe memory access can crash the server.
+- Scripts are sandboxed, so some OS APIs may be blocked.
 
 #### Check for FFI
 
@@ -2433,6 +2375,49 @@ write_bit(object + 0x10, 0, 0)          -- unset no-collision
 write_bit(object + 0x10, 5, 0)          -- unset ignore-physics
 ```
 
+### Script Hygiene
+
+#### Security
+
+Applies to anything driven by player input.
+
+- Validate player indices, admin levels, numeric ranges, and types. Never `loadstring` or `load` player input.
+- Rate-limit costly actions with per-player cooldowns.
+- Treat client input as untrusted and log suspicious behavior for review.
+
+#### Performance
+
+`EVENT_TICK` runs 30 times per second, so keep it lean.
+
+- Queue or debounce frequent events (damage, weapon fire) and drain them with short timers (50-200 ms).
+- Use separate queues for different priorities (score updates vs. log writes).
+
+- Localize frequently used globals at file scope:
+
+```lua
+local table_insert = table.insert
+local math_random = math.random
+```
+
+- Reuse tables from a pool to cut GC churn in hot paths:
+
+```lua
+local pool = {}
+
+---@return table t Reusable table from the pool, or a new empty table.
+local function newTable()
+    return table.remove(pool) or {}
+end
+
+---@param t table Table to clear and return to the pool.
+local function freeTable(t)
+    for k in pairs(t) do t[k] = nil end
+    pool[#pool + 1] = t
+end
+```
+
+- Avoid forcing garbage collection. If you must, do it at a quiet moment (round end, idle).
+
 ---
 
 ### Memory addresses and offsets
@@ -2441,7 +2426,7 @@ Lookup tables for SAPP (server) Lua scripting: pointers, signatures, variables, 
 
 #### Pointers
 
-Addresses below apply to both PC and CE. The `halo_type` global is defined by SAPP; the snippet below probes when it is absent. Use these pointers when no reliable signature exists (see [Signatures](#signatures)). Addresses are hex and `-` means unavailable. Pick PC or CE with `halo_type` (`"PC"` or `"CE"`):
+Each pointer is listed for PC and CE. Use these when no reliable signature exists (see [Signatures](#signatures)). Addresses are hex and `-` means unavailable. Pick PC or CE with `halo_type`:
 
 ```lua
 local timelimit_address = halo_type == "PC" and 0x626630 or 0x5AA5B0
@@ -2509,7 +2494,7 @@ local timelimit_address = halo_type == "PC" and 0x626630 or 0x5AA5B0
 
 Notes:
 
-- `gametype_base + 0x0` is the gametype variant display name as UTF-16LE (e.g. `"Team Slayer"`, not the base identifier `$gt` returns). Use `readWideString`, not `read_string` (see [Wide Strings](../common-reference.md#wide-strings)). The base identifier comes from the code byte at `+0x30` (see [Gametype Codes](../common-reference.md#gametype-codes)). The other fields are listed under [Gametype Struct](../common-reference.md#gametype-struct). There is no working PC sig for this pointer; use `0x671320`.
+- `gametype_base + 0x0` is the gametype variant display name as UTF-16LE (e.g. `"Team Slayer"`, not the base identifier `$gt` returns). Use `readWideString`, not `read_string` (see [Wide Strings](../common-reference.md#wide-strings)). The base identifier comes from the code byte at `+0x30` (see [Gametype Codes](../common-reference.md#gametype-codes)). The other fields are listed under [Gametype Struct](../common-reference.md#gametype-struct).
 - `map_name_address` is UTF-16LE. Use `readWideString`. For the map filename, use `read_string(network_struct + 0x8C, 0x80)`. `map_name_address2` is not populated on the dedi.
 - `map_pointer` resolves to `0x40440000` on both PC and CE. Read the tag array pointer from the base (`read_dword(0x40440000)`) and the tag count from `0x4044000C`.
 - The `race_globals` fields are listed under [Race Globals](../common-reference.md#race-globals). On SAPP the player index is `to_real_index(i)`. `race_locs` is not required for lap timing.
@@ -2525,7 +2510,7 @@ The tag table base is `0x40440000` on both PC and CE. Read the tag array pointer
 
 #### Signatures
 
-Signatures below use `sig_scan`, which works on both PC and CE. Use the [hardcoded pointers](#pointers) above as a fallback. `halo_type` is a case-sensitive string (`"PC"` or `"CE"`) and is the correct way to pick a fallback when `sig_scan` returns `0`.
+Signatures below use `sig_scan`, which works on both PC and CE (unless indicated). Use the [hardcoded pointers](#pointers) above as a fallback when `sig_scan` returns `0`, picking PC or CE with `halo_type`.
 
 | Pointer name                | Expression                                                                                       |
 | --------------------------- | ------------------------------------------------------------------------------------------------ |
@@ -3080,13 +3065,7 @@ Add custom fields to Halo's query response.
 
 Custom variables come from these commands, or from `add_var`, `del_var`, and `set_var` in Lua. SAPP scripts have separate Lua environments, so they cannot directly access each other's globals. Use `lua_call <script> <function> [arguments...]` to invoke a function in a loaded script, and custom variables when scripts need to share state.
 
-| Command  | Level | Usage                                         | Description                                                                                                           |
-| -------- | ----- | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| var_add  | 4     | `var_add <name> <type>`                       | Type: `0` = global str, `1` = global int, `2` = global float, `3` = player str, `4` = player int, `5` = player float. |
-| var_conv | 4     | `var_conv <name>`                             | Convert between integer and float variable.                                                                           |
-| var_del  | 4     | `var_del <name>`                              | Delete a variable.                                                                                                    |
-| var_list | 4     | `var_list`                                    | List all custom variables.                                                                                            |
-| var_set  | 4     | `var_set <name> <value_expr> [player number]` | Set a custom variable (player number required for player variables).                                                  |
+The `var_add`, `var_conv`, `var_del`, `var_list`, and `var_set` commands are listed under [Event and Custom Commands](#event-and-custom-commands).
 
 ---
 
