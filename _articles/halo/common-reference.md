@@ -157,8 +157,8 @@ The persistent player structure.
 | `0x6C`            | float   | Player speed multiplier (1.0 = normal)                     |
 | `0x96`            | word    | Lifetime killstreak count                                  |
 | `0x9C`            | word    | Kills                                                      |
-| `0xA4`            | word    | Assists / secondary kills                                  |
-| `0xAC`            | word    | Betrays (+ suicides count)                                 |
+| `0xA4`            | word    | Assists                                                    |
+| `0xAC`            | word    | Betrays                                                    |
 | `0xAE`            | word    | Deaths                                                     |
 | `0xB0`            | word    | Suicides                                                   |
 | `0xC4`            | word    | King of the Hill hill time (ticks) / CTF flag steals       |
@@ -255,6 +255,7 @@ Relative to the gametype struct base. On Chimera that is `gametype_base` from th
 | `0x70` | dword   | Friendly fire penalty (ticks)                                                                      |
 | `0x74` | byte    | Auto team balance (0 = Off, 1 = On)                                                                |
 | `0x78` | dword   | Time limit (ticks)                                                                                 |
+| `0x8C` | byte    | Oddball gametype variant (see [Oddball Gametype](#oddball-gametype))                               |
 
 ### Race Globals
 
@@ -397,6 +398,20 @@ exposes through the `gametype` global.
 ```lua
 local gametype_names = { "ctf", "slayer", "oddball", "king", "race" }
 local gametype = gametype_names[read_byte(gametype_base + 0x30)] or "unknown"
+```
+
+### Oddball Gametype
+
+For Oddball, the byte at `gametype_base + 0x8C` identifies the variant:
+
+| Value | Variant     |
+| ----- | ----------- |
+| `0`   | Normal      |
+| `1`   | Reverse Tag |
+| `2`   | Juggernaut  |
+
+```lua
+local oddball_gametype = read_byte(gametype_base + 0x8C)
 ```
 
 ### Team and Color
