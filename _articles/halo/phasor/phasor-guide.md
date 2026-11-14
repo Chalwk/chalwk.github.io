@@ -620,11 +620,10 @@ This doubles as an API reference and EmmyLua / LuaLS script for Lua-aware editor
 
 ```lua
 ---@meta
--- Phasor 2.0 Lua API for EmmyLua and lua-language-server.
+-- Phasor 2.0 Lua API definitions for EmmyLua and lua-language-server.
 -- Runtime is Lua 5.2.
 --
 -- Copyright (c) 2026 Jericho Crosby (Chalwk).
---
 
 ---@alias PhasorGame "PC" | "CE"
 
