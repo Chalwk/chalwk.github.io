@@ -250,8 +250,8 @@ Scripts are where most of Phasor's value comes from.
 ### Installing a Script
 
 1. [Download a Script][script_archive].
-2. Copy it to your scripts folder: `Phasor_PC/cg/scripts` for PC or `Phasor_CE/cg/scripts` for CE.
-3. To keep it loaded for the whole server session, put it in `scripts/persistent` instead.
+2. Copy it to `<instance or server root>\scripts`. In the Phasor packages that is `cg\scripts`.
+3. To keep it loaded for the whole server session, put it in `<instance or server root>\scripts\persistent` instead.
 4. Load or unload it with `sv_script_load` and `sv_script_unload`, or list it on a mapcycle or map vote line in `init.txt`.
 
 > [!IMPORTANT]
@@ -396,12 +396,12 @@ Phasor has no registration call. It looks for global functions with the event na
 
 ### Deploying a Script
 
-Phasor only loads `.lua` files. A script saved as `.txt` needs renaming first. Where you put it decides how long it stays loaded:
+Phasor only loads `.lua` files. A script saved as `.txt` needs renaming first. Paths start from your instance folder, which is `cg\` in the packages. Some hosting providers (NFO, for example) have no `cg` folder, so use the server root instead. Where you put the script decides how long it stays loaded:
 
-| Folder                | Behavior                                                        |
-| --------------------- | --------------------------------------------------------------- |
-| `scripts/`            | Loaded on request, unloaded at the end of each game             |
-| `scripts/persistent/` | Loaded when Phasor starts, stays loaded until the server closes |
+| Folder                                          | Behavior                                                        |
+| ----------------------------------------------- | --------------------------------------------------------------- |
+| `<instance or server root>\scripts\`            | Loaded on request, unloaded at the end of each game             |
+| `<instance or server root>\scripts\persistent\` | Loaded when Phasor starts, stays loaded until the server closes |
 
 ### Script Commands
 

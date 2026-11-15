@@ -24,24 +24,20 @@ examples for HUDs and gameplay tweaks.
 
 ## Script locations
 
-Chimera looks for Lua scripts in two folders and treats them differently:
+Chimera looks for Lua scripts in two folders under `chimera\lua\scripts\` and treats them differently:
 
-- **Global scripts:** Put `.lua` files in `chimera\lua\scripts\global`. They load when Chimera
-  starts
-  and stay active until you reload them. Use this for tools and HUD mods you want all the time.
-  Global scripts are not sandboxed.
+- **Global scripts:** `chimera\lua\scripts\global\<script>.lua`. They load when Chimera starts and stay active until you reload them. Use this for tools and HUD mods you want all the time.
 
-- **Map scripts:** Put scripts in `chimera\lua\scripts\map`. They load when their map is active and
-  unload when you leave it. File-based map scripts are not sandboxed; embedded map scripts are
-  sandboxed (see [Sandbox restrictions](#sandbox-restrictions)).
+- **Map scripts:** `chimera\lua\scripts\map\<map>.lua`. They load when their map is active and unload when you leave it.
+
+Neither folder is sandboxed. Only scripts embedded in a `.map` file are (see [Sandbox restrictions](#sandbox-restrictions)).
 
 By default, the Chimera folder is located inside your Halo data folder:
 
 - **Halo Custom Edition (CE):** `%USERPROFILE%\Documents\My Games\Halo CE\chimera`
 - **Halo PC:** `%USERPROFILE%\Documents\My Games\Halo\chimera`
 
-Linux: `~/Documents/My Games/Halo CE/chimera` or `~/Documents/My Games/Halo/chimera`, depending
-on your setup.
+Linux: `~/Documents/My Games/Halo CE/chimera` or `~/Documents/My Games/Halo/chimera`, depending on your setup.
 
 ---
 

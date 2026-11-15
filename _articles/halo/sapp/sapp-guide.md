@@ -63,7 +63,11 @@ This is the folder structure after extracting either zip:
 
 Each package ships only the executable for its platform: `haloded.exe` for PC, `haloceded.exe` for CE.
 
-Two folders are named `sapp`. The root `sapp\` holds global files shared by every instance. The `cg\sapp\` folder holds settings for one instance. Keep them straight, because the multiserver setup depends on the difference.
+In the packages, two folders are named `sapp`. The root `sapp\` holds global files shared by every instance. The `cg\sapp\` folder holds settings for one instance. Keep them straight, because the multiserver setup depends on the difference.
+
+Some hosting providers (NFO, for example) have no `cg` folder and only one `sapp` folder. There the server root is the instance folder: the startup `init.txt` is in the root, while the SAPP `init.txt` and Lua scripts are in `sapp\` (`sapp\init.txt`, `sapp\lua\`). Global files such as `admins.txt` and `ipbans.txt` share that same `sapp\` folder.
+
+Throughout this guide, "instance folder" means the folder that holds the startup `init.txt` and the instance's `sapp\` folder. That is `cg\` in the packages and the server root on these hosts.
 
 ### File Reference
 
@@ -93,7 +97,7 @@ Every server instance of the same platform reads these files from the root `sapp
 
 The `cg\` folder holds the config for one server instance.
 
-- `cg\sapp\lua\`: Lua scripts for complex game modes. Load each one from `cg\sapp\init.txt` with `lua_load "filename"`, leaving off the `.lua` extension, and set `lua true` first. The package includes `sample_script.lua` as a starting point. See [Script Structure](#script-structure).
+- `cg\sapp\lua\` (generally `<instance or server root>\sapp\lua\`): Lua scripts for complex game modes. Load each one from `sapp\init.txt` in the same folder with `lua_load "filename"`, leaving off the `.lua` extension, and set `lua true` first. The package includes `sample_script.lua` as a starting point. See [Script Structure](#script-structure).
 
 ```lua
 api_version = "1.12.0.0"
