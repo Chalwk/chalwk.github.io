@@ -344,7 +344,7 @@ function OnError(message)
 end
 ```
 
-SAPP API functions work only after `OnScriptLoad()` starts, so run signature scans inside `OnScriptLoad()` or a function it calls—never at file scope. Perform `get_var` and tag lookups in a runtime callback such as `OnStart` or `OnJoin`; calling `OnStart()` from `OnScriptLoad()` is fine (it covers a script loaded mid-game) as long as it bails out when no game is running.
+SAPP API functions work only after `OnScriptLoad()` starts, so run signature scans inside `OnScriptLoad()` or a function it calls, never at file scope. Perform `get_var` and tag lookups in a runtime callback such as `OnStart` or `OnJoin`; calling `OnStart()` from `OnScriptLoad()` is fine (it covers a script loaded mid-game) as long as it bails out when no game is running.
 
 **Example script:**
 

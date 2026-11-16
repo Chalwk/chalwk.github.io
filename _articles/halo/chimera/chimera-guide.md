@@ -726,7 +726,7 @@ environment, and Chimera version. They are not protected from reassignment by sc
 | `script_type`        | `"global"` or `"map"`.                                                                                          |
 | `server_type`        | `"none"` (single player), `"local"` (hosting), or `"dedicated"` (joined a server).                              |
 
-> [!NOTE] Chimera has no equivalent to SAPP’s `halo_type` global and no function that reports which
+> [!NOTE] Chimera has no equivalent to SAPP's `halo_type` global and no function that reports which
 > client you are on. See [Probing the Platform](#probing-the-platform) for
 > details on how to do this.
 
