@@ -31,7 +31,7 @@ Official docs, forums, map repositories, and community knowledge bases.
 
 - [Official SAPP Docs](https://halo-sapp.readthedocs.io/): Lua API, events, commands, and examples
   for the SAPP server extension.
-- [SAPP Documentation (mirror)](https://github.com/Chalwk/SPCLib/blob/master/docs/sapp_docs_revision_2.4.pdf):
+- [SAPP Documentation (mirror)](https://github.com/Chalwk/SPCLib/blob/main/docs/sapp_docs_revision_2.4.pdf):
   PDF copy of the SAPP docs, revision 2.4.
 - [Phasor (legacy)](https://phasor.halonet.net/): Legacy server extension and documentation; useful
   for older scripts and historical examples.

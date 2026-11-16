@@ -1364,7 +1364,7 @@ end
 [hardcoded_pointers]: ../sapp/sapp-guide.md#memory-addresses-and-offsets
 [offset_helpers]: ../common-reference.md#offset-helpers
 [position_aim]: ../common-reference.md#position-and-aim
-[script_archive]: https://github.com/Chalwk/SPCLib/tree/master/phasor
+[script_archive]: https://github.com/Chalwk/SPCLib/tree/main/phasor
 [static_player_data]: ../common-reference.md#static-player-data
 [ternary_emulation]: ../common-reference.md#ternary-emulation
 [timing_units]: ../common-reference.md#timing-and-units
