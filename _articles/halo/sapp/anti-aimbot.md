@@ -61,7 +61,7 @@ Points are the snap angle in degrees multiplied by a weight. The weight depends 
 | Hit        | `SCORING.SNAP_ON_TARGET` (15) |
 | Miss       | `SCORING.SNAP_OFF_TARGET` (5) |
 
-The cone only says the camera points roughly at the enemy. The ray is what decides whether a shot would land. With defaults, a 20 degree snap that ends on target is worth 300 points, so about ten of them in one life reach the 3000 limit.
+The cone points roughly at the enemy. The ray is what decides whether a shot would land. With defaults, a 20 degree snap that ends on target is worth 300 points, so about ten of them in one life reach the 3000 limit.
 
 ### Tracking
 
@@ -156,7 +156,7 @@ Other points:
 
 - A kick does not stop the player rejoining, and their state starts fresh when they do.
 - An IP ban affects everyone behind that address.
-- There is no admin exemption.
+- There is no admin exemption (yet).
 - The command string is not validated. Any value other than `"ipban"` or `"NONE"` is run as `<command> <id> "<reason>"`.
 
 ---
@@ -284,7 +284,7 @@ Decay is applied in chunks. Once `INTERVAL_SECONDS` has passed, it subtracts `el
 
 - The first sample after a weapon change, or after being unarmed, only records the value. Weapon changes are detected by object ID, not tag, so picking up a second weapon of the same type also resets it.
 - A magazine weapon fires `max(0, previous - current)` shots, so a tick that missed a few rounds counts them all and a reload (count goes up) counts none.
-- An energy weapon counts one shot per tick at most, when heat has risen by more than `ACCURACY.HEAT_EPSILON`. That threshold is shared by all energy weapons. There is a TODO in the source to make it per weapon.
+- An energy weapon counts one shot per tick at most, when heat has risen by more than `ACCURACY.HEAT_EPSILON`. That threshold is shared by all energy weapons. I plan on making this per weapon (stay tuned!).
 - When shots are found, `checkShotHit` casts one aim ray and `shots_hit` is increased by the full shot count if it lands on any enemy. `updateDynamicThreshold` then runs once for that event.
 
 Setting `DYNAMIC_THRESHOLD.ENABLED` to false only stops the threshold from changing. Shot counting and its ray cast still run, so it does not save any work.
