@@ -109,6 +109,7 @@ These tools are cross-platform, scriptable, and actively maintained by the commu
 
 Enhance your local game or test scripts without needing a dedicated server.
 
+- [Lethargy](https://opencarnage.net/index.php?/topic/3769-lethargy/)
 - [Chimera](https://github.com/SnowyMouse/chimera): Halo CE client modification with Lua support,
   quality-of-life features, and modding APIs.
 - [Balltze](https://github.com/MangoFizz/balltze): Plugin loader and mod platform for Halo CE.
