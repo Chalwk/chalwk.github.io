@@ -19,7 +19,7 @@ The script is independent of SAPP's built-in aimbot detection. It does not use `
 ## Requirements
 
 - SAPP 10.2.1
-- Stock weapons only (defualt). See [Custom Maps and Weapons](#custom-maps-and-weapons).
+- Stock weapons only (default). See [Custom Maps and Weapons](#custom-maps-and-weapons).
 
 ---
 
