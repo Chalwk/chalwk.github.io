@@ -36,15 +36,17 @@ Every tick, for each living player (the shooter), the script does the following 
 
 1. Applies score decay.
 2. Updates the shooter's accuracy from shots fired this life.
-3. Measures how far the camera moved since the previous tick.
-4. Builds the aim cone for this tick (see [Aim Cone](#aim-cone)).
-5. Walks the enemy list in player index order and stops at the first enemy inside the cone. Only that one enemy is evaluated per tick.
-6. Scores the event if it qualifies as a snap or tracking (see [Scoring](#scoring)).
-7. Runs enforcement if the score is over `CFG.AUTO_AIM.MAX_SCORE`.
+3. Samples the trigger if `TRIGGER_WEIGHTING` is on (see [Firing Bonus](#firing-bonus)).
+4. Measures how far the camera moved since the previous tick.
+5. Builds the aim cone for this tick (see [Aim Cone](#aim-cone)).
+6. Walks the enemy list in player index order and stops at the first enemy inside the cone. Only that one enemy is evaluated per tick.
+7. Scores the event if it qualifies as a snap or tracking (see [Scoring](#scoring)).
+8. Prints a warning if the score has reached `CFG.AUTO_AIM.WARN_SCORE` (see [Warnings](#warnings)).
+9. Runs enforcement if the score is over `CFG.AUTO_AIM.MAX_SCORE`. Immune admins get an alert instead (see [Admin Immunity](#admin-immunity)).
 
 Nothing is scored unless the camera moved. A player holding the crosshair still on an enemy scores zero, however long they do it.
 
-Per-player state is created on join and cleared on leave and at game end. Aim score, lock count and shot counts reset on death and after enforcement.
+Per-player state is created on join and cleared on leave and at game end. Aim score, lock count, shot counts and the warning flag reset on death and after enforcement.
 
 ---
 
@@ -83,6 +85,16 @@ The event score (points plus the lock distance term) is multiplied by:
 - `CAMO.SCORE_MULTIPLIER` (2.0) when the target has active camo.
 
 Both can apply to the same event.
+
+### Firing Bonus
+
+Off by default (`TRIGGER_WEIGHTING.ENABLED = false`). A snap followed by a shot is a stronger sign than a snap on its own, so when this is on, a scored snap is raised if the shooter fires soon after it.
+
+The trigger counts as active when its value is above `ACTIVE_THRESHOLD` (0). The snap has the tick it happened on plus `WINDOW_TICKS` (6, or 0.2 seconds) after it for the trigger to be active. If it is, the script adds the snap's score multiplied by `SCORE_MULTIPLIER` minus 1, which is an extra 50 percent with the default 1.5. The snap's score here is its final score, so it already includes the obscured and camo multipliers. Each snap can earn the bonus once.
+
+It only applies to snaps, not tracking. Only one snap waits for the trigger at a time, so a new scored snap inside the window replaces the earlier one. The script cannot tell whether the shot was fired at the snapped target, so a player holding the trigger down while flicking earns the bonus too.
+
+The trigger value comes from a memory offset that you should check on your own server before enabling this. See [Tuning](#tuning).
 
 ### Pattern Detection
 
@@ -126,6 +138,7 @@ The table lists the settings you are most likely to change. Every field in `CFG`
 | Setting                            | Default | Notes                                                      |
 | ---------------------------------- | ------- | ---------------------------------------------------------- |
 | `AUTO_AIM.MAX_SCORE`               | `3000`  | Score that triggers enforcement. Raise to be more lenient. |
+| `AUTO_AIM.WARN_SCORE`              | `1500`  | Console warning at this score. `0` turns it off.           |
 | `AUTO_AIM.ANGLE_THRESHOLD_DEGREES` | `2.5`   | Base cone. Lower it to narrow the cone.                    |
 | `SNAP_DETECTION.BASELINE_DEGREES`  | `6.0`   | Smallest single-tick camera change that counts as a snap.  |
 | `SNAP_DETECTION.TRACKING_ENABLED`  | `false` | See [Tracking](#tracking).                                 |
@@ -133,6 +146,9 @@ The table lists the settings you are most likely to change. Every field in `CFG`
 | `ENFORCEMENT.COMMAND`              | `"k"`   | `"k"`, `"ipban"` or `"NONE"`.                              |
 | `ENFORCEMENT.IPBAN_TIME_MINUTES`   | `60`    | Only used by `ipban`. `0` is indefinite.                   |
 | `PATTERN_DETECTION.SCORE_BOOST`    | `150`   | Points added when a timing pattern is found.               |
+| `IMMUNITY.LEVELS`                  | 1 to 4  | Admin levels exempt from enforcement.                      |
+| `TRIGGER_WEIGHTING.ENABLED`        | `false` | See [Firing Bonus](#firing-bonus).                         |
+| `TRIGGER_WEIGHTING.LOG_VALUES`     | `false` | Prints trigger values to check the offset.                 |
 
 Units are mixed, so check each field's comment. Distances (`TRACE_DISTANCE`, lock distance) are in world units. Speeds (`MOVING_SPEED`, `SPEED_THRESHOLD`, `PROJECTILE_SPEED`) are in meters per second. One world unit is 3.048 meters.
 
@@ -140,7 +156,7 @@ Units are mixed, so check each field's comment. Distances (`TRACE_DISTANCE`, loc
 
 ## Enforcement
 
-When a shooter's score is over `MAX_SCORE`, the script prints an alert to the server console in red and then runs the command:
+When a shooter's score is over `MAX_SCORE`, the script prints an alert to the server console in red and then runs the command. Players at an immune admin level skip this (see [Admin Immunity](#admin-immunity)).
 
 | `COMMAND` | Command that runs                                        |
 | --------- | -------------------------------------------------------- |
@@ -156,21 +172,41 @@ Other points:
 
 - A kick does not stop the player rejoining, and their state starts fresh when they do.
 - An IP ban affects everyone behind that address.
-- There is no admin exemption (yet).
 - The command string is not validated. Any value other than `"ipban"` or `"NONE"` is run as `<command> <id> "<reason>"`.
+
+### Admin Immunity
+
+`IMMUNITY.LEVELS` lists the admin levels that are exempt from enforcement. Levels 1 to 4 are exempt by default. The script reads the player's `$lvl` when they reach the limit, so it covers both CD-key and name and password admins. Players with no admin level, or a level that is not set to `true`, are not exempt. To remove the exemption for a level, set it to `false` or delete the entry.
+
+Immune players are scored like everyone else. When one reaches the limit, the script prints a purple console alert, resets their score and runs nothing. `MESSAGES.IMMUNE_ALERT` receives the player name, player index, score and admin level, in that order. This keeps staff from being kicked while still showing you when one of them trips the script. Because the score resets, the alert can repeat once it builds up again.
+
+### Warnings
+
+`AUTO_AIM.WARN_SCORE` (1500) prints a yellow console line the first time a player's score reaches it in a life. `MESSAGES.WARNING_ALERT` receives the player name, player index, score and the limit, in that order. It runs no command and applies to everyone, including immune admins.
+
+The warning resets on death and after enforcement, so it can print again next life. It does not print twice in one life if the score decays and rises again. Set it to `0` to turn it off, and keep it below `MAX_SCORE`.
 
 ---
 
 ## Tuning
 
-The script only prints when a player passes `MAX_SCORE`, so there is no per-event output to watch. To see how your normal players score:
+The script only prints at `WARN_SCORE` and `MAX_SCORE`, so there is no per-event output to watch. To see how your normal players score:
 
 1. Set `ENFORCEMENT.COMMAND = "NONE"`.
-2. Lower `AUTO_AIM.MAX_SCORE` well below the real value for a test period.
+2. Lower `AUTO_AIM.MAX_SCORE` (and `WARN_SCORE` with it) well below the real value for a test period.
 3. Watch how often the alert fires for players you trust. If legitimate players trip it, raise the limit or narrow the cone. If a known cheater never trips it, do the opposite.
-4. Restore the real limit and switch to `"k"` before moving to `"ipban"`.
+4. Restore the real limit and switch to `"k"` before moving to `"ipban"`. Admins at immune levels are never kicked, so test the kick with a non-admin account.
 
 Fast flicks to an enemy are normal play, which is why the default limit needs several large on-target snaps in one life.
+
+To check trigger weighting before enabling it:
+
+1. Set `TRIGGER_WEIGHTING.LOG_VALUES = true` and join the server.
+2. Stand still, then fire a few bursts. The console prints a line each time your trigger value changes.
+3. The value should rise above `ACTIVE_THRESHOLD` while you fire and drop back when you stop. If it never changes, or stays above the threshold, leave the weighting off, because the offset does not behave the way the script expects on your server.
+4. Set `LOG_VALUES` back to `false` and turn on `ENABLED`.
+
+`LOG_VALUES` prints for every living player, so use it on a test server.
 
 ---
 
@@ -212,6 +248,7 @@ All offsets are listed in the [Common Reference](../common-reference.md#memory-o
 | Dynamic player | `0x118`             | Current weapon object ID                   | `getWeaponObject`                       |
 | Dynamic player | `0x11C`             | Vehicle object ID (`0xFFFFFFFF` = on foot) | `getBaseObject`, `getCollisionObjectId` |
 | Dynamic player | `0x230/0x234/0x238` | Aim vector                                 | `getCamera`                             |
+| Dynamic player | `0x490`             | Primary trigger state (float)              | `updateTrigger`                         |
 | Dynamic player | `0x50C`             | Crouch scale                               | `getPlayerPosition`                     |
 | Base object    | `0x5C`              | World position X, Y, Z                     | `getPlayerPosition`                     |
 | Base object    | `0x68`              | Velocity X, Y, Z (world units per tick)    | `getVelocity`                           |
@@ -268,11 +305,14 @@ event = points + lock_count * distance * LOCK_DISTANCE_WEIGHT
 event = event * OBSCURED_MULTIPLIER   (if enabled and not visible)
 event = event * CAMO_SCORE_MULTIPLIER (if enabled and target camouflaged)
 aim_score = aim_score + event
+aim_score = aim_score + event * (SCORE_MULTIPLIER - 1)  (snaps only, once the shooter fires in the window)
 ```
 
 `lock_count` is incremented after it is read for the formula. `was_scoring` is read before it is updated for this tick, which is how `is_new_lock` is determined, and it is set from the return value at the end of `processPlayerAim`.
 
 An event only exists when the camera moved enough to count as a snap or tracking, so `was_scoring` is false on any tick where the crosshair is simply resting on a target. With tracking off (the default), a scoring tick needs a camera change above `BASELINE_DEGREES` in that tick. Two of those back to back are rare in real play, so `lock_count` seldom climbs above 1 or 2 and almost every snap counts as a new lock. In practice that means the lock distance term is only significant with tracking enabled, and pattern detection is looking at the spacing between individual snaps.
+
+`updateTrigger` runs before the cone check each tick, so `trigger_active` is current when a snap is scored. After scoring a snap, `evaluateAim` stores the tick in `snap_tick` and the snap's final score in `snap_points`. If the trigger is already active, the bonus is applied on the spot. Otherwise the snap waits, and `updateTrigger` applies the bonus on the first later tick where the trigger is active, or drops `snap_tick` once more than `WINDOW_TICKS` ticks have passed. `applyFiringBonus` clears `snap_tick`, so a snap pays out once. A second scored snap overwrites both fields.
 
 `checkPattern` appends the current time and trims the list to `MAX_PATTERN_LENGTH`. It then computes the population standard deviation of the gaps, so with exactly two gaps the deviation is half their difference. The boost goes straight onto `aim_score` and the list is replaced with an empty table.
 
@@ -293,21 +333,26 @@ Setting `DYNAMIC_THRESHOLD.ENABLED` to false only stops the threshold from chang
 
 `PlayerAimState` is created by `newState` on join and at game start. `resetLife` clears most of it on death and after enforcement.
 
-| Field               | Reset on death or enforcement | Other resets                                   |
-| ------------------- | ----------------------------- | ---------------------------------------------- |
-| `aim_score`         | Yes                           | None                                           |
-| `lock_count`        | Yes                           | Drops by 0.5 each tick without a scoring event |
-| `last_decay_time`   | Yes                           | Updated each decay                             |
-| `lock_pattern`      | Yes                           | Cleared when a pattern is found                |
-| `was_scoring`       | Yes                           | Set every tick                                 |
-| `shots_fired`       | Yes                           | None                                           |
-| `shots_hit`         | Yes                           | None                                           |
-| `last_fire_value`   | Yes                           | Weapon change or no weapon                     |
-| `last_weapon_id`    | Yes                           | Weapon change or no weapon                     |
-| `dynamic_threshold` | No                            | Only changes on a detected shot                |
-| `accuracy_history`  | No                            | None                                           |
+| Field                | Reset on death or enforcement | Other resets                                      |
+| -------------------- | ----------------------------- | ------------------------------------------------- |
+| `aim_score`          | Yes                           | None                                              |
+| `lock_count`         | Yes                           | Drops by 0.5 each tick without a scoring event    |
+| `last_decay_time`    | Yes                           | Updated each decay                                |
+| `lock_pattern`       | Yes                           | Cleared when a pattern is found                   |
+| `was_scoring`        | Yes                           | Set every tick                                    |
+| `shots_fired`        | Yes                           | None                                              |
+| `shots_hit`          | Yes                           | None                                              |
+| `last_fire_value`    | Yes                           | Weapon change or no weapon                        |
+| `last_weapon_id`     | Yes                           | Weapon change or no weapon                        |
+| `warned`             | Yes                           | None                                              |
+| `trigger_active`     | Yes                           | Set every tick while trigger weighting is on      |
+| `snap_tick`          | Yes                           | Cleared when the bonus is paid or the window ends |
+| `snap_points`        | Yes                           | Overwritten by each scored snap                   |
+| `dynamic_threshold`  | No                            | Only changes on a detected shot                   |
+| `accuracy_history`   | No                            | None                                              |
+| `last_trigger_value` | No                            | Only used by `LOG_VALUES`                         |
 
-The last two carry over between lives within a game. A player who leaves and rejoins gets a fresh state, including accuracy history.
+`dynamic_threshold` and `accuracy_history` carry over between lives within a game. `last_trigger_value` is only used for `LOG_VALUES` and is never reset. A player who leaves and rejoins gets a fresh state, including accuracy history.
 
 `camera_vectors` is a separate table. It is cleared on death, leave, game start, game end, a bad camera read, and whenever the dynamic player address is 0.
 
@@ -315,12 +360,15 @@ The last two carry over between lives within a game. A player who leaves and rej
 
 `enforce` builds the command with `string.format` and passes it to `execute_command` with no player ID, so it runs with server permissions. The kick reason is wrapped in double quotes and not escaped, so a reason containing a double quote will break the command. `resetLife` runs straight after, even though the player may still be connected for another tick or two, which stops the alert repeating while the kick completes.
 
+Before building anything, `enforce` calls `isImmune`, which reads `$lvl` and checks it against `IMMUNITY.LEVELS`. For an immune player it prints `IMMUNE_ALERT`, calls `resetLife` and returns without running a command. The warning is not part of `enforce`. It is checked in `processPlayerAim` just before the enforcement check, and the `warned` flag makes it print once per life.
+
 ### Performance
 
 - The cone check is the hot path. It runs every tick for every living shooter against every living enemy, so a full free-for-all server is up to 16 by 15 pairs per tick. It involves no raycasts and only a few reads, a square root and an `acos` per pair.
 - `isEnemy` rejects absent, dead and same-team targets using `tick_teams` before any memory is read. `tick_teams` is filled in one pass at the start of each tick so `get_var` is called once per living player instead of once per pair.
 - API functions and math functions are copied into file-scope locals at the top of the script.
 - Weapon names are cached by tag index, since the tag table does not change during a map. The cache is emptied at game start.
+- `updateTrigger` returns at once unless `TRIGGER_WEIGHTING.ENABLED` or `LOG_VALUES` is true. When enabled it costs one `read_float` per living shooter per tick.
 
 ### Limitations
 
