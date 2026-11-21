@@ -1,190 +1,115 @@
 ---
-title: "Halo: How to host a Linux VPS (Ubuntu 22.04)"
+title: "Halo: Running SAPP Servers on an Ubuntu VPS"
 permalink: /halo/ubuntu-vps-hosting/
 date: 2025-08-29
-last-updated: 2026-10-09
-description: "Step-by-step guide to hosting a secure Halo PC / Custom Edition dedicated server (SAPP or Phasor) on a Vultr Ubuntu 22.04 VPS using Wine, TightVNC, UFW and fail2ban."
+last-updated: 2026-11-22
+description: "A complete, headless guide to setting up a Vultr Ubuntu VPS and hosting one or many Halo CE (SAPP) dedicated servers under Wine as systemd services."
 categories: [ education, halo, vps, linux, server ]
-tags: [ ubuntu, wine, vnc, ssh, hosting, tutorial, ufw, fail2ban, vultr ]
+tags: [ ubuntu, wine, ssh, hosting, tutorial, ufw, fail2ban, vultr ]
 ---
 
-This guide walks you through setting up a **Halo** server on a Linux VPS, from a fresh Ubuntu 22.04 LTS installation to
-a fully functional, secure, and remotely manageable server.
+# Summary
 
-We'll use **Wine** to run the Windows-based Halo dedicated server executable, **TightVNC** for a graphical interface
-(tunnelled through SSH, never exposed to the internet), and the **Bitvise SSH Client** for secure remote access. Along
-the way, we'll harden the server with a firewall, SSH key authentication, and **fail2ban**.
+This guide builds a secure, headless Ubuntu VPS that runs **Halo CE (SAPP) dedicated servers** under Wine.
 
-**Estimated time:** 35-60 minutes (longer if you're new to Linux).
+Everything is managed from a terminal over SSH with **BitVise**. There is no GUI, no remote desktop and no VNC. Every long-running thing is a **systemd service**, so it keeps running after you close your SSH client, starts at boot, and restarts after a crash.
 
----
+| Part | What it covers                                                         |
+| ---- | ---------------------------------------------------------------------- |
+| 1    | VPS foundation: user, SSH hardening, firewall, Fail2ban, swap, updates |
+| 2    | Halo servers: Wine, Xvfb, systemd units, the `halo` helper, status     |
+| A-D  | Quick reference, ports, memory and monitoring, removal                 |
 
-## What you'll build
+Do the parts in order the first time. After that, each part stands alone as a reference.
+
+> [!TIP] **Already familiar with SAPP?** This guide assumes you have (or will build) a multi-server SAPP folder with one `cg/<ServerName>/` instance per server. The [SAPP Server and Lua API Guide](sapp/sapp-guide.md) explains that layout.
+
+## How it fits together
 
 ```
-  Your Windows PC                            Vultr VPS (Ubuntu 22.04)
-+-------------------+   SSH, TCP 22992    +--------------------------------+
-| Bitvise           |-------------------->| sshd (SSH keys only)           |
-|  - terminal       |                     |                                |
-|  - SFTP           |   tunnel to :5901   | TightVNC on 127.0.0.1:5901     |
-|  - C2S tunnel     |-------------------->|   +- XFCE desktop              |
-| TightVNC Viewer   |                     |        +- Wine -> Halo server  |
-+-------------------+                     |                                |
-                                          | UFW firewall + fail2ban        |
-  Halo players  ---------- UDP 2302 ----->|                                |
-                                          +--------------------------------+
+Internet
+   │
+   ├── TCP <ssh-port> (SSH, only from your own IP)  ──────►  sshd
+   └── UDP 2302-2304 (players)  ──────────────────────────►  Halo servers (Wine)
+
+xvfb.service  →  wineserver.service  →  halo@CTF, halo@Slayer, ...   (one unit per Halo server)
 ```
 
-Only two ports are open to the internet: your custom **SSH port** (TCP) and the **Halo server port** (UDP). The desktop
-is only reachable through the SSH tunnel.
+## Conventions used throughout
+
+| Item                | Value                                                     |
+| ------------------- | --------------------------------------------------------- |
+| Linux user          | `haloadmin` (everything runs as this user, never as root) |
+| SSH port            | `22022` (any unused port above 1024 works; pick your own) |
+| Halo servers folder | `/home/haloadmin/HaloServers`                             |
+| Halo unit names     | `halo@<ServerName>.service`, plus `xvfb` and `wineserver` |
+| Example servers     | `CTF` (2302), `Slayer` (2303), `KOTH` (2304)              |
+| Placeholders        | `<like-this>` means "replace with your own value"         |
+
+`haloadmin`, `22022` and the example server names are placeholders. You can use your own, but if you change the username, change it **everywhere**, including inside the systemd unit files in Part 2, which cannot use variables.
+
+> [!TIP] **Saving in nano:** use **`Ctrl + O`**, **Enter**, then **`Ctrl + X`**.
 
 ---
 
-## Before you begin
+# Part 1: VPS Foundation
 
-### Target OS
+## Prerequisites
 
-**Ubuntu 22.04 LTS (Jammy Jellyfish) x64**
+- [BitVise SSH Client](https://www.bitvise.com/ssh-client-download) (Windows). On Linux or macOS you can use the built-in `ssh` and `ssh-keygen` instead; the steps are the same.
+- A Vultr account
+- Your home public IP address (search "what is my IP")
+- Your Halo CE dedicated server files: `haloceded.exe`, `sapp.dll`, `strings.dll`, your `maps/` folder, and a `cg/` folder with one subfolder per server (see [Folder layout](#folder-layout))
 
-These instructions are written specifically for this version. While the core steps (Wine, VNC, UFW) are similar on other
-distributions, package names and repository URLs may differ.
-
-> **Why not Ubuntu 24.04?** It changes how SSH starts (systemd socket activation), which means the "change the SSH
-> port" step in this guide works differently. Stick to 22.04 LTS for the smoothest experience. Standard security
-> updates for 22.04 run until April 2027, which is plenty for a game server you rebuild when needed.
-
-### Prerequisites
-
-Make sure you have the following on your local Windows machine:
-
-| Tool                                                                                                                                                                                             | Purpose                                                                                             |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------- |
-| [Bitvise SSH Client](https://www.bitvise.com/ssh-client-download)                                                                                                                                | Secure terminal access, file transfers (SFTP) and the VNC tunnel.                                   |
-| [TightVNC Viewer](https://www.tightvnc.com/download.php)                                                                                                                                         | Remote desktop connection to the VPS GUI.                                                           |
-| [SAPP Server Templates](https://github.com/Chalwk/SPCLib/releases/tag/sapp-server-templates) or [Phasor Server Templates](https://github.com/Chalwk/SPCLib/releases/tag/phasor-server-templates) | Pre-configured server files that work with Wine (`SAPP_PC`, `SAPP_CE`, `Phasor_PC` or `Phasor_CE`). |
-
-### Important notes
-
-- **Security first** - We will create a non-root user, disable password SSH login, use a firewall, and lock down the
-  VNC server. Follow each step carefully and in order.
-- **Cost** - The recommended VPS plan from Vultr is the **Shared CPU** `vc2-1c-2gb` (1 vCPU, 2GB RAM, 55GB SSD,
-  2TB/month bandwidth) for about **\$10/month**. Automatic backups are optional (about \$2/month extra). Prices change,
-  so check Vultr's pricing page. You can destroy the VPS anytime to stop charges.
-- **Static IP** - Your VPS has a static public IP. Your home IP address is irrelevant for server availability.
-- **Your username** - This guide uses `haloadmin` as the non-root user. You can pick another name, but then replace it
-  in every command and file path below.
-- **Which user runs what** - Steps 3 and 4 start as `root`. From the moment you log in as `haloadmin`, run everything
-  as `haloadmin` (use `sudo` where shown), not as `root`.
-
----
-
-## Step 1: Download and Prepare the Server Template
-
-1. Open the [SAPP server templates](https://github.com/Chalwk/SPCLib/releases/tag/sapp-server-templates) or the
-   [Phasor server templates](https://github.com/Chalwk/SPCLib/releases/tag/phasor-server-templates) release page.
-2. Download the appropriate archive:
-    - From **sapp-server-templates**: `SAPP_PC` (Halo PC) or `SAPP_CE` (Halo Custom Edition).
-    - From **phasor-server-templates**: `Phasor_PC` or `Phasor_CE`.
-
-   Both are ready-to-run.
-3. Extract the archive on your local computer. You'll now have a folder named after it (e.g., `SAPP_PC`, `SAPP_CE`,
-   `Phasor_PC`, or `Phasor_CE`). Keep it handy - we'll upload it to the VPS later.
-
----
-
-## Step 2: Deploy a New VPS on Vultr
+## Step 1: Deploy the VPS
 
 1. Go to the [Vultr Deploy page](https://my.vultr.com/deploy/).
 2. Choose **Shared CPU**.
-3. Pick a location. Choose the one closest to most of your players - it directly affects their ping.
-4. Select your subscription plan (see the cost note above).
-5. Select **Ubuntu 22.04 LTS x64** as the operating system.
-6. Give your server a hostname (e.g., `halo-server`).
-7. Click **Deploy Now**. Wait a few minutes for the instance to be created.
-8. From the instance overview page, note the **IP Address**, **Password**, and **Username** (`root`).
+3. Pick the location closest to your players.
+4. Select a plan. See [Appendix C](#appendix-c-memory-budget-and-monitoring): RAM is the limiting factor.
+5. Click **Configure Software** and select the latest **Ubuntu LTS x64**.
+6. Set a hostname (e.g., `halo-vps`).
+7. Click **Deploy Now** and wait a few minutes.
+8. From the instance overview page, note the **IP Address**, **Password** and **Username** (`root`).
 
-> **Keep this page handy.** The Vultr web console (the **View Console** button on the instance page) is your safety
-> net. It gives you a login prompt directly on the server, even if you break SSH. We'll rely on it in Step 4.
+## Step 2: First Connection and SSH Key (BitVise)
 
----
+We use the root password once, then switch to key authentication.
 
-## Step 3: Initial Connection & User Setup via Bitvise
+1. Open **BitVise SSH Client**.
+2. Enter the **Host** (server IP), **Port** `22`, and **Username** `root`.
+3. Set **Initial Method** to `password` and enter the password from Vultr.
+4. Open the **Client key manager** (Login tab) and generate a key:
+    - **Algorithm:** `ed25519`
+    - Leave the passphrase blank unless you want to type it every login.
+    - Click **Generate**.
+5. Export the public key in `OpenSSH format` to a file, e.g. `bitvise-key.pub`.
+6. Export the private key in `BitVise format (text)`, e.g. `bitvise-key.bkp`, and store it somewhere safe.
+7. Log in as `root` and accept the host fingerprint, then open a **terminal console**.
 
-We'll use the `root` password only this one time. Then we'll switch to SSH key authentication.
-
-### Generate a key and connect
-
-1. Open **Bitvise SSH Client**.
-2. Fill in the **Host** (your server's IP) and **Username** (`root`). Leave the port at `22` for now.
-3. Set **Initial Method** to `password` and enter the password from the Vultr control panel.
-4. Open the **Client key manager** (from the Login tab).
-5. Click **Generate New**:
-
-   - **Algorithm:** `ed25519` (recommended).
-   - **Passphrase:** optional. A passphrase protects the key if someone ever gets hold of the file, so it's a good idea
-     on a shared PC or laptop. Leaving it blank means you won't be prompted on every login.
-   - Click **Generate**.
-
-6. Highlight your new key and click **Export**, then export the **public key**:
-
-   - Select **Export Public Key**, choose **OpenSSH format**.
-   - Save it somewhere easy to find, e.g. `C:\Users\YourUsername\Desktop\bitvise-ssh-public-key.pub`.
-
-7. Export a **private key backup** the same way, using **Export Private Key** in **Bitvise format (text)**, e.g.
-   `bitvise-ssh-private-key.bkp`.
-
-   > **Treat the private key like a password.** Never share it, email it, or upload it anywhere public. Store the
-   > backup in a password manager or on an encrypted drive, then delete the copy from your Desktop. If you lose the
-   > key and your Bitvise profile, you can recover access through the Vultr web console.
-
-8. Back on the **Login** tab, click **Log in**. The first time you connect, Bitvise shows the server's host key
-   fingerprint. Choose **Accept and Save**.
-9. Click **New terminal console** to open a terminal window.
-
-> **Optional fingerprint check:** On a brand-new server you created seconds ago there's little risk, but if you want
-> to verify, open the Vultr **View Console**, log in as `root`, and run
-> `ssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub`. The fingerprint should match what Bitvise showed. If it
-> ever changes unexpectedly on a later connection, stop and find out why.
-
-### Create a dedicated user (non-root)
-
-It's a security best practice to run services under a regular user account. You're `root` right now, so `sudo` isn't
-needed yet.
+## Step 3: Create the Non-Root User
 
 ```bash
-# Create a new user named 'haloadmin' (you can change the name)
+# Create the user. Set a strong password; leave the optional fields blank; confirm with y.
 adduser haloadmin
-# Follow the prompts to set a strong password.
-# Leave all optional fields (Full Name, Room Number, etc.) blank.
-# Type "y" and press ENTER to confirm.
 
-# Add the new user to the 'sudo' group so they can perform administrative tasks
+# Give it sudo rights
 usermod -aG sudo haloadmin
 
-# Verify the user was added correctly
+# Verify (you should see haloadmin in the list)
 grep sudo /etc/group
-# You should see something like: sudo:x:27:haloadmin
 ```
 
-> **Don't skip the strong password.** It's what `sudo` asks for, and it's also how you log in through the Vultr web
-> console if SSH ever breaks.
+## Step 4: Install Your SSH Public Key
 
-### Upload your SSH public key
-
-Now we'll set up key-based authentication for the new user.
+Still as `root`:
 
 ```bash
-# Create the .ssh folder and authorized_keys file for haloadmin
 mkdir -p /home/haloadmin/.ssh
 nano /home/haloadmin/.ssh/authorized_keys
 ```
 
-- Open the `bitvise-ssh-public-key.pub` file you exported earlier in a text editor (like Notepad).
-- Copy the entire line (it starts with `ssh-ed25519 AAAA...`). It must stay on **one line**.
-- Paste it into the `authorized_keys` file in the terminal.
-- Save and exit nano: press `CTRL+O`, then `ENTER`, then `CTRL+X`.
-
-Now set the correct permissions:
+Open `bitvise-key.pub` in a text editor, copy the whole line (it starts with `ssh-ed25519 AAAA...`), paste it into nano, then save and exit. Fix the permissions:
 
 ```bash
 chmod 700 /home/haloadmin/.ssh
@@ -192,675 +117,1087 @@ chmod 600 /home/haloadmin/.ssh/authorized_keys
 chown -R haloadmin:haloadmin /home/haloadmin/.ssh
 ```
 
-**Leave this root session open** for now. If something goes wrong, you can still fix it from here.
+Close the terminal console.
 
-### Test key login
+## Step 5: Test Key Login
 
-1. Start a **second** Bitvise window (leave the root session running in the first one).
-2. Enter the same server IP and set **Username** to `haloadmin`.
-3. Set **Initial Method** to `publickey` and pick the key you generated (e.g. `Global 1`).
-4. Click **Log in**.
-5. Open a new terminal console. Your prompt should now show `haloadmin@your-server-name`.
+1. In BitVise, log out of the `root` session.
+2. Log in as `haloadmin` with **Initial Method** `publickey` and your **Client key**.
+3. Open a terminal console. The prompt should read `haloadmin@<hostname>`.
 
-> **Only proceed if key login works.** If it fails, troubleshoot before moving on (see the
-> [troubleshooting table](#troubleshooting) at the end). Once it works, you can close the root session.
+> [!WARNING] **Do not continue until key login works.** If it fails, fix it now. Locking yourself out later is much harder to fix.
 
-**Tip:** In Bitvise, use **Save profile as** so you don't have to retype the host, port and key next time.
+## Step 6: Update the System
 
----
+```bash
+sudo apt update
+sudo apt full-upgrade -y
+sudo apt install -y unattended-upgrades curl unzip tmux htop
+sudo dpkg-reconfigure -plow unattended-upgrades    # choose Yes
+```
 
-## Step 4: Harden SSH and Configure the Firewall (UFW)
+> [!TIP] `unattended-upgrades` installs security updates automatically. If a kernel update needs a reboot, the file `/var/run/reboot-required` appears. Reboot when convenient (`sudo reboot`). Every service in this guide comes back by itself.
 
-Now we'll change the SSH port, disable root login, disable password authentication (since we're using keys), and set up
-the firewall. **Follow the order carefully to avoid locking yourself out.**
+## Step 7: Firewall and SSH Hardening
 
-### Edit the SSH configuration
+> [!WARNING] **Follow this order exactly to avoid locking yourself out.** Keep your current BitVise session open throughout.
 
-In your `haloadmin` terminal:
+### 7a. Set up the firewall first
+
+```bash
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+
+# New SSH port, only from your own IP
+sudo ufw allow from <your-home-ip> to any port 22022 proto tcp comment 'SSH'
+
+# TEMPORARY: keep the old port open until the new one is proven (removed in 7d)
+sudo ufw allow 22/tcp comment 'SSH temporary'
+
+sudo ufw enable        # type y to confirm
+sudo ufw status verbose
+```
+
+> [!NOTE] **Home IP changes often?** If your ISP rotates your address, restricting SSH to one IP will lock you out regularly. The fallback below (the Vultr console) always works, but you can also choose to allow the SSH port from anywhere: `sudo ufw allow 22022/tcp`. That is acceptable **only** because password login is disabled in the next step and Fail2ban (Step 8) is watching the port.
+
+### 7b. Edit the SSH configuration
 
 ```bash
 sudo nano /etc/ssh/sshd_config
 ```
 
-Find these lines, **remove the `#`** at the start of each, and set the values:
+Set (or add) these lines, removing any leading `#`:
 
 ```
-Port 22992
+Port 22022
 PermitRootLogin no
 PasswordAuthentication no
+KbdInteractiveAuthentication no
+PubkeyAuthentication yes
+AllowUsers haloadmin
 ```
 
-Use any port you like between 1024 and 65535 (22992 is just an example). Save and exit (`CTRL+O`, `ENTER`,
-`CTRL+X`).
-
-Next, check whether another file overrides your changes. On Ubuntu, `sshd_config` starts by including every file in
-`/etc/ssh/sshd_config.d/`, and **the first value found wins**. Some cloud images ship a file there
-(often `50-cloud-init.conf`) that re-enables password logins:
+> [!NOTE] Cloud images sometimes ship a drop-in file that overrides these settings. Check for one:
 
 ```bash
-sudo grep -Ri "PasswordAuthentication" /etc/ssh/sshd_config /etc/ssh/sshd_config.d/
+ls /etc/ssh/sshd_config.d/
+sudo grep -ri 'PasswordAuthentication' /etc/ssh/sshd_config.d/
 ```
 
-If any file in `sshd_config.d` says `PasswordAuthentication yes`, edit that file and change it to `no`.
+If a file there (for example `50-cloud-init.conf`) says `PasswordAuthentication yes`, change it to `no`. Drop-ins are read before the main file, so they win.
 
-Now test the configuration and confirm what SSH will actually use:
+Validate the config and look at what SSH will actually use:
 
 ```bash
-# No output means the syntax is fine
-sudo sshd -t
-
-# Show the effective settings
-sudo sshd -T | grep -Ei '^(port|permitrootlogin|passwordauthentication|kbdinteractiveauthentication) '
+sudo sshd -t && echo "config OK"
+sudo sshd -T | grep -Ei '^(port|permitrootlogin|passwordauthentication|pubkeyauthentication|allowusers) '
 ```
 
-You should see:
-
-```
-port 22992
-permitrootlogin no
-passwordauthentication no
-kbdinteractiveauthentication no
-```
-
-**Do NOT restart SSH yet.** We must first open the new SSH port in the firewall.
-
-### Configure UFW
-
-> **Note:** If you need to allow a port range, use the `start:end/protocol` format (for example
-> `sudo ufw allow 2010:2315/udp comment 'Halo Server Ports'`).
-
-```bash
-# Allow the custom SSH port
-sudo ufw allow 22992/tcp comment 'Custom SSH Port'
-
-# Allow the Halo server port (UDP 2302 by default)
-sudo ufw allow 2302/udp comment 'Halo Server Port'
-
-# Enable the firewall (it will deny all other incoming connections)
-sudo ufw enable
-# Type 'y' and press ENTER to confirm.
-
-# Verify the rules
-sudo ufw status verbose
-```
-
-You should see `22992/tcp` and `2302/udp` set to `ALLOW IN`, and `deny (incoming)` as the default policy.
-
-> **Technical note:** Since this is a public internet server and we're not running the Halo client locally, we only
-> need UDP 2302. TCP 2303 is not required.
-
-> **Extra layer (optional):** Vultr also offers a network-level **Firewall** under *Products*. If you use it, allow
-> the same two ports there, or you'll block yourself. UFW alone is enough for this guide.
-
-### Restart SSH
+### 7c. Restart SSH and confirm it listens on the new port
 
 ```bash
 sudo systemctl restart ssh
+sudo ss -tlnp | grep sshd
 ```
 
-(`sshd` also works as the service name on Ubuntu 22.04.) Your current session stays connected, which is exactly what
-we want while testing.
+You must see `:22022`. On Ubuntu, SSH can be started by a *socket* unit that keeps listening on port 22 and ignores your `Port` line. If `ss` only shows port 22, switch to the normal service:
 
-### Test the new SSH port
+```bash
+sudo systemctl disable --now ssh.socket
+sudo systemctl enable --now ssh.service
+sudo ss -tlnp | grep sshd
+```
 
-1. Open a **new** Bitvise window.
-2. Enter the server IP and the new port (`22992`).
-3. Username: `haloadmin`
-4. Initial Method: `publickey`, select your key.
-5. Click **Log in**.
+### 7d. Test the new port, then remove port 22
 
-> **Only after you have successfully logged in on the new port** should you close the original terminal window and the
-> old Bitvise session.
-
-> **Locked out?** Open the Vultr **View Console** and log in as `haloadmin` with your password. Edit
-> `/etc/ssh/sshd_config` (or the file in `sshd_config.d`), fix the setting, run `sudo sshd -t`, then
-> `sudo systemctl restart ssh`.
-
-### Remove the default SSH port from the firewall
-
-Many Vultr images come with UFW already enabled and port 22 allowed. Check:
+1. Open a **second** BitVise session: server IP, port **`22022`**, user `haloadmin`, `publickey`.
+2. Only after it works, close the old session and remove the temporary rule:
 
 ```bash
 sudo ufw status numbered
+sudo ufw delete <number-of-the-22/tcp-rule>      # repeat for the IPv6 (v6) 22/tcp rule
+sudo ufw status verbose
 ```
 
-If you see a rule for port 22 (shown as `22/tcp`, or `OpenSSH`), delete it by name. This removes both the IPv4 and
-IPv6 rules and avoids the rule numbers shifting after each delete:
+> [!TIP] **If your home IP changes and you're locked out:** open the Vultr control panel, choose **View Console** on the instance, log in there (this bypasses the firewall), and run `sudo ufw allow from <new-ip> to any port 22022 proto tcp`. Then delete the old rule.
+
+## Step 8: Fail2ban
+
+Fail2ban bans IPs that fail logins repeatedly. Its default SSH jail watches the **default port**, so it must be told about `22022`:
 
 ```bash
-sudo ufw delete allow 22/tcp
-# If it's listed as OpenSSH instead:
-# sudo ufw delete allow OpenSSH
-
-# Confirm it's gone
-sudo ufw status numbered
+sudo apt install -y fail2ban
+sudo nano /etc/fail2ban/jail.local
 ```
 
-If there's no port 22 rule, there's nothing to remove.
+```ini
+[DEFAULT]
+ignoreip = 127.0.0.1/8 ::1 <your-home-ip>
+
+[sshd]
+enabled = true
+port = 22022
+maxretry = 5
+findtime = 10m
+bantime = 1h
+```
+
+```bash
+sudo systemctl enable --now fail2ban
+sudo fail2ban-client status sshd
+```
+
+## Step 9: Swap File
+
+Small VPS plans have little RAM, so swap is a safety net against the kernel killing your servers:
+
+```bash
+sudo fallocate -l 2G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+free -h
+```
+
+Swap is slow compared with RAM and is no substitute for it. See [Appendix C](#appendix-c-memory-budget-and-monitoring).
+
+## Step 10: Limit Journal Size
+
+systemd keeps service logs in the journal, which can grow large over time. Cap it:
+
+```bash
+sudo mkdir -p /etc/systemd/journald.conf.d
+sudo nano /etc/systemd/journald.conf.d/size.conf
+```
+
+```ini
+[Journal]
+SystemMaxUse=200M
+```
+
+```bash
+sudo systemctl restart systemd-journald
+```
+
+## Step 11: Create the Base Folder
+
+```bash
+mkdir -p /home/haloadmin/HaloServers
+```
+
+## Part 1 Checklist
+
+| Check                                         | Command                                                        |
+| --------------------------------------------- | -------------------------------------------------------------- |
+| SSH is on 22022, password login off, root off | `sudo sshd -T \| grep -Ei '^(port\|permitroot\|passwordauth)'` |
+| Only intended ports open                      | `sudo ufw status verbose`                                      |
+| Fail2ban is watching the right port           | `sudo fail2ban-client status sshd`                             |
+| Swap is active                                | `free -h`                                                      |
+| Security updates are automatic                | `systemctl status unattended-upgrades`                         |
 
 ---
 
-## Step 5: Install Wine and Configure a 32-bit Prefix
+# Part 2: Halo Servers (Wine)
 
-With the server secured, it's time to install Wine. We'll set up a 32-bit prefix from the start so Halo's 32-bit server
-runs without issues.
+This part runs your Halo CE (SAPP) servers so they:
 
-Run these commands in the SSH terminal (as `haloadmin`):
+- keep running after you close BitVise SSH,
+- start automatically on boot,
+- restart if they crash (but give up cleanly if something is truly broken),
+- can be started, stopped and checked from a terminal, one at a time or all together.
+
+## How the Halo services fit together
+
+```
+xvfb.service         virtual display :1 (Wine wants a display, even for console apps)
+   └─ wineserver.service     ONE shared, persistent wineserver for the Wine prefix
+         └─ halo@CTF.service, halo@Slayer.service, ...   one unit per Halo server
+                └─ run.sh <name>  →  wine haloceded.exe -path ... -exec ... -port ...
+```
+
+Why a separate `wineserver.service`: all servers share one Wine prefix, and so one `wineserver`. If `wineserver` were started by the first Halo service, it would live in that service's cgroup. Stopping that one server would kill `wineserver`, and every other server would die with it. Running it as its own service avoids that, and it saves a lot of RAM compared with one prefix per server.
+
+Because the Halo units `Require` both `xvfb` and `wineserver`, stopping or restarting either of those stops or restarts **every** Halo server. Stopping an individual `halo@NAME` never affects the others.
+
+## Folder layout
+
+Path: `/home/haloadmin/HaloServers`
+
+```
+│   haloceded.exe
+│   sapp.dll
+│   strings.dll
+│   motd.txt                    (optional)
+│   run.sh                      launcher (systemd calls this)
+│   status.sh                   status dashboard
+│   halo                        start/stop/restart/status/logs helper
+│   servers.conf                the ONE list of server names + ports
+│   logs/                       only used by the run.sh menu "Launch all"
+│
+├───sapp                        GLOBAL shared files (admins.txt, ipbans.txt, ...)
+├───cg
+│   ├───CTF
+│   │   │   init.txt            server startup (sv_name, load, ...)
+│   │   ├───sapp
+│   │   │   │   commands.txt
+│   │   │   │   events.txt
+│   │   │   │   init.txt        SAPP settings (lua, mapcycle, etc.)
+│   │   │   │   mapcycle.txt
+│   │   │   │   mapvotes.txt
+│   │   │   └───lua
+│   │   ├───saved
+│   │   └───savegames
+│   ├───Slayer
+│   └───KOTH                    (every server follows the same structure as cg/CTF)
+├───maps
+│       bloodgulch.map
+│       bitmaps.map             (these four base maps are required)
+│       loc.map
+│       sounds.map
+│       ui.map
+│       ...
+```
+
+Rules for your server folders:
+
+- Each server has **two** `init.txt` files, both required:
+  - `cg/<ServerName>/init.txt` is read by `haloceded.exe` at launch. It holds basic settings (`sv_name`, `sv_public`, passwords, MOTD) and **must end with the `load` command**, which is what loads SAPP.
+  - `cg/<ServerName>/sapp/init.txt` is read by SAPP after the server is up. It holds SAPP-specific settings (Lua, map cycle/vote, prefixes, RCON).
+- You do **not** put the port in either file. The launcher passes it from `servers.conf`.
+- Server names must not contain spaces, and the folder name must match the name in `servers.conf` exactly.
+- The launcher refuses to start a server if `cg/<ServerName>/sapp/mapcycle.txt` is missing, or if any map it lists (or any of the four base maps) is missing from `maps/`. If you use map voting instead of a map cycle, keep a `mapcycle.txt` that lists the same maps.
+
+## Servers and ports
+
+| #   | Server | UDP port |
+| --- | ------ | -------- |
+| 1   | CTF    | 2302     |
+| 2   | Slayer | 2303     |
+| 3   | KOTH   | 2304     |
+
+These are examples. Give each server its own UDP port; consecutive ports starting at Halo's default `2302` are the easiest to manage. The list lives in `servers.conf` only. `run.sh`, `status.sh` and `halo` all read it, so they can never disagree. See [Adding a server](#adding-a-halo-server).
+
+## Step 1: Install Wine and Xvfb
 
 ```bash
-# Enable 32-bit architecture
 sudo dpkg --add-architecture i386
-
-# Download and add the WineHQ key
-sudo mkdir -pm755 /etc/apt/keyrings
-sudo wget -O /etc/apt/keyrings/winehq-archive.key https://dl.winehq.org/wine-builds/winehq.key
-
-# Add the WineHQ repository for Ubuntu 22.04 LTS (Jammy)
-sudo wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/ubuntu/dists/jammy/winehq-jammy.sources
-
-# Update the package list and install system upgrades
 sudo apt update
-sudo apt upgrade -y
-
-# Install Wine (stable). --install-recommends pulls in the 32-bit components.
-sudo apt install --install-recommends winehq-stable -y
-
-# Verify the installation
-wine --version
+sudo apt install -y wine wine32 xvfb
 ```
 
-You should see a version number like `wine-11.0` or higher.
+> [!NOTE] `wine32` lives in Ubuntu's `universe` repository. If apt can't find it: `sudo add-apt-repository universe && sudo apt update`.
 
-If the upgrade installed a new kernel, Ubuntu will want a reboot. You can check:
+## Step 2: Upload the Server Files
+
+Using BitVise's **New SFTP Window**, copy `haloceded.exe`, `sapp.dll`, `strings.dll`, `maps/`, `sapp/` and `cg/` to `/home/haloadmin/HaloServers`.
+
+## Step 3: Create the Helper Scripts
+
+Four small files live next to `haloceded.exe`. The simplest way to create them is to open each in nano (`nano /home/haloadmin/HaloServers/<file>`), paste the contents below, then save and exit.
 
 ```bash
-[ -f /var/run/reboot-required ] && echo "Reboot needed" || echo "No reboot needed"
+cd /home/haloadmin/HaloServers
+nano servers.conf
+nano run.sh
+nano status.sh
+nano halo
 ```
 
-If a reboot is needed, run `sudo reboot`, wait a minute, then log back in as `haloadmin`.
+> [!CAUTION] **Pasted or uploaded from Windows?** Files edited on Windows usually have CRLF line endings, which break shell scripts (you get `bad interpreter: /usr/bin/env bash^M`). The `sed` command below fixes this. Pasting through nano avoids the problem, but running it does no harm.
 
-Now create a **32-bit** Wine prefix. The Halo server is 32-bit, and we force the architecture from the very first
-Wine command:
+### `servers.conf`
+
+Edit the names and ports to match your own servers.
 
 ```bash
-# Set the architecture and prefix location
-export WINEARCH=win32
-export WINEPREFIX=/home/haloadmin/.wine
+# servers.conf - single source of truth for the Halo server list.
+#
+# SERVER_NAMES[i] must match the folder name under cg/ and the systemd
+# instance name (halo@<name>). SERVER_PORTS[i] is that server's UDP port.
+# Both arrays must stay the same length and in the same order.
+# Use letters, numbers and underscores only (no spaces).
+#
+# Copyright (c) 2026. Jericho Crosby (Chalwk)
 
-# Create and initialise the 32-bit prefix
-wineboot --init
+SERVER_NAMES=(CTF Slayer KOTH)
+SERVER_PORTS=(2302 2303 2304)
+
+# To add a server (e.g. a test server on the next port), append to BOTH arrays:
+#   SERVER_NAMES=(... Test)
+#   SERVER_PORTS=(... 2305)
+# then create cg/Test/, open its UDP port in the firewall, and enable halo@Test
 ```
 
-Because you're in an SSH terminal without a graphical display, Wine may print display-related errors or fail to show
-its Mono/Gecko installer prompts. **The prefix is still created** - those messages are safe to ignore. Verify it:
+### `run.sh`
+
+The launcher. systemd calls this with a server name (`./run.sh ctf`). Run with no arguments it shows a menu, which is handy for local testing only.
 
 ```bash
-grep -m1 '#arch' /home/haloadmin/.wine/system.reg
-# Expected: #arch=win32
+#!/usr/bin/env bash
+# Halo CE (SAPP) launcher for Wine on Linux.
+#
+#   ./run.sh <id|name>   Run one server in the foreground (this is what systemd uses).
+#   ./run.sh             Interactive menu (local testing only; use ./halo on the VPS).
+#
+# Environment toggles:
+#   HALO_UNIX_PATHS=1    Pass Unix paths to haloceded.exe instead of Windows (Z:\...) paths.
+#
+# Copyright (c) 2026. Jericho Crosby (Chalwk)
+
+set -uo pipefail
+
+ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+
+export WINEARCH="${WINEARCH:-win32}"
+export WINEPREFIX="${WINEPREFIX:-$HOME/.wine}"
+export WINEDLLOVERRIDES="${WINEDLLOVERRIDES:-msvcrt=n,b}"
+export WINEDEBUG="${WINEDEBUG:--all}"
+export DISPLAY="${DISPLAY:-:1.0}"
+
+readonly RED='\033[31m'
+readonly GREEN='\033[32m'
+readonly YELLOW='\033[33m'
+readonly CYAN='\033[36m'
+readonly RESET='\033[0m'
+
+SERVER_CONF="$ROOT/servers.conf"
+if [[ ! -f "$SERVER_CONF" ]]; then
+    printf "${RED}Missing server list: %s${RESET}\n" "$SERVER_CONF" >&2
+    exit 1
+fi
+# shellcheck source=servers.conf
+source "$SERVER_CONF"
+
+if ((${#SERVER_NAMES[@]} != ${#SERVER_PORTS[@]})); then
+    printf "${RED}servers.conf: SERVER_NAMES and SERVER_PORTS differ in length.${RESET}\n" >&2
+    exit 1
+fi
+
+BASE_MAPS=(bitmaps.map loc.map sounds.map ui.map)
+MAPS_DIR="$ROOT/maps"
+LOG_DIR="$ROOT/logs"
+
+if [[ ! -f "$ROOT/haloceded.exe" ]]; then
+    printf "${RED}Could not find haloceded.exe in project root: %s${RESET}\n" "$ROOT" >&2
+    exit 1
+fi
+if ! command -v wine >/dev/null 2>&1; then
+    printf "${RED}Could not find 'wine' in PATH.${RESET}\n" >&2
+    exit 1
+fi
+
+# Matches on the "-port N" argument, so it works regardless of how paths are passed.
+is_running() {
+    pgrep -f -- "-port $1( |\$)" >/dev/null 2>&1
+}
+
+# Directory argument for -path.
+wine_dir_arg() {
+    local p
+    if [[ "${HALO_UNIX_PATHS:-0}" != 1 ]] && p="$(winepath -w "$1" 2>/dev/null)" && [[ -n "$p" ]]; then
+        printf '%s\\' "$p"
+    else
+        printf '%s/' "$1"
+    fi
+}
+
+# File argument for -exec.
+wine_file_arg() {
+    local p
+    if [[ "${HALO_UNIX_PATHS:-0}" != 1 ]] && p="$(winepath -w "$1" 2>/dev/null)" && [[ -n "$p" ]]; then
+        printf '%s' "$p"
+    else
+        printf '%s' "$1"
+    fi
+}
+
+read_choice() {
+    local title="$1"
+    shift
+    local -a items=("$@")
+    local choice
+
+    printf "\n${CYAN}%s${RESET}\n" "$title"
+    for ((i = 0; i < ${#items[@]}; i++)); do
+        printf '  %d. %s\n' "$((i + 1))" "${items[$i]}"
+    done
+    printf '  Q. Quit\n'
+
+    while true; do
+        read -r -p 'Select an option: ' choice || { REPLY=-1; return; }
+        if [[ "$choice" =~ ^[Qq]$ ]]; then
+            REPLY=-1
+            return
+        fi
+        if [[ "$choice" =~ ^[0-9]+$ ]] && ((choice >= 1 && choice <= ${#items[@]})); then
+            REPLY=$((choice - 1))
+            return
+        fi
+        printf "${YELLOW}Enter one of the listed numbers, or Q to quit.${RESET}\n"
+    done
+}
+
+map_exists() {
+    local wanted="${1,,}"
+    local file name
+    for file in "$MAPS_DIR"/*.map; do
+        [[ -f "$file" ]] || continue
+        name="${file##*/}"
+        [[ "${name,,}" == "$wanted" ]] && return 0
+    done
+    return 1
+}
+
+check_maps() {
+    local server="$1"
+    local mapcycle="$ROOT/cg/$server/sapp/mapcycle.txt"
+    local -a cycle_maps=()
+    local -a missing=()
+    local -A seen_maps=()
+    local line map_name lower_name map_file support_file
+
+    if [[ ! -f "$mapcycle" ]]; then
+        printf "${RED}Mapcycle file not found: %s${RESET}\n" "$mapcycle"
+        return 1
+    fi
+
+    while IFS= read -r line || [[ -n "$line" ]]; do
+        line="${line%$'\r'}"
+        map_name="${line%%[;:]*}"
+        map_name="$(printf '%s' "$map_name" | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')"
+        if [[ -n "$map_name" && "$map_name" != \#* ]]; then
+            lower_name="${map_name,,}"
+            if [[ -z "${seen_maps[$lower_name]+x}" ]]; then
+                cycle_maps+=("$map_name.map")
+                seen_maps[$lower_name]=1
+            fi
+        fi
+    done < "$mapcycle"
+
+    mkdir -p -- "$MAPS_DIR"
+    for support_file in "${BASE_MAPS[@]}"; do
+        map_exists "$support_file" || missing+=("$support_file")
+    done
+    for map_file in "${cycle_maps[@]}"; do
+        map_exists "$map_file" || missing+=("$map_file")
+    done
+
+    if ((${#missing[@]} > 0)); then
+        printf "${RED}Cannot launch %s. These required map files are missing from '%s':${RESET}\n" "$server" "$MAPS_DIR"
+        for map_file in "${missing[@]}"; do
+            printf "${RED}  %s${RESET}\n" "$map_file"
+        done
+        printf "${YELLOW}Place the missing map files in '%s' before launching this server.${RESET}\n" "$MAPS_DIR"
+        return 1
+    fi
+    return 0
+}
+
+# launch_server <index> [foreground|exec|background]
+#   foreground  run and wait (menu use)
+#   exec        replace this shell with wine, so wine is the main process (systemd use)
+#   background  detached from the terminal, logs to logs/<server>.log (local testing)
+launch_server() {
+    local index="$1"
+    local mode="${2:-foreground}"
+    local server="${SERVER_NAMES[$index]}"
+    local port="${SERVER_PORTS[$index]}"
+    local server_path="$ROOT/cg/$server"
+    local init_file="$server_path/init.txt"
+
+    if [[ ! -d "$server_path" ]]; then
+        printf "${RED}Server folder not found: %s${RESET}\n" "$server_path"
+        return 1
+    fi
+    if [[ ! -f "$init_file" ]]; then
+        printf "${RED}Init file not found: %s${RESET}\n" "$init_file"
+        return 1
+    fi
+    if ! check_maps "$server"; then
+        return 1
+    fi
+    if is_running "$port"; then
+        printf "${YELLOW}%s is already running (UDP %s). Not starting a second copy.${RESET}\n" "$server" "$port"
+        return 1
+    fi
+
+    local path_arg init_arg
+    path_arg="$(wine_dir_arg "$server_path")"
+    init_arg="$(wine_file_arg "$init_file")"
+    local -a cmd=(wine ./haloceded.exe -path "$path_arg" -exec "$init_arg" -port "$port")
+
+    case "$mode" in
+        exec)
+            cd -- "$ROOT" || return 1
+            exec "${cmd[@]}"
+            ;;
+        background)
+            mkdir -p -- "$LOG_DIR"
+            (cd -- "$ROOT" && exec setsid nohup "${cmd[@]}" </dev/null >>"$LOG_DIR/$server.log" 2>&1) &
+            printf "${GREEN}Started %s in the background (PID %s). Log: %s${RESET}\n" \
+                "$server" "$!" "$LOG_DIR/$server.log"
+            ;;
+        *)
+            printf "${GREEN}Launching %s with Wine...${RESET}\n" "$server"
+            (cd -- "$ROOT" && "${cmd[@]}")
+            ;;
+    esac
+}
+
+start_server_argument() {
+    local argument="$1"
+    local lower_name
+    local i
+
+    argument="${argument#-}"
+    if [[ "$argument" =~ ^[0-9]+$ ]]; then
+        if ((argument < 1 || argument > ${#SERVER_NAMES[@]})); then
+            printf "${RED}Server ID must be between 1 and %d.${RESET}\n" "${#SERVER_NAMES[@]}" >&2
+            return 2
+        fi
+        launch_server "$((argument - 1))" exec
+        return $?
+    fi
+
+    lower_name="${argument,,}"
+    for ((i = 0; i < ${#SERVER_NAMES[@]}; i++)); do
+        if [[ "${SERVER_NAMES[$i],,}" == "$lower_name" ]]; then
+            launch_server "$i" exec
+            return $?
+        fi
+    done
+    printf "${RED}Unknown server '%s'. Choose one of: %s.${RESET}\n" "$argument" "${SERVER_NAMES[*]}" >&2
+    return 2
+}
+
+if (($# > 1)); then
+    printf "${RED}Specify at most one server by ID or name, for example: ./run.sh 1 or ./run.sh -ctf.${RESET}\n" >&2
+    exit 2
+elif (($# == 1)); then
+    start_server_argument "$1"
+    exit $?
+fi
+
+printf "${YELLOW}Menu mode is for local testing. On the VPS, manage servers with ./halo (systemd).${RESET}\n"
+
+while true; do
+    menu_items=("${SERVER_NAMES[@]}" 'Launch all (background)')
+    read_choice 'Select a server to run:' "${menu_items[@]}"
+    server_index=$REPLY
+    ((server_index < 0)) && break
+
+    if ((server_index < ${#SERVER_NAMES[@]})); then
+        launch_server "$server_index"
+    else
+        for ((i = 0; i < ${#SERVER_NAMES[@]}; i++)); do
+            launch_server "$i" background
+            sleep 5 # stagger starts so a small VPS is not swamped
+        done
+    fi
+done
 ```
 
-> **Seeing "WINEARCH is set to 'win32' but this is not supported in wow64 mode"?** Newer Wine builds use a "new WoW64"
-> mode that only supports 64-bit prefixes (Wine 11 deprecates pure 32-bit prefixes). The WineHQ packages for Ubuntu
-> 22.04 install separate 64-bit and 32-bit parts and support `win32` prefixes, so you should not see this. If you do,
-> your Wine is a new-WoW64 build: delete the failed prefix (`rm -rf ~/.wine`), remove the two `WINEARCH` lines
-> here and in `run.sh` (Step 11), and let Wine create its default 64-bit prefix. 32-bit programs such as the Halo
-> server still run fine in it.
+### `status.sh`
 
----
-
-## Step 6: Install and Configure TightVNC & XFCE
-
-To give you a graphical interface for managing the server, we'll install the XFCE desktop environment and TightVNC.
+The status dashboard.
 
 ```bash
-# Install XFCE and TightVNC (this downloads a few hundred MB, so it takes a few minutes)
-sudo apt install xfce4 xfce4-goodies tightvncserver -y
+#!/usr/bin/env bash
+# Status dashboard for the Halo servers.
+#
+#   ./status.sh          All servers
+#   ./status.sh ctf      One server (case-insensitive; a leading "-" is allowed)
+#
+# STATUS meanings:
+#   RUNNING     systemd service is active
+#   RESTARTING  systemd is waiting to restart it after a crash
+#   FAILED      systemd gave up (see: journalctl -u halo@NAME -n 50)
+#   MANUAL      a server is running on that port outside systemd (e.g. started via run.sh)
+#   STOPPED     nothing running
+#
+# Copyright (c) 2026. Jericho Crosby (Chalwk)
 
-# Start VNC to create its config files (this is temporary)
-vncserver
-# Set a VNC password (max 8 characters). When asked about a view-only password, choose 'n'.
+set -uo pipefail
 
-# Kill the temporary VNC instance
-vncserver -kill :1
+ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+
+if [[ ! -f "$ROOT/servers.conf" ]]; then
+    echo "Missing $ROOT/servers.conf" >&2
+    exit 1
+fi
+# shellcheck source=servers.conf
+source "$ROOT/servers.conf"
+
+readonly RED='\033[31m'
+readonly GREEN='\033[32m'
+readonly YELLOW='\033[33m'
+readonly CYAN='\033[36m'
+readonly BOLD='\033[1m'
+readonly RESET='\033[0m'
+
+filter="${1:-}"
+filter="${filter#-}"
+
+# True if something is listening on the given UDP port.
+udp_open() {
+    ss -H -lun 2>/dev/null | awk -v p=":$1" '$4 ~ (p "$") { f = 1 } END { exit !f }'
+}
+
+printf "${BOLD}${CYAN}%-15s %-8s %-14s %-10s %-12s${RESET}\n" "SERVER NAME" "PORT" "STATUS" "PID" "UDP PORT"
+printf "%s\n" "-------------------------------------------------------------------"
+
+found=0
+for ((i = 0; i < ${#SERVER_NAMES[@]}; i++)); do
+    name="${SERVER_NAMES[$i]}"
+    port="${SERVER_PORTS[$i]}"
+
+    [[ -n "$filter" && "${name,,}" != "${filter,,}" ]] && continue
+    found=1
+
+    state="$(systemctl is-active "halo@$name" 2>/dev/null || true)"
+    pid="$(pgrep -f -- "-port $port( |\$)" 2>/dev/null | head -n 1 || true)"
+
+    case "$state" in
+        active)     status="${GREEN}RUNNING${RESET}" ;;
+        activating) status="${YELLOW}RESTARTING${RESET}" ;;
+        failed)     status="${RED}FAILED${RESET}" ;;
+        *)
+            if [[ -n "$pid" ]]; then
+                status="${YELLOW}MANUAL${RESET}"
+            else
+                status="${RED}STOPPED${RESET}"
+            fi
+            ;;
+    esac
+
+    if udp_open "$port"; then
+        udp="${GREEN}OPEN${RESET}"
+    else
+        udp="${RED}CLOSED${RESET}"
+    fi
+
+    printf "%-15s %-8s %-23b %-10s %-21b\n" "$name" "$port" "$status" "${pid:--}" "$udp"
+done
+
+if ((!found)); then
+    printf "${RED}Unknown server '%s'. Choose one of: %s.${RESET}\n" "$filter" "${SERVER_NAMES[*]}" >&2
+    exit 2
+fi
 ```
 
-> **About the 8-character limit:** TightVNC only uses the first 8 characters of the password. That's acceptable here
-> because VNC will only listen on `localhost` and every connection goes through your SSH tunnel.
-> `xfce4-goodies` is optional extras - drop it if you want a lighter install.
+### `halo`
 
-### Configure VNC to launch XFCE
-
-Back up the original startup script and create a new one:
+The helper you will use day to day. It wraps `systemctl` so you don't have to remember unit names.
 
 ```bash
-mv ~/.vnc/xstartup ~/.vnc/xstartup.bak
-nano ~/.vnc/xstartup
+#!/usr/bin/env bash
+# halo - start/stop/restart/status/logs for the Halo servers (systemd wrapper).
+#
+#   ./halo start   [server|all]
+#   ./halo stop    [server|all]
+#   ./halo restart [server|all]
+#   ./halo status  [server|all]
+#   ./halo logs    <server>
+#   ./halo enable  [server|all]    start at boot
+#   ./halo disable [server|all]
+#
+# Server names are case-insensitive. Default target is "all".
+#
+# Copyright (c) 2026. Jericho Crosby (Chalwk)
+
+set -uo pipefail
+
+ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+
+if [[ ! -f "$ROOT/servers.conf" ]]; then
+    echo "Missing $ROOT/servers.conf" >&2
+    exit 1
+fi
+# shellcheck source=servers.conf
+source "$ROOT/servers.conf"
+
+usage() {
+    echo "Usage: ./halo {start|stop|restart|status|logs|enable|disable} [server|all]" >&2
+    echo "Servers: ${SERVER_NAMES[*]}" >&2
+    exit 2
+}
+
+SUDO=""
+((EUID != 0)) && SUDO="sudo"
+
+action="${1:-}"
+target="${2:-all}"
+[[ -z "$action" ]] && usage
+
+# Case-insensitive name -> canonical name.
+resolve() {
+    local s
+    for s in "${SERVER_NAMES[@]}"; do
+        if [[ "${s,,}" == "${1,,}" ]]; then
+            printf '%s' "$s"
+            return 0
+        fi
+    done
+    return 1
+}
+
+if [[ "$target" == all ]]; then
+    names=("${SERVER_NAMES[@]}")
+else
+    if ! single="$(resolve "$target")"; then
+        echo "Unknown server '$target'. Choose one of: ${SERVER_NAMES[*]}" >&2
+        exit 2
+    fi
+    names=("$single")
+fi
+
+case "$action" in
+    start|restart)
+        $SUDO systemctl start xvfb wineserver || exit 1
+        for n in "${names[@]}"; do
+            echo "$action $n"
+            $SUDO systemctl "$action" "halo@$n"
+            # Stagger so a 1 vCPU / 1 GB VPS is not swamped.
+            [[ "$target" == all ]] && sleep 5
+        done
+        ;;
+    stop|enable|disable)
+        for n in "${names[@]}"; do
+            echo "$action $n"
+            $SUDO systemctl "$action" "halo@$n"
+        done
+        ;;
+    status)
+        if [[ "$target" == all ]]; then
+            "$ROOT/status.sh"
+        else
+            "$ROOT/status.sh" "${names[0]}"
+        fi
+        ;;
+    logs)
+        if [[ "$target" == all ]]; then
+            echo "Give a server name, e.g. ./halo logs ctf" >&2
+            exit 2
+        fi
+        journalctl -u "halo@${names[0]}" -f
+        ;;
+    *)
+        usage
+        ;;
+esac
 ```
 
-Paste the following:
+### Make them executable
 
 ```bash
-#!/bin/bash
-xrdb $HOME/.Xresources
-startxfce4 &
+cd /home/haloadmin/HaloServers
+sed -i 's/\r$//' run.sh status.sh halo servers.conf
+chmod +x run.sh status.sh halo
 ```
 
-Save and exit (`CTRL+O`, `ENTER`, `CTRL+X`). Then make it executable:
+> [!TIP] Re-run that `sed` line any time you re-upload a script from Windows.
+
+## Step 4: Create the Wine Prefix (One Time)
 
 ```bash
-chmod +x ~/.vnc/xstartup
+Xvfb :1 -screen 0 1024x768x16 &     # temporary, only for this step
+sleep 2
+WINEARCH=win32 WINEPREFIX=$HOME/.wine WINEDLLOVERRIDES="mscoree,mshtml=" DISPLAY=:1.0 wineboot --init
+kill %1                             # stop the temporary Xvfb
 ```
 
----
+The `mscoree,mshtml=` override stops Wine asking to download Mono and Gecko, which a headless server doesn't need.
 
-## Step 7: Create a Systemd Service for VNC (Auto-start on boot)
+## Step 5: Create the systemd Units
 
-We'll use a systemd service to start VNC automatically and keep it running. The `-localhost` flag ensures VNC only
-accepts connections from the local machine - we'll tunnel through SSH for security.
+Three unit files are needed. Create each with nano and paste the contents below.
 
-Create the service file:
-
-```bash
-sudo nano /etc/systemd/system/vncserver@.service
-```
-
-Paste the following, **replacing `haloadmin` with your actual username** (it appears in four places):
+1. `sudo nano /etc/systemd/system/xvfb.service`
 
 ```ini
 [Unit]
-Description=TightVNC Remote Desktop Service
+Description=Xvfb virtual display :1 (for Wine)
 After=network.target
 
 [Service]
-Type=forking
+Type=simple
 User=haloadmin
-Group=haloadmin
-WorkingDirectory=/home/haloadmin
-PIDFile=/home/haloadmin/.vnc/%H:%i.pid
-ExecStartPre=-/usr/bin/vncserver -kill :%i
-ExecStart=/usr/bin/vncserver -depth 24 -geometry 1280x720 -localhost :%i
-ExecStop=/usr/bin/vncserver -kill :%i
+ExecStart=/usr/bin/Xvfb :1 -screen 0 1024x768x16 -nolisten tcp
+Restart=on-failure
+RestartSec=5s
 
 [Install]
 WantedBy=multi-user.target
 ```
 
-Save and exit. Then reload systemd, enable the service and start it:
+2. `sudo nano /etc/systemd/system/wineserver.service`
+
+```ini
+[Unit]
+Description=Persistent wineserver for the Halo servers
+After=xvfb.service
+Requires=xvfb.service
+
+[Service]
+Type=simple
+User=haloadmin
+Environment="WINEARCH=win32"
+Environment="WINEPREFIX=/home/haloadmin/.wine"
+Environment="WINEDEBUG=-all"
+Environment="DISPLAY=:1.0"
+# Verify the path with: which wineserver
+ExecStart=/usr/bin/wineserver -f -p
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target
+```
+
+3. `sudo nano /etc/systemd/system/halo@.service`
+
+```ini
+[Unit]
+Description=Halo CE Dedicated Server (%i)
+Requires=xvfb.service wineserver.service
+After=network.target xvfb.service wineserver.service
+# Give up after 5 failed starts in 2 minutes instead of looping forever.
+StartLimitIntervalSec=120
+StartLimitBurst=5
+
+[Service]
+Type=simple
+User=haloadmin
+WorkingDirectory=/home/haloadmin/HaloServers
+Environment="WINEARCH=win32"
+Environment="WINEPREFIX=/home/haloadmin/.wine"
+Environment="WINEDLLOVERRIDES=msvcrt=n,b"
+Environment="WINEDEBUG=-all"
+Environment="DISPLAY=:1.0"
+# Uncomment if Halo rejects the Windows-style paths run.sh passes by default:
+#Environment="HALO_UNIX_PATHS=1"
+ExecStart=/usr/bin/bash /home/haloadmin/HaloServers/run.sh %i
+Restart=on-failure
+RestartSec=10s
+TimeoutStopSec=15s
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Check that `which wineserver` and `which Xvfb` match the paths in the units, then reload systemd:
 
 ```bash
 sudo systemctl daemon-reload
-sudo systemctl enable --now vncserver@1.service
 ```
 
-Check that it's running and **only listening on localhost**:
+## Step 6: Open the Game Ports
+
+Halo uses **UDP**. Players need to reach these from anywhere, so no source restriction. Open the range that covers your servers:
 
 ```bash
-sudo systemctl status vncserver@1.service --no-pager
-ss -ltn | grep 5901
+sudo ufw allow 2302:2304/udp comment 'Halo servers'
+sudo ufw status verbose
 ```
 
-The `ss` output should show `127.0.0.1:5901`. If it shows `0.0.0.0:5901`, the `-localhost` flag is missing - fix the
-service file before continuing.
+If a Vultr firewall group is attached to the VPS, open the same UDP range there too.
 
-> **Service won't start?** Read the log with `journalctl -u vncserver@1.service -n 50 --no-pager`. A common cause is
-> a leftover lock file from the temporary VNC instance; clear it with
-> `sudo rm -f /tmp/.X1-lock /tmp/.X11-unix/X1` and start the service again.
-
----
-
-## Step 8: Connect to VNC Securely via Bitvise (SSH Tunnel)
-
-Because we used `-localhost`, you cannot connect directly to the VNC port. Instead, we create an SSH tunnel.
-
-1. In Bitvise, go to the **C2S** (Client-to-Server) tab.
-2. Click **Add**.
-3. Set:
-
-   - **Listen Interface:** `127.0.0.1`
-   - **Listen Port:** `5901`
-   - **Destination Host:** `127.0.0.1`
-   - **Destination Port:** `5901`
-
-4. Click **OK** to save the rule, then **Log in** (or reconnect) so the tunnel becomes active.
-5. Save your Bitvise profile so the rule is remembered.
-
-Now open **TightVNC Viewer** on your local machine:
-
-- **Remote Host:** `127.0.0.1:5901` (if your viewer rejects that, use `127.0.0.1::5901`)
-- Enter the VNC password you set in Step 6.
-- Click **Connect**.
-
-You should now see the XFCE desktop of your VPS.
-
-> **Important:** Bitvise must remain connected for the tunnel to work. If you close Bitvise, the VNC viewer will
-> drop. The desktop itself keeps running on the server, and so does anything you launch in it.
-
----
-
-## Step 9: Install fail2ban
-
-fail2ban protects against brute-force attacks by temporarily blocking IPs that fail too many login attempts. Since
-we disabled password logins this is mostly a bonus, but it keeps bots from hammering your SSH port and filling your
-logs.
+## Step 7: Test ONE Server by Hand
 
 ```bash
-sudo apt install fail2ban -y
+sudo systemctl start xvfb wineserver
+cd /home/haloadmin/HaloServers
+./run.sh ctf
 ```
 
-**You must tell fail2ban about your custom SSH port.** By default it only watches and blocks port `22`, which would
-leave your real SSH port unprotected. Create a local config:
+Check that SAPP loads and the console is running, then connect from the game to `<vps-ip>:2302`. Stop it with `Ctrl + C`.
+
+If the server won't start or can't find its files, Halo may not like the Windows-style paths that `run.sh` passes by default. Try `HALO_UNIX_PATHS=1 ./run.sh ctf`. If that works, uncomment the `HALO_UNIX_PATHS` line in `halo@.service` and run `sudo systemctl daemon-reload`.
+
+## Step 8: Hand It Over to systemd
 
 ```bash
-sudo nano /etc/fail2ban/jail.local
+sudo systemctl enable --now xvfb wineserver
+sudo systemctl enable --now halo@CTF
 ```
 
-Paste:
+Close BitVise, reconnect, and run `./halo status ctf`. It should still be `RUNNING`.
 
-```ini
-[sshd]
-enabled  = true
-port     = 22992
-maxretry = 5
-findtime = 10m
-bantime  = 1h
-```
+**Check that servers are independent:** enable a second one (`sudo systemctl enable --now halo@Slayer`), then stop the first (`./halo stop ctf`). Slayer must keep running. If it dies, `wineserver.service` isn't running properly. Check `systemctl status wineserver`.
 
-Save and exit, then start it and enable it on boot:
+## Step 9: Bring Up the Rest, Gradually
 
 ```bash
-sudo systemctl enable --now fail2ban
-sudo systemctl restart fail2ban
-
-# Verify the sshd jail is active
-sudo fail2ban-client status sshd
+./halo enable all   # start at boot
+./halo start all    # starts them one by one, 5 seconds apart
 ```
 
-You should see the `sshd` jail with a file list and `Currently banned: 0`.
+Watch RAM while they come up (`free -h`, `top`). See [Appendix C](#appendix-c-memory-budget-and-monitoring).
 
-If you ever lock **yourself** out (too many failed logins from your own IP), unban yourself from the Vultr web console
-or another connection:
+## Step 10: Reboot Test
 
 ```bash
-sudo fail2ban-client set sshd unbanip YOUR_IP_ADDRESS
+sudo reboot
 ```
 
----
+Reconnect after a minute and run `./halo status`. Everything enabled should be back without any action.
 
-## Step 10: Upload Server Files via SFTP
+## Daily Use: the `halo` Helper
 
-1. In Bitvise, click the **New SFTP window** button.
-2. Navigate to `/home/haloadmin/Desktop/` on the VPS. (If the folder doesn't exist yet, connect to VNC once so XFCE
-   creates it, or create it with `mkdir -p ~/Desktop`.)
-3. On your local computer, locate the extracted server folder (e.g., `SAPP_PC`, `SAPP_CE`, `Phasor_PC`, or
-   `Phasor_CE`).
-4. Drag and drop the entire folder into the VPS `/home/haloadmin/Desktop/` directory.
+Run from `/home/haloadmin/HaloServers`. Server names are case-insensitive. The default target is `all`.
 
-This may take a few minutes depending on file size.
+| Task                    | Command                                |
+| ----------------------- | -------------------------------------- |
+| Status of everything    | `./halo status`                        |
+| Status of one server    | `./halo status ctf`                    |
+| Start one server        | `./halo start slayer`                  |
+| Start all (staggered)   | `./halo start all`                     |
+| Stop one server         | `./halo stop ctf`                      |
+| Stop all servers        | `./halo stop all`                      |
+| Restart one server      | `./halo restart ctf`                   |
+| Restart all (staggered) | `./halo restart all`                   |
+| Follow a server's log   | `./halo logs ctf`                      |
+| Start at boot / not     | `./halo enable\|disable [server\|all]` |
 
-> **Faster alternative:** Thousands of small files upload slowly over SFTP. Instead, upload the **zip** file and
-> extract it on the server:
->
-> ```bash
-> sudo apt install unzip -y
-> unzip ~/Desktop/SAPP_CE.zip -d ~/Desktop/
-> ```
->
-> Check the resulting folder name afterwards with `ls ~/Desktop`.
+`./status.sh` and `./status.sh ctf` also work directly. `./halo` uses `sudo`, so it will ask for your password.
 
----
+### Reading the status table
 
-## Step 11: Set Up the Launch Script and Desktop Shortcut
+```
+SERVER NAME     PORT     STATUS         PID        UDP PORT
+-------------------------------------------------------------------
+CTF             2302     RUNNING        14825      OPEN
+Slayer          2303     STOPPED        -          CLOSED
+KOTH            2304     RESTARTING     -          CLOSED
+```
 
-Your server template (`SAPP_PC`, `SAPP_CE`, `Phasor_PC`, or `Phasor_CE`) already includes a ready-to-use `run.sh`
-script. All you need to do is make it executable and create a desktop shortcut to launch it with a single click.
+| Status       | Meaning                                                                       |
+| ------------ | ----------------------------------------------------------------------------- |
+| `RUNNING`    | systemd service is active                                                     |
+| `RESTARTING` | it crashed and systemd is waiting to retry                                    |
+| `FAILED`     | systemd gave up after 5 failures in 2 minutes. Look at the logs and fix it    |
+| `MANUAL`     | running on that port **outside** systemd (e.g. started with `run.sh` by hand) |
+| `STOPPED`    | nothing running                                                               |
 
-First, make the existing `run.sh` executable:
+`UDP PORT` shows whether something is listening on the port. `RUNNING` with `CLOSED` is normal for a few seconds after start.
+
+After a `FAILED` state, once the cause is fixed:
 
 ```bash
-chmod +x /home/haloadmin/Desktop/SAPP_CE/run.sh
+sudo systemctl reset-failed halo@CTF
+./halo start ctf
 ```
 
-Replace `SAPP_CE` with the name of your actual server folder (`SAPP_PC`, `Phasor_CE`, etc.) here and in the rest of
-this step.
+## Talking to a Halo Server Console
 
-> **If the `run.sh` script is missing**, or if you need to change the **port**, **folder structure**, or any other
-> setting, you can create or edit it using **nano**:
->
-> ```bash
-> nano /home/haloadmin/Desktop/SAPP_CE/run.sh
-> ```
+A systemd service has no interactive console, so you can't type SAPP commands into it. Options:
 
-The template's `run.sh` looks like this (adjust it if you change the **port** or **folder structure**):
+- **In-game rcon / admin commands:** work as normal.
+- **SAPP `remote_console`** (TCP): configure it in `cg/<server>/sapp/init.txt`. If used, open that TCP port deliberately and restrict its source IP.
+- **tmux**, for hands-on debugging only: stop the service (`./halo stop ctf`), then run `tmux new -s ctf` and `./run.sh ctf` inside it. Detach with `Ctrl + B`, then `D`. Start the service again afterwards, or `status` will show `MANUAL`.
+
+Server output (what SAPP prints with `cprint`) goes to the journal: `./halo logs ctf`.
+
+## Adding a Halo Server
+
+1. Create `cg/<NAME>/` with both `init.txt` files, `sapp/` and so on (copy an existing one).
+2. Append the name and port to **both** arrays in `servers.conf`. Keep the order the same.
+3. Make sure the maps listed in `sapp/mapcycle.txt` are in `maps/`.
+4. Open its UDP port: `sudo ufw allow <port>/udp` (or widen the range you opened in Step 6).
+5. `./halo enable <name>`, then `./halo start <name>`.
+
+Example for a test server: add `Test` and `2305` to `servers.conf`, create `cg/Test/`, and allow UDP 2305.
+
+## Halo Troubleshooting
+
+| Symptom                                          | Likely cause and fix                                                                                   |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
+| `bad interpreter: ... ^M`                        | Windows line endings. `sed -i 's/\r$//' run.sh status.sh halo servers.conf`.                           |
+| Server goes `RESTARTING` then `FAILED`           | `journalctl -u halo@NAME -n 50 --no-pager`. Usually missing maps or a bad `init.txt` path.             |
+| `Start request repeated too quickly`             | Hit the start limit. Fix the problem, then `sudo systemctl reset-failed halo@NAME`.                    |
+| "Cannot launch ... map files are missing"        | Put the listed `.map` files in `maps/` (the four base maps are also required).                         |
+| "Mapcycle file not found"                        | Create `cg/<NAME>/sapp/mapcycle.txt`, even if you use map voting.                                      |
+| "already running ... Not starting a second copy" | Something else is on that port (`MANUAL` in status). Find it with `pgrep -af haloceded` and stop it.   |
+| All servers die when one is stopped              | `wineserver.service` isn't running or isn't being used. Check `systemctl status wineserver`.           |
+| Wine complains about a display                   | `systemctl status xvfb`. It must be running and `DISPLAY=:1.0` must match.                             |
+| Halo can't find its init or map files            | Try `HALO_UNIX_PATHS=1` (see [Step 7](#step-7-test-one-server-by-hand)).                               |
+| Process is up but nobody can connect             | UDP port closed in UFW or the Vultr firewall. `sudo ufw status`; status table shows `UDP PORT` `OPEN`. |
+| Servers randomly vanish                          | Out of memory. See [Appendix C](#appendix-c-memory-budget-and-monitoring).                             |
+| Changed a unit file and nothing happened         | `sudo systemctl daemon-reload`, then restart the service.                                              |
+| Need to restart Wine itself                      | `sudo systemctl restart wineserver` (this restarts all Halo servers).                                  |
+
+---
+
+# Appendix A: Quick Reference
+
+| Task                     | Command                                              |
+| ------------------------ | ---------------------------------------------------- |
+| Connect                  | BitVise, port **22022**, user `haloadmin`, publickey |
+| All Halo servers         | `cd ~/HaloServers && ./halo status`                  |
+| One Halo server          | `./halo start\|stop\|restart\|logs <name>`           |
+| Firewall rules           | `sudo ufw status numbered`                           |
+| Fail2ban                 | `sudo fail2ban-client status sshd`                   |
+| Unblock an IP            | `sudo fail2ban-client set sshd unbanip <ip>`         |
+| Memory                   | `free -h`                                            |
+| Kernel killed something? | `sudo dmesg -T \| grep -i 'out of memory'`           |
+| Reload unit files        | `sudo systemctl daemon-reload`                       |
+| Clear a failed state     | `sudo systemctl reset-failed <unit>`                 |
+| Reboot required?         | `ls /var/run/reboot-required`                        |
+
+---
+
+# Appendix B: Ports and Firewall
+
+| Port           | Protocol | Source            | Purpose                |
+| -------------- | -------- | ----------------- | ---------------------- |
+| 22022          | TCP      | your home IP only | SSH                    |
+| 2302-2304      | UDP      | anywhere          | Halo servers (players) |
+| (all outbound) | any      | n/a               | apt, updates, etc.     |
+
+Anything else should be absent from `sudo ufw status verbose`. When you add a service, add its rule, and when you remove one, delete its rule. If a Vultr firewall group is attached, keep it consistent with UFW.
+
+---
+
+# Appendix C: Memory Budget and Monitoring
+
+Memory is a small VPS's tightest resource. It runs one Wine process per Halo server, plus a shared `wineserver`, `Xvfb` and the OS on top.
+
+**Measure, don't guess.** After everything is up for a while:
 
 ```bash
-#!/bin/bash
-
-# Force 32-bit Wine prefix
-export WINEARCH=win32
-export WINEPREFIX=/home/haloadmin/.wine
-
-# Set server port
-PORT=2302
-
-# Get the script directory
-ROOT="$(dirname "$(realpath "$0")")"
-cd "$ROOT"
-
-# Set paths
-CG_PATH="$ROOT/cg"
-INIT_FILE="$CG_PATH/init.txt"
-
-# Launch Server
-wine "$ROOT/haloceded.exe" -path "$CG_PATH" -exec "$INIT_FILE" -port $PORT
+free -h                   # total/used/available RAM and swap
+top                       # press M to sort by memory; q to quit
+sudo dmesg -T | grep -i 'out of memory'   # evidence the kernel killed something
 ```
 
-Notes:
+**Rules of thumb:**
 
-- **Halo PC vs Custom Edition:** the Custom Edition server executable is `haloceded.exe`. Halo PC uses `haloded.exe`,
-  so the PC templates launch that instead.
-- **Running more than one server?** Copy the server folder, give each copy its own `PORT`, and open each port in UFW
-  (`sudo ufw allow PORT/udp`).
-- **Editing on Windows?** Windows editors can save files with `CRLF` line endings, which breaks shell scripts (you'll
-  see `bad interpreter: /bin/bash^M`). Use an editor that keeps `LF` endings, or fix the file on the server with
-  `sed -i 's/\r$//' run.sh`.
+- Compare `available` in `free -h` with what you plan to add. Add servers one at a time and re-check.
+- Using swap occasionally is fine. If `free -h` shows swap steadily growing and `top` shows `kswapd` busy, the machine is under pressure and gameplay will suffer (lag, rubber-banding, dropped players).
+- Cheapest fixes, in order: stop (`./halo disable`) rarely used Halo servers, then upgrade the Vultr plan. You can resize a Vultr instance in the control panel.
 
-Now create the desktop shortcut:
+Disk is rarely a problem, but `df -h` and `sudo journalctl --disk-usage` are worth an occasional look.
+
+---
+
+# Appendix D: Removal
+
+## Halo servers
 
 ```bash
-nano /home/haloadmin/Desktop/run.desktop
+cd /home/haloadmin/HaloServers
+./halo disable all
+./halo stop all
+sudo systemctl disable --now wineserver xvfb
+sudo rm /etc/systemd/system/halo@.service /etc/systemd/system/wineserver.service /etc/systemd/system/xvfb.service
+sudo ufw delete allow 2302:2304/udp
+rm -rf ~/.wine      # optional: delete the Wine prefix
 ```
 
-Paste the following (change `Name` to whatever you like):
-
-```ini
-[Desktop Entry]
-Version=1.0
-Type=Application
-Name=Halo Server
-Exec=/home/haloadmin/Desktop/SAPP_CE/run.sh
-Path=/home/haloadmin/Desktop/SAPP_CE
-Icon=utilities-terminal
-Terminal=true
-Categories=Game;
-```
-
-Save and exit. Next, make the desktop file executable:
+## Finish
 
 ```bash
-chmod +x /home/haloadmin/Desktop/run.desktop
+sudo systemctl daemon-reload
+sudo systemctl reset-failed
 ```
-
-**Using the shortcut:** Double-click the icon on your VPS desktop (inside your VNC session). The first time, Wine may
-prompt you to install **Mono** (and possibly **Gecko**) - click **Install** and let it finish. After that, the server
-console window will open. You're now ready to host games!
-
-You can close the VNC viewer and Bitvise at any time. The server keeps running because the desktop session lives on the
-VPS.
-
----
-
-## Step 12: Check That Your Server Is Reachable
-
-On the VPS, confirm the server is listening on its UDP port:
-
-```bash
-sudo ss -ulnp | grep 2302
-```
-
-Then test from the outside. From your Halo client, join the server by IP (`YOUR_SERVER_IP:2302`). In Halo Custom
-Edition you can also open the console (launch with `-console`) and run `connect YOUR_SERVER_IP:2302`. Ask a friend to
-try as well; a server that works from your own PC but not theirs usually points to a firewall rule (see the
-troubleshooting table).
-
----
-
-## Optional: Start the Halo Server Automatically After a Reboot
-
-VNC already starts on boot, so you can have XFCE launch the server as soon as the desktop session starts:
-
-```bash
-mkdir -p ~/.config/autostart
-cp ~/Desktop/run.desktop ~/.config/autostart/halo-server.desktop
-```
-
-Test it with `sudo reboot`, wait a minute or two, reconnect through Bitvise and VNC, and check the server console is
-already open.
-
-> **Note:** This starts the server on boot, but it won't restart it if the server itself crashes. In that case,
-> double-click the desktop shortcut again.
-
----
-
-## Keeping the Server Healthy
-
-- **Updates:** Run `sudo apt update && sudo apt upgrade -y` every few weeks. Ubuntu also installs security updates
-  automatically by default. If `/var/run/reboot-required` exists, plan a reboot (`sudo reboot`).
-- **Backups:** Before big changes, take a **snapshot** in the Vultr control panel. Also keep a copy of your server
-  folder (configs, scripts, ban lists) on your own PC via SFTP.
-- **Monitor:** `htop` (`sudo apt install htop`) shows CPU and RAM use. A 2GB plan has plenty of room for one or two
-  servers plus the desktop.
-
----
-
-## Troubleshooting
-
-| Problem                                                              | Likely cause                                               | Fix                                                                                                                             |
-| -------------------------------------------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| Can't connect after changing the SSH port                            | Firewall rule missing or typo in `sshd_config`             | Log in via the Vultr **View Console**, run `sudo ufw status`, `sudo sshd -t`, fix, then `sudo systemctl restart ssh`.           |
-| `Permission denied (publickey)`                                      | Wrong permissions/ownership, or the key was pasted broken  | Re-check the `chmod`/`chown` commands in Step 3 and that `authorized_keys` is a single line. See `sudo tail /var/log/auth.log`. |
-| Password login still works                                           | A file in `sshd_config.d` overrides your setting           | Follow the override check in Step 4 and run `sudo sshd -T`.                                                                     |
-| VNC viewer: connection refused                                       | Bitvise tunnel not connected, or the service isn't running | Reconnect Bitvise (C2S rule active), then `sudo systemctl status vncserver@1.service`.                                          |
-| VNC shows a grey screen with no desktop                              | `xstartup` not executable or XFCE not installed            | Run `chmod +x ~/.vnc/xstartup`, confirm Step 6, restart the service. Check the logs in `~/.vnc/`.                               |
-| VNC service fails to start                                           | Stale X lock file                                          | `sudo rm -f /tmp/.X1-lock /tmp/.X11-unix/X1`, then start the service again.                                                     |
-| `bad interpreter: /bin/bash^M`                                       | Windows line endings in `run.sh`                           | `sed -i 's/\r$//' run.sh`                                                                                                       |
-| `WINEARCH is set to 'win32' but this is not supported in wow64 mode` | Your Wine is a new-WoW64 build                             | See the note at the end of Step 5.                                                                                              |
-| Players can't see or join the server                                 | Port closed, wrong port, or Vultr firewall                 | Confirm `sudo ufw status`, that `PORT` in `run.sh` matches the open UDP port, and that any Vultr firewall group allows it.      |
-| You banned yourself with fail2ban                                    | Too many failed logins from your IP                        | `sudo fail2ban-client set sshd unbanip YOUR_IP_ADDRESS` from another connection or the web console.                             |
-
-Still stuck? Ask in the support forum on the [Chalwk - Code & Chill Discord](https://discord.gg/VAEb4FXU5) and include
-the exact error message and the step you're on.
-
----
-
-## Next Steps
-
-- Browse ready-made scripts for your server in the
-  [SPCLib Script Browser](https://chalwk.github.io/SPCLib/tools/script-browser).
-- Learn how to write your own with the
-  [Scripting with SAPP guide](https://chalwk.github.io/blog/2026/05/17/halo-scripting-with-sapp/).
-- Before granting admin rights by CD-key hash, check it with the
-  [CD Key Hash Checker](https://chalwk.github.io/SPCLib/tools/hash-checker).
-
----
-
-## Optional: Changing Passwords
-
-This section covers how to change the passwords you created during the setup. If you ever need to update your
-credentials, follow these steps.
-
-**Which passwords are covered?**
-
-- The `haloadmin` user password (used for `sudo` and local/console login).
-- The VNC password (used to connect to the remote desktop).
-- (Optional) The SSH key passphrase, if you chose to set one during key generation.
-
-> **The Vultr `root` password** is not changed here. SSH can no longer use it, but it still works on the Vultr web
-> console. Keep it safe, and change it from the Vultr control panel if you think it has been exposed.
-
----
-
-### Change the haloadmin User Password
-
-1. Open a terminal session in Bitvise (as `haloadmin`).
-2. Run the `passwd` command:
-
-   ```bash
-   passwd
-   ```
-
-3. You will be prompted for:
-    - Your current password.
-    - The new password (type it twice to confirm).
-4. After a successful change, the password for `haloadmin` is updated immediately.
-
-> **Note:** This password is used when you run `sudo` commands and if you ever need to log in on the Vultr web console.
-
----
-
-### Change the VNC Password
-
-The VNC password is stored in the user's home directory and is managed with the `vncpasswd` tool.
-
-1. In your SSH terminal, stop the VNC service first. It must restart anyway to pick up the new password, and stopping
-   it avoids confusion about which password is active:
-
-   ```bash
-   sudo systemctl stop vncserver@1.service
-   ```
-
-   Remember this also stops the Halo server running inside the desktop session.
-
-2. Run the VNC password utility:
-
-   ```bash
-   vncpasswd
-   ```
-
-3. Enter your new password when prompted (maximum 8 characters). When asked about a view-only password, type `n`.
-4. Restart the VNC service:
-
-   ```bash
-   sudo systemctl start vncserver@1.service
-   ```
-
-5. The new password will be required the next time you connect through your SSH tunnel.
-
----
-
-### (Optional) Change Your SSH Key Passphrase
-
-If you left the passphrase blank, you can ignore this section.
-
-**If you generated the key in Bitvise** (as in this guide), the key is stored in Bitvise's **Client key manager**, in
-Bitvise's own format. Manage its passphrase there. Bitvise's key files are not in OpenSSH format, so the
-`ssh-keygen` command below cannot read them.
-
-**If you have an OpenSSH-format private key** (for example one made with `ssh-keygen`), change its passphrase on your
-**local Windows machine**:
-
-1. Open a Command Prompt or PowerShell window.
-2. Navigate to the folder containing your private key (e.g., `C:\Users\YourUsername\.ssh\`).
-3. Run:
-
-   ```powershell
-   ssh-keygen -p -f your-private-key-file
-   ```
-
-   Replace `your-private-key-file` with the actual filename (e.g., `id_ed25519`).
-4. You will be asked for:
-    - The old passphrase (if any).
-    - The new passphrase (type it twice to confirm).
-5. The key is updated in place. You do not need to upload a new public key to the server, because the key pair itself
-   remains unchanged; only the encryption of the private key changes.
-
----
