@@ -206,13 +206,17 @@ EXEC="${CG_PATH}/init.txt"
 wine "${DIR}/haloceded.exe" -path "${CG_PATH}" -exec "${EXEC}" -port "${PORT}"
 ```
 
-Open each server's UDP port in your firewall. See [Halo: Server Port Forwarding](../server-port-forwarding) for details.
+Open each server's UDP port in your firewall. See [Halo: Server Port Forwarding](../server-port-forwarding.md) for details.
 
 #### 4. Start the Servers
 
 Run each launch script to start its server in a separate console window.
 
 To start multiple servers in Windows Terminal, create `run_all.bat`:
+
+### Advanced Server Setup
+
+For advanced server setups, see the [Halo: Running SAPP Servers on an Ubuntu VPS](../ubuntu-vps-hosting.md) guide.
 
 ---
 
