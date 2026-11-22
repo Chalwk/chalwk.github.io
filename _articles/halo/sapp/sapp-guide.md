@@ -3,7 +3,7 @@ title: "Halo: SAPP Server and Lua API Guide"
 permalink: /halo/sapp/guide/
 description: "Complete guide to setting up, configuring, and running SAPP dedicated servers and writing server-side Lua scripts."
 date: 2026-11-12
-last-updated: 2026-11-14
+last-updated: 2026-11-22
 categories: [ education, halo, modding, server ]
 tags: [ sapp, lua, scripting, hosting, multiserver, server, tutorial ]
 ---
@@ -25,28 +25,29 @@ This is the folder structure after extracting either zip:
 
 ```text
 .                                        Root of the extracted server
-|   haloded.exe or haloceded.exe         Dedicated server executable
+|   cache.hac                            Map cache
+|   haloded.exe or haloceded.exe         Dedicated server executable (PC or CE)
 |   motd.txt                             Message of the Day (CE only)
-|   run.bat                              Windows launch script
-|   run.sh                               Linux/Wine launch script
+|   RUN_CTF.bat                          Windows launch script (CTF instance)
+|   RUN_CTF.sh                           Linux/Wine launch script (CTF instance)
 |   sapp.dll                             SAPP binary
-|   strings.dll                          SAPP loader
+|   Strings.dll                          SAPP loader
 |
 +---cg                                   Instance configs
-|   |   init.txt                         Server startup commands (run with -exec)
-|   |
-|   +---sapp                             SAPP configs for this instance
-|   |   |   commands.txt                 Custom commands
-|   |   |   events.txt                   Event scripting
-|   |   |   init.txt                     SAPP settings
-|   |   |   mapcycle.txt                 Map rotation
-|   |   |   mapvotes.txt                 Map voting options
-|   |   |
-|   |   \---lua                          Lua scripts
-|   |           sample_script.lua        Example Lua script
-|   +---saved                            Server save data (profiles, playlists, hdmu.map)
-|   |
-|   \---savegames                        Game variant files
+|   \---CTF                              Example instance (CTF)
+|       |   init.txt                     Server startup (sv_name, load, ...)
+|       |
+|       +---sapp                         SAPP configs for this instance
+|       |   |   commands.txt             Custom commands
+|       |   |   events.txt               Event scripting
+|       |   |   init.txt                 SAPP settings (lua, mapcycle, etc.)
+|       |   |   mapcycle.txt             Map rotation
+|       |   |   mapvotes.txt             Map voting options
+|       |   |
+|       |   \---lua                      Lua scripts
+|       |           sample_script.lua    Example Lua script
+|       |
+|       \---savegames                    Game variant files
 |
 +---maps                                 All map files (.map)
 |       beavercreek.map
@@ -61,43 +62,44 @@ This is the folder structure after extracting either zip:
         users.txt                        CD-key admins (V1)
 ```
 
-Each package ships only the executable for its platform: `haloded.exe` for PC, `haloceded.exe` for CE.
+Each package ships only the executable for its platform: `haloded.exe` for PC, `haloceded.exe` for CE, and one ready-made instance, `CTF`, under `cg\CTF\`. It is a working template you can run as is or copy to add more game modes.
 
-In the packages, two folders are named `sapp`. The root `sapp\` holds global files shared by every instance. The `cg\sapp\` folder holds settings for one instance. Keep them straight, because the multiserver setup depends on the difference.
+In the packages, two folders are named `sapp`. The root `sapp\` holds global files shared by every instance. The `cg\<instance\sapp\` folder (for the shipped example, `cg\CTF\sapp\`) holds settings for one instance. Keep them straight, because the multiserver setup depends on the difference.
 
-Some hosting providers (NFO, for example) have no `cg` folder and only one `sapp` folder. There the server root is the instance folder: the startup `init.txt` is in the root, while the SAPP `init.txt` and Lua scripts are in `sapp\` (`sapp\init.txt`, `sapp\lua\`). Global files such as `admins.txt` and `ipbans.txt` share that same `sapp\` folder.
+Some hosting providers (NFO, for example) have no `cg` folder and only one `sapp` folder. There the sapp server root is the instance folder: the startup `init.txt` is in the root, while the SAPP `init.txt` and Lua scripts are in `sapp\` (`sapp\init.txt`, `sapp\lua\`). Global files such as `admins.txt` and `ipbans.txt` share that same `sapp\` folder.
 
-Throughout this guide, "instance folder" means the folder that holds the startup `init.txt` and the instance's `sapp\` folder. That is `cg\` in the packages and the server root on these hosts.
+Throughout this guide, "instance folder" means the folder that holds the startup `init.txt` and the instance's `sapp\` folder. That is `cg\<instance\` (for example `cg\CTF\`) in the packages and the server root on these hosts.
 
 ### File Reference
 
 #### Root Files
 
-- `haloded.exe` / `haloceded.exe`: The dedicated server executable (PC or CE).
-- `sapp.dll`: The SAPP binary. Halo loads it when the `load` command runs.
-- `strings.dll`: The SAPP loader. The `load` command needs it enabled and `sapp.dll` present.
-- `motd.txt`: Message of the Day shown to joining players. CE only. It is set with `sv_motd`, and the package includes the file for convenience.
-- `run.bat` / `run.sh`: Launch scripts for Windows and Linux/Wine. See [Run a Single Server](#run-a-single-server).
+| File                            | Description                                                                                                                                                                                                  |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `cache.hac`                     | Map cache, read by the dedicated server at startup.                                                                                                                                                          |
+| `haloded.exe` / `haloceded.exe` | The dedicated server executable (PC or CE).                                                                                                                                                                  |
+| `sapp.dll`                      | The SAPP binary. Halo loads it when the `load` command runs.                                                                                                                                                 |
+| `Strings.dll`                   | The SAPP loader. The `load` command needs it enabled and `sapp.dll` present.                                                                                                                                 |
+| `motd.txt`                      | Message of the Day shown to joining players. CE only. It is set with `sv_motd`, inside `cg\\<instance>\init.txt` and the package includes the file for convenience.                                          |
+| `RUN_CTF.bat` / `RUN_CTF.sh`    | Launch scripts for Windows and Linux/Wine, pre-wired to the `CTF` instance. Rename them (for example `RUN_Slayer.bat`) when you duplicate the instance and update `CG_PATH` inside. See Run a Single Server. |
 
 #### Global Configs (`sapp\`)
 
 Every server instance of the same platform reads these files from the root `sapp\` folder.
 
-- `admins.txt`: Name and password admins (V2). Each line holds a name, an MD5-hashed password, and a level, for example `AdminName;<md5_hash>;4`. Entries are normally created with `admin_add` or `admin_add_manually`. Log in once, admin everywhere.
+| File            | Description                                                                                                                                                                                                                                                                                                                                 |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `admins.txt`    | Name and password admins (V2). Each line holds a name, an MD5-hashed password, and a level, for example `AdminName;<md5_hash>;4`. Entries are normally created with `admin_add` or `admin_add_manually`. Log in once, admin everywhere.                                                                                                     |
+| `areas.txt`     | Custom rectangular or spherical areas, used by `event_aenter` / `event_aexit` and Lua events. Shared so triggers behave the same on every instance.                                                                                                                                                                                         |
+| `ipbans.txt`    | IP bans, with CIDR ranges supported. A ban added on one instance applies to all instances of the same platform.                                                                                                                                                                                                                             |
+| `locations.txt` | Named X, Y, Z coordinates for teleport commands such as `t <player_id> <location_name>`.                                                                                                                                                                                                                                                    |
+| `users.txt`     | CD-key admins (V1). Each entry holds a CD-key hash and a level, for example `AdminName;<admin index>;<cd_key_hash>;4:`, and can be limited to IP ranges. If a hash is cracked, anyone using that CD-key gets the admin level on join, so use IP ranges where you can. You can check a hash with the [Hash Checker tool][hash_checker_tool]. |
 
-- `areas.txt`: Custom rectangular or spherical areas, used by `event_aenter` / `event_aexit` and Lua events. Shared so triggers behave the same on every instance.
+#### Instance Configs (`cg\<instance>\`)
 
-- `ipbans.txt`: IP bans, with CIDR ranges supported. A ban added on one instance applies to all instances of the same platform.
+The `cg\<instance>\` folder holds the config for one server instance. The package ships one instance, `cg\CTF\`; every bullet below uses `<instance>` as the placeholder.
 
-- `locations.txt`: Named X, Y, Z coordinates for teleport commands such as `t <player_id> <location_name>`.
-
-- `users.txt`: CD-key admins (V1). Each entry holds a CD-key hash and a level, for example `AdminName;<admin index>;<cd_key_hash>;4:`, and can be limited to IP ranges. If a hash is cracked, anyone using that CD-key gets the admin level on join, so use IP ranges where you can. You can check a hash with the [Hash Checker tool][hash_checker_tool].
-
-#### Instance Configs (`cg\`)
-
-The `cg\` folder holds the config for one server instance.
-
-- `cg\sapp\lua\` (generally `<instance or server root>\sapp\lua\`): Lua scripts for complex game modes. Load each one from `sapp\init.txt` in the same folder with `lua_load "filename"`, leaving off the `.lua` extension, and set `lua true` first. The package includes `sample_script.lua` as a starting point. See [Script Structure](#script-structure).
+- `cg\<instance>\sapp\lua\` (the shipped example is `cg\CTF\sapp\lua\`): Lua scripts for complex game modes. Load each one from `sapp\init.txt` in the same folder with `lua_load "filename"`, leaving off the `.lua` extension, and set `lua true` first. The package includes `sample_script.lua` as a starting point. See [Script Structure](#script-structure).
 
 ```lua
 api_version = "1.12.0.0"
@@ -113,35 +115,30 @@ end
 function OnScriptUnload() end
 ```
 
-- `cg\saved\`: Server save data, including player profiles (`player_profiles\`), custom playlists (`playlists\`), and saved maps (`hdmu.map`).
-
-- `cg\savegames\`: Custom game variant files. Refer to them from map cycles and votes.
-
-- `cg\init.txt`: The startup script executed by the server at launch. It holds core server settings (`sv_name`, `sv_public`, `sv_rcon_password`, `sv_password`) and must end with the `load` command to initialize SAPP. (SAPP-specific settings belong in `cg\sapp\init.txt`).
-
-- `cg\sapp\init.txt`: Configuration file loaded by SAPP after server startup. It controls Lua scripting (`lua`, `lua_load`), map rotation/voting (`sapp_mapcycle`, `mapvote`), game behavior (`no_lead`), message prefixes, RCON policies, and performance tunings (`custom_sleep`, `packet_limit`).
-
-- `cg\sapp\commands.txt`: Custom commands for this instance. Each line is `command_name #arg1 #arg2... 'command1;command2...' level`.
-
-- `cg\sapp\events.txt`: Event scripting without Lua. Lines define what runs when an event fires, such as `event_die` or `event_score`.
-
-- `cg\sapp\mapcycle.txt`: The map rotation, used when `sapp_mapcycle true` is set. Format: `map:gametype:min_players:max_players` (min and max are optional).
-
-- `cg\sapp\mapvotes.txt`: The maps and gametypes players can vote for, used when `mapvote true` is set. Format: `map:gametype:display_name:min_players:max_players`. Enabling map voting disables the map cycle.
+| Path                              | Description                                                                                                                                                                                                                                                                    |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `cg\<instance>\saved\`            | Server save data, including player profiles (`player_profiles\`), custom playlists (`playlists\`), and saved maps (`hdmu.map`).                                                                                                                                                |
+| `cg\<instance>\savegames\`        | Custom game variant files. Refer to them from map cycles and votes.                                                                                                                                                                                                            |
+| `cg\<instance>\init.txt`          | The startup script executed by the server at launch. It holds core server settings (`sv_name`, `sv_public`, `sv_rcon_password`, `sv_password`) and must end with the `load` command to initialize SAPP. (SAPP-specific settings belong in `cg\<instance>\sapp\init.txt`).      |
+| `cg\<instance>\sapp\init.txt`     | Configuration file loaded by SAPP after server startup. It controls Lua scripting (`lua`, `lua_load`), map rotation/voting (`sapp_mapcycle`, `mapvote`), game behavior (`no_lead`), message prefixes, RCON policies, and performance tunings (`custom_sleep`, `packet_limit`). |
+| `cg\<instance>\sapp\commands.txt` | Custom commands for this instance. Each line is `command_name #arg1 #arg2... 'command1;command2...' level`.                                                                                                                                                                    |
+| `cg\<instance>\sapp\events.txt`   | Event scripting without Lua. Lines define what runs when an event fires, such as `event_die` or `event_score`.                                                                                                                                                                 |
+| `cg\<instance>\sapp\mapcycle.txt` | The map rotation, used when `sapp_mapcycle true` is set. Format: `map:gametype:min_players:max_players` (min and max are optional).                                                                                                                                            |
+| `cg\<instance>\sapp\mapvotes.txt` | The maps and gametypes players can vote for, used when `mapvote true` is set. Format: `map:gametype:display_name:min_players:max_players`. Enabling map voting disables the map cycle.                                                                                         |
 
 #### Maps (`maps\`)
 
 All `.map` files live here, shared by every instance. Drop a new map in and every instance can run it.
 
-### Run a Single Server
+### Installation
 
 1. Extract the zip anywhere, for example `C:\SAPP_CE` or `~/SAPP_CE`.
-2. Optional: open `cg\init.txt` and change `sv_name "your_server_name_here"` to your server name.
+2. Open `cg\CTF\init.txt` and change `sv_name "your_server_name_here"` to your server name.
 3. Launch the server:
-    - Windows: double-click `run.bat`.
-    - Linux or macOS with Wine: run `chmod +x run.sh`, then `./run.sh`.
+    - Windows: double-click `RUN_CTF.bat`.
+    - Linux or macOS with Wine: run `chmod +x RUN_CTF.sh`, then `./RUN_CTF.sh`.
 
-`run.bat` looks like this:
+`RUN_CTF.bat` looks like this:
 
 ```bat
 @ECHO OFF
@@ -153,14 +150,14 @@ rem Get the absolute path of the directory where this script resides
 set ROOT=%~dp0
 
 rem Define instance config path and startup execution script
-set CG_PATH=%ROOT%\cg\
+set CG_PATH=%ROOT%\cg\CTF\
 set EXEC=%CG_PATH%\init.txt
 
 rem Launch the server. Use haloded.exe for PC Retail, haloceded.exe for CE
 "%ROOT%haloceded.exe" -path %CG_PATH% -exec %EXEC% -port %PORT%
 ```
 
-And `run.sh` for Linux/Wine:
+`RUN_CTF.sh` looks like this:
 
 ```bash
 #!/usr/bin/env bash
@@ -172,44 +169,38 @@ PORT=2302
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Define instance config path and startup execution script
-CG_PATH="${DIR}/cg"
+CG_PATH="${DIR}/cg/CTF"
 EXEC="${CG_PATH}/init.txt"
 
 # Launch the server. Use haloded.exe for PC Retail, haloceded.exe for CE
 wine "${DIR}/haloceded.exe" -path "${CG_PATH}" -exec "${EXEC}" -port "${PORT}"
 ```
 
-- `%~dp0` / `$DIR` expands to the folder the script sits in. That keeps the script portable.
-- `-path` points at the instance configs (`cg\`).
-- `-exec` points at that instance's `init.txt`.
-- `-port` specifies the UDP port the server listens on (default Halo port is `2302`, but custom ports like `2310` are commonly used to avoid conflicts or run multiple servers).
-
-The server console opens and SAPP loads. The console output confirms SAPP is active.
-
 ### Multi-Server Setup
 
-Each extra instance is a small copy of `cg\` plus its own launch script and port. The executable, `sapp.dll`, the maps, and the global `sapp\` files stay in one place.
+Each extra instance is a small copy of `cg\CTF\` plus its own launch script and port. The executable, `sapp.dll`, the maps, and the global `sapp\` files stay in one place.
 
-#### Step 1: Move the Original Instance
+#### Step 1: Keep or Rename the Original
 
-The original instance lives directly in `cg\`. Give it its own folder so more instances can sit beside it:
+The shipped instance lives in `cg\CTF\` and works as is. If you want a mode-specific name (for example `slayer` or `ctf_public`), rename it:
 
-1. Create `cg\myserver\` (use any name).
-2. Move `init.txt`, `sapp\`, `saved\`, and `savegames\` from `cg\` into `cg\myserver\`.
-3. In `run.bat`, change `set CG_PATH=%ROOT%\cg\` to `set CG_PATH=%ROOT%\cg\myserver\`. In `run.sh`, change `CG_PATH="${DIR}/cg"` to `CG_PATH="${DIR}/cg/myserver"`.
+1. Rename `cg\CTF\` to `cg\myserver\` (use any name).
+2. In `RUN_CTF.bat`, change `set CG_PATH=%ROOT%\cg\CTF\` to `set CG_PATH=%ROOT%\cg\myserver\`. In `RUN_CTF.sh`, change `CG_PATH="${DIR}/cg/CTF"` to `CG_PATH="${DIR}/cg/myserver"`. Rename the launch scripts to match (for example `RUN_myserver.bat` / `RUN_myserver.sh`).
+
+If you keep the name `CTF`, skip this step. Everything below assumes the original instance is `cg\CTF\`.
 
 #### Step 2: Copy the Instance
 
-Copy `cg\myserver\` to a new folder named after the game mode, such as `cg\gun_game\`. Copying `saved\` and `savegames\` is optional: bring them only if the new instance needs the same save data or variants.
+Copy `cg\CTF\` (or your renamed original) to a new folder named after the game mode, such as `cg\gun_game\`. Copying `saved\` and `savegames\` is optional: bring them only if the new instance needs the same save data or variants.
 
 ```text
 cg\
-+---myserver\           Original instance
++---CTF\                Original instance (shipped)
 |   +---sapp\
 |   +---saved\          (optional)
 |   +---savegames\      (optional)
 |   \---init.txt
-\---gun_game\           New instance, copied from myserver
+\---gun_game\           New instance, copied from CTF
     +---sapp\
     +---saved\          (optional)
     +---savegames\      (optional)
@@ -233,7 +224,7 @@ Edit these files inside `cg\gun_game\`:
 
 #### Step 4: Pick a Port
 
-Each instance needs its own UDP port. Create `run_gun_game.bat` next to `run.bat`:
+Each instance needs its own UDP port. Create `run_gun_game.bat` next to `RUN_CTF.bat`:
 
 ```bat
 @ECHO OFF
@@ -261,42 +252,21 @@ Run each script by hand and each server gets its own console window. To start th
 ```bat
 @ECHO OFF
 cd /d "%~dp0"
-wt.exe cmd /k "run.bat" ^
+wt.exe cmd /k "RUN_CTF.bat" ^
  ; new-tab cmd /k "run_gun_game.bat"
 ```
 
 Or from a Command Prompt:
 
 ```bat
-wt.exe cmd /k "run.bat" ; new-tab cmd /k "run_gun_game.bat"
+wt.exe cmd /k "RUN_CTF.bat" `; new-tab cmd /k "run_gun_game.bat"
 ```
 
 Or from PowerShell, where the semicolon needs a backtick:
 
 ```powershell
-wt.exe cmd /k "run.bat" `; new-tab cmd /k "run_gun_game.bat"
+wt.exe cmd /k "RUN_CTF.bat" `; new-tab cmd /k "run_gun_game.bat"
 ```
-
-### Shared and Per-Instance Files
-
-| Item                                                     | Location                   | Scope        |
-| -------------------------------------------------------- | -------------------------- | ------------ |
-| Server executable, `sapp.dll`, `strings.dll`, other DLLs | Root                       | Shared       |
-| `.map` files                                             | `maps\`                    | Shared       |
-| `admins.txt`, `users.txt`, `ipbans.txt`                  | `sapp\`                    | Shared       |
-| `areas.txt`, `locations.txt`                             | `sapp\`                    | Shared       |
-| `init.txt` (name, password, `load`)                      | `cg\<instance>\`           | Per instance |
-| `init.txt`, `commands.txt`, `events.txt`                 | `cg\<instance>\sapp\`      | Per instance |
-| `mapcycle.txt`, `mapvotes.txt`                           | `cg\<instance>\sapp\`      | Per instance |
-| Lua scripts                                              | `cg\<instance>\sapp\lua\`  | Per instance |
-| Game variants                                            | `cg\<instance>\savegames\` | Per instance |
-| Server save data (profiles, playlists)                   | `cg\<instance>\saved\`     | Per instance |
-
-What the split gives you:
-
-- Shared admins and bans: Ban a player on one instance, and they are banned on all of them. Add an admin once and they are an admin everywhere. To change a global setting, edit one file and run `reload`.
-- Small copies: A new instance is a few kilobytes of config. You never duplicate the executable, `sapp.dll`, or the maps.
-- Isolation: Each instance has its own name, password, map rotation, and Lua scripts. A change to one never touches another.
 
 ---
 
