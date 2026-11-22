@@ -112,7 +112,7 @@ Each instance has its own startup and SAPP configuration.
 
 The package includes `sample_script.lua` as a starting point. See [Script Structure](#script-structure) for details.
 
-#### Maps (`maps\\`)
+#### Maps (`maps\`)
 
 All `.map` files are stored here and shared by every instance.
 
@@ -216,7 +216,7 @@ To start multiple servers in Windows Terminal, create `run_all.bat`:
 
 ### Advanced Server Setup
 
-For advanced server setups, see the [Halo: Running SAPP Servers on an Ubuntu VPS](../ubuntu-vps-hosting.md) guide.
+For advanced server setups, see the [Halo: Running SAPP Servers on an Ubuntu VPS](../ubuntu-vps-hosting.md).
 
 ---
 
