@@ -173,17 +173,40 @@ Example `RUN_GUN_GAME.bat`:
 ```bat
 @ECHO OFF
 
-set PORT=2303
+rem Set the server port (default: 2302)
+set PORT=2302
+
+rem Get the absolute path of the directory where this script resides
 set ROOT=%~dp0
-set CG_PATH=%ROOT%\cg\gun_game\
+
+rem Define instance config path and startup execution script
+set CG_PATH=%ROOT%cg\gun_game
 set EXEC=%CG_PATH%\init.txt
 
-"%ROOT%haloceded.exe" -path %CG_PATH% -exec %EXEC% -port %PORT%
+rem Launch the server. Use haloded.exe for PC Retail, haloceded.exe for CE
+"%ROOT%haloceded.exe" -path "%CG_PATH%" -exec "%EXEC%" -port %PORT%
 ```
 
 On Linux, make the same changes to the copied `.sh` script.
 
-Open each server's UDP port in your firewall.
+```shell
+#!/usr/bin/env bash
+
+# Set the server port (default: 2302)
+PORT=2302
+
+# Get the absolute path of the directory where this script resides
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Define instance config path and startup execution script
+CG_PATH="${DIR}/cg/gun_game"
+EXEC="${CG_PATH}/init.txt"
+
+# Launch the server. Use haloded.exe for PC Retail, haloceded.exe for CE
+wine "${DIR}/haloceded.exe" -path "${CG_PATH}" -exec "${EXEC}" -port "${PORT}"
+```
+
+Open each server's UDP port in your firewall. See [Halo: Server Port Forwarding](../server-port-forwarding) for details.
 
 #### 4. Start the Servers
 
